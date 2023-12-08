@@ -24,7 +24,6 @@ export class SettingsService {
     private _beginChangesCount = 0;
     private _changed = false;
     private _changedSettings: SettingsService.GroupSetting[] = [];
-    private _lastSettingsSaveFailed = false;
     private _restartRequired = false;
     private _defaultDataEnvironmentId: DataEnvironmentId; // used to update Motif Services
 
@@ -35,6 +34,7 @@ export class SettingsService {
 
     private _saveTimeoutHandle: ReturnType<typeof setTimeout> | undefined;
     private _saveRequestPromise: Promise<Result<void> | undefined> | undefined;
+    private _lastSaveFailed = false;
 
     private _masterChangedMultiEvent = new MultiEvent<SettingsService.ChangedEventHandler>();
     private _changedMultiEvent = new MultiEvent<SettingsService.ChangedEventHandler>();
@@ -65,6 +65,11 @@ export class SettingsService {
     get scalar() { return this._scalar; }
     get exchanges() { return this._exchanges; }
     get color() { return this._color; }
+
+    finalise() {
+        document.removeEventListener('visibilitychange', this._documentVisibilityChangeListener);
+        this.checkClearScheduledSave(); // should already have been saved in visibility change
+    }
 
     register(group: SettingsGroup) {
         const existingGroup = this.getRegisteredGroup(group.name);
@@ -479,15 +484,15 @@ export class SettingsService {
 
     private processSaveResult(result: Result<void>, docHiding: boolean) {
         if (result.isOk()) {
-            if (this._lastSettingsSaveFailed) {
+            if (this._lastSaveFailed) {
                 // Logger.log(Logger.LevelId.Warning, 'Save settings succeeded');
-                this._lastSettingsSaveFailed = false;
+                this._lastSaveFailed = false;
             }
         } else {
-            if (!this._lastSettingsSaveFailed) {
+            if (!this._lastSaveFailed) {
                 Logger.log(Logger.LevelId.Warning, `${docHiding ? 'Hiding s' : 'S' }ave settings error: ${getErrorMessage(result.error)}`);
+                this._lastSaveFailed = true;
             }
-            this._lastSettingsSaveFailed = true;
         }
     }
 

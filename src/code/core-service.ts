@@ -31,7 +31,6 @@ import {
     SymbolDetailCacheService,
     SymbolsService
 } from "./services/services-internal-api";
-import { MultiEvent } from './sys/sys-internal-api';
 import { TextFormatterService } from "./text-format/text-format-internal-api";
 import { WatchmakerService } from './watchmaker/watchmaker-internal-api';
 
@@ -63,7 +62,6 @@ export class CoreService {
 
     private _finalised = false;
 
-    private _settingsChangedSubscriptionId: MultiEvent.SubscriptionId;
     private _activeColorSchemeName: string;
 
     constructor() {
@@ -113,10 +111,6 @@ export class CoreService {
         );
         this.commandRegisterService = new CommandRegisterService();
         this.keyboardService = new KeyboardService();
-
-        this._settingsChangedSubscriptionId = this.settingsService.subscribeSettingsChangedEvent(() => {
-            this.handleSettingsChanged();
-        });
     }
 
     finalise() {
@@ -127,15 +121,10 @@ export class CoreService {
             this.symbolsService.finalise();
             this.textFormatterService.finalise();
 
-            this.settingsService.unsubscribeSettingsChangedEvent(this._settingsChangedSubscriptionId);
-            this._settingsChangedSubscriptionId = undefined;
+            this.settingsService.finalise();
             this.idleService.finalise();
 
             this._finalised = true;
         }
-    }
-
-    private handleSettingsChanged(): void {
-        //
     }
 }
