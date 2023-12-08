@@ -243,6 +243,8 @@ export abstract class AdaptedRevgrid extends Revgrid<AdaptedRevgridBehavioredGri
     // (undocumented)
     destroy(): void;
     // (undocumented)
+    get emWidth(): number;
+    // (undocumented)
     protected abstract invalidateAll(): void;
     // (undocumented)
     protected readonly _settingsService: SettingsService;
@@ -25383,6 +25385,8 @@ export class SettingsService {
     get color(): ColorSettings;
     // (undocumented)
     get exchanges(): ExchangesSettings;
+    // (undocumented)
+    finalise(): void;
     // (undocumented)
     hasSymbolNameFieldIdChanged(): boolean;
     // (undocumented)

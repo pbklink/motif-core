@@ -60,6 +60,8 @@ export abstract class AdaptedRevgrid extends Revgrid<AdaptedRevgridBehavioredGri
         this.horizontalScroller.setAfterInsideOffset(0);
     }
 
+    get emWidth() { return this.canvas.gc.getEmWidth(); }
+
     override destroy(): void {
         this._settingsService.unsubscribeSettingsChangedEvent(
             this._settingsChangedSubscriptionId
