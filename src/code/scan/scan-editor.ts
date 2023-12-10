@@ -23,7 +23,6 @@ import {
     AssertInternalError,
     EnumInfoOutOfOrderError,
     Err,
-    ErrorCode,
     Guid,
     Integer,
     LockOpenListItem,
@@ -393,7 +392,7 @@ export class ScanEditor {
         }
     }
 
-    setCriteriaAsZenithText(value: string, fieldChanger?: ScanEditor.FieldChanger): Result<void, ScanFormulaZenithEncoding.DecodeError> | undefined {
+    setCriteriaAsZenithText(value: string, fieldChanger?: ScanEditor.FieldChanger): Result<void, ScanFormulaZenithEncoding.DecodeErrorAndProgress> | undefined {
         if (value === this._criteriaAsZenithText) {
             return undefined;
         } else {
@@ -401,41 +400,42 @@ export class ScanEditor {
             this._criteriaAsZenithText = value;
             this.addFieldChange(ScanEditor.FieldId.CriteriaAsZenithText);
 
-            let decodeError: ScanFormulaZenithEncoding.DecodeError | undefined;
+            let decodeErrorAndProgress: ScanFormulaZenithEncoding.DecodeErrorAndProgress | undefined;
             let zenithCriteria: ZenithEncodedScanFormula.BooleanTupleNode;
             try {
                 zenithCriteria = JSON.parse(value) as ZenithEncodedScanFormula.BooleanTupleNode;
             } catch(e) {
                 const errorText = getErrorMessage(e);
-                decodeError = new ScanFormulaZenithEncoding.DecodeError(
-                    ErrorCode.ScanEditor_SetCriteriaAsZenithText_InvalidJson,
-                    `${Strings[StringId.InvalidJsonObject]}: ${errorText}`
-                );
+                decodeErrorAndProgress = {
+                    errorId: ScanFormulaZenithEncoding.ErrorId.InvalidJson,
+                    extraErrorText: errorText,
+                    progress: undefined,
+                };
                 zenithCriteria = ['None']; // ignored
             }
-            if (decodeError === undefined) {
+            if (decodeErrorAndProgress === undefined) {
                 const decodeResult = ScanFormulaZenithEncoding.tryDecodeBoolean(zenithCriteria);
                 if (decodeResult.isOk()) {
-                    const criteria = decodeResult.value.node;
+                    const criteria = decodeResult.value;
                     this._criteria = criteria;
                     this.addFieldChange(ScanEditor.FieldId.Criteria);
-                    decodeError = undefined;
+                    decodeErrorAndProgress = undefined;
                 } else {
-                    decodeError = decodeResult.error;
+                    decodeErrorAndProgress = decodeResult.error;
                 }
             }
 
             this.endFieldChanges();
 
-            if (decodeError === undefined) {
+            if (decodeErrorAndProgress === undefined) {
                 return new Ok(undefined);
             } else {
-                return new Err(decodeError);
+                return new Err(decodeErrorAndProgress);
             }
         }
     }
 
-    setRankAsZenithText(value: string, fieldChanger?: ScanEditor.FieldChanger): Result<void, ScanFormulaZenithEncoding.DecodeError> | undefined {
+    setRankAsZenithText(value: string, fieldChanger?: ScanEditor.FieldChanger): Result<void, ScanFormulaZenithEncoding.DecodeErrorAndProgress> | undefined {
         if (value === this._rankAsZenithText) {
             return undefined;
         } else {
@@ -443,37 +443,38 @@ export class ScanEditor {
             this._rankAsZenithText = value;
             this.addFieldChange(ScanEditor.FieldId.RankAsZenithText);
 
-            let decodeError: ScanFormulaZenithEncoding.DecodeError | undefined;
+            let decodeErrorAndProgress: ScanFormulaZenithEncoding.DecodeErrorAndProgress | undefined;
             let zenithRank: ZenithEncodedScanFormula.NumericTupleNode;
             try {
                 zenithRank = JSON.parse(value) as ZenithEncodedScanFormula.NumericTupleNode;
             } catch(e) {
                 const errorText = getErrorMessage(e);
-                decodeError = new ScanFormulaZenithEncoding.DecodeError(
-                    ErrorCode.ScanEditor_SetRankAsZenithText_InvalidJson,
-                    `${Strings[StringId.InvalidJsonObject]}: ${errorText}`
-                );
+                decodeErrorAndProgress = {
+                    errorId: ScanFormulaZenithEncoding.ErrorId.InvalidJson,
+                    extraErrorText: errorText,
+                    progress: undefined,
+                };
                 zenithRank = ['Pos', 0]; // ignored
             }
 
-            if (decodeError === undefined) {
+            if (decodeErrorAndProgress === undefined) {
                 const decodeResult = ScanFormulaZenithEncoding.decodeNumeric(zenithRank);
                 if (decodeResult.isOk()) {
-                    const rank = decodeResult.value.node;
+                    const rank = decodeResult.value;
                     this._rank = rank;
                     this.addFieldChange(ScanEditor.FieldId.Rank);
-                    decodeError = undefined;
+                    decodeErrorAndProgress = undefined;
                 } else {
-                    decodeError = decodeResult.error;
+                    decodeErrorAndProgress = decodeResult.error;
                 }
             }
 
             this.endFieldChanges();
 
-            if (decodeError === undefined) {
+            if (decodeErrorAndProgress === undefined) {
                 return new Ok(undefined);
             } else {
-                return new Err(decodeError);
+                return new Err(decodeErrorAndProgress);
             }
         }
     }
@@ -917,14 +918,22 @@ export class ScanEditor {
         } else {
             const decodeResult = ScanFormulaZenithEncoding.tryDecodeBoolean(zenithCriteria);
             if (decodeResult.isErr()) {
-                const decodeError = decodeResult.error;
-                const progress = decodeError.progress;
-                Logger.logWarning(`ScanEditor criteria decode error: Id: ${scan.id} Code: ${decodeError.code} Message: "${decodeError.message}" Count: ${progress.tupleNodeCount} Depth: ${progress.tupleNodeDepth}`);
+                const decodeErrorAndProgress = decodeResult.error;
+                let msg =`ScanEditor criteria decode error: Id: ${scan.id} ErrorId: ${decodeErrorAndProgress.errorId}`;
+                const extraErrorText = decodeErrorAndProgress.extraErrorText;
+                if (extraErrorText !== undefined) {
+                    msg += ` Extra: "${decodeErrorAndProgress.extraErrorText}"`;
+                }
+                const progress = decodeErrorAndProgress.progress;
+                if (progress !== undefined) {
+                    msg += ` Count: ${progress.tupleNodeCount} Depth: ${progress.tupleNodeDepth}`;
+                }
+                Logger.logWarning(msg);
                 if (defaultIfError) {
                     this._criteria = { typeId: ScanFormula.NodeTypeId.None };
                 }
             } else {
-                this._criteria = decodeResult.value.node;
+                this._criteria = decodeResult.value;
             }
         }
     }
@@ -936,14 +945,22 @@ export class ScanEditor {
         } else {
             const decodeResult = ScanFormulaZenithEncoding.decodeNumeric(zenithRank);
             if (decodeResult.isErr()) {
-                const decodeError = decodeResult.error;
-                const progress = decodeError.progress;
-                Logger.logWarning(`ScanEditor rank decode error: Id: ${scan.id} Code: ${decodeError.code} Message: "${decodeError.message}" Count: ${progress.tupleNodeCount} Depth: ${progress.tupleNodeDepth}`);
+                const decodeErrorAndProgress = decodeResult.error;
+                let msg =`ScanEditor rank decode error: Id: ${scan.id} ErrorId: ${decodeErrorAndProgress.errorId}`;
+                const extraErrorText = decodeErrorAndProgress.extraErrorText;
+                if (extraErrorText !== undefined) {
+                    msg += ` Extra: "${decodeErrorAndProgress.extraErrorText}"`;
+                }
+                const progress = decodeErrorAndProgress.progress;
+                if (progress !== undefined) {
+                    msg += ` Count: ${progress.tupleNodeCount} Depth: ${progress.tupleNodeDepth}`;
+                }
+                Logger.logWarning(msg);
                 if (defaultIfError) {
                     this._rank = { typeId: ScanFormula.NodeTypeId.NumericPos, operand: 0 } as ScanFormula.NumericPosNode;
                 }
             } else {
-                this._rank = decodeResult.value.node;
+                this._rank = decodeResult.value;
             }
         }
     }

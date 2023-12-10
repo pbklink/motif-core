@@ -128,8 +128,8 @@ export namespace LitIvemBaseDetail {
             },
         } as const;
 
-        export const idCount = Object.keys(infosObject).length;
         const infos = Object.values(infosObject);
+        export const idCount = infos.length;
 
         export const allNames = new Array<string>(idCount);
 

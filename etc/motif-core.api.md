@@ -8055,8 +8055,6 @@ export const enum ErrorCode {
     // (undocumented)
     RoutedIvemId_TryCreateArrayFromJsonElementArray = "ROOTCAFJEA88223",
     // (undocumented)
-    ScanEditor_SetCriteriaAsZenithText_InvalidJson = "SESCAZTIJ40441",
-    // (undocumented)
     ScanEditor_SetRankAsZenithText_InvalidJson = "SESRAZTIJ40441",
     // (undocumented)
     ScanEditorFrame_RecordFocusedTryOpenEditor = "SEFRFTOE31099",
@@ -8376,110 +8374,6 @@ export const enum ErrorCode {
     ZenithDepthMessage_UpdateOrderNotFound = "ZDMUONF10945",
     // (undocumented)
     ZenithDepthMessage_UpdateOrderOnWrongSide = "ZDMUOOWS10945",
-    // (undocumented)
-    ZenithEncodedScanFormulaDecode_AltCodeSubFieldContainsSubFieldIsUnknown = "ZSCPACSFCSFIU11906",
-    // (undocumented)
-    ZenithEncodedScanFormulaDecode_AltCodeSubFieldHasValueSubFieldIsUnknown = "ZSCPACSFHVSFPIU11891",
-    // (undocumented)
-    ZenithEncodedScanFormulaDecode_AttributeSubFieldContainsSubFieldIsUnknown = "ZSCPASFCSFIU11907",
-    // (undocumented)
-    ZenithEncodedScanFormulaDecode_AttributeSubFieldHasValueSubFieldIsUnknown = "ZSCPASFHVSFIU11892",
-    // (undocumented)
-    ZenithEncodedScanFormulaDecode_BooleanFieldCanOnlyHaveOneParameter = "ZSCPBFCOHOP11916",
-    // (undocumented)
-    ZenithEncodedScanFormulaDecode_BooleanFieldEqualsTargetIsNotBoolean = "ZSCPBFETINB11902",
-    // (undocumented)
-    ZenithEncodedScanFormulaDecode_BooleanTupleNodeArrayIsZeroLength = "ZSCPBTNAIZL11638",
-    // (undocumented)
-    ZenithEncodedScanFormulaDecode_BooleanTupleNodeIsNotAnArray = "ZSCPBTNINAA05822",
-    // (undocumented)
-    ZenithEncodedScanFormulaDecode_BooleanTupleNodeTypeIsNotString = "ZSCPBTNTINS96220",
-    // (undocumented)
-    ZenithEncodedScanFormulaDecode_DateFieldEqualsTargetIsNotString = "ZSCPDFETINS11897",
-    // (undocumented)
-    ZenithEncodedScanFormulaDecode_DateSubFieldEqualsSubFieldIsUnknown = "ZSCPDSFESFIU11904",
-    // (undocumented)
-    ZenithEncodedScanFormulaDecode_DateSubFieldEqualsTargetIsNotString = "ZSCPDSFETINS11905",
-    // (undocumented)
-    ZenithEncodedScanFormulaDecode_DateSubFieldHasValueSubFieldIsUnknown = "ZSCPDSFHVSFIU11890",
-    // (undocumented)
-    ZenithEncodedScanFormulaDecode_FieldBooleanNodeHasTooManyParameters = "ZSCPFBNHTMP11920",
-    // (undocumented)
-    ZenithEncodedScanFormulaDecode_FirstParameterCannotBeObjectOrNull = "ZSCPFPCBOON11914",
-    // (undocumented)
-    ZenithEncodedScanFormulaDecode_IfTupleNodeRequiresAnEvenNumberOfParameters = "ZSCPITNRAENOP11930",
-    // (undocumented)
-    ZenithEncodedScanFormulaDecode_IfTupleNodeRequiresAtLeast4Parameters = "ZSCPITNRAL4P11929",
-    // (undocumented)
-    ZenithEncodedScanFormulaDecode_LeftRightArithmeticNumericTupleNodeRequires3Parameters = "ZSCPLRANTNR3P11925",
-    // (undocumented)
-    ZenithEncodedScanFormulaDecode_LogicalBooleanMissingOperand = "ZSCPLBMO21100",
-    // (undocumented)
-    ZenithEncodedScanFormulaDecode_LogicalBooleanMissingOperands = "ZSCPLBMO15996",
-    // (undocumented)
-    ZenithEncodedScanFormulaDecode_NamedParametersCannotBeNull = "ZSCPNPCBN11913",
-    // (undocumented)
-    ZenithEncodedScanFormulaDecode_NumericComparisonDoesNotHave2Operands = "ZSCPNCDNH2O10100",
-    // (undocumented)
-    ZenithEncodedScanFormulaDecode_NumericParameterIsNotNumberOrComparableFieldOrArray = "ZSCPNPINNOCFOA60611",
-    // (undocumented)
-    ZenithEncodedScanFormulaDecode_NumericTupleNodeIsZeroLength = "ZSCPNTNIZL11921",
-    // (undocumented)
-    ZenithEncodedScanFormulaDecode_NumericTupleNodeRequires2Or3Parameters = "ZSCPNTNR2O3P11923",
-    // (undocumented)
-    ZenithEncodedScanFormulaDecode_NumericTupleNodeTypeIsNotString = "ZSCPNTNTINS11922",
-    // (undocumented)
-    ZenithEncodedScanFormulaDecode_OnlySubFieldNodeCanHave4Parameters = "ZSCPOSFNCH4P11918",
-    // (undocumented)
-    ZenithEncodedScanFormulaDecode_OnlySubFieldOrTextFieldNodesCanHave3Parameters = "ZSCPOSFOTFNCH3P11917",
-    // (undocumented)
-    ZenithEncodedScanFormulaDecode_OnlyTextSubFieldContainsNodeCanHave4Parameters = "ZSCPOTSFCNCH4P11919",
-    // (undocumented)
-    ZenithEncodedScanFormulaDecode_PriceSubFieldEqualsSubFieldIsUnknown = "ZSCPPSFESFIU11903",
-    // (undocumented)
-    ZenithEncodedScanFormulaDecode_PriceSubFieldHasValueSubFieldIsUnknown = "ZSCPPSFHVSFIU11889",
-    // (undocumented)
-    ZenithEncodedScanFormulaDecode_RangeMaxHasInvalidDateFormat = "ZSCPRMHIDF11912",
-    // (undocumented)
-    ZenithEncodedScanFormulaDecode_RangeMaxIsDefinedButNotNumber = "ZSCPRMIDBNN11895",
-    // (undocumented)
-    ZenithEncodedScanFormulaDecode_RangeMaxIsDefinedButNotString = "ZSCPRMIDBNS11911",
-    // (undocumented)
-    ZenithEncodedScanFormulaDecode_RangeMinAndMaxAreBothUndefined = "ZSCPRMAMABU11896",
-    // (undocumented)
-    ZenithEncodedScanFormulaDecode_RangeMinHasInvalidDateFormat = "ZSCPRMHIDF11910",
-    // (undocumented)
-    ZenithEncodedScanFormulaDecode_RangeMinIsDefinedButNotNumber = "ZSCPRMIDBNN11894",
-    // (undocumented)
-    ZenithEncodedScanFormulaDecode_RangeMinIsDefinedButNotString = "ZSCPRMIDBNS11909",
-    // (undocumented)
-    ZenithEncodedScanFormulaDecode_SecondParameterCannotBeObjectOrNull = "ZSCPSPCBOON11915",
-    // (undocumented)
-    ZenithEncodedScanFormulaDecode_SubFieldIsNotString = "ZSCPSFINS11888",
-    // (undocumented)
-    ZenithEncodedScanFormulaDecode_TargetHasInvalidDateFormat = "ZSCPTHIDF11908",
-    // (undocumented)
-    ZenithEncodedScanFormulaDecode_TargetIsNotNumber = "ZSCPTINN11893",
-    // (undocumented)
-    ZenithEncodedScanFormulaDecode_TextFieldContainsAsHasInvalidFormat = "ZSCPTFCAHIF11900",
-    // (undocumented)
-    ZenithEncodedScanFormulaDecode_TextFieldContainsAsIsNotBoolean = "ZSCPTFCAINB11901",
-    // (undocumented)
-    ZenithEncodedScanFormulaDecode_TextFieldContainsAsIsNotString = "ZSCPTFCAINS11899",
-    // (undocumented)
-    ZenithEncodedScanFormulaDecode_TextFieldContainsValueIsNotString = "ZSCPTFCVINS11898",
-    // (undocumented)
-    ZenithEncodedScanFormulaDecode_UnaryArithmeticNumericTupleNodeRequires2Parameters = "ZSCPUANTNR2P11924",
-    // (undocumented)
-    ZenithEncodedScanFormulaDecode_UnexpectedBooleanParamType = "ZSCPUBPT11886",
-    // (undocumented)
-    ZenithEncodedScanFormulaDecode_UnknownBooleanTupleNodeType = "ZSCPUBTNT11926",
-    // (undocumented)
-    ZenithEncodedScanFormulaDecode_UnknownFieldBooleanParam = "ZSCPUFBP11887",
-    // (undocumented)
-    ZenithEncodedScanFormulaDecode_UnknownNumericField = "ZSCPUNF11928",
-    // (undocumented)
-    ZenithEncodedScanFormulaDecode_UnknownNumericTupleNodeType = "ZSCPUNTNT11927",
     // (undocumented)
     ZenithMessageConvert_AddToWatchmakerList_Action = "ZMCATWLA69114",
     // (undocumented)
@@ -22903,9 +22797,9 @@ export class ScanEditor {
     // (undocumented)
     get scan(): Scan | undefined;
     // (undocumented)
-    setCriteriaAsZenithText(value: string, fieldChanger?: ScanEditor.FieldChanger): Result<void, ScanFormulaZenithEncoding.DecodeError> | undefined;
+    setCriteriaAsZenithText(value: string, fieldChanger?: ScanEditor.FieldChanger): Result<void, ScanFormulaZenithEncoding.DecodeErrorAndProgress> | undefined;
     // (undocumented)
-    setRankAsZenithText(value: string, fieldChanger?: ScanEditor.FieldChanger): Result<void, ScanFormulaZenithEncoding.DecodeError> | undefined;
+    setRankAsZenithText(value: string, fieldChanger?: ScanEditor.FieldChanger): Result<void, ScanFormulaZenithEncoding.DecodeErrorAndProgress> | undefined;
     // (undocumented)
     get statusId(): ScanStatusId | undefined;
     // (undocumented)
@@ -23704,27 +23598,16 @@ export namespace ScanFormula {
 // @public (undocumented)
 export namespace ScanFormulaZenithEncoding {
     // (undocumented)
-    export interface DecodedBoolean {
+    export interface DecodeErrorAndProgress {
         // (undocumented)
-        node: ScanFormula.BooleanNode;
+        errorId: ErrorId;
         // (undocumented)
-        progress: DecodeProgress;
+        extraErrorText: string | undefined;
+        // (undocumented)
+        progress: DecodeProgress | undefined;
     }
     // (undocumented)
-    export interface DecodedNumeric {
-        // (undocumented)
-        node: ScanFormula.NumericNode;
-        // (undocumented)
-        progress: DecodeProgress;
-    }
-    // (undocumented)
-    export class DecodeError extends ExternalError {
-        constructor(code: ErrorCode, message: string);
-        // (undocumented)
-        progress: DecodeProgress;
-    }
-    // (undocumented)
-    export function decodeNumeric(node: ZenithEncodedScanFormula.NumericTupleNode): Result<DecodedNumeric, DecodeError>;
+    export function decodeNumeric(node: ZenithEncodedScanFormula.NumericTupleNode): Result<ScanFormula.NumericNode, DecodeErrorAndProgress>;
     // (undocumented)
     export class DecodeProgress {
         // (undocumented)
@@ -23757,7 +23640,137 @@ export namespace ScanFormulaZenithEncoding {
     // (undocumented)
     export function encodeNumeric(node: ScanFormula.NumericNode): ZenithEncodedScanFormula.NumericTupleNode | ZenithEncodedScanFormula.NumericField;
     // (undocumented)
-    export function tryDecodeBoolean(node: ZenithEncodedScanFormula.BooleanTupleNode): Result<DecodedBoolean, DecodeError>;
+    export namespace Error {
+        // (undocumented)
+        export type Id = ErrorId;
+        const // (undocumented)
+        idCount: number;
+        // (undocumented)
+        export function idToSummary(id: Id): string;
+        // (undocumented)
+        export function idToSummaryId(id: Id): StringId;
+        // (undocumented)
+        export function initialise(): void;
+    }
+    // (undocumented)
+    export const enum ErrorId {
+        // (undocumented)
+        AltCodeSubFieldContainsSubFieldIsUnknown = 28,
+        // (undocumented)
+        AltCodeSubFieldHasValueSubFieldIsUnknown = 13,
+        // (undocumented)
+        AttributeSubFieldContainsSubFieldIsUnknown = 29,
+        // (undocumented)
+        AttributeSubFieldHasValueSubFieldIsUnknown = 14,
+        // (undocumented)
+        BooleanFieldCanOnlyHaveOneParameter = 38,
+        // (undocumented)
+        BooleanFieldEqualsTargetIsNotBoolean = 24,
+        // (undocumented)
+        BooleanTupleNodeArrayIsZeroLength = 2,
+        // (undocumented)
+        BooleanTupleNodeIsNotAnArray = 1,
+        // (undocumented)
+        BooleanTupleNodeTypeIsNotString = 3,
+        // (undocumented)
+        DateFieldEqualsTargetIsNotString = 19,
+        // (undocumented)
+        DateSubFieldEqualsSubFieldIsUnknown = 26,
+        // (undocumented)
+        DateSubFieldEqualsTargetIsNotString = 27,
+        // (undocumented)
+        DateSubFieldHasValueSubFieldIsUnknown = 12,
+        // (undocumented)
+        FieldBooleanNodeHasTooManyParameters = 42,
+        // (undocumented)
+        FirstParameterCannotBeObjectOrNull = 36,
+        // (undocumented)
+        IfTupleNodeRequiresAnEvenNumberOfParameters = 52,
+        // (undocumented)
+        IfTupleNodeRequiresAtLeast4Parameters = 51,
+        // (undocumented)
+        InvalidJson = 0,
+        // (undocumented)
+        LeftRightArithmeticNumericTupleNodeRequires3Parameters = 47,
+        // (undocumented)
+        LogicalBooleanMissingOperand = 5,
+        // (undocumented)
+        LogicalBooleanMissingOperands = 4,
+        // (undocumented)
+        NamedParametersCannotBeNull = 35,
+        // (undocumented)
+        NumericComparisonDoesNotHave2Operands = 6,
+        // (undocumented)
+        NumericParameterIsNotNumberOrComparableFieldOrArray = 7,
+        // (undocumented)
+        NumericTupleNodeIsZeroLength = 43,
+        // (undocumented)
+        NumericTupleNodeRequires2Or3Parameters = 45,
+        // (undocumented)
+        NumericTupleNodeTypeIsNotString = 44,
+        // (undocumented)
+        OnlySubFieldNodeCanHave4Parameters = 40,
+        // (undocumented)
+        OnlySubFieldOrTextFieldNodesCanHave3Parameters = 39,
+        // (undocumented)
+        OnlyTextSubFieldContainsNodeCanHave4Parameters = 41,
+        // (undocumented)
+        PriceSubFieldEqualsSubFieldIsUnknown = 25,
+        // (undocumented)
+        PriceSubFieldHasValueSubFieldIsUnknown = 11,
+        // (undocumented)
+        RangeMaxHasInvalidDateFormat = 34,
+        // (undocumented)
+        RangeMaxIsDefinedButNotNumber = 17,
+        // (undocumented)
+        RangeMaxIsDefinedButNotString = 33,
+        // (undocumented)
+        RangeMinAndMaxAreBothUndefined = 18,
+        // (undocumented)
+        RangeMinHasInvalidDateFormat = 32,
+        // (undocumented)
+        RangeMinIsDefinedButNotNumber = 16,
+        // (undocumented)
+        RangeMinIsDefinedButNotString = 31,
+        // (undocumented)
+        SecondParameterCannotBeObjectOrNull = 37,
+        // (undocumented)
+        SubFieldIsNotString = 10,
+        // (undocumented)
+        TargetHasInvalidDateFormat = 30,
+        // (undocumented)
+        TargetIsNotNumber = 15,
+        // (undocumented)
+        TextFieldContainsAsHasInvalidFormat = 22,
+        // (undocumented)
+        TextFieldContainsAsIsNotBoolean = 23,
+        // (undocumented)
+        TextFieldContainsAsIsNotString = 21,
+        // (undocumented)
+        TextFieldContainsValueIsNotString = 20,
+        // (undocumented)
+        UnaryArithmeticNumericTupleNodeRequires2Parameters = 46,
+        // (undocumented)
+        UnexpectedBooleanParamType = 8,
+        // (undocumented)
+        UnknownBooleanTupleNodeType = 48,
+        // (undocumented)
+        UnknownFieldBooleanParam = 9,
+        // (undocumented)
+        UnknownNumericField = 50,
+        // (undocumented)
+        UnknownNumericTupleNodeType = 49
+    }
+    // (undocumented)
+    export function tryDecodeBoolean(node: ZenithEncodedScanFormula.BooleanTupleNode): Result<ScanFormula.BooleanNode, DecodeErrorAndProgress>;
+}
+
+// Warning: (ae-missing-release-tag) "ScanFormulaZenithEncodingModule" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export namespace ScanFormulaZenithEncodingModule {
+    // (undocumented)
+    export function initialiseStatic(): void;
 }
 
 // @public (undocumented)
@@ -26648,11 +26661,11 @@ export const enum StringId {
     // (undocumented)
     Details = 58,
     // (undocumented)
-    Diagnostics_CloseSocketConnection = 2037,
+    Diagnostics_CloseSocketConnection = 2090,
     // (undocumented)
-    DiagnosticsDitemGroup_DebugCaption = 2035,
+    DiagnosticsDitemGroup_DebugCaption = 2088,
     // (undocumented)
-    DiagnosticsDitemGroup_DebugTitle = 2036,
+    DiagnosticsDitemGroup_DebugTitle = 2089,
     // (undocumented)
     Disabled = 97,
     // (undocumented)
@@ -27046,37 +27059,37 @@ export const enum StringId {
     // (undocumented)
     Grid_SelectAllTitle = 900,
     // (undocumented)
-    GridFieldFieldHeading_DefaultHeading = 2025,
+    GridFieldFieldHeading_DefaultHeading = 2078,
     // (undocumented)
-    GridFieldFieldHeading_DefaultTextAlign = 2026,
+    GridFieldFieldHeading_DefaultTextAlign = 2079,
     // (undocumented)
-    GridFieldFieldHeading_DefaultWidth = 2027,
+    GridFieldFieldHeading_DefaultWidth = 2080,
     // (undocumented)
-    GridFieldFieldHeading_Heading = 2023,
+    GridFieldFieldHeading_Heading = 2076,
     // (undocumented)
-    GridFieldFieldHeading_Name = 2022,
+    GridFieldFieldHeading_Name = 2075,
     // (undocumented)
-    GridFieldFieldHeading_SourceName = 2024,
+    GridFieldFieldHeading_SourceName = 2077,
     // (undocumented)
-    GridLayoutDefinitionColumnDescription_FieldHeading = 1984,
+    GridLayoutDefinitionColumnDescription_FieldHeading = 2037,
     // (undocumented)
-    GridLayoutDefinitionColumnDescription_FieldName = 1982,
+    GridLayoutDefinitionColumnDescription_FieldName = 2035,
     // (undocumented)
-    GridLayoutDefinitionColumnDescription_FieldSourceName = 1986,
+    GridLayoutDefinitionColumnDescription_FieldSourceName = 2039,
     // (undocumented)
-    GridLayoutDefinitionColumnDescription_Visible = 1990,
+    GridLayoutDefinitionColumnDescription_Visible = 2043,
     // (undocumented)
-    GridLayoutDefinitionColumnDescription_Width = 1988,
+    GridLayoutDefinitionColumnDescription_Width = 2041,
     // (undocumented)
-    GridLayoutDefinitionColumnHeading_FieldHeading = 1983,
+    GridLayoutDefinitionColumnHeading_FieldHeading = 2036,
     // (undocumented)
-    GridLayoutDefinitionColumnHeading_FieldName = 1981,
+    GridLayoutDefinitionColumnHeading_FieldName = 2034,
     // (undocumented)
-    GridLayoutDefinitionColumnHeading_FieldSourceName = 1985,
+    GridLayoutDefinitionColumnHeading_FieldSourceName = 2038,
     // (undocumented)
-    GridLayoutDefinitionColumnHeading_Visible = 1989,
+    GridLayoutDefinitionColumnHeading_Visible = 2042,
     // (undocumented)
-    GridLayoutDefinitionColumnHeading_Width = 1987,
+    GridLayoutDefinitionColumnHeading_Width = 2040,
     // (undocumented)
     GridLayoutDialog_EditGridColumns = 904,
     // (undocumented)
@@ -28696,19 +28709,19 @@ export const enum StringId {
     // (undocumented)
     RankedLitIvemIdListAbbreviation_WatchmakerListId = 349,
     // (undocumented)
-    RankedLitIvemIdListDirectoryItem_TypeId_Scan = 2034,
+    RankedLitIvemIdListDirectoryItem_TypeId_Scan = 2087,
     // (undocumented)
-    RankedLitIvemIdListDirectoryItem_TypeId_WatchmakerList = 2033,
+    RankedLitIvemIdListDirectoryItem_TypeId_WatchmakerList = 2086,
     // (undocumented)
-    RankedLitIvemIdListDirectoryItemFieldHeading_Description = 2032,
+    RankedLitIvemIdListDirectoryItemFieldHeading_Description = 2085,
     // (undocumented)
-    RankedLitIvemIdListDirectoryItemFieldHeading_Id = 2029,
+    RankedLitIvemIdListDirectoryItemFieldHeading_Id = 2082,
     // (undocumented)
-    RankedLitIvemIdListDirectoryItemFieldHeading_Name = 2031,
+    RankedLitIvemIdListDirectoryItemFieldHeading_Name = 2084,
     // (undocumented)
-    RankedLitIvemIdListDirectoryItemFieldHeading_Readonly = 2030,
+    RankedLitIvemIdListDirectoryItemFieldHeading_Readonly = 2083,
     // (undocumented)
-    RankedLitIvemIdListDirectoryItemFieldHeading_TypeId = 2028,
+    RankedLitIvemIdListDirectoryItemFieldHeading_TypeId = 2081,
     // (undocumented)
     RankedLitIvemIdListDisplay_LitIvemIdArray = 348,
     // (undocumented)
@@ -28734,205 +28747,311 @@ export const enum StringId {
     // (undocumented)
     SaveColorSchemeToADifferentNameTitle = 236,
     // (undocumented)
-    ScanCriteriaCaption_DefaultView = 1973,
+    ScanCriteriaCaption_DefaultView = 2026,
     // (undocumented)
-    ScanCriteriaCaption_View = 1975,
+    ScanCriteriaCaption_View = 2028,
     // (undocumented)
-    ScanCriteriaDescription_DefaultView = 1974,
+    ScanCriteriaDescription_DefaultView = 2027,
     // (undocumented)
-    ScanCriteriaDescription_View = 1976,
+    ScanCriteriaDescription_View = 2029,
     // (undocumented)
-    ScanCriteriaTypeDisplay_Custom = 1906,
+    ScanCriteriaTypeDisplay_Custom = 1959,
     // (undocumented)
-    ScanCriteriaTypeDisplay_PriceGreaterThanValue = 1907,
+    ScanCriteriaTypeDisplay_PriceGreaterThanValue = 1960,
     // (undocumented)
-    ScanCriteriaTypeDisplay_PriceLessThanValue = 1908,
+    ScanCriteriaTypeDisplay_PriceLessThanValue = 1961,
     // (undocumented)
-    ScanCriteriaTypeDisplay_TodayPriceDecreaseGreaterThanPercentage = 1910,
+    ScanCriteriaTypeDisplay_TodayPriceDecreaseGreaterThanPercentage = 1963,
     // (undocumented)
-    ScanCriteriaTypeDisplay_TodayPriceIncreaseGreaterThanPercentage = 1909,
+    ScanCriteriaTypeDisplay_TodayPriceIncreaseGreaterThanPercentage = 1962,
     // (undocumented)
-    ScanCriteriaViewDescription_Default = 1912,
+    ScanCriteriaViewDescription_Default = 1965,
     // (undocumented)
-    ScanCriteriaViewDescription_Formula = 1916,
+    ScanCriteriaViewDescription_Formula = 1969,
     // (undocumented)
-    ScanCriteriaViewDescription_List = 1914,
+    ScanCriteriaViewDescription_List = 1967,
     // (undocumented)
-    ScanCriteriaViewDescription_Zenith = 1918,
+    ScanCriteriaViewDescription_Zenith = 1971,
     // (undocumented)
-    ScanCriteriaViewDisplay_Default = 1911,
+    ScanCriteriaViewDisplay_Default = 1964,
     // (undocumented)
-    ScanCriteriaViewDisplay_Formula = 1915,
+    ScanCriteriaViewDisplay_Formula = 1968,
     // (undocumented)
-    ScanCriteriaViewDisplay_List = 1913,
+    ScanCriteriaViewDisplay_List = 1966,
     // (undocumented)
-    ScanCriteriaViewDisplay_Zenith = 1917,
+    ScanCriteriaViewDisplay_Zenith = 1970,
     // (undocumented)
     ScanEditor = 247,
     // (undocumented)
-    ScanEditorComponent_ApplyTitle = 1977,
+    ScanEditorComponent_ApplyTitle = 2030,
     // (undocumented)
-    ScanEditorComponent_DeleteTitle = 1979,
+    ScanEditorComponent_DeleteTitle = 2032,
     // (undocumented)
-    ScanEditorComponent_RevertTitle = 1978,
+    ScanEditorComponent_RevertTitle = 2031,
     // (undocumented)
-    ScanEditorComponent_TestTitle = 1980,
+    ScanEditorComponent_TestTitle = 2033,
     // (undocumented)
-    ScanFieldHeading_Description = 1996,
+    ScanFieldHeading_Description = 2049,
     // (undocumented)
-    ScanFieldHeading_Id = 1991,
+    ScanFieldHeading_Id = 2044,
     // (undocumented)
-    ScanFieldHeading_Index = 1993,
+    ScanFieldHeading_Index = 2046,
     // (undocumented)
-    ScanFieldHeading_LastSavedTime = 2005,
+    ScanFieldHeading_LastSavedTime = 2058,
     // (undocumented)
-    ScanFieldHeading_MaxMatchCount = 2000,
+    ScanFieldHeading_MaxMatchCount = 2053,
     // (undocumented)
-    ScanFieldHeading_Name = 1995,
+    ScanFieldHeading_Name = 2048,
     // (undocumented)
-    ScanFieldHeading_Readonly = 1992,
+    ScanFieldHeading_Readonly = 2045,
     // (undocumented)
-    ScanFieldHeading_StatusId = 1994,
+    ScanFieldHeading_StatusId = 2047,
     // (undocumented)
-    ScanFieldHeading_SymbolListEnabled = 2003,
+    ScanFieldHeading_SymbolListEnabled = 2056,
     // (undocumented)
-    ScanFieldHeading_TargetLitIvemIds = 1999,
+    ScanFieldHeading_TargetLitIvemIds = 2052,
     // (undocumented)
-    ScanFieldHeading_TargetMarkets = 1998,
+    ScanFieldHeading_TargetMarkets = 2051,
     // (undocumented)
-    ScanFieldHeading_TargetTypeId = 1997,
+    ScanFieldHeading_TargetTypeId = 2050,
     // (undocumented)
-    ScanFieldHeading_Version = 2004,
+    ScanFieldHeading_Version = 2057,
     // (undocumented)
-    ScanFieldHeading_ZenithCriteria = 2001,
+    ScanFieldHeading_ZenithCriteria = 2054,
     // (undocumented)
-    ScanFieldHeading_ZenithRank = 2002,
+    ScanFieldHeading_ZenithRank = 2055,
     // (undocumented)
-    ScanPropertiesCaption_AllNotifiers = 1949,
+    ScanFormulaZenithEncodingError_AltCodeSubFieldContainsSubFieldIsUnknown = 1925,
     // (undocumented)
-    ScanPropertiesCaption_Description = 1931,
+    ScanFormulaZenithEncodingError_AltCodeSubFieldHasValueSubFieldIsUnknown = 1910,
     // (undocumented)
-    ScanPropertiesCaption_EmailNotifier = 1945,
+    ScanFormulaZenithEncodingError_AttributeSubFieldContainsSubFieldIsUnknown = 1926,
     // (undocumented)
-    ScanPropertiesCaption_Enabled = 1927,
+    ScanFormulaZenithEncodingError_AttributeSubFieldHasValueSubFieldIsUnknown = 1911,
     // (undocumented)
-    ScanPropertiesCaption_MinimumElapsedTime = 1953,
+    ScanFormulaZenithEncodingError_BooleanFieldCanOnlyHaveOneParameter = 1935,
     // (undocumented)
-    ScanPropertiesCaption_MinimumStableTime = 1951,
+    ScanFormulaZenithEncodingError_BooleanFieldEqualsTargetIsNotBoolean = 1921,
     // (undocumented)
-    ScanPropertiesCaption_MobileNotifier = 1941,
+    ScanFormulaZenithEncodingError_BooleanTupleNodeArrayIsZeroLength = 1899,
     // (undocumented)
-    ScanPropertiesCaption_MotifNotifier = 1947,
+    ScanFormulaZenithEncodingError_BooleanTupleNodeIsNotAnArray = 1898,
     // (undocumented)
-    ScanPropertiesCaption_Name = 1929,
+    ScanFormulaZenithEncodingError_BooleanTupleNodeTypeIsNotString = 1900,
     // (undocumented)
-    ScanPropertiesCaption_SmsNotifier = 1943,
+    ScanFormulaZenithEncodingError_DateFieldEqualsTargetIsNotString = 1916,
     // (undocumented)
-    ScanPropertiesCaption_SymbolList = 1935,
+    ScanFormulaZenithEncodingError_DateSubFieldEqualsSubFieldIsUnknown = 1923,
     // (undocumented)
-    ScanPropertiesCaption_SymbolListMaxCount = 1937,
+    ScanFormulaZenithEncodingError_DateSubFieldEqualsTargetIsNotString = 1924,
     // (undocumented)
-    ScanPropertiesCaption_Type = 1933,
+    ScanFormulaZenithEncodingError_DateSubFieldHasValueSubFieldIsUnknown = 1909,
     // (undocumented)
-    ScanPropertiesCaption_View = 1939,
+    ScanFormulaZenithEncodingError_FieldBooleanNodeHasTooManyParameters = 1939,
     // (undocumented)
-    ScanPropertiesDescription_AllNotifiers = 1950,
+    ScanFormulaZenithEncodingError_FirstParameterCannotBeObjectOrNull = 1933,
     // (undocumented)
-    ScanPropertiesDescription_EmailNotifier = 1946,
+    ScanFormulaZenithEncodingError_IfTupleNodeRequiresAnEvenNumberOfParameters = 1949,
     // (undocumented)
-    ScanPropertiesDescription_MinimumElapsedTime = 1954,
+    ScanFormulaZenithEncodingError_IfTupleNodeRequiresAtLeast4Parameters = 1948,
     // (undocumented)
-    ScanPropertiesDescription_MinimumStableTime = 1952,
+    ScanFormulaZenithEncodingError_InvalidJson = 1897,
     // (undocumented)
-    ScanPropertiesDescription_MobileNotifier = 1942,
+    ScanFormulaZenithEncodingError_LeftRightArithmeticNumericTupleNodeRequires3Parameters = 1944,
     // (undocumented)
-    ScanPropertiesDescription_MotifNotifier = 1948,
+    ScanFormulaZenithEncodingError_LogicalBooleanMissingOperand = 1902,
     // (undocumented)
-    ScanPropertiesDescription_SmsNotifier = 1944,
+    ScanFormulaZenithEncodingError_LogicalBooleanMissingOperands = 1901,
     // (undocumented)
-    ScanPropertiesTitle_Description = 1932,
+    ScanFormulaZenithEncodingError_NamedParametersCannotBeNull = 1932,
     // (undocumented)
-    ScanPropertiesTitle_Enabled = 1928,
+    ScanFormulaZenithEncodingError_NumericComparisonDoesNotHave2Operands = 1903,
     // (undocumented)
-    ScanPropertiesTitle_Name = 1930,
+    ScanFormulaZenithEncodingError_NumericParameterIsNotNumberOrComparableFieldOrArray = 1904,
     // (undocumented)
-    ScanPropertiesTitle_SymbolList = 1936,
+    ScanFormulaZenithEncodingError_NumericTupleNodeIsZeroLength = 1940,
     // (undocumented)
-    ScanPropertiesTitle_SymbolListMaxCount = 1938,
+    ScanFormulaZenithEncodingError_NumericTupleNodeRequires2Or3Parameters = 1942,
     // (undocumented)
-    ScanPropertiesTitle_Type = 1934,
+    ScanFormulaZenithEncodingError_NumericTupleNodeTypeIsNotString = 1941,
     // (undocumented)
-    ScanPropertiesTitle_View = 1940,
+    ScanFormulaZenithEncodingError_OnlySubFieldNodeCanHave4Parameters = 1937,
     // (undocumented)
-    ScansGridHeading_Description = 1923,
+    ScanFormulaZenithEncodingError_OnlySubFieldOrTextFieldNodesCanHave3Parameters = 1936,
     // (undocumented)
-    ScansGridHeading_Id = 1919,
+    ScanFormulaZenithEncodingError_OnlyTextSubFieldContainsNodeCanHave4Parameters = 1938,
     // (undocumented)
-    ScansGridHeading_Index = 1920,
+    ScanFormulaZenithEncodingError_PriceSubFieldEqualsSubFieldIsUnknown = 1922,
     // (undocumented)
-    ScansGridHeading_LastSavedTime = 1926,
+    ScanFormulaZenithEncodingError_PriceSubFieldHasValueSubFieldIsUnknown = 1908,
     // (undocumented)
-    ScansGridHeading_Name = 1922,
+    ScanFormulaZenithEncodingError_RangeMaxHasInvalidDateFormat = 1931,
     // (undocumented)
-    ScansGridHeading_Readonly = 1921,
+    ScanFormulaZenithEncodingError_RangeMaxIsDefinedButNotNumber = 1914,
     // (undocumented)
-    ScansGridHeading_StatusId = 1924,
+    ScanFormulaZenithEncodingError_RangeMaxIsDefinedButNotString = 1930,
     // (undocumented)
-    ScansGridHeading_Version = 1925,
+    ScanFormulaZenithEncodingError_RangeMinAndMaxAreBothUndefined = 1915,
     // (undocumented)
-    ScanStatusDisplay_Active = 1902,
+    ScanFormulaZenithEncodingError_RangeMinHasInvalidDateFormat = 1929,
     // (undocumented)
-    ScanStatusDisplay_Faulted = 1903,
+    ScanFormulaZenithEncodingError_RangeMinIsDefinedButNotNumber = 1913,
     // (undocumented)
-    ScanStatusDisplay_Inactive = 1901,
+    ScanFormulaZenithEncodingError_RangeMinIsDefinedButNotString = 1928,
     // (undocumented)
-    ScanSyncStatusDisplay_Behind = 1898,
+    ScanFormulaZenithEncodingError_SecondParameterCannotBeObjectOrNull = 1934,
     // (undocumented)
-    ScanSyncStatusDisplay_Conflict = 1899,
+    ScanFormulaZenithEncodingError_SubFieldIsNotString = 1907,
     // (undocumented)
-    ScanSyncStatusDisplay_InSync = 1900,
+    ScanFormulaZenithEncodingError_TargetHasInvalidDateFormat = 1927,
     // (undocumented)
-    ScanSyncStatusDisplay_Saving = 1897,
+    ScanFormulaZenithEncodingError_TargetIsNotNumber = 1912,
     // (undocumented)
-    ScanTargetsCaption_MaxMatchCount = 1963,
+    ScanFormulaZenithEncodingError_TextFieldContainsAsHasInvalidFormat = 1919,
     // (undocumented)
-    ScanTargetsCaption_MultiMarket = 1961,
+    ScanFormulaZenithEncodingError_TextFieldContainsAsIsNotBoolean = 1920,
     // (undocumented)
-    ScanTargetsCaption_SingleMarket = 1959,
+    ScanFormulaZenithEncodingError_TextFieldContainsAsIsNotString = 1918,
     // (undocumented)
-    ScanTargetsCaption_SingleSymbol = 1957,
+    ScanFormulaZenithEncodingError_TextFieldContainsValueIsNotString = 1917,
     // (undocumented)
-    ScanTargetsCaption_TargetType = 1955,
+    ScanFormulaZenithEncodingError_UnaryArithmeticNumericTupleNodeRequires2Parameters = 1943,
     // (undocumented)
-    ScanTargetsDescription_MaxMatchCount = 1964,
+    ScanFormulaZenithEncodingError_UnexpectedBooleanParamType = 1905,
     // (undocumented)
-    ScanTargetsDescription_MultiMarket = 1962,
+    ScanFormulaZenithEncodingError_UnknownBooleanTupleNodeType = 1945,
     // (undocumented)
-    ScanTargetsDescription_SingleMarket = 1960,
+    ScanFormulaZenithEncodingError_UnknownFieldBooleanParam = 1906,
     // (undocumented)
-    ScanTargetsDescription_SingleSymbol = 1958,
+    ScanFormulaZenithEncodingError_UnknownNumericField = 1947,
     // (undocumented)
-    ScanTargetsDescription_TargetType = 1956,
+    ScanFormulaZenithEncodingError_UnknownNumericTupleNodeType = 1946,
     // (undocumented)
-    ScanTargetsTargetSubTypeIdDescription_MultiMarket = 1972,
+    ScanPropertiesCaption_AllNotifiers = 2002,
     // (undocumented)
-    ScanTargetsTargetSubTypeIdDescription_MultiSymbol = 1968,
+    ScanPropertiesCaption_Description = 1984,
     // (undocumented)
-    ScanTargetsTargetSubTypeIdDescription_SingleMarket = 1970,
+    ScanPropertiesCaption_EmailNotifier = 1998,
     // (undocumented)
-    ScanTargetsTargetSubTypeIdDescription_SingleSymbol = 1966,
+    ScanPropertiesCaption_Enabled = 1980,
     // (undocumented)
-    ScanTargetsTargetSubTypeIdDisplay_MultiMarket = 1971,
+    ScanPropertiesCaption_MinimumElapsedTime = 2006,
     // (undocumented)
-    ScanTargetsTargetSubTypeIdDisplay_MultiSymbol = 1967,
+    ScanPropertiesCaption_MinimumStableTime = 2004,
     // (undocumented)
-    ScanTargetsTargetSubTypeIdDisplay_SingleMarket = 1969,
+    ScanPropertiesCaption_MobileNotifier = 1994,
     // (undocumented)
-    ScanTargetsTargetSubTypeIdDisplay_SingleSymbol = 1965,
+    ScanPropertiesCaption_MotifNotifier = 2000,
     // (undocumented)
-    ScanTargetTypeDisplay_Markets = 1904,
+    ScanPropertiesCaption_Name = 1982,
     // (undocumented)
-    ScanTargetTypeDisplay_Symbols = 1905,
+    ScanPropertiesCaption_SmsNotifier = 1996,
+    // (undocumented)
+    ScanPropertiesCaption_SymbolList = 1988,
+    // (undocumented)
+    ScanPropertiesCaption_SymbolListMaxCount = 1990,
+    // (undocumented)
+    ScanPropertiesCaption_Type = 1986,
+    // (undocumented)
+    ScanPropertiesCaption_View = 1992,
+    // (undocumented)
+    ScanPropertiesDescription_AllNotifiers = 2003,
+    // (undocumented)
+    ScanPropertiesDescription_EmailNotifier = 1999,
+    // (undocumented)
+    ScanPropertiesDescription_MinimumElapsedTime = 2007,
+    // (undocumented)
+    ScanPropertiesDescription_MinimumStableTime = 2005,
+    // (undocumented)
+    ScanPropertiesDescription_MobileNotifier = 1995,
+    // (undocumented)
+    ScanPropertiesDescription_MotifNotifier = 2001,
+    // (undocumented)
+    ScanPropertiesDescription_SmsNotifier = 1997,
+    // (undocumented)
+    ScanPropertiesTitle_Description = 1985,
+    // (undocumented)
+    ScanPropertiesTitle_Enabled = 1981,
+    // (undocumented)
+    ScanPropertiesTitle_Name = 1983,
+    // (undocumented)
+    ScanPropertiesTitle_SymbolList = 1989,
+    // (undocumented)
+    ScanPropertiesTitle_SymbolListMaxCount = 1991,
+    // (undocumented)
+    ScanPropertiesTitle_Type = 1987,
+    // (undocumented)
+    ScanPropertiesTitle_View = 1993,
+    // (undocumented)
+    ScansGridHeading_Description = 1976,
+    // (undocumented)
+    ScansGridHeading_Id = 1972,
+    // (undocumented)
+    ScansGridHeading_Index = 1973,
+    // (undocumented)
+    ScansGridHeading_LastSavedTime = 1979,
+    // (undocumented)
+    ScansGridHeading_Name = 1975,
+    // (undocumented)
+    ScansGridHeading_Readonly = 1974,
+    // (undocumented)
+    ScansGridHeading_StatusId = 1977,
+    // (undocumented)
+    ScansGridHeading_Version = 1978,
+    // (undocumented)
+    ScanStatusDisplay_Active = 1955,
+    // (undocumented)
+    ScanStatusDisplay_Faulted = 1956,
+    // (undocumented)
+    ScanStatusDisplay_Inactive = 1954,
+    // (undocumented)
+    ScanSyncStatusDisplay_Behind = 1951,
+    // (undocumented)
+    ScanSyncStatusDisplay_Conflict = 1952,
+    // (undocumented)
+    ScanSyncStatusDisplay_InSync = 1953,
+    // (undocumented)
+    ScanSyncStatusDisplay_Saving = 1950,
+    // (undocumented)
+    ScanTargetsCaption_MaxMatchCount = 2016,
+    // (undocumented)
+    ScanTargetsCaption_MultiMarket = 2014,
+    // (undocumented)
+    ScanTargetsCaption_SingleMarket = 2012,
+    // (undocumented)
+    ScanTargetsCaption_SingleSymbol = 2010,
+    // (undocumented)
+    ScanTargetsCaption_TargetType = 2008,
+    // (undocumented)
+    ScanTargetsDescription_MaxMatchCount = 2017,
+    // (undocumented)
+    ScanTargetsDescription_MultiMarket = 2015,
+    // (undocumented)
+    ScanTargetsDescription_SingleMarket = 2013,
+    // (undocumented)
+    ScanTargetsDescription_SingleSymbol = 2011,
+    // (undocumented)
+    ScanTargetsDescription_TargetType = 2009,
+    // (undocumented)
+    ScanTargetsTargetSubTypeIdDescription_MultiMarket = 2025,
+    // (undocumented)
+    ScanTargetsTargetSubTypeIdDescription_MultiSymbol = 2021,
+    // (undocumented)
+    ScanTargetsTargetSubTypeIdDescription_SingleMarket = 2023,
+    // (undocumented)
+    ScanTargetsTargetSubTypeIdDescription_SingleSymbol = 2019,
+    // (undocumented)
+    ScanTargetsTargetSubTypeIdDisplay_MultiMarket = 2024,
+    // (undocumented)
+    ScanTargetsTargetSubTypeIdDisplay_MultiSymbol = 2020,
+    // (undocumented)
+    ScanTargetsTargetSubTypeIdDisplay_SingleMarket = 2022,
+    // (undocumented)
+    ScanTargetsTargetSubTypeIdDisplay_SingleSymbol = 2018,
+    // (undocumented)
+    ScanTargetTypeDisplay_Markets = 1957,
+    // (undocumented)
+    ScanTargetTypeDisplay_Symbols = 1958,
     // (undocumented)
     Search = 57,
     // (undocumented)
@@ -29876,23 +29995,23 @@ export const enum StringId {
     // (undocumented)
     Watchlist_SymbolButtonTitle = 872,
     // (undocumented)
-    WatchmakerListHeading_Category = 2018,
+    WatchmakerListHeading_Category = 2071,
     // (undocumented)
-    WatchmakerListHeading_ConfigModified = 2020,
+    WatchmakerListHeading_ConfigModified = 2073,
     // (undocumented)
-    WatchmakerListHeading_Description = 2017,
+    WatchmakerListHeading_Description = 2070,
     // (undocumented)
-    WatchmakerListHeading_Id = 2013,
+    WatchmakerListHeading_Id = 2066,
     // (undocumented)
-    WatchmakerListHeading_Index = 2015,
+    WatchmakerListHeading_Index = 2068,
     // (undocumented)
-    WatchmakerListHeading_LastSavedTime = 2021,
+    WatchmakerListHeading_LastSavedTime = 2074,
     // (undocumented)
-    WatchmakerListHeading_Name = 2016,
+    WatchmakerListHeading_Name = 2069,
     // (undocumented)
-    WatchmakerListHeading_Readonly = 2014,
+    WatchmakerListHeading_Readonly = 2067,
     // (undocumented)
-    WatchmakerListHeading_SyncStatusId = 2019,
+    WatchmakerListHeading_SyncStatusId = 2072,
     // (undocumented)
     Writable = 69,
     // (undocumented)
@@ -29938,19 +30057,19 @@ export const enum StringId {
     // (undocumented)
     ZenithPublisherStateDisplay_SocketOpen = 1069,
     // (undocumented)
-    ZenithScanFormulaView_ErrorCaption = 2006,
+    ZenithScanFormulaView_ErrorCaption = 2059,
     // (undocumented)
-    ZenithScanFormulaView_ErrorTitle = 2007,
+    ZenithScanFormulaView_ErrorTitle = 2060,
     // (undocumented)
-    ZenithScanFormulaViewDecodeProgress_CountCaption = 2009,
+    ZenithScanFormulaViewDecodeProgress_CountCaption = 2062,
     // (undocumented)
-    ZenithScanFormulaViewDecodeProgress_CountTitle = 2010,
+    ZenithScanFormulaViewDecodeProgress_CountTitle = 2063,
     // (undocumented)
-    ZenithScanFormulaViewDecodeProgress_DepthCaption = 2011,
+    ZenithScanFormulaViewDecodeProgress_DepthCaption = 2064,
     // (undocumented)
-    ZenithScanFormulaViewDecodeProgress_DepthTitle = 2012,
+    ZenithScanFormulaViewDecodeProgress_DepthTitle = 2065,
     // (undocumented)
-    ZenithScanFormulaViewDecodeProgress_Title = 2008,
+    ZenithScanFormulaViewDecodeProgress_Title = 2061,
     // (undocumented)
     ZenithUnexpectedCaseExternalError = 18,
     // (undocumented)
