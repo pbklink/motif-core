@@ -43,7 +43,7 @@
     "@ctrl/tinycolor": "^4.0.2",
     "decimal.js-light": "^2.5.1",
     "nanoid": "^5.0.1",
-    "revgrid": "^0.4.4"
+    "revgrid": "^0.4.5"
   },
   "devDependencies": {
     "@microsoft/api-extractor": "^7.38.0",
