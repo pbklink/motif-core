@@ -58,34 +58,47 @@ export namespace ScanFormulaZenithEncoding {
         }
     }
 
-    interface DecodeError {
+    export interface DecodeError {
         errorId: ErrorId;
         extraErrorText: string | undefined;
     }
 
-    export interface DecodeErrorAndProgress {
-        errorId: ErrorId;
-        extraErrorText: string | undefined;
-        progress: DecodeProgress | undefined;
+    export interface DecodedError {
+        error: DecodeError;
+        progress: DecodeProgress;
+    }
+
+    export interface DecodedBoolean {
+        node: ScanFormula.BooleanNode;
+        progress: DecodeProgress;
+    }
+
+    export interface DecodedNumeric {
+        node: ScanFormula.NumericNode;
+        progress: DecodeProgress;
     }
 
     export function encodeBoolean(node: ScanFormula.BooleanNode): ZenithEncodedScanFormula.BooleanTupleNode {
         return encodeBooleanNode(node);
     }
 
-    export function tryDecodeBoolean(node: ZenithEncodedScanFormula.BooleanTupleNode): Result<ScanFormula.BooleanNode, DecodeErrorAndProgress> {
+    export function tryDecodeBoolean(node: ZenithEncodedScanFormula.BooleanTupleNode): Result<DecodedBoolean, DecodedError> {
         const progress = new DecodeProgress();
 
         const tryResult = tryDecodeExpectedBooleanNode(node, progress);
 
         if (tryResult.isOk()) {
-            return new Ok(tryResult.value);
+            const decodedBoolean: DecodedBoolean = {
+                node: tryResult.value,
+                progress,
+            };
+            return new Ok(decodedBoolean);
         } else {
-            const decodeErrorAndProgress: DecodeErrorAndProgress = {
-                ...tryResult.error,
+            const decodedError: DecodedError = {
+                error: tryResult.error,
                 progress,
             }
-            return new Err(decodeErrorAndProgress);
+            return new Err(decodedError);
         }
     }
 
@@ -93,19 +106,23 @@ export namespace ScanFormulaZenithEncoding {
         return encodeNumericNode(node);
     }
 
-    export function decodeNumeric(node: ZenithEncodedScanFormula.NumericTupleNode): Result<ScanFormula.NumericNode, DecodeErrorAndProgress> {
+    export function tryDecodeNumeric(node: ZenithEncodedScanFormula.NumericTupleNode): Result<DecodedNumeric, DecodedError> {
         const progress = new DecodeProgress();
 
         const tryResult = tryDecodeExpectedArithmeticNumericNode(node, progress);
 
         if (tryResult.isOk()) {
-            return new Ok(tryResult.value);
+            const decodedNumeric: DecodedNumeric = {
+                node: tryResult.value,
+                progress,
+            };
+            return new Ok(decodedNumeric);
         } else {
-            const decodeErrorAndProgress: DecodeErrorAndProgress = {
-                ...tryResult.error,
+            const decodedError: DecodedError = {
+                error: tryResult.error,
                 progress,
             }
-            return new Err(decodeErrorAndProgress);
+            return new Err(decodedError);
         }
     }
 
@@ -1291,6 +1308,7 @@ export namespace ScanFormulaZenithEncoding {
         numericTupleNode: ZenithEncodedScanFormula.NumericTupleNode,
         toProgress: DecodeProgress
     ): Result<ScanFormula.NumericNode, DecodeError> {
+        toProgress.enterTupleNode();
         const tupleNodeLength = numericTupleNode.length;
         if (tupleNodeLength < 1 ) {
             return createDecodeErrorResult(ErrorId.NumericTupleNodeIsZeroLength, undefined);

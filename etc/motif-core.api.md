@@ -22145,7 +22145,7 @@ export namespace RowDataArrayGrid {
     // Warning: (ae-forgotten-export) The symbol "RowDataArrayGridField" needs to be exported by the entry point public-api.d.ts
     //
     // (undocumented)
-    export function createField(sourceDefinition: GridFieldSourceDefinition, sourcelessName: string, defaultHeading: string, defaultTextAlign: GridFieldHorizontalAlign, defaultWidth?: number): RowDataArrayGridField;
+    export function createField(sourcelessName: string, defaultHeading: string, defaultTextAlign: GridFieldHorizontalAlign, defaultWidth?: number): RowDataArrayGridField;
     // (undocumented)
     export type MainClickEventer = (this: void, columnIndex: number, rowIndex: number) => void;
     // (undocumented)
@@ -22797,9 +22797,9 @@ export class ScanEditor {
     // (undocumented)
     get scan(): Scan | undefined;
     // (undocumented)
-    setCriteriaAsZenithText(value: string, fieldChanger?: ScanEditor.FieldChanger): Result<void, ScanFormulaZenithEncoding.DecodeErrorAndProgress> | undefined;
+    setCriteriaAsZenithText(value: string, fieldChanger?: ScanEditor.FieldChanger): ScanEditor.SetAsZenithTextResult | undefined;
     // (undocumented)
-    setRankAsZenithText(value: string, fieldChanger?: ScanEditor.FieldChanger): Result<void, ScanFormulaZenithEncoding.DecodeErrorAndProgress> | undefined;
+    setRankAsZenithText(value: string, fieldChanger?: ScanEditor.FieldChanger): ScanEditor.SetAsZenithTextResult | undefined;
     // (undocumented)
     get statusId(): ScanStatusId | undefined;
     // (undocumented)
@@ -22926,6 +22926,13 @@ export namespace ScanEditor {
         Modified = 1,
         // (undocumented)
         Unmodified = 0
+    }
+    // (undocumented)
+    export interface SetAsZenithTextResult {
+        // (undocumented)
+        error: ScanFormulaZenithEncoding.DecodeError | undefined;
+        // (undocumented)
+        progress: ScanFormulaZenithEncoding.DecodeProgress;
     }
     // (undocumented)
     export type StateChangeEventHandler = (this: void) => void;
@@ -23598,16 +23605,33 @@ export namespace ScanFormula {
 // @public (undocumented)
 export namespace ScanFormulaZenithEncoding {
     // (undocumented)
-    export interface DecodeErrorAndProgress {
+    export interface DecodedBoolean {
+        // (undocumented)
+        node: ScanFormula.BooleanNode;
+        // (undocumented)
+        progress: DecodeProgress;
+    }
+    // (undocumented)
+    export interface DecodedError {
+        // (undocumented)
+        error: DecodeError;
+        // (undocumented)
+        progress: DecodeProgress;
+    }
+    // (undocumented)
+    export interface DecodedNumeric {
+        // (undocumented)
+        node: ScanFormula.NumericNode;
+        // (undocumented)
+        progress: DecodeProgress;
+    }
+    // (undocumented)
+    export interface DecodeError {
         // (undocumented)
         errorId: ErrorId;
         // (undocumented)
         extraErrorText: string | undefined;
-        // (undocumented)
-        progress: DecodeProgress | undefined;
     }
-    // (undocumented)
-    export function decodeNumeric(node: ZenithEncodedScanFormula.NumericTupleNode): Result<ScanFormula.NumericNode, DecodeErrorAndProgress>;
     // (undocumented)
     export class DecodeProgress {
         // (undocumented)
@@ -23762,7 +23786,9 @@ export namespace ScanFormulaZenithEncoding {
         UnknownNumericTupleNodeType = 49
     }
     // (undocumented)
-    export function tryDecodeBoolean(node: ZenithEncodedScanFormula.BooleanTupleNode): Result<ScanFormula.BooleanNode, DecodeErrorAndProgress>;
+    export function tryDecodeBoolean(node: ZenithEncodedScanFormula.BooleanTupleNode): Result<DecodedBoolean, DecodedError>;
+    // (undocumented)
+    export function tryDecodeNumeric(node: ZenithEncodedScanFormula.NumericTupleNode): Result<DecodedNumeric, DecodedError>;
 }
 
 // Warning: (ae-missing-release-tag) "ScanFormulaZenithEncodingModule" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
