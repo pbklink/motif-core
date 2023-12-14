@@ -875,6 +875,18 @@ export function deepExtendValue(existingTarget: unknown, value: unknown): unknow
     }
 }
 
+export function isUndefinableStringNumberBooleanNestArrayEqual(left: unknown[] | undefined, right: unknown[] | undefined) {
+    if (left === undefined) {
+        return right === undefined;
+    } else {
+        if (right === undefined) {
+            return false;
+        } else {
+            return isStringNumberBooleanNestArrayEqual(left, right);
+        }
+    }
+}
+
 export function isStringNumberBooleanNestArrayEqual(left: unknown[], right: unknown[]) {
     const leftCount = left.length;
     const rightCount = right.length;

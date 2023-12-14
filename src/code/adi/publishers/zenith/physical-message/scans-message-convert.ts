@@ -12,8 +12,8 @@ import {
     AdiPublisherSubscription,
     AurcChangeTypeId,
     QueryScanDescriptorsDataDefinition,
-    ScanStatusedDescriptorsDataMessage,
-    WatchmakerListDescriptorsDataDefinition
+    ScanDescriptorsDataDefinition,
+    ScanStatusedDescriptorsDataMessage
 } from "../../../common/adi-common-internal-api";
 import { ZenithProtocol } from './protocol/zenith-protocol';
 import { ZenithConvert } from './zenith-convert';
@@ -22,7 +22,7 @@ import { ZenithNotifyConvert } from './zenith-notify-convert';
 export namespace ScansMessageConvert {
     export function createRequestMessage(request: AdiPublisherRequest) {
         const definition = request.subscription.dataDefinition;
-        if (definition instanceof WatchmakerListDescriptorsDataDefinition) {
+        if (definition instanceof ScanDescriptorsDataDefinition) {
             return createSubUnsubMessage(request.typeId);
         } else {
             if (definition instanceof QueryScanDescriptorsDataDefinition) {
@@ -118,7 +118,10 @@ export namespace ScansMessageConvert {
                     versionId: metaData.versionId,
                     versioningInterrupted: metaData.versioningInterrupted,
                     lastSavedTime: metaData.lastSavedTime,
+                    lastEditSessionId: metaData.lastEditSessionId,
                     symbolListEnabled: metaData.symbolListEnabled,
+                    zenithCriteriaSource: metaData.zenithCriteriaSource,
+                    zenithRankSource: metaData.zenithRankSource,
                     readonly: !scan.IsWritable,
                     scanStatusId,
                 };

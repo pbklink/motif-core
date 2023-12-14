@@ -124,8 +124,7 @@ export namespace ZenithMessageConvert {
                 case DataChannelId.BrokerageAccountOrders: return OrdersMessageConvert.parseMessage(subscription, message, actionId);
                 case DataChannelId.BrokerageAccountHoldings: return HoldingsMessageConvert.parseMessage(subscription, message, actionId);
                 case DataChannelId.BrokerageAccountBalances: return BalancesMessageConvert.parseMessage(subscription, message, actionId);
-                case DataChannelId.BrokerageAccountTransactions: return TransactionsMessageConvert.parseMessage(subscription, message,
-                    actionId);
+                case DataChannelId.BrokerageAccountTransactions: return TransactionsMessageConvert.parseMessage(subscription, message, actionId);
                 case DataChannelId.OrderRequests: return OrderRequestsMessageConvert.parseMessage(subscription, message, actionId);
                 case DataChannelId.OrderAudit: return OrderAuditMessageConvert.parseMessage(subscription, message, actionId);
                 case DataChannelId.PlaceOrderRequest: return PlaceOrderMessageConvert.parseMessage(subscription, message, actionId);
@@ -144,6 +143,7 @@ export namespace ZenithMessageConvert {
                 case DataChannelId.LitIvemIdAddToWatchmakerList: return AddToWatchlistMessageConvert.parseMessage(subscription, message, actionId);
                 case DataChannelId.LitIvemIdInsertIntoWatchmakerList: return InsertIntoWatchlistMessageConvert.parseMessage(subscription, message, actionId);
                 case DataChannelId.MoveInWatchmakerList: return MoveInWatchlistMessageConvert.parseMessage(subscription, message, actionId);
+                case DataChannelId.LitIvemIdMatches: return MatchesMessageConvert.parseMessage(subscription, message, actionId);
                 default:
                     throw new UnexpectedCaseError('MZCCDM113355', subscription.dataDefinition.channelId.toString(10));
             }

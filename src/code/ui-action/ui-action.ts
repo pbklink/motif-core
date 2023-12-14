@@ -158,6 +158,10 @@ export abstract class UiAction {
         this.pushState(UiAction.StateId.Readonly);
     }
 
+    pushMissing() {
+        this.pushState(UiAction.StateId.Missing);
+    }
+
     pushInvalid(invalidTitleText?: string) {
         this.pushState(UiAction.StateId.Invalid, invalidTitleText);
     }

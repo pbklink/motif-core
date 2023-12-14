@@ -1218,6 +1218,9 @@ export class CreateScanDataDefinition extends FeedSubscriptionDataDefinition {
     versionId: Guid;
     versioningInterrupted: boolean;
     lastSavedTime: Date;
+    lastEditSessionId: Guid;
+    zenithCriteriaSource: string | undefined;
+    zenithRankSource: string | undefined;
     symbolListEnabled: boolean;
     targetTypeId: ScanTargetTypeId;
     targets: readonly MarketId[] | readonly LitIvemId[];
@@ -1264,7 +1267,10 @@ export class UpdateScanDataDefinition extends FeedSubscriptionDataDefinition {
     versionId: Guid;
     versioningInterrupted: boolean;
     lastSavedTime: Date;
+    lastEditSessionId: Guid;
     symbolListEnabled: boolean;
+    zenithCriteriaSource: string | undefined;
+    zenithRankSource: string | undefined;
     zenithCriteria: ZenithEncodedScanFormula.BooleanTupleNode;
     zenithRank: ZenithEncodedScanFormula.NumericTupleNode;
     targetTypeId: ScanTargetTypeId;

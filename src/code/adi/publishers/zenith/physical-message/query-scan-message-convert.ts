@@ -66,7 +66,10 @@ export namespace QueryScanMessageConvert {
                     dataMessage.versionId = convertMetaData.versionId;
                     dataMessage.versioningInterrupted = convertMetaData.versioningInterrupted;
                     dataMessage.lastSavedTime = convertMetaData.lastSavedTime;
+                    dataMessage.lastEditSessionId = convertMetaData.lastEditSessionId;
                     dataMessage.symbolListEnabled = convertMetaData.symbolListEnabled;
+                    dataMessage.zenithCriteriaSource = convertMetaData.zenithCriteriaSource;
+                    dataMessage.zenithRankSource = convertMetaData.zenithRankSource;
                     dataMessage.scanReadonly = !details.IsWritable
                     const parameters = response.Parameters;
                     dataMessage.targetTypeId = ZenithNotifyConvert.ScanType.toId(parameters.Type);

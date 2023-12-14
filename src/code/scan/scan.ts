@@ -11,7 +11,9 @@ import {
     MarketId,
     QueryScanDetailDataDefinition,
     QueryScanDetailDataItem,
+    ScanDetail,
     ScanStatusedDescriptor,
+    ScanStatusedDescriptorInterface,
     ScanStatusId,
     ScanTargetTypeId,
     ZenithEncodedScanFormula
@@ -25,10 +27,11 @@ import {
     EnumInfoOutOfOrderError,
     Err,
     FieldDataTypeId,
+    Guid,
     Integer,
-    isStringNumberBooleanNestArrayEqual,
     isUndefinableArrayEqualUniquely,
     isUndefinableDateEqual,
+    isUndefinableStringNumberBooleanNestArrayEqual,
     LockOpenListItem,
     LockOpenManager,
     MapKey,
@@ -55,7 +58,7 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
     // StatusedDescriptor
     private _name: string;
     private _upperCaseName: string;
-    private _description: string;
+    private _description: string | undefined;
     private _upperCaseDescription: string;
     private _readonly: boolean;
     private _statusId: ScanStatusId;
@@ -63,7 +66,10 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
     private _versionId: string | undefined;
     private _versioningInterrupted: boolean;
     private _lastSavedTime: Date | undefined;
+    private _lastEditSessionId: Guid | undefined;
     private _symbolListEnabled: boolean | undefined;
+    private _zenithCriteriaSource: string | undefined;
+    private _zenithRankSource: string | undefined;
 
     // Parameters
     private _targetTypeId: ScanTargetTypeId | undefined;
@@ -111,15 +117,32 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
         this._upperCaseName = name.toUpperCase();
         const description = this._descriptor.description;
         this._description = description;
-        this._upperCaseDescription = description.toUpperCase();
+        this._upperCaseDescription = description === undefined ? '' : description.toUpperCase();
         this._readonly = this._descriptor.readonly;
         this._versionNumber = this._descriptor.versionNumber;
         this._versionId = this._descriptor.versionId;
         this._versioningInterrupted = this._descriptor.versioningInterrupted;
         this._lastSavedTime = this._descriptor.lastSavedTime;
+        this._lastEditSessionId = this._descriptor.lastEditSessionId;
+        this._zenithCriteriaSource = this._descriptor.zenithCriteriaSource;
+        this._zenithRankSource = this._descriptor.zenithRankSource;
 
-        this._descriptorChangedSubscriptionId = this._descriptor.subscribeChangedEvent(
-            (changedFieldIds) => { this.handleDescriptorChangeEvent(changedFieldIds) }
+        this._descriptorChangedSubscriptionId = this._descriptor.subscribeUpdatedEvent(
+            (changedFieldIds) => {
+                this.beginChange();
+                this.applyDescriptorChanges(this._descriptor, changedFieldIds);
+                const detail: Partial<ScanDetail> = {
+                    zenithCriteria: undefined,
+                    zenithRank: undefined,
+                    targetTypeId: undefined,
+                    targetMarketIds: undefined,
+                    targetLitIvemIds: undefined,
+                    notifications: undefined,
+                }
+                this.applyDetail(detail);
+                this.endChange();
+                this.wantDetail(true);
+            }
         );
 
         this.updateCorrectnessId();
@@ -131,6 +154,7 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
     get openers(): readonly LockOpenListItem.Opener[] { return this._lockOpenManager.openers; }
 
     get correctnessId() { return this._correctnessId; }
+    get detailed() { return this._detailed; }
 
     get name() { return this._name; }
     get description() { return this._description; }
@@ -143,6 +167,7 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
     get versionId() { return this._versionId; }
     get versioningInterrupted() { return this._versioningInterrupted; }
     get lastSavedTime() { return this._lastSavedTime; }
+    get lastEditSessionId() { return this._lastEditSessionId; }
     get readonly() { return this._readonly; }
     get statusId() { return this._statusId; }
     get targetTypeId() { return this._targetTypeId; }
@@ -151,6 +176,8 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
     get maxMatchCount() { return this._maxMatchCount; }
     get zenithCriteria() { return this._zenithCriteria; }
     get zenithRank() { return this._zenithRank; }
+    get zenithCriteriaSource() { return this._zenithCriteriaSource; }
+    get zenithRankSource() { return this._zenithRankSource; }
 
     get version() {
         const versionNumber = this._versionNumber;
@@ -170,7 +197,7 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
     }
 
     finalise(): void {
-        this._descriptor.unsubscribeChangedEvent(this._descriptorChangedSubscriptionId);
+        this._descriptor.unsubscribeUpdatedEvent(this._descriptorChangedSubscriptionId);
         this._descriptorChangedSubscriptionId = undefined;
     }
 
@@ -243,14 +270,14 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
         this._directoryItemChangedMultiEvent.unsubscribe(subscriptionId);
     }
 
-    private handleDescriptorChangeEvent(changedFieldIds: ScanStatusedDescriptor.FieldId[]) {
+    private applyDescriptorChanges(descriptor: ScanStatusedDescriptorInterface, changedFieldIds: readonly ScanStatusedDescriptor.FieldId[]) {
         this.beginChange();
         for (const fieldId of changedFieldIds) {
             switch (fieldId) {
                 case ScanStatusedDescriptor.FieldId.Id:
                     throw new AssertInternalError('SHDCEI60153');
                 case ScanStatusedDescriptor.FieldId.Name: {
-                    const name = this._descriptor.name;
+                    const name = descriptor.name;
                     if (name !== this._name) {
                         this._name = name;
                         this._upperCaseName = name.toUpperCase();
@@ -263,10 +290,10 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
                     break;
                 }
                 case ScanStatusedDescriptor.FieldId.Description: {
-                    const description = this._descriptor.description;
+                    const description = descriptor.description;
                     if (description !== this._description) {
                         this._description = description;
-                        this._upperCaseDescription = description.toUpperCase();
+                        this._upperCaseDescription = description === undefined ? '' : description.toUpperCase();
                         const valueChange: Scan.ValueChange = {
                             fieldId: Scan.FieldId.Description,
                             recentChangeTypeId: ValueRecentChangeTypeId.Update,
@@ -276,7 +303,7 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
                     break;
                 }
                 case ScanStatusedDescriptor.FieldId.Readonly: {
-                    const readonly = this._descriptor.readonly;
+                    const readonly = descriptor.readonly;
                     if (readonly !== this._readonly) {
                         this._readonly = readonly;
                         const valueChange: Scan.ValueChange = {
@@ -288,7 +315,7 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
                     break;
                 }
                 case ScanStatusedDescriptor.FieldId.StatusId: {
-                    const statusId = this._descriptor.statusId;
+                    const statusId = descriptor.statusId;
                     if (statusId !== this._statusId) {
                         this._statusId = statusId;
                         const valueChange: Scan.ValueChange = {
@@ -300,9 +327,9 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
                     break;
                 }
                 case ScanStatusedDescriptor.FieldId.Version: {
-                    const versionNumber = this._descriptor.versionNumber;
-                    const versionId = this._descriptor.versionId;
-                    const versioningInterrupted = this._descriptor.versioningInterrupted;
+                    const versionNumber = descriptor.versionNumber;
+                    const versionId = descriptor.versionId;
+                    const versioningInterrupted = descriptor.versioningInterrupted;
                     if (versionNumber !== this._versionNumber || versionId !== this._versionId || versioningInterrupted !== this._versioningInterrupted) {
                         this._versionNumber = versionNumber;
                         this._versionId = versionId;
@@ -316,7 +343,7 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
                     break;
                 }
                 case ScanStatusedDescriptor.FieldId.LastSavedTime: {
-                    const lastSavedTime = this._descriptor.lastSavedTime;
+                    const lastSavedTime = descriptor.lastSavedTime;
                     if (isUndefinableDateEqual(lastSavedTime, this._lastSavedTime)) {
                         this._lastSavedTime = lastSavedTime;
                         const valueChange: Scan.ValueChange = {
@@ -327,12 +354,48 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
                     }
                     break;
                 }
+                case ScanStatusedDescriptor.FieldId.LastEditSessionId: {
+                    const lastEditSessionId = descriptor.lastEditSessionId;
+                    if (lastEditSessionId !== this._lastEditSessionId) {
+                        this._lastEditSessionId = lastEditSessionId;
+                        const valueChange: Scan.ValueChange = {
+                            fieldId: Scan.FieldId.LastEditSessionId,
+                            recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                        };
+                        this._valueChanges.push(valueChange);
+                    }
+                    break;
+                }
                 case ScanStatusedDescriptor.FieldId.SymbolListEnabled: {
-                    const symbolListEnabled = this._descriptor.symbolListEnabled;
+                    const symbolListEnabled = descriptor.symbolListEnabled;
                     if (symbolListEnabled !== this._symbolListEnabled) {
                         this._symbolListEnabled = symbolListEnabled;
                         const valueChange: Scan.ValueChange = {
                             fieldId: Scan.FieldId.SymbolListEnabled,
+                            recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                        };
+                        this._valueChanges.push(valueChange);
+                    }
+                    break;
+                }
+                case ScanStatusedDescriptor.FieldId.ZenithCriteriaSource: {
+                    const zenithCriteriaSource = descriptor.zenithCriteriaSource;
+                    if (zenithCriteriaSource !== this._zenithCriteriaSource) {
+                        this._zenithCriteriaSource = zenithCriteriaSource;
+                        const valueChange: Scan.ValueChange = {
+                            fieldId: Scan.FieldId.ZenithCriteriaSource,
+                            recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                        };
+                        this._valueChanges.push(valueChange);
+                    }
+                    break;
+                }
+                case ScanStatusedDescriptor.FieldId.ZenithRankSource: {
+                    const zenithRankSource = descriptor.zenithRankSource;
+                    if (zenithRankSource !== this._zenithRankSource) {
+                        this._zenithRankSource = zenithRankSource;
+                        const valueChange: Scan.ValueChange = {
+                            fieldId: Scan.FieldId.ZenithRankSource,
                             recentChangeTypeId: ValueRecentChangeTypeId.Update,
                         };
                         this._valueChanges.push(valueChange);
@@ -344,10 +407,6 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
             }
         }
         this.endChange();
-
-        if (this._detailWanted) {
-            this.wantDetail(true);
-        }
     }
 
     private notifyValuesChanged(valueChanges: Scan.ValueChange[]) {
@@ -456,7 +515,11 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
                                     this._detailCorrectnessId = dataItem.correctnessId;
                                     this.updateCorrectnessId();
                                 } else {
-                                    this.applyDetail(dataItem);
+                                    this.beginChange();
+                                    const descriptorAndDetail = dataItem.descriptorAndDetail;
+                                    this.applyDescriptorChanges(descriptorAndDetail, ScanStatusedDescriptor.Field.allIds);
+                                    this.applyDetail(descriptorAndDetail);
+                                    this.endChange();
                                     this._detailed = true;
                                 }
                             }
@@ -520,75 +583,11 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
         }
     }
 
-    private applyDetail(dataItem: QueryScanDetailDataItem) {
-        const detail = dataItem.detail;
+    private applyDetail(detail: Partial<ScanDetail>) {
         this.beginChange();
 
         this._detailCorrectnessId = CorrectnessId.Good;
         this.updateCorrectnessId();
-
-        const newName = detail.name;
-        if (newName !== this._name) {
-            this._name = newName;
-            this._upperCaseName = newName.toUpperCase();
-            this._valueChanges.push({
-                fieldId: Scan.FieldId.Name,
-                recentChangeTypeId: ValueRecentChangeTypeId.Update,
-            });
-        }
-        const newDescription = detail.description ?? '';
-        if (newDescription !== this._description) {
-            this._description = newDescription;
-            this._upperCaseName = newDescription.toUpperCase();
-            this._valueChanges.push({
-                fieldId: Scan.FieldId.Description,
-                recentChangeTypeId: ValueRecentChangeTypeId.Update,
-            });
-        }
-        const newReadonly = detail.readonly;
-        if (newReadonly !== this._readonly) {
-            this._readonly = newReadonly;
-            this._valueChanges.push({
-                fieldId: Scan.FieldId.Readonly,
-                recentChangeTypeId: ValueRecentChangeTypeId.Update,
-            });
-        }
-        const newStatusId = detail.statusId;
-        if (newStatusId !== this._statusId) {
-            this._statusId = newStatusId;
-            this._valueChanges.push({
-                fieldId: Scan.FieldId.StatusId,
-                recentChangeTypeId: ValueRecentChangeTypeId.Update,
-            });
-        }
-        const newVersionNumber = detail.versionNumber;
-        const newVersionId = detail.versionId;
-        const newVersioningInterrupted = detail.versioningInterrupted;
-        if (newVersionNumber !== this._versionNumber || newVersionId !== this._versionId || newVersioningInterrupted !== this._versioningInterrupted) {
-            this._versionNumber = newVersionNumber;
-            this._versionId = newVersionId;
-            this._versioningInterrupted = newVersioningInterrupted;
-            this._valueChanges.push({
-                fieldId: Scan.FieldId.Version,
-                recentChangeTypeId: ValueRecentChangeTypeId.Update,
-            });
-        }
-        const newLastSavedTime = detail.lastSavedTime;
-        if (newLastSavedTime !== this._lastSavedTime) {
-            this._lastSavedTime = newLastSavedTime;
-            this._valueChanges.push({
-                fieldId: Scan.FieldId.LastSavedTime,
-                recentChangeTypeId: ValueRecentChangeTypeId.Update,
-            });
-        }
-        const newSymbolListEnabled = detail.symbolListEnabled;
-        if (newSymbolListEnabled !== this._symbolListEnabled) {
-            this._symbolListEnabled = newSymbolListEnabled;
-            this._valueChanges.push({
-                fieldId: Scan.FieldId.SymbolListEnabled,
-                recentChangeTypeId: ValueRecentChangeTypeId.Update,
-            });
-        }
 
         const newTargetTypeId  = detail.targetTypeId;
         if (newTargetTypeId !== this._targetTypeId) {
@@ -623,7 +622,7 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
             });
         }
         const newZenithCriteria = detail.zenithCriteria;
-        if (this._zenithCriteria === undefined || !isStringNumberBooleanNestArrayEqual(newZenithCriteria, this._zenithCriteria)) {
+        if (!isUndefinableStringNumberBooleanNestArrayEqual(newZenithCriteria, this._zenithCriteria)) {
             this._zenithCriteria = newZenithCriteria;
             this._valueChanges.push({
                 fieldId: Scan.FieldId.ZenithCriteria,
@@ -631,7 +630,7 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
             });
         }
         const newZenithRank = detail.zenithRank;
-        if (this._zenithRank === undefined || !isStringNumberBooleanNestArrayEqual(newZenithRank, this._zenithRank)) {
+        if (!isUndefinableStringNumberBooleanNestArrayEqual(newZenithRank, this._zenithRank)) {
             this._zenithRank = newZenithRank;
             this._valueChanges.push({
                 fieldId: Scan.FieldId.ZenithRank,
@@ -731,10 +730,34 @@ export namespace Scan {
         SymbolListEnabled,
         Version,
         LastSavedTime,
+        LastEditSessionId,
+        ZenithCriteriaSource,
+        ZenithRankSource,
     }
 
     export namespace Field {
         export type Id = FieldId;
+
+        export const allIds: readonly FieldId[] = [
+            FieldId.Id,
+            FieldId.Readonly,
+            FieldId.Index,
+            FieldId.StatusId,
+            FieldId.Name,
+            FieldId.Description,
+            FieldId.TargetTypeId,
+            FieldId.TargetMarkets,
+            FieldId.TargetLitIvemIds,
+            FieldId.MaxMatchCount,
+            FieldId.ZenithCriteria,
+            FieldId.ZenithRank,
+            FieldId.SymbolListEnabled,
+            FieldId.Version,
+            FieldId.LastSavedTime,
+            FieldId.LastEditSessionId,
+            FieldId.ZenithCriteriaSource,
+            FieldId.ZenithRankSource,
+        ];
 
         interface Info {
             readonly id: Id;
@@ -852,15 +875,43 @@ export namespace Scan {
                 headingId: StringId.ScanFieldHeading_LastSavedTime,
                 directoryItemFieldId: undefined,
             },
+            LastEditSessionId: {
+                id: FieldId.LastEditSessionId,
+                name: 'LastEditSessionId',
+                dataTypeId: FieldDataTypeId.String,
+                headingId: StringId.ScanFieldHeading_LastEditSessionId,
+                directoryItemFieldId: undefined,
+            },
+            ZenithCriteriaSource: {
+                id: FieldId.ZenithCriteriaSource,
+                name: 'ZenithCriteriaSource',
+                dataTypeId: FieldDataTypeId.String,
+                headingId: StringId.ScanFieldHeading_ZenithCriteriaSource,
+                directoryItemFieldId: undefined,
+            },
+            ZenithRankSource: {
+                id: FieldId.ZenithRankSource,
+                name: 'ZenithRankSource',
+                dataTypeId: FieldDataTypeId.String,
+                headingId: StringId.ScanFieldHeading_ZenithRankSource,
+                directoryItemFieldId: undefined,
+            },
         } as const;
 
         const infos = Object.values(infosObject);
         export const idCount = infos.length;
 
         export function initialise() {
-            const outOfOrderIdx = infos.findIndex((info: Info, index: number) => info.id !== index as FieldId);
-            if (outOfOrderIdx >= 0) {
-                throw new EnumInfoOutOfOrderError('EditableScan.FieldId', outOfOrderIdx, `${idToName(outOfOrderIdx)}`);
+            for (let i = 0; i < idCount; i++) {
+                const id = i as FieldId;
+                if (allIds[i] !== id) {
+                    throw new AssertInternalError('SFII43210', id.toString());
+                } else {
+                    const info = infos[i];
+                    if (info.id !== id) {
+                        throw new EnumInfoOutOfOrderError('Scan.FieldId', i, `${idToName(id)}`);
+                    }
+                }
             }
         }
 

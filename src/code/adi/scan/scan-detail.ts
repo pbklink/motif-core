@@ -4,20 +4,9 @@
  * License: motionite.trade/license/motif
  */
 
-import { Guid, Integer } from '../../sys/sys-internal-api';
-import { LitIvemId, MarketId, ScanNotification, ScanStatusId, ScanTargetTypeId, ZenithEncodedScanFormula } from '../common/adi-common-internal-api';
+import { LitIvemId, MarketId, ScanNotification, ScanTargetTypeId, ZenithEncodedScanFormula } from '../common/adi-common-internal-api';
 
 export interface ScanDetail {
-    readonly id: string;
-    readonly name: string;
-    readonly description: string | undefined;
-    readonly readonly: boolean;
-    readonly statusId: ScanStatusId;
-    readonly versionNumber: Integer | undefined;
-    readonly versionId: Guid | undefined;
-    readonly versioningInterrupted: boolean;
-    readonly lastSavedTime: Date | undefined;
-    readonly symbolListEnabled: boolean | undefined;
     readonly zenithCriteria: ZenithEncodedScanFormula.BooleanTupleNode;
     readonly zenithRank: ZenithEncodedScanFormula.NumericTupleNode;
     readonly targetTypeId: ScanTargetTypeId;

@@ -32,7 +32,10 @@ export namespace CreateScanMessageConvert {
             versionId: definition.versionId,
             versioningInterrupted: definition.versioningInterrupted,
             lastSavedTime: definition.lastSavedTime,
+            lastEditSessionId: definition.lastEditSessionId,
             symbolListEnabled: definition.symbolListEnabled,
+            zenithCriteriaSource: definition.zenithCriteriaSource,
+            zenithRankSource: definition.zenithRankSource,
         }
 
         const details: ZenithProtocol.NotifyController.ScanDescriptor = {

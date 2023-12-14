@@ -32,7 +32,6 @@ import {
     Result,
     UnreachableCaseError,
     getErrorMessage,
-    isArrayEqual,
     isUndefinableArrayEqual,
     newGuid
 } from '../sys/sys-internal-api';
@@ -41,7 +40,7 @@ import { ScanFormula } from './scan-formula';
 import { ScanFormulaZenithEncoding } from './scan-formula-zenith-encoding';
 
 export class ScanEditor {
-    private readonly _readonly: boolean;
+    readonly readonly: boolean;
 
     private _finalised = false;
 
@@ -59,7 +58,7 @@ export class ScanEditor {
     private readonly _whileSavingModifiedScanFieldIds = new Array<Scan.FieldId>();
     private _whileSavingModifiedStateId = ScanEditor.ModifiedStateId.Unmodified;
 
-    private _enabled: boolean;
+    private _enabled = true;
     private _name: string;
     private _description: string;
     private _symbolListEnabled: boolean;
@@ -67,6 +66,7 @@ export class ScanEditor {
     private _versionNumber: Integer | undefined;
     private _versionId: Guid | undefined;
     private _versioningInterrupted: boolean;
+    private _editSessionId: Guid;
 
     private _targetTypeId: ScanTargetTypeId | undefined;
     private _targetMarketIds: readonly MarketId[] | undefined;
@@ -78,6 +78,9 @@ export class ScanEditor {
     private _rank: ScanFormula.NumericNode | undefined;
     private _rankAsFormula: string | undefined;
     private _rankAsZenithText: string | undefined;
+
+    private _criteriaSourceId: ScanEditor.SourceId | undefined;
+    private _rankSourceId: ScanEditor.SourceId | undefined;
 
     private _fieldChanger: ScanEditor.FieldChanger | undefined;
     private _fieldChangesMultiEvent = new MultiEvent<ScanEditor.FieldChangesEventHandler>();
@@ -93,31 +96,23 @@ export class ScanEditor {
     ) {
         this._openers.push(opener);
 
-        if (scan === undefined) {
-            this._readonly = false;
-            this._lifeCycleStateId = ScanEditor.LifeCycleStateId.NotYetCreated;
+        this._editSessionId = newGuid();
 
-            this._name = Strings[StringId.New];
-            this._description = '';
-            this._symbolListEnabled = ScanEditor.DefaultSymbolListEnabled;
-            this._targetTypeId = ScanEditor.DefaultScanTargetTypeId;
-            this._targetMarketIds = [];
-            this._targetLitIvemIds = [];
-            this._maxMatchCount = 10;
-            this._criteria = { typeId: ScanFormula.NodeTypeId.None };
-            this.updateCriteriaFormulaZenithText();
-            const zenithCriteria = this.createZenithEncodedCriteria(this._criteria);
-            this._criteriaAsZenithText = JSON.stringify(zenithCriteria);
-            this._rank = { typeId: ScanFormula.NodeTypeId.NumericPos, operand: 0 } as ScanFormula.NumericPosNode;
-            this.updateRankFormulaZenithText();
-            this._versionNumber = 0;
-            this._versionId = undefined;
-            this._versioningInterrupted = false;
+        let lifeCycleStateId: ScanEditor.LifeCycleStateId;
+        if (scan === undefined) {
+            this.readonly = false;
+
+            this.loadNewScan();
+
+            lifeCycleStateId = ScanEditor.LifeCycleStateId.NotYetCreated;
         } else {
-            this._readonly = scan.readonly;
+            this.readonly = scan.readonly;
             this.loadScan(scan, true);
-            this.setLifeCycleState(ScanEditor.LifeCycleStateId.Exists);
+            lifeCycleStateId = scan.detailed ? ScanEditor.LifeCycleStateId.Exists : ScanEditor.LifeCycleStateId.LoadingInitialDetail;
+
         }
+
+        this.setLifeCycleState(lifeCycleStateId);
     }
 
     get scan() { return this._scan; }
@@ -129,7 +124,7 @@ export class ScanEditor {
 
     get modifiedStatedId() { return this._modifiedStateId; }
 
-    get id() { return this._scan === undefined ? undefined : this._scan.id; }
+    get id() { return this._scan === undefined ? undefined : this._scan.id; } // If undefined, then not yet created
     get enabled() { return this._enabled; }
     set enabled(value: boolean) {
         if (value !== this._enabled) {
@@ -141,89 +136,15 @@ export class ScanEditor {
     }
 
     get name() { return this._name; }
-    set name(value: string) {
-        if (value !== this._name) {
-            this.beginFieldChanges(undefined)
-            this._name = value;
-            this.addFieldChange(ScanEditor.FieldId.Name);
-            this.endFieldChanges();
-        }
-    }
-
     get description() { return this._description; }
-    set description(value: string) {
-        if (value !== this._description) {
-            this.beginFieldChanges(undefined)
-            this._description = value;
-            this.addFieldChange(ScanEditor.FieldId.Description);
-            this.endFieldChanges();
-        }
-    }
-
     get symbolListEnabled() { return this._symbolListEnabled; }
-    set symbolListEnabled(value: boolean) {
-        if (value !== this._symbolListEnabled) {
-            this.beginFieldChanges(undefined)
-            this._symbolListEnabled = value;
-            this.addFieldChange(ScanEditor.FieldId.SymbolListEnabled);
-            this.endFieldChanges();
-        }
-    }
-
-    get targetTypeId() {
-        const targetTypeId = this._targetTypeId;
-        if (targetTypeId === undefined) {
-            throw new AssertInternalError('SEGTTIU30145');
-        } else {
-            return targetTypeId;
-        }
-    }
-    set targetTypeId(value: ScanTargetTypeId) {
-        if (value !== this._targetTypeId) {
-            this.beginFieldChanges(undefined)
-            this._targetTypeId = value;
-            this.addFieldChange(ScanEditor.FieldId.TargetTypeId);
-            this.endFieldChanges();
-        }
-    }
-
-    get targetMarketIds(): readonly MarketId[] {
-        const targetMarketIds = this._targetMarketIds;
-        if (targetMarketIds === undefined) {
-            throw new AssertInternalError('SEGTMIU30145');
-        } else {
-            return targetMarketIds;
-        }
-    }
-    set targetMarketIds(value: readonly MarketId[]) {
-        if (this._targetMarketIds === undefined || !isArrayEqual(value, this._targetMarketIds)) {
-            this.beginFieldChanges(undefined)
-            this._targetMarketIds = value.slice();
-            this.addFieldChange(ScanEditor.FieldId.TargetMarkets);
-            this.endFieldChanges();
-        }
-    }
-
-    get targetLitIvemIds(): readonly LitIvemId[] {
-        const targetLitIvemIds = this._targetLitIvemIds;
-        if (targetLitIvemIds === undefined) {
-            throw new AssertInternalError('SEGTMIU30145');
-        } else {
-            return targetLitIvemIds;
-        }
-    }
-    set targetLitIvemIds(value: readonly LitIvemId[]) {
-        if (this._targetLitIvemIds === undefined || !isArrayEqual(value, this._targetLitIvemIds)) {
-            this.beginFieldChanges(undefined)
-            this._targetLitIvemIds = value.slice();
-            this.addFieldChange(ScanEditor.FieldId.TargetMarkets);
-            this.endFieldChanges();
-        }
-    }
-
-    get targets(): readonly MarketId[] | readonly LitIvemId[] {
+    get targetTypeId() { return this._targetTypeId; } // Will be undefined while waiting for first Scan Detail
+    get targetMarketIds() { return this._targetMarketIds; } // Will be undefined while waiting for first Scan Detail
+    get targetLitIvemIds() { return this._targetLitIvemIds; }  // Will be undefined while waiting for first Scan Detail
+    get targets(): readonly MarketId[] | readonly LitIvemId[] | undefined {
         const targetTypeId = this.targetTypeId;
         switch (targetTypeId) {
+            case undefined: return undefined;
             case ScanTargetTypeId.Markets: return this.targetMarketIds;
             case ScanTargetTypeId.Symbols: return this.targetLitIvemIds;
             default:
@@ -231,120 +152,33 @@ export class ScanEditor {
         }
     }
 
-    get maxMatchCount() {
-        const maxMatchCount = this._maxMatchCount;
-        if (maxMatchCount === undefined) {
-            throw new AssertInternalError('SEGMMCU30145');
-        } else {
-            return maxMatchCount;
-        }
-    }
-    set maxMatchCount(value: Integer) {
-        if (value !== this._maxMatchCount) {
-            this.beginFieldChanges(undefined)
-            this._maxMatchCount = value;
-            this.addFieldChange(ScanEditor.FieldId.MaxMatchCount);
-            this.endFieldChanges();
-        }
-    }
+    get maxMatchCount() { return this._maxMatchCount; } // Will be undefined while waiting for first Scan Detail
+    get criteria() { return this._criteria; } // Will be undefined while waiting for first Scan Detail
+    get criteriaAsFormula() { return this._criteriaAsFormula; } // Will be undefined while waiting for first Scan Detail
+    get criteriaAsZenithText() { return this._criteriaAsZenithText; } // Will be undefined while waiting for first Scan Detail;
 
-    get criteria() {
-        const criteria = this._criteria;
-        if (criteria === undefined) {
-            throw new AssertInternalError('SEGCU30145');
-        } else {
-            return criteria;
-        }
-    }
-    set criteria(value: ScanFormula.BooleanNode) {
-        this.beginFieldChanges(undefined)
-        this._criteria = value;
-        this.addFieldChange(ScanEditor.FieldId.Criteria);
-
-        const json = this.createZenithEncodedCriteria(value);
-        const text = JSON.stringify(json);
-        if (text !== this._criteriaAsZenithText) {
-            this._criteriaAsZenithText = text;
-            this.addFieldChange(ScanEditor.FieldId.CriteriaAsZenithText);
-        }
-
-        this.endFieldChanges();
-    }
-
-    get criteriaAsFormula() {
-        const criteriaAsFormula = this._criteriaAsFormula;
-        if (criteriaAsFormula === undefined) {
-            throw new AssertInternalError('SEGCAF30145');
-        } else {
-            return criteriaAsFormula;
-        }
-    }
-
-    get criteriaAsZenithText() {
-        const criteriaAsZenithText = this._criteriaAsZenithText;
-        if (criteriaAsZenithText === undefined) {
-            throw new AssertInternalError('SEGCAZT30145');
-        } else {
-            return criteriaAsZenithText;
-        }
-    }
-
-    get criteriaAsZenithEncoded() {
+    get criteriaAsZenithEncoded() { // Will be undefined while waiting for first Scan Detail
         const criteria = this.criteria;
-        return this.createZenithEncodedCriteria(criteria);
-    }
-
-    get rank() {
-        const rank = this._rank;
-        if (rank === undefined) {
-            throw new AssertInternalError('SEGR30145');
+        if (criteria === undefined) {
+            return undefined;
         } else {
-            return rank;
-        }
-    }
-    set rank(value: ScanFormula.NumericNode) {
-        if (value.typeId === ScanFormula.NodeTypeId.NumericFieldValueGet) {
-            throw new AssertInternalError('SESR30145'); // root node cannot be NumericFieldValueGet as this is not a ZenithScan array
-        } else {
-            this.beginFieldChanges(undefined)
-            this._rank = value;
-            this.addFieldChange(ScanEditor.FieldId.Rank);
-
-            const zenithRank = this.createZenithEncodedRank(value);
-            const zenithText = JSON.stringify(zenithRank);
-            if (zenithText !== this._rankAsZenithText) {
-                this._rankAsZenithText = zenithText;
-                this.addFieldChange(ScanEditor.FieldId.RankAsZenithText);
-            }
-
-            this.endFieldChanges();
+            return this.createZenithEncodedCriteria(criteria);
         }
     }
 
-    get rankAsFormula() {
-        const rankAsFormula = this._rankAsFormula;
-        if (rankAsFormula === undefined) {
-            throw new AssertInternalError('SEGRAF30145');
-        } else {
-            return rankAsFormula;
-        }
-    }
-
-    get rankAsZenithText() {
-        const rankAsZenithText = this._rankAsZenithText;
-        if (rankAsZenithText === undefined) {
-            throw new AssertInternalError('SEGRAZT30145');
-        } else {
-            return rankAsZenithText;
-        }
-    }
-
-    get rankAsZenithEncoded() {
+    get rank() { return this._rank; } // Will be undefined while waiting for first Scan Detail
+    get rankAsFormula() { return this._rankAsFormula; } // Will be undefined while waiting for first Scan Detail
+    get rankAsZenithText() { return this._rankAsZenithText; } // Will be undefined while waiting for first Scan Detail
+    get rankAsZenithEncoded() {  // Will be undefined while waiting for first Scan Detail
         const rank = this.rank;
-        return this.createZenithEncodedRank(rank);
+        if (rank === undefined) {
+            return undefined;
+        } else {
+            return this.createZenithEncodedRank(rank);
+        }
     }
 
-    get statusId(): ScanStatusId | undefined {
+    get statusId(): ScanStatusId | undefined { // Will be undefined while waiting for first Scan Detail
         const scan = this._scan;
         if (scan === undefined) {
             return undefined;
@@ -392,6 +226,88 @@ export class ScanEditor {
         }
     }
 
+    setName(value: string) {
+        if (value !== this._name) {
+            this.beginFieldChanges(undefined)
+            this._name = value;
+            this.addFieldChange(ScanEditor.FieldId.Name);
+            this.endFieldChanges();
+        }
+    }
+
+    setDescription(value: string) {
+        if (value !== this._description) {
+            this.beginFieldChanges(undefined)
+            this._description = value;
+            this.addFieldChange(ScanEditor.FieldId.Description);
+            this.endFieldChanges();
+        }
+    }
+
+    setSymbolListEnabled(value: boolean) {
+        if (value !== this._symbolListEnabled) {
+            this.beginFieldChanges(undefined)
+            this._symbolListEnabled = value;
+            this.addFieldChange(ScanEditor.FieldId.SymbolListEnabled);
+            this.endFieldChanges();
+        }
+    }
+
+    setTargetTypeId(value: ScanTargetTypeId) {
+        if (value !== this._targetTypeId) {
+            this.beginFieldChanges(undefined)
+            this._targetTypeId = value;
+            this.addFieldChange(ScanEditor.FieldId.TargetTypeId);
+            this.endFieldChanges();
+        }
+    }
+
+    setTargetMarketIds(value: readonly MarketId[]) {
+        if (!isUndefinableArrayEqual(value, this._targetMarketIds)) {
+            this.beginFieldChanges(undefined)
+            this._targetMarketIds = value.slice();
+            this.addFieldChange(ScanEditor.FieldId.TargetMarkets);
+            this.endFieldChanges();
+        }
+    }
+
+    setTargetLitIvemIds(value: readonly LitIvemId[]) {
+        if (!isUndefinableArrayEqual(value, this._targetLitIvemIds)) {
+            this.beginFieldChanges(undefined)
+            this._targetLitIvemIds = value.slice();
+            this.addFieldChange(ScanEditor.FieldId.TargetMarkets);
+            this.endFieldChanges();
+        }
+    }
+
+    setMaxMatchCount(value: Integer) {
+        if (value !== this._maxMatchCount) {
+            this.beginFieldChanges(undefined)
+            this._maxMatchCount = value;
+            this.addFieldChange(ScanEditor.FieldId.MaxMatchCount);
+            this.endFieldChanges();
+        }
+    }
+
+    setCriteria(value: ScanFormula.BooleanNode, sourceId: ScanEditor.SourceId | undefined) {
+        this.beginFieldChanges(undefined)
+        this._criteria = value;
+        this.addFieldChange(ScanEditor.FieldId.Criteria);
+
+        this._criteriaSourceId = sourceId;
+        if (sourceId === undefined) {
+            // update sources from Criteria
+            const json = this.createZenithEncodedCriteria(value);
+            const text = JSON.stringify(json);
+            if (text !== this._criteriaAsZenithText) {
+                this._criteriaAsZenithText = text;
+                this.addFieldChange(ScanEditor.FieldId.CriteriaAsZenithText);
+            }
+        }
+
+        this.endFieldChanges();
+    }
+
     setCriteriaAsZenithText(value: string, fieldChanger?: ScanEditor.FieldChanger): ScanEditor.SetAsZenithTextResult | undefined {
         if (value === this._criteriaAsZenithText) {
             return undefined;
@@ -421,8 +337,7 @@ export class ScanEditor {
                 const decodeResult = ScanFormulaZenithEncoding.tryDecodeBoolean(zenithCriteria);
                 if (decodeResult.isOk()) {
                     const decodedBoolean = decodeResult.value;
-                    this._criteria = decodedBoolean.node;
-                    this.addFieldChange(ScanEditor.FieldId.Criteria);
+                    this.setCriteria(decodedBoolean.node, ScanEditor.SourceId.Zenith);
                     result = {
                         progress: decodedBoolean.progress,
                         error: undefined,
@@ -435,6 +350,29 @@ export class ScanEditor {
             this.endFieldChanges();
 
             return result;
+        }
+    }
+
+    setRank(value: ScanFormula.NumericNode, sourceId: ScanEditor.SourceId | undefined) {
+        if (value.typeId === ScanFormula.NodeTypeId.NumericFieldValueGet) {
+            throw new AssertInternalError('SESR30145'); // root node cannot be NumericFieldValueGet as this is not a ZenithScan array
+        } else {
+            this.beginFieldChanges(undefined);
+            this._rank = value;
+            this.addFieldChange(ScanEditor.FieldId.Rank);
+
+            this._rankSourceId = sourceId;
+            if (sourceId === undefined) {
+                // update sources from Criteria
+                const zenithRank = this.createZenithEncodedRank(value);
+                const zenithText = JSON.stringify(zenithRank);
+                if (zenithText !== this._rankAsZenithText) {
+                    this._rankAsZenithText = zenithText;
+                    this.addFieldChange(ScanEditor.FieldId.RankAsZenithText);
+                }
+            }
+
+            this.endFieldChanges();
         }
     }
 
@@ -468,8 +406,7 @@ export class ScanEditor {
                 const decodeResult = ScanFormulaZenithEncoding.tryDecodeNumeric(zenithRank);
                 if (decodeResult.isOk()) {
                     const decodedNumeric = decodeResult.value;
-                    this._rank = decodedNumeric.node;
-                    this.addFieldChange(ScanEditor.FieldId.Rank);
+                    this.setRank(decodedNumeric.node, ScanEditor.SourceId.Zenith);
                     result = {
                         progress: decodedNumeric.progress,
                         error: undefined,
@@ -507,6 +444,7 @@ export class ScanEditor {
                 this.updateScan();
                 break;
             case ScanEditor.LifeCycleStateId.Creating:
+            case ScanEditor.LifeCycleStateId.LoadingInitialDetail:
             case ScanEditor.LifeCycleStateId.Updating:
             case ScanEditor.LifeCycleStateId.Deleted:
             case ScanEditor.LifeCycleStateId.Deleting:
@@ -519,13 +457,7 @@ export class ScanEditor {
     revert() {
         const scan = this._scan;
         if (scan !== undefined) {
-            this.beginFieldChanges(undefined);
-
-            // this.enabled = scan.enabled;
-            this.name = scan.name;
-            this.description = scan.description;
-
-            this.endFieldChanges();
+            // this.processScanValueChanges(scan, true);
         }
     }
 
@@ -580,11 +512,14 @@ export class ScanEditor {
                         definition.versioningInterrupted = versioningInterrupted;
                         definition.lastSavedTime = new Date();
                         definition.symbolListEnabled = this._symbolListEnabled;
+                        definition.lastEditSessionId = this._editSessionId;
                         definition.targetTypeId = this._targetTypeId;
                         definition.targets = this.calculateTargets(this._targetTypeId);
                         definition.maxMatchCount = this._maxMatchCount;
                         definition.zenithCriteria = criteriaJson;
                         definition.zenithRank = zenithRank;
+                        definition.zenithCriteriaSource = this._criteriaSourceId === ScanEditor.SourceId.Zenith ? this._criteriaAsZenithText : undefined;
+                        definition.zenithRankSource = this._rankSourceId === ScanEditor.SourceId.Zenith ? this._rankAsZenithText : undefined;
                         definition.notifications = []; // todo
                         // definition.enabled = this._enabled;
 
@@ -605,7 +540,7 @@ export class ScanEditor {
                                     return new Err(`${Strings[StringId.CreateScan]} ${Strings[StringId.Error]}: ${dataItem.errorText}`);
                                 } else {
                                     const scan = await this._getOrWaitForScanEventer(dataItem.scanId);
-                                    this.loadScan(scan, true);
+                                    this.loadScan(scan, true); // do we want to do this?
                                     this.processStateAfterSuccessfulSave(ScanEditor.LifeCycleStateId.Exists);
                                     return new Ok(scan);
                                 }
@@ -671,7 +606,10 @@ export class ScanEditor {
                             definition.versionId = versionId;
                             definition.versioningInterrupted = versioningInterrupted;
                             definition.lastSavedTime = new Date();
+                            definition.lastEditSessionId = this._editSessionId;
                             definition.symbolListEnabled = this._symbolListEnabled;
+                            definition.zenithCriteriaSource = this._criteriaSourceId === ScanEditor.SourceId.Zenith ? this._criteriaAsZenithText : undefined;
+                            definition.zenithRankSource = this._rankSourceId === ScanEditor.SourceId.Zenith ? this._rankAsZenithText : undefined;
                             definition.zenithCriteria = zenithCriteria;
                             definition.zenithRank = zenithRank;
                             definition.targetTypeId = this._targetTypeId;
@@ -709,15 +647,19 @@ export class ScanEditor {
     }
 
     deleteScan() {
-        const promise = this.asyncDeleteScan();
-        promise.then(
-            (result) => {
-                if (!this._finalised && result.isErr() && this._errorEventer !== undefined) {
-                    this._errorEventer(result.error);
-                }
-            },
-            (reason) => { throw AssertInternalError.createIfNotError(reason, 'SED55716'); }
-        );
+        if (this._lifeCycleStateId === ScanEditor.LifeCycleStateId.NotYetCreated) {
+            this.setLifeCycleState(ScanEditor.LifeCycleStateId.Deleted);
+        } else {
+            const promise = this.asyncDeleteScan();
+            promise.then(
+                (result) => {
+                    if (!this._finalised && result.isErr() && this._errorEventer !== undefined) {
+                        this._errorEventer(result.error);
+                    }
+                },
+                (reason) => { throw AssertInternalError.createIfNotError(reason, 'SED55716'); }
+            );
+        }
     }
 
     async asyncDeleteScan() {
@@ -793,10 +735,7 @@ export class ScanEditor {
         this._fieldChangesMultiEvent.unsubscribe(subscriptionId);
     }
 
-    private handleScanValuesChangedEvent(scan: Scan, valueChanges: Scan.ValueChange[]) {
-        const maxChangedFieldIdCount = valueChanges.length + 4; // 2 extra criteria and rank
-        const changedFieldIds = new Array<ScanEditor.FieldId>(maxChangedFieldIdCount);
-        let changedFieldIdCount = 0;
+    private processScanValueChanges(scan: Scan, valueChanges: Scan.ValueChange[]) {
         let conflict = false;
         this.beginFieldChanges(undefined);
         for (const valueChange of valueChanges) {
@@ -817,71 +756,103 @@ export class ScanEditor {
                 case Scan.FieldId.Index:
                     break;
                 case Scan.FieldId.StatusId:
-                    changedFieldIds[changedFieldIdCount++] = ScanEditor.FieldId.StatusId;
+                    this.addFieldChange(ScanEditor.FieldId.StatusId);
                     break;
-                case Scan.FieldId.Name:
+                case Scan.FieldId.Name: {
                     if (scan.name !== this._name && !fieldConflict) {
-                        this._name = scan.name;
-                        changedFieldIds[changedFieldIdCount++] = ScanEditor.FieldId.Name;
+                        this.setName(scan.name);
                     }
                     break;
-                case Scan.FieldId.Description:
-                    if (scan.description !== this._description && !fieldConflict) {
-                        this.description = scan.description;
-                        changedFieldIds[changedFieldIdCount++] = ScanEditor.FieldId.Description;
+                }
+                case Scan.FieldId.Description: {
+                    let newDescription = scan.description;
+                    if (newDescription === undefined) {
+                        newDescription = '';
+                    }
+                    if (newDescription !== this._description && !fieldConflict) {
+                        this.setDescription(newDescription);
                     }
                     break;
-                case Scan.FieldId.TargetTypeId:
-                    if (scan.targetTypeId !== this._targetTypeId && !fieldConflict) {
-                        this._targetTypeId = scan.targetTypeId;
-                        changedFieldIds[changedFieldIdCount++] = ScanEditor.FieldId.TargetTypeId;
+                }
+                case Scan.FieldId.TargetTypeId: {
+                    const newTargetTypeId = scan.targetTypeId;
+                    if (newTargetTypeId !== undefined && newTargetTypeId !== this._targetTypeId && !fieldConflict) {
+                        this.setTargetTypeId(newTargetTypeId);
                     }
                     break;
-                case Scan.FieldId.TargetMarkets:
-                    if (isUndefinableArrayEqual(scan.targetMarketIds, this._targetMarketIds) && !fieldConflict) {
-                        this._targetMarketIds = scan.targetMarketIds?.slice();
-                        changedFieldIds[changedFieldIdCount++] = ScanEditor.FieldId.TargetMarkets;
+                }
+                case Scan.FieldId.TargetMarkets: {
+                    const newTargetMarketIds = scan.targetMarketIds;
+                    if (newTargetMarketIds !== undefined && !isUndefinableArrayEqual(newTargetMarketIds, this._targetMarketIds) && !fieldConflict) {
+                        this.setTargetMarketIds(newTargetMarketIds.slice());
                     }
                     break;
-                case Scan.FieldId.TargetLitIvemIds:
-                    if (isUndefinableArrayEqual(scan.targetLitIvemIds, this._targetLitIvemIds) && !fieldConflict) {
-                        this._targetLitIvemIds = scan.targetLitIvemIds?.slice();
-                        changedFieldIds[changedFieldIdCount++] = ScanEditor.FieldId.TargetLitIvemIds;
+                }
+                case Scan.FieldId.TargetLitIvemIds: {
+                    const newTargetLitIvemIds = scan.targetLitIvemIds;
+                    if (newTargetLitIvemIds !== undefined && !isUndefinableArrayEqual(newTargetLitIvemIds, this._targetLitIvemIds) && !fieldConflict) {
+                        this.setTargetLitIvemIds(newTargetLitIvemIds.slice());
                     }
                     break;
-                case Scan.FieldId.MaxMatchCount:
-                    if (scan.maxMatchCount !== this._maxMatchCount && !fieldConflict) {
-                        this._maxMatchCount = scan.maxMatchCount;
-                        changedFieldIds[changedFieldIdCount++] = ScanEditor.FieldId.MaxMatchCount;
+                }
+                case Scan.FieldId.MaxMatchCount: {
+                    const newMaxMatchCount = scan.maxMatchCount;
+                    if (newMaxMatchCount !== undefined && newMaxMatchCount !== this._maxMatchCount && !fieldConflict) {
+                        this.setMaxMatchCount(newMaxMatchCount);
                     }
                     break;
-                case Scan.FieldId.ZenithCriteria:
-                    if (!fieldConflict) {
-                        this.loadZenithCriteria(scan, false);
-                        this.updateCriteriaFormulaZenithText();
-                        changedFieldIds[changedFieldIdCount++] = ScanEditor.FieldId.CriteriaAsZenithText;
-                        changedFieldIds[changedFieldIdCount++] = ScanEditor.FieldId.CriteriaAsFormula;
+                }
+                case Scan.FieldId.ZenithCriteria: {
+                    const newZenithCriteria = scan.zenithCriteria;
+                    if (newZenithCriteria !== undefined && !fieldConflict) {
+                        let sourceId: ScanEditor.SourceId | undefined;
+                        if (scan.zenithCriteriaSource !== undefined) {
+                            sourceId = ScanEditor.SourceId.Zenith;
+                        }
+                        this.loadZenithCriteria(newZenithCriteria, scan.id, false, sourceId);
                     }
                     break;
-                case Scan.FieldId.ZenithRank:
-                    if (!fieldConflict) {
-                        this.loadZenithRank(scan, false);
-                        this.updateRankFormulaZenithText();
-                        changedFieldIds[changedFieldIdCount++] = ScanEditor.FieldId.RankAsZenithText;
-                        changedFieldIds[changedFieldIdCount++] = ScanEditor.FieldId.RankAsFormula;
+                }
+                case Scan.FieldId.ZenithCriteriaSource: {
+                    const newZenithCriteriaSource = scan.zenithCriteriaSource;
+                    if (newZenithCriteriaSource !== undefined && !fieldConflict) {
+                        this._criteriaAsZenithText = newZenithCriteriaSource;
+                        this.addFieldChange(ScanEditor.FieldId.CriteriaAsZenithText);
                     }
                     break;
-                case Scan.FieldId.SymbolListEnabled:
+                }
+                case Scan.FieldId.ZenithRank: {
+                    const newZenithRank = scan.zenithRank;
+                    if (newZenithRank !== undefined && !fieldConflict) {
+                        let sourceId: ScanEditor.SourceId | undefined;
+                        if (scan.zenithRankSource !== undefined) {
+                            sourceId = ScanEditor.SourceId.Zenith;
+                        }
+                        this.loadZenithRank(newZenithRank, scan.id, false, sourceId);
+                    }
+                    break;
+                }
+                case Scan.FieldId.ZenithRankSource: {
+                    const newZenithRankSource = scan.zenithRankSource;
+                    if (newZenithRankSource !== undefined && !fieldConflict) {
+                        this._rankAsZenithText = newZenithRankSource;
+                        this.addFieldChange(ScanEditor.FieldId.RankAsZenithText);
+                    }
+                    break;
+                }
+                case Scan.FieldId.SymbolListEnabled: {
                     if (scan.symbolListEnabled !== this._symbolListEnabled && !fieldConflict) {
-                        this._symbolListEnabled = scan.symbolListEnabled ?? ScanEditor.DefaultSymbolListEnabled;
-                        changedFieldIds[changedFieldIdCount++] = ScanEditor.FieldId.SymbolListEnabled;
+                        this.setSymbolListEnabled(scan.symbolListEnabled ?? ScanEditor.DefaultSymbolListEnabled);
                     }
                     break;
+                }
                 case Scan.FieldId.Version:
-                    changedFieldIds[changedFieldIdCount++] = ScanEditor.FieldId.Version;
+                    this.addFieldChange(ScanEditor.FieldId.Version);
                     break;
                 case Scan.FieldId.LastSavedTime:
-                    changedFieldIds[changedFieldIdCount++] = ScanEditor.FieldId.LastSavedTime;
+                    this.addFieldChange(ScanEditor.FieldId.LastSavedTime);
+                    break;
+                case Scan.FieldId.LastEditSessionId:
                     break;
                 default:
                     throw new UnreachableCaseError('SEHSVCED50501', scanFieldId);
@@ -898,74 +869,105 @@ export class ScanEditor {
         }
     }
 
+    private loadNewScan() {
+        this.setName(Strings[StringId.New]);
+        this.setDescription('');
+        this.setSymbolListEnabled(ScanEditor.DefaultSymbolListEnabled);
+        this.setTargetTypeId(ScanEditor.DefaultScanTargetTypeId);
+        this.setTargetMarketIds([]);
+        this.setTargetLitIvemIds([]);
+        this.setMaxMatchCount(10);
+        this.setCriteria(ScanEditor.DefaultCriteria, undefined);
+        this.setRank(ScanEditor.DefaultRank, undefined);
+        this._versionNumber = 0;
+        this._versionId = undefined;
+        this._versioningInterrupted = false;
+    }
+
     private loadScan(scan: Scan, defaultIfError: boolean) {
-        this._name = scan.name;
-        this._description = scan.description;
-        this._symbolListEnabled = scan.symbolListEnabled ?? ScanEditor.DefaultSymbolListEnabled;
-        this._targetTypeId = scan.targetTypeId;
-        this._targetMarketIds = scan.targetMarketIds?.slice();
-        this._targetLitIvemIds = scan.targetLitIvemIds?.slice();
-        this._maxMatchCount = scan.maxMatchCount;
-        this.loadZenithCriteria(scan, defaultIfError);
-        this.updateCriteriaFormulaZenithText();
-        this.loadZenithRank(scan, defaultIfError);
-        this.updateRankFormulaZenithText();
+        this.setName(scan.name);
+        this.setDescription(scan.description ?? '');
+        this.setSymbolListEnabled(scan.symbolListEnabled ?? ScanEditor.DefaultSymbolListEnabled);
+        if (scan.targetTypeId !== undefined) {
+            this.setTargetTypeId(scan.targetTypeId);
+        }
+        if (scan.targetMarketIds !== undefined) {
+            this.setTargetMarketIds(scan.targetMarketIds.slice());
+        }
+        if (scan.targetLitIvemIds !== undefined) {
+            this.setTargetLitIvemIds(scan.targetLitIvemIds.slice());
+        }
+        if (scan.maxMatchCount !== undefined) {
+            this.setMaxMatchCount(scan.maxMatchCount);
+        }
+        if (scan.zenithCriteria !== undefined) {
+            this.loadZenithCriteria(scan.zenithCriteria, scan.id, defaultIfError, undefined);
+        }
+        if (scan.zenithRank !== undefined) {
+            this.loadZenithRank(scan.zenithRank, scan.id, defaultIfError, undefined);
+        }
         this._versionNumber = scan.versionNumber;
         this._versionId = scan.versionId;
         this._versioningInterrupted = scan.versioningInterrupted;
 
-        this._scanValuesChangedSubscriptionId = scan.subscribeValuesChangedEvent((valueChanges) => { this.handleScanValuesChangedEvent(scan, valueChanges); });
+        this._scanValuesChangedSubscriptionId = scan.subscribeValuesChangedEvent(
+            (valueChanges) => {
+                if (scan.lastEditSessionId !== this._editSessionId) {
+                    this.processScanValueChanges(scan, valueChanges);
+                }
+            }
+        );
     }
 
-    private loadZenithCriteria(scan: Scan, defaultIfError: boolean) {
-        const zenithCriteria = scan.zenithCriteria;
-        if (zenithCriteria === undefined) {
-            this._criteria = undefined;
-        } else {
-            const decodeResult = ScanFormulaZenithEncoding.tryDecodeBoolean(zenithCriteria);
-            if (decodeResult.isErr()) {
-                const decodedError = decodeResult.error;
-                const decodeError = decodedError.error;
-                let msg =`ScanEditor criteria decode error: Id: ${scan.id} ErrorId: ${decodeError.errorId}`;
-                const extraErrorText = decodeError.extraErrorText;
-                if (extraErrorText !== undefined) {
-                    msg += ` Extra: "${extraErrorText}"`;
-                }
-                const progress = decodedError.progress;
-                msg += ` Count: ${progress.tupleNodeCount} Depth: ${progress.tupleNodeDepth}`;
-                Logger.logWarning(msg);
-                if (defaultIfError) {
-                    this._criteria = { typeId: ScanFormula.NodeTypeId.None };
-                }
-            } else {
-                this._criteria = decodeResult.value.node;
+    private loadZenithCriteria(zenithCriteria: ZenithEncodedScanFormula.BooleanTupleNode, scanId: string, defaultIfError: boolean, sourceId: ScanEditor.SourceId | undefined) {
+        let criteria: ScanFormula.BooleanNode | undefined;
+        const decodeResult = ScanFormulaZenithEncoding.tryDecodeBoolean(zenithCriteria);
+        if (decodeResult.isErr()) {
+            const decodedError = decodeResult.error;
+            const decodeError = decodedError.error;
+            let msg =`ScanEditor criteria decode error: Id: ${scanId} ErrorId: ${decodeError.errorId}`;
+            const extraErrorText = decodeError.extraErrorText;
+            if (extraErrorText !== undefined) {
+                msg += ` Extra: "${extraErrorText}"`;
             }
+            const progress = decodedError.progress;
+            msg += ` Count: ${progress.tupleNodeCount} Depth: ${progress.tupleNodeDepth}`;
+            Logger.logWarning(msg);
+            if (defaultIfError) {
+                criteria = ScanEditor.DefaultCriteria;
+            }
+        } else {
+            criteria = decodeResult.value.node;
+        }
+
+        if (criteria !== undefined) {
+            this.setCriteria(criteria, sourceId);
         }
     }
 
-    private loadZenithRank(scan: Scan, defaultIfError: boolean) {
-        const zenithRank = scan.zenithRank;
-        if (zenithRank === undefined) {
-            this._rank = undefined;
-        } else {
-            const decodeResult = ScanFormulaZenithEncoding.tryDecodeNumeric(zenithRank);
-            if (decodeResult.isErr()) {
-                const decodedError = decodeResult.error;
-                const decodeError = decodedError.error;
-                let msg =`ScanEditor rank decode error: Id: ${scan.id} ErrorId: ${decodeError.errorId}`;
-                const extraErrorText = decodeError.extraErrorText;
-                if (extraErrorText !== undefined) {
-                    msg += ` Extra: "${extraErrorText}"`;
-                }
-                const progress = decodedError.progress;
-                msg += ` Count: ${progress.tupleNodeCount} Depth: ${progress.tupleNodeDepth}`;
-                Logger.logWarning(msg);
-                if (defaultIfError) {
-                    this._rank = { typeId: ScanFormula.NodeTypeId.NumericPos, operand: 0 } as ScanFormula.NumericPosNode;
-                }
-            } else {
-                this._rank = decodeResult.value.node;
+    private loadZenithRank(zenithRank: ZenithEncodedScanFormula.NumericTupleNode, scanId: string, defaultIfError: boolean, sourceId: ScanEditor.SourceId | undefined) {
+        let rank: ScanFormula.NumericNode | undefined;
+        const decodeResult = ScanFormulaZenithEncoding.tryDecodeNumeric(zenithRank);
+        if (decodeResult.isErr()) {
+            const decodedError = decodeResult.error;
+            const decodeError = decodedError.error;
+            let msg =`ScanEditor rank decode error: Id: ${scanId} ErrorId: ${decodeError.errorId}`;
+            const extraErrorText = decodeError.extraErrorText;
+            if (extraErrorText !== undefined) {
+                msg += ` Extra: "${extraErrorText}"`;
             }
+            const progress = decodedError.progress;
+            msg += ` Count: ${progress.tupleNodeCount} Depth: ${progress.tupleNodeDepth}`;
+            Logger.logWarning(msg);
+            if (defaultIfError) {
+                rank = ScanEditor.DefaultRank;
+            }
+        } else {
+            rank = decodeResult.value.node;
+        }
+
+        if (rank !== undefined) {
+            this.setRank(rank, sourceId);
         }
     }
 
@@ -1098,28 +1100,6 @@ export class ScanEditor {
         }
     }
 
-    private updateCriteriaFormulaZenithText() {
-        const criteria = this._criteria;
-        if (criteria === undefined) {
-            this._criteriaAsFormula = undefined;
-            this._criteriaAsZenithText = undefined;
-        } else {
-            this._criteriaAsFormula = this.generateCriteriaAsFormula(criteria);
-            this._criteriaAsZenithText = this.createZenithCriteriaText(criteria);
-        }
-    }
-
-    private updateRankFormulaZenithText() {
-        const rank = this._rank;
-        if (rank === undefined) {
-            this._rankAsFormula = undefined;
-            this._rankAsZenithText = undefined;
-        } else {
-            this._rankAsFormula = this.generateRankAsFormula(rank);
-            this._rankAsZenithText = this.createZenithRankText(rank);
-        }
-    }
-
     private updateVersion(): ScanEditor.Version {
         if (this._versionId === undefined && this._versionNumber !== 0) {
             this._versioningInterrupted = true;
@@ -1143,6 +1123,8 @@ export class ScanEditor {
 export namespace ScanEditor {
     export const DefaultSymbolListEnabled = false;
     export const DefaultScanTargetTypeId = ScanTargetTypeId.Symbols;
+    export const DefaultCriteria: ScanFormula.BooleanNode = { typeId: ScanFormula.NodeTypeId.None };
+    export const DefaultRank: ScanFormula.NumericPosNode = { typeId: ScanFormula.NodeTypeId.NumericPos, operand: 0 } ;
 
     export type StateChangeEventHandler = (this: void) => void;
     export type FieldChangesEventHandler = (this: void, changedFieldIds: readonly FieldId[], changer: FieldChanger | undefined) => void;
@@ -1264,6 +1246,7 @@ export namespace ScanEditor {
     export const enum LifeCycleStateId {
         NotYetCreated,
         Creating,
+        LoadingInitialDetail,
         Exists,
         Updating,
         Deleting,
@@ -1274,6 +1257,11 @@ export namespace ScanEditor {
         Unmodified,
         Modified,
         Conflict,
+    }
+
+    export const enum SourceId {
+        Formula,
+        Zenith,
     }
 
     export interface Version {

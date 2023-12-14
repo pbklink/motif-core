@@ -117,7 +117,8 @@ export class ScanTableValueSource extends CorrectnessTableValueSource<Scan> {
                 break;
             }
             case Scan.FieldId.Index: {
-                (value as IntegerCorrectnessTableValue).data = this._scan.index;
+                // (value as IntegerCorrectnessTableValue).data = this._scan.index;
+                throw new AssertInternalError('STVSLVZI34345');
                 break;
             }
             case Scan.FieldId.StatusId: {
@@ -154,6 +155,12 @@ export class ScanTableValueSource extends CorrectnessTableValueSource<Scan> {
             case Scan.FieldId.ZenithRank: {
                 throw new AssertInternalError('STVSLVZR34345');
             }
+            case Scan.FieldId.ZenithCriteriaSource: {
+                throw new AssertInternalError('STVSLVZCS34345');
+            }
+            case Scan.FieldId.ZenithRankSource: {
+                throw new AssertInternalError('STVSLVZRS34345');
+            }
             case Scan.FieldId.SymbolListEnabled: {
                 (value as EnabledCorrectnessTableValue).data = this._scan.symbolListEnabled;
                 break;
@@ -164,6 +171,10 @@ export class ScanTableValueSource extends CorrectnessTableValueSource<Scan> {
             }
             case Scan.FieldId.LastSavedTime: {
                 (value as DateTimeCorrectnessTableValue).data = this._scan.lastSavedTime;
+                break;
+            }
+            case Scan.FieldId.LastEditSessionId: {
+                throw new AssertInternalError('STVSLVZLS34345');
                 break;
             }
             default:

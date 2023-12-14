@@ -12,6 +12,7 @@ export * from './scan-detail';
 export * from './scan-match';
 export * from './scan-match-record';
 export * from './scan-statused-descriptor';
+export * from './scan-statused-descriptor-interface';
 export * from './scan-statused-descriptors-data-item';
 export * from './update-scan-data-item';
 

@@ -86,7 +86,14 @@ export class ScanTableFieldSourceDefinition extends TableFieldSourceDefinition {
 /** @public */
 export namespace ScanTableFieldSourceDefinition {
     export namespace Field {
-        const unsupportedIds: Scan.FieldId[] = [Scan.FieldId.Index, Scan.FieldId.ZenithCriteria, Scan.FieldId.ZenithRank];
+        const unsupportedIds: Scan.FieldId[] = [
+            Scan.FieldId.Index,
+            Scan.FieldId.ZenithCriteria,
+            Scan.FieldId.ZenithRank,
+            Scan.FieldId.ZenithCriteriaSource,
+            Scan.FieldId.ZenithRankSource,
+            Scan.FieldId.LastEditSessionId,
+        ];
         export const count = Scan.Field.idCount - unsupportedIds.length;
 
         interface Info {

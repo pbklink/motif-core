@@ -257,10 +257,10 @@ export namespace OrdersDataMessage {
         marketId: MarketId | undefined;
         marketBoardId: MarketBoardId | undefined;
         currencyId: CurrencyId | undefined;
-        estimatedBrokerage: Decimal;
-        currentBrokerage: Decimal;
-        estimatedTax: Decimal;
-        currentTax: Decimal;
+        estimatedBrokerage: Decimal | undefined;
+        currentBrokerage: Decimal | undefined;
+        estimatedTax: Decimal | undefined;
+        currentTax: Decimal | undefined;
         currentValue: Decimal;
         createdDate: SourceTzOffsetDateTime;
         updatedDate: SourceTzOffsetDateTime;
@@ -795,7 +795,10 @@ export class QueryScanDetailDataMessage extends DataMessage {
     versionId: Guid | undefined;
     versioningInterrupted: boolean;
     lastSavedTime: Date | undefined;
+    lastEditSessionId: Guid | undefined;
     symbolListEnabled: boolean | undefined;
+    zenithCriteriaSource: string | undefined;
+    zenithRankSource: string | undefined;
     zenithCriteria: ZenithEncodedScanFormula.BooleanTupleNode;
     zenithRank: ZenithEncodedScanFormula.NumericTupleNode;
     targetTypeId: ScanTargetTypeId;
@@ -843,7 +846,10 @@ export namespace ScanStatusedDescriptorsDataMessage {
         versionId: Guid | undefined;
         versioningInterrupted: boolean;
         lastSavedTime: Date | undefined;
+        lastEditSessionId: Guid | undefined;
         symbolListEnabled: boolean | undefined;
+        zenithCriteriaSource: string | undefined;
+        zenithRankSource: string | undefined;
     }
 
     export interface AddChange extends AddUpdateChange {
@@ -853,9 +859,13 @@ export namespace ScanStatusedDescriptorsDataMessage {
         scanDescription: string | undefined;
         readonly: boolean;
         scanStatusId: ScanStatusId;
-        versionId: string;
-        lastSavedTime: Date;
-        symbolListEnabled: boolean;
+        versionId: string | undefined;
+        versioningInterrupted: boolean;
+        lastSavedTime: Date | undefined;
+        lastEditSessionId: Guid | undefined;
+        symbolListEnabled: boolean | undefined;
+        zenithCriteriaSource: string | undefined;
+        zenithRankSource: string | undefined;
     }
 
     export interface UpdateChange extends AddUpdateChange {

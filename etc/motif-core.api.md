@@ -5149,6 +5149,8 @@ export function createRandomUrlSearch(): string;
 export class CreateScanDataDefinition extends FeedSubscriptionDataDefinition {
     constructor();
     // (undocumented)
+    lastEditSessionId: Guid;
+    // (undocumented)
     lastSavedTime: Date;
     // (undocumented)
     maxMatchCount: Integer;
@@ -5175,7 +5177,11 @@ export class CreateScanDataDefinition extends FeedSubscriptionDataDefinition {
     // (undocumented)
     zenithCriteria: ZenithEncodedScanFormula.BooleanTupleNode;
     // (undocumented)
+    zenithCriteriaSource: string | undefined;
+    // (undocumented)
     zenithRank: ZenithEncodedScanFormula.NumericTupleNode;
+    // (undocumented)
+    zenithRankSource: string | undefined;
 }
 
 // Warning: (ae-missing-release-tag) "CreateScanDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -12848,6 +12854,11 @@ export function isUndefinableDateEqual(left: Date | undefined, right: Date | und
 // @public (undocumented)
 export function isUndefinableDecimalEqual(left: Decimal | undefined, right: Decimal | undefined): boolean;
 
+// Warning: (ae-missing-release-tag) "isUndefinableStringNumberBooleanNestArrayEqual" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export function isUndefinableStringNumberBooleanNestArrayEqual(left: unknown[] | undefined, right: unknown[] | undefined): boolean;
+
 // Warning: (ae-missing-release-tag) "ItemBkgdColorColorSchemeGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -16997,9 +17008,9 @@ export class Order implements BrokerageAccountRecord {
     // (undocumented)
     get currencyId(): CurrencyId | undefined;
     // (undocumented)
-    get currentBrokerage(): Decimal;
+    get currentBrokerage(): Decimal | undefined;
     // (undocumented)
-    get currentTax(): Decimal;
+    get currentTax(): Decimal | undefined;
     // (undocumented)
     get currentValue(): Decimal;
     // (undocumented)
@@ -17011,9 +17022,9 @@ export class Order implements BrokerageAccountRecord {
     // (undocumented)
     get equityOrderTypeId(): OrderTypeId;
     // (undocumented)
-    get estimatedBrokerage(): Decimal;
+    get estimatedBrokerage(): Decimal | undefined;
     // (undocumented)
-    get estimatedTax(): Decimal;
+    get estimatedTax(): Decimal | undefined;
     // (undocumented)
     get exchangeId(): ExchangeId;
     // (undocumented)
@@ -18636,9 +18647,9 @@ export namespace OrdersDataMessage {
         // (undocumented)
         currencyId: CurrencyId | undefined;
         // (undocumented)
-        currentBrokerage: Decimal;
+        currentBrokerage: Decimal | undefined;
         // (undocumented)
-        currentTax: Decimal;
+        currentTax: Decimal | undefined;
         // (undocumented)
         currentValue: Decimal;
         // (undocumented)
@@ -18648,9 +18659,9 @@ export namespace OrdersDataMessage {
         // (undocumented)
         equityOrderTypeId: OrderTypeId;
         // (undocumented)
-        estimatedBrokerage: Decimal;
+        estimatedBrokerage: Decimal | undefined;
         // (undocumented)
-        estimatedTax: Decimal;
+        estimatedTax: Decimal | undefined;
         // (undocumented)
         exchangeId: ExchangeId;
         // (undocumented)
@@ -20165,8 +20176,10 @@ export class QueryScanDetailDataDefinition extends FeedSubscriptionDataDefinitio
 //
 // @public (undocumented)
 export class QueryScanDetailDataItem extends ScanPublishDataItem {
+    // Warning: (ae-forgotten-export) The symbol "ScanDescriptorAndDetail" needs to be exported by the entry point public-api.d.ts
+    //
     // (undocumented)
-    get detail(): ScanDetail;
+    get descriptorAndDetail(): ScanDescriptorAndDetail;
     // (undocumented)
     processMessage(msg: DataMessage): void;
 }
@@ -20176,6 +20189,8 @@ export class QueryScanDetailDataItem extends ScanPublishDataItem {
 // @public (undocumented)
 export class QueryScanDetailDataMessage extends DataMessage {
     constructor();
+    // (undocumented)
+    lastEditSessionId: Guid | undefined;
     // (undocumented)
     lastSavedTime: Date | undefined;
     // (undocumented)
@@ -20209,7 +20224,11 @@ export class QueryScanDetailDataMessage extends DataMessage {
     // (undocumented)
     zenithCriteria: ZenithEncodedScanFormula.BooleanTupleNode;
     // (undocumented)
+    zenithCriteriaSource: string | undefined;
+    // (undocumented)
     zenithRank: ZenithEncodedScanFormula.NumericTupleNode;
+    // (undocumented)
+    zenithRankSource: string | undefined;
 }
 
 // Warning: (ae-missing-release-tag) "QuerySecurityDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -22471,7 +22490,9 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
     // (undocumented)
     get correctnessId(): CorrectnessId;
     // (undocumented)
-    get description(): string;
+    get description(): string | undefined;
+    // (undocumented)
+    get detailed(): boolean;
     // (undocumented)
     readonly directoryItemTypeId = RankedLitIvemIdListDirectoryItem.TypeId.Scan;
     // (undocumented)
@@ -22486,6 +22507,8 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
     get index(): number;
     // (undocumented)
     isLocked(ignoreOnlyLocker: LockOpenListItem.Locker | undefined): boolean;
+    // (undocumented)
+    get lastEditSessionId(): string | undefined;
     // (undocumented)
     get lastSavedTime(): Date | undefined;
     // (undocumented)
@@ -22553,7 +22576,11 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
     // (undocumented)
     get zenithCriteria(): ZenithEncodedScanFormula.BooleanTupleNode | undefined;
     // (undocumented)
+    get zenithCriteriaSource(): string | undefined;
+    // (undocumented)
     get zenithRank(): ZenithEncodedScanFormula.NumericTupleNode | undefined;
+    // (undocumented)
+    get zenithRankSource(): string | undefined;
 }
 
 // @public (undocumented)
@@ -22599,6 +22626,8 @@ export namespace Scan {
         // (undocumented)
         export type Id = FieldId;
         const // (undocumented)
+        allIds: readonly FieldId[];
+        const // (undocumented)
         idCount: number;
         // (undocumented)
         export function idToDirectoryItemFieldId(id: Id): RankedLitIvemIdListDirectoryItem.FieldId | undefined;
@@ -22622,6 +22651,8 @@ export namespace Scan {
         // (undocumented)
         Index = 2,
         // (undocumented)
+        LastEditSessionId = 15,
+        // (undocumented)
         LastSavedTime = 14,
         // (undocumented)
         MaxMatchCount = 9,
@@ -22644,7 +22675,11 @@ export namespace Scan {
         // (undocumented)
         ZenithCriteria = 10,
         // (undocumented)
-        ZenithRank = 11
+        ZenithCriteriaSource = 16,
+        // (undocumented)
+        ZenithRank = 11,
+        // (undocumented)
+        ZenithRankSource = 17
     }
     // (undocumented)
     export type GetListCorrectnessIdEventer = (this: void) => CorrectnessId;
@@ -22687,33 +22722,13 @@ export class ScanDescriptorsDataDefinition extends FeedSubscriptionDataDefinitio
 // @public (undocumented)
 export interface ScanDetail {
     // (undocumented)
-    readonly description: string | undefined;
-    // (undocumented)
-    readonly id: string;
-    // (undocumented)
-    readonly lastSavedTime: Date | undefined;
-    // (undocumented)
-    readonly name: string;
-    // (undocumented)
     readonly notifications: readonly ScanNotification[] | undefined;
-    // (undocumented)
-    readonly readonly: boolean;
-    // (undocumented)
-    readonly statusId: ScanStatusId;
-    // (undocumented)
-    readonly symbolListEnabled: boolean | undefined;
     // (undocumented)
     readonly targetLitIvemIds: readonly LitIvemId[] | undefined;
     // (undocumented)
     readonly targetMarketIds: readonly MarketId[] | undefined;
     // (undocumented)
     readonly targetTypeId: ScanTargetTypeId;
-    // (undocumented)
-    readonly versionId: Guid | undefined;
-    // (undocumented)
-    readonly versioningInterrupted: boolean;
-    // (undocumented)
-    readonly versionNumber: Integer | undefined;
     // (undocumented)
     readonly zenithCriteria: ZenithEncodedScanFormula.BooleanTupleNode;
     // (undocumented)
@@ -22743,19 +22758,17 @@ export class ScanEditor {
     // (undocumented)
     createScan(): void;
     // (undocumented)
-    get criteria(): ScanFormula.BooleanNode;
-    set criteria(value: ScanFormula.BooleanNode);
+    get criteria(): ScanFormula.BooleanNode | undefined;
     // (undocumented)
-    get criteriaAsFormula(): string;
+    get criteriaAsFormula(): string | undefined;
     // (undocumented)
-    get criteriaAsZenithEncoded(): ZenithEncodedScanFormula.BooleanTupleNode;
+    get criteriaAsZenithEncoded(): ZenithEncodedScanFormula.LogicalTupleNode | [nodeType: ZenithEncodedScanFormula.NumericField, value: number] | [nodeType: ZenithEncodedScanFormula.NumericField, namedParameters: ZenithEncodedScanFormula.NumericNamedParameters] | [nodeType: ZenithEncodedScanFormula.NumericField, subField: ZenithEncodedScanFormula.PriceSubFieldEnum] | [nodeType: ZenithEncodedScanFormula.NumericField, subField: ZenithEncodedScanFormula.PriceSubFieldEnum, min: number | null, max: number | null] | [nodeType: ZenithEncodedScanFormula.DateField, value: string] | [nodeType: ZenithEncodedScanFormula.DateField, namedParameters: ZenithEncodedScanFormula.DateNamedParameters] | [nodeType: ZenithEncodedScanFormula.DateField, subField: ZenithEncodedScanFormula.DateSubFieldEnum, min: string | null, max: string | null] | [nodeType: ZenithEncodedScanFormula.TextField, value: string, as?: ZenithEncodedScanFormula.TextContainsAsEnum | undefined, ignoreCase?: boolean | undefined] | [nodeType: ZenithEncodedScanFormula.TextField, subField: ZenithEncodedScanFormula.TextSubField, value: string, as?: ZenithEncodedScanFormula.TextContainsAsEnum | undefined, ignoreCase?: boolean | undefined] | [nodeType: ZenithEncodedScanFormula.TextField, subField: ZenithEncodedScanFormula.TextSubField, value: string, namedParameters: ZenithEncodedScanFormula.TextNamedParameters] | [nodeType: "IsIndex", value: boolean] | ZenithEncodedScanFormula.ComparisonTupleNode | ZenithEncodedScanFormula.AllNoneTupleNode | undefined;
     // (undocumented)
-    get criteriaAsZenithText(): string;
+    get criteriaAsZenithText(): string | undefined;
     // (undocumented)
     deleteScan(): void;
     // (undocumented)
     get description(): string;
-    set description(value: string);
     // (undocumented)
     get enabled(): boolean;
     set enabled(value: boolean);
@@ -22770,24 +22783,23 @@ export class ScanEditor {
     // (undocumented)
     get lifeCycleStateId(): ScanEditor.LifeCycleStateId;
     // (undocumented)
-    get maxMatchCount(): Integer;
-    set maxMatchCount(value: Integer);
+    get maxMatchCount(): number | undefined;
     // (undocumented)
     get modifiedStatedId(): ScanEditor.ModifiedStateId;
     // (undocumented)
     get name(): string;
-    set name(value: string);
     // (undocumented)
     get openCount(): number;
     // (undocumented)
-    get rank(): ScanFormula.NumericNode;
-    set rank(value: ScanFormula.NumericNode);
+    get rank(): ScanFormula.NumericNode | undefined;
     // (undocumented)
-    get rankAsFormula(): string;
+    get rankAsFormula(): string | undefined;
     // (undocumented)
-    get rankAsZenithEncoded(): ZenithEncodedScanFormula.UnaryExpressionTupleNode | ZenithEncodedScanFormula.BinaryExpressionTupleNode | ZenithEncodedScanFormula.UnaryOrBinaryExpressionTupleNode | ZenithEncodedScanFormula.NumericIfTupleNode;
+    get rankAsZenithEncoded(): ZenithEncodedScanFormula.UnaryExpressionTupleNode | ZenithEncodedScanFormula.BinaryExpressionTupleNode | ZenithEncodedScanFormula.UnaryOrBinaryExpressionTupleNode | ZenithEncodedScanFormula.NumericIfTupleNode | undefined;
     // (undocumented)
-    get rankAsZenithText(): string;
+    get rankAsZenithText(): string | undefined;
+    // (undocumented)
+    readonly readonly: boolean;
     // (undocumented)
     removeOpener(opener: LockOpenListItem.Opener): void;
     // (undocumented)
@@ -22797,9 +22809,27 @@ export class ScanEditor {
     // (undocumented)
     get scan(): Scan | undefined;
     // (undocumented)
+    setCriteria(value: ScanFormula.BooleanNode, sourceId: ScanEditor.SourceId | undefined): void;
+    // (undocumented)
     setCriteriaAsZenithText(value: string, fieldChanger?: ScanEditor.FieldChanger): ScanEditor.SetAsZenithTextResult | undefined;
     // (undocumented)
+    setDescription(value: string): void;
+    // (undocumented)
+    setMaxMatchCount(value: Integer): void;
+    // (undocumented)
+    setName(value: string): void;
+    // (undocumented)
+    setRank(value: ScanFormula.NumericNode, sourceId: ScanEditor.SourceId | undefined): void;
+    // (undocumented)
     setRankAsZenithText(value: string, fieldChanger?: ScanEditor.FieldChanger): ScanEditor.SetAsZenithTextResult | undefined;
+    // (undocumented)
+    setSymbolListEnabled(value: boolean): void;
+    // (undocumented)
+    setTargetLitIvemIds(value: readonly LitIvemId[]): void;
+    // (undocumented)
+    setTargetMarketIds(value: readonly MarketId[]): void;
+    // (undocumented)
+    setTargetTypeId(value: ScanTargetTypeId): void;
     // (undocumented)
     get statusId(): ScanStatusId | undefined;
     // (undocumented)
@@ -22810,18 +22840,14 @@ export class ScanEditor {
     subscribeModifiedStateChangeEvents(handler: ScanEditor.StateChangeEventHandler): number;
     // (undocumented)
     get symbolListEnabled(): boolean;
-    set symbolListEnabled(value: boolean);
     // (undocumented)
-    get targetLitIvemIds(): readonly LitIvemId[];
-    set targetLitIvemIds(value: readonly LitIvemId[]);
+    get targetLitIvemIds(): readonly LitIvemId[] | undefined;
     // (undocumented)
-    get targetMarketIds(): readonly MarketId[];
-    set targetMarketIds(value: readonly MarketId[]);
+    get targetMarketIds(): readonly MarketId[] | undefined;
     // (undocumented)
-    get targets(): readonly MarketId[] | readonly LitIvemId[];
+    get targets(): readonly MarketId[] | readonly LitIvemId[] | undefined;
     // (undocumented)
-    get targetTypeId(): ScanTargetTypeId;
-    set targetTypeId(value: ScanTargetTypeId);
+    get targetTypeId(): ScanTargetTypeId | undefined;
     // (undocumented)
     unsubscribeFieldChangesEvents(subscriptionId: MultiEvent.SubscriptionId): void;
     // (undocumented)
@@ -22838,6 +22864,10 @@ export namespace ScanEditor {
     DefaultSymbolListEnabled = false;
     const // (undocumented)
     DefaultScanTargetTypeId = ScanTargetTypeId.Symbols;
+    const // (undocumented)
+    DefaultCriteria: ScanFormula.BooleanNode;
+    const // (undocumented)
+    DefaultRank: ScanFormula.NumericPosNode;
     // (undocumented)
     export type ErrorEventer = (this: void, errorText: string) => void;
     // (undocumented)
@@ -22908,15 +22938,17 @@ export namespace ScanEditor {
         // (undocumented)
         Creating = 1,
         // (undocumented)
-        Deleted = 5,
+        Deleted = 6,
         // (undocumented)
-        Deleting = 4,
+        Deleting = 5,
         // (undocumented)
-        Exists = 2,
+        Exists = 3,
+        // (undocumented)
+        LoadingInitialDetail = 2,
         // (undocumented)
         NotYetCreated = 0,
         // (undocumented)
-        Updating = 3
+        Updating = 4
     }
     // (undocumented)
     export const enum ModifiedStateId {
@@ -22933,6 +22965,13 @@ export namespace ScanEditor {
         error: ScanFormulaZenithEncoding.DecodeError | undefined;
         // (undocumented)
         progress: ScanFormulaZenithEncoding.DecodeProgress;
+    }
+    // (undocumented)
+    export const enum SourceId {
+        // (undocumented)
+        Formula = 0,
+        // (undocumented)
+        Zenith = 1
     }
     // (undocumented)
     export type StateChangeEventHandler = (this: void) => void;
@@ -24020,14 +24059,16 @@ export namespace ScanStatus {
 // Warning: (ae-missing-release-tag) "ScanStatusedDescriptor" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class ScanStatusedDescriptor {
+export class ScanStatusedDescriptor implements ScanStatusedDescriptorInterface {
     constructor(change: ScanStatusedDescriptorsDataMessage.AddChange);
     // (undocumented)
-    get description(): string;
+    get description(): string | undefined;
     // (undocumented)
     readonly id: string;
     // (undocumented)
-    get lastSavedTime(): Date;
+    get lastEditSessionId(): string | undefined;
+    // (undocumented)
+    get lastSavedTime(): Date | undefined;
     // (undocumented)
     get name(): string;
     // (undocumented)
@@ -24035,11 +24076,11 @@ export class ScanStatusedDescriptor {
     // (undocumented)
     get statusId(): ScanStatusId;
     // (undocumented)
-    subscribeChangedEvent(handler: ScanStatusedDescriptor.ChangedEventHandler): number;
+    subscribeUpdatedEvent(handler: ScanStatusedDescriptor.UpdatedEventHandler): number;
     // (undocumented)
-    get symbolListEnabled(): boolean;
+    get symbolListEnabled(): boolean | undefined;
     // (undocumented)
-    unsubscribeChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+    unsubscribeUpdatedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
     // (undocumented)
     update(change: ScanStatusedDescriptorsDataMessage.UpdateChange): void;
     // (undocumented)
@@ -24050,20 +24091,24 @@ export class ScanStatusedDescriptor {
     get versioningInterrupted(): boolean;
     // (undocumented)
     get versionNumber(): number | undefined;
+    // (undocumented)
+    get zenithCriteriaSource(): string | undefined;
+    // (undocumented)
+    get zenithRankSource(): string | undefined;
 }
 
 // @public (undocumented)
 export namespace ScanStatusedDescriptor {
     // (undocumented)
-    export type ChangedEventHandler = (this: void, changedFieldIds: ScanStatusedDescriptor.FieldId[]) => void;
-    // (undocumented)
     export type CorrectnessChangedEventHandler = (this: void) => void;
     // (undocumented)
     export namespace Field {
+        const // (undocumented)
+        allIds: readonly FieldId[];
         // (undocumented)
         export type Id = ScanStatusedDescriptor.FieldId;
         const // (undocumented)
-        count: number;
+        idCount: number;
         // (undocumented)
         export function idToName(id: Id): string;
         // (undocumented)
@@ -24076,6 +24121,8 @@ export namespace ScanStatusedDescriptor {
         // (undocumented)
         Id = 0,
         // (undocumented)
+        LastEditSessionId = 7,
+        // (undocumented)
         LastSavedTime = 6,
         // (undocumented)
         Name = 1,
@@ -24084,9 +24131,13 @@ export namespace ScanStatusedDescriptor {
         // (undocumented)
         StatusId = 4,
         // (undocumented)
-        SymbolListEnabled = 7,
+        SymbolListEnabled = 8,
         // (undocumented)
-        Version = 5
+        Version = 5,
+        // (undocumented)
+        ZenithCriteriaSource = 9,
+        // (undocumented)
+        ZenithRankSource = 10
     }
     // (undocumented)
     export class Key implements KeyedRecord.Key {
@@ -24094,6 +24145,40 @@ export namespace ScanStatusedDescriptor {
         // (undocumented)
         readonly mapKey: string;
     }
+    // (undocumented)
+    export type UpdatedEventHandler = (this: void, changedFieldIds: ScanStatusedDescriptor.FieldId[]) => void;
+}
+
+// Warning: (ae-missing-release-tag) "ScanStatusedDescriptorInterface" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ScanStatusedDescriptorInterface {
+    // (undocumented)
+    readonly description: string | undefined;
+    // (undocumented)
+    readonly id: string;
+    // (undocumented)
+    readonly lastEditSessionId: Guid | undefined;
+    // (undocumented)
+    readonly lastSavedTime: Date | undefined;
+    // (undocumented)
+    readonly name: string;
+    // (undocumented)
+    readonly readonly: boolean;
+    // (undocumented)
+    readonly statusId: ScanStatusId;
+    // (undocumented)
+    readonly symbolListEnabled: boolean | undefined;
+    // (undocumented)
+    readonly versionId: Guid | undefined;
+    // (undocumented)
+    readonly versioningInterrupted: boolean;
+    // (undocumented)
+    readonly versionNumber: Integer | undefined;
+    // (undocumented)
+    readonly zenithCriteriaSource: string | undefined;
+    // (undocumented)
+    readonly zenithRankSource: string | undefined;
 }
 
 // Warning: (ae-missing-release-tag) "ScanStatusedDescriptorsDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -24140,7 +24225,9 @@ export namespace ScanStatusedDescriptorsDataMessage {
     // (undocumented)
     export interface AddChange extends AddUpdateChange {
         // (undocumented)
-        lastSavedTime: Date;
+        lastEditSessionId: Guid | undefined;
+        // (undocumented)
+        lastSavedTime: Date | undefined;
         // (undocumented)
         readonly: boolean;
         // (undocumented)
@@ -24152,14 +24239,22 @@ export namespace ScanStatusedDescriptorsDataMessage {
         // (undocumented)
         scanStatusId: ScanStatusId;
         // (undocumented)
-        symbolListEnabled: boolean;
+        symbolListEnabled: boolean | undefined;
         // (undocumented)
         typeId: AurcChangeTypeId.Add;
         // (undocumented)
-        versionId: string;
+        versionId: string | undefined;
+        // (undocumented)
+        versioningInterrupted: boolean;
+        // (undocumented)
+        zenithCriteriaSource: string | undefined;
+        // (undocumented)
+        zenithRankSource: string | undefined;
     }
     // (undocumented)
     export interface AddUpdateChange extends Change {
+        // (undocumented)
+        lastEditSessionId: Guid | undefined;
         // (undocumented)
         lastSavedTime: Date | undefined;
         // (undocumented)
@@ -24182,6 +24277,10 @@ export namespace ScanStatusedDescriptorsDataMessage {
         versioningInterrupted: boolean;
         // (undocumented)
         versionNumber: Integer | undefined;
+        // (undocumented)
+        zenithCriteriaSource: string | undefined;
+        // (undocumented)
+        zenithRankSource: string | undefined;
     }
     // (undocumented)
     export interface Change {
@@ -26687,11 +26786,11 @@ export const enum StringId {
     // (undocumented)
     Details = 58,
     // (undocumented)
-    Diagnostics_CloseSocketConnection = 2090,
+    Diagnostics_CloseSocketConnection = 2093,
     // (undocumented)
-    DiagnosticsDitemGroup_DebugCaption = 2088,
+    DiagnosticsDitemGroup_DebugCaption = 2091,
     // (undocumented)
-    DiagnosticsDitemGroup_DebugTitle = 2089,
+    DiagnosticsDitemGroup_DebugTitle = 2092,
     // (undocumented)
     Disabled = 97,
     // (undocumented)
@@ -27085,17 +27184,17 @@ export const enum StringId {
     // (undocumented)
     Grid_SelectAllTitle = 900,
     // (undocumented)
-    GridFieldFieldHeading_DefaultHeading = 2078,
+    GridFieldFieldHeading_DefaultHeading = 2081,
     // (undocumented)
-    GridFieldFieldHeading_DefaultTextAlign = 2079,
+    GridFieldFieldHeading_DefaultTextAlign = 2082,
     // (undocumented)
-    GridFieldFieldHeading_DefaultWidth = 2080,
+    GridFieldFieldHeading_DefaultWidth = 2083,
     // (undocumented)
-    GridFieldFieldHeading_Heading = 2076,
+    GridFieldFieldHeading_Heading = 2079,
     // (undocumented)
-    GridFieldFieldHeading_Name = 2075,
+    GridFieldFieldHeading_Name = 2078,
     // (undocumented)
-    GridFieldFieldHeading_SourceName = 2077,
+    GridFieldFieldHeading_SourceName = 2080,
     // (undocumented)
     GridLayoutDefinitionColumnDescription_FieldHeading = 2037,
     // (undocumented)
@@ -28735,19 +28834,19 @@ export const enum StringId {
     // (undocumented)
     RankedLitIvemIdListAbbreviation_WatchmakerListId = 349,
     // (undocumented)
-    RankedLitIvemIdListDirectoryItem_TypeId_Scan = 2087,
+    RankedLitIvemIdListDirectoryItem_TypeId_Scan = 2090,
     // (undocumented)
-    RankedLitIvemIdListDirectoryItem_TypeId_WatchmakerList = 2086,
+    RankedLitIvemIdListDirectoryItem_TypeId_WatchmakerList = 2089,
     // (undocumented)
-    RankedLitIvemIdListDirectoryItemFieldHeading_Description = 2085,
+    RankedLitIvemIdListDirectoryItemFieldHeading_Description = 2088,
     // (undocumented)
-    RankedLitIvemIdListDirectoryItemFieldHeading_Id = 2082,
+    RankedLitIvemIdListDirectoryItemFieldHeading_Id = 2085,
     // (undocumented)
-    RankedLitIvemIdListDirectoryItemFieldHeading_Name = 2084,
+    RankedLitIvemIdListDirectoryItemFieldHeading_Name = 2087,
     // (undocumented)
-    RankedLitIvemIdListDirectoryItemFieldHeading_Readonly = 2083,
+    RankedLitIvemIdListDirectoryItemFieldHeading_Readonly = 2086,
     // (undocumented)
-    RankedLitIvemIdListDirectoryItemFieldHeading_TypeId = 2081,
+    RankedLitIvemIdListDirectoryItemFieldHeading_TypeId = 2084,
     // (undocumented)
     RankedLitIvemIdListDisplay_LitIvemIdArray = 348,
     // (undocumented)
@@ -28823,6 +28922,8 @@ export const enum StringId {
     // (undocumented)
     ScanFieldHeading_Index = 2046,
     // (undocumented)
+    ScanFieldHeading_LastEditSessionId = 2059,
+    // (undocumented)
     ScanFieldHeading_LastSavedTime = 2058,
     // (undocumented)
     ScanFieldHeading_MaxMatchCount = 2053,
@@ -28845,7 +28946,11 @@ export const enum StringId {
     // (undocumented)
     ScanFieldHeading_ZenithCriteria = 2054,
     // (undocumented)
+    ScanFieldHeading_ZenithCriteriaSource = 2060,
+    // (undocumented)
     ScanFieldHeading_ZenithRank = 2055,
+    // (undocumented)
+    ScanFieldHeading_ZenithRankSource = 2061,
     // (undocumented)
     ScanFormulaZenithEncodingError_AltCodeSubFieldContainsSubFieldIsUnknown = 1925,
     // (undocumented)
@@ -30021,23 +30126,23 @@ export const enum StringId {
     // (undocumented)
     Watchlist_SymbolButtonTitle = 872,
     // (undocumented)
-    WatchmakerListHeading_Category = 2071,
+    WatchmakerListHeading_Category = 2074,
     // (undocumented)
-    WatchmakerListHeading_ConfigModified = 2073,
+    WatchmakerListHeading_ConfigModified = 2076,
     // (undocumented)
-    WatchmakerListHeading_Description = 2070,
+    WatchmakerListHeading_Description = 2073,
     // (undocumented)
-    WatchmakerListHeading_Id = 2066,
+    WatchmakerListHeading_Id = 2069,
     // (undocumented)
-    WatchmakerListHeading_Index = 2068,
+    WatchmakerListHeading_Index = 2071,
     // (undocumented)
-    WatchmakerListHeading_LastSavedTime = 2074,
+    WatchmakerListHeading_LastSavedTime = 2077,
     // (undocumented)
-    WatchmakerListHeading_Name = 2069,
+    WatchmakerListHeading_Name = 2072,
     // (undocumented)
-    WatchmakerListHeading_Readonly = 2067,
+    WatchmakerListHeading_Readonly = 2070,
     // (undocumented)
-    WatchmakerListHeading_SyncStatusId = 2072,
+    WatchmakerListHeading_SyncStatusId = 2075,
     // (undocumented)
     Writable = 69,
     // (undocumented)
@@ -30083,19 +30188,19 @@ export const enum StringId {
     // (undocumented)
     ZenithPublisherStateDisplay_SocketOpen = 1069,
     // (undocumented)
-    ZenithScanFormulaView_ErrorCaption = 2059,
+    ZenithScanFormulaView_ErrorCaption = 2062,
     // (undocumented)
-    ZenithScanFormulaView_ErrorTitle = 2060,
+    ZenithScanFormulaView_ErrorTitle = 2063,
     // (undocumented)
-    ZenithScanFormulaViewDecodeProgress_CountCaption = 2062,
+    ZenithScanFormulaViewDecodeProgress_CountCaption = 2065,
     // (undocumented)
-    ZenithScanFormulaViewDecodeProgress_CountTitle = 2063,
+    ZenithScanFormulaViewDecodeProgress_CountTitle = 2066,
     // (undocumented)
-    ZenithScanFormulaViewDecodeProgress_DepthCaption = 2064,
+    ZenithScanFormulaViewDecodeProgress_DepthCaption = 2067,
     // (undocumented)
-    ZenithScanFormulaViewDecodeProgress_DepthTitle = 2065,
+    ZenithScanFormulaViewDecodeProgress_DepthTitle = 2068,
     // (undocumented)
-    ZenithScanFormulaViewDecodeProgress_Title = 2061,
+    ZenithScanFormulaViewDecodeProgress_Title = 2064,
     // (undocumented)
     ZenithUnexpectedCaseExternalError = 18,
     // (undocumented)
@@ -34529,6 +34634,8 @@ export abstract class UiAction {
     // (undocumented)
     pushInvalid(invalidTitleText?: string): void;
     // (undocumented)
+    pushMissing(): void;
+    // (undocumented)
     pushPlaceholder(value: string): void;
     // (undocumented)
     pushReadonly(): void;
@@ -34712,6 +34819,8 @@ export class UnreachableCaseError extends BaseInternalError {
 export class UpdateScanDataDefinition extends FeedSubscriptionDataDefinition {
     constructor();
     // (undocumented)
+    lastEditSessionId: Guid;
+    // (undocumented)
     lastSavedTime: Date;
     // (undocumented)
     notifications: readonly ScanNotification[] | undefined;
@@ -34738,7 +34847,11 @@ export class UpdateScanDataDefinition extends FeedSubscriptionDataDefinition {
     // (undocumented)
     zenithCriteria: ZenithEncodedScanFormula.BooleanTupleNode;
     // (undocumented)
+    zenithCriteriaSource: string | undefined;
+    // (undocumented)
     zenithRank: ZenithEncodedScanFormula.NumericTupleNode;
+    // (undocumented)
+    zenithRankSource: string | undefined;
 }
 
 // Warning: (ae-missing-release-tag) "UpdateScanDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -35946,6 +36059,18 @@ export namespace ZenithConvert {
             // (undocumented)
             export function fromRequestTypeId(requestTypeId: AdiPublisherRequest.TypeId): true | undefined;
         }
+    }
+    // (undocumented)
+    export namespace OrderFees {
+        // (undocumented)
+        export interface AsDecimal {
+            // (undocumented)
+            readonly brokerage: Decimal | undefined;
+            // (undocumented)
+            readonly tax: Decimal | undefined;
+        }
+        // (undocumented)
+        export function toDecimal(value: ZenithProtocol.TradingController.OrderFees): AsDecimal;
     }
     // (undocumented)
     export namespace OrderInstruction {
@@ -39023,9 +39148,7 @@ export namespace ZenithProtocol {
                 // (undocumented)
                 Errors?: OrderRequestError[];
                 // (undocumented)
-                EstimatedBrokerage?: Decimal;
-                // (undocumented)
-                EstimatedTax?: Decimal;
+                EstimatedFees?: OrderFees;
                 // (undocumented)
                 EstimatedValue?: Decimal;
                 // (undocumented)
@@ -39290,6 +39413,13 @@ export namespace ZenithProtocol {
             }
         }
         // (undocumented)
+        export interface OrderFees {
+            // (undocumented)
+            Brokerage?: number;
+            // (undocumented)
+            Tax?: number;
+        }
+        // (undocumented)
         export type OrderRequestError = string;
         // (undocumented)
         export namespace OrderRequestError {
@@ -39434,9 +39564,7 @@ export namespace ZenithProtocol {
                 // (undocumented)
                 Currency: Currency;
                 // (undocumented)
-                CurrentBrokerage: number;
-                // (undocumented)
-                CurrentTax: number;
+                CurrentFees?: OrderFees;
                 // (undocumented)
                 CurrentValue: number;
                 // (undocumented)
@@ -39444,9 +39572,7 @@ export namespace ZenithProtocol {
                 // (undocumented)
                 Details: PlaceOrder.Details;
                 // (undocumented)
-                EstimatedBrokerage: number;
-                // (undocumented)
-                EstimatedTax: number;
+                EstimatedFees?: OrderFees;
                 // (undocumented)
                 ExternalID: string | undefined;
                 // (undocumented)
@@ -39727,9 +39853,7 @@ export namespace ZenithProtocol {
                 // (undocumented)
                 Errors?: OrderRequestError[];
                 // (undocumented)
-                EstimatedBrokerage?: Decimal;
-                // (undocumented)
-                EstimatedTax?: Decimal;
+                EstimatedFees?: OrderFees;
                 // (undocumented)
                 EstimatedValue?: Decimal;
                 // (undocumented)

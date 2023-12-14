@@ -2067,6 +2067,9 @@ export const enum StringId {
     ScanFieldHeading_SymbolListEnabled,
     ScanFieldHeading_Version,
     ScanFieldHeading_LastSavedTime,
+    ScanFieldHeading_LastEditSessionId,
+    ScanFieldHeading_ZenithCriteriaSource,
+    ScanFieldHeading_ZenithRankSource,
     ZenithScanFormulaView_ErrorCaption,
     ZenithScanFormulaView_ErrorTitle,
     ZenithScanFormulaViewDecodeProgress_Title,
@@ -12441,6 +12444,21 @@ export namespace I18nStrings {
         ScanFieldHeading_LastSavedTime: {
             id: StringId.ScanFieldHeading_LastSavedTime, translations: {
                 en: 'Last saved time',
+            }
+        },
+        ScanFieldHeading_LastEditSessionId: {
+            id: StringId.ScanFieldHeading_LastEditSessionId, translations: {
+                en: 'Last edit session',
+            }
+        },
+        ScanFieldHeading_ZenithCriteriaSource: {
+            id: StringId.ScanFieldHeading_ZenithCriteriaSource, translations: {
+                en: 'Z.Criteria source',
+            }
+        },
+        ScanFieldHeading_ZenithRankSource: {
+            id: StringId.ScanFieldHeading_ZenithRankSource, translations: {
+                en: 'Z.Rank source',
             }
         },
         ZenithScanFormulaView_ErrorCaption: {
