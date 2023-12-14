@@ -1362,6 +1362,11 @@ export namespace ZenithProtocol {
             export const ManagedFund = SecurityClass.ManagedFund;
         }
 
+        export interface OrderFees {
+            Brokerage?: number;
+            Tax?: number;
+        }
+
         export namespace Accounts {
             export type PublishSubUnsubMessageContainer = RequestMessageContainer;
 
@@ -1470,10 +1475,8 @@ export namespace ZenithProtocol {
                 Market: string;
                 TradingMarket: string;
                 Currency: Currency;
-                EstimatedBrokerage: number;
-                CurrentBrokerage: number;
-                EstimatedTax: number;
-                CurrentTax: number;
+                EstimatedFees?: OrderFees;
+                CurrentFees?: OrderFees;
                 CurrentValue: number;
                 CreatedDate: DateTimeIso8601;
                 UpdatedDate: DateTimeIso8601;
@@ -1877,8 +1880,7 @@ export namespace ZenithProtocol {
                 Result: OrderRequestResult;
                 Order?: Orders.AddUpdateOrder;
                 Errors?: OrderRequestError[];
-                EstimatedBrokerage?: Decimal;
-                EstimatedTax?: Decimal;
+                EstimatedFees?: OrderFees;
                 EstimatedValue?: Decimal;
             }
         }
@@ -1906,8 +1908,7 @@ export namespace ZenithProtocol {
                 Result: OrderRequestResult;
                 Order?: Orders.AddUpdateOrder;
                 Errors?: OrderRequestError[];
-                EstimatedBrokerage?: Decimal;
-                EstimatedTax?: Decimal;
+                EstimatedFees?: OrderFees;
                 EstimatedValue?: Decimal;
             }
         }

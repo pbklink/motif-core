@@ -138,10 +138,25 @@ export namespace ZenithOrderConvert {
                 change.marketId = marketId;
                 change.marketBoardId = marketBoardId;
                 change.currencyId = ZenithConvert.Currency.tryToId(order.Currency);
-                change.estimatedBrokerage = new Decimal(order.EstimatedBrokerage);
-                change.currentBrokerage = new Decimal(order.CurrentBrokerage);
-                change.estimatedTax = new Decimal(order.EstimatedTax);
-                change.currentTax = new Decimal(order.CurrentTax);
+
+                const estimatedFees = order.EstimatedFees;
+                if (estimatedFees === undefined) {
+                    change.estimatedBrokerage = undefined;
+                    change.estimatedTax = undefined;
+                } else {
+                    const estimatedFeesAsDecimal = ZenithConvert.OrderFees.toDecimal(estimatedFees);
+                    change.estimatedBrokerage = estimatedFeesAsDecimal.brokerage;
+                    change.estimatedTax = estimatedFeesAsDecimal.tax;
+                }
+                const currentFees = order.CurrentFees;
+                if (currentFees === undefined) {
+                    change.currentBrokerage = undefined;
+                    change.currentTax = undefined;
+                } else {
+                    const currentFeesAsDecimal = ZenithConvert.OrderFees.toDecimal(currentFees);
+                    change.currentBrokerage = currentFeesAsDecimal.brokerage;
+                    change.currentTax = currentFeesAsDecimal.tax;
+                }
                 change.currentValue = new Decimal(order.CurrentValue);
                 change.createdDate = createdDate;
                 change.updatedDate = updatedDate;
@@ -165,10 +180,13 @@ export namespace ZenithOrderConvert {
             case ZenithProtocol.TradingController.OrderStyle.Unknown:
                 throw new ZenithDataError(ErrorCode.ZOCLODU87873991318, JSON.stringify(value).substr(0, 200));
             case ZenithProtocol.TradingController.OrderStyle.Market:
-                return loadMarketOrderDetails(order, value as ZenithProtocol.TradingController.PlaceOrder.MarketDetails);
+                loadMarketOrderDetails(order, value as ZenithProtocol.TradingController.PlaceOrder.MarketDetails);
+                break;
             case ZenithProtocol.TradingController.OrderStyle.ManagedFund:
-                return loadManagedFundOrderDetails(order, value as ZenithProtocol.TradingController.PlaceOrder.ManagedFundDetails);
-            default: throw new UnreachableCaseError('ZOCTOD44855', value.Style);
+                loadManagedFundOrderDetails(order, value as ZenithProtocol.TradingController.PlaceOrder.ManagedFundDetails);
+                break;
+            default:
+                throw new UnreachableCaseError('ZOCTOD44855', value.Style);
         }
     }
 
@@ -198,12 +216,16 @@ export namespace ZenithOrderConvert {
     function loadOrderRoute(order: OrdersDataMessage.AddUpdateChange, value: ZenithProtocol.TradingController.PlaceOrder.Route) {
         switch (value.Algorithm) {
             case ZenithProtocol.OrderRouteAlgorithm.Market:
-                return loadMarketOrderRoute(order, value as ZenithProtocol.TradingController.PlaceOrder.MarketRoute);
+                loadMarketOrderRoute(order, value as ZenithProtocol.TradingController.PlaceOrder.MarketRoute);
+                break;
             case ZenithProtocol.OrderRouteAlgorithm.BestMarket:
-                return loadBestMarketOrderRoute(order, value as ZenithProtocol.TradingController.PlaceOrder.BestMarketRoute);
+                loadBestMarketOrderRoute(order, value as ZenithProtocol.TradingController.PlaceOrder.BestMarketRoute);
+                break;
             case ZenithProtocol.OrderRouteAlgorithm.Fix:
-                return loadFixOrderRoute(order, value as ZenithProtocol.TradingController.PlaceOrder.FixRoute);
-            default: throw new UnreachableCaseError('ZCTOR33872', value.Algorithm);
+                loadFixOrderRoute(order, value as ZenithProtocol.TradingController.PlaceOrder.FixRoute);
+                break;
+            default:
+                throw new UnreachableCaseError('ZCTOR33872', value.Algorithm);
         }
     }
 

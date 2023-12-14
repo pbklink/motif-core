@@ -1919,6 +1919,24 @@ export namespace ZenithConvert {
         }
     }
 
+    export namespace OrderFees {
+        export function toDecimal(value: ZenithProtocol.TradingController.OrderFees): AsDecimal {
+            const valueBrokerage = value.Brokerage;
+            const brokerage = valueBrokerage === undefined ? undefined : new Decimal(valueBrokerage);
+            const valueTax = value.Tax;
+            const tax = valueTax === undefined ? undefined : new Decimal(valueTax);
+            return {
+                brokerage,
+                tax,
+            };
+        }
+
+        export interface AsDecimal {
+            readonly brokerage: Decimal | undefined;
+            readonly tax: Decimal | undefined;
+        }
+    }
+
     export namespace OrderStatus {
         export function toAdi(value: ZenithProtocol.TradingController.OrderStatuses.Status) {
             const exchange = value.Exchange;

@@ -69,10 +69,10 @@ export class Order implements BrokerageAccountRecord {
     private _marketId: MarketId | undefined;
     private _marketBoardId: MarketBoardId | undefined;
     private _currencyId: CurrencyId | undefined;
-    private _estimatedBrokerage: Decimal;
-    private _currentBrokerage: Decimal;
-    private _estimatedTax: Decimal;
-    private _currentTax: Decimal;
+    private _estimatedBrokerage: Decimal | undefined;
+    private _currentBrokerage: Decimal | undefined;
+    private _estimatedTax: Decimal | undefined;
+    private _currentTax: Decimal | undefined;
     private _currentValue: Decimal;
     private _createdDate: SourceTzOffsetDateTime;
     private _updatedDate: SourceTzOffsetDateTime;

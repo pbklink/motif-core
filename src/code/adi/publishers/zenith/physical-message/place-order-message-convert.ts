@@ -75,8 +75,16 @@ export namespace PlaceOrderMessageConvert {
                     dataMessage.order = order === undefined ? undefined : ZenithOrderConvert.toAddUpdateChange(order);
                     const errors = response.Errors;
                     dataMessage.errors = errors === undefined ? undefined : ZenithConvert.OrderRequestError.toErrorArray(errors);
-                    dataMessage.estimatedBrokerage = newUndefinableDecimal(response.EstimatedBrokerage);
-                    dataMessage.estimatedTax = newUndefinableDecimal(response.EstimatedTax);
+
+                    const estimatedFees = response.EstimatedFees;
+                    if (estimatedFees === undefined) {
+                        dataMessage.estimatedBrokerage = undefined;
+                        dataMessage.estimatedTax = undefined;
+                    } else {
+                        const estimatedFeesAsDecimal = ZenithConvert.OrderFees.toDecimal(estimatedFees);
+                        dataMessage.estimatedBrokerage = estimatedFeesAsDecimal.brokerage;
+                        dataMessage.estimatedTax = estimatedFeesAsDecimal.tax;
+                    }
                     dataMessage.estimatedValue = newUndefinableDecimal(response.EstimatedValue);
                     return dataMessage;
                 }
