@@ -270,15 +270,15 @@ export abstract class PublisherSubscriptionDataItem extends DataItem {
 
     protected processPublisherSubscriptionWarning(warningText: string) {
         const badness: Badness = {
-            reasonId: Badness.ReasonId.PublisherServerWarning,
+            reasonId: this.usable ? Badness.ReasonId.PublisherServerWarning_Usable : Badness.ReasonId.PublisherServerWarning_Suspect,
             reasonExtra: warningText,
         };
 
         const logText = Badness.generateText(badness);
         console.warn(logText);
 
-        if (this.usable) {
-            this.setUsable(badness);
+        if (!this.error) {
+            this.setBadness(badness);
         }
     }
 
