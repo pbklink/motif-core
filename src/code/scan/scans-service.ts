@@ -5,6 +5,7 @@
  */
 
 import { AdiService } from '../adi/adi-internal-api';
+import { SymbolsService } from '../services/services-internal-api';
 import {
     ErrorCode,
     Integer,
@@ -28,9 +29,11 @@ export class ScansService {
 
     private _scanListChangeSubscriptionId: MultiEvent.SubscriptionId;
 
-    constructor(private readonly _adiService: AdiService) {
+    constructor(
+        private readonly _adiService: AdiService,
+        private readonly _symbolsService: SymbolsService
+    ) {
         this.scanList = new ScanList(this._adiService);
-
     }
 
     initialise() {
@@ -47,7 +50,9 @@ export class ScansService {
     }
 
     openNewScanEditor(opener: LockOpenListItem.Opener, errorEventer?: ScanEditor.ErrorEventer): ScanEditor {
-        return new ScanEditor(this._adiService,
+        return new ScanEditor(
+            this._adiService,
+            this._symbolsService,
             undefined,
             opener,
             (createdScanId) => this.getOrWaitForScan(createdScanId),
@@ -72,6 +77,7 @@ export class ScansService {
                     if (openedEditor === undefined) {
                         openedEditor = new ScanEditor(
                             this._adiService,
+                            this._symbolsService,
                             scan,
                             opener,
                             (createdScanId) => this.getOrWaitForScan(createdScanId),

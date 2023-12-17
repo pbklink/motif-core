@@ -37,7 +37,7 @@ export abstract class UiAction {
     private _stateTitleActive = false;
     private _placeholder = '';
 
-    constructor(valueRequired: boolean | undefined = true) {
+    constructor(valueRequired = true) {
         this._valueRequired = valueRequired;
         this._stateId = valueRequired ? UiAction.StateId.Missing : UiAction.StateId.Valid;
     }

@@ -47,6 +47,7 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
     readonly mapKey: MapKey;
 
     existenceVerified = true;
+    index: Integer; // within list of scans - used by LockOpenList
 
     private readonly _lockOpenManager: LockOpenManager<Scan>;
     private readonly _valueChanges = new Array<Scan.ValueChange>();
@@ -79,7 +80,6 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
     private _zenithCriteria: ZenithEncodedScanFormula.BooleanTupleNode | undefined;
     private _zenithRank: ZenithEncodedScanFormula.NumericTupleNode | undefined;
 
-    private _index: Integer; // within list of scans - used by LockOpenList
     private _deleted = false;
     private _detailWanted = false;
     private _detailed = false;
@@ -160,7 +160,6 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
     get description() { return this._description; }
     get symbolListEnabled() { return this._symbolListEnabled; }
 
-    get index() { return this._index; }
     get upperCaseName() { return this._upperCaseName; }
     get upperCaseDescription() { return this._upperCaseDescription; }
     get versionNumber() { return this._versionNumber; }

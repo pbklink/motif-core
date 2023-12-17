@@ -58,10 +58,15 @@ export const enum StringId {
     Filter,
     Open,
     Close,
+    Create,
     Delete,
+    Deleting,
+    Deleted,
+    Update,
     Edit,
     Apply,
     Revert,
+    Overwrite,
     Test,
     Search,
     Details,
@@ -480,6 +485,7 @@ export const enum StringId {
     FeedDisplay_News_Fnsx,
     FeedDisplay_Watchlist,
     FeedDisplay_Scanner,
+    FeedDisplay_Channel,
     MarketDisplay_MixedMarket,
     MarketDisplay_MyxNormal,
     MarketDisplay_MyxOddLot,
@@ -721,6 +727,7 @@ export const enum StringId {
     FeedClassDisplay_Trading,
     FeedClassDisplay_Watchlist,
     FeedClassDisplay_Scanner,
+    FeedClassDisplay_Channel,
     SubscribabilityExtentDisplay_None,
     SubscribabilityExtentDisplay_Some,
     SubscribabilityExtentDisplay_All,
@@ -2397,9 +2404,29 @@ export namespace I18nStrings {
                 en: 'Close',
             }
         },
+        Create: {
+            id: StringId.Create, translations: {
+                en: 'Create',
+            }
+        },
         Delete: {
             id: StringId.Delete, translations: {
                 en: 'Delete',
+            }
+        },
+        Deleting: {
+            id: StringId.Deleting, translations: {
+                en: 'Deleting',
+            }
+        },
+        Deleted: {
+            id: StringId.Deleted, translations: {
+                en: 'Deleted',
+            }
+        },
+        Update: {
+            id: StringId.Update, translations: {
+                en: 'Update',
             }
         },
         Edit: {
@@ -2415,6 +2442,11 @@ export namespace I18nStrings {
         Revert: {
             id: StringId.Revert, translations: {
                 en: 'Revert',
+            }
+        },
+        Overwrite: {
+            id: StringId.Overwrite, translations: {
+                en: 'Overwrite',
             }
         },
         Test: {
@@ -4503,6 +4535,11 @@ export namespace I18nStrings {
                 en: 'Scanner',
             }
         },
+        FeedDisplay_Channel: {
+            id: StringId.FeedDisplay_Channel, translations: {
+                en: 'Channel',
+            }
+        },
         MarketDisplay_MixedMarket: {
             id: StringId.MarketDisplay_MixedMarket, translations: {
                 en: 'MixedMarket',
@@ -5706,6 +5743,11 @@ export namespace I18nStrings {
         FeedClassDisplay_Scanner: {
             id: StringId.FeedClassDisplay_Scanner, translations: {
                 en: 'Scanner',
+            }
+        },
+        FeedClassDisplay_Channel: {
+            id: StringId.FeedClassDisplay_Channel, translations: {
+                en: 'Channel',
             }
         },
         SubscribabilityExtentDisplay_None: {

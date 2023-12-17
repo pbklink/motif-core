@@ -74,7 +74,7 @@ export class CoreService {
         this.symbolsService = new SymbolsService(this.settingsService, this.adiService);
         this.symbolDetailCacheService = new SymbolDetailCacheService(this.adiService.dataMgr, this.symbolsService);
         this.watchmakerService = new WatchmakerService(this.adiService);
-        this.scansService = new ScansService(this.adiService);
+        this.scansService = new ScansService(this.adiService, this.symbolsService);
         this.rankedLitIvemIdListDefinitionFactoryService = new RankedLitIvemIdListDefinitionFactoryService();
         this.rankedLitIvemIdListFactoryService = new RankedLitIvemIdListFactoryService(
             this.adiService,

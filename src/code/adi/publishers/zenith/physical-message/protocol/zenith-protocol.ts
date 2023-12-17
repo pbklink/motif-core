@@ -327,6 +327,7 @@ export namespace ZenithProtocol {
                 Trading = 'Trading',
                 Watchlist = 'Watchlist',
                 Scanner = 'Scanner',
+                Channel = 'Channel',
             }
 
             export const enum AuthorityFeed {
@@ -360,7 +361,7 @@ export namespace ZenithProtocol {
             export interface Feed {
                 Name: string;
                 Class: FeedClass;
-                Status: FeedStatus;
+                Status?: FeedStatus;
             }
         }
     }
@@ -2045,7 +2046,7 @@ export namespace ZenithProtocol {
         export interface ScanDescriptor {
             readonly Name: string;
             readonly Description?: string;
-            readonly MetaData: MetaData;
+            readonly MetaData?: MetaData;
         }
 
         export interface ScanStatusedDescriptor extends ScanDescriptor {
@@ -2057,7 +2058,7 @@ export namespace ZenithProtocol {
             readonly ID: ScanID;
             readonly Name?: string;
             readonly Description?: string;
-            readonly MetaData: MetaData;
+            readonly MetaData?: MetaData;
             readonly IsWritable?: boolean;
             readonly Status: ScanStatus;
             readonly Type: ScanType;
@@ -2101,7 +2102,6 @@ export namespace ZenithProtocol {
 
         export interface MatchChange {
             readonly Operation: AurcChangeType;
-            readonly Key?: string; // Symbol for symbol scans. In future, can be something else when different things can be scanned
         }
 
         export interface ClearMatchChange extends MatchChange {
@@ -2109,7 +2109,14 @@ export namespace ZenithProtocol {
         }
 
         export interface AddUpdateRemoveMatchChange extends MatchChange {
-            readonly Key: string;
+            readonly Key: string; // Symbol for symbol scans. In future, can be something else when different things can be scanned
+        }
+
+        export interface RemoveMatchChange extends AddUpdateRemoveMatchChange {
+        }
+
+        export interface AddUpdateMatchChange extends AddUpdateRemoveMatchChange {
+            readonly Rank?: number;
         }
 
         export namespace CreateScan {

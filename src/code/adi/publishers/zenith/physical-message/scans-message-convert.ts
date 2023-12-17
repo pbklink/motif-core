@@ -108,20 +108,21 @@ export namespace ScansMessageConvert {
                 const addUpdateZenithChange = zenithChange as ZenithProtocol.NotifyController.AddUpdateRemoveScanChange;
                 const scan = addUpdateZenithChange.Scan;
                 const scanStatusId = ZenithNotifyConvert.ScanStatus.toId(scan.Status);
-                const metaData = ZenithNotifyConvert.ScanMetaType.to(scan.MetaData);
+                const scanStateMetaData = scan.MetaData;
+                const metaData = scanStateMetaData === undefined ? undefined : ZenithNotifyConvert.ScanMetaType.to(scanStateMetaData);
                 const change: ScanStatusedDescriptorsDataMessage.AddUpdateChange = {
                     typeId: changeTypeId,
                     scanId: scan.ID,
                     scanName: scan.Name,
                     scanDescription: scan.Description,
-                    versionNumber: metaData.versionNumber,
-                    versionId: metaData.versionId,
-                    versioningInterrupted: metaData.versioningInterrupted,
-                    lastSavedTime: metaData.lastSavedTime,
-                    lastEditSessionId: metaData.lastEditSessionId,
-                    symbolListEnabled: metaData.symbolListEnabled,
-                    zenithCriteriaSource: metaData.zenithCriteriaSource,
-                    zenithRankSource: metaData.zenithRankSource,
+                    versionNumber: metaData === undefined ? undefined : metaData.versionNumber,
+                    versionId: metaData === undefined ? undefined : metaData.versionId,
+                    versioningInterrupted: metaData === undefined ? true : metaData.versioningInterrupted,
+                    lastSavedTime: metaData === undefined ? undefined : metaData.lastSavedTime,
+                    lastEditSessionId: metaData === undefined ? undefined : metaData.lastEditSessionId,
+                    symbolListEnabled: metaData === undefined ? undefined : metaData.symbolListEnabled,
+                    zenithCriteriaSource: metaData === undefined ? undefined : metaData.zenithCriteriaSource,
+                    zenithRankSource: metaData === undefined ? undefined : metaData.zenithRankSource,
                     readonly: !scan.IsWritable,
                     scanStatusId,
                 };

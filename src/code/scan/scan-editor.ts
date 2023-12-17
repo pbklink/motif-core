@@ -9,6 +9,7 @@ import {
     CreateScanDataDefinition,
     DataItemIncubator,
     DeleteScanDataDefinition,
+    ExchangeInfo,
     LitIvemId,
     MarketId,
     ScanStatusId,
@@ -19,6 +20,7 @@ import {
 } from '../adi/adi-internal-api';
 import { CreateScanDataItem } from '../adi/scan/create-scan-data-item';
 import { StringId, Strings } from '../res/res-internal-api';
+import { SymbolsService } from '../services/symbols-service';
 import {
     AssertInternalError,
     EnumInfoOutOfOrderError,
@@ -89,6 +91,7 @@ export class ScanEditor {
 
     constructor(
         private readonly _adiService: AdiService,
+        private readonly _symbolsService: SymbolsService,
         scan: Scan | undefined,
         opener: LockOpenListItem.Opener,
         private readonly _getOrWaitForScanEventer: ScanEditor.GetOrWaitForScanEventer,
@@ -108,11 +111,12 @@ export class ScanEditor {
         } else {
             this.readonly = scan.readonly;
             this.loadScan(scan, true);
-            lifeCycleStateId = scan.detailed ? ScanEditor.LifeCycleStateId.Exists : ScanEditor.LifeCycleStateId.LoadingInitialDetail;
+            lifeCycleStateId = scan.detailed ? ScanEditor.LifeCycleStateId.Exists : ScanEditor.LifeCycleStateId.initialDetailLoading;
 
         }
 
         this.setLifeCycleState(lifeCycleStateId);
+        this.setUnmodified();
     }
 
     get scan() { return this._scan; }
@@ -122,7 +126,7 @@ export class ScanEditor {
     get saving() { return this._lifeCycleStateId === ScanEditor.LifeCycleStateId.Creating || this._lifeCycleStateId === ScanEditor.LifeCycleStateId.Updating; }
     get existsOrUpdating() { return this._lifeCycleStateId === ScanEditor.LifeCycleStateId.Exists || this._lifeCycleStateId === ScanEditor.LifeCycleStateId.Updating; }
 
-    get modifiedStatedId() { return this._modifiedStateId; }
+    get modifiedStateId() { return this._modifiedStateId; }
 
     get id() { return this._scan === undefined ? undefined : this._scan.id; } // If undefined, then not yet created
     get enabled() { return this._enabled; }
@@ -214,16 +218,47 @@ export class ScanEditor {
     }
 
     endFieldChanges() {
-        if (--this._beginFieldChangesCount === 0) {
+        if (this._beginFieldChangesCount > 1) {
+            this._beginFieldChangesCount--;
+        } else {
             const fieldChanger = this._fieldChanger;
             this._fieldChanger = undefined;
-            if (this._changedFieldIds.length > 0) {
+            const saving = this.saving;
+            const modifiedScanFieldIds = saving ? this._whileSavingModifiedScanFieldIds : this._modifiedScanFieldIds;
+            // loop in case fields are again changed in handlers
+            while (this._changedFieldIds.length > 0) {
+                const changedFieldIds = this._changedFieldIds;
+                this._changedFieldIds = [];
+
+                for (const fieldId of changedFieldIds) {
+                    const scanFieldId = ScanEditor.Field.idToScanFieldId(fieldId);
+                    if (scanFieldId !== undefined) {
+                        if (!modifiedScanFieldIds.includes(scanFieldId)) {
+                            modifiedScanFieldIds.push(scanFieldId);
+                        }
+                    }
+                }
+
                 const handlers = this._fieldChangesMultiEvent.copyHandlers();
                 for (const handler of handlers) {
                     handler(this._changedFieldIds, fieldChanger);
                 }
+
+                if (!saving) {
+                    if (this._modifiedStateId === ScanEditor.ModifiedStateId.Unmodified && modifiedScanFieldIds.length > 0) {
+                        this.setModifiedState(ScanEditor.ModifiedStateId.Modified);
+                    }
+                }
             }
+
+            this._beginFieldChangesCount--;
         }
+    }
+
+    setUnmodified() {
+        this._modifiedScanFieldIds.length = 0;
+        this._whileSavingModifiedScanFieldIds.length = 0;
+        this.setModifiedState(ScanEditor.ModifiedStateId.Unmodified);
     }
 
     setName(value: string) {
@@ -444,7 +479,7 @@ export class ScanEditor {
                 this.updateScan();
                 break;
             case ScanEditor.LifeCycleStateId.Creating:
-            case ScanEditor.LifeCycleStateId.LoadingInitialDetail:
+            case ScanEditor.LifeCycleStateId.initialDetailLoading:
             case ScanEditor.LifeCycleStateId.Updating:
             case ScanEditor.LifeCycleStateId.Deleted:
             case ScanEditor.LifeCycleStateId.Deleting:
@@ -456,9 +491,12 @@ export class ScanEditor {
 
     revert() {
         const scan = this._scan;
-        if (scan !== undefined) {
-            // this.processScanValueChanges(scan, true);
+        if (scan === undefined) {
+            this.loadNewScan();
+        } else {
+            this.loadScan(scan, true);
         }
+        this.setUnmodified();
     }
 
     createScan() {
@@ -870,21 +908,26 @@ export class ScanEditor {
     }
 
     private loadNewScan() {
+        this.beginFieldChanges(undefined);
         this.setName(Strings[StringId.New]);
         this.setDescription('');
         this.setSymbolListEnabled(ScanEditor.DefaultSymbolListEnabled);
         this.setTargetTypeId(ScanEditor.DefaultScanTargetTypeId);
-        this.setTargetMarketIds([]);
-        this.setTargetLitIvemIds([]);
+        const defaultExchangeId = this._symbolsService.defaultExchangeId;
+        const defaultMarketId = ExchangeInfo.idToDefaultMarketId(defaultExchangeId);
+        this.setTargetMarketIds([defaultMarketId]);
+        this.setTargetTypeId(ScanTargetTypeId.Markets);
         this.setMaxMatchCount(10);
         this.setCriteria(ScanEditor.DefaultCriteria, undefined);
         this.setRank(ScanEditor.DefaultRank, undefined);
         this._versionNumber = 0;
         this._versionId = undefined;
         this._versioningInterrupted = false;
+        this.endFieldChanges();
     }
 
     private loadScan(scan: Scan, defaultIfError: boolean) {
+        this.beginFieldChanges(undefined);
         this.setName(scan.name);
         this.setDescription(scan.description ?? '');
         this.setSymbolListEnabled(scan.symbolListEnabled ?? ScanEditor.DefaultSymbolListEnabled);
@@ -917,6 +960,8 @@ export class ScanEditor {
                 }
             }
         );
+        this._modifiedScanFieldIds.length = 0;
+        this.endFieldChanges();
     }
 
     private loadZenithCriteria(zenithCriteria: ZenithEncodedScanFormula.BooleanTupleNode, scanId: string, defaultIfError: boolean, sourceId: ScanEditor.SourceId | undefined) {
@@ -972,14 +1017,8 @@ export class ScanEditor {
     }
 
     private addFieldChange(fieldId: ScanEditor.FieldId) {
-        this._changedFieldIds.push(fieldId);
-
-        const scanFieldId = ScanEditor.Field.idToScanFieldId(fieldId);
-        if (scanFieldId !== undefined) {
-            const modifiedScanFieldIds = this.saving ? this._whileSavingModifiedScanFieldIds : this._modifiedScanFieldIds;
-            if (!modifiedScanFieldIds.includes(scanFieldId)) {
-                modifiedScanFieldIds.push(scanFieldId);
-            }
+        if (!this._changedFieldIds.includes(fieldId)) {
+            this._changedFieldIds.push(fieldId);
         }
     }
 
@@ -1122,7 +1161,7 @@ export class ScanEditor {
 
 export namespace ScanEditor {
     export const DefaultSymbolListEnabled = false;
-    export const DefaultScanTargetTypeId = ScanTargetTypeId.Symbols;
+    export const DefaultScanTargetTypeId = ScanTargetTypeId.Markets;
     export const DefaultCriteria: ScanFormula.BooleanNode = { typeId: ScanFormula.NodeTypeId.None };
     export const DefaultRank: ScanFormula.NumericPosNode = { typeId: ScanFormula.NodeTypeId.NumericPos, operand: 0 } ;
 
@@ -1246,7 +1285,7 @@ export namespace ScanEditor {
     export const enum LifeCycleStateId {
         NotYetCreated,
         Creating,
-        LoadingInitialDetail,
+        initialDetailLoading,
         Exists,
         Updating,
         Deleting,

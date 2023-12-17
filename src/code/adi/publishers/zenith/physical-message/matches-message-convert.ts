@@ -135,14 +135,18 @@ export namespace MatchesMessageConvert {
 
     }
 
-    function parseLitIvemIdData(data: readonly ZenithProtocol.NotifyController.MatchChange[]): LitIvemIdMatchesDataMessage.Change[] {
-        const count = data.length;
-        const result = new Array<LitIvemIdMatchesDataMessage.Change>(count);
-        for (let i = 0; i < count; i++) {
-            const matchChange = data[i];
-            result[i] = parseLitIvemIdScanChange(matchChange);
+    function parseLitIvemIdData(data: readonly ZenithProtocol.NotifyController.MatchChange[] | undefined): LitIvemIdMatchesDataMessage.Change[] {
+        if (data === undefined) {
+            return []; // need to check if this is intended from server
+        } else {
+            const count = data.length;
+            const result = new Array<LitIvemIdMatchesDataMessage.Change>(count);
+            for (let i = 0; i < count; i++) {
+                const matchChange = data[i];
+                result[i] = parseLitIvemIdScanChange(matchChange);
+            }
+            return result;
         }
-        return result;
     }
 
     function parseLitIvemIdScanChange(value: ZenithProtocol.NotifyController.MatchChange): LitIvemIdMatchesDataMessage.Change {
@@ -150,21 +154,29 @@ export namespace MatchesMessageConvert {
         switch (changeTypeId) {
             case AurcChangeTypeId.Add:
             case AurcChangeTypeId.Update: {
-                const key = value.Key;
+                const addUpdateValue = value as ZenithProtocol.NotifyController.AddUpdateMatchChange;
+                const key = addUpdateValue.Key;
+                // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
                 if (key === undefined) {
-                    throw new ZenithDataError(ErrorCode.ZenithMessageConvert_Matches_AddUpdateMissingKey, JSON.stringify(value));
+                    throw new ZenithDataError(ErrorCode.ZenithMessageConvert_Matches_AddUpdateMissingKey, JSON.stringify(addUpdateValue));
                 } else {
+                    let rankScore = addUpdateValue.Rank;
+                    if (rankScore === undefined) {
+                        rankScore = 0;
+                    }
                     const change: LitIvemIdMatchesDataMessage.AddUpdateChange = {
                         typeId: changeTypeId,
                         key,
                         value: ZenithConvert.Symbol.toId(key),
-                        rankScore: 0,
+                        rankScore,
                     };
                     return change;
                 }
             }
             case AurcChangeTypeId.Remove: {
-                const key = value.Key;
+                const removeValue = value as ZenithProtocol.NotifyController.RemoveMatchChange;
+                const key = removeValue.Key;
+                // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
                 if (key === undefined) {
                     throw new ZenithDataError(ErrorCode.ZenithMessageConvert_Matches_RemoveMissingKey, JSON.stringify(value));
                 } else {
