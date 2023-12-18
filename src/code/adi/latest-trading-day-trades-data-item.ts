@@ -318,6 +318,10 @@ export class LatestTradingDayTradesDataItem extends DataItem implements TradesDa
                 throw new AssertInternalError('LTDTDIPSLCBR19662', this.definition.description);
             case UsableListChangeTypeId.AfterReplace:
                 throw new AssertInternalError('LTDTDIPSLCAR19662', this.definition.description);
+            case UsableListChangeTypeId.BeforeMove:
+                throw new AssertInternalError('LTDTDIPSLCBM19662', this.definition.description);
+            case UsableListChangeTypeId.AfterMove:
+                throw new AssertInternalError('LTDTDIPSLCAM19662', this.definition.description);
             case UsableListChangeTypeId.Remove: {
                 this.checkUsableNotifyListChange(UsableListChangeTypeId.Remove, this._queryRecordCount + index, count);
                 this._recordCount -= count;
@@ -403,6 +407,10 @@ export class LatestTradingDayTradesDataItem extends DataItem implements TradesDa
                 throw new AssertInternalError('LTDTDIPQLCBR19662', this.definition.description);
             case UsableListChangeTypeId.AfterReplace:
                 throw new AssertInternalError('LTDTDIPQLCAR19662', this.definition.description);
+            case UsableListChangeTypeId.BeforeMove:
+                throw new AssertInternalError('LTDTDIPQLCBM19662', this.definition.description);
+            case UsableListChangeTypeId.AfterMove:
+                throw new AssertInternalError('LTDTDIPQLCAM19662', this.definition.description);
             case UsableListChangeTypeId.Remove: {
                 this.checkUsableNotifyListChange(UsableListChangeTypeId.Remove, index, count);
                 this._recordCount -= count;

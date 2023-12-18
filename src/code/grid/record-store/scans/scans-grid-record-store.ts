@@ -125,6 +125,12 @@ export class ScansGridRecordStore implements GridRecordStore {
             case UsableListChangeTypeId.AfterReplace:
                 throw new AssertInternalError('SGRSPLCAR19662');
 
+            case UsableListChangeTypeId.BeforeMove:
+                throw new AssertInternalError('SGRSPLCBM19662');
+
+            case UsableListChangeTypeId.AfterMove:
+                throw new AssertInternalError('SGRSPLCAM19662');
+
             case UsableListChangeTypeId.Remove:
                 this._recordsEventers.recordsDeleted(index, count);
                 break;

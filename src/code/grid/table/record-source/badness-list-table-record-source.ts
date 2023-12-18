@@ -150,6 +150,12 @@ export abstract class BadnessListTableRecordSource<Record, RecordList extends Ba
             case UsableListChangeTypeId.AfterReplace:
                 this.checkUsableNotifyListChange(UsableListChangeTypeId.AfterReplace, idx, count);
                 break;
+            case UsableListChangeTypeId.BeforeMove:
+                this.checkUsableNotifyListChange(UsableListChangeTypeId.BeforeMove, idx, count);
+                break;
+            case UsableListChangeTypeId.AfterMove:
+                this.checkUsableNotifyListChange(UsableListChangeTypeId.AfterMove, idx, count);
+                break;
             case UsableListChangeTypeId.Remove:
                 this.checkUsableNotifyListChange(UsableListChangeTypeId.Remove, idx, count);
                 // this._definitions.splice(idx, count);

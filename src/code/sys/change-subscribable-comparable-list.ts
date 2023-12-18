@@ -10,7 +10,7 @@ import { CorrectnessList } from './correctness-list';
 import { AssertInternalError } from './internal-error';
 import { MultiEvent } from './multi-event';
 import { RecordList } from './record-list';
-import { Integer, UsableListChangeTypeId } from './types';
+import { Integer, UsableListChangeType, UsableListChangeTypeId } from './types';
 import { UsableList } from './usable-list';
 
 export class ChangeSubscribableComparableList<T> extends ComparableList<T> implements CorrectnessList<T>, UsableList<T> {
@@ -113,6 +113,14 @@ export class ChangeSubscribableComparableList<T> extends ComparableList<T> imple
         super.removeItems(items, (index, count) => { this.handleBeforeRemoveRangeCallback(index, count, beforeRemoveRangeCallBack); } )
     }
 
+    override exchange(index1: Integer, index2: Integer) {
+        this.notifyListChange(UsableListChangeTypeId.BeforeReplace, index1, 1);
+        this.notifyListChange(UsableListChangeTypeId.BeforeReplace, index2, 1);
+        super.exchange(index1, index2);
+        this.notifyListChange(UsableListChangeTypeId.AfterReplace, index1, 1);
+        this.notifyListChange(UsableListChangeTypeId.AfterReplace, index2, 1);
+    }
+
     override extract(value: T): T {
         const idx = this.indexOf(value);
         if (idx < 0) {
@@ -152,6 +160,38 @@ export class ChangeSubscribableComparableList<T> extends ComparableList<T> imple
     protected override assign(other: ChangeSubscribableComparableList<T>) {
         this._correctnessId = other.correctnessId;
         super.assign(other);
+    }
+
+    protected override processExchange(fromIndex: Integer, toIndex: Integer) {
+        this.notifyListChange(UsableListChangeTypeId.BeforeReplace, fromIndex, 1);
+        this.notifyListChange(UsableListChangeTypeId.BeforeReplace, toIndex, 1);
+        super.processExchange(fromIndex, toIndex);
+        this.notifyListChange(UsableListChangeTypeId.AfterReplace, fromIndex, 1);
+        this.notifyListChange(UsableListChangeTypeId.AfterReplace, toIndex, 1);
+    }
+
+    protected override processMove(fromIndex: Integer, toIndex: Integer) {
+        const beforeRegistrationIndex = UsableListChangeType.registerMoveParameters(fromIndex, toIndex, 1);
+        this.notifyListChange(UsableListChangeTypeId.BeforeMove, beforeRegistrationIndex, 0);
+        UsableListChangeType.deregisterMoveParameters(beforeRegistrationIndex);
+
+        super.processMove(fromIndex, toIndex);
+
+        const afterRegistrationIndex = UsableListChangeType.registerMoveParameters(fromIndex, toIndex, 1);
+        this.notifyListChange(UsableListChangeTypeId.AfterMove, afterRegistrationIndex, 0);
+        UsableListChangeType.deregisterMoveParameters(afterRegistrationIndex);
+    }
+
+    protected override processMoveRange(fromIndex: Integer, toIndex: Integer, count: Integer) {
+        const beforeRegistrationIndex = UsableListChangeType.registerMoveParameters(fromIndex, toIndex, count);
+        this.notifyListChange(UsableListChangeTypeId.BeforeMove, beforeRegistrationIndex, 0);
+        UsableListChangeType.deregisterMoveParameters(beforeRegistrationIndex);
+
+        super.processMoveRange(fromIndex, toIndex, count);
+
+        const afterRegistrationIndex = UsableListChangeType.registerMoveParameters(fromIndex, toIndex, count);
+        this.notifyListChange(UsableListChangeTypeId.AfterMove, afterRegistrationIndex, 0);
+        UsableListChangeType.deregisterMoveParameters(afterRegistrationIndex);
     }
 
     private handleBeforeRemoveRangeCallback(index: Integer, count: Integer, originalBeforeRemoveRangeCallBack: ComparableList.BeforeRemoveRangeCallBack | undefined) {

@@ -3292,6 +3292,8 @@ export class ChangeSubscribableComparableList<T> extends ComparableList<T> imple
     get correctnessId(): CorrectnessId;
     set correctnessId(value: CorrectnessId);
     // (undocumented)
+    exchange(index1: Integer, index2: Integer): void;
+    // (undocumented)
     extract(value: T): T;
     // (undocumented)
     insert(index: Integer, value: T): void;
@@ -3299,6 +3301,10 @@ export class ChangeSubscribableComparableList<T> extends ComparableList<T> imple
     insertRange(index: Integer, values: readonly T[]): void;
     // (undocumented)
     insertSubRange(index: Integer, values: readonly T[], subRangeStartIndex: Integer, subRangeCount: Integer): void;
+    // (undocumented)
+    protected processMove(fromIndex: Integer, toIndex: Integer): void;
+    // (undocumented)
+    protected processMoveRange(fromIndex: Integer, toIndex: Integer, count: Integer): void;
     // (undocumented)
     remove(value: T): void;
     // (undocumented)
@@ -4704,7 +4710,13 @@ export class ComparableList<T> {
     // (undocumented)
     get lastIndex(): number;
     // (undocumented)
-    move(curIndex: Integer, newIndex: Integer): void;
+    move(fromIndex: Integer, toIndex: Integer): void;
+    // (undocumented)
+    moveRange(fromIndex: Integer, toIndex: Integer, count: Integer): void;
+    // (undocumented)
+    protected processMove(fromIndex: Integer, toIndex: Integer): void;
+    // (undocumented)
+    protected processMoveRange(fromIndex: Integer, toIndex: Integer, count: Integer): void;
     // (undocumented)
     remove(value: T): void;
     // (undocumented)
@@ -31112,6 +31124,8 @@ export class Table extends CorrectnessBadness {
     // (undocumented)
     subscribeRecordsLoadedEvent(handler: Table.RecordsLoadedEventHandler): number;
     // (undocumented)
+    subscribeRecordsMovedEvent(handler: Table.RecordsMovedEventHandler): number;
+    // (undocumented)
     subscribeRecordsReplacedEvent(handler: Table.RecordsReplacedEventHandler): number;
     // (undocumented)
     subscribeRecordsSplicedEvent(handler: Table.RecordsSplicedEventHandler): number;
@@ -31143,6 +31157,8 @@ export class Table extends CorrectnessBadness {
     unsubscribeRecordsInsertedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
     // (undocumented)
     unsubscribeRecordsLoadedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+    // (undocumented)
+    unsubscribeRecordsMovedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
     // (undocumented)
     unsubscribeRecordsReplacedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
     // (undocumented)
@@ -31215,6 +31231,8 @@ export namespace Table {
     export type RecordsInsertedEventHandler = (this: void, index: Integer, count: Integer) => void;
     // (undocumented)
     export type RecordsLoadedEventHandler = (this: void) => void;
+    // (undocumented)
+    export type RecordsMovedEventHandler = (this: void, fromIndex: Integer, toIndex: Integer, count: Integer) => void;
     // (undocumented)
     export type RecordsReplacedEventHandler = (this: void, index: Integer, count: Integer) => void;
     // (undocumented)
@@ -34924,14 +34942,39 @@ export interface UsableList<Record> extends RecordList<Record> {
     readonly usable: boolean;
 }
 
+// Warning: (ae-missing-release-tag) "UsableListChangeType" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export namespace UsableListChangeType {
+    // (undocumented)
+    export function deregisterMoveParameters(index: Integer): void;
+    // (undocumented)
+    export function getMoveParameters(index: Integer): MoveParameters;
+    // (undocumented)
+    export interface MoveParameters {
+        // (undocumented)
+        count: Integer;
+        // (undocumented)
+        fromIndex: Integer;
+        // (undocumented)
+        toIndex: Integer;
+    }
+    // (undocumented)
+    export function registerMoveParameters(fromIndex: Integer, toIndex: Integer, count: Integer): Integer;
+}
+
 // @public (undocumented)
 export const enum UsableListChangeTypeId {
     // (undocumented)
+    AfterMove = 8,
+    // (undocumented)
     AfterReplace = 6,
+    // (undocumented)
+    BeforeMove = 7,
     // (undocumented)
     BeforeReplace = 5,
     // (undocumented)
-    Clear = 8,
+    Clear = 10,
     // (undocumented)
     Insert = 4,
     // (undocumented)
@@ -34939,7 +34982,7 @@ export const enum UsableListChangeTypeId {
     // (undocumented)
     PreUsableClear = 2,
     // (undocumented)
-    Remove = 7,
+    Remove = 9,
     // (undocumented)
     Unusable = 0,
     // (undocumented)

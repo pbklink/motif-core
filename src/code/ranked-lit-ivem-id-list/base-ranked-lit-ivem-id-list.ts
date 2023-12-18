@@ -18,9 +18,11 @@ import {
     RecordList,
     Result,
     UnreachableCaseError,
+    UsableListChangeType,
     UsableListChangeTypeId,
     anyBinarySearch,
     compareNumber,
+    moveElementsInArray,
     rangedAnyBinarySearch
 } from "../sys/sys-internal-api";
 import { RankedLitIvemIdListDefinition } from './definition/ranked-lit-ivem-id-list-definition-internal-api';
@@ -206,6 +208,14 @@ export abstract class BaseRankedLitIvemIdList implements RankedLitIvemIdList {
                 this.replaceRecords(index, count);
                 this.checkUsableNotifyListChange(UsableListChangeTypeId.AfterReplace, index, count);
                 break;
+            case UsableListChangeTypeId.BeforeMove:
+                this.checkUsableNotifyListChange(UsableListChangeTypeId.BeforeMove, index, count);
+                break;
+            case UsableListChangeTypeId.AfterMove:
+                const { fromIndex, toIndex, count: moveCount } = UsableListChangeType.getMoveParameters(index); // index is actually move parameters registration index
+                this.moveRecords(fromIndex, toIndex, moveCount);
+                this.checkUsableNotifyListChange(UsableListChangeTypeId.AfterMove, index, count);
+                break;
             case UsableListChangeTypeId.Remove:
                 this.removeRecords(index, count);
                 this.checkUsableNotifyListChange(UsableListChangeTypeId.Remove, index, count);
@@ -364,6 +374,13 @@ export abstract class BaseRankedLitIvemIdList implements RankedLitIvemIdList {
 
             this.insertIntoSorting(newRecords);
         }
+    }
+
+    private moveRecords(fromIndex: Integer, toIndex: Integer, moveCount: Integer) {
+        if (moveCount > 0) {
+            moveElementsInArray(this._records, fromIndex, toIndex, moveCount);
+        }
+        // Since none of the record's values have changed, the sorting is not affected
     }
 
     private clearRecords() {

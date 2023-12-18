@@ -145,9 +145,13 @@ export class ScanList extends LockOpenList<Scan> {
                 break;
             }
             case UsableListChangeTypeId.BeforeReplace:
-                throw new AssertInternalError('SLPSLCB45094');
+                throw new AssertInternalError('SLPSLCBR45094');
             case UsableListChangeTypeId.AfterReplace:
-                throw new AssertInternalError('SLPSLCA45094');
+                throw new AssertInternalError('SLPSLCAR45094');
+            case UsableListChangeTypeId.BeforeMove:
+                throw new AssertInternalError('SLPSLCBM45094');
+            case UsableListChangeTypeId.AfterMove:
+                throw new AssertInternalError('SLPSLCAM45094');
             case UsableListChangeTypeId.Remove:
                 this.deleteScans(index, count);
                 break;

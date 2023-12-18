@@ -163,6 +163,10 @@ export abstract class MarketSubscriptionDataItem extends FeedStatusSubscriptionD
                 throw new AssertInternalError('MSDIPMLCBR19662', this.definition.description);
             case UsableListChangeTypeId.AfterReplace:
                 throw new AssertInternalError('MSDIPMLCAR19662', this.definition.description);
+            case UsableListChangeTypeId.BeforeMove:
+                throw new AssertInternalError('MSDIPMLCBM19662', this.definition.description);
+            case UsableListChangeTypeId.AfterMove:
+                throw new AssertInternalError('MSDIPMLCAM19662', this.definition.description);
             case UsableListChangeTypeId.Remove:
                 this.checkClearMarket(index, count);
                 break;

@@ -606,6 +606,10 @@ export class SymbolsService {
                 throw new AssertInternalError('SSHMLCEBR19662');
             case UsableListChangeTypeId.AfterReplace:
                 throw new AssertInternalError('SSHMLCEAR19662');
+            case UsableListChangeTypeId.BeforeMove:
+                throw new AssertInternalError('SSHMLCEBM19662');
+            case UsableListChangeTypeId.AfterMove:
+                throw new AssertInternalError('SSHMLCEAM19662');
             case UsableListChangeTypeId.Remove:
                 this.loadAllowedExchangeAndMarketIds();
                 break;

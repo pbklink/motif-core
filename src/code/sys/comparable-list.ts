@@ -6,6 +6,7 @@
 
 import { AssertInternalError } from './internal-error';
 import { ComparisonResult, Integer } from './types';
+import { moveElementInArray, moveElementsInArray } from './utils';
 import { BinarySearchResult, CompareFtn, rangedAnyBinarySearch, rangedEarliestBinarySearch, rangedLatestBinarySearch, rangedQuickSort } from './utils-search';
 
 /** @public */
@@ -204,17 +205,20 @@ export class ComparableList<T> {
     }
 
     exchange(index1: Integer, index2: Integer) {
-        const temp = this._items[index1];
-        this._items[index1] = this._items[index2];
-        this._items[index2] = temp;
+        this.processExchange(index1, index2);
     }
 
-    move(curIndex: Integer, newIndex: Integer) {
-        if (curIndex !== newIndex) {
-            this.checkItemRangeInline(newIndex);
-            const temp = this._items[curIndex];
-            this._items.splice(curIndex, 1);
-            this._items.splice(newIndex, 0, temp);
+    move(fromIndex: Integer, toIndex: Integer) {
+        if (fromIndex !== toIndex) {
+            this.checkItemRangeInline(toIndex);
+            this.processMove(fromIndex, toIndex);
+        }
+    }
+
+    moveRange(fromIndex: Integer, toIndex: Integer, count: Integer) {
+        if (fromIndex !== toIndex) {
+            this.checkItemRangeInline(toIndex);
+            this.processMoveRange(fromIndex, toIndex, count);
         }
     }
 
@@ -295,6 +299,20 @@ export class ComparableList<T> {
     protected assign(other: ComparableList<T>) {
         this.clear();
         this.addSubRange(other.items, 0, other.count);
+    }
+
+    protected processExchange(index1: number, index2: number) {
+        const temp = this._items[index1];
+        this._items[index1] = this._items[index2];
+        this._items[index2] = temp;
+    }
+
+    protected processMove(fromIndex: Integer, toIndex: Integer) {
+        moveElementInArray(this._items, fromIndex, toIndex);
+    }
+
+    protected processMoveRange(fromIndex: Integer, toIndex: Integer, count: Integer) {
+        moveElementsInArray(this._items, fromIndex, toIndex, count);
     }
 
     private getCapacity(): Integer {

@@ -6,7 +6,7 @@
 
 import { AdiService, LitIvemBaseDetail, RankedLitIvemId } from '../../../adi/adi-internal-api';
 import { SymbolDetailCacheService } from '../../../services/symbol-detail-cache-service';
-import { Badness, ChangeSubscribableComparableList, Integer, NotImplementedError, UnreachableCaseError, UsableListChangeTypeId } from '../../../sys/sys-internal-api';
+import { Badness, ChangeSubscribableComparableList, Integer, NotImplementedError, UnreachableCaseError, UsableListChangeType, UsableListChangeTypeId, moveElementsInArray } from '../../../sys/sys-internal-api';
 import { TextFormatterService } from '../../../text-format/text-format-internal-api';
 import {
     TableFieldSourceDefinition
@@ -167,6 +167,15 @@ export class RankedLitIvemIdUsableListTableRecordSource extends UsableListTableR
                     this.records[i] = this.createRecordFromList(i);
                 }
                 this.notifyListChange(UsableListChangeTypeId.AfterReplace, idx, count);
+                break;
+            }
+            case UsableListChangeTypeId.BeforeMove:
+                this.notifyListChange(UsableListChangeTypeId.BeforeMove, idx, count);
+                break;
+            case UsableListChangeTypeId.AfterMove: {
+                const moveParameters = UsableListChangeType.getMoveParameters(idx);
+                moveElementsInArray(this.records, moveParameters.fromIndex, moveParameters.toIndex, moveParameters.count);
+                this.notifyListChange(UsableListChangeTypeId.AfterMove, idx, count);
                 break;
             }
             case UsableListChangeTypeId.Remove:

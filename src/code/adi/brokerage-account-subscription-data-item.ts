@@ -182,6 +182,10 @@ export class BrokerageAccountSubscriptionDataItem extends SubscribabilityExtentS
                 throw new AssertInternalError('BASDIPALCBR19662', this.definition.description);
             case UsableListChangeTypeId.AfterReplace:
                 throw new AssertInternalError('BASDIPALCAR19662', this.definition.description);
+            case UsableListChangeTypeId.BeforeMove:
+                throw new AssertInternalError('BASDIPALCBM19662', this.definition.description);
+            case UsableListChangeTypeId.AfterMove:
+                throw new AssertInternalError('BASDIPALCAM19662', this.definition.description);
             case UsableListChangeTypeId.Remove:
                 this.checkClearAccount(index, count);
                 break;

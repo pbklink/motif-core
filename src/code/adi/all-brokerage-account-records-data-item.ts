@@ -566,6 +566,10 @@ export namespace AllBrokerageAccountRecordsDataItem {
                     throw new AssertInternalError('ABARDIHLCEBR19662');
                 case UsableListChangeTypeId.AfterReplace:
                     throw new AssertInternalError('ABARDIHLCEAR19662');
+                case UsableListChangeTypeId.BeforeMove:
+                    throw new AssertInternalError('ABARDIHLCEBM19662');
+                case UsableListChangeTypeId.AfterMove:
+                    throw new AssertInternalError('ABARDIHLCEAM19662');
                 case UsableListChangeTypeId.Remove:
                     this.checkNotifyRecordsRemove(this.accountMapKey, this._dataItem.records, index, count);
                     break;

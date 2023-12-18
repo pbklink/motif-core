@@ -225,6 +225,10 @@ export class TopShareholderTableRecordSource extends SingleDataItemTableRecordSo
                 throw new AssertInternalError('GLDCERTRSPDILCBR19662');
             case UsableListChangeTypeId.AfterReplace:
                 throw new AssertInternalError('GLDCERTRSPDILCAR19662');
+            case UsableListChangeTypeId.BeforeMove:
+                throw new AssertInternalError('GLDCERTRSPDILCBM19662');
+            case UsableListChangeTypeId.AfterMove:
+                throw new AssertInternalError('GLDCERTRSPDILCAM19662');
             case UsableListChangeTypeId.Remove:
                 this.checkUsableNotifyListChange(UsableListChangeTypeId.Remove, idx, count);
                 this.recordList.splice(idx, count);

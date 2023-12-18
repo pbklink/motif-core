@@ -321,6 +321,10 @@ export class LitIvemDetailFromSearchSymbolsTableRecordSource extends SingleDataI
                 throw new AssertInternalError("SDITRSPDILCBR19662");
             case UsableListChangeTypeId.AfterReplace:
                 throw new AssertInternalError("SDITRSPDILCAR19662");
+            case UsableListChangeTypeId.BeforeMove:
+                throw new AssertInternalError("SDITRSPDILCBM19662");
+            case UsableListChangeTypeId.AfterMove:
+                throw new AssertInternalError("SDITRSPDILCAM19662");
             case UsableListChangeTypeId.Remove:
                 this.checkUsableNotifyListChange(
                     UsableListChangeTypeId.Remove,

@@ -366,6 +366,10 @@ export class DayTradesDataItem extends DataItem {
                 throw new AssertInternalError('DTDIPLCBR19662', this.definition.description);
             case UsableListChangeTypeId.AfterReplace:
                 throw new AssertInternalError('DTDIPLCAR19662', this.definition.description);
+            case UsableListChangeTypeId.BeforeMove:
+                throw new AssertInternalError('DTDIPLCBM19662', this.definition.description);
+            case UsableListChangeTypeId.AfterMove:
+                throw new AssertInternalError('DTDIPLCAM19662', this.definition.description);
             case UsableListChangeTypeId.Remove:
                 throw new AssertInternalError('DTDIPLCRM19662', this.definition.description);
             case UsableListChangeTypeId.Clear: {
