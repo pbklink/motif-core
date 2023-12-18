@@ -56,10 +56,10 @@ export class ClassFeedsDataItem extends DataItem {
         this._allFeedsDataItem = this.subscribeDataItem(feedsDefinition) as FeedsDataItem;
 
         this._allBadnessChangeSubscriptionId = this._allFeedsDataItem.subscribeBadnessChangeEvent(
-            () => this.handleAllBadnessChangeEvent()
+            () => { this.handleAllBadnessChangeEvent(); }
         );
         this._allListChangeSubscriptionId = this._allFeedsDataItem.subscribeListChangeEvent(
-            (listChangeTypeId, index, count) => this.handleAllListChangeEvent(listChangeTypeId, index, count)
+            (listChangeTypeId, index, count) => { this.handleAllListChangeEvent(listChangeTypeId, index, count); }
         );
 
         if (this._allFeedsDataItem.usable) {

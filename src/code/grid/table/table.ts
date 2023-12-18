@@ -803,11 +803,12 @@ export class Table extends CorrectnessBadness {
                 break;
             case UsableListChangeTypeId.BeforeMove:
                 break;
-            case UsableListChangeTypeId.AfterMove:
+            case UsableListChangeTypeId.AfterMove: {
                 const { fromIndex, toIndex, count: moveCount } = UsableListChangeType.getMoveParameters(recordIdx); // recordIdx is actually move parameters registration index
                 this.moveRecords(fromIndex, toIndex, moveCount);
                 this.notifyRecordsMoved(fromIndex, toIndex, moveCount);
                 break;
+            }
             case UsableListChangeTypeId.Remove:
                 // Delete records before notifying so that grid matches correctly
                 this.deleteRecords(recordIdx, recordCount);

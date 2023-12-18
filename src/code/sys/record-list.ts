@@ -5,7 +5,8 @@
  */
 
 import { MultiEvent } from './multi-event';
-import { Integer, UsableListChangeTypeId } from './types';
+import { Integer } from './types';
+import { UsableListChangeTypeId } from './usable-list-change-type';
 
 export interface RecordList<Record> {
     readonly count: Integer;

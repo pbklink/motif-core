@@ -10,8 +10,9 @@ import { CorrectnessList } from './correctness-list';
 import { AssertInternalError } from './internal-error';
 import { MultiEvent } from './multi-event';
 import { RecordList } from './record-list';
-import { Integer, UsableListChangeType, UsableListChangeTypeId } from './types';
+import { Integer,  } from './types';
 import { UsableList } from './usable-list';
+import { UsableListChangeType, UsableListChangeTypeId } from './usable-list-change-type';
 
 export class ChangeSubscribableComparableList<T> extends ComparableList<T> implements CorrectnessList<T>, UsableList<T> {
     private _correctnessId = CorrectnessId.Good;

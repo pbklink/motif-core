@@ -3302,6 +3302,8 @@ export class ChangeSubscribableComparableList<T> extends ComparableList<T> imple
     // (undocumented)
     insertSubRange(index: Integer, values: readonly T[], subRangeStartIndex: Integer, subRangeCount: Integer): void;
     // (undocumented)
+    protected processExchange(fromIndex: Integer, toIndex: Integer): void;
+    // (undocumented)
     protected processMove(fromIndex: Integer, toIndex: Integer): void;
     // (undocumented)
     protected processMoveRange(fromIndex: Integer, toIndex: Integer, count: Integer): void;
@@ -4713,6 +4715,8 @@ export class ComparableList<T> {
     move(fromIndex: Integer, toIndex: Integer): void;
     // (undocumented)
     moveRange(fromIndex: Integer, toIndex: Integer, count: Integer): void;
+    // (undocumented)
+    protected processExchange(index1: number, index2: number): void;
     // (undocumented)
     protected processMove(fromIndex: Integer, toIndex: Integer): void;
     // (undocumented)
@@ -34942,8 +34946,6 @@ export interface UsableList<Record> extends RecordList<Record> {
     readonly usable: boolean;
 }
 
-// Warning: (ae-missing-release-tag) "UsableListChangeType" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
 // @public (undocumented)
 export namespace UsableListChangeType {
     // (undocumented)

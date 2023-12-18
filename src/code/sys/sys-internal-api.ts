@@ -43,6 +43,7 @@ export * from './resource-badness';
 export * from './result';
 export * from './service-operator';
 export * from './usable-list';
+export * from './usable-list-change-type';
 // export * from './Scheduler';
 export * from './source-tz-offset-date';
 export * from './source-tz-offset-date-time';

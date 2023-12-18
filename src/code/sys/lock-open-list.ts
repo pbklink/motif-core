@@ -12,7 +12,8 @@ import { AssertInternalError } from './internal-error';
 import { LockOpenListItem } from './lock-open-list-item';
 import { MultiEvent } from './multi-event';
 import { Ok, Result } from './result';
-import { Guid, Integer, MapKey, UsableListChangeTypeId } from './types';
+import { Guid, Integer, MapKey } from './types';
+import { UsableListChangeTypeId } from './usable-list-change-type';
 
 export abstract class LockOpenList<Item extends LockOpenListItem<Item>> extends CorrectnessBadness implements BadnessList<Item> {
     // private localFilePath = '';

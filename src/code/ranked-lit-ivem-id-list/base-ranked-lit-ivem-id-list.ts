@@ -211,11 +211,12 @@ export abstract class BaseRankedLitIvemIdList implements RankedLitIvemIdList {
             case UsableListChangeTypeId.BeforeMove:
                 this.checkUsableNotifyListChange(UsableListChangeTypeId.BeforeMove, index, count);
                 break;
-            case UsableListChangeTypeId.AfterMove:
+            case UsableListChangeTypeId.AfterMove: {
                 const { fromIndex, toIndex, count: moveCount } = UsableListChangeType.getMoveParameters(index); // index is actually move parameters registration index
                 this.moveRecords(fromIndex, toIndex, moveCount);
                 this.checkUsableNotifyListChange(UsableListChangeTypeId.AfterMove, index, count);
                 break;
+            }
             case UsableListChangeTypeId.Remove:
                 this.removeRecords(index, count);
                 this.checkUsableNotifyListChange(UsableListChangeTypeId.Remove, index, count);

@@ -37,13 +37,13 @@ export class DayTradesGridRecordStore implements GridRecordStore {
         this.clearDataItem();
         this._dataItem = value;
         this._dataItemListChangeSubscriptionId = this._dataItem.subscribeListChangeEvent(
-            (listChangeTypeId, index, count) => this.handleDataItemListChangeEvent(listChangeTypeId, index, count)
+            (listChangeTypeId, index, count) => { this.handleDataItemListChangeEvent(listChangeTypeId, index, count); }
         );
         this._dataItemRecordChangeSubscriptionId = this._dataItem.subscribeRecordChangeEvent(
-            (index) => this.handleDataItemRecordChangeEvent(index)
+            (index) => { this.handleDataItemRecordChangeEvent(index); }
         );
         this._dataItemDataCorrectnessChangeSubscriptionId = this._dataItem.subscribeCorrectnessChangedEvent(
-            () => this.handleDataItemDataCorrectnessChangedEvent()
+            () => { this.handleDataItemDataCorrectnessChangedEvent(); }
         );
         this._records = this._dataItem.records;
         this._recordCount = this._dataItem.recordCount;

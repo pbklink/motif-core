@@ -139,10 +139,10 @@ export class CallPutFromUnderlyingTableRecordSource extends SingleDataItemTableR
         this._dataItemSubscribed = true;
         super.setSingleDataItem(this._dataItem);
         this._dataItemListChangeEventSubscriptionId = this._dataItem.subscribeListChangeEvent(
-            (listChangeTypeId, idx, count) => this.handleDataItemListChangeEvent(listChangeTypeId, idx, count)
+            (listChangeTypeId, idx, count) => { this.handleDataItemListChangeEvent(listChangeTypeId, idx, count); }
         );
         this._dataItemBadnessChangeEventSubscriptionId = this._dataItem.subscribeBadnessChangeEvent(
-            () => this.handleDataItemBadnessChangeEvent()
+            () => { this.handleDataItemBadnessChangeEvent(); }
         );
 
         super.openLocked(opener);
