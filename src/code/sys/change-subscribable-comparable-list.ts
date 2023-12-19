@@ -5,44 +5,14 @@
  */
 
 import { ComparableList } from './comparable-list';
-import { Correctness, CorrectnessId } from './correctness';
-import { CorrectnessList } from './correctness-list';
 import { AssertInternalError } from './internal-error';
 import { MultiEvent } from './multi-event';
 import { RecordList } from './record-list';
-import { Integer,  } from './types';
-import { UsableList } from './usable-list';
+import { Integer, } from './types';
 import { UsableListChangeType, UsableListChangeTypeId } from './usable-list-change-type';
 
-export class ChangeSubscribableComparableList<T> extends ComparableList<T> implements CorrectnessList<T>, UsableList<T> {
-    private _correctnessId = CorrectnessId.Good;
+export class ChangeSubscribableComparableList<T> extends ComparableList<T> implements RecordList<T> {
     private _listChangeMultiEvent = new MultiEvent<RecordList.ListChangeEventHandler>();
-    private _correctnessChangedMultiEvent = new MultiEvent<CorrectnessList.CorrectnessChangedEventHandler>();
-
-    get usable() { return Correctness.idIsUsable(this._correctnessId); }
-    get correctnessId() { return this._correctnessId; }
-    set correctnessId(value: CorrectnessId) {
-        if (value !== this._correctnessId) {
-            const oldUsable = this.usable;
-            this._correctnessId = value;
-
-            const usable = this.usable;
-            if (usable !== oldUsable) {
-                if (!usable) {
-                    this.notifyListChange(UsableListChangeTypeId.Unusable, 0, 0);
-                } else {
-                    this.notifyListChange(UsableListChangeTypeId.PreUsableClear, 0, 0);
-                    const count = this.count;
-                    if (this.count > 0) {
-                        this.notifyListChange(UsableListChangeTypeId.PreUsableAdd, 0, count)
-                    }
-                    this.notifyListChange(UsableListChangeTypeId.Usable, 0, count);
-                }
-            }
-
-            this.notifyCorrectnessChanged();
-        }
-    }
 
     override clone(): ChangeSubscribableComparableList<T> {
         const result = new ChangeSubscribableComparableList(this._compareItemsFtn);
@@ -150,17 +120,11 @@ export class ChangeSubscribableComparableList<T> extends ComparableList<T> imple
         this._listChangeMultiEvent.unsubscribe(subscriptionId);
     }
 
-    subscribeCorrectnessChangedEvent(handler: CorrectnessList.CorrectnessChangedEventHandler): MultiEvent.DefinedSubscriptionId {
-        return this._correctnessChangedMultiEvent.subscribe(handler);
-    }
-
-    unsubscribeCorrectnessChangedEvent(subscriptionId: MultiEvent.SubscriptionId) {
-        this._correctnessChangedMultiEvent.unsubscribe(subscriptionId);
-    }
-
-    protected override assign(other: ChangeSubscribableComparableList<T>) {
-        this._correctnessId = other.correctnessId;
-        super.assign(other);
+    protected notifyListChange(listChangeTypeId: UsableListChangeTypeId, index: Integer, count: Integer) {
+        const handlers = this._listChangeMultiEvent.copyHandlers();
+        for (let i = 0; i < handlers.length; i++) {
+            handlers[i](listChangeTypeId, index, count);
+        }
     }
 
     protected override processExchange(fromIndex: Integer, toIndex: Integer) {
@@ -199,20 +163,6 @@ export class ChangeSubscribableComparableList<T> extends ComparableList<T> imple
         this.notifyListChange(UsableListChangeTypeId.Remove, index, count);
         if (originalBeforeRemoveRangeCallBack !== undefined) {
             originalBeforeRemoveRangeCallBack(index, count);
-        }
-    }
-
-    private notifyListChange(listChangeTypeId: UsableListChangeTypeId, index: Integer, count: Integer) {
-        const handlers = this._listChangeMultiEvent.copyHandlers();
-        for (let i = 0; i < handlers.length; i++) {
-            handlers[i](listChangeTypeId, index, count);
-        }
-    }
-
-    private notifyCorrectnessChanged() {
-        const handlers = this._correctnessChangedMultiEvent.copyHandlers();
-        for (let i = 0; i < handlers.length; i++) {
-            handlers[i]();
         }
     }
 }

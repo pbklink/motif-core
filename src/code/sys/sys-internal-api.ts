@@ -6,6 +6,7 @@
 
 export * from './authorisations';
 export * from './badness';
+export * from './badness-comparable-list';
 export * from './badness-list';
 export * from './change-subscribable-comparable-list';
 export * from './comma-text';

@@ -184,19 +184,30 @@ export abstract class BaseRankedLitIvemIdList implements RankedLitIvemIdList {
     private processScoredListListChange(listChangeTypeId: UsableListChangeTypeId, index: Integer, count: Integer) {
         switch (listChangeTypeId) {
             case UsableListChangeTypeId.Unusable:
-                // nothing to do - DataItem badness event will handle
+                this.notifyListChange(UsableListChangeTypeId.Unusable, 0, 0);
                 break;
-            case UsableListChangeTypeId.PreUsableClear:
-                this._records.length = 0;
-                this.notifyListChange(listChangeTypeId, index, count);
+            case UsableListChangeTypeId.PreUsableClear: {
+                const oldCount = this.count;
+                if (oldCount !== 0) {
+                    this._records.length = 0;
+                }
                 break;
+            }
             case UsableListChangeTypeId.PreUsableAdd:
-                this.insertRecords(index, count);
-                this.notifyListChange(listChangeTypeId, index, count);
+                if (count > 0) {
+                    this.insertRecords(index, count);
+                }
                 break;
-            case UsableListChangeTypeId.Usable:
-                // handled through badness change
+            case UsableListChangeTypeId.Usable: {
+                this.notifyListChange(UsableListChangeTypeId.PreUsableClear, 0, 0);
+                const recordCount = this.count;
+                if (count > 0) {
+                    this.notifyListChange(UsableListChangeTypeId.PreUsableAdd, 0, recordCount);
+                }
+                this.notifyListChange(UsableListChangeTypeId.Usable, 0, 0);
+                    // handled through badness change
                 break;
+            }
             case UsableListChangeTypeId.Insert:
                 this.insertRecords(index, count);
                 this.checkUsableNotifyListChange(UsableListChangeTypeId.Insert, index, count);

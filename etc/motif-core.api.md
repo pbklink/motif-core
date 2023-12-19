@@ -1468,6 +1468,34 @@ export namespace Badness {
     }
 }
 
+// Warning: (ae-missing-release-tag) "BadnessComparableList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class BadnessComparableList<T> extends ChangeSubscribableComparableList<T> implements CorrectnessList<T>, BadnessList<T> {
+    // (undocumented)
+    protected assign(other: BadnessComparableList<T>): void;
+    // (undocumented)
+    get badness(): Badness;
+    // (undocumented)
+    get correctnessId(): CorrectnessId;
+    // (undocumented)
+    setBadness(value: Badness): void;
+    // (undocumented)
+    subscribeBadnessChangeEvent(handler: CorrectnessBadness.BadnessChangeEventHandler): MultiEvent.DefinedSubscriptionId;
+    // (undocumented)
+    subscribeCorrectnessChangedEvent(handler: CorrectnessList.CorrectnessChangedEventHandler): MultiEvent.DefinedSubscriptionId;
+    // (undocumented)
+    subscribeUsableChangedEvent(handler: CorrectnessBadness.UsableChangedEventHandler): MultiEvent.DefinedSubscriptionId;
+    // (undocumented)
+    unsubscribeBadnessChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+    // (undocumented)
+    unsubscribeCorrectnessChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+    // (undocumented)
+    unsubscribeUsableChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+    // (undocumented)
+    get usable(): boolean;
+}
+
 // Warning: (ae-missing-release-tag) "BadnessList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "BadnessList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -3275,7 +3303,7 @@ export class CellPainterFactoryService {
 // Warning: (ae-missing-release-tag) "ChangeSubscribableComparableList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class ChangeSubscribableComparableList<T> extends ComparableList<T> implements CorrectnessList<T>, UsableList<T> {
+export class ChangeSubscribableComparableList<T> extends ComparableList<T> implements RecordList<T> {
     // (undocumented)
     add(value: T): number;
     // (undocumented)
@@ -3283,14 +3311,9 @@ export class ChangeSubscribableComparableList<T> extends ComparableList<T> imple
     // (undocumented)
     addSubRange(values: readonly T[], rangeStartIndex: Integer, rangeCount: Integer): void;
     // (undocumented)
-    protected assign(other: ChangeSubscribableComparableList<T>): void;
-    // (undocumented)
     clear(): void;
     // (undocumented)
     clone(): ChangeSubscribableComparableList<T>;
-    // (undocumented)
-    get correctnessId(): CorrectnessId;
-    set correctnessId(value: CorrectnessId);
     // (undocumented)
     exchange(index1: Integer, index2: Integer): void;
     // (undocumented)
@@ -3301,6 +3324,8 @@ export class ChangeSubscribableComparableList<T> extends ComparableList<T> imple
     insertRange(index: Integer, values: readonly T[]): void;
     // (undocumented)
     insertSubRange(index: Integer, values: readonly T[], subRangeStartIndex: Integer, subRangeCount: Integer): void;
+    // (undocumented)
+    protected notifyListChange(listChangeTypeId: UsableListChangeTypeId, index: Integer, count: Integer): void;
     // (undocumented)
     protected processExchange(fromIndex: Integer, toIndex: Integer): void;
     // (undocumented)
@@ -3318,15 +3343,9 @@ export class ChangeSubscribableComparableList<T> extends ComparableList<T> imple
     // (undocumented)
     setAt(index: Integer, value: T): void;
     // (undocumented)
-    subscribeCorrectnessChangedEvent(handler: CorrectnessList.CorrectnessChangedEventHandler): MultiEvent.DefinedSubscriptionId;
-    // (undocumented)
     subscribeListChangeEvent(handler: RecordList.ListChangeEventHandler): MultiEvent.DefinedSubscriptionId;
     // (undocumented)
-    unsubscribeCorrectnessChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
-    // (undocumented)
     unsubscribeListChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
-    // (undocumented)
-    get usable(): boolean;
 }
 
 // Warning: (ae-missing-release-tag) "ChartHistoryDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -4962,7 +4981,7 @@ export namespace Correctness {
 // Warning: (ae-missing-release-tag) "CorrectnessBadness" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export abstract class CorrectnessBadness implements CorrectnessRecord {
+export class CorrectnessBadness implements CorrectnessRecord {
     // (undocumented)
     get badness(): Badness;
     // (undocumented)
@@ -4986,7 +5005,7 @@ export abstract class CorrectnessBadness implements CorrectnessRecord {
     // (undocumented)
     protected processUsableChanged(): void;
     // (undocumented)
-    protected setBadness(badness: Badness): void;
+    setBadness(badness: Badness): void;
     // (undocumented)
     protected setUnusable(badness: Badness): void;
     // (undocumented)
@@ -4995,11 +5014,15 @@ export abstract class CorrectnessBadness implements CorrectnessRecord {
     subscribeBadnessChangeEvent(handler: CorrectnessBadness.BadnessChangeEventHandler): number;
     // (undocumented)
     subscribeCorrectnessChangedEvent(handler: CorrectnessBadness.CorrectnessChangedEventHandler): number;
+    // (undocumented)
+    subscribeUsableChangedEvent(handler: CorrectnessBadness.UsableChangedEventHandler): number;
     protected trySetUsable(): void;
     // (undocumented)
     unsubscribeBadnessChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
     // (undocumented)
     unsubscribeCorrectnessChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+    // (undocumented)
+    unsubscribeUsableChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
     // (undocumented)
     get usable(): boolean;
 }
@@ -5010,6 +5033,8 @@ export namespace CorrectnessBadness {
     export type BadnessChangeEventHandler = (this: void) => void;
     // (undocumented)
     export type CorrectnessChangedEventHandler = (this: void) => void;
+    // (undocumented)
+    export type UsableChangedEventHandler = (this: void) => void;
 }
 
 // @public (undocumented)
@@ -14610,9 +14635,9 @@ export class LitIvemIdScanMatchesDataItem extends ScanMatchesDataItem<LitIvemId>
     // (undocumented)
     indexOf(value: LitIvemIdScanMatch): number;
     // (undocumented)
-    protected processCorrectnessChanged(): void;
-    // (undocumented)
     processMessage(msg: DataMessage): void;
+    // (undocumented)
+    protected processUsableChanged(): void;
     // (undocumented)
     readonly rankedMatches: ChangeSubscribableComparableList<LitIvemIdScanMatch>;
     // (undocumented)
@@ -14621,6 +14646,10 @@ export class LitIvemIdScanMatchesDataItem extends ScanMatchesDataItem<LitIvemId>
     protected rankUnrankedListClear(): void;
     // (undocumented)
     protected rankUnrankedListRemove(removeIndex: Integer): void;
+    // (undocumented)
+    start(): void;
+    // (undocumented)
+    stop(): void;
     // (undocumented)
     subscribeListChangeEvent(handler: RecordList.ListChangeEventHandler): number;
     // (undocumented)

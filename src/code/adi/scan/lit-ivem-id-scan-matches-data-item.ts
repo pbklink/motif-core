@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { ChangeSubscribableComparableList, Integer, MultiEvent, RecordList, UsableListChangeTypeId } from '../../sys/sys-internal-api';
+import { AssertInternalError, ChangeSubscribableComparableList, Integer, MultiEvent, RecordList, UnreachableCaseError, UsableListChangeTypeId } from '../../sys/sys-internal-api';
 import { DataDefinition, DataMessage, DataMessageTypeId, LitIvemId, LitIvemIdMatchesDataMessage, MarketInfo } from '../common/adi-common-internal-api';
 import { RankScoredLitIvemId, RankScoredLitIvemIdList } from '../rank-scored-lit-ivem-id/internal-api';
 import { LitIvemIdScanMatch } from './lit-ivem-id-scan-match';
@@ -14,6 +14,7 @@ import { ScanMatchesDataItem } from './scan-matches-data-item';
 export class LitIvemIdScanMatchesDataItem extends ScanMatchesDataItem<LitIvemId> implements RankScoredLitIvemIdList {
     readonly rankedMatches: ChangeSubscribableComparableList<LitIvemIdScanMatch>;
 
+    private _rankedMatchesListChangeSubscriptionId: MultiEvent.SubscriptionId;
     private _rankedListChangeMultiEvent = new MultiEvent<RecordList.ListChangeEventHandler>();
     private _searchMatch: LitIvemIdScanMatch = {
         index: -1,
@@ -26,7 +27,21 @@ export class LitIvemIdScanMatchesDataItem extends ScanMatchesDataItem<LitIvemId>
         this.rankedMatches = new ChangeSubscribableComparableList<LitIvemIdScanMatch>((left, right) => this.compareRankScore(left, right));
     }
 
-    get count() { return this.unrankedRecords.length; }
+    get count() { return this.rankedMatches.count; }
+
+    override start() {
+        this._rankedMatchesListChangeSubscriptionId = this.rankedMatches.subscribeListChangeEvent(
+            (listChangeTypeId, idx, count) => { this.processRankedMatchesListChange(listChangeTypeId, idx, count); }
+        );
+        super.start();
+    }
+
+    override stop() {
+        super.stop();
+
+        this.rankedMatches.unsubscribeListChangeEvent(this._rankedMatchesListChangeSubscriptionId);
+        this._rankedMatchesListChangeSubscriptionId = undefined;
+    }
 
     indexOf(value: LitIvemIdScanMatch) {
         const rankedMatches = this.rankedMatches;
@@ -83,9 +98,19 @@ export class LitIvemIdScanMatchesDataItem extends ScanMatchesDataItem<LitIvemId>
         this._rankedListChangeMultiEvent.unsubscribe(subscriptionId);
     }
 
-    protected override processCorrectnessChanged() {
-        this.rankedMatches.correctnessId = this.correctnessId;
-        super.processCorrectnessChanged();
+    protected override processUsableChanged() {
+        super.processUsableChanged();
+
+        if (this.usable) {
+            this.notifyListChange(UsableListChangeTypeId.PreUsableClear, 0, 0);
+            const count = this.count;
+            if (count > 0) {
+                this.notifyListChange(UsableListChangeTypeId.PreUsableAdd, 0, count);
+            }
+            this.notifyListChange(UsableListChangeTypeId.Usable, 0, 0);
+        } else {
+            this.notifyListChange(UsableListChangeTypeId.Unusable, 0, 0);
+        }
     }
 
     protected override rankUnrankedListAdd(addIndex: Integer, addCount: Integer) {
@@ -147,6 +172,46 @@ export class LitIvemIdScanMatchesDataItem extends ScanMatchesDataItem<LitIvemId>
         }
     }
 
+    private processRankedMatchesListChange(listChangeTypeId: UsableListChangeTypeId, idx: Integer, changeCount: Integer) {
+        switch (listChangeTypeId) {
+            case UsableListChangeTypeId.Unusable:
+                throw new AssertInternalError('LIISMDIPRMLCUU41423'); // Never occurs.  Unusable is handled through badness change
+                break;
+            case UsableListChangeTypeId.PreUsableClear:
+                throw new AssertInternalError('LIISMDIPRMLCPC41423'); // Never occurs.
+            case UsableListChangeTypeId.PreUsableAdd:
+                throw new AssertInternalError('LIISMDIPRMLCPA41423'); // Never occurs.
+            case UsableListChangeTypeId.Usable: {
+                throw new AssertInternalError('LIISMDIPRMLCU41423'); // Never occurs.
+            }
+            case UsableListChangeTypeId.Insert:
+                this.checkUsableNotifyListChange(listChangeTypeId, idx, changeCount);
+                break;
+            case UsableListChangeTypeId.BeforeReplace:
+                this.checkUsableNotifyListChange(listChangeTypeId, idx, changeCount);
+                break;
+            case UsableListChangeTypeId.AfterReplace: {
+                this.checkUsableNotifyListChange(listChangeTypeId, idx, changeCount);
+                break;
+            }
+            case UsableListChangeTypeId.BeforeMove:
+                this.checkUsableNotifyListChange(listChangeTypeId, idx, changeCount);
+                break;
+            case UsableListChangeTypeId.AfterMove: {
+                this.checkUsableNotifyListChange(listChangeTypeId, idx, changeCount);
+                break;
+            }
+            case UsableListChangeTypeId.Remove:
+                this.checkUsableNotifyListChange(listChangeTypeId, idx, changeCount);
+                break;
+            case UsableListChangeTypeId.Clear:
+                this.notifyListChange(UsableListChangeTypeId.Clear, idx, changeCount);
+                break;
+            default:
+                throw new UnreachableCaseError('LIISMDIPRMLCU41423', listChangeTypeId);
+        }
+    }
+
     private checkUsableNotifyListChange(listChangeTypeId: UsableListChangeTypeId, index: Integer, count: Integer) {
         if (this.usable) {
             this.notifyListChange(listChangeTypeId, index, count);
@@ -183,5 +248,4 @@ export namespace LitIvemIdScanMatchesDataItem {
             this.notifyUpdated(changedFields);
         }
     }
-
 }
