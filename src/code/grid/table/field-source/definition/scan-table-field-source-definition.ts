@@ -152,22 +152,22 @@ export namespace ScanTableFieldSourceDefinition {
             },
         ];
 
-        const idFieldIndices = new Array<Integer>(count);
+        const idFieldIndices = new Array<Integer>(Scan.Field.idCount);
 
         export function initialise() {
-            const idFieldIndexCount = idFieldIndices.length;
-            for (let i = 0; i < idFieldIndexCount; i++) {
-                idFieldIndices[i] = -1;
+            for (let id = 0; id < Scan.Field.idCount; id++) {
+                idFieldIndices[id] = -1;
             }
+
             for (let fieldIndex = 0; fieldIndex < count; fieldIndex++) {
                 const id = infos[fieldIndex].id;
                 if (unsupportedIds.includes(id)) {
                     throw new AssertInternalError('STFSDFII42422', fieldIndex.toString());
                 } else {
-                    if (idFieldIndices[fieldIndex] !== -1) {
+                    if (idFieldIndices[id] !== -1) {
                         throw new AssertInternalError('STFSDFID42422', fieldIndex.toString()); // duplicate
                     } else {
-                        idFieldIndices[fieldIndex] = fieldIndex;
+                        idFieldIndices[id] = fieldIndex;
                     }
                 }
             }

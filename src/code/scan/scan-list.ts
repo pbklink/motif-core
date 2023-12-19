@@ -51,16 +51,6 @@ export class ScanList extends LockOpenList<Scan> {
         this._scanDescriptorsDataItem = undefined as unknown as ScanStatusedDescriptorsDataItem;
     }
 
-     // may not need this
-    subscribeScanChangeEvent(handler: ScanList.RecordChangeEventHandler) {
-        return this._scanChangeMultiEvent.subscribe(handler);
-    }
-
-     // may not need this
-    unsubscribeScanChangeEvent(subscriptionId: MultiEvent.SubscriptionId) {
-        this._scanChangeMultiEvent.unsubscribe(subscriptionId);
-    }
-
     protected override processUsableChanged() {
         if (this.usable) {
             this.notifyListChange(UsableListChangeTypeId.PreUsableClear, 0, 0);

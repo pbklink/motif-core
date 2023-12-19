@@ -26,10 +26,10 @@ export class FeedTableValueSource extends TableValueSource {
 
     activate(): TableValue[] {
         this._statusChangedEventSubscriptionId = this._feed.subscribeStatusChangedEvent(
-            () => this.handleStatusChangedEvent()
+            () => { this.handleStatusChangedEvent(); }
         );
         this._correctnessChangedEventSubscriptionId = this._feed.subscribeCorrectnessChangedEvent(
-            () => this.handleCorrectnessChangedEvent()
+            () => { this.handleCorrectnessChangedEvent(); }
         );
 
         this.initialiseBeenIncubated(Correctness.idIsIncubated(this._feed.correctnessId));

@@ -7161,15 +7161,6 @@ export const enum DepthStyleId {
     Short = 1
 }
 
-// Warning: (ae-internal-missing-underscore) The name "DescriptionScansGridField" should be prefixed with an underscore because the declaration is marked as @internal
-//
-// @internal (undocumented)
-export class DescriptionScansGridField extends ScansGridField {
-    constructor();
-    // (undocumented)
-    getViewValue(record: Scan): RenderValue;
-}
-
 // Warning: (ae-missing-release-tag) "DisplayColorSchemeGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -11701,15 +11692,6 @@ export namespace IdleService {
     }
 }
 
-// Warning: (ae-internal-missing-underscore) The name "IdScansGridField" should be prefixed with an underscore because the declaration is marked as @internal
-//
-// @internal (undocumented)
-export class IdScansGridField extends ScansGridField {
-    constructor();
-    // (undocumented)
-    getViewValue(record: Scan): RenderValue;
-}
-
 // @public (undocumented)
 export function ifDefined<U, T>(value: U | undefined, fn: (x: U) => T): T | undefined;
 
@@ -11769,15 +11751,6 @@ export interface IndexedRecord {
 //
 // @public (undocumented)
 export interface IndexedTableRecordDefinition<Record extends IndexedRecord> extends PayloadTableRecordDefinition<Record> {
-}
-
-// Warning: (ae-internal-missing-underscore) The name "IndexScansGridField" should be prefixed with an underscore because the declaration is marked as @internal
-//
-// @internal (undocumented)
-export class IndexScansGridField extends ScansGridField {
-    constructor();
-    // (undocumented)
-    getViewValue(record: Scan): RenderValue;
 }
 
 // @public (undocumented)
@@ -13540,15 +13513,6 @@ export namespace LastIntervalHistorySequenceSeries {
         // (undocumented)
         value: number | undefined;
     }
-}
-
-// Warning: (ae-internal-missing-underscore) The name "LastSavedTimeScansGridField" should be prefixed with an underscore because the declaration is marked as @internal
-//
-// @internal (undocumented)
-export class LastSavedTimeScansGridField extends ScansGridField {
-    constructor();
-    // (undocumented)
-    getViewValue(record: Scan): RenderValue;
 }
 
 // @public
@@ -16550,15 +16514,6 @@ export class NameColorSchemeGridField extends ColorSchemeGridField {
     constructor(colorSettings: ColorSettings);
     // (undocumented)
     getViewValue(record: ColorSchemeGridRecordStore.Record): StringRenderValue;
-}
-
-// Warning: (ae-internal-missing-underscore) The name "NameScansGridField" should be prefixed with an underscore because the declaration is marked as @internal
-//
-// @internal (undocumented)
-export class NameScansGridField extends ScansGridField {
-    constructor();
-    // (undocumented)
-    getViewValue(record: Scan): RenderValue;
 }
 
 // @public (undocumented)
@@ -21119,15 +21074,6 @@ export class ReadonlyRenderValue extends BooleanRenderValue {
     constructor(data: boolean | undefined);
 }
 
-// Warning: (ae-internal-missing-underscore) The name "ReadonlyScansGridField" should be prefixed with an underscore because the declaration is marked as @internal
-//
-// @internal (undocumented)
-export class ReadonlyScansGridField extends ScansGridField {
-    constructor();
-    // (undocumented)
-    getViewValue(record: Scan): RenderValue;
-}
-
 // @public (undocumented)
 export class RecordGrid extends AdaptedRevgrid implements GridLayout.ChangeInitiator {
     constructor(settingsService: SettingsService, gridHostElement: HTMLElement, recordStore: RevRecordStore, customGridSettings: AdaptedRevgrid.CustomGridSettings, customiseSettingsForNewColumnEventer: AdaptedRevgrid.CustomiseSettingsForNewColumnEventer, getMainCellPainterEventer: Subgrid.GetCellPainterEventer<AdaptedRevgridBehavioredColumnSettings, GridField>, getHeaderCellPainterEventer: Subgrid.GetCellPainterEventer<AdaptedRevgridBehavioredColumnSettings, GridField>, externalParent: unknown);
@@ -23923,10 +23869,6 @@ export class ScanList extends LockOpenList<Scan> {
     initialise(): void;
     // (undocumented)
     protected processUsableChanged(): void;
-    // (undocumented)
-    subscribeScanChangeEvent(handler: ScanList.RecordChangeEventHandler): number;
-    // (undocumented)
-    unsubscribeScanChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
 }
 
 // @public (undocumented)
@@ -23985,67 +23927,6 @@ export namespace ScanModule {
 export interface ScanNotification {
     // (undocumented)
     channelId: string;
-}
-
-// Warning: (ae-internal-missing-underscore) The name "ScansGridField" should be prefixed with an underscore because the declaration is marked as @internal
-//
-// @internal (undocumented)
-export abstract class ScansGridField extends GridField implements GridRevRecordField {
-    constructor(id: ScansGridField.Id, definition: GridFieldDefinition);
-    // (undocumented)
-    abstract getViewValue(record: Scan): RenderValue;
-    // (undocumented)
-    readonly id: ScansGridField.Id;
-}
-
-// @internal (undocumented)
-export namespace ScansGridField {
-    // (undocumented)
-    export function createField(id: Id): ScansGridField;
-    const // (undocumented)
-    allIds: Id[];
-    const // (undocumented)
-    sourceDefinition: GridFieldSourceDefinition;
-    // (undocumented)
-    export const enum Id {
-        // (undocumented)
-        Description = 4,
-        // (undocumented)
-        Id = 0,
-        // (undocumented)
-        Index = 1,
-        // (undocumented)
-        LastSavedTime = 7,
-        // (undocumented)
-        Name = 3,
-        // (undocumented)
-        Readonly = 2,
-        // (undocumented)
-        StatusId = 5,
-        // (undocumented)
-        Version = 6
-    }
-}
-
-// Warning: (ae-missing-release-tag) "ScansGridRecordStore" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class ScansGridRecordStore implements GridRecordStore {
-    constructor(_scansService: ScansService);
-    // (undocumented)
-    destroy(): void;
-    // (undocumented)
-    getRecord(index: Integer): Scan;
-    // (undocumented)
-    getRecords(): readonly Scan[];
-    // (undocumented)
-    get recordCount(): number;
-    // (undocumented)
-    recordsInserted(firstInsertedRecordIndex: GridRecordIndex, count: Integer): void;
-    // (undocumented)
-    recordsLoaded(): void;
-    // (undocumented)
-    setRecordEventers(recordsEventers: GridRecordStoreRecordsEventers): void;
 }
 
 // @public (undocumented)
@@ -24457,8 +24338,6 @@ export namespace ScanTableRecordDefinition {
 export class ScanTableRecordSource extends LockOpenListTableRecordSource<Scan, ScanList> {
     constructor(_scansService: ScansService, textFormatterService: TextFormatterService, tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService, definition: ScanTableRecordSourceDefinition);
     // (undocumented)
-    closeLocked(_opener: LockOpenListItem.Opener): void;
-    // (undocumented)
     createDefinition(): ScanTableRecordSourceDefinition;
     // (undocumented)
     createRecordDefinition(idx: Integer): ScanTableRecordDefinition;
@@ -24469,13 +24348,7 @@ export class ScanTableRecordSource extends LockOpenListTableRecordSource<Scan, S
     // (undocumented)
     protected getDefaultFieldSourceDefinitionTypeIds(): TableFieldSourceDefinition.TypeId.Scan[];
     // (undocumented)
-    openLocked(_opener: LockOpenListItem.Opener): Ok<undefined, unknown>;
-    // (undocumented)
     protected subscribeList(opener: LockOpenListItem.Opener): ScanList;
-    // (undocumented)
-    tryLock(_locker: LockOpenListItem.Locker): Promise<Result<void>>;
-    // (undocumented)
-    unlock(_locker: LockOpenListItem.Locker): void;
     // (undocumented)
     protected unsubscribeList(opener: LockOpenListItem.Opener): void;
 }
@@ -26034,15 +25907,6 @@ export class SourceTzOffsetDateTimeTimeRenderValue extends GenericRenderValue<So
 export namespace SourceTzOffsetTimeRenderValueModule {
     // (undocumented)
     export function initaliseStatic(): void;
-}
-
-// Warning: (ae-internal-missing-underscore) The name "StatusIdScansGridField" should be prefixed with an underscore because the declaration is marked as @internal
-//
-// @internal (undocumented)
-export class StatusIdScansGridField extends ScansGridField {
-    constructor();
-    // (undocumented)
-    getViewValue(record: Scan): RenderValue;
 }
 
 // Warning: (ae-missing-release-tag) "StringArrayCorrectnessTableField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -35118,15 +34982,6 @@ export namespace ValueRecentChangeTypeId {
     Increase = RevRecordValueRecentChangeTypeId.Increase;
     const // (undocumented)
     Decrease = RevRecordValueRecentChangeTypeId.Decrease;
-}
-
-// Warning: (ae-internal-missing-underscore) The name "VersionScansGridField" should be prefixed with an underscore because the declaration is marked as @internal
-//
-// @internal (undocumented)
-export class VersionScansGridField extends ScansGridField {
-    constructor();
-    // (undocumented)
-    getViewValue(record: Scan): StringRenderValue;
 }
 
 // Warning: (ae-missing-release-tag) "VisibleTableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)

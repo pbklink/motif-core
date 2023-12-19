@@ -241,7 +241,7 @@ export class ScanEditor {
 
                 const handlers = this._fieldChangesMultiEvent.copyHandlers();
                 for (const handler of handlers) {
-                    handler(this._changedFieldIds, fieldChanger);
+                    handler(changedFieldIds, fieldChanger);
                 }
 
                 if (!saving) {

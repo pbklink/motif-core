@@ -5,7 +5,7 @@
  */
 
 import { Scan, ScanList, ScansService } from '../../../scan/scan-internal-api';
-import { Integer, LockOpenListItem, Ok, Result, UnreachableCaseError } from '../../../sys/sys-internal-api';
+import { Integer, LockOpenListItem, UnreachableCaseError } from '../../../sys/sys-internal-api';
 import { TextFormatterService } from '../../../text-format/text-format-internal-api';
 import {
     TableFieldSourceDefinition
@@ -36,23 +36,6 @@ export class ScanTableRecordSource extends LockOpenListTableRecordSource<Scan, S
 
     override createDefinition(): ScanTableRecordSourceDefinition {
         return this.tableRecordSourceDefinitionFactoryService.createScan();
-    }
-
-    override tryLock(_locker: LockOpenListItem.Locker): Promise<Result<void>> {
-        return Ok.createResolvedPromise(undefined);
-    }
-
-    override unlock(_locker: LockOpenListItem.Locker) {
-        // nothing to do
-    }
-
-
-    override openLocked(_opener: LockOpenListItem.Opener) {
-        return new Ok(undefined);
-    }
-
-    override closeLocked(_opener: LockOpenListItem.Opener) {
-        // nothing to do
     }
 
     override createRecordDefinition(idx: Integer): ScanTableRecordDefinition {
@@ -90,6 +73,7 @@ export class ScanTableRecordSource extends LockOpenListTableRecordSource<Scan, S
     }
 
     protected override getCount() { return this._scanList.count; }
+
     protected override subscribeList(opener: LockOpenListItem.Opener) {
         return this._scanList;
     }

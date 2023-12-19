@@ -25,7 +25,6 @@ import {
     Correctness,
     CorrectnessId,
     EnumInfoOutOfOrderError,
-    Err,
     FieldDataTypeId,
     Guid,
     Integer,
@@ -35,7 +34,7 @@ import {
     LockOpenListItem,
     LockOpenManager,
     MapKey,
-    MultiEvent, Result,
+    MultiEvent, Ok, Result,
     UnreachableCaseError,
     ValueRecentChangeTypeId
 } from "../sys/sys-internal-api";
@@ -274,7 +273,11 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
         for (const fieldId of changedFieldIds) {
             switch (fieldId) {
                 case ScanStatusedDescriptor.FieldId.Id:
-                    throw new AssertInternalError('SHDCEI60153');
+                    if (descriptor.id !== this.id) {
+                        throw new AssertInternalError('SHDCEI60153');
+                    } else {
+                        break
+                    }
                 case ScanStatusedDescriptor.FieldId.Name: {
                     const name = descriptor.name;
                     if (name !== this._name) {
@@ -438,7 +441,7 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
     }
 
     private tryProcessFirstLock(): Promise<Result<void>> {
-        return Err.createResolvedPromise('not implemented');
+        return Promise.resolve(new Ok(undefined));
     }
 
     private processLastUnlock() {
