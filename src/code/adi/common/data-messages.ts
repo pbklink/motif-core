@@ -800,7 +800,7 @@ export class QueryScanDetailDataMessage extends DataMessage {
     zenithCriteriaSource: string | undefined;
     zenithRankSource: string | undefined;
     zenithCriteria: ZenithEncodedScanFormula.BooleanTupleNode;
-    zenithRank: ZenithEncodedScanFormula.NumericTupleNode;
+    zenithRank: ZenithEncodedScanFormula.NumericTupleNode | undefined;
     targetTypeId: ScanTargetTypeId;
     targetMarketIds: readonly MarketId[] | undefined;
     targetLitIvemIds: readonly LitIvemId[] | undefined;

@@ -5196,7 +5196,7 @@ export class CreateScanDataDefinition extends FeedSubscriptionDataDefinition {
     // (undocumented)
     lastSavedTime: Date;
     // (undocumented)
-    maxMatchCount: Integer;
+    maxMatchCount: Integer | undefined;
     // (undocumented)
     name: string;
     // (undocumented)
@@ -5222,7 +5222,7 @@ export class CreateScanDataDefinition extends FeedSubscriptionDataDefinition {
     // (undocumented)
     zenithCriteriaSource: string | undefined;
     // (undocumented)
-    zenithRank: ZenithEncodedScanFormula.NumericTupleNode;
+    zenithRank: ZenithEncodedScanFormula.NumericTupleNode | undefined;
     // (undocumented)
     zenithRankSource: string | undefined;
 }
@@ -8788,6 +8788,8 @@ export namespace ExchangesSettings {
 // @public (undocumented)
 export abstract class ExecuteScanDataDefinition extends FeedSubscriptionDataDefinition {
     // (undocumented)
+    maxMatchCount: Integer | undefined;
+    // (undocumented)
     get referencable(): boolean;
     // (undocumented)
     targets: readonly MarketId[] | readonly LitIvemId[];
@@ -8796,7 +8798,7 @@ export abstract class ExecuteScanDataDefinition extends FeedSubscriptionDataDefi
     // (undocumented)
     zenithCriteria: ZenithEncodedScanFormula.BooleanTupleNode;
     // (undocumented)
-    zenithRank: ZenithEncodedScanFormula.NumericTupleNode;
+    zenithRank: ZenithEncodedScanFormula.NumericTupleNode | undefined;
 }
 
 // Warning: (ae-missing-release-tag) "ExerciseType" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -20232,7 +20234,7 @@ export class QueryScanDetailDataMessage extends DataMessage {
     // (undocumented)
     zenithCriteriaSource: string | undefined;
     // (undocumented)
-    zenithRank: ZenithEncodedScanFormula.NumericTupleNode;
+    zenithRank: ZenithEncodedScanFormula.NumericTupleNode | undefined;
     // (undocumented)
     zenithRankSource: string | undefined;
 }
@@ -22729,7 +22731,7 @@ export interface ScanDetail {
     // (undocumented)
     readonly zenithCriteria: ZenithEncodedScanFormula.BooleanTupleNode;
     // (undocumented)
-    readonly zenithRank: ZenithEncodedScanFormula.NumericTupleNode;
+    readonly zenithRank: ZenithEncodedScanFormula.NumericTupleNode | undefined;
 }
 
 // Warning: (ae-missing-release-tag) "ScanEditor" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -22749,9 +22751,15 @@ export class ScanEditor {
     // (undocumented)
     asyncUpdateScan(): Promise<Result<void>>;
     // (undocumented)
-    beginFieldChanges(fieldChanger: ScanEditor.FieldChanger | undefined): void;
+    beginFieldChanges(modifier: ScanEditor.Modifier | undefined): void;
     // (undocumented)
     calculateTargets(targetTypeId: ScanTargetTypeId): readonly MarketId[] | readonly LitIvemId[];
+    // (undocumented)
+    canApply(): boolean;
+    // (undocumented)
+    canCreateScan(): boolean;
+    // (undocumented)
+    canUpdateScan(): boolean;
     // (undocumented)
     createScan(): void;
     // (undocumented)
@@ -22762,6 +22770,8 @@ export class ScanEditor {
     get criteriaAsZenithEncoded(): ZenithEncodedScanFormula.LogicalTupleNode | [nodeType: ZenithEncodedScanFormula.NumericField, value: number] | [nodeType: ZenithEncodedScanFormula.NumericField, namedParameters: ZenithEncodedScanFormula.NumericNamedParameters] | [nodeType: ZenithEncodedScanFormula.NumericField, subField: ZenithEncodedScanFormula.PriceSubFieldEnum] | [nodeType: ZenithEncodedScanFormula.NumericField, subField: ZenithEncodedScanFormula.PriceSubFieldEnum, min: number | null, max: number | null] | [nodeType: ZenithEncodedScanFormula.DateField, value: string] | [nodeType: ZenithEncodedScanFormula.DateField, namedParameters: ZenithEncodedScanFormula.DateNamedParameters] | [nodeType: ZenithEncodedScanFormula.DateField, subField: ZenithEncodedScanFormula.DateSubFieldEnum, min: string | null, max: string | null] | [nodeType: ZenithEncodedScanFormula.TextField, value: string, as?: ZenithEncodedScanFormula.TextContainsAsEnum | undefined, ignoreCase?: boolean | undefined] | [nodeType: ZenithEncodedScanFormula.TextField, subField: ZenithEncodedScanFormula.TextSubField, value: string, as?: ZenithEncodedScanFormula.TextContainsAsEnum | undefined, ignoreCase?: boolean | undefined] | [nodeType: ZenithEncodedScanFormula.TextField, subField: ZenithEncodedScanFormula.TextSubField, value: string, namedParameters: ZenithEncodedScanFormula.TextNamedParameters] | [nodeType: "IsIndex", value: boolean] | ZenithEncodedScanFormula.ComparisonTupleNode | ZenithEncodedScanFormula.AllNoneTupleNode | undefined;
     // (undocumented)
     get criteriaAsZenithText(): string | undefined;
+    // (undocumented)
+    get criteriaSourceValid(): boolean;
     // (undocumented)
     deleteScan(): void;
     // (undocumented)
@@ -22796,6 +22806,8 @@ export class ScanEditor {
     // (undocumented)
     get rankAsZenithText(): string | undefined;
     // (undocumented)
+    get rankSourceValid(): boolean;
+    // (undocumented)
     readonly readonly: boolean;
     // (undocumented)
     removeOpener(opener: LockOpenListItem.Opener): void;
@@ -22808,7 +22820,7 @@ export class ScanEditor {
     // (undocumented)
     setCriteria(value: ScanFormula.BooleanNode, sourceId: ScanEditor.SourceId | undefined): void;
     // (undocumented)
-    setCriteriaAsZenithText(value: string, fieldChanger?: ScanEditor.FieldChanger): ScanEditor.SetAsZenithTextResult | undefined;
+    setCriteriaAsZenithText(value: string, fieldChanger?: ScanEditor.Modifier): ScanEditor.SetAsZenithTextResult | undefined;
     // (undocumented)
     setDescription(value: string): void;
     // (undocumented)
@@ -22816,9 +22828,9 @@ export class ScanEditor {
     // (undocumented)
     setName(value: string): void;
     // (undocumented)
-    setRank(value: ScanFormula.NumericNode, sourceId: ScanEditor.SourceId | undefined): void;
+    setRank(value: ScanFormula.NumericNode | undefined, sourceId: ScanEditor.SourceId | undefined): void;
     // (undocumented)
-    setRankAsZenithText(value: string, fieldChanger?: ScanEditor.FieldChanger): ScanEditor.SetAsZenithTextResult | undefined;
+    setRankAsZenithText(value: string, fieldChanger?: ScanEditor.Modifier): ScanEditor.SetAsZenithTextResult | undefined;
     // (undocumented)
     setSymbolListEnabled(value: boolean): void;
     // (undocumented)
@@ -22829,6 +22841,8 @@ export class ScanEditor {
     setTargetTypeId(value: ScanTargetTypeId): void;
     // (undocumented)
     setUnmodified(): void;
+    // (undocumented)
+    get sourceValid(): boolean;
     // (undocumented)
     get statusId(): ScanStatusId | undefined;
     // (undocumented)
@@ -22866,7 +22880,7 @@ export namespace ScanEditor {
     const // (undocumented)
     DefaultCriteria: ScanFormula.BooleanNode;
     const // (undocumented)
-    DefaultRank: ScanFormula.NumericPosNode;
+    DefaultRank: ScanFormula.NumericPosNode | undefined;
     // (undocumented)
     export type ErrorEventer = (this: void, errorText: string) => void;
     // (undocumented)
@@ -22881,14 +22895,7 @@ export namespace ScanEditor {
         export function initialise(): void;
     }
     // (undocumented)
-    export interface FieldChanger {
-        // (undocumented)
-        readonly typeInstanceId: string;
-        // (undocumented)
-        readonly typeName: string;
-    }
-    // (undocumented)
-    export type FieldChangesEventHandler = (this: void, changedFieldIds: readonly FieldId[], changer: FieldChanger | undefined) => void;
+    export type FieldChangesEventHandler = (this: void, changedFieldIds: readonly FieldId[], changer: Modifier | undefined) => void;
     // (undocumented)
     export const enum FieldId {
         // (undocumented)
@@ -22941,9 +22948,9 @@ export namespace ScanEditor {
         // (undocumented)
         Deleting = 5,
         // (undocumented)
-        Exists = 3,
+        ExistsDetailLoaded = 3,
         // (undocumented)
-        initialDetailLoading = 2,
+        ExistsInitialDetailLoading = 2,
         // (undocumented)
         NotYetCreated = 0,
         // (undocumented)
@@ -22959,11 +22966,18 @@ export namespace ScanEditor {
         Unmodified = 0
     }
     // (undocumented)
+    export interface Modifier {
+        // (undocumented)
+        readonly typeInstanceId: string;
+        // (undocumented)
+        readonly typeName: string;
+    }
+    // (undocumented)
     export interface SetAsZenithTextResult {
         // (undocumented)
         error: ScanFormulaZenithEncoding.DecodeError | undefined;
         // (undocumented)
-        progress: ScanFormulaZenithEncoding.DecodeProgress;
+        progress: ScanFormulaZenithEncoding.DecodeProgress | undefined;
     }
     // (undocumented)
     export const enum SourceId {
@@ -34571,8 +34585,6 @@ export abstract class UiAction {
     // (undocumented)
     pushInvalid(invalidTitleText?: string): void;
     // (undocumented)
-    pushMissing(): void;
-    // (undocumented)
     pushPlaceholder(value: string): void;
     // (undocumented)
     pushReadonly(): void;
@@ -34581,7 +34593,7 @@ export abstract class UiAction {
     // (undocumented)
     pushTitle(value: string): void;
     // (undocumented)
-    pushValid(titleText?: string): void;
+    pushValidOrMissing(titleText?: string): void;
     // (undocumented)
     pushWaiting(waitingTitleText?: string): void;
     // (undocumented)
@@ -34760,6 +34772,8 @@ export class UpdateScanDataDefinition extends FeedSubscriptionDataDefinition {
     // (undocumented)
     lastSavedTime: Date;
     // (undocumented)
+    maxMatchCount: Integer | undefined;
+    // (undocumented)
     notifications: readonly ScanNotification[] | undefined;
     // (undocumented)
     get referencable(): boolean;
@@ -34786,7 +34800,7 @@ export class UpdateScanDataDefinition extends FeedSubscriptionDataDefinition {
     // (undocumented)
     zenithCriteriaSource: string | undefined;
     // (undocumented)
-    zenithRank: ZenithEncodedScanFormula.NumericTupleNode;
+    zenithRank: ZenithEncodedScanFormula.NumericTupleNode | undefined;
     // (undocumented)
     zenithRankSource: string | undefined;
 }
@@ -38706,16 +38720,7 @@ export namespace ZenithProtocol {
                 readonly Data: PublishPayload;
             }
             // (undocumented)
-            export interface QueryRequest {
-                // (undocumented)
-                readonly Criteria: ZenithEncodedScanFormula.BooleanTupleNode;
-                // (undocumented)
-                readonly Rank: ZenithEncodedScanFormula.NumericTupleNode;
-                // (undocumented)
-                readonly Target: Target;
-                // (undocumented)
-                readonly Type: ScanType;
-            }
+            export type QueryRequest = ScanParametersWithoutNotifications;
         }
         // (undocumented)
         export interface MatchChange {
@@ -38793,13 +38798,18 @@ export namespace ZenithProtocol {
         // (undocumented)
         export type ScanID = string;
         // (undocumented)
-        export interface ScanParameters {
+        export interface ScanParameters extends ScanParametersWithoutNotifications {
+            // (undocumented)
+            readonly Notifications?: [unknown];
+        }
+        // (undocumented)
+        export interface ScanParametersWithoutNotifications {
             // (undocumented)
             readonly Criteria: ZenithEncodedScanFormula.BooleanTupleNode;
             // (undocumented)
-            readonly Notifications?: [unknown];
+            readonly MaxMatchCount?: Integer;
             // (undocumented)
-            readonly Rank: ZenithEncodedScanFormula.NumericTupleNode;
+            readonly Rank?: ZenithEncodedScanFormula.NumericTupleNode;
             // (undocumented)
             readonly Target: Target;
             // (undocumented)

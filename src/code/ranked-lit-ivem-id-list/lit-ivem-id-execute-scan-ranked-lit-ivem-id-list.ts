@@ -34,6 +34,7 @@ export class LitIvemIdExecuteScanRankedLitIvemIdList extends BaseRankedLitIvemId
         copyOfDataDefinition.zenithRank = this._dataDefinition.zenithRank;
         copyOfDataDefinition.targetTypeId = this._dataDefinition.targetTypeId;
         copyOfDataDefinition.targets = this._dataDefinition.targets;
+        copyOfDataDefinition.maxMatchCount = this._dataDefinition.maxMatchCount;
         return new LitIvemIdExecuteScanRankedLitIvemIdListDefinition(this.name, this.description, this.category, copyOfDataDefinition);
     }
 

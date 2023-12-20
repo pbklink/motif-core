@@ -132,6 +132,8 @@ export namespace ZenithMessageConvert {
                 case DataChannelId.CancelOrderRequest: return CancelOrderMessageConvert.parseMessage(subscription, message, actionId);
                 case DataChannelId.MoveOrderRequest: return MoveOrderMessageConvert.parseMessage(subscription, message, actionId);
                 case DataChannelId.CreateScan: return CreateScanMessageConvert.parseMessage(subscription, message, actionId);
+                case DataChannelId.UpdateScan: return UpdateScanMessageConvert.parseMessage(subscription, message, actionId);
+                case DataChannelId.DeleteScan: return DeleteScanMessageConvert.parseMessage(subscription, message, actionId);
                 case DataChannelId.QueryScanDetail: return QueryScanMessageConvert.parseMessage(subscription, message, actionId);
                 case DataChannelId.ScanDescriptors: return ScansMessageConvert.parseMessage(subscription, message, actionId);
                 case DataChannelId.LitIvemIdCreateWatchmakerList: return CreateWatchlistMessageConvert.parseMessage(subscription, message, actionId);

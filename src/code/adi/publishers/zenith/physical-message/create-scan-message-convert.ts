@@ -40,7 +40,7 @@ export namespace CreateScanMessageConvert {
 
         const details: ZenithProtocol.NotifyController.ScanDescriptor = {
             Name: definition.name,
-            Description: definition.description,
+            Description: definition.scanDescription,
             MetaData: ZenithNotifyConvert.ScanMetaType.from(convertMetaData),
         }
 
@@ -49,6 +49,7 @@ export namespace CreateScanMessageConvert {
             Rank: definition.zenithRank,
             Type: ZenithNotifyConvert.ScanType.fromId(definition.targetTypeId),
             Target: ZenithNotifyConvert.Target.fromId(definition.targetTypeId, definition.targets),
+            MaxMatchCount: definition.maxMatchCount,
         }
 
         const result: ZenithProtocol.NotifyController.CreateScan.PublishMessageContainer = {

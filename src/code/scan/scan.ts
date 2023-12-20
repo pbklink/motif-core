@@ -521,8 +521,8 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
                                     const descriptorAndDetail = dataItem.descriptorAndDetail;
                                     this.applyDescriptorChanges(descriptorAndDetail, ScanStatusedDescriptor.Field.allIds);
                                     this.applyDetail(descriptorAndDetail);
-                                    this.endChange();
                                     this._detailed = true;
+                                    this.endChange();
                                 }
                             }
                         },

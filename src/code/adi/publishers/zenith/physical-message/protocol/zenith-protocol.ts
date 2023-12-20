@@ -2079,11 +2079,15 @@ export namespace ZenithProtocol {
         export type TargetMarket = string;
         export type Target = readonly TargetSymbol[] | readonly TargetMarket[];
 
-        export interface ScanParameters {
+        export interface ScanParametersWithoutNotifications {
             readonly Type: ScanType;
             readonly Criteria: ZenithEncodedScanFormula.BooleanTupleNode;
-            readonly Rank: ZenithEncodedScanFormula.NumericTupleNode;
+            readonly Rank?: ZenithEncodedScanFormula.NumericTupleNode;
             readonly Target: Target;
+            readonly MaxMatchCount?: Integer;
+        }
+
+        export interface ScanParameters extends ScanParametersWithoutNotifications {
             readonly Notifications?: [unknown];
         }
 
@@ -2183,12 +2187,7 @@ export namespace ZenithProtocol {
         }
 
         export namespace ExecuteScan {
-            export interface QueryRequest {
-                readonly Type: ScanType;
-                readonly Criteria: ZenithEncodedScanFormula.BooleanTupleNode;
-                readonly Rank: ZenithEncodedScanFormula.NumericTupleNode;
-                readonly Target: Target;
-            }
+            export type QueryRequest = ScanParametersWithoutNotifications;
 
             export interface PublishMessageContainer extends RequestMessageContainer {
                 readonly Data: QueryRequest;

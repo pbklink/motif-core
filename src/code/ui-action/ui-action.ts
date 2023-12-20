@@ -158,23 +158,23 @@ export abstract class UiAction {
         this.pushState(UiAction.StateId.Readonly);
     }
 
-    pushMissing() {
-        this.pushState(UiAction.StateId.Missing);
-    }
-
     pushInvalid(invalidTitleText?: string) {
         this.pushState(UiAction.StateId.Invalid, invalidTitleText);
     }
 
-    pushValid(titleText?: string) {
-        this.pushState(UiAction.StateId.Valid, titleText);
+    pushValidOrMissing(titleText?: string) {
+        if (this._valueRequired && this.valueUndefined) {
+            this.pushState(UiAction.StateId.Missing, titleText);
+        } else {
+            this.pushState(UiAction.StateId.Valid, titleText);
+        }
     }
 
     pushAccepted(value?: boolean) {
         if (value === undefined || value) {
             this.pushState(UiAction.StateId.Accepted);
         } else {
-            this.pushState(UiAction.StateId.Valid);
+            this.pushValidOrMissing();
         }
     }
 
@@ -279,10 +279,10 @@ export abstract class UiAction {
                         break;
                     }
                     case UiAction.AutoAcceptanceTypeId.Valid:
-                        this.pushValid();
+                        this.pushState(UiAction.StateId.Valid);
                         break;
                     case UiAction.AutoAcceptanceTypeId.Accepted:
-                        this.pushAccepted();
+                        this.pushState(UiAction.StateId.Accepted);
                         break;
                     default:
                         throw new UnreachableCaseError('UAPAAU2319971355', this.autoAcceptanceTypeId);
@@ -290,10 +290,13 @@ export abstract class UiAction {
             } else {
                 switch (this._stateId) {
                     case UiAction.StateId.Invalid:
-                        throw new AssertInternalError('UAPAAI2319971355');
+                        this._inputInvalid = true; // make sure state update is blocked
+                        this.pushState(UiAction.StateId.Missing);
+                        break;
                     case UiAction.StateId.Valid:
                     case UiAction.StateId.Accepted:
                         this.pushState(UiAction.StateId.Missing);
+                        break;
                 }
             }
         }
