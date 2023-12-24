@@ -78,18 +78,18 @@ export class MotifServicesService {
                     payload = JSON.parse(payloadText) as MotifServicesService.GetResponsePayload;
                 } catch (e) {
                     const result = this.createPayloadParseErrorResult<string | undefined>(e, payloadText);
-                    return Promise.resolve(result);
+                    return result;
                 }
                 if (payload.successful) {
                     const result: Result<string | undefined> = new Ok(payload.data);
-                    return await Promise.resolve(result);
+                    return result;
                 } else {
                     const result = new Err(`${Strings[StringId.MotifServicesResponsePayloadError]}: ${payload.reason}`);
-                    return await Promise.resolve(result);
+                    return result;
                 }
             } else {
                 const result = new Err(`${Strings[StringId.MotifServicesResponseStatusError]}: ${response.status}: ${response.statusText}`);
-                return await Promise.resolve(result);
+                return result;
             }
         } catch (reason) {
             const errorText = getErrorMessage(reason);
@@ -135,14 +135,14 @@ export class MotifServicesService {
                 }
                 if (payload.successful) {
                     const result: Result<void> = new Ok(undefined);
-                    return await Promise.resolve(result);
+                    return result;
                 } else {
                     const result = new Err(`${Strings[StringId.MotifServicesResponsePayloadError]}: ${payload.reason}`);
-                    return await Promise.resolve(result);
+                    return result;
                 }
             } else {
                 const result = new Err(`${Strings[StringId.MotifServicesResponseStatusError]}: ${response.status}: ${response.statusText}`);
-                return await Promise.resolve(result);
+                return result;
             }
         } catch (reason) {
             const errorText = getErrorMessage(reason);
@@ -182,14 +182,14 @@ export class MotifServicesService {
                 }
                 if (payload.successful) {
                     const result: Result<void> = new Ok(undefined);
-                    return await Promise.resolve(result);
+                    return result;
                 } else {
                     const result = new Err(`${Strings[StringId.MotifServicesResponsePayloadError]}: ${payload.reason}`);
-                    return await Promise.resolve(result);
+                    return result;
                 }
             } else {
                 const result = new Err(`${Strings[StringId.MotifServicesResponseStatusError]}: ${response.status}: ${response.statusText}`);
-                return await Promise.resolve(result);
+                return result;
             }
         } catch (reason) {
             const errorText = getErrorMessage(reason);
@@ -232,14 +232,14 @@ export class MotifServicesService {
                 }
                 if (payload.successful) {
                     const result: Result<string | undefined> = new Ok(payload.data);
-                    return await Promise.resolve(result);
+                    return result;
                 } else {
                     const result = new Err(`${Strings[StringId.MotifServicesResponsePayloadError]}: ${payload.reason}`);
-                    return await Promise.resolve(result);
+                    return result;
                 }
             } else {
                 const result = new Err(`${Strings[StringId.MotifServicesResponseStatusError]}: ${response.status}: ${response.statusText}`);
-                return await Promise.resolve(result);
+                return result;
             }
         } catch (reason) {
             const errorText = getErrorMessage(reason);
@@ -282,14 +282,14 @@ export class MotifServicesService {
                 }
                 if (payload.successful) {
                     const result: Result<string | undefined> = new Ok(payload.data);
-                    return await Promise.resolve(result);
+                    return result;
                 } else {
                     const result = new Err(`${Strings[StringId.MotifServicesResponsePayloadError]}: ${payload.reason}`);
-                    return await Promise.resolve(result);
+                    return result;
                 }
             } else {
                 const result = new Err(`${Strings[StringId.MotifServicesResponseStatusError]}: ${response.status}: ${response.statusText}`);
-                return await Promise.resolve(result);
+                return result;
             }
         } catch (reason) {
             const errorText = getErrorMessage(reason);
@@ -332,14 +332,14 @@ export class MotifServicesService {
                 }
                 if (payload.successful) {
                     const result: Result<string | undefined> = new Ok(payload.data);
-                    return await Promise.resolve(result);
+                    return result;
                 } else {
                     const result = new Err(`${Strings[StringId.MotifServicesResponsePayloadError]}: ${payload.reason}`);
-                    return await Promise.resolve(result);
+                    return result;
                 }
             } else {
                 const result = new Err(`${Strings[StringId.MotifServicesResponseStatusError]}: ${response.status}: ${response.statusText}`);
-                return await Promise.resolve(result);
+                return result;
             }
         } catch (reason) {
             const errorText = getErrorMessage(reason);

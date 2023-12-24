@@ -5,7 +5,6 @@
  */
 
 import { ChangeSubscribableComparableList } from './change-subscribable-comparable-list';
-import { ComparableList } from './comparable-list';
 import { ErrorCode } from './error-code';
 import { DuplicateError } from './external-error';
 import { UnreachableCaseError } from './internal-error';
@@ -120,6 +119,14 @@ export class MappedComparableList<T extends Mappable> extends ChangeSubscribable
         super.removeAtIndex(index);
     }
 
+    override removeAtIndices(removeIndices: Integer[]) {
+        for (const removeIndex of removeIndices) {
+            const item = this.items[removeIndex];
+            this._map.delete(item.mapKey);
+        }
+        super.removeAtIndices(removeIndices);
+    }
+
     override removeRange(index: Integer, deleteCount: Integer) {
         const nextRangeIdx = index + deleteCount;
         for (let i = index; i < nextRangeIdx; i++) {
@@ -129,11 +136,11 @@ export class MappedComparableList<T extends Mappable> extends ChangeSubscribable
         super.removeRange(index, deleteCount);
     }
 
-    override removeItems(items: readonly T[], beforeRemoveRangeCallBack?: ComparableList.BeforeRemoveRangeCallBack) {
-        for (const item of items) {
+    override removeItems(removeItems: readonly T[]) {
+        for (const item of removeItems) {
             this._map.delete(item.mapKey);
         }
-        super.removeItems(items, beforeRemoveRangeCallBack);
+        super.removeItems(removeItems);
     }
 
     override extract(value: T): T {

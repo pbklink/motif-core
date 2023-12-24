@@ -15,6 +15,7 @@ export * from './holding-table-value-source';
 export * from './lit-ivem-alternate-codes-table-value-source';
 export * from './lit-ivem-base-detail-table-value-source';
 export * from './lit-ivem-extended-detail-table-value-source';
+export * from './lit-ivem-id-table-value-source';
 export * from './myx-lit-ivem-attributes-table-value-source';
 export * from './order-table-value-source';
 export * from './ranked-lit-ivem-id-list-directory-item-table-value-source';

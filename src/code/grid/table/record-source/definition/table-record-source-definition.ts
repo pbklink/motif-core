@@ -81,6 +81,7 @@ export namespace TableRecordSourceDefinition {
 
     export const enum TypeId {
         Null,
+        LitIvemIdComparableList,
         LitIvemDetailsFromSearchSymbols,
         Watchlist,
         MarketMovers,
@@ -130,6 +131,12 @@ export namespace TableRecordSourceDefinition {
                 name: 'Null',
                 display: StringId.TableRecordDefinitionList_ListTypeDisplay_Null,
                 abbr: StringId.TableRecordDefinitionList_ListTypeAbbr_Null
+            },
+            LitIvemIdComparableList: {
+                id: TableRecordSourceDefinition.TypeId.LitIvemIdComparableList,
+                name: 'LitIvemIdList',
+                display: StringId.TableRecordDefinitionList_ListTypeDisplay_LitIvemIdList,
+                abbr: StringId.TableRecordDefinitionList_ListTypeAbbr_LitIvemIdList,
             },
             LitIvemDetailsFromSearchSymbols: {
                 id: TableRecordSourceDefinition.TypeId.LitIvemDetailsFromSearchSymbols,

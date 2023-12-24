@@ -16,7 +16,7 @@ import {
 import { TableRecordSource } from './table-record-source';
 
 /** @public */
-export abstract class BadnessListTableRecordSource<Record, RecordList extends BadnessList<Record>> extends TableRecordSource {
+export abstract class SubscribeBadnessListTableRecordSource<Record, RecordList extends BadnessList<Record>> extends TableRecordSource {
     private _recordList: RecordList;
     private _recordListListChangeEventSubscriptionId: MultiEvent.SubscriptionId;
     // private _recordListBeforeRecordChangeEventSubscriptionId: MultiEvent.SubscriptionId;

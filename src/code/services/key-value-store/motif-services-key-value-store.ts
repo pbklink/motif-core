@@ -15,15 +15,15 @@ export class MotifServicesKeyValueStore implements KeyValueStore {
     constructor(private _motifServicesService: MotifServicesService) {
     }
 
-    public async getItem(key: string, operatorId: ServiceOperatorId | undefined): Promise<Result<string | undefined>> {
+    public getItem(key: string, operatorId: ServiceOperatorId | undefined): Promise<Result<string | undefined>> {
         return this._motifServicesService.getUserSetting(key, operatorId);
     }
 
-    public async setItem(key: string, value: string, operatorId: ServiceOperatorId | undefined): Promise<Result<void>> {
+    public setItem(key: string, value: string, operatorId: ServiceOperatorId | undefined): Promise<Result<void>> {
         return this._motifServicesService.setUserSetting(key, value, operatorId);
     }
 
-    public async removeItem(key: string, operatorId: ServiceOperatorId | undefined): Promise<Result<void>> {
+    public removeItem(key: string, operatorId: ServiceOperatorId | undefined): Promise<Result<void>> {
         return this._motifServicesService.deleteUserSetting(key, operatorId);
     }
 }

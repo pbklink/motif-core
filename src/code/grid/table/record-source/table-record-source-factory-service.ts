@@ -23,6 +23,7 @@ import {
     GridFieldTableRecordSourceDefinition,
     HoldingTableRecordSourceDefinition,
     LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition,
+    LitIvemIdComparableListTableRecordSourceDefinition,
     OrderTableRecordSourceDefinition,
     RankedLitIvemIdListDirectoryItemTableRecordSourceDefinition,
     RankedLitIvemIdListTableRecordSourceDefinition,
@@ -37,6 +38,7 @@ import { FeedTableRecordSource } from './feed-table-record-source';
 import { GridFieldTableRecordSource } from './grid-field-table-record-source';
 import { HoldingTableRecordSource } from './holding-table-record-source';
 import { LitIvemDetailFromSearchSymbolsTableRecordSource } from './lit-ivem-detail-from-search-symbols-table-record-source';
+import { LitIvemIdComparableListTableRecordSource } from './lit-ivem-id-comparable-list-table-record-source';
 import { OrderTableRecordSource } from './order-table-record-source';
 import { RankedLitIvemIdListDirectoryItemTableRecordSource } from './ranked-lit-ivem-id-list-directory-item-table-record-source';
 import { RankedLitIvemIdListTableRecordSource } from './ranked-lit-ivem-id-list-table-record-source';
@@ -59,6 +61,7 @@ export class TableRecordSourceFactoryService {
     createFromDefinition(definition: TableRecordSourceDefinition): TableRecordSource {
         switch (definition.typeId) {
             case TableRecordSourceDefinition.TypeId.Null: throw new NotImplementedError('TRSFCFDN29984');
+            case TableRecordSourceDefinition.TypeId.LitIvemIdComparableList: return this.createLitIvemIdComparableList(definition);
             case TableRecordSourceDefinition.TypeId.LitIvemDetailsFromSearchSymbols: return this.createLitIvemDetailFromSearchSymbols(definition);
             case TableRecordSourceDefinition.TypeId.Watchlist: return this.createWatchlist(definition);
             case TableRecordSourceDefinition.TypeId.MarketMovers: throw new NotImplementedError('TRSFCFDMM3820');
@@ -83,6 +86,20 @@ export class TableRecordSourceFactoryService {
             case TableRecordSourceDefinition.TypeId.GridField: return this.createGridField(definition);
             case TableRecordSourceDefinition.TypeId.ScanTest: return this.createScanTest(definition);
             default: throw new UnreachableCaseError('TDLFCFTID17742', definition.typeId);
+        }
+    }
+
+    createLitIvemIdComparableList(definition: TableRecordSourceDefinition) {
+        if (definition instanceof LitIvemIdComparableListTableRecordSourceDefinition) {
+            return new LitIvemIdComparableListTableRecordSource(
+                this._adiService,
+                this._symbolDetailCacheService,
+                this._textFormatterService,
+                this._tableRecordSourceDefinitionFactoryService,
+                definition
+            );
+        } else {
+            throw new AssertInternalError('TRSFCLIIFSS21099');
         }
     }
 

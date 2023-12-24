@@ -197,6 +197,12 @@ export class MarketIdTableValue extends EnumTableValue {
         this.renderValueTypeId = RenderValue.TypeId.MarketId;
     }
 }
+export class DataEnvironmentIdTableValue extends EnumTableValue {
+    constructor() {
+        super();
+        this.renderValueTypeId = RenderValue.TypeId.DataEnvironmentId;
+    }
+}
 export class ExerciseTypeIdTableValue extends EnumTableValue {
     constructor() {
         super();

@@ -17,6 +17,7 @@ import { HoldingTableFieldSourceDefinition } from './holding-table-field-source-
 import { LitIvemAlternateCodesTableFieldSourceDefinition } from './lit-ivem-alternate-codes-table-field-source-definition';
 import { LitIvemBaseDetailTableFieldSourceDefinition } from './lit-ivem-base-detail-table-field-source-definition';
 import { LitIvemExtendedDetailTableFieldSourceDefinition } from './lit-ivem-extended-detail-table-field-source-definition';
+import { LitIvemIdTableFieldSourceDefinition } from './lit-ivem-id-table-field-source-definition';
 import { MyxLitIvemAttributesTableFieldSourceDefinition } from './myx-lit-ivem-attributes-table-field-source-definition';
 import { OrderTableFieldSourceDefinition } from './order-table-field-source-definition';
 import { RankedLitIvemIdListDirectoryItemTableFieldSourceDefinition } from './ranked-lit-ivem-id-list-directory-item-table-field-source-definition';
@@ -31,6 +32,9 @@ export class TableFieldSourceDefinitionRegistryService {
 
     get feed() {
         return this.get(TableFieldSourceDefinition.TypeId.Feed) as FeedTableFieldSourceDefinition;
+    }
+    get litIvemId() {
+        return this.get(TableFieldSourceDefinition.TypeId.LitIvemId) as LitIvemIdTableFieldSourceDefinition;
     }
     get rankedLitIvemId() {
         return this.get(TableFieldSourceDefinition.TypeId.RankedLitIvemId) as RankedLitIvemIdTableFieldSourceDefinition;
@@ -102,6 +106,8 @@ export class TableFieldSourceDefinitionRegistryService {
         switch (typeId) {
             case TableFieldSourceDefinition.TypeId.Feed:
                 return new FeedTableFieldSourceDefinition();
+            case TableFieldSourceDefinition.TypeId.LitIvemId:
+                return new LitIvemIdTableFieldSourceDefinition();
             case TableFieldSourceDefinition.TypeId.RankedLitIvemId:
                 return new RankedLitIvemIdTableFieldSourceDefinition();
             case TableFieldSourceDefinition.TypeId.LitIvemBaseDetail:

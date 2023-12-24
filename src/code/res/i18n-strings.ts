@@ -353,6 +353,14 @@ export const enum StringId {
     SecurityFieldHeading_ShareIssue,
     SecurityFieldDisplay_StatusNote,
     SecurityFieldHeading_StatusNote,
+    LitIvemIdFieldDisplay_LitIvemId,
+    LitIvemIdFieldHeading_LitIvemId,
+    LitIvemIdFieldDisplay_Code,
+    LitIvemIdFieldHeading_Code,
+    LitIvemIdFieldDisplay_LitId,
+    LitIvemIdFieldHeading_LitId,
+    LitIvemIdFieldDisplay_EnvironmentId,
+    LitIvemIdFieldHeading_EnvironmentId,
     RankedLitIvemIdFieldDisplay_LitIvemId,
     RankedLitIvemIdFieldHeading_LitIvemId,
     RankedLitIvemIdFieldDisplay_Rank,
@@ -369,6 +377,8 @@ export const enum StringId {
     RankedLitIvemIdListDisplay_LitIvemIdExecuteScan,
     TableRecordDefinitionList_ListTypeDisplay_Null,
     TableRecordDefinitionList_ListTypeAbbr_Null,
+    TableRecordDefinitionList_ListTypeDisplay_LitIvemIdList,
+    TableRecordDefinitionList_ListTypeAbbr_LitIvemIdList,
     TableRecordDefinitionList_ListTypeDisplay_LitIvemDetailsFromSearchSymbols,
     TableRecordDefinitionList_ListTypeAbbr_LitIvemDetailsFromSearchSymbols,
     TableRecordDefinitionList_ListTypeDisplay_Watchlist,
@@ -1091,7 +1101,7 @@ export const enum StringId {
     ZenithPublisherStateDisplay_Finalised,
     ZenithPublisherReconnectReasonDisplay_NewEndpoints,
     ZenithPublisherReconnectReasonDisplay_PassportTokenFailure,
-    ZenithPublisherReconnectReasonDisplay_SocketOpenFailure,
+    ZenithPublisherReconnectReasonDisplay_SocketConnectingError,
     ZenithPublisherReconnectReasonDisplay_AuthRejected,
     ZenithPublisherReconnectReasonDisplay_AuthExpired,
     ZenithPublisherReconnectReasonDisplay_UnexpectedSocketClose,
@@ -2049,6 +2059,7 @@ export const enum StringId {
     ScanEditorComponent_RevertTitle,
     ScanEditorComponent_DeleteTitle,
     ScanEditorComponent_TestTitle,
+    ScanEditorTargetsComponent_EditMultiSymbolGridColumns,
     GridLayoutDefinitionColumnHeading_FieldName,
     GridLayoutDefinitionColumnDescription_FieldName,
     GridLayoutDefinitionColumnHeading_FieldHeading,
@@ -3875,6 +3886,46 @@ export namespace I18nStrings {
                 en: 'Status Note',
             }
         },
+        LitIvemIdFieldDisplay_LitIvemId: {
+            id: StringId.LitIvemIdFieldDisplay_LitIvemId, translations: {
+                en: 'Symbol',
+            }
+        },
+        LitIvemIdFieldHeading_LitIvemId: {
+            id: StringId.LitIvemIdFieldHeading_LitIvemId, translations: {
+                en: 'Symbol',
+            }
+        },
+        LitIvemIdFieldDisplay_Code: {
+            id: StringId.LitIvemIdFieldDisplay_Code, translations: {
+                en: 'Code',
+            }
+        },
+        LitIvemIdFieldHeading_Code: {
+            id: StringId.LitIvemIdFieldHeading_Code, translations: {
+                en: 'Code',
+            }
+        },
+        LitIvemIdFieldDisplay_LitId: {
+            id: StringId.LitIvemIdFieldDisplay_LitId, translations: {
+                en: 'Market',
+            }
+        },
+        LitIvemIdFieldHeading_LitId: {
+            id: StringId.LitIvemIdFieldHeading_LitId, translations: {
+                en: 'Market',
+            }
+        },
+        LitIvemIdFieldDisplay_EnvironmentId: {
+            id: StringId.LitIvemIdFieldDisplay_EnvironmentId, translations: {
+                en: 'Environment',
+            }
+        },
+        LitIvemIdFieldHeading_EnvironmentId: {
+            id: StringId.LitIvemIdFieldHeading_EnvironmentId, translations: {
+                en: 'Environment',
+            }
+        },
         RankedLitIvemIdFieldDisplay_LitIvemId: {
             id: StringId.RankedLitIvemIdFieldDisplay_LitIvemId, translations: {
                 en: 'Symbol',
@@ -3953,6 +4004,16 @@ export namespace I18nStrings {
         TableRecordDefinitionList_ListTypeAbbr_Null: {
             id: StringId.TableRecordDefinitionList_ListTypeAbbr_Null, translations: {
                 en: 'Nul',
+            }
+        },
+        TableRecordDefinitionList_ListTypeDisplay_LitIvemIdList: {
+            id: StringId.TableRecordDefinitionList_ListTypeDisplay_LitIvemIdList, translations: {
+                en: 'Symbols',
+            }
+        },
+        TableRecordDefinitionList_ListTypeAbbr_LitIvemIdList: {
+            id: StringId.TableRecordDefinitionList_ListTypeAbbr_LitIvemIdList, translations: {
+                en: 'Sym',
             }
         },
         TableRecordDefinitionList_ListTypeDisplay_LitIvemDetailsFromSearchSymbols: {
@@ -7566,9 +7627,9 @@ export namespace I18nStrings {
                 en: 'Passport Token Failure',
             }
         },
-        ZenithPublisherReconnectReasonDisplay_SocketOpenFailure: {
-            id: StringId.ZenithPublisherReconnectReasonDisplay_SocketOpenFailure, translations: {
-                en: 'Socket Open Failure',
+        ZenithPublisherReconnectReasonDisplay_SocketConnectingError: {
+            id: StringId.ZenithPublisherReconnectReasonDisplay_SocketConnectingError, translations: {
+                en: 'Socket Connecting Error',
             }
         },
         ZenithPublisherReconnectReasonDisplay_AuthRejected: {
@@ -12360,8 +12421,11 @@ export namespace I18nStrings {
                 en: 'Execute scan immediately and see results',
             }
         },
-
-
+        ScanEditorTargetsComponent_EditMultiSymbolGridColumns: {
+            id: StringId.ScanEditorTargetsComponent_EditMultiSymbolGridColumns, translations: {
+                en: 'Edit symbol grid columns'
+            }
+        },
         GridLayoutDefinitionColumnHeading_FieldName: {
             id: StringId.GridLayoutDefinitionColumnHeading_FieldName, translations: {
                 en: 'Name',

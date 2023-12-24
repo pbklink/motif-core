@@ -14,10 +14,10 @@ import {
 import { RankedLitIvemIdListDirectoryItemTableRecordDefinition, TableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
 import { TableRecord } from '../record/grid-table-record-internal-api';
 import { RankedLitIvemIdListDirectoryItemTableValueSource } from '../value-source/grid-table-value-source-internal-api';
-import { BadnessListTableRecordSource } from './badness-list-table-record-source';
 import { RankedLitIvemIdListDirectoryItemTableRecordSourceDefinition, TableRecordSourceDefinitionFactoryService } from './definition/grid-table-record-source-definition-internal-api';
+import { SubscribeBadnessListTableRecordSource } from './subscribe-badness-list-table-record-source';
 
-export class RankedLitIvemIdListDirectoryItemTableRecordSource extends BadnessListTableRecordSource<RankedLitIvemIdListDirectoryItem, RankedLitIvemIdListDirectory> {
+export class RankedLitIvemIdListDirectoryItemTableRecordSource extends SubscribeBadnessListTableRecordSource<RankedLitIvemIdListDirectoryItem, RankedLitIvemIdListDirectory> {
     private readonly _listDirectory: RankedLitIvemIdListDirectory;
 
     constructor(

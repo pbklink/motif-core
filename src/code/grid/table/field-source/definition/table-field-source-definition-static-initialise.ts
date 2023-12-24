@@ -13,6 +13,7 @@ import { HoldingTableFieldSourceDefinition } from './holding-table-field-source-
 import { LitIvemAlternateCodesTableFieldSourceDefinition } from './lit-ivem-alternate-codes-table-field-source-definition';
 import { LitIvemBaseDetailTableFieldSourceDefinition } from './lit-ivem-base-detail-table-field-source-definition';
 import { LitIvemExtendedDetailTableFieldSourceDefinition } from './lit-ivem-extended-detail-table-field-source-definition';
+import { LitIvemIdTableFieldSourceDefinition } from './lit-ivem-id-table-field-source-definition';
 import { MyxLitIvemAttributesTableFieldSourceDefinition } from './myx-lit-ivem-attributes-table-field-source-definition';
 import { OrderTableFieldSourceDefinition } from './order-table-field-source-definition';
 import { PrefixableSecurityDataItemTableFieldSourceDefinition } from './prefixable-security-data-item-table-field-source-definition';
@@ -37,6 +38,7 @@ export namespace TableFieldSourceDefinitionStaticInitialise {
         TopShareholderTableFieldSourceDefinition.initialiseStatic();
         CallPutTableFieldSourceDefinition.initialiseStatic();
         ScanTableFieldSourceDefinition.initialiseStatic();
+        LitIvemIdTableFieldSourceDefinition.initialiseStatic();
         RankedLitIvemIdTableFieldSourceDefinition.initialiseStatic();
         EditableGridLayoutDefinitionColumnTableFieldSourceDefinition.initialiseStatic();
         RankedLitIvemIdListDirectoryItemTableFieldSourceDefinition.initialiseStatic();

@@ -4,6 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
+export * from './badness-list-table-record-source-definition';
 export * from './balances-table-record-source-definition';
 export * from './brokerage-account-group-table-record-source-definition';
 export * from './brokerage-account-table-record-source-definition';
@@ -14,6 +15,7 @@ export * from './feed-table-record-source-definition';
 export * from './grid-field-table-record-source-definition';
 export * from './holding-table-record-source-definition';
 export * from './lit-ivem-detail-from-symbol-search-table-record-source-definition';
+export * from './lit-ivem-id-comparable-list-table-record-source-definition';
 export * from './order-table-record-source-definition';
 export * from './ranked-lit-ivem-id-list-directory-item-table-record-source-definition';
 export * from './ranked-lit-ivem-id-list-table-record-source-definition';

@@ -8,6 +8,7 @@ import { LitIvemId } from '../../../adi/adi-internal-api';
 import { TableRecordDefinition } from './table-record-definition';
 
 export interface LitIvemIdTableRecordDefinition extends TableRecordDefinition {
+    readonly typeId: TableRecordDefinition.TypeId.LitIvemId;
     readonly litIvemId: LitIvemId;
 }
 

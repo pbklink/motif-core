@@ -32,7 +32,7 @@ export abstract class UiAction {
     private _inputInvalidBlockedStateTitle: string | undefined;
 
     private _caption: string;
-    private _title: string;
+    private _title = '';
     private _defaultTitle = '';
     private _stateTitleActive = false;
     private _placeholder = '';

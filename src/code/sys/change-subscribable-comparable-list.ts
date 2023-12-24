@@ -75,13 +75,17 @@ export class ChangeSubscribableComparableList<T> extends ComparableList<T> imple
         super.removeAtIndex(index);
     }
 
+    override  removeAtIndices(removeIndices: Integer[]) {
+        super.removeAtIndices(removeIndices, (index, count) => { this.notifyListChange(UsableListChangeTypeId.Remove, index, count); } )
+    }
+
     override removeRange(index: Integer, deleteCount: Integer) {
         this.notifyListChange(UsableListChangeTypeId.Remove, index, deleteCount);
         super.removeRange(index, deleteCount);
     }
 
-    override removeItems(items: readonly T[], beforeRemoveRangeCallBack?: ComparableList.BeforeRemoveRangeCallBack) {
-        super.removeItems(items, (index, count) => { this.handleBeforeRemoveRangeCallback(index, count, beforeRemoveRangeCallBack); } )
+    override removeItems(removeItems: readonly T[]) {
+        super.removeItems(removeItems, (index, count) => { this.notifyListChange(UsableListChangeTypeId.Remove, index, count); } )
     }
 
     override exchange(index1: Integer, index2: Integer) {
@@ -90,18 +94,6 @@ export class ChangeSubscribableComparableList<T> extends ComparableList<T> imple
         super.exchange(index1, index2);
         this.notifyListChange(UsableListChangeTypeId.AfterReplace, index1, 1);
         this.notifyListChange(UsableListChangeTypeId.AfterReplace, index2, 1);
-    }
-
-    override extract(value: T): T {
-        const idx = this.indexOf(value);
-        if (idx < 0) {
-            throw new AssertInternalError('CSMCLE40401', `${JSON.stringify(value)}`);
-        } else {
-            this.notifyListChange(UsableListChangeTypeId.Remove, idx, 1);
-            const result = this.items[idx];
-            super.removeAtIndex(idx);
-            return result;
-        }
     }
 
     override clear() {
@@ -157,12 +149,5 @@ export class ChangeSubscribableComparableList<T> extends ComparableList<T> imple
         const afterRegistrationIndex = UsableListChangeType.registerMoveParameters(fromIndex, toIndex, count);
         this.notifyListChange(UsableListChangeTypeId.AfterMove, afterRegistrationIndex, 0);
         UsableListChangeType.deregisterMoveParameters(afterRegistrationIndex);
-    }
-
-    private handleBeforeRemoveRangeCallback(index: Integer, count: Integer, originalBeforeRemoveRangeCallBack: ComparableList.BeforeRemoveRangeCallBack | undefined) {
-        this.notifyListChange(UsableListChangeTypeId.Remove, index, count);
-        if (originalBeforeRemoveRangeCallBack !== undefined) {
-            originalBeforeRemoveRangeCallBack(index, count);
-        }
     }
 }

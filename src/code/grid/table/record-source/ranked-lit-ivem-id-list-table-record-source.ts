@@ -18,11 +18,11 @@ import {
 import { RankedLitIvemIdTableRecordDefinition, TableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
 import { TableRecord } from '../record/grid-table-record-internal-api';
 import { LitIvemBaseDetailTableValueSource, RankedLitIvemIdTableValueSource, SecurityDataItemTableValueSource } from '../value-source/grid-table-value-source-internal-api';
-import { BadnessListTableRecordSource } from './badness-list-table-record-source';
 import { RankedLitIvemIdListTableRecordSourceDefinition, TableRecordSourceDefinitionFactoryService } from './definition/grid-table-record-source-definition-internal-api';
 import { PromisedLitIvemBaseDetail } from './promised-lit-ivem-base-detail';
+import { SubscribeBadnessListTableRecordSource } from './subscribe-badness-list-table-record-source';
 
-export class RankedLitIvemIdListTableRecordSource extends BadnessListTableRecordSource<RankedLitIvemId, RankedLitIvemIdList> {
+export class RankedLitIvemIdListTableRecordSource extends SubscribeBadnessListTableRecordSource<RankedLitIvemId, RankedLitIvemIdList> {
     readonly declare definition: RankedLitIvemIdListTableRecordSourceDefinition;
     private _lockedRankedLitIvemIdList: RankedLitIvemIdList;
 

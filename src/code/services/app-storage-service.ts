@@ -33,23 +33,23 @@ export class AppStorageService {
         }
     }
 
-    async getItem(key: KeyValueStore.Key | string, operator = false): Promise<Result<string | undefined>> {
+    getItem(key: KeyValueStore.Key | string, operator = false): Promise<Result<string | undefined>> {
         const operatorId = operator ? this._serviceOperatorId : undefined;
         return this._keyValueStore.getItem(key, operatorId);
     }
 
-    async getSubNamedItem(key: KeyValueStore.Key | string, subName: string, group = false): Promise<Result<string | undefined>> {
+    getSubNamedItem(key: KeyValueStore.Key | string, subName: string, group = false): Promise<Result<string | undefined>> {
         const stringKey = AppStorageService.makeSubNamedKey(key, subName);
         const operatorId = group ? this._serviceOperatorId : undefined;
         return this._keyValueStore.getItem(stringKey, operatorId);
     }
 
-    async setItem(key: KeyValueStore.Key | string, value: string, group = false): Promise<Result<void>> {
+    setItem(key: KeyValueStore.Key | string, value: string, group = false): Promise<Result<void>> {
         const opeatorId = group ? this._serviceOperatorId : undefined;
         return this._keyValueStore.setItem(key, value, opeatorId);
     }
 
-    async setSubNamedItem(
+    setSubNamedItem(
         key: KeyValueStore.Key | string,
         subName: string,
         value: string,
@@ -60,12 +60,12 @@ export class AppStorageService {
         return this._keyValueStore.setItem(stringKey, value, operatorId);
     }
 
-    async removeItem(key: KeyValueStore.Key | string, group = false): Promise<Result<void>> {
+    removeItem(key: KeyValueStore.Key | string, group = false): Promise<Result<void>> {
         const operatorId = group ? this._serviceOperatorId : undefined;
         return this._keyValueStore.removeItem(key, operatorId);
     }
 
-    async removeSubNamedItem(key: KeyValueStore.Key | string, subName: string, group = false): Promise<Result<void>> {
+    removeSubNamedItem(key: KeyValueStore.Key | string, subName: string, group = false): Promise<Result<void>> {
         const stringKey = AppStorageService.makeSubNamedKey(key, subName);
         const operatorId = group ? this._serviceOperatorId : undefined;
         return this._keyValueStore.removeItem(stringKey, operatorId);

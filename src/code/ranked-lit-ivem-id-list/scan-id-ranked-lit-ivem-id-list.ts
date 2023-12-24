@@ -42,7 +42,6 @@ export class ScanIdRankedLitIvemIdList extends BaseRankedLitIvemIdList {
             throw new AssertInternalError('SMSRLIILGD20091');
         } else {
             const description = lockedScan.description;
-            // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
             return description === undefined ? '' : description;
         }
     }
