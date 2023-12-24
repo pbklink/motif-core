@@ -1346,10 +1346,11 @@ export class ZenithCounterDataMessage extends DataMessage {
 
     authExpiryTime: SysTick.Time;
     authFetchSuccessiveFailureCount: Integer;
-    socketOpenSuccessiveFailureCount: Integer;
+    socketConnectingSuccessiveErrorCount: Integer;
     zenithTokenFetchSuccessiveFailureCount: Integer;
     zenithTokenRefreshSuccessiveFailureCount: Integer;
-    socketCloseSuccessiveFailureCount: Integer;
+    socketClosingSuccessiveErrorCount: Integer;
+    socketShortLivedClosedSuccessiveErrorCount: Integer;
     unexpectedSocketCloseCount: Integer;
     timeoutCount: Integer;
     lastTimeoutStateId: ZenithPublisherStateId | undefined;

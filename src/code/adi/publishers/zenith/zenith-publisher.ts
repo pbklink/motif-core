@@ -270,7 +270,7 @@ export class ZenithPublisher extends AdiPublisher {
         switch (this._websocket.readyState) {
             case ZenithWebsocket.ReadyState.Connecting:
                 this.logError(`Websocket connecting error: ${errorType}`);
-                this._stateEngine.adviseSocketOpenFailure();
+                this._stateEngine.adviseSocketConnectingError();
                 break;
             case ZenithWebsocket.ReadyState.Open:
                 this.logError(`Websocket opened error: ${errorType}`);
@@ -278,10 +278,11 @@ export class ZenithPublisher extends AdiPublisher {
                 break;
             case ZenithWebsocket.ReadyState.Closing:
                 this.logError(`Websocket closing error: ${errorType}, State: ${this._stateEngine.activeWaitId}`);
-                this._stateEngine.adviseSocketCloseFailure();
+                this._stateEngine.adviseSocketClosingError();
                 break;
             case ZenithWebsocket.ReadyState.Closed:
                 this.logError(`Websocket closed error: ${errorType}`);
+                this._stateEngine.adviseSocketClosedError();
                 break;
         }
     }
@@ -550,20 +551,17 @@ export class ZenithPublisher extends AdiPublisher {
                 default: return 20000;
             }
         } else {
-            const socketOpenSuccessiveFailureCount = this._stateEngine.socketOpenSuccessiveFailureCount;
-            if (socketOpenSuccessiveFailureCount > 0) {
-                switch (socketOpenSuccessiveFailureCount) {
+            const socketConnectingPlusShortLivedErrorCount = this._stateEngine.socketConnectingSuccessiveErrorCount + this._stateEngine.socketShortLivedClosedSuccessiveErrorCount;
+            if (socketConnectingPlusShortLivedErrorCount > 0) {
+                switch (socketConnectingPlusShortLivedErrorCount) {
                     case 1: return 50;
                     case 2: return 2000;
                     case 3: return 2000;
                     case 4: return 2000;
                     case 5: return 2000;
-                    case 6: return 2000;
-                    case 7: return 2000;
-                    case 8: return 2000;
-                    case 9: return 10000;
-                    case 10: return 10000;
-                    case 11: return 10000;
+                    case 6: return 10000;
+                    case 7: return 10000;
+                    case 8: return 10000;
                     default: return 15000;
                 }
             } else {
@@ -576,7 +574,7 @@ export class ZenithPublisher extends AdiPublisher {
                         default: return 20000;
                     }
                 } else {
-                    return 50;
+                    return 8000;
                 }
             }
         }
@@ -663,10 +661,11 @@ export class ZenithPublisher extends AdiPublisher {
 
         dataMessage.authExpiryTime = this._stateEngine.authExpiryTime;
         dataMessage.authFetchSuccessiveFailureCount = this._stateEngine.authFetchSuccessiveFailureCount;
-        dataMessage.socketOpenSuccessiveFailureCount = this._stateEngine.socketOpenSuccessiveFailureCount;
+        dataMessage.socketConnectingSuccessiveErrorCount = this._stateEngine.socketConnectingSuccessiveErrorCount;
         dataMessage.zenithTokenFetchSuccessiveFailureCount = this._stateEngine.zenithTokenFetchSuccessiveFailureCount;
         dataMessage.zenithTokenRefreshSuccessiveFailureCount = this._stateEngine.zenithTokenRefreshSuccessiveFailureCount;
-        dataMessage.socketCloseSuccessiveFailureCount = this._stateEngine.socketCloseSuccessiveFailureCount;
+        dataMessage.socketClosingSuccessiveErrorCount = this._stateEngine.socketClosingSuccessiveErrorCount;
+        dataMessage.socketShortLivedClosedSuccessiveErrorCount = this._stateEngine.socketShortLivedClosedSuccessiveErrorCount;
         dataMessage.unexpectedSocketCloseCount = this._stateEngine.unexpectedSocketCloseCount;
         dataMessage.timeoutCount = this._stateEngine.timeoutCount;
         dataMessage.lastTimeoutStateId = this._stateEngine.lastTimeoutStateId;

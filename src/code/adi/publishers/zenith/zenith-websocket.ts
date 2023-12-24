@@ -35,10 +35,10 @@ export class ZenithWebsocket {
     open(endpoint: string, waitId: Integer) {
         this._lastOpenWaitId = waitId;
         this._webSocket = new WebSocket(endpoint, ZenithWebsocket._protocol);
-        this._webSocket.addEventListener('open', (ev) => this.handleOpen(ev));
-        this._webSocket.addEventListener('message', (ev) => this.handleMessage(ev));
-        this._webSocket.addEventListener('close', (ev) => this.handleClose(ev));
-        this._webSocket.addEventListener('error', (ev) => this.handleError(ev));
+        this._webSocket.addEventListener('open', (ev) => { this.handleOpen(ev); });
+        this._webSocket.addEventListener('message', (ev) => { this.handleMessage(ev); });
+        this._webSocket.addEventListener('close', (ev) => { this.handleClose(ev); });
+        this._webSocket.addEventListener('error', (ev) => { this.handleError(ev); });
     }
 
     sendAuth(data: string, transactionId: Integer, waitId: Integer) {

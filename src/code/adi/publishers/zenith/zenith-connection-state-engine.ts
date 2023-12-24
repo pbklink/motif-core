@@ -46,10 +46,14 @@ export class ZenithConnectionStateEngine {
     private _authExpiryTime: SysTick.Time;
 
     private _authFetchSuccessiveFailureCount = 0;
-    private _socketOpenSuccessiveFailureCount = 0;
     private _zenithAuthFetchSuccessiveFailureCount = 0;
     private _zenithTokenRefreshSuccessiveFailureCount = 0;
-    private _socketCloseSuccessiveFailureCount = 0;
+
+    private _socketOpenTime = -1;
+    private _socketClosedErrorOccurred = false;
+    private _socketConnectingSuccessiveErrorCount = 0;
+    private _socketClosingSuccessiveErrorCount = 0;
+    private _socketShortLivedClosedSuccessiveErrorCount = 0;
     private _unexpectedSocketCloseCount = 0;
 
     private _reconnectReasonId: ZenithPublisherReconnectReasonId | undefined;
@@ -66,10 +70,11 @@ export class ZenithConnectionStateEngine {
     get authExpiryTime() { return this._authExpiryTime; }
 
     get authFetchSuccessiveFailureCount() { return this._authFetchSuccessiveFailureCount; }
-    get socketOpenSuccessiveFailureCount() { return this._socketOpenSuccessiveFailureCount; }
+    get socketConnectingSuccessiveErrorCount() { return this._socketConnectingSuccessiveErrorCount; }
     get zenithTokenFetchSuccessiveFailureCount() { return this._zenithAuthFetchSuccessiveFailureCount; }
     get zenithTokenRefreshSuccessiveFailureCount() { return this._zenithTokenRefreshSuccessiveFailureCount; }
-    get socketCloseSuccessiveFailureCount() { return this._socketCloseSuccessiveFailureCount; }
+    get socketClosingSuccessiveErrorCount() { return this._socketClosingSuccessiveErrorCount; }
+    get socketShortLivedClosedSuccessiveErrorCount() { return this._socketShortLivedClosedSuccessiveErrorCount; }
     get unexpectedSocketCloseCount() { return this._unexpectedSocketCloseCount; }
     get reconnectReasonId() { return this._reconnectReasonId; }
     get timeoutCount() { return this._timeoutCount; }
@@ -115,15 +120,16 @@ export class ZenithConnectionStateEngine {
 
     adviseSocketOpenSuccess() {
         if (this.stateId === ZenithPublisherStateId.SocketOpen) {
-            this._socketOpenSuccessiveFailureCount = 0;
+            this._socketConnectingSuccessiveErrorCount = 0;
+            this._socketOpenTime = SysTick.now();
             this.action(ZenithConnectionStateEngine.ActionId.FetchAuth);
         }
     }
 
-    adviseSocketOpenFailure() {
+    adviseSocketConnectingError() {
         if (this.stateId === ZenithPublisherStateId.SocketOpen) {
-            this._socketOpenSuccessiveFailureCount++;
-            this.reconnect(ZenithPublisherReconnectReasonId.SocketOpenFailure);
+            this._socketConnectingSuccessiveErrorCount++;
+            this.reconnect(ZenithPublisherReconnectReasonId.SocketConnectingError);
         }
     }
 
@@ -187,8 +193,12 @@ export class ZenithConnectionStateEngine {
     }
 
     adviseSocketClose(reconnectReasonId: ZenithPublisherReconnectReasonId, code: number, reason: string, wasClean: boolean) {
+        if (!this._socketClosedErrorOccurred) {
+            this._socketShortLivedClosedSuccessiveErrorCount = 0;
+            this._socketClosedErrorOccurred = false;
+        }
         if (this.stateId === ZenithPublisherStateId.SocketClose) {
-            this._socketCloseSuccessiveFailureCount = 0;
+            this._socketClosingSuccessiveErrorCount = 0;
             this.disconnect(true, code, reason, wasClean); // we were expecting so reconnect was already called
         } else {
             this._unexpectedSocketCloseCount++;
@@ -196,15 +206,24 @@ export class ZenithConnectionStateEngine {
         }
     }
 
-    adviseSocketCloseFailure() {
+    adviseSocketClosingError() {
         if (this.stateId === ZenithPublisherStateId.SocketClose) {
             // assume closed and continue disconnect
             this.disconnect(true);
         } else {
             // weird - reconnect
-            this._socketCloseSuccessiveFailureCount++;
+            this._socketClosingSuccessiveErrorCount++;
             this.reconnect(ZenithPublisherReconnectReasonId.UnexpectedSocketClose);
         }
+    }
+
+    adviseSocketClosedError() {
+        this._socketClosedErrorOccurred = true;
+        const openLifeTime = SysTick.now() - this._socketOpenTime;
+        if (openLifeTime < ZenithConnectionStateEngine.SocketShortOpenLifeMaxTime) {
+            this._socketShortLivedClosedSuccessiveErrorCount++;
+        }
+        this.reconnect(ZenithPublisherReconnectReasonId.UnexpectedSocketClose, true);
     }
 
     adviseReconnectDelayCompleted() {
@@ -273,7 +292,7 @@ export class ZenithConnectionStateEngine {
             default: {
                 const actionWaitId = this._activeWaitId;
                 this.checkClearActionTimeout();
-                this._actionTimeoutHandle = setTimeout(() => this.handleTimeout(actionWaitId), timeout);
+                this._actionTimeoutHandle = setTimeout(() => { this.handleTimeout(actionWaitId); }, timeout);
             }
         }
 
@@ -308,11 +327,12 @@ export class ZenithConnectionStateEngine {
             this._authExpiryTime = 0;
 
             this._authFetchSuccessiveFailureCount = 0;
-            this._socketOpenSuccessiveFailureCount = 0;
+            this._socketConnectingSuccessiveErrorCount = 0;
             this._zenithAuthFetchSuccessiveFailureCount = 0;
             this._zenithTokenRefreshSuccessiveFailureCount = 0;
-            this._socketCloseSuccessiveFailureCount = 0;
-            this._unexpectedSocketCloseCount = 0;
+            this._socketClosingSuccessiveErrorCount = 0;
+            this._socketShortLivedClosedSuccessiveErrorCount = 0;
+            this._socketClosedErrorOccurred = false;
 
             this._reconnectReasonId = undefined;
             this._timeoutCount = 0;
@@ -382,7 +402,9 @@ export class ZenithConnectionStateEngine {
         if (this.finalising) {
             this.setState(ZenithPublisherStateId.Finalised);
         } else {
-            this.action(ZenithConnectionStateEngine.ActionId.ReconnectDelay);
+            if (this.stateId !== ZenithPublisherStateId.ReconnectDelay) {
+                this.action(ZenithConnectionStateEngine.ActionId.ReconnectDelay);
+            }
         }
     }
 }
@@ -400,6 +422,8 @@ export namespace ZenithConnectionStateEngine {
 
     export const nullSocketCloseReason = '';
     export const nullSocketCloseWasClean = true;
+
+    export const SocketShortOpenLifeMaxTime = 20000; // 20 seconds
 
     export type ActionEvent = (this: void, actionId: ActionId, waitId: Integer) => void;
     export type CameOnlineEvent = (this: void) => void;
@@ -454,7 +478,7 @@ export namespace ZenithConnectionStateEngine {
 
         // eslint-disable-next-line @typescript-eslint/no-shadow
         export function initialiseStatic() {
-            const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
+            const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as ActionId);
             if (outOfOrderIdx >= 0) {
                 throw new EnumInfoOutOfOrderError('ZenithConnectionStateEngine.Action', outOfOrderIdx, `${infos[outOfOrderIdx].id}`);
             }

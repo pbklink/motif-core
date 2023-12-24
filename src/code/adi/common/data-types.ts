@@ -1061,7 +1061,7 @@ export const enum ZenithPublisherStateId {
 export const enum ZenithPublisherReconnectReasonId {
     NewEndpoints,
     PassportTokenFailure,
-    SocketOpenFailure,
+    SocketConnectingError,
     AuthRejected,
     AuthExpired,
     UnexpectedSocketClose,
@@ -7058,9 +7058,9 @@ export namespace ZenithPublisherReconnectReason {
             displayId: StringId.ZenithPublisherReconnectReasonDisplay_PassportTokenFailure,
             normal: false,
         },
-        SocketOpenFailure: {
-            id: ZenithPublisherReconnectReasonId.SocketOpenFailure,
-            displayId: StringId.ZenithPublisherReconnectReasonDisplay_SocketOpenFailure,
+        SocketConnectingError: {
+            id: ZenithPublisherReconnectReasonId.SocketConnectingError,
+            displayId: StringId.ZenithPublisherReconnectReasonDisplay_SocketConnectingError,
             normal: false,
         },
         AuthRejected: {
