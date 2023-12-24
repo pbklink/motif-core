@@ -137,7 +137,6 @@ export abstract class PublisherSubscriptionDataItem extends DataItem {
         switch (this._publisherSubscriptionStateId) {
             case PublisherSubscriptionDataItem.SubscriptionStateId.NeverSubscribed:
             case PublisherSubscriptionDataItem.SubscriptionStateId.PublisherOfflining:
-            case PublisherSubscriptionDataItem.SubscriptionStateId.PublisherOnlineWaiting:
                 throw new AssertInternalError('PSDIAIOWN200199931',
                     `${this._publisherSubscriptionStateId} ${this.definition.description}`);
 
@@ -150,6 +149,7 @@ export abstract class PublisherSubscriptionDataItem extends DataItem {
                 break;
 
             case PublisherSubscriptionDataItem.SubscriptionStateId.RetryDelayWaiting:
+            case PublisherSubscriptionDataItem.SubscriptionStateId.PublisherOnlineWaiting:
             case PublisherSubscriptionDataItem.SubscriptionStateId.ResponseWaiting:
             case PublisherSubscriptionDataItem.SubscriptionStateId.SynchronisationWaiting:
             case PublisherSubscriptionDataItem.SubscriptionStateId.Synchronised:
