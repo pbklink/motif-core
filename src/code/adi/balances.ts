@@ -366,7 +366,6 @@ export namespace Balances {
             public readonly currencyId: CurrencyId,
             environmentId?: TradingEnvironmentId,
         ) {
-            // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
             this.environmentId = environmentId === undefined ? TradingEnvironment.getDefaultId() : environmentId;
             this._mapKey = Key.generateMapKey(this.accountId, this.environmentId, this.currencyId);
         }

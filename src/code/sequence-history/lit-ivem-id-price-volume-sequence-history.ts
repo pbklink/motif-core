@@ -399,7 +399,6 @@ export class LitIvemIdPriceVolumeSequenceHistory extends SequenceHistory {
                 this.setUnusable(badness);
             } else {
                 const record = symbolsDataItem.records[0];
-                // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
                 this._isIndex = record.isIndex !== undefined ? record.isIndex : false;
                 this._exchangeId = record.exchangeId;
                 this._ivemClassId = record.ivemClassId;

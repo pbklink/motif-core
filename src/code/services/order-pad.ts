@@ -479,7 +479,6 @@ export class OrderPad {
             }
         }
     }
-    // eslint-disable-next-line @typescript-eslint/member-ordering, @typescript-eslint/prefer-nullish-coalescing
     get allowedTimeInForceIds() { return this._allowedTimeInForceIds === undefined ? TimeInForce.all : this._allowedTimeInForceIds; }
 
     // eslint-disable-next-line @typescript-eslint/member-ordering

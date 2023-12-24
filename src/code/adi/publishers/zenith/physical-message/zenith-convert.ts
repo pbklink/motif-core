@@ -597,7 +597,6 @@ export namespace ZenithConvert {
         }
 
         export function encloseFromOverridableUnresolvedId(environmentId: DataEnvironmentId | undefined, exchangeId: ExchangeId) {
-            // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
             const resolvedEnvironmentId = environmentId !== undefined ? environmentId : ExchangeInfo.getDefaultDataEnvironmentId(exchangeId);
             return encloseFromId(resolvedEnvironmentId);
         }
@@ -1289,7 +1288,6 @@ export namespace ZenithConvert {
                     break;
             }
 
-            // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
             result.environment = environment === undefined ? ZenithProtocol.DataEnvironment.Production : environment;
 
             return result;
@@ -2770,7 +2768,6 @@ export namespace ZenithConvert {
                 sellCrossRef: tradeData.SellCrossRef,
                 marketId,
                 relatedId: tradeData.RelatedID,
-                // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
                 attributes: tradeData.Attributes === undefined ? [] : tradeData.Attributes,
                 buyDepthOrderId: tradeData.Buy,
                 sellDepthOrderId: tradeData.Sell,
@@ -2800,7 +2797,6 @@ export namespace ZenithConvert {
                 sellCrossRef: tradeData.SellCrossRef,
                 marketId,
                 relatedId: tradeData.RelatedID,
-                // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
                 attributes: tradeData.Attributes === undefined ? [] : tradeData.Attributes,
                 buyDepthOrderId: tradeData.Buy,
                 sellDepthOrderId: tradeData.Sell,

@@ -449,7 +449,6 @@ export class DepthLevelsDataItem extends MarketSubscriptionDataItem {
                             volume: msgLevel.volume,
                             marketId: msgLevel.marketId,
                             hasUndisclosed:
-                                // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
                                 msgLevel.hasUndisclosed === undefined
                                     ? false
                                     : msgLevel.hasUndisclosed,
@@ -502,7 +501,6 @@ export class DepthLevelsDataItem extends MarketSubscriptionDataItem {
                     };
                 }
                 const newHasUndisclosed =
-                    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
                     msgLevel.hasUndisclosed === undefined
                         ? false
                         : msgLevel.hasUndisclosed;

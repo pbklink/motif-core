@@ -373,7 +373,6 @@ export namespace Holding {
             public readonly accountId: BrokerageAccountId,
             environmentId?: TradingEnvironmentId
         ) {
-            // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
             this.environmentId = environmentId === undefined ? TradingEnvironment.getDefaultId() : environmentId;
             this._mapKey = Key.generateMapKey(this.exchangeId, this.code, this.accountId, this.environmentId);
         }

@@ -48,7 +48,6 @@ export class SearchSymbolsLitIvemBaseDetail implements LitIvemBaseDetail {
         this._name = name;
         this._exchangeId = change.exchangeId;
         const alternateCodes = change.alternateCodes;
-        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
         this._alternateCodes = alternateCodes === undefined ? {} : alternateCodes;
     }
 
