@@ -21273,6 +21273,8 @@ export class RecordGrid extends AdaptedRevgrid implements GridLayout.ChangeIniti
     get continuousFiltering(): boolean;
     set continuousFiltering(value: boolean);
     // (undocumented)
+    dataServersRowListChangedEventer: RecordGrid.DataServersRowListChangedEventer | undefined;
+    // (undocumented)
     protected descendantProcessActiveColumnListChanged(typeId: ListChangedTypeId, index: number, count: number, targetIndex: number | undefined, ui: boolean): void;
     // (undocumented)
     protected descendantProcessClick(event: MouseEvent, hoverCell: LinedHoverCell<AdaptedRevgridBehavioredColumnSettings, GridField> | null | undefined): void;
@@ -21280,6 +21282,8 @@ export class RecordGrid extends AdaptedRevgrid implements GridLayout.ChangeIniti
     protected descendantProcessColumnSort(_event: MouseEvent, headerOrFixedRowCell: ViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>): void;
     // (undocumented)
     protected descendantProcessColumnsWidthChanged(columns: Column<AdaptedRevgridBehavioredColumnSettings, GridField>[], ui: boolean): void;
+    // (undocumented)
+    protected descendantProcessDataServersRowListChanged(dataServers: DataServer<GridField>[]): void;
     // (undocumented)
     protected descendantProcessDblClick(event: MouseEvent, hoverCell: LinedHoverCell<AdaptedRevgridBehavioredColumnSettings, GridField> | null | undefined): void;
     // (undocumented)
@@ -21372,6 +21376,8 @@ export class RecordGrid extends AdaptedRevgrid implements GridLayout.ChangeIniti
 
 // @public (undocumented)
 export namespace RecordGrid {
+    // (undocumented)
+    export type DataServersRowListChangedEventer = (this: void, dataServers: DataServer<GridField>[]) => void;
     // (undocumented)
     export type FieldSortedEventer = (this: void) => void;
     // (undocumented)

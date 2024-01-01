@@ -7,6 +7,7 @@
 import {
     Column,
     ColumnsManager,
+    DataServer,
     DatalessSubgrid,
     LinedHoverCell,
     ListChangedTypeId,
@@ -49,6 +50,7 @@ export class RecordGrid extends AdaptedRevgrid implements GridLayout.ChangeIniti
     mainClickEventer: RecordGrid.MainClickEventer | undefined;
     mainDblClickEventer: RecordGrid.MainDblClickEventer | undefined;
     selectionChangedEventer: RecordGrid.SelectionChangedEventer | undefined;
+    dataServersRowListChangedEventer: RecordGrid.DataServersRowListChangedEventer | undefined;
 
     private _gridLayout: GridLayout | undefined;
     private _allowedFields: readonly GridField[] | undefined;
@@ -471,6 +473,12 @@ export class RecordGrid extends AdaptedRevgrid implements GridLayout.ChangeIniti
         }
     }
 
+    protected override descendantProcessDataServersRowListChanged(dataServers: DataServer<GridField>[]) {
+        if (this.dataServersRowListChangedEventer !== undefined) {
+            this.dataServersRowListChangedEventer(dataServers);
+        }
+    }
+
     protected override applySettings() {
         const result = super.applySettings();
 
@@ -605,5 +613,6 @@ export namespace RecordGrid {
     export type MainClickEventer = (this: void, fieldIndex: RevRecordFieldIndex, recordIndex: RevRecordIndex) => void;
     export type MainDblClickEventer = (this: void, fieldIndex: RevRecordFieldIndex, recordIndex: RevRecordIndex) => void;
     export type SelectionChangedEventer = (this: void) => void;
+    export type DataServersRowListChangedEventer = (this: void, dataServers: DataServer<GridField>[]) => void;
     export type FieldSortedEventer = (this: void) => void;
 }
