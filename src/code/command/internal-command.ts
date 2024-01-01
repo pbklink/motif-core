@@ -114,6 +114,7 @@ export namespace InternalCommand {
         Grid_MoveBottom,
         Grid_Insert,
         Grid_Remove,
+        Grid_RemoveSelected,
 
         ColorSchemePresetCode_Ok,
         ColorSchemePresetCode_CopyToClipboard,
@@ -159,6 +160,7 @@ export namespace InternalCommand {
         ScanTest_Close,
         ZenithScanFormulaViewDecodeProgress_Close,
 
+        Popout,
         ExpandSection,
         RestoreSection,
         CollapseSection,
@@ -276,6 +278,7 @@ export namespace InternalCommand {
         Grid_MoveBottom = 'Grid_MoveBottom',
         Grid_Insert = 'Grid_Insert',
         Grid_Remove = 'Grid_Remove',
+        Grid_RemoveSelected = 'Grid_RemoveSelected',
 
         ColorSchemePresetCode_Ok = 'ColorSchemePresetCode_Ok',
         ColorSchemePresetCode_CopyToClipboard = 'ColorSchemePresetCode_CopyToClipboard',
@@ -321,6 +324,7 @@ export namespace InternalCommand {
         ScanTest_Close = 'ScanTest_Close',
         ZenithScanFormulaViewDecodeProgress_Close = 'ZenithScanFormulaViewDecodeProgress_Close',
 
+        Popout = 'Popout',
         ExpandSection = 'ExpandSection',
         RestoreSection = 'RestoreSection',
         CollapseSection = 'CollapseSection',
@@ -432,6 +436,7 @@ export namespace InternalCommand {
         Grid_MoveBottom: { id: Id.Grid_MoveBottom, nameId: NameId.Grid_MoveBottom },
         Grid_Insert: { id: Id.Grid_Insert, nameId: NameId.Grid_Insert },
         Grid_Remove: { id: Id.Grid_Remove, nameId: NameId.Grid_Remove },
+        Grid_RemoveSelected: { id: Id.Grid_RemoveSelected, nameId: NameId.Grid_RemoveSelected },
         ColorSchemePresetCode_Ok: { id: Id.ColorSchemePresetCode_Ok, nameId: NameId.ColorSchemePresetCode_Ok },
         ColorSchemePresetCode_CopyToClipboard: { id: Id.ColorSchemePresetCode_CopyToClipboard, nameId: NameId.ColorSchemePresetCode_CopyToClipboard },
         Symbols_Query: { id: Id.Symbols_Query, nameId: NameId.Symbols_Query },
@@ -465,6 +470,7 @@ export namespace InternalCommand {
         NewScan: { id: Id.NewScan, nameId: NameId.NewScan },
         ScanTest_Close: { id: Id.ScanTest_Close, nameId: NameId.ScanTest_Close },
         ZenithScanFormulaViewDecodeProgress_Close: { id: Id.ZenithScanFormulaViewDecodeProgress_Close, nameId: NameId.ZenithScanFormulaViewDecodeProgress_Close },
+        Popout: { id: Id.Popout, nameId: NameId.Popout },
         ExpandSection: { id: Id.ExpandSection, nameId: NameId.ExpandSection },
         RestoreSection: { id: Id.RestoreSection, nameId: NameId.RestoreSection },
         CollapseSection: { id: Id.CollapseSection, nameId: NameId.CollapseSection },

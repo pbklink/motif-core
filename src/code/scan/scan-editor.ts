@@ -71,6 +71,7 @@ export class ScanEditor {
     private _versioningInterrupted: boolean;
     private _editSessionId: Guid;
 
+    private _lastTargetTypeIdWasMulti: boolean | undefined; // Assists UI from distinguishing between one element in target and multiple elements in target
     private _targetTypeId: ScanTargetTypeId | undefined;
     private _targetMarketIds: readonly MarketId[] | undefined;
     private _targetLitIvemIds: readonly LitIvemId[] | undefined;
@@ -144,6 +145,7 @@ export class ScanEditor {
     get name() { return this._name; }
     get description() { return this._description; }
     get symbolListEnabled() { return this._symbolListEnabled; }
+    get lastTargetTypeIdWasMulti(): boolean | undefined { return this._lastTargetTypeIdWasMulti; }
     get targetTypeId() { return this._targetTypeId; } // Will be undefined while waiting for first Scan Detail
     get targetMarketIds() { return this._targetMarketIds; } // Will be undefined while waiting for first Scan Detail
     get targetLitIvemIds() { return this._targetLitIvemIds; }  // Will be undefined while waiting for first Scan Detail
@@ -290,6 +292,15 @@ export class ScanEditor {
             this.beginFieldChanges(undefined)
             this._symbolListEnabled = value;
             this.addFieldChange(ScanEditor.FieldId.SymbolListEnabled);
+            this.endFieldChanges();
+        }
+    }
+
+    setLastTargetTypeIdWasMulti(value: boolean) {
+        if (value !== this._lastTargetTypeIdWasMulti) {
+            this.beginFieldChanges(undefined);
+            this._lastTargetTypeIdWasMulti = value;
+            this.addFieldChange(ScanEditor.FieldId.LastTargetTypeIdWasMulti);
             this.endFieldChanges();
         }
     }
@@ -829,6 +840,7 @@ export class ScanEditor {
 
     private processScanValueChanges(scan: Scan, valueChanges: Scan.ValueChange[]) {
         let conflict = false;
+        let lastTargetTypeIdWasMultiCalculationRequired = false;
         this.beginFieldChanges(undefined);
 
         const modifiedScanFieldIds = this.saving ? this._whileSavingModifiedScanFieldIds : this._modifiedScanFieldIds;
@@ -875,6 +887,7 @@ export class ScanEditor {
                     const newTargetTypeId = scan.targetTypeId;
                     if (newTargetTypeId !== undefined && newTargetTypeId !== this._targetTypeId && !fieldConflict) {
                         this.setTargetTypeId(newTargetTypeId);
+                        lastTargetTypeIdWasMultiCalculationRequired = true;
                     }
                     break;
                 }
@@ -882,6 +895,8 @@ export class ScanEditor {
                     const newTargetMarketIds = scan.targetMarketIds;
                     if (newTargetMarketIds !== undefined && !isUndefinableArrayEqual(newTargetMarketIds, this._targetMarketIds) && !fieldConflict) {
                         this.setTargetMarketIds(newTargetMarketIds.slice());
+                        this.setLastTargetTypeIdWasMulti(newTargetMarketIds.length === 1);
+                        lastTargetTypeIdWasMultiCalculationRequired = true;
                     }
                     break;
                 }
@@ -889,6 +904,8 @@ export class ScanEditor {
                     const newTargetLitIvemIds = scan.targetLitIvemIds;
                     if (newTargetLitIvemIds !== undefined && !isUndefinableArrayEqual(newTargetLitIvemIds, this._targetLitIvemIds) && !fieldConflict) {
                         this.setTargetLitIvemIds(newTargetLitIvemIds.slice());
+                        this.setLastTargetTypeIdWasMulti(newTargetLitIvemIds.length === 1);
+                        lastTargetTypeIdWasMultiCalculationRequired = true;
                     }
                     break;
                 }
@@ -952,6 +969,11 @@ export class ScanEditor {
                 default:
                     throw new UnreachableCaseError('SEHSVCED50501', scanFieldId);
             }
+        }
+
+        if (lastTargetTypeIdWasMultiCalculationRequired) {
+            const lastTargetTypeIdWasMulti = this.calculateLastTargetTypeIdWasMulti();
+            this.setLastTargetTypeIdWasMulti(lastTargetTypeIdWasMulti);
         }
 
         if (zenithCriteriaSource !== undefined) {
@@ -1225,10 +1247,42 @@ export class ScanEditor {
             versioningInterrupted: this._versioningInterrupted,
         }
     }
+
+    private calculateLastTargetTypeIdWasMulti() {
+        let lastTargetTypeIdWasMulti: boolean;
+        switch (this._targetTypeId) {
+            case undefined: {
+                lastTargetTypeIdWasMulti = ScanEditor.defaultLastTargetTypeIdWasMulti;
+                break;
+            }
+            case ScanTargetTypeId.Symbols: {
+                const targetLitIvemIds = this._targetLitIvemIds;
+                if (targetLitIvemIds === undefined) {
+                    lastTargetTypeIdWasMulti = false;
+                } else {
+                    lastTargetTypeIdWasMulti = targetLitIvemIds.length !== 1;
+                }
+                break;
+            }
+            case ScanTargetTypeId.Markets: {
+                const targetMarketIds = this._targetMarketIds;
+                if (targetMarketIds === undefined) {
+                    lastTargetTypeIdWasMulti = false;
+                } else {
+                    lastTargetTypeIdWasMulti = targetMarketIds.length !== 1;
+                }
+                break;
+            }
+            default:
+                throw new UnreachableCaseError('SECLTTI55971', this._targetTypeId);
+        }
+        return lastTargetTypeIdWasMulti;
+    }
 }
 
 export namespace ScanEditor {
     export const DefaultSymbolListEnabled = false;
+    export const defaultLastTargetTypeIdWasMulti = false;
     export const DefaultScanTargetTypeId = ScanTargetTypeId.Markets;
     export const DefaultCriteria: ScanFormula.BooleanNode = { typeId: ScanFormula.NodeTypeId.None };
     export const DefaultRank: ScanFormula.NumericPosNode | undefined = undefined; // { typeId: ScanFormula.NodeTypeId.NumericPos, operand: 0 } ;
@@ -1251,6 +1305,7 @@ export namespace ScanEditor {
         Name,
         Description,
         SymbolListEnabled,
+        LastTargetTypeIdWasMulti,
         TargetTypeId,
         TargetMarkets,
         TargetLitIvemIds,
@@ -1296,6 +1351,9 @@ export namespace ScanEditor {
             },
             SymbolListEnabled: { fieldId: FieldId.SymbolListEnabled,
                 scanFieldId: Scan.FieldId.SymbolListEnabled,
+            },
+            LastTargetTypeIdWasMulti: { fieldId: FieldId.LastTargetTypeIdWasMulti,
+                scanFieldId: undefined,
             },
             TargetTypeId: { fieldId: FieldId.TargetTypeId,
                 scanFieldId: Scan.FieldId.TargetTypeId,

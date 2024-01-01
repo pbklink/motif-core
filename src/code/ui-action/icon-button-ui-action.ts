@@ -106,6 +106,8 @@ export namespace IconButtonUiAction {
         MarkAll,
         InsertIntoListFromLeft,
         RemoveFromListToLeft,
+        RemoveSelectedFromList,
+        EnlargeToTopLeft,
         Dot,
     }
 

@@ -146,6 +146,7 @@ export class RecordGrid extends AdaptedRevgrid implements GridLayout.ChangeIniti
         }
     }
 
+    get mainRowCount(): number { return this.mainDataServer.getRowCount(); }
     get headerRowCount(): number { return this.headerDataServer.getRowCount(); }
     get isFiltered(): boolean { return this.mainDataServer.isFiltered; }
     get gridRightAligned(): boolean { return this.settings.gridRightAligned; }

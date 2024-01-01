@@ -949,6 +949,10 @@ export const enum StringId {
     GridLayoutEditor_ShowHiddenRadioTitle,
     GridLayoutEditorColumns_SetWidthCaption,
     GridLayoutEditorColumns_SetWidthTitle,
+    LitIvemIdListEditor_RemoveSelectedCaption,
+    LitIvemIdListEditor_RemoveSelectedTitle,
+    LitIvemIdListEditor_PopoutCaption,
+    LitIvemIdListEditor_PopoutTitle,
     CallPutFieldDisplay_ExercisePrice,
     CallPutFieldHeading_ExercisePrice,
     CallPutFieldDisplay_ExpiryDate,
@@ -2059,6 +2063,7 @@ export const enum StringId {
     ScanEditorComponent_RevertTitle,
     ScanEditorComponent_DeleteTitle,
     ScanEditorComponent_TestTitle,
+    ScanEditorTargetsComponent_EditMultiSymbolList,
     ScanEditorTargetsComponent_EditMultiSymbolGridColumns,
     GridLayoutDefinitionColumnHeading_FieldName,
     GridLayoutDefinitionColumnDescription_FieldName,
@@ -6864,6 +6869,26 @@ export namespace I18nStrings {
         GridLayoutEditorColumns_SetWidthTitle: {
             id: StringId.GridLayoutEditorColumns_SetWidthTitle, translations: {
                 en: 'Set column width or clear for width to be set automatically',
+            }
+        },
+        LitIvemIdListEditor_RemoveSelectedCaption: {
+            id: StringId.LitIvemIdListEditor_RemoveSelectedCaption, translations: {
+                en: 'Remove'
+            }
+        },
+        LitIvemIdListEditor_RemoveSelectedTitle: {
+            id: StringId.LitIvemIdListEditor_RemoveSelectedTitle, translations: {
+                en: 'Remove selected symbols'
+            }
+        },
+        LitIvemIdListEditor_PopoutCaption: {
+            id: StringId.LitIvemIdListEditor_PopoutCaption, translations: {
+                en: 'Popout'
+            }
+        },
+        LitIvemIdListEditor_PopoutTitle: {
+            id: StringId.LitIvemIdListEditor_PopoutTitle, translations: {
+                en: 'Popout symbol list editor'
             }
         },
         CallPutFieldDisplay_ExercisePrice: {
@@ -12421,9 +12446,14 @@ export namespace I18nStrings {
                 en: 'Execute scan immediately and see results',
             }
         },
+        ScanEditorTargetsComponent_EditMultiSymbolList: {
+            id: StringId.ScanEditorTargetsComponent_EditMultiSymbolList, translations: {
+                en: 'Edit scan target symbol list'
+            }
+        },
         ScanEditorTargetsComponent_EditMultiSymbolGridColumns: {
             id: StringId.ScanEditorTargetsComponent_EditMultiSymbolGridColumns, translations: {
-                en: 'Edit symbol grid columns'
+                en: 'Edit scan target symbol grid columns'
             }
         },
         GridLayoutDefinitionColumnHeading_FieldName: {
