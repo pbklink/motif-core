@@ -35,8 +35,7 @@ export class RankedLitIvemIdListDirectoryItemTableRecordSourceDefinition extends
         fieldNames.push(rankedLitIvemIdListDirectoryItemFieldSourceDefinition.getSupportedFieldNameById(RankedLitIvemIdListDirectoryItem.FieldId.Name));
         fieldNames.push(rankedLitIvemIdListDirectoryItemFieldSourceDefinition.getSupportedFieldNameById(RankedLitIvemIdListDirectoryItem.FieldId.TypeId));
 
-        const columns = this.createGridLayoutDefinitionColumnsFromFieldNames(fieldNames);
-        return new GridLayoutDefinition(columns);
+        return GridLayoutDefinition.createFromFieldNames(fieldNames);
     }
 }
 

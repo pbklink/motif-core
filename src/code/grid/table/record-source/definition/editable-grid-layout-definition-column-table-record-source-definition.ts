@@ -39,8 +39,7 @@ export class EditableGridLayoutDefinitionColumnTableRecordSourceDefinition exten
         fieldNames.push(fieldSourceDefinition.getFieldNameById(EditableGridLayoutDefinitionColumn.FieldId.Width));
         fieldNames.push(fieldSourceDefinition.getFieldNameById(EditableGridLayoutDefinitionColumn.FieldId.Visible));
 
-        const columns = this.createGridLayoutDefinitionColumnsFromFieldNames(fieldNames);
-        return new GridLayoutDefinition(columns);
+        return GridLayoutDefinition.createFromFieldNames(fieldNames);
     }
 }
 

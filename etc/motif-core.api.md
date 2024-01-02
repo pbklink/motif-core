@@ -1871,6 +1871,13 @@ export namespace BalancesTableFieldSourceDefinition {
         export function isIdSupported(id: Balances.FieldId): boolean;
     }
     // (undocumented)
+    export interface FieldId extends TableFieldSourceDefinition.FieldId {
+        // (undocumented)
+        id: Balances.FieldId;
+        // (undocumented)
+        sourceTypeId: TableFieldSourceDefinition.TypeId.BalancesDataItem;
+    }
+    // (undocumented)
     export function initialiseStatic(): void;
 }
 
@@ -2721,6 +2728,13 @@ export namespace BrokerageAccountTableFieldSourceDefinition {
         export function isIdSupported(id: Account.FieldId): boolean;
     }
     // (undocumented)
+    export interface FieldId extends TableFieldSourceDefinition.FieldId {
+        // (undocumented)
+        id: Account.FieldId;
+        // (undocumented)
+        sourceTypeId: TableFieldSourceDefinition.TypeId.BrokerageAccounts;
+    }
+    // (undocumented)
     export function initialiseStatic(): void;
 }
 
@@ -3074,11 +3088,21 @@ export namespace CallPutSecurityDataItemTableFieldSourceDefinition {
     // (undocumented)
     export function calculateTypeIdAndPrefix(callOrPutId: CallOrPutId): TypeIdAndPrefix;
     // (undocumented)
+    export interface CallFieldId extends PrefixableSecurityDataItemTableFieldSourceDefinition.FieldId {
+        // (undocumented)
+        sourceTypeId: TableFieldSourceDefinition.TypeId.CallSecurityDataItem;
+    }
+    // (undocumented)
     export const enum FieldNameHeaderPrefix {
         // (undocumented)
         Call = "C.",
         // (undocumented)
         Put = "P."
+    }
+    // (undocumented)
+    export interface PutFieldId extends PrefixableSecurityDataItemTableFieldSourceDefinition.FieldId {
+        // (undocumented)
+        sourceTypeId: TableFieldSourceDefinition.TypeId.PutSecurityDataItem;
     }
     // (undocumented)
     export interface TypeIdAndPrefix {
@@ -3131,6 +3155,13 @@ export namespace CallPutTableFieldSourceDefinition {
         export function initialiseFieldStatic(): void;
         // (undocumented)
         export function isIdSupported(id: CallPut.FieldId): boolean;
+    }
+    // (undocumented)
+    export interface FieldId extends TableFieldSourceDefinition.FieldId {
+        // (undocumented)
+        id: CallPut.FieldId;
+        // (undocumented)
+        sourceTypeId: TableFieldSourceDefinition.TypeId.CallPut;
     }
     // (undocumented)
     export function initialiseStatic(): void;
@@ -7386,6 +7417,13 @@ export namespace EditableGridLayoutDefinitionColumnTableFieldSourceDefinition {
         export function initialise(): void;
     }
     // (undocumented)
+    export interface FieldId extends TableFieldSourceDefinition.FieldId {
+        // (undocumented)
+        id: EditableGridLayoutDefinitionColumn.FieldId;
+        // (undocumented)
+        sourceTypeId: TableFieldSourceDefinition.TypeId.EditableGridLayoutDefinitionColumn;
+    }
+    // (undocumented)
     export function initialiseStatic(): void;
 }
 
@@ -7929,6 +7967,8 @@ export const enum ErrorCode {
     GridSourceDefinition_TableRecordSourceDefinitionIsInvalid = "GSDTRSDII30899",
     // (undocumented)
     GridSourceDefinition_TableRecordSourceDefinitionNotSpecified = "GSDTRSDNS30899",
+    // (undocumented)
+    GridSourceFrame_JsonDefinitionIsInvalid = "GSFKDII34589",
     // (undocumented)
     GridSourceOrReference_LockGridSource = "GSORLGS66334",
     // (undocumented)
@@ -9518,6 +9558,13 @@ export namespace FeedTableFieldSourceDefinition {
         export function isIdSupported(id: Feed.FieldId): boolean;
     }
     // (undocumented)
+    export interface FieldId extends TableFieldSourceDefinition.FieldId {
+        // (undocumented)
+        id: Feed.FieldId;
+        // (undocumented)
+        sourceTypeId: TableFieldSourceDefinition.TypeId.Feed;
+    }
+    // (undocumented)
     export function initialiseStatic(): void;
 }
 
@@ -10202,6 +10249,15 @@ export namespace GridFieldTableFieldSourceDefinition {
         // (undocumented)
         export function isIdSupported(id: GridField.FieldId): boolean;
     }
+    // (undocumented)
+    export interface FieldId extends TableFieldSourceDefinition.FieldId {
+        // (undocumented)
+        id: GridField.FieldId;
+        // (undocumented)
+        sourceTypeId: TableFieldSourceDefinition.TypeId.GridField;
+    }
+    // (undocumented)
+    export function initialiseStatic(): void;
 }
 
 // Warning: (ae-missing-release-tag) "GridFieldTableRecordDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -10516,6 +10572,10 @@ export namespace GridLayoutDefinition {
         // (undocumented)
         export function tryCreateFromJson(element: JsonElement): Column | undefined;
     }
+    // (undocumented)
+    export function createColumnsFromFieldNames(fieldNames: readonly string[]): Column[];
+    // (undocumented)
+    export function createFromFieldNames(fieldNames: readonly string[]): GridLayoutDefinition;
     // (undocumented)
     export namespace JsonName {
         const // (undocumented)
@@ -11345,6 +11405,13 @@ export namespace HoldingTableFieldSourceDefinition {
         export function initialiseFieldStatic(): void;
         // (undocumented)
         export function isIdSupported(id: Holding.FieldId): boolean;
+    }
+    // (undocumented)
+    export interface FieldId extends TableFieldSourceDefinition.FieldId {
+        // (undocumented)
+        id: Holding.FieldId;
+        // (undocumented)
+        sourceTypeId: TableFieldSourceDefinition.TypeId.HoldingsDataItem;
     }
     // (undocumented)
     export function initialiseStatic(): void;
@@ -13735,6 +13802,13 @@ export namespace LitIvemAlternateCodesTableFieldSourceDefinition {
         export function isIdSupported(id: LitIvemAlternateCodes.Field.Id): boolean;
     }
     // (undocumented)
+    export interface FieldId extends TableFieldSourceDefinition.FieldId {
+        // (undocumented)
+        id: LitIvemAlternateCodes.Field.Id;
+        // (undocumented)
+        sourceTypeId: TableFieldSourceDefinition.TypeId.LitIvemAlternateCodes;
+    }
+    // (undocumented)
     export function initialiseStatic(): void;
 }
 
@@ -13924,6 +13998,13 @@ export namespace LitIvemBaseDetailTableFieldSourceDefinition {
         export function isIdSupported(id: LitIvemBaseDetail.Field.Id): boolean;
     }
     // (undocumented)
+    export interface FieldId extends TableFieldSourceDefinition.FieldId {
+        // (undocumented)
+        id: LitIvemBaseDetail.Field.Id;
+        // (undocumented)
+        sourceTypeId: TableFieldSourceDefinition.TypeId.LitIvemBaseDetail;
+    }
+    // (undocumented)
     export function initialiseStatic(): void;
 }
 
@@ -14103,6 +14184,13 @@ export namespace LitIvemExtendedDetailTableFieldSourceDefinition {
         export function initialiseFieldStatic(): void;
         // (undocumented)
         export function isIdSupported(id: SearchSymbolsLitIvemFullDetail.ExtendedField.Id): boolean;
+    }
+    // (undocumented)
+    export interface FieldId extends TableFieldSourceDefinition.FieldId {
+        // (undocumented)
+        id: SearchSymbolsLitIvemFullDetail.ExtendedField.Id;
+        // (undocumented)
+        sourceTypeId: TableFieldSourceDefinition.TypeId.LitIvemExtendedDetail;
     }
     // (undocumented)
     export function initialiseStatic(): void;
@@ -14376,16 +14464,18 @@ export class LitIvemIdComparableListTableRecordSource extends BadnessListTableRe
     // (undocumented)
     protected getDefaultFieldSourceDefinitionTypeIds(): LitIvemIdComparableListTableRecordSourceDefinition.FieldSourceDefinitionTypeId[];
     // (undocumented)
-    readonly list: BadnessComparableList<LitIvemId>;
+    readonly list: UiBadnessComparableList<LitIvemId>;
     // (undocumented)
-    get recordList(): BadnessComparableList<LitIvemId>;
+    get recordList(): UiBadnessComparableList<LitIvemId>;
 }
 
 // @public (undocumented)
 export class LitIvemIdComparableListTableRecordSourceDefinition extends BadnessListTableRecordSourceDefinition<LitIvemId> {
-    constructor(customHeadingsService: GridFieldCustomHeadingsService, tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService, list: BadnessComparableList<LitIvemId>);
+    constructor(customHeadingsService: GridFieldCustomHeadingsService, tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService, list: UiBadnessComparableList<LitIvemId>);
     // (undocumented)
     createDefaultLayoutDefinition(): GridLayoutDefinition;
+    // (undocumented)
+    list: UiBadnessComparableList<LitIvemId>;
     // (undocumented)
     saveToJson(element: JsonElement): void;
 }
@@ -14393,11 +14483,17 @@ export class LitIvemIdComparableListTableRecordSourceDefinition extends BadnessL
 // @public (undocumented)
 export namespace LitIvemIdComparableListTableRecordSourceDefinition {
     // (undocumented)
-    export type FieldSourceDefinitionTypeId = PickEnum<TableFieldSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId.LitIvemId | TableFieldSourceDefinition.TypeId.LitIvemBaseDetail | TableFieldSourceDefinition.TypeId.SecurityDataItem>;
+    export function createLayoutDefinition(fieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService, fieldIds: FieldId[]): GridLayoutDefinition;
     const // (undocumented)
     allowedFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[];
     const // (undocumented)
     defaultFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[];
+    // (undocumented)
+    export type FieldId = LitIvemBaseDetailTableFieldSourceDefinition.FieldId | SecurityDataItemTableFieldSourceDefinition.FieldId | LitIvemIdTableFieldSourceDefinition.FieldId;
+    // (undocumented)
+    export type FieldSourceDefinitionTypeId = PickEnum<TableFieldSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId.LitIvemId | TableFieldSourceDefinition.TypeId.LitIvemBaseDetail | TableFieldSourceDefinition.TypeId.SecurityDataItem>;
+    // (undocumented)
+    export function is(definition: TableRecordSourceDefinition): definition is LitIvemIdComparableListTableRecordSourceDefinition;
     // (undocumented)
     export namespace JsonName {
         const // (undocumented)
@@ -14406,7 +14502,7 @@ export namespace LitIvemIdComparableListTableRecordSourceDefinition {
     // (undocumented)
     export function tryCreateDefinition(customHeadingsService: GridFieldCustomHeadingsService, tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService, element: JsonElement): Result<LitIvemIdComparableListTableRecordSourceDefinition>;
     // (undocumented)
-    export function tryCreateListFromElement(element: JsonElement): Result<BadnessComparableList<LitIvemId>>;
+    export function tryCreateListFromElement(element: JsonElement): Result<UiBadnessComparableList<LitIvemId>>;
 }
 
 // Warning: (ae-missing-release-tag) "LitIvemIdCorrectnessTableField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -14791,6 +14887,13 @@ export namespace LitIvemIdTableFieldSourceDefinition {
         export function initialise(): void;
         // (undocumented)
         export function isIdSupported(id: LitIvemId.FieldId): boolean;
+    }
+    // (undocumented)
+    export interface FieldId extends TableFieldSourceDefinition.FieldId {
+        // (undocumented)
+        id: LitIvemId.FieldId;
+        // (undocumented)
+        sourceTypeId: TableFieldSourceDefinition.TypeId.LitIvemId;
     }
     // (undocumented)
     export function initialiseStatic(): void;
@@ -16665,6 +16768,13 @@ export namespace MyxLitIvemAttributesTableFieldSourceDefinition {
         export function initialiseFieldStatic(): void;
         // (undocumented)
         export function isIdSupported(id: MyxLitIvemAttributes.Field.Id): boolean;
+    }
+    // (undocumented)
+    export interface FieldId extends TableFieldSourceDefinition.FieldId {
+        // (undocumented)
+        id: MyxLitIvemAttributes.Field.Id;
+        // (undocumented)
+        sourceTypeId: TableFieldSourceDefinition.TypeId.MyxLitIvemAttributes;
     }
     // (undocumented)
     export function initialiseStatic(): void;
@@ -19237,6 +19347,13 @@ export namespace OrderTableFieldSourceDefinition {
         export function isIdSupported(id: Order.FieldId): boolean;
     }
     // (undocumented)
+    export interface FieldId extends TableFieldSourceDefinition.FieldId {
+        // (undocumented)
+        id: Order.FieldId;
+        // (undocumented)
+        sourceTypeId: TableFieldSourceDefinition.TypeId.OrdersDataItem;
+    }
+    // (undocumented)
     export function initialiseStatic(): void;
 }
 
@@ -19672,6 +19789,11 @@ export namespace PrefixableSecurityDataItemTableFieldSourceDefinition {
         export function initialiseLitIvemIdSecurityWatchValueSourceField(): void;
         // (undocumented)
         export function isIdSupported(id: SecurityDataItem.FieldId): boolean;
+    }
+    // (undocumented)
+    export interface FieldId extends TableFieldSourceDefinition.FieldId {
+        // (undocumented)
+        id: SecurityDataItem.FieldId;
     }
     // (undocumented)
     export function initialiseStatic(): void;
@@ -20920,6 +21042,13 @@ export namespace RankedLitIvemIdListDirectoryItemTableFieldSourceDefinition {
         export function isIdSupported(id: RankedLitIvemIdListDirectoryItem.FieldId): boolean;
     }
     // (undocumented)
+    export interface FieldId extends TableFieldSourceDefinition.FieldId {
+        // (undocumented)
+        id: RankedLitIvemIdListDirectoryItem.FieldId;
+        // (undocumented)
+        sourceTypeId: TableFieldSourceDefinition.TypeId.RankedLitIvemIdListDirectoryItem;
+    }
+    // (undocumented)
     export function initialiseStatic(): void;
 }
 
@@ -21141,6 +21270,13 @@ export namespace RankedLitIvemIdTableFieldSourceDefinition {
         export function initialiseFieldStatic(): void;
         // (undocumented)
         export function isIdSupported(id: RankedLitIvemId.FieldId): boolean;
+    }
+    // (undocumented)
+    export interface FieldId extends TableFieldSourceDefinition.FieldId {
+        // (undocumented)
+        id: RankedLitIvemId.FieldId;
+        // (undocumented)
+        sourceTypeId: TableFieldSourceDefinition.TypeId.RankedLitIvemId;
     }
     // (undocumented)
     export function initialiseStatic(): void;
@@ -21434,6 +21570,8 @@ export interface RecordList<Record> {
 export namespace RecordList {
     // (undocumented)
     export type ListChangeEventHandler = (this: void, listChangeTypeId: UsableListChangeTypeId, idx: Integer, count: Integer) => void;
+    // (undocumented)
+    export type UiListChangeEventHandler = (this: void, listChangeTypeId: UsableListChangeTypeId, idx: Integer, count: Integer, ui: boolean) => void;
 }
 
 // Warning: (ae-missing-release-tag) "RecordsBrokerageAccountSubscriptionDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -24519,6 +24657,13 @@ export namespace ScanTableFieldSourceDefinition {
         export function isIdSupported(id: Scan.FieldId): boolean;
     }
     // (undocumented)
+    export interface FieldId extends TableFieldSourceDefinition.FieldId {
+        // (undocumented)
+        id: Scan.FieldId;
+        // (undocumented)
+        sourceTypeId: TableFieldSourceDefinition.TypeId.Scan;
+    }
+    // (undocumented)
     export function initialiseStatic(): void;
 }
 
@@ -25146,6 +25291,11 @@ export class SecurityDataItemTableFieldSourceDefinition extends PrefixableSecuri
 export namespace SecurityDataItemTableFieldSourceDefinition {
     const // (undocumented)
     fieldNameHeaderPrefix = "";
+    // (undocumented)
+    export interface FieldId extends PrefixableSecurityDataItemTableFieldSourceDefinition.FieldId {
+        // (undocumented)
+        sourceTypeId: TableFieldSourceDefinition.TypeId.SecurityDataItem;
+    }
 }
 
 // Warning: (ae-missing-release-tag) "SecurityDataItemTableValueSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -31493,6 +31643,13 @@ export namespace TableFieldSourceDefinition {
         readonly sourceTypeId: Type.Id;
     }
     // (undocumented)
+    export interface FieldId {
+        // (undocumented)
+        id: number;
+        // (undocumented)
+        sourceTypeId: TableFieldSourceDefinition.TypeId;
+    }
+    // (undocumented)
     export function initialise(): void;
     // (undocumented)
     export type TableGridConstructors = [
@@ -31598,6 +31755,7 @@ export namespace TableFieldSourceDefinition {
 }
 
 // Warning: (ae-missing-release-tag) "TableFieldSourceDefinitionRegistryService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TableFieldSourceDefinitionRegistryService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class TableFieldSourceDefinitionRegistryService {
@@ -31609,6 +31767,8 @@ export class TableFieldSourceDefinitionRegistryService {
     get callPut(): CallPutTableFieldSourceDefinition;
     // (undocumented)
     get callSecurityDataItem(): CallPutSecurityDataItemTableFieldSourceDefinition;
+    // (undocumented)
+    createLayoutDefinition(fieldIds: TableFieldSourceDefinitionRegistryService.FieldId[]): GridLayoutDefinition;
     // (undocumented)
     get editableGridLayoutDefinitionColumn(): EditableGridLayoutDefinitionColumnTableFieldSourceDefinition;
     // (undocumented)
@@ -31643,6 +31803,12 @@ export class TableFieldSourceDefinitionRegistryService {
     get securityDataItem(): SecurityDataItemTableFieldSourceDefinition;
     // (undocumented)
     get topShareholdersDataItem(): TopShareholderTableFieldSourceDefinition;
+}
+
+// @public (undocumented)
+export namespace TableFieldSourceDefinitionRegistryService {
+    // (undocumented)
+    export type FieldId = FeedTableFieldSourceDefinition.FieldId | LitIvemIdTableFieldSourceDefinition.FieldId | RankedLitIvemIdTableFieldSourceDefinition.FieldId | LitIvemBaseDetailTableFieldSourceDefinition.FieldId | LitIvemExtendedDetailTableFieldSourceDefinition.FieldId | LitIvemAlternateCodesTableFieldSourceDefinition.FieldId | MyxLitIvemAttributesTableFieldSourceDefinition.FieldId | EditableGridLayoutDefinitionColumnTableFieldSourceDefinition.FieldId | SecurityDataItemTableFieldSourceDefinition.FieldId | BrokerageAccountTableFieldSourceDefinition.FieldId | OrderTableFieldSourceDefinition.FieldId | HoldingTableFieldSourceDefinition.FieldId | BalancesTableFieldSourceDefinition.FieldId | CallPutTableFieldSourceDefinition.FieldId | CallPutSecurityDataItemTableFieldSourceDefinition.CallFieldId | CallPutSecurityDataItemTableFieldSourceDefinition.PutFieldId | TopShareholderTableFieldSourceDefinition.FieldId | ScanTableFieldSourceDefinition.FieldId | RankedLitIvemIdListDirectoryItemTableFieldSourceDefinition.FieldId | GridFieldTableFieldSourceDefinition.FieldId;
 }
 
 // Warning: (ae-internal-missing-underscore) The name "TableFieldSourceDefinitionStaticInitialise" should be prefixed with an underscore because the declaration is marked as @internal
@@ -31904,8 +32070,6 @@ export abstract class TableRecordSourceDefinition {
     // (undocumented)
     abstract createDefaultLayoutDefinition(): GridLayoutDefinition;
     // (undocumented)
-    protected createGridLayoutDefinitionColumnsFromFieldNames(fieldNames: string[]): GridLayoutDefinition.Column[];
-    // (undocumented)
     readonly fieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService;
     // (undocumented)
     saveToJson(element: JsonElement): void;
@@ -32026,7 +32190,7 @@ export class TableRecordSourceDefinitionFactoryService {
     // (undocumented)
     createHolding(brokerageAccountGroup: BrokerageAccountGroup): HoldingTableRecordSourceDefinition;
     // (undocumented)
-    createLitIvemIdComparableList(list: BadnessComparableList<LitIvemId>): LitIvemIdComparableListTableRecordSourceDefinition;
+    createLitIvemIdComparableList(list: UiBadnessComparableList<LitIvemId>): LitIvemIdComparableListTableRecordSourceDefinition;
     // (undocumented)
     createLitIvemIdFromSearchSymbols(dataDefinition: SearchSymbolsDataDefinition): LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition;
     // (undocumented)
@@ -33436,6 +33600,13 @@ export namespace TopShareholderTableFieldSourceDefinition {
         export function initialiseFieldStatic(): void;
         // (undocumented)
         export function isIdSupported(id: TopShareholder.FieldId): boolean;
+    }
+    // (undocumented)
+    export interface FieldId extends TableFieldSourceDefinition.FieldId {
+        // (undocumented)
+        id: TopShareholder.FieldId;
+        // (undocumented)
+        sourceTypeId: TableFieldSourceDefinition.TypeId.TopShareholdersDataItem;
     }
     // (undocumented)
     export function initialiseStatic(): void;
@@ -34964,6 +35135,48 @@ export namespace UiAction {
     }
     // (undocumented)
     export type TitlePushEventHandler = (this: void, title: string) => void;
+}
+
+// Warning: (ae-missing-release-tag) "UiBadnessComparableList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class UiBadnessComparableList<T> extends BadnessComparableList<T> implements RecordList<T> {
+    // (undocumented)
+    clone(): UiBadnessComparableList<T>;
+    // (undocumented)
+    protected notifyListChange(listChangeTypeId: UsableListChangeTypeId, index: Integer, count: Integer): void;
+    // (undocumented)
+    subscribeListChangeEvent(handler: RecordList.UiListChangeEventHandler): MultiEvent.DefinedSubscriptionId;
+    // (undocumented)
+    uiAdd(value: T, ui?: boolean): number;
+    // (undocumented)
+    uiAddRange(values: readonly T[], ui?: boolean): void;
+    // (undocumented)
+    uiAddSubRange(values: readonly T[], rangeStartIndex: Integer, rangeCount: Integer, ui?: boolean): void;
+    // (undocumented)
+    uiClear(ui?: boolean): void;
+    // (undocumented)
+    uiExchange(index1: Integer, index2: Integer, ui?: boolean): void;
+    // (undocumented)
+    uiInsert(index: Integer, value: T, ui?: boolean): void;
+    // (undocumented)
+    uiInsertRange(index: Integer, values: readonly T[], ui?: boolean): void;
+    // (undocumented)
+    uiInsertSubRange(index: Integer, values: readonly T[], subRangeStartIndex: Integer, subRangeCount: Integer, ui?: boolean): void;
+    // (undocumented)
+    uiRemove(value: T, ui?: boolean): void;
+    // (undocumented)
+    uiRemoveAtIndex(index: Integer, ui?: boolean): void;
+    // (undocumented)
+    uiRemoveAtIndices(removeIndices: Integer[], ui?: boolean): void;
+    // (undocumented)
+    uiRemoveItems(removeItems: readonly T[], ui?: boolean): void;
+    // (undocumented)
+    uiRemoveRange(index: Integer, deleteCount: Integer, ui?: boolean): void;
+    // (undocumented)
+    uiSetAt(index: Integer, value: T, ui?: boolean): void;
+    // (undocumented)
+    unsubscribeListChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
 }
 
 // Warning: (ae-missing-release-tag) "UndefinedTableValueSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)

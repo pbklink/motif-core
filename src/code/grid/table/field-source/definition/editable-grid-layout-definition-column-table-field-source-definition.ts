@@ -121,6 +121,11 @@ export namespace EditableGridLayoutDefinitionColumnTableFieldSourceDefinition {
         }
     }
 
+    export interface FieldId extends TableFieldSourceDefinition.FieldId {
+        sourceTypeId: TableFieldSourceDefinition.TypeId.EditableGridLayoutDefinitionColumn;
+        id: EditableGridLayoutDefinitionColumn.FieldId;
+    }
+
     export function initialiseStatic() {
         Field.initialise();
     }

@@ -165,6 +165,11 @@ export namespace LitIvemIdTableFieldSourceDefinition {
         }
     }
 
+    export interface FieldId extends TableFieldSourceDefinition.FieldId {
+        sourceTypeId: TableFieldSourceDefinition.TypeId.LitIvemId;
+        id: LitIvemId.FieldId;
+    }
+
     export function initialiseStatic() {
         Field.initialise();
     }

@@ -192,6 +192,11 @@ export namespace LitIvemExtendedDetailTableFieldSourceDefinition {
         }
     }
 
+    export interface FieldId extends TableFieldSourceDefinition.FieldId {
+        sourceTypeId: TableFieldSourceDefinition.TypeId.LitIvemExtendedDetail;
+        id: SearchSymbolsLitIvemFullDetail.ExtendedField.Id;
+    }
+
     export function initialiseStatic() {
         Field.initialiseFieldStatic();
     }

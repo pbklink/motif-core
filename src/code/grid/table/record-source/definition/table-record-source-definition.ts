@@ -56,21 +56,6 @@ export abstract class TableRecordSourceDefinition {
         element.setString(TableRecordSourceDefinition.jsonTag_TypeId, TableRecordSourceDefinition.Type.idToJson(this.typeId));
     }
 
-    protected createGridLayoutDefinitionColumnsFromFieldNames(fieldNames: string[]): GridLayoutDefinition.Column[] {
-        const count = fieldNames.length;
-        const columns = new Array<GridLayoutDefinition.Column>(count);
-        for (let i = 0; i < count; i++) {
-            const fieldName = fieldNames[i];
-            const column: GridLayoutDefinition.Column = {
-                fieldName,
-                visible: undefined,
-                autoSizableWidth: undefined,
-            };
-            columns[i] = column;
-        }
-        return columns;
-    }
-
     abstract createDefaultLayoutDefinition(): GridLayoutDefinition;
 }
 

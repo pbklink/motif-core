@@ -64,8 +64,7 @@ export class CallPutFromUnderlyingTableRecordSourceDefinition extends TableRecor
         fieldNames.push(putSecurityDataItemFieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.Close));
         fieldNames.push(putSecurityDataItemFieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.Volume));
 
-        const columns = this.createGridLayoutDefinitionColumnsFromFieldNames(fieldNames);
-        return new GridLayoutDefinition(columns);
+        return GridLayoutDefinition.createFromFieldNames(fieldNames);
     }
 
 }

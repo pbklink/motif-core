@@ -185,4 +185,9 @@ export namespace TableFieldSourceDefinition {
             }
         }
     }
+
+    export interface FieldId {
+        sourceTypeId: TableFieldSourceDefinition.TypeId;
+        id: number;
+    }
 }

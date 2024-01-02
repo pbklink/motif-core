@@ -117,6 +117,26 @@ export namespace GridLayoutDefinition {
         }
     }
 
+    export function createColumnsFromFieldNames(fieldNames: readonly string[]): Column[] {
+        const count = fieldNames.length;
+        const columns = new Array<Column>(count);
+        for (let i = 0; i < count; i++) {
+            const fieldName = fieldNames[i];
+            const column: Column = {
+                fieldName,
+                visible: undefined,
+                autoSizableWidth: undefined,
+            };
+            columns[i] = column;
+        }
+        return columns;
+    }
+
+    export function createFromFieldNames(fieldNames: readonly string[]): GridLayoutDefinition {
+        const columns = createColumnsFromFieldNames(fieldNames);
+        return new GridLayoutDefinition(columns);
+    }
+
     export function tryCreateFromJson(element: JsonElement): Result<GridLayoutDefinition> {
         const columnsResult = tryCreateColumnsFromJson(element);
         if (columnsResult.isErr()) {

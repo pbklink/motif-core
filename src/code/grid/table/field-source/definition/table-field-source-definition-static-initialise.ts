@@ -9,6 +9,7 @@ import { BrokerageAccountTableFieldSourceDefinition } from './brokerage-account-
 import { CallPutTableFieldSourceDefinition } from './call-put-table-field-source-definition';
 import { EditableGridLayoutDefinitionColumnTableFieldSourceDefinition } from './editable-grid-layout-definition-column-table-field-source-definition';
 import { FeedTableFieldSourceDefinition } from './feed-table-field-source-definition';
+import { GridFieldTableFieldSourceDefinition } from './grid-field-table-field-source-definition';
 import { HoldingTableFieldSourceDefinition } from './holding-table-field-source-definition';
 import { LitIvemAlternateCodesTableFieldSourceDefinition } from './lit-ivem-alternate-codes-table-field-source-definition';
 import { LitIvemBaseDetailTableFieldSourceDefinition } from './lit-ivem-base-detail-table-field-source-definition';
@@ -42,5 +43,6 @@ export namespace TableFieldSourceDefinitionStaticInitialise {
         RankedLitIvemIdTableFieldSourceDefinition.initialiseStatic();
         EditableGridLayoutDefinitionColumnTableFieldSourceDefinition.initialiseStatic();
         RankedLitIvemIdListDirectoryItemTableFieldSourceDefinition.initialiseStatic();
+        GridFieldTableFieldSourceDefinition.initialiseStatic();
     }
 }

@@ -165,6 +165,11 @@ export namespace RankedLitIvemIdTableFieldSourceDefinition {
         }
     }
 
+    export interface FieldId extends TableFieldSourceDefinition.FieldId {
+        sourceTypeId: TableFieldSourceDefinition.TypeId.RankedLitIvemId;
+        id: RankedLitIvemId.FieldId;
+    }
+
     export function initialiseStatic() {
         Field.initialiseFieldStatic();
     }

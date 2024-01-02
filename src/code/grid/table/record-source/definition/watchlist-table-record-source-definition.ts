@@ -11,6 +11,9 @@ import {
 import { GridFieldCustomHeadingsService } from '../../../field/grid-field-internal-api';
 import { GridLayoutDefinition } from '../../../layout/grid-layout-internal-api';
 import {
+    LitIvemBaseDetailTableFieldSourceDefinition,
+    RankedLitIvemIdTableFieldSourceDefinition,
+    SecurityDataItemTableFieldSourceDefinition,
     TableFieldSourceDefinition,
     TableFieldSourceDefinitionRegistryService
 } from "../../field-source/grid-table-field-source-internal-api";
@@ -77,8 +80,7 @@ export class WatchlistTableRecordSourceDefinition extends RankedLitIvemIdListTab
         // fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.Trend));
         fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.ValueTraded));
 
-        const columns = this.createGridLayoutDefinitionColumnsFromFieldNames(fieldNames);
-        return new GridLayoutDefinition(columns);
+        return GridLayoutDefinition.createFromFieldNames(fieldNames);
     }
 }
 
@@ -96,4 +98,23 @@ export namespace WatchlistTableRecordSourceDefinition {
         TableFieldSourceDefinition.TypeId.SecurityDataItem,
         TableFieldSourceDefinition.TypeId.RankedLitIvemId,
     ];
+
+    export type FieldId =
+        LitIvemBaseDetailTableFieldSourceDefinition.FieldId |
+        SecurityDataItemTableFieldSourceDefinition.FieldId |
+        RankedLitIvemIdTableFieldSourceDefinition.FieldId;
+        // AlternateCodesFix: Currently this actually is part of FullDetail.  Will be in BaseDetail in future
+        // AlternateCodesTableFieldSourceDefinition.FieldId;
+
+
+    export function createLayoutDefinition(
+        fieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
+        fieldIds: FieldId[],
+    ): GridLayoutDefinition {
+        return fieldSourceDefinitionRegistryService.createLayoutDefinition(fieldIds);
+    }
+
+    export function is(definition: TableRecordSourceDefinition): definition is WatchlistTableRecordSourceDefinition {
+        return definition.typeId === TableRecordSourceDefinition.TypeId.Watchlist;
+    }
 }

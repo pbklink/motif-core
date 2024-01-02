@@ -5,10 +5,13 @@
  */
 
 import { LitIvemId } from '../../../../adi/adi-internal-api';
-import { BadnessComparableList, Err, ErrorCode, JsonElement, Ok, PickEnum, Result } from '../../../../sys/sys-internal-api';
+import { Err, ErrorCode, JsonElement, Ok, PickEnum, Result, UiBadnessComparableList } from '../../../../sys/sys-internal-api';
 import { GridFieldCustomHeadingsService } from '../../../field/grid-field-internal-api';
 import { GridLayoutDefinition } from '../../../layout/grid-layout-internal-api';
 import {
+    LitIvemBaseDetailTableFieldSourceDefinition,
+    LitIvemIdTableFieldSourceDefinition,
+    SecurityDataItemTableFieldSourceDefinition,
     TableFieldSourceDefinition,
     TableFieldSourceDefinitionRegistryService
 } from "../../field-source/grid-table-field-source-internal-api";
@@ -17,10 +20,12 @@ import { TableRecordSourceDefinition } from './table-record-source-definition';
 
 /** @public */
 export class LitIvemIdComparableListTableRecordSourceDefinition extends BadnessListTableRecordSourceDefinition<LitIvemId> {
+    declare list: UiBadnessComparableList<LitIvemId>;
+
     constructor(
         customHeadingsService: GridFieldCustomHeadingsService,
         tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
-        list: BadnessComparableList<LitIvemId>,
+        list: UiBadnessComparableList<LitIvemId>,
     ) {
         super(
             customHeadingsService,
@@ -44,8 +49,7 @@ export class LitIvemIdComparableListTableRecordSourceDefinition extends BadnessL
 
         fieldNames.push(litIvemIdFieldSourceDefinition.getFieldNameById(LitIvemId.FieldId.LitIvemId));
 
-        const columns = this.createGridLayoutDefinitionColumnsFromFieldNames(fieldNames);
-        return new GridLayoutDefinition(columns);
+        return GridLayoutDefinition.createFromFieldNames(fieldNames);
     }
 }
 
@@ -71,11 +75,16 @@ export namespace LitIvemIdComparableListTableRecordSourceDefinition {
         TableFieldSourceDefinition.TypeId.LitIvemId,
     ];
 
+    export type FieldId =
+        LitIvemBaseDetailTableFieldSourceDefinition.FieldId |
+        SecurityDataItemTableFieldSourceDefinition.FieldId |
+        LitIvemIdTableFieldSourceDefinition.FieldId;
+
     export namespace JsonName {
         export const list = 'list';
     }
 
-    export function tryCreateListFromElement(element: JsonElement): Result<BadnessComparableList<LitIvemId>> {
+    export function tryCreateListFromElement(element: JsonElement): Result<UiBadnessComparableList<LitIvemId>> {
         const elementArrayResult = element.tryGetElementArray(JsonName.list);
         if (elementArrayResult.isErr()) {
             const error = elementArrayResult.error;
@@ -90,7 +99,7 @@ export namespace LitIvemIdComparableListTableRecordSourceDefinition {
                 return litIvemIdsResult.createOuter(ErrorCode.LitIvemIdComparableListTableRecordSourceDefinition_JsonLitIvemIdArrayIsInvalid);
             } else {
                 const litIvemIds = litIvemIdsResult.value;
-                const list = new BadnessComparableList<LitIvemId>();
+                const list = new UiBadnessComparableList<LitIvemId>();
                 list.addRange(litIvemIds);
                 return new Ok(list);
             }
@@ -111,5 +120,16 @@ export namespace LitIvemIdComparableListTableRecordSourceDefinition {
             const definition = new LitIvemIdComparableListTableRecordSourceDefinition(customHeadingsService, tableFieldSourceDefinitionRegistryService, list);
             return new Ok(definition);
         }
+    }
+
+    export function createLayoutDefinition(
+        fieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
+        fieldIds: FieldId[],
+    ): GridLayoutDefinition {
+        return fieldSourceDefinitionRegistryService.createLayoutDefinition(fieldIds);
+    }
+
+    export function is(definition: TableRecordSourceDefinition): definition is LitIvemIdComparableListTableRecordSourceDefinition {
+        return definition.typeId === TableRecordSourceDefinition.TypeId.LitIvemIdComparableList;
     }
 }

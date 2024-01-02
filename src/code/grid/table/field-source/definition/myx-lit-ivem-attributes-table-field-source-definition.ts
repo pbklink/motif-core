@@ -174,6 +174,11 @@ export namespace MyxLitIvemAttributesTableFieldSourceDefinition {
         }
     }
 
+    export interface FieldId extends TableFieldSourceDefinition.FieldId {
+        sourceTypeId: TableFieldSourceDefinition.TypeId.MyxLitIvemAttributes;
+        id: MyxLitIvemAttributes.Field.Id;
+    }
+
     export function initialiseStatic() {
         Field.initialiseFieldStatic();
     }

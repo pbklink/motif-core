@@ -5,7 +5,8 @@
  */
 
 import { CallOrPutId } from '../../../../adi/adi-internal-api';
-import { UnreachableCaseError } from '../../../../sys/internal-error';
+import { UnreachableCaseError } from '../../../../sys/sys-internal-api';
+import { GridLayoutDefinition } from '../../../layout/grid-layout-internal-api';
 import { BalancesTableFieldSourceDefinition } from './balances-table-field-source-definition';
 import { BrokerageAccountTableFieldSourceDefinition } from './brokerage-account-table-field-source-definition';
 import { CallPutSecurityDataItemTableFieldSourceDefinition } from './call-put-security-data-item-table-field-source-definition';
@@ -102,6 +103,18 @@ export class TableFieldSourceDefinitionRegistryService {
         }
     }
 
+    createLayoutDefinition(fieldIds: TableFieldSourceDefinitionRegistryService.FieldId[]): GridLayoutDefinition {
+        const count = fieldIds.length;
+        const fieldNames = new Array<string>(count);
+        for (let i = 0; i < count; i++) {
+            const fieldId = fieldIds[i];
+            const fieldName = this.getFieldNameOfFieldId(fieldId);
+            fieldNames[i] = fieldName;
+        }
+
+        return GridLayoutDefinition.createFromFieldNames(fieldNames);
+    }
+
     private createDefinition(typeId: TableFieldSourceDefinition.TypeId): TableFieldSourceDefinition {
         switch (typeId) {
             case TableFieldSourceDefinition.TypeId.Feed:
@@ -149,4 +162,78 @@ export class TableFieldSourceDefinitionRegistryService {
                 throw new UnreachableCaseError('TFSDRCD25051', typeId);
         }
     }
+
+    private getFieldNameOfFieldId(fieldId: TableFieldSourceDefinitionRegistryService.FieldId) {
+        const sourceTypeId = fieldId.sourceTypeId;
+        switch (sourceTypeId) {
+            case TableFieldSourceDefinition.TypeId.Feed:
+                return this.feed.getFieldNameById(fieldId.id);
+            case TableFieldSourceDefinition.TypeId.LitIvemId:
+                return this.litIvemId.getFieldNameById(fieldId.id);
+            case TableFieldSourceDefinition.TypeId.RankedLitIvemId:
+                return this.rankedLitIvemId.getFieldNameById(fieldId.id);
+            case TableFieldSourceDefinition.TypeId.LitIvemBaseDetail:
+                return this.litIvemBaseDetail.getFieldNameById(fieldId.id);
+            case TableFieldSourceDefinition.TypeId.LitIvemExtendedDetail:
+                return this.litIvemExtendedDetail.getFieldNameById(fieldId.id);
+            case TableFieldSourceDefinition.TypeId.LitIvemAlternateCodes:
+                return this.litIvemAlternateCodes.getFieldNameById(fieldId.id);
+            case TableFieldSourceDefinition.TypeId.MyxLitIvemAttributes:
+                return this.myxLitIvemAttributes.getFieldNameById(fieldId.id);
+            case TableFieldSourceDefinition.TypeId.EditableGridLayoutDefinitionColumn:
+                return this.editableGridLayoutDefinitionColumn.getFieldNameById(fieldId.id);
+            case TableFieldSourceDefinition.TypeId.SecurityDataItem:
+                return this.securityDataItem.getFieldNameById(fieldId.id);
+            case TableFieldSourceDefinition.TypeId.BrokerageAccounts:
+                return this.brokerageAccounts.getFieldNameById(fieldId.id);
+            case TableFieldSourceDefinition.TypeId.OrdersDataItem:
+                return this.ordersDataItem.getFieldNameById(fieldId.id);
+            case TableFieldSourceDefinition.TypeId.HoldingsDataItem:
+                return this.holdingsDataItem.getFieldNameById(fieldId.id);
+            case TableFieldSourceDefinition.TypeId.BalancesDataItem:
+                return this.balances.getFieldNameById(fieldId.id);
+            case TableFieldSourceDefinition.TypeId.CallPut:
+                return this.callPut.getFieldNameById(fieldId.id);
+            case TableFieldSourceDefinition.TypeId.CallSecurityDataItem:
+                return this.callSecurityDataItem.getFieldNameById(fieldId.id);
+            case TableFieldSourceDefinition.TypeId.PutSecurityDataItem:
+                return this.putSecurityDataItem.getFieldNameById(fieldId.id);
+            case TableFieldSourceDefinition.TypeId.TopShareholdersDataItem:
+                return this.topShareholdersDataItem.getFieldNameById(fieldId.id);
+            case TableFieldSourceDefinition.TypeId.Scan:
+                return this.scan.getFieldNameById(fieldId.id);
+            case TableFieldSourceDefinition.TypeId.RankedLitIvemIdListDirectoryItem:
+                return this.rankedLitIvemIdListDirectoryItem.getFieldNameById(fieldId.id);
+            case TableFieldSourceDefinition.TypeId.GridField:
+                return this.gridField.getFieldNameById(fieldId.id);
+
+            default:
+                throw new UnreachableCaseError('TFSDRSGF25051', sourceTypeId);
+        }
+    }
+}
+
+export namespace TableFieldSourceDefinitionRegistryService {
+    export type FieldId =
+        FeedTableFieldSourceDefinition.FieldId |
+        LitIvemIdTableFieldSourceDefinition.FieldId |
+        RankedLitIvemIdTableFieldSourceDefinition.FieldId |
+        LitIvemBaseDetailTableFieldSourceDefinition.FieldId |
+        LitIvemExtendedDetailTableFieldSourceDefinition.FieldId |
+        LitIvemAlternateCodesTableFieldSourceDefinition.FieldId |
+        MyxLitIvemAttributesTableFieldSourceDefinition.FieldId |
+        EditableGridLayoutDefinitionColumnTableFieldSourceDefinition.FieldId |
+        SecurityDataItemTableFieldSourceDefinition.FieldId |
+        BrokerageAccountTableFieldSourceDefinition.FieldId |
+        OrderTableFieldSourceDefinition.FieldId |
+        HoldingTableFieldSourceDefinition.FieldId |
+        BalancesTableFieldSourceDefinition.FieldId |
+        CallPutTableFieldSourceDefinition.FieldId |
+        CallPutSecurityDataItemTableFieldSourceDefinition.CallFieldId |
+        CallPutSecurityDataItemTableFieldSourceDefinition.PutFieldId |
+        TopShareholderTableFieldSourceDefinition.FieldId |
+        ScanTableFieldSourceDefinition.FieldId |
+        RankedLitIvemIdListDirectoryItemTableFieldSourceDefinition.FieldId |
+        GridFieldTableFieldSourceDefinition.FieldId;
+
 }

@@ -167,6 +167,11 @@ export namespace FeedTableFieldSourceDefinition {
         }
     }
 
+    export interface FieldId extends TableFieldSourceDefinition.FieldId {
+        sourceTypeId: TableFieldSourceDefinition.TypeId.Feed;
+        id: Feed.FieldId;
+    }
+
     export function initialiseStatic() {
         Field.initialiseFieldStatic();
     }

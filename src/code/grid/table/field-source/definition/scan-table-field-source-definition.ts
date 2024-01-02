@@ -207,6 +207,11 @@ export namespace ScanTableFieldSourceDefinition {
         }
     }
 
+    export interface FieldId extends TableFieldSourceDefinition.FieldId {
+        sourceTypeId: TableFieldSourceDefinition.TypeId.Scan;
+        id: Scan.FieldId;
+    }
+
     export function initialiseStatic() {
         Field.initialise();
     }

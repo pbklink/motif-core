@@ -243,6 +243,10 @@ export namespace PrefixableSecurityDataItemTableFieldSourceDefinition {
         }
     }
 
+    export interface FieldId extends TableFieldSourceDefinition.FieldId {
+        id: SecurityDataItem.FieldId;
+    }
+
     export function initialiseStatic() {
         Field.initialiseLitIvemIdSecurityWatchValueSourceField();
     }
