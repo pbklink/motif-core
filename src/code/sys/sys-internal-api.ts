@@ -43,6 +43,7 @@ export * from './record-list';
 export * from './resource-badness';
 export * from './result';
 export * from './service-operator';
+export * from './ui-badness-comparable-list';
 export * from './usable-list';
 export * from './usable-list-change-type';
 // export * from './Scheduler';

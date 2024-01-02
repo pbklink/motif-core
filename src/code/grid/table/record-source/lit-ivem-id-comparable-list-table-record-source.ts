@@ -6,7 +6,7 @@
 
 import { AdiService, LitIvemId } from '../../../adi/adi-internal-api';
 import { SymbolDetailCacheService } from '../../../services/services-internal-api';
-import { BadnessComparableList, Integer, UnreachableCaseError } from '../../../sys/sys-internal-api';
+import { Integer, UiBadnessComparableList, UnreachableCaseError } from '../../../sys/sys-internal-api';
 import { TextFormatterService } from '../../../text-format/text-format-internal-api';
 import {
     TableFieldSourceDefinition
@@ -20,7 +20,7 @@ import { PromisedLitIvemBaseDetail } from './promised-lit-ivem-base-detail';
 
 export class LitIvemIdComparableListTableRecordSource extends BadnessListTableRecordSource<LitIvemId> {
     declare readonly definition: LitIvemIdComparableListTableRecordSourceDefinition;
-    declare readonly list: BadnessComparableList<LitIvemId>;
+    declare readonly list: UiBadnessComparableList<LitIvemId>;
 
     constructor(
         private readonly _adiService: AdiService,
@@ -37,7 +37,7 @@ export class LitIvemIdComparableListTableRecordSource extends BadnessListTableRe
         );
     }
 
-    override get recordList() { return super.recordList as BadnessComparableList<LitIvemId>; }
+    override get recordList() { return super.recordList as UiBadnessComparableList<LitIvemId>; }
 
     override createDefinition(): LitIvemIdComparableListTableRecordSourceDefinition {
         const list = this.list.clone();

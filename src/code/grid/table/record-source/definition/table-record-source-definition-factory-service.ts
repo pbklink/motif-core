@@ -11,7 +11,7 @@ import {
     RankedLitIvemIdListDefinitionFactoryService,
     RankedLitIvemIdListDirectory,
 } from "../../../../ranked-lit-ivem-id-list/ranked-lit-ivem-id-list-internal-api";
-import { AssertInternalError, BadnessComparableList, Err, ErrorCode, JsonElement, LockOpenListItem, NotImplementedError, Ok, Result, UnreachableCaseError } from '../../../../sys/sys-internal-api';
+import { AssertInternalError, Err, ErrorCode, JsonElement, LockOpenListItem, NotImplementedError, Ok, Result, UiBadnessComparableList, UnreachableCaseError } from '../../../../sys/sys-internal-api';
 import { GridField, GridFieldCustomHeadingsService } from '../../../field/grid-field-internal-api';
 import { TableFieldSourceDefinitionRegistryService } from '../../field-source/grid-table-field-source-internal-api';
 import { BalancesTableRecordSourceDefinition } from './balances-table-record-source-definition';
@@ -67,7 +67,7 @@ export class TableRecordSourceDefinitionFactoryService {
         );
     }
 
-    createLitIvemIdComparableList(list: BadnessComparableList<LitIvemId>) {
+    createLitIvemIdComparableList(list: UiBadnessComparableList<LitIvemId>) {
         return new LitIvemIdComparableListTableRecordSourceDefinition(
             this.gridFieldCustomHeadingsService,
             this.tableFieldSourceDefinitionRegistryService,
