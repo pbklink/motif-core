@@ -427,4 +427,5 @@ export const enum ErrorCode {
     PlaceholderDitemFrameDefinition_DitemComponentIsNotSpecified = 'PDFDDCINS11133',
     PlaceholderDitemFrameDefinition_DitemComponentIsInvalid = 'PDFDDCII11133',
     ScanEditorFrame_RecordFocusedTryOpenEditor = 'SEFRFTOE31099',
+    GridSourceFrame_JsonDefinitionIsInvalid = 'GSFKDII34589',
 }
