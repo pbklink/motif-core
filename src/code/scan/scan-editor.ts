@@ -327,7 +327,7 @@ export class ScanEditor {
         if (!isUndefinableArrayEqual(value, this._targetLitIvemIds)) {
             this.beginFieldChanges(undefined)
             this._targetLitIvemIds = value.slice();
-            this.addFieldChange(ScanEditor.FieldId.TargetMarkets);
+            this.addFieldChange(ScanEditor.FieldId.TargetLitIvemIds);
             this.endFieldChanges();
         }
     }
