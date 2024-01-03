@@ -79,6 +79,10 @@ export class LockOpenManager<Item extends LockOpenListItem<Item>> {
             default: return true;
         }
     }
+
+    isOpened() {
+        return this._openers.length > 0;
+    }
 }
 
 export namespace LockOpenManager {

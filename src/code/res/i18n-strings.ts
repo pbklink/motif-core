@@ -923,6 +923,7 @@ export const enum StringId {
     Holdings_ColumnsDialogCaption,
     Balances_ColumnsDialogCaption,
     OrderAuthorise_ColumnsDialogCaption,
+    Scans_ColumnsDialogCaption,
     Grid_SelectAllCaption,
     Grid_SelectAllTitle,
     Grid_SearchInputTitle,
@@ -6739,6 +6740,11 @@ export namespace I18nStrings {
         OrderAuthorise_ColumnsDialogCaption: {
             id: StringId.OrderAuthorise_ColumnsDialogCaption, translations: {
                 en: 'Order authorise grid columns',
+            }
+        },
+        Scans_ColumnsDialogCaption: {
+            id: StringId.Scans_ColumnsDialogCaption, translations: {
+                en: 'Scans grid columns',
             }
         },
         Grid_SelectAllCaption: {

@@ -98,6 +98,7 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
         private readonly _adiService: AdiService,
         private readonly _descriptor: ScanStatusedDescriptor,
         private _listCorrectnessId: CorrectnessId,
+        private readonly _requireUnwantDetailOnLastCloseEventer: Scan.RequireUnwantDetailOnLastCloseEventer,
         private readonly _deletedAndUnlockedEventer: Scan.DeletedAndUnlockedEventer,
     ) {
         this._queryScanDetailDataItemIncubator = new DataItemIncubator<QueryScanDetailDataItem>(this._adiService);
@@ -203,6 +204,12 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
         if (value !== this._listCorrectnessId) {
             this._listCorrectnessId = value;
             this.updateCorrectnessId();
+        }
+    }
+
+    unwantDetailIfClosed() {
+        if (this._detailWanted && !this._lockOpenManager.isOpened()) {
+            this.unwantDetail();
         }
     }
     // subscribeCorrectnessChangedEvent(handler: KeyedCorrectnessListItem.CorrectnessChangedEventHandler): number {
@@ -455,7 +462,9 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
     }
 
     private processLastClose() {
-        this.unwantDetail();
+        if (this._requireUnwantDetailOnLastCloseEventer()) {
+            this.unwantDetail();
+        }
     }
 
     private beginChange() {
@@ -512,17 +521,19 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
                     dataItemOrPromise.then(
                         (dataItem) => {
                             if (dataItem !== undefined) { // ignore if undefined as cancelled
-                                if (dataItem.error) {
-                                    this._errorText = dataItem.errorText;
-                                    this._detailCorrectnessId = dataItem.correctnessId;
-                                    this.updateCorrectnessId();
-                                } else {
-                                    this.beginChange();
-                                    const descriptorAndDetail = dataItem.descriptorAndDetail;
-                                    this.applyDescriptorChanges(descriptorAndDetail, ScanStatusedDescriptor.Field.allIds);
-                                    this.applyDetail(descriptorAndDetail);
-                                    this._detailed = true;
-                                    this.endChange();
+                                if (this._detailWanted) { // ignore if no longer want detail
+                                    if (dataItem.error) {
+                                        this._errorText = dataItem.errorText;
+                                        this._detailCorrectnessId = dataItem.correctnessId;
+                                        this.updateCorrectnessId();
+                                    } else {
+                                        this.beginChange();
+                                        const descriptorAndDetail = dataItem.descriptorAndDetail;
+                                        this.applyDescriptorChanges(descriptorAndDetail, ScanStatusedDescriptor.Field.allIds);
+                                        this.applyDetail(descriptorAndDetail);
+                                        this._detailed = true;
+                                        this.endChange();
+                                    }
                                 }
                             }
                         },
@@ -536,6 +547,7 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
     private unwantDetail() {
         if (this._detailWanted) {
             this._detailWanted = false;
+            this._detailed = false;
             this.beginChange();
             this._detailCorrectnessId = CorrectnessId.Good;
             this.updateCorrectnessId();
@@ -651,6 +663,7 @@ export namespace Scan {
     export type CloseLockedEventHandler = (this: void, scan: Scan, opener: LockOpenListItem.Opener) => void;
     export type GetListCorrectnessIdEventer = (this: void) => CorrectnessId;
     export type DeletedAndUnlockedEventer = (this: void, scan: Scan) => void;
+    export type RequireUnwantDetailOnLastCloseEventer = (this: void) => boolean;
 
     export const enum CriterionId {
         PriceGreaterThanValue,

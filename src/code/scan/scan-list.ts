@@ -14,6 +14,7 @@ export class ScanList extends LockOpenList<Scan> {
     private _scanDescriptorsDataItemCorrectnessChangedSubscriptionId: MultiEvent.SubscriptionId;
 
     private _scanChangeMultiEvent = new MultiEvent<ScanList.RecordChangeEventHandler>();
+    private _suspendUnwantDetailOnScanLastCloseCount = 0;
 
     constructor(private readonly _adiService: AdiService) {
         super();
@@ -49,6 +50,16 @@ export class ScanList extends LockOpenList<Scan> {
         this._scanDescriptorsDataItemListChangeEventSubscriptionId = undefined;
         this._adiService.unsubscribe(this._scanDescriptorsDataItem);
         this._scanDescriptorsDataItem = undefined as unknown as ScanStatusedDescriptorsDataItem;
+    }
+
+    suspendUnwantDetailOnScanLastClose() {
+        this._suspendUnwantDetailOnScanLastCloseCount++;
+    }
+
+    unsuspendUnwantDetailOnScanLastClose() {
+        if (--this._suspendUnwantDetailOnScanLastCloseCount === 0) {
+            this.unwantDetailOnClosedScans();
+        }
     }
 
     protected override processUsableChanged() {
@@ -162,6 +173,7 @@ export class ScanList extends LockOpenList<Scan> {
             this._adiService,
             descriptor,
             this.correctnessId,
+            () => this.requireUnwantDetailOnScanLastClose(),
             (aScanId) => { this.deleteItem(aScanId); },
         );
     }
@@ -191,6 +203,18 @@ export class ScanList extends LockOpenList<Scan> {
             const index = 0;
             const blockLength = blockLastIndex + 1;
             this.deleteItemsAtIndex(index, blockLength);
+        }
+    }
+
+    private requireUnwantDetailOnScanLastClose() {
+        return this._suspendUnwantDetailOnScanLastCloseCount === 0;
+    }
+
+    private unwantDetailOnClosedScans() {
+        const count = this.count;
+        for (let i = 0; i < count; i++) {
+            const scan = this.getAt(i);
+            scan.unwantDetailIfClosed();
         }
     }
 }
