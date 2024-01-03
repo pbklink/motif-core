@@ -3338,8 +3338,6 @@ export class ChangeSubscribableComparableList<T> extends ComparableList<T> imple
     // (undocumented)
     clone(): ChangeSubscribableComparableList<T>;
     // (undocumented)
-    exchange(index1: Integer, index2: Integer): void;
-    // (undocumented)
     insert(index: Integer, value: T): void;
     // (undocumented)
     insertRange(index: Integer, values: readonly T[]): void;
@@ -3353,8 +3351,6 @@ export class ChangeSubscribableComparableList<T> extends ComparableList<T> imple
     protected processMove(fromIndex: Integer, toIndex: Integer): void;
     // (undocumented)
     protected processMoveRange(fromIndex: Integer, toIndex: Integer, count: Integer): void;
-    // (undocumented)
-    remove(value: T): void;
     // (undocumented)
     removeAtIndex(index: Integer): void;
     // (undocumented)
@@ -14107,7 +14103,13 @@ export namespace LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition {
     const // (undocumented)
     allowedFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[];
     // (undocumented)
+    export function createLayoutDefinition(fieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService, fieldIds: FieldId[]): GridLayoutDefinition;
+    // (undocumented)
+    export type FieldId = LitIvemBaseDetailTableFieldSourceDefinition.FieldId | LitIvemExtendedDetailTableFieldSourceDefinition.FieldId | LitIvemAlternateCodesTableFieldSourceDefinition.FieldId | MyxLitIvemAttributesTableFieldSourceDefinition.FieldId;
+    // (undocumented)
     export type FieldSourceDefinitionTypeId = PickEnum<TableFieldSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId.LitIvemBaseDetail | TableFieldSourceDefinition.TypeId.LitIvemExtendedDetail | TableFieldSourceDefinition.TypeId.LitIvemAlternateCodes | TableFieldSourceDefinition.TypeId.MyxLitIvemAttributes>;
+    // (undocumented)
+    export function is(definition: TableRecordSourceDefinition): definition is LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition;
     // (undocumented)
     export namespace JsonName {
         const // (undocumented)
@@ -35138,13 +35140,46 @@ export namespace UiAction {
 }
 
 // Warning: (ae-missing-release-tag) "UiBadnessComparableList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "UiBadnessComparableList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class UiBadnessComparableList<T> extends BadnessComparableList<T> implements RecordList<T> {
     // (undocumented)
+    add(value: T): number;
+    // (undocumented)
+    addRange(values: readonly T[]): void;
+    // (undocumented)
+    addSubRange(values: readonly T[], rangeStartIndex: Integer, rangeCount: Integer): void;
+    // (undocumented)
+    clear(): void;
+    // (undocumented)
     clone(): UiBadnessComparableList<T>;
     // (undocumented)
+    insert(index: Integer, value: T): void;
+    // (undocumented)
+    insertRange(index: Integer, values: readonly T[]): void;
+    // (undocumented)
+    insertSubRange(index: Integer, values: readonly T[], subRangeStartIndex: Integer, subRangeCount: Integer): void;
+    // (undocumented)
     protected notifyListChange(listChangeTypeId: UsableListChangeTypeId, index: Integer, count: Integer): void;
+    // (undocumented)
+    protected processExchange(fromIndex: Integer, toIndex: Integer): void;
+    // (undocumented)
+    protected processMove(fromIndex: Integer, toIndex: Integer): void;
+    // (undocumented)
+    protected processMoveRange(fromIndex: Integer, toIndex: Integer, count: Integer): void;
+    // (undocumented)
+    removeAtIndex(index: Integer): void;
+    // (undocumented)
+    removeAtIndices(removeIndices: Integer[]): void;
+    // (undocumented)
+    removeItems(removeItems: readonly T[]): void;
+    // (undocumented)
+    removeRange(index: Integer, deleteCount: Integer): void;
+    // (undocumented)
+    setAt(index: Integer, value: T): void;
+    // (undocumented)
+    subscribeAfterListChangedEvent(handler: UiBadnessComparableList.AfterListChangedEventHandler): MultiEvent.DefinedSubscriptionId;
     // (undocumented)
     subscribeListChangeEvent(handler: RecordList.UiListChangeEventHandler): MultiEvent.DefinedSubscriptionId;
     // (undocumented)
@@ -35176,7 +35211,15 @@ export class UiBadnessComparableList<T> extends BadnessComparableList<T> impleme
     // (undocumented)
     uiSetAt(index: Integer, value: T, ui?: boolean): void;
     // (undocumented)
+    unsubscribeAfterListChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+    // (undocumented)
     unsubscribeListChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+}
+
+// @public (undocumented)
+export namespace UiBadnessComparableList {
+    // (undocumented)
+    export type AfterListChangedEventHandler = (this: void, ui: boolean) => void;
 }
 
 // Warning: (ae-missing-release-tag) "UndefinedTableValueSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -35498,6 +35541,12 @@ export namespace WatchlistTableRecordSourceDefinition {
     allowedFieldSourceDefinitionTypeIds: RankedLitIvemIdListTableRecordSourceDefinition.FieldSourceDefinitionTypeId[];
     const // (undocumented)
     defaultFieldSourceDefinitionTypeIds: RankedLitIvemIdListTableRecordSourceDefinition.FieldSourceDefinitionTypeId[];
+    // (undocumented)
+    export function createLayoutDefinition(fieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService, fieldIds: FieldId[]): GridLayoutDefinition;
+    // (undocumented)
+    export type FieldId = LitIvemBaseDetailTableFieldSourceDefinition.FieldId | SecurityDataItemTableFieldSourceDefinition.FieldId | RankedLitIvemIdTableFieldSourceDefinition.FieldId;
+    // (undocumented)
+    export function is(definition: TableRecordSourceDefinition): definition is WatchlistTableRecordSourceDefinition;
 }
 
 // Warning: (ae-missing-release-tag) "WatchmakerDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)

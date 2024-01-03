@@ -129,7 +129,7 @@ export class ComparableList<T> {
     remove(value: T) {
         const index = this.indexOf(value);
         if (index === -1) {
-            throw new Error('Item not found');
+            throw new AssertInternalError('CLR55098');
         } else {
             this.removeAtIndex(index);
         }
@@ -144,19 +144,19 @@ export class ComparableList<T> {
     removeAtIndices(removeIndices: Integer[], beforeRemoveRangeCallBack?: ComparableList.BeforeRemoveRangeCallBack) {
         if (removeIndices.length > 0) {
             removeIndices.sort((left, right) => left - right);
-            let nextRemoveIndex = removeIndices[removeIndices.length - 1];
+            let nextRemoveIndicesIndex = removeIndices.length - 1;
 
             let blockLastIndex: Integer | undefined;
             for (let i = this._count - 1; i >= 0; i--) {
-                const toBeRemoved = i === nextRemoveIndex;
+                const toBeRemoved = i === removeIndices[nextRemoveIndicesIndex];
                 if (toBeRemoved) {
                     if (blockLastIndex === undefined) {
                         blockLastIndex = i;
                     }
 
-                    nextRemoveIndex--;
+                    nextRemoveIndicesIndex--;
 
-                    if (nextRemoveIndex < 0) {
+                    if (nextRemoveIndicesIndex < 0) {
                         this.removeBlockRange(i, blockLastIndex - i + 1, beforeRemoveRangeCallBack)
                         blockLastIndex = undefined;
                         break;
@@ -410,6 +410,7 @@ export class ComparableList<T> {
             beforeRemoveRangeCallBack(blockStartIndex, blockLength);
         }
         this.items.splice(blockStartIndex, blockLength);
+        this._count -= blockLength;
     }
 }
 

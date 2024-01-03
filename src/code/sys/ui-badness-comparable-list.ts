@@ -12,6 +12,7 @@ import { UsableListChangeTypeId } from './usable-list-change-type';
 
 export class UiBadnessComparableList<T> extends BadnessComparableList<T> implements RecordList<T> {
     private _uiListChangeMultiEvent = new MultiEvent<RecordList.UiListChangeEventHandler>();
+    private _afterListChangedMultiEvent = new MultiEvent<UiBadnessComparableList.AfterListChangedEventHandler>();
     private _uiChanging = false;
 
     override clone(): UiBadnessComparableList<T> {
@@ -105,6 +106,67 @@ export class UiBadnessComparableList<T> extends BadnessComparableList<T> impleme
         this._uiChanging = false;
     }
 
+    override setAt(index: Integer, value: T) {
+        super.setAt(index, value);
+        this.notifyAfterListChanged();
+    }
+
+    override add(value: T) {
+        const result = super.add(value);
+        this.notifyAfterListChanged();
+        return result;
+    }
+
+    override addRange(values: readonly T[]) {
+        super.addRange(values);
+        this.notifyAfterListChanged();
+    }
+
+    override addSubRange(values: readonly T[], rangeStartIndex: Integer, rangeCount: Integer) {
+        super.addSubRange(values, rangeStartIndex, rangeCount);
+        this.notifyAfterListChanged();
+    }
+
+    override insert(index: Integer, value: T) {
+        super.insert(index, value);
+        this.notifyAfterListChanged();
+    }
+
+    override insertRange(index: Integer, values: readonly T[]) {
+        super.insertRange(index, values);
+        this.notifyAfterListChanged();
+    }
+
+    override insertSubRange(index: Integer, values: readonly T[], subRangeStartIndex: Integer, subRangeCount: Integer) {
+        super.insertSubRange(index, values, subRangeStartIndex, subRangeCount);
+        this.notifyAfterListChanged();
+    }
+
+    override removeAtIndex(index: Integer) {
+        super.removeAtIndex(index);
+        this.notifyAfterListChanged();
+    }
+
+    override  removeAtIndices(removeIndices: Integer[]) {
+        super.removeAtIndices(removeIndices);
+        this.notifyAfterListChanged();
+    }
+
+    override removeRange(index: Integer, deleteCount: Integer) {
+        super.removeRange(index, deleteCount);
+        this.notifyAfterListChanged();
+    }
+
+    override removeItems(removeItems: readonly T[]) {
+        super.removeItems(removeItems);
+        this.notifyAfterListChanged();
+    }
+
+    override clear() {
+        super.clear();
+        this.notifyAfterListChanged();
+    }
+
     override subscribeListChangeEvent(handler: RecordList.UiListChangeEventHandler): MultiEvent.DefinedSubscriptionId {
         return this._uiListChangeMultiEvent.subscribe(handler);
     }
@@ -113,10 +175,44 @@ export class UiBadnessComparableList<T> extends BadnessComparableList<T> impleme
         this._uiListChangeMultiEvent.unsubscribe(subscriptionId);
     }
 
+    subscribeAfterListChangedEvent(handler: UiBadnessComparableList.AfterListChangedEventHandler): MultiEvent.DefinedSubscriptionId {
+        return this._afterListChangedMultiEvent.subscribe(handler);
+    }
+
+    unsubscribeAfterListChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void {
+        this._afterListChangedMultiEvent.unsubscribe(subscriptionId);
+    }
+
+    protected override processExchange(fromIndex: Integer, toIndex: Integer) {
+        super.processExchange(fromIndex, toIndex);
+        this.notifyAfterListChanged();
+    }
+
+    protected override processMove(fromIndex: Integer, toIndex: Integer) {
+        super.processMove(fromIndex, toIndex);
+        this.notifyAfterListChanged();
+    }
+
+    protected override processMoveRange(fromIndex: Integer, toIndex: Integer, count: Integer) {
+        super.processMoveRange(fromIndex, toIndex, count);
+        this.notifyAfterListChanged();
+    }
+
     protected override notifyListChange(listChangeTypeId: UsableListChangeTypeId, index: Integer, count: Integer) {
         const handlers = this._uiListChangeMultiEvent.copyHandlers();
         for (let i = 0; i < handlers.length; i++) {
             handlers[i](listChangeTypeId, index, count, this._uiChanging);
         }
     }
+
+    private notifyAfterListChanged() {
+        const handlers = this._afterListChangedMultiEvent.copyHandlers();
+        for (let i = 0; i < handlers.length; i++) {
+            handlers[i](this._uiChanging);
+        }
+    }
+}
+
+export namespace UiBadnessComparableList {
+    export type AfterListChangedEventHandler = (this: void, ui: boolean) => void;
 }

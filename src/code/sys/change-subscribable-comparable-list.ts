@@ -5,7 +5,6 @@
  */
 
 import { ComparableList } from './comparable-list';
-import { AssertInternalError } from './internal-error';
 import { MultiEvent } from './multi-event';
 import { RecordList } from './record-list';
 import { Integer, } from './types';
@@ -60,23 +59,13 @@ export class ChangeSubscribableComparableList<T> extends ComparableList<T> imple
         this.notifyListChange(UsableListChangeTypeId.Insert, subRangeStartIndex, subRangeCount);
     }
 
-    override remove(value: T) {
-        const idx = this.indexOf(value);
-        if (idx < 0) {
-            throw new AssertInternalError('CSMCLR40401', `${JSON.stringify(value)}`);
-        } else {
-            this.notifyListChange(UsableListChangeTypeId.Remove, idx, 1);
-            super.removeAtIndex(idx);
-        }
-    }
-
     override removeAtIndex(index: Integer) {
         this.notifyListChange(UsableListChangeTypeId.Remove, index, 1);
         super.removeAtIndex(index);
     }
 
     override  removeAtIndices(removeIndices: Integer[]) {
-        super.removeAtIndices(removeIndices, (index, count) => { this.notifyListChange(UsableListChangeTypeId.Remove, index, count); } )
+        super.removeAtIndices(removeIndices, (index, count) => { this.notifyListChange(UsableListChangeTypeId.Remove, index, count); } );
     }
 
     override removeRange(index: Integer, deleteCount: Integer) {
@@ -85,15 +74,7 @@ export class ChangeSubscribableComparableList<T> extends ComparableList<T> imple
     }
 
     override removeItems(removeItems: readonly T[]) {
-        super.removeItems(removeItems, (index, count) => { this.notifyListChange(UsableListChangeTypeId.Remove, index, count); } )
-    }
-
-    override exchange(index1: Integer, index2: Integer) {
-        this.notifyListChange(UsableListChangeTypeId.BeforeReplace, index1, 1);
-        this.notifyListChange(UsableListChangeTypeId.BeforeReplace, index2, 1);
-        super.exchange(index1, index2);
-        this.notifyListChange(UsableListChangeTypeId.AfterReplace, index1, 1);
-        this.notifyListChange(UsableListChangeTypeId.AfterReplace, index2, 1);
+        super.removeItems(removeItems, (index, count) => { this.notifyListChange(UsableListChangeTypeId.Remove, index, count); } );
     }
 
     override clear() {
