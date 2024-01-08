@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { HorizontalAlign, TextTruncateType } from 'revgrid';
+import { HorizontalAlign, TextTruncateType } from '@xilytix/revgrid';
 
 
 /** @public */

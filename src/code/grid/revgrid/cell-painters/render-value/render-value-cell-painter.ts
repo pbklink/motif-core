@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { CachedCanvasRenderingContext2D, DataServer, DatalessViewCell, Rectangle, SelectionAreaTypeId } from 'revgrid';
+import { CachedCanvasRenderingContext2D, DataServer, DatalessViewCell, Rectangle, SelectionAreaTypeId } from '@xilytix/revgrid';
 import { ColorScheme, ColorSettings, RenderValue, ScalarSettings, SettingsService } from '../../../../services/services-internal-api';
 import { IndexSignatureHack } from '../../../../sys/sys-internal-api';
 import { GridField } from '../../../field/grid-field-internal-api';

@@ -4,9 +4,9 @@
  * License: motionite.trade/license/motif
  */
 
+import { RevRecordValueRecentChangeTypeId } from '@xilytix/revgrid';
 import { Config, Decimal, Numeric } from 'decimal.js-light';
 import { nanoid } from 'nanoid';
-import { RevRecordValueRecentChangeTypeId } from 'revgrid';
 import { ValueRecentChangeTypeId } from './grid-revgrid-types';
 import { Err, Ok, Result } from './result';
 import { ComparisonResult, Integer, Json, JsonValue, PriceOrRemainder, Rect, TimeSpan } from './types';

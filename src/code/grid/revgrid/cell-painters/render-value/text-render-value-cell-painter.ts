@@ -10,7 +10,7 @@ import {
     RevRecordRecentChangeTypeId,
     RevRecordValueRecentChangeTypeId,
     StandardTextPainter
-} from 'revgrid';
+} from '@xilytix/revgrid';
 import { HigherLowerId, OrderSideId } from '../../../../adi/adi-internal-api';
 import { ColorRenderValue, ColorScheme, RenderValue, SettingsService } from '../../../../services/services-internal-api';
 import { CorrectnessId, IndexSignatureHack, Integer, UnreachableCaseError } from '../../../../sys/sys-internal-api';

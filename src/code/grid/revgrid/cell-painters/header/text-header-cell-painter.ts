@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { DataServer, DatalessViewCell, IndexSignatureHack, StandardTextPainter } from 'revgrid';
+import { DataServer, DatalessViewCell, IndexSignatureHack, StandardTextPainter } from '@xilytix/revgrid';
 import { ColorScheme, SettingsService } from '../../../../services/services-internal-api';
 import { GridField } from '../../../field/grid-field-internal-api';
 import { AdaptedRevgrid } from '../../adapted-revgrid/grid-revgrid-adapted-revgrid-internal-api';

@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { StandardToggleClickBoxCellEditor } from 'revgrid';
+import { StandardToggleClickBoxCellEditor } from '@xilytix/revgrid';
 import { SettingsService } from '../../../services/services-internal-api';
 import { GridField } from '../../field/grid-field-internal-api';
 import { CheckboxRenderValueCellPainter, CheckboxRenderValueRecordGridCellPainter } from '../cell-painters/grid-revgrid-cell-painters-internal-api';

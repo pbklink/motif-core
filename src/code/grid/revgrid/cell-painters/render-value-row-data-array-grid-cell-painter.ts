@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { CellPainter, DataRowArrayDataServer, DataServer, DatalessViewCell } from 'revgrid';
+import { CellPainter, DataRowArrayDataServer, DataServer, DatalessViewCell } from '@xilytix/revgrid';
 import {
     BigIntRenderValue,
     DateTimeRenderValue,

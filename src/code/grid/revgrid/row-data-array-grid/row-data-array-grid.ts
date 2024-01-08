@@ -11,7 +11,7 @@ import {
     Revgrid,
     SingleHeadingDataRowArrayServerSet,
     Subgrid
-} from 'revgrid';
+} from '@xilytix/revgrid';
 import { SettingsService } from '../../../services/services-internal-api';
 import { GridFieldHorizontalAlign } from '../../../sys/sys-internal-api';
 import { GridField, GridFieldDefinition, GridFieldSourceDefinition } from '../../field/grid-field-internal-api';

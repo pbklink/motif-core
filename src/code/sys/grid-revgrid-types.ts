@@ -14,7 +14,7 @@ import {
     RevRecordInvalidatedValue,
     RevRecordStore,
     RevRecordValueRecentChangeTypeId
-} from 'revgrid';
+} from '@xilytix/revgrid';
 
 // Aliases for RevGrid types (so that revgrid is only imported here for grid sub projects)
 

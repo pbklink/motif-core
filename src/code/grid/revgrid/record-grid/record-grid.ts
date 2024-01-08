@@ -19,7 +19,7 @@ import {
     Revgrid,
     Subgrid,
     ViewCell
-} from 'revgrid';
+} from '@xilytix/revgrid';
 import { SettingsService } from '../../../services/services-internal-api';
 import {
     AssertInternalError,

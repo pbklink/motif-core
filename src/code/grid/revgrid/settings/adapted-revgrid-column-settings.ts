@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { ColumnSettings } from 'revgrid';
+import { ColumnSettings } from '@xilytix/revgrid';
 import { AdaptedRevgridOnlyColumnSettings } from './adapted-revgrid-only-column-settings';
 
 /** @public */

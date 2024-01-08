@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { HorizontalAlign, InMemoryBehavioredGridSettings, TextTruncateType } from 'revgrid';
+import { HorizontalAlign, InMemoryBehavioredGridSettings, TextTruncateType } from '@xilytix/revgrid';
 import { AdaptedRevgridBehavioredGridSettings } from './adapted-revgrid-behaviored-grid-settings';
 import { AdaptedRevgridGridSettings } from './adapted-revgrid-grid-settings';
 import { AdaptedRevgridOnlyGridSettings } from './adapted-revgrid-only-grid-settings';
