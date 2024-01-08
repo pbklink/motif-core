@@ -4,8 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
-import { ZenithConvert, ZenithEncodedScanFormula, ZenithProtocolCommon } from '../adi/adi-internal-api';
-import { StringId, Strings } from '../res/res-internal-api';
+import { ZenithConvert, ZenithEncodedScanFormula, ZenithProtocolCommon } from '../../adi/adi-internal-api';
+import { StringId, Strings } from '../../res/res-internal-api';
 import {
     AssertInternalError,
     EnumInfoOutOfOrderError,
@@ -15,7 +15,7 @@ import {
     Result,
     SourceTzOffsetDateTime,
     UnreachableCaseError
-} from "../sys/sys-internal-api";
+} from "../../sys/sys-internal-api";
 import { ScanFormula } from './scan-formula';
 
 export namespace ScanFormulaZenithEncoding {
@@ -145,7 +145,6 @@ export namespace ScanFormulaZenithEncoding {
             case ScanFormula.NodeTypeId.DateFieldEquals: return encodeDateFieldEqualsNode(node as ScanFormula.DateFieldEqualsNode);
             case ScanFormula.NodeTypeId.DateFieldInRange: return encodeDateFieldInRangeNode(node as ScanFormula.DateFieldInRangeNode);
             case ScanFormula.NodeTypeId.TextFieldContains: return encodeTextFieldContainsNode(node as ScanFormula.TextFieldContainsNode);
-            case ScanFormula.NodeTypeId.SubFieldHasValue: return encodeSubFieldHasValueNode(node as ScanFormula.SubFieldHasValueNode);
             case ScanFormula.NodeTypeId.PriceSubFieldHasValue: return encodePriceSubFieldHasValueNode(node as ScanFormula.PriceSubFieldHasValueNode);
             case ScanFormula.NodeTypeId.PriceSubFieldEquals: return encodePriceSubFieldEqualsNode(node as ScanFormula.PriceSubFieldEqualsNode);
             case ScanFormula.NodeTypeId.PriceSubFieldInRange: return encodePriceSubFieldInRangeNode(node as ScanFormula.PriceSubFieldInRangeNode);
@@ -352,21 +351,6 @@ export namespace ScanFormulaZenithEncoding {
             IgnoreCase: node.ignoreCase,
         }
         return [field, value, namedParameters];
-    }
-
-    function encodeSubFieldHasValueNode(node: ScanFormula.SubFieldHasValueNode):
-            ZenithEncodedScanFormula.NumericNamedRangeMatchingTupleNode |
-            ZenithEncodedScanFormula.DateNamedRangeMatchingTupleNode |
-            ZenithEncodedScanFormula.NamedTextMatchingTupleNode {
-        const fieldId = node.fieldId;
-        switch (fieldId) {
-            case ScanFormula.FieldId.Price: return encodePriceSubFieldHasValue(node.subFieldId as ScanFormula.PriceSubFieldId);
-            case ScanFormula.FieldId.Date: return encodeDateSubFieldHasValue(node.subFieldId as ScanFormula.DateSubFieldId);
-            case ScanFormula.FieldId.AltCode: return encodeAltCodeSubFieldHasValue(node.subFieldId as ScanFormula.AltCodeSubFieldId);
-            case ScanFormula.FieldId.Attribute: return encodeAttributeSubFieldHasValue(node.subFieldId as ScanFormula.AttributeSubFieldId);
-            default:
-                throw new UnreachableCaseError('ZSCCFSFHVN55592', fieldId);
-        }
     }
 
     function encodePriceSubFieldHasValueNode(node: ScanFormula.PriceSubFieldHasValueNode): ZenithEncodedScanFormula.NumericNamedRangeMatchingTupleNode {

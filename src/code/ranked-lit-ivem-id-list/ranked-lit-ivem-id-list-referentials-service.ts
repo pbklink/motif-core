@@ -5,7 +5,7 @@
  */
 
 import { AdiService } from '../adi/adi-internal-api';
-import { ScansService } from '../scan/scan-internal-api';
+import { ScansService } from '../scan/internal-api';
 import { AppStorageService, IdleService, KeyValueStore } from '../services/services-internal-api';
 import { AssertInternalError, JsonElement, LockOpenList, UnexpectedCaseError, UnreachableCaseError } from '../sys/sys-internal-api';
 import { WatchmakerService } from '../watchmaker/watchmaker-internal-api';

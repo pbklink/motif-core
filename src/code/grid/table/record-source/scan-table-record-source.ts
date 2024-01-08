@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { Scan, ScanList, ScansService } from '../../../scan/scan-internal-api';
+import { Scan, ScanList, ScansService } from '../../../scan/internal-api';
 import { Integer, LockOpenListItem, UnreachableCaseError } from '../../../sys/sys-internal-api';
 import { TextFormatterService } from '../../../text-format/text-format-internal-api';
 import {

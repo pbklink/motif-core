@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { Scan } from '../../../scan/scan-internal-api';
+import { Scan } from '../../../scan/internal-api';
 import { PayloadTableRecordDefinition } from './payload-table-record-definition';
 import { TableRecordDefinition } from './table-record-definition';
 

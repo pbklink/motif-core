@@ -63,7 +63,7 @@ import {
     TrailingStopLossOrderConditionTypeId
 } from "../adi/adi-internal-api";
 import { StringId, Strings } from '../res/res-internal-api';
-import { Scan } from '../scan/scan-internal-api';
+import { Scan } from '../scan/internal-api';
 import {
     BigIntRenderValue,
     BooleanRenderValue,

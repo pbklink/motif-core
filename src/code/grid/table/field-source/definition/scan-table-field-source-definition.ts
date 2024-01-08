@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { Scan } from '../../../../scan/scan-internal-api';
+import { Scan } from '../../../../scan/internal-api';
 import { AssertInternalError, CommaText, FieldDataType, FieldDataTypeId, Integer } from '../../../../sys/sys-internal-api';
 import {
     BooleanCorrectnessTableField,

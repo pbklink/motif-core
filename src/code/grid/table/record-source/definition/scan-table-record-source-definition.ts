@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { Scan } from '../../../../scan/scan-internal-api';
+import { Scan } from '../../../../scan/internal-api';
 import { PickEnum } from '../../../../sys/sys-internal-api';
 import { GridFieldCustomHeadingsService } from '../../../field/grid-field-internal-api';
 import { GridLayoutDefinition } from '../../../layout/grid-layout-internal-api';

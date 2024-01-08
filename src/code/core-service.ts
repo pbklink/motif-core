@@ -21,7 +21,7 @@ import {
     RankedLitIvemIdListDefinitionFactoryService,
     RankedLitIvemIdListFactoryService,
 } from "./ranked-lit-ivem-id-list/ranked-lit-ivem-id-list-internal-api";
-import { ScansService } from './scan/scan-internal-api';
+import { ScansService } from './scan/internal-api';
 import {
     AppStorageService,
     CapabilitiesService,

@@ -15,6 +15,7 @@ import {
     Result,
     UsableListChangeTypeId
 } from "../sys/sys-internal-api";
+import { ScanConditionSet } from './condition-set/internal-api';
 import { Scan } from './scan';
 import { ScanEditor } from './scan-editor';
 import { ScanList } from './scan-list';
@@ -49,20 +50,30 @@ export class ScansService {
         this.scanList.finalise();
     }
 
-    openNewScanEditor(opener: LockOpenListItem.Opener, errorEventer?: ScanEditor.ErrorEventer): ScanEditor {
+    openNewScanEditor(
+        opener: LockOpenListItem.Opener,
+        emptyScanConditionSet: ScanConditionSet,
+        errorEventer?: ScanEditor.ErrorEventer,
+    ): ScanEditor {
         return new ScanEditor(
             this._adiService,
             this._symbolsService,
             undefined,
             opener,
+            emptyScanConditionSet,
             (createdScanId) => this.getOrWaitForScan(createdScanId),
             errorEventer,
         );
     }
 
-    async tryOpenScanEditor(scanId: string | undefined, opener: LockOpenListItem.Opener, errorEventer?: ScanEditor.ErrorEventer): Promise<Result<ScanEditor | undefined>> {
+    async tryOpenScanEditor(
+        scanId: string | undefined,
+        opener: LockOpenListItem.Opener,
+        newScanConditionSetCallback: (this: void) => ScanConditionSet,
+        errorEventer?: ScanEditor.ErrorEventer,
+    ): Promise<Result<ScanEditor | undefined>> {
         if (scanId === undefined) {
-            return new Ok(this.openNewScanEditor(opener));
+            return new Ok(this.openNewScanEditor(opener, newScanConditionSetCallback()));
         } else {
             const lockResult = await this.scanList.tryLockItemByKey(scanId, opener);
             if (lockResult.isErr()) {
@@ -80,6 +91,7 @@ export class ScansService {
                             this._symbolsService,
                             scan,
                             opener,
+                            newScanConditionSetCallback(),
                             (createdScanId) => this.getOrWaitForScan(createdScanId),
                             errorEventer,
                         );

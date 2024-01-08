@@ -5,7 +5,7 @@
  */
 
 import { AdiService } from '../adi/adi-internal-api';
-import { ScansService } from '../scan/scan-internal-api';
+import { ScansService } from '../scan/internal-api';
 import { AssertInternalError, ErrorCode, Guid, IndexedRecord, Integer, LockOpenListItem, LockOpenManager, MapKey, Ok, Result, UnexpectedCaseError } from "../sys/sys-internal-api";
 import { WatchmakerService } from '../watchmaker/watchmaker-service';
 import { BaseRankedLitIvemIdList } from './base-ranked-lit-ivem-id-list';

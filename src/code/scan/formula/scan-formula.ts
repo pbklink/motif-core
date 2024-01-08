@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { EnumInfoOutOfOrderError, PickEnum, SourceTzOffsetDateTime } from '../sys/sys-internal-api';
+import { EnumInfoOutOfOrderError, PickEnum, SourceTzOffsetDateTime } from '../../sys/sys-internal-api';
 
 export namespace ScanFormula {
     export const enum NodeTypeId {
@@ -48,7 +48,6 @@ export namespace ScanFormula {
         DateFieldEquals,
         DateFieldInRange,
         TextFieldContains,
-        SubFieldHasValue,
         PriceSubFieldHasValue,
         PriceSubFieldEquals,
         PriceSubFieldInRange,
@@ -79,7 +78,6 @@ export namespace ScanFormula {
         NodeTypeId.DateFieldEquals |
         NodeTypeId.DateFieldInRange |
         NodeTypeId.TextFieldContains |
-        NodeTypeId.SubFieldHasValue |
         NodeTypeId.PriceSubFieldHasValue |
         NodeTypeId.PriceSubFieldEquals |
         NodeTypeId.PriceSubFieldInRange |
@@ -160,6 +158,12 @@ export namespace ScanFormula {
 
         constructor() {
             super(NodeTypeId.Not);
+        }
+    }
+
+    export namespace NotNode {
+        export function is(node: Node): node is NotNode {
+            return node.typeId === NodeTypeId.Not;
         }
     }
 
@@ -265,31 +269,24 @@ export namespace ScanFormula {
         }
     }
 
-    export abstract class SubFieldNode<TypeId extends BooleanNodeTypeId, MySubbedFieldId extends SubbedFieldId, SubFieldId> extends FieldBooleanNode {
-        declare typeId: TypeId;
+    export abstract class SubFieldNode<MySubbedFieldId extends SubbedFieldId, SubFieldId> extends FieldBooleanNode {
         declare fieldId: MySubbedFieldId;
         subFieldId: SubFieldId;
     }
 
-    export class SubFieldHasValueNode extends SubFieldNode<NodeTypeId.SubFieldHasValue,
-        FieldId.AltCode | FieldId.Attribute | FieldId.Date | FieldId.Price,
-        AltCodeSubFieldId | AttributeSubFieldId | DateSubFieldId | PriceSubFieldId
-    > {
-        constructor() {
-            super(NodeTypeId.SubFieldHasValue);
-        }
+    export abstract class PriceSubFieldNode extends SubFieldNode<FieldId.Price, PriceSubFieldId> {
     }
 
-    export abstract class PriceSubFieldNode<TypeId extends BooleanNodeTypeId> extends SubFieldNode<TypeId, FieldId.Price, PriceSubFieldId> {
-    }
+    export class PriceSubFieldHasValueNode extends PriceSubFieldNode {
+        declare readonly typeId: NodeTypeId.PriceSubFieldHasValue;
 
-    export class PriceSubFieldHasValueNode extends PriceSubFieldNode<NodeTypeId.PriceSubFieldHasValue> {
         constructor() {
             super(NodeTypeId.PriceSubFieldHasValue);
         }
     }
 
-    export class PriceSubFieldEqualsNode extends PriceSubFieldNode<NodeTypeId.PriceSubFieldEquals> {
+    export class PriceSubFieldEqualsNode extends PriceSubFieldNode {
+        declare readonly typeId: NodeTypeId.PriceSubFieldEquals;
         target: number; // | NumericNode;
 
         constructor() {
@@ -297,7 +294,8 @@ export namespace ScanFormula {
         }
     }
 
-    export class PriceSubFieldInRangeNode extends PriceSubFieldNode<NodeTypeId.PriceSubFieldInRange> {
+    export class PriceSubFieldInRangeNode extends PriceSubFieldNode {
+        declare readonly typeId: NodeTypeId.PriceSubFieldInRange;
         min: number | undefined; // | NumericNode;
         max: number | undefined; // | NumericNode;
 
@@ -307,16 +305,19 @@ export namespace ScanFormula {
     }
 
     // There is only one Subbed field which works with date fields.
-    export abstract class DateSubFieldNode<TypeId extends BooleanNodeTypeId> extends SubFieldNode<TypeId, FieldId.Date, DateSubFieldId> {
+    export abstract class DateSubFieldNode extends SubFieldNode<FieldId.Date, DateSubFieldId> {
     }
 
-    export class DateSubFieldHasValueNode extends DateSubFieldNode<NodeTypeId.DateSubFieldHasValue> {
+    export class DateSubFieldHasValueNode extends DateSubFieldNode {
+        declare readonly typeId: NodeTypeId.DateSubFieldHasValue;
+
         constructor() {
             super(NodeTypeId.DateSubFieldHasValue);
         }
     }
 
-    export class DateSubFieldEqualsNode extends DateSubFieldNode<NodeTypeId.DateSubFieldEquals> {
+    export class DateSubFieldEqualsNode extends DateSubFieldNode {
+        declare readonly typeId: NodeTypeId.DateSubFieldEquals;
         target: SourceTzOffsetDateTime;
 
         constructor() {
@@ -324,7 +325,8 @@ export namespace ScanFormula {
         }
     }
 
-    export class DateSubFieldInRangeNode extends DateSubFieldNode<NodeTypeId.DateSubFieldInRange> {
+    export class DateSubFieldInRangeNode extends DateSubFieldNode {
+        declare readonly typeId: NodeTypeId.DateSubFieldInRange;
         min: SourceTzOffsetDateTime | undefined; // | DateNode;
         max: SourceTzOffsetDateTime | undefined; // | DateNode;
 
@@ -333,16 +335,19 @@ export namespace ScanFormula {
         }
     }
 
-    export abstract class AltCodeSubFieldNode<TypeId extends BooleanNodeTypeId> extends SubFieldNode<TypeId, FieldId.AltCode, AltCodeSubFieldId> {
+    export abstract class AltCodeSubFieldNode extends SubFieldNode<FieldId.AltCode, AltCodeSubFieldId> {
     }
 
-    export class AltCodeSubFieldHasValueNode extends AltCodeSubFieldNode<NodeTypeId.AltCodeSubFieldHasValue> {
+    export class AltCodeSubFieldHasValueNode extends AltCodeSubFieldNode {
+        declare readonly typeId: NodeTypeId.AltCodeSubFieldHasValue;
+
         constructor() {
             super(NodeTypeId.AltCodeSubFieldHasValue);
         }
     }
 
-    export class AltCodeSubFieldContainsNode extends AltCodeSubFieldNode<NodeTypeId.AltCodeSubFieldContains> {
+    export class AltCodeSubFieldContainsNode extends AltCodeSubFieldNode {
+        declare readonly typeId: NodeTypeId.AltCodeSubFieldContains;
         value: string;
         asId: TextContainsAsId;
         ignoreCase: boolean;
@@ -352,16 +357,19 @@ export namespace ScanFormula {
         }
     }
 
-    export abstract class AttributeSubFieldNode<TypeId extends BooleanNodeTypeId> extends SubFieldNode<TypeId, FieldId.Attribute, AttributeSubFieldId> {
+    export abstract class AttributeSubFieldNode extends SubFieldNode<FieldId.Attribute, AttributeSubFieldId> {
     }
 
-    export class AttributeSubFieldHasValueNode extends AttributeSubFieldNode<NodeTypeId.AttributeSubFieldHasValue> {
+    export class AttributeSubFieldHasValueNode extends AttributeSubFieldNode {
+        declare readonly typeId: NodeTypeId.AttributeSubFieldHasValue;
+
         constructor() {
             super(NodeTypeId.AttributeSubFieldHasValue);
         }
     }
 
-    export class AttributeSubFieldContainsNode extends AttributeSubFieldNode<NodeTypeId.AttributeSubFieldContains> {
+    export class AttributeSubFieldContainsNode extends AttributeSubFieldNode {
+        declare readonly typeId: NodeTypeId.AttributeSubFieldContains;
         value: string;
         asId: TextContainsAsId;
         ignoreCase: boolean;
@@ -512,6 +520,12 @@ export namespace ScanFormula {
 
         constructor() {
             super(NodeTypeId.NumericFieldValueGet);
+        }
+    }
+
+    export namespace NumericFieldValueGetNode {
+        export function is(node: NumericNode): node is NumericFieldValueGetNode {
+            return node.typeId === NodeTypeId.NumericFieldValueGet;
         }
     }
 

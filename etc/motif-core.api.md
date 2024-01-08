@@ -999,6 +999,21 @@ export class AllowedMarketsEnumUiAction extends EnumUiAction {
     getElementPropertiesArray(): EnumUiAction.ElementProperties[];
 }
 
+// Warning: (ae-missing-release-tag) "AllScanCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "AllScanCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface AllScanCondition extends ScanCondition {
+    // (undocumented)
+    readonly typeId: ScanCondition.TypeId.All;
+}
+
+// @public (undocumented)
+export namespace AllScanCondition {
+    // (undocumented)
+    export function isEqual(_left: AllScanCondition, _right: AllScanCondition): boolean;
+}
+
 // Warning: (ae-missing-release-tag) "AllTransactionsDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -1008,6 +1023,48 @@ export class AllTransactionsDataDefinition extends DataDefinition {
     protected calculateChannelReferencableKey(): string;
     // (undocumented)
     get referencable(): boolean;
+}
+
+// Warning: (ae-missing-release-tag) "AltCodeSubFieldContainsScanCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "AltCodeSubFieldContainsScanCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface AltCodeSubFieldContainsScanCondition extends AltCodeSubfieldScanCondition {
+    // (undocumented)
+    readonly asId: ScanFormula.TextContainsAsId;
+    // (undocumented)
+    readonly ignoreCase: boolean;
+    // (undocumented)
+    readonly typeId: ScanCondition.TypeId.AltCodeSubFieldContains;
+    // (undocumented)
+    readonly value: string;
+}
+
+// @public (undocumented)
+export namespace AltCodeSubFieldContainsScanCondition {
+    // (undocumented)
+    export function isEqual(left: AltCodeSubFieldContainsScanCondition, right: AltCodeSubFieldContainsScanCondition): boolean;
+}
+
+// Warning: (ae-missing-release-tag) "AltCodeSubFieldHasValueScanCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "AltCodeSubFieldHasValueScanCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface AltCodeSubFieldHasValueScanCondition extends AltCodeSubfieldScanCondition {
+    // (undocumented)
+    readonly typeId: ScanCondition.TypeId.AltCodeSubFieldHasValue;
+}
+
+// @public (undocumented)
+export namespace AltCodeSubFieldHasValueScanCondition {
+    // (undocumented)
+    export function isEqual(left: AltCodeSubFieldHasValueScanCondition, right: AltCodeSubFieldHasValueScanCondition): boolean;
+}
+
+// Warning: (ae-missing-release-tag) "AltCodeSubfieldScanCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface AltCodeSubfieldScanCondition extends SubFieldScanCondition<ScanFormula.FieldId.AltCode, ScanFormula.AltCodeSubFieldId> {
 }
 
 // Warning: (ae-missing-release-tag) "AmendOrderDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -1226,6 +1283,48 @@ export class AttributesDayTradesGridField extends DayTradesGridField {
     protected compareValue(left: DayTradesDataItem.Record, right: DayTradesDataItem.Record): number;
     // (undocumented)
     protected createRenderValue(record: DayTradesDataItem.Record): DayTradesGridField.CreateRenderValueResult;
+}
+
+// Warning: (ae-missing-release-tag) "AttributeSubFieldContainsScanCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "AttributeSubFieldContainsScanCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface AttributeSubFieldContainsScanCondition extends AttributeSubfieldScanCondition {
+    // (undocumented)
+    readonly asId: ScanFormula.TextContainsAsId;
+    // (undocumented)
+    readonly ignoreCase: boolean;
+    // (undocumented)
+    readonly typeId: ScanCondition.TypeId.AttributeSubFieldContains;
+    // (undocumented)
+    readonly value: string;
+}
+
+// @public (undocumented)
+export namespace AttributeSubFieldContainsScanCondition {
+    // (undocumented)
+    export function isEqual(left: AttributeSubFieldContainsScanCondition, right: AttributeSubFieldContainsScanCondition): boolean;
+}
+
+// Warning: (ae-missing-release-tag) "AttributeSubFieldHasValueScanCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "AttributeSubFieldHasValueScanCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface AttributeSubFieldHasValueScanCondition extends AttributeSubfieldScanCondition {
+    // (undocumented)
+    readonly typeId: ScanCondition.TypeId.AttributeSubFieldHasValue;
+}
+
+// @public (undocumented)
+export namespace AttributeSubFieldHasValueScanCondition {
+    // (undocumented)
+    export function isEqual(left: AttributeSubFieldHasValueScanCondition, right: AttributeSubFieldHasValueScanCondition): boolean;
+}
+
+// Warning: (ae-missing-release-tag) "AttributeSubfieldScanCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface AttributeSubfieldScanCondition extends SubFieldScanCondition<ScanFormula.FieldId.Attribute, ScanFormula.AttributeSubFieldId> {
 }
 
 // Warning: (ae-missing-release-tag) "AuiChangeTypeId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -2171,6 +2270,31 @@ export abstract class BooleanCorrectnessTableValue extends GenericCorrectnessTab
     protected createRenderValue(): BooleanRenderValue;
     // (undocumented)
     protected renderValueTypeId: RenderValue.TypeId;
+}
+
+// Warning: (ae-missing-release-tag) "BooleanFieldEqualsScanCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BooleanFieldEqualsScanCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface BooleanFieldEqualsScanCondition extends BooleanFieldScanCondition {
+    // (undocumented)
+    readonly target: boolean;
+    // (undocumented)
+    readonly typeId: ScanCondition.TypeId.BooleanFieldEquals;
+}
+
+// @public (undocumented)
+export namespace BooleanFieldEqualsScanCondition {
+    // (undocumented)
+    export function isEqual(left: BooleanFieldEqualsScanCondition, right: BooleanFieldEqualsScanCondition): boolean;
+}
+
+// Warning: (ae-missing-release-tag) "BooleanFieldScanCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface BooleanFieldScanCondition extends FieldScanCondition {
+    // (undocumented)
+    readonly fieldId: ScanFormula.BooleanFieldId;
 }
 
 // @public (undocumented)
@@ -6042,6 +6166,50 @@ export class DateCorrectnessTableValue extends BaseDateCorrectnessTableValue {
     protected createRenderValue(): DateRenderValue;
 }
 
+// Warning: (ae-missing-release-tag) "DateFieldEqualsScanCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DateFieldEqualsScanCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface DateFieldEqualsScanCondition extends DateFieldScanCondition {
+    // (undocumented)
+    readonly target: SourceTzOffsetDateTime;
+    // (undocumented)
+    readonly typeId: ScanCondition.TypeId.DateFieldEquals;
+}
+
+// @public (undocumented)
+export namespace DateFieldEqualsScanCondition {
+    // (undocumented)
+    export function isEqual(left: DateFieldEqualsScanCondition, right: DateFieldEqualsScanCondition): boolean;
+}
+
+// Warning: (ae-missing-release-tag) "DateFieldInRangeScanCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DateFieldInRangeScanCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface DateFieldInRangeScanCondition extends DateFieldScanCondition {
+    // (undocumented)
+    readonly max: SourceTzOffsetDateTime | undefined;
+    // (undocumented)
+    readonly min: SourceTzOffsetDateTime | undefined;
+    // (undocumented)
+    readonly typeId: ScanCondition.TypeId.DateFieldInRange;
+}
+
+// @public (undocumented)
+export namespace DateFieldInRangeScanCondition {
+    // (undocumented)
+    export function isEqual(left: DateFieldInRangeScanCondition, right: DateFieldInRangeScanCondition): boolean;
+}
+
+// Warning: (ae-missing-release-tag) "DateFieldScanCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface DateFieldScanCondition extends FieldScanCondition {
+    // (undocumented)
+    readonly fieldId: ScanFormula.DateFieldId;
+}
+
 // @public (undocumented)
 export type DateOrDateTime = Date;
 
@@ -6050,6 +6218,63 @@ export type DateOrDateTime = Date;
 // @public (undocumented)
 export class DateRenderValue extends GenericRenderValue<Date> {
     constructor(data: Date | undefined);
+}
+
+// Warning: (ae-missing-release-tag) "DateSubFieldEqualsScanCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DateSubFieldEqualsScanCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface DateSubFieldEqualsScanCondition extends DateSubfieldScanCondition {
+    // (undocumented)
+    readonly target: SourceTzOffsetDateTime;
+    // (undocumented)
+    readonly typeId: ScanCondition.TypeId.DateSubFieldEquals;
+}
+
+// @public (undocumented)
+export namespace DateSubFieldEqualsScanCondition {
+    // (undocumented)
+    export function isEqual(left: DateSubFieldEqualsScanCondition, right: DateSubFieldEqualsScanCondition): boolean;
+}
+
+// Warning: (ae-missing-release-tag) "DateSubFieldHasValueScanCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DateSubFieldHasValueScanCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface DateSubFieldHasValueScanCondition extends DateSubfieldScanCondition {
+    // (undocumented)
+    readonly typeId: ScanCondition.TypeId.DateSubFieldHasValue;
+}
+
+// @public (undocumented)
+export namespace DateSubFieldHasValueScanCondition {
+    // (undocumented)
+    export function isEqual(left: DateSubFieldHasValueScanCondition, right: DateSubFieldHasValueScanCondition): boolean;
+}
+
+// Warning: (ae-missing-release-tag) "DateSubFieldInRangeScanCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DateSubFieldInRangeScanCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface DateSubFieldInRangeScanCondition extends DateSubfieldScanCondition {
+    // (undocumented)
+    readonly max: SourceTzOffsetDateTime | undefined;
+    // (undocumented)
+    readonly min: SourceTzOffsetDateTime | undefined;
+    // (undocumented)
+    readonly typeId: ScanCondition.TypeId.DateSubFieldInRange;
+}
+
+// @public (undocumented)
+export namespace DateSubFieldInRangeScanCondition {
+    // (undocumented)
+    export function isEqual(left: DateSubFieldInRangeScanCondition, right: DateSubFieldInRangeScanCondition): boolean;
+}
+
+// Warning: (ae-missing-release-tag) "DateSubfieldScanCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface DateSubfieldScanCondition extends SubFieldScanCondition<ScanFormula.FieldId.Date, ScanFormula.DateSubFieldId> {
 }
 
 // Warning: (ae-missing-release-tag) "DateTableField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -9684,6 +9909,36 @@ export const enum FieldDataTypeId {
 export namespace FieldDataTypeModule {
     // (undocumented)
     export function initialiseStatic(): void;
+}
+
+// Warning: (ae-missing-release-tag) "FieldHasValueScanCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "FieldHasValueScanCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface FieldHasValueScanCondition extends FieldScanCondition {
+    // (undocumented)
+    readonly typeId: ScanCondition.TypeId.FieldHasValue;
+}
+
+// @public (undocumented)
+export namespace FieldHasValueScanCondition {
+    // (undocumented)
+    export function isEqual(left: FieldHasValueScanCondition, right: FieldHasValueScanCondition): boolean;
+}
+
+// Warning: (ae-missing-release-tag) "FieldScanCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "FieldScanCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface FieldScanCondition extends ScanCondition {
+    // (undocumented)
+    readonly fieldId: ScanFormula.FieldId;
+}
+
+// @public (undocumented)
+export namespace FieldScanCondition {
+    // (undocumented)
+    export function isEqual(left: FieldScanCondition, right: FieldScanCondition): boolean;
 }
 
 // Warning: (ae-missing-release-tag) "firstDataItemId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -16842,6 +17097,21 @@ export function newUndefinableDecimal(value: Numeric | undefined): Decimal | und
 // @public (undocumented)
 export function newUndefinableNullableDecimal(value: Numeric | undefined | null): Decimal | null | undefined;
 
+// Warning: (ae-missing-release-tag) "NoneScanCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "NoneScanCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface NoneScanCondition extends ScanCondition {
+    // (undocumented)
+    readonly typeId: ScanCondition.TypeId.None;
+}
+
+// @public (undocumented)
+export namespace NoneScanCondition {
+    // (undocumented)
+    export function isEqual(_left: NoneScanCondition, _right: NoneScanCondition): boolean;
+}
+
 // @public (undocumented)
 export class NotifyMultiEvent extends MultiEvent<() => void> {
     // (undocumented)
@@ -17140,6 +17410,121 @@ export namespace NumberUiAction {
     export type ValuePushEventHander = (this: void, value: number | undefined, edited: boolean) => void;
     const // (undocumented)
     defaultOptions: Options;
+}
+
+// Warning: (ae-missing-release-tag) "NumericComparisonScanCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "NumericComparisonScanCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface NumericComparisonScanCondition extends ScanCondition {
+    // (undocumented)
+    readonly leftOperand: NumericComparisonScanCondition.Operand;
+    // (undocumented)
+    readonly operationId: NumericComparisonScanCondition.OperationId;
+    // (undocumented)
+    readonly rightOperand: NumericComparisonScanCondition.Operand;
+}
+
+// @public (undocumented)
+export namespace NumericComparisonScanCondition {
+    // (undocumented)
+    export function isEqual(left: NumericComparisonScanCondition, right: NumericComparisonScanCondition): boolean;
+    // (undocumented)
+    export function isOperandEqual(left: Operand, right: Operand): boolean;
+    // (undocumented)
+    export interface NumberOperand extends Operand {
+        // (undocumented)
+        readonly value: number;
+    }
+    // (undocumented)
+    export namespace NumberOperand {
+        // (undocumented)
+        export function isEqual(left: NumberOperand, right: NumberOperand): boolean;
+    }
+    // (undocumented)
+    export interface NumericFieldValueGetOperand extends Operand {
+        // (undocumented)
+        readonly fieldId: ScanFormula.NumericFieldId;
+    }
+    // (undocumented)
+    export namespace NumericFieldValueGetOperand {
+        // (undocumented)
+        export function isEqual(left: NumericFieldValueGetOperand, right: NumericFieldValueGetOperand): boolean;
+    }
+    // (undocumented)
+    export interface Operand {
+        // (undocumented)
+        readonly typeId: Operand.TypeId;
+    }
+    // (undocumented)
+    export namespace Operand {
+        // (undocumented)
+        export function isEqual(left: Operand, right: Operand): boolean;
+        // (undocumented)
+        export const enum TypeId {
+            // (undocumented)
+            Number = 0,
+            // (undocumented)
+            NumericFieldValueGet = 1
+        }
+    }
+    // (undocumented)
+    export const enum OperationId {
+        // (undocumented)
+        Equals = 0,
+        // (undocumented)
+        GreaterThan = 1,
+        // (undocumented)
+        GreaterThanOrEqual = 2,
+        // (undocumented)
+        LessThan = 3,
+        // (undocumented)
+        LessThanOrEqual = 4
+    }
+}
+
+// Warning: (ae-missing-release-tag) "NumericFieldEqualsScanCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "NumericFieldEqualsScanCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface NumericFieldEqualsScanCondition extends NumericFieldScanCondition {
+    // (undocumented)
+    readonly target: number;
+    // (undocumented)
+    readonly typeId: ScanCondition.TypeId.NumericFieldEquals;
+}
+
+// @public (undocumented)
+export namespace NumericFieldEqualsScanCondition {
+    // (undocumented)
+    export function isEqual(left: NumericFieldEqualsScanCondition, right: NumericFieldEqualsScanCondition): boolean;
+}
+
+// Warning: (ae-missing-release-tag) "NumericFieldInRangeScanCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "NumericFieldInRangeScanCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface NumericFieldInRangeScanCondition extends NumericFieldScanCondition {
+    // (undocumented)
+    readonly max: number | undefined;
+    // (undocumented)
+    readonly min: number | undefined;
+    // (undocumented)
+    readonly typeId: ScanCondition.TypeId.NumericFieldInRange;
+}
+
+// @public (undocumented)
+export namespace NumericFieldInRangeScanCondition {
+    // (undocumented)
+    export function isEqual(left: NumericFieldInRangeScanCondition, right: NumericFieldInRangeScanCondition): boolean;
+}
+
+// Warning: (ae-missing-release-tag) "NumericFieldScanCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface NumericFieldScanCondition extends FieldScanCondition {
+    // (undocumented)
+    readonly fieldId: ScanFormula.NumericFieldId;
 }
 
 // Warning: (ae-missing-release-tag) "OffliningPublisherSubscriptionDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -20000,6 +20385,63 @@ export class PriceStepperIncubator {
 export namespace PriceStepperIncubator {
     // (undocumented)
     export function isStepper(stepperOrPromise: SecurityPriceStepper | Promise<SecurityPriceStepper | undefined>): stepperOrPromise is SecurityPriceStepper;
+}
+
+// Warning: (ae-missing-release-tag) "PriceSubFieldEqualsScanCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "PriceSubFieldEqualsScanCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface PriceSubFieldEqualsScanCondition extends PriceSubfieldScanCondition {
+    // (undocumented)
+    readonly target: number;
+    // (undocumented)
+    readonly typeId: ScanCondition.TypeId.PriceSubFieldEquals;
+}
+
+// @public (undocumented)
+export namespace PriceSubFieldEqualsScanCondition {
+    // (undocumented)
+    export function isEqual(left: PriceSubFieldEqualsScanCondition, right: PriceSubFieldEqualsScanCondition): boolean;
+}
+
+// Warning: (ae-missing-release-tag) "PriceSubFieldHasValueScanCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "PriceSubFieldHasValueScanCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface PriceSubFieldHasValueScanCondition extends PriceSubfieldScanCondition {
+    // (undocumented)
+    readonly typeId: ScanCondition.TypeId.PriceSubFieldHasValue;
+}
+
+// @public (undocumented)
+export namespace PriceSubFieldHasValueScanCondition {
+    // (undocumented)
+    export function isEqual(left: PriceSubFieldHasValueScanCondition, right: PriceSubFieldHasValueScanCondition): boolean;
+}
+
+// Warning: (ae-missing-release-tag) "PriceSubFieldInRangeScanCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "PriceSubFieldInRangeScanCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface PriceSubFieldInRangeScanCondition extends PriceSubfieldScanCondition {
+    // (undocumented)
+    readonly max: number | undefined;
+    // (undocumented)
+    readonly min: number | undefined;
+    // (undocumented)
+    readonly typeId: ScanCondition.TypeId.PriceSubFieldInRange;
+}
+
+// @public (undocumented)
+export namespace PriceSubFieldInRangeScanCondition {
+    // (undocumented)
+    export function isEqual(left: PriceSubFieldInRangeScanCondition, right: PriceSubFieldInRangeScanCondition): boolean;
+}
+
+// Warning: (ae-missing-release-tag) "PriceSubfieldScanCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface PriceSubfieldScanCondition extends SubFieldScanCondition<ScanFormula.FieldId.Price, ScanFormula.PriceSubFieldId> {
 }
 
 // Warning: (ae-missing-release-tag) "PriceTableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -23029,6 +23471,185 @@ export namespace Scan {
     export type ValuesChangedEventHandler = (this: void, valueChanges: ValueChange[]) => void;
 }
 
+// Warning: (ae-missing-release-tag) "ScanCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ScanCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ScanCondition {
+    // (undocumented)
+    not: boolean;
+    // (undocumented)
+    readonly typeId: ScanCondition.TypeId;
+}
+
+// @public (undocumented)
+export namespace ScanCondition {
+    // (undocumented)
+    export function isEqual(left: ScanCondition, right: ScanCondition): boolean;
+    // (undocumented)
+    export type SubFieldTypeId = PickEnum<TypeId, TypeId.PriceSubFieldHasValue | TypeId.PriceSubFieldEquals | TypeId.PriceSubFieldInRange | TypeId.DateSubFieldHasValue | TypeId.DateSubFieldEquals | TypeId.DateSubFieldInRange | TypeId.AltCodeSubFieldHasValue | TypeId.AltCodeSubFieldContains | TypeId.AttributeSubFieldHasValue | TypeId.AttributeSubFieldContains>;
+    // (undocumented)
+    export const enum TypeId {
+        // (undocumented)
+        All = 1,
+        // (undocumented)
+        AltCodeSubFieldContains = 17,
+        // (undocumented)
+        AltCodeSubFieldHasValue = 16,
+        // (undocumented)
+        AttributeSubFieldContains = 19,
+        // (undocumented)
+        AttributeSubFieldHasValue = 18,
+        // (undocumented)
+        BooleanFieldEquals = 4,
+        // (undocumented)
+        DateFieldEquals = 7,
+        // (undocumented)
+        DateFieldInRange = 8,
+        // (undocumented)
+        DateSubFieldEquals = 14,
+        // (undocumented)
+        DateSubFieldHasValue = 13,
+        // (undocumented)
+        DateSubFieldInRange = 15,
+        // (undocumented)
+        FieldHasValue = 3,
+        // (undocumented)
+        None = 2,
+        // (undocumented)
+        NumericComparison = 0,
+        // (undocumented)
+        NumericFieldEquals = 5,
+        // (undocumented)
+        NumericFieldInRange = 6,
+        // (undocumented)
+        PriceSubFieldEquals = 11,
+        // (undocumented)
+        PriceSubFieldHasValue = 10,
+        // (undocumented)
+        PriceSubFieldInRange = 12,
+        // (undocumented)
+        TextFieldContains = 9
+    }
+}
+
+// Warning: (ae-missing-release-tag) "ScanConditionFactory" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ScanConditionFactory {
+    // (undocumented)
+    createAll(formulaNode: ScanFormula.AllNode, not: boolean): Result<AllScanCondition, ScanConditionSetLoadError>;
+    // (undocumented)
+    createAltCodeSubFieldContains(formulaNode: ScanFormula.AltCodeSubFieldContainsNode, not: boolean): Result<AltCodeSubFieldContainsScanCondition, ScanConditionSetLoadError>;
+    // (undocumented)
+    createAltCodeSubFieldHasValue(formulaNode: ScanFormula.AltCodeSubFieldHasValueNode, not: boolean): Result<AltCodeSubFieldHasValueScanCondition, ScanConditionSetLoadError>;
+    // (undocumented)
+    createAttributeSubFieldContains(formulaNode: ScanFormula.AttributeSubFieldContainsNode, not: boolean): Result<AttributeSubFieldContainsScanCondition, ScanConditionSetLoadError>;
+    // (undocumented)
+    createAttributeSubFieldHasValue(formulaNode: ScanFormula.AttributeSubFieldHasValueNode, not: boolean): Result<AttributeSubFieldHasValueScanCondition, ScanConditionSetLoadError>;
+    // (undocumented)
+    createBooleanFieldEquals(formulaNode: ScanFormula.BooleanFieldEqualsNode, not: boolean): Result<BooleanFieldEqualsScanCondition, ScanConditionSetLoadError>;
+    // (undocumented)
+    createDateFieldEquals(formulaNode: ScanFormula.DateFieldEqualsNode, not: boolean): Result<DateFieldEqualsScanCondition, ScanConditionSetLoadError>;
+    // (undocumented)
+    createDateFieldInRange(formulaNode: ScanFormula.DateFieldInRangeNode, not: boolean): Result<DateFieldInRangeScanCondition, ScanConditionSetLoadError>;
+    // (undocumented)
+    createDateSubFieldEquals(formulaNode: ScanFormula.DateSubFieldEqualsNode, not: boolean): Result<DateSubFieldEqualsScanCondition, ScanConditionSetLoadError>;
+    // (undocumented)
+    createDateSubFieldHasValue(formulaNode: ScanFormula.DateSubFieldHasValueNode, not: boolean): Result<DateSubFieldHasValueScanCondition, ScanConditionSetLoadError>;
+    // (undocumented)
+    createDateSubFieldInRange(formulaNode: ScanFormula.DateSubFieldInRangeNode, not: boolean): Result<DateSubFieldInRangeScanCondition, ScanConditionSetLoadError>;
+    // (undocumented)
+    createFieldHasValue(formulaNode: ScanFormula.FieldHasValueNode, not: boolean): Result<FieldHasValueScanCondition, ScanConditionSetLoadError>;
+    // (undocumented)
+    createNone(formulaNode: ScanFormula.NoneNode, not: boolean): Result<NoneScanCondition, ScanConditionSetLoadError>;
+    // (undocumented)
+    createNumericComparison(formulaNode: ScanFormula.NumericComparisonBooleanNode, not: boolean, operationId: NumericComparisonScanCondition.OperationId): Result<NumericComparisonScanCondition, ScanConditionSetLoadError>;
+    // (undocumented)
+    createNumericFieldEquals(formulaNode: ScanFormula.NumericFieldEqualsNode, not: boolean): Result<NumericFieldEqualsScanCondition, ScanConditionSetLoadError>;
+    // (undocumented)
+    createNumericFieldInRange(formulaNode: ScanFormula.NumericFieldInRangeNode, not: boolean): Result<NumericFieldInRangeScanCondition, ScanConditionSetLoadError>;
+    // (undocumented)
+    createPriceSubFieldEquals(formulaNode: ScanFormula.PriceSubFieldEqualsNode, not: boolean): Result<PriceSubFieldEqualsScanCondition, ScanConditionSetLoadError>;
+    // (undocumented)
+    createPriceSubFieldHasValue(formulaNode: ScanFormula.PriceSubFieldHasValueNode, not: boolean): Result<PriceSubFieldHasValueScanCondition, ScanConditionSetLoadError>;
+    // (undocumented)
+    createPriceSubFieldInRange(formulaNode: ScanFormula.PriceSubFieldInRangeNode, not: boolean): Result<PriceSubFieldInRangeScanCondition, ScanConditionSetLoadError>;
+    // (undocumented)
+    createTextFieldContains(formulaNode: ScanFormula.TextFieldContainsNode, not: boolean): Result<TextFieldContainsScanCondition, ScanConditionSetLoadError>;
+}
+
+// Warning: (ae-missing-release-tag) "ScanConditionSet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ScanConditionSet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ScanConditionSet {
+    // (undocumented)
+    assign(value: ScanConditionSet): void;
+    // (undocumented)
+    readonly conditionFactory: ScanConditionFactory;
+    // (undocumented)
+    conditions: ScanConditionSet.Conditions;
+    // (undocumented)
+    loadError: ScanConditionSetLoadError | undefined;
+    // (undocumented)
+    notSetOperation: boolean;
+    // (undocumented)
+    setOperationId: ScanConditionSet.SetOperationId;
+}
+
+// @public (undocumented)
+export namespace ScanConditionSet {
+    // (undocumented)
+    export interface Conditions {
+        // (undocumented)
+        add(condition: ScanCondition): Integer;
+        // (undocumented)
+        capacity: Integer;
+        // (undocumented)
+        clear(): void;
+        // (undocumented)
+        readonly count: Integer;
+        // (undocumented)
+        getAt(index: Integer): ScanCondition;
+    }
+    // (undocumented)
+    export function createFormulaNode(conditionSet: ScanConditionSet): ScanFormula.OrNode | ScanFormula.AndNode | ScanFormula.NotNode;
+    // (undocumented)
+    export function isEqual(left: ScanConditionSet, right: ScanConditionSet): boolean;
+    // (undocumented)
+    export const enum SetOperationId {
+        // (undocumented)
+        And = 1,
+        // (undocumented)
+        Or = 0
+    }
+    // (undocumented)
+    export function tryLoadConditionSetFromFormulaNode(conditionSet: ScanConditionSet, rootFormulaBooleanNode: ScanFormula.BooleanNode): boolean;
+}
+
+// Warning: (ae-missing-release-tag) "ScanConditionSetLoadError" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ScanConditionSetLoadError {
+    // (undocumented)
+    extra: string;
+    // (undocumented)
+    typeId: ScanConditionSetLoadErrorTypeId;
+}
+
+// Warning: (ae-missing-release-tag) "ScanConditionSetLoadErrorTypeId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export const enum ScanConditionSetLoadErrorTypeId {
+    // (undocumented)
+    UnsupportedConditionNodeType = 1,
+    // (undocumented)
+    UnsupportedConditionsNodeType = 0,
+    // (undocumented)
+    UnsupportedNumericComparisonOperandType = 2
+}
+
 // Warning: (ae-missing-release-tag) "ScanDescriptorModule" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -23069,7 +23690,7 @@ export interface ScanDetail {
 //
 // @public (undocumented)
 export class ScanEditor {
-    constructor(_adiService: AdiService, _symbolsService: SymbolsService, scan: Scan | undefined, opener: LockOpenListItem.Opener, _getOrWaitForScanEventer: ScanEditor.GetOrWaitForScanEventer, _errorEventer: ScanEditor.ErrorEventer | undefined);
+    constructor(_adiService: AdiService, _symbolsService: SymbolsService, scan: Scan | undefined, opener: LockOpenListItem.Opener, emptyScanConditionSet: ScanConditionSet, _getOrWaitForScanEventer: ScanEditor.GetOrWaitForScanEventer, _errorEventer: ScanEditor.ErrorEventer | undefined);
     // (undocumented)
     addOpener(opener: LockOpenListItem.Opener): void;
     // (undocumented)
@@ -23094,6 +23715,8 @@ export class ScanEditor {
     createScan(): void;
     // (undocumented)
     get criteria(): ScanFormula.BooleanNode | undefined;
+    // (undocumented)
+    readonly criteriaAsConditionSet: ScanConditionSet;
     // (undocumented)
     get criteriaAsFormula(): string | undefined;
     // (undocumented)
@@ -23152,7 +23775,9 @@ export class ScanEditor {
     // (undocumented)
     setCriteria(value: ScanFormula.BooleanNode, sourceId: ScanEditor.SourceId | undefined): void;
     // (undocumented)
-    setCriteriaAsZenithText(value: string, fieldChanger?: ScanEditor.Modifier): ScanEditor.SetAsZenithTextResult | undefined;
+    setCriteriaAsConditionSet(value: ScanConditionSet, modifier?: ScanEditor.Modifier): boolean;
+    // (undocumented)
+    setCriteriaAsZenithText(value: string, modifier?: ScanEditor.Modifier): ScanEditor.SetAsZenithTextResult | undefined;
     // (undocumented)
     setDescription(value: string): void;
     // (undocumented)
@@ -23164,7 +23789,7 @@ export class ScanEditor {
     // (undocumented)
     setRank(value: ScanFormula.NumericNode | undefined, sourceId: ScanEditor.SourceId | undefined): void;
     // (undocumented)
-    setRankAsZenithText(value: string, fieldChanger?: ScanEditor.Modifier): ScanEditor.SetAsZenithTextResult | undefined;
+    setRankAsZenithText(value: string, modifier?: ScanEditor.Modifier): ScanEditor.SetAsZenithTextResult | undefined;
     // (undocumented)
     setSymbolListEnabled(value: boolean): void;
     // (undocumented)
@@ -23237,9 +23862,11 @@ export namespace ScanEditor {
         // (undocumented)
         Criteria = 12,
         // (undocumented)
+        CriteriaAsConditionSet = 14,
+        // (undocumented)
         CriteriaAsFormula = 13,
         // (undocumented)
-        CriteriaAsZenithText = 14,
+        CriteriaAsZenithText = 15,
         // (undocumented)
         Description = 5,
         // (undocumented)
@@ -23247,7 +23874,7 @@ export namespace ScanEditor {
         // (undocumented)
         Id = 0,
         // (undocumented)
-        LastSavedTime = 19,
+        LastSavedTime = 20,
         // (undocumented)
         LastTargetTypeIdWasMulti = 7,
         // (undocumented)
@@ -23255,11 +23882,11 @@ export namespace ScanEditor {
         // (undocumented)
         Name = 4,
         // (undocumented)
-        Rank = 15,
+        Rank = 16,
         // (undocumented)
-        RankAsFormula = 16,
+        RankAsFormula = 17,
         // (undocumented)
-        RankAsZenithText = 17,
+        RankAsZenithText = 18,
         // (undocumented)
         Readonly = 1,
         // (undocumented)
@@ -23273,7 +23900,7 @@ export namespace ScanEditor {
         // (undocumented)
         TargetTypeId = 8,
         // (undocumented)
-        Version = 18
+        Version = 19
     }
     // (undocumented)
     export type GetOrWaitForScanEventer = (this: void, scanId: string) => Promise<Scan>;
@@ -23320,9 +23947,11 @@ export namespace ScanEditor {
     // (undocumented)
     export const enum SourceId {
         // (undocumented)
+        ConditionSet = 1,
+        // (undocumented)
         Formula = 0,
         // (undocumented)
-        Zenith = 1
+        Zenith = 2
     }
     // (undocumented)
     export type StateChangeEventHandler = (this: void) => void;
@@ -23356,18 +23985,22 @@ export namespace ScanFormula {
         readonly typeId: NodeTypeId.All;
     }
     // (undocumented)
-    export class AltCodeSubFieldContainsNode extends AltCodeSubFieldNode<NodeTypeId.AltCodeSubFieldContains> {
+    export class AltCodeSubFieldContainsNode extends AltCodeSubFieldNode {
         constructor();
         // (undocumented)
         asId: TextContainsAsId;
         // (undocumented)
         ignoreCase: boolean;
         // (undocumented)
+        readonly typeId: NodeTypeId.AltCodeSubFieldContains;
+        // (undocumented)
         value: string;
     }
     // (undocumented)
-    export class AltCodeSubFieldHasValueNode extends AltCodeSubFieldNode<NodeTypeId.AltCodeSubFieldHasValue> {
+    export class AltCodeSubFieldHasValueNode extends AltCodeSubFieldNode {
         constructor();
+        // (undocumented)
+        readonly typeId: NodeTypeId.AltCodeSubFieldHasValue;
     }
     // (undocumented)
     export const enum AltCodeSubFieldId {
@@ -23389,7 +24022,7 @@ export namespace ScanFormula {
         Uid = 7
     }
     // (undocumented)
-    export abstract class AltCodeSubFieldNode<TypeId extends BooleanNodeTypeId> extends SubFieldNode<TypeId, FieldId.AltCode, AltCodeSubFieldId> {
+    export abstract class AltCodeSubFieldNode extends SubFieldNode<FieldId.AltCode, AltCodeSubFieldId> {
     }
     // (undocumented)
     export class AndNode extends MultiOperandBooleanNode {
@@ -23398,18 +24031,22 @@ export namespace ScanFormula {
         readonly typeId: NodeTypeId.And;
     }
     // (undocumented)
-    export class AttributeSubFieldContainsNode extends AttributeSubFieldNode<NodeTypeId.AttributeSubFieldContains> {
+    export class AttributeSubFieldContainsNode extends AttributeSubFieldNode {
         constructor();
         // (undocumented)
         asId: TextContainsAsId;
         // (undocumented)
         ignoreCase: boolean;
         // (undocumented)
+        readonly typeId: NodeTypeId.AttributeSubFieldContains;
+        // (undocumented)
         value: string;
     }
     // (undocumented)
-    export class AttributeSubFieldHasValueNode extends AttributeSubFieldNode<NodeTypeId.AttributeSubFieldHasValue> {
+    export class AttributeSubFieldHasValueNode extends AttributeSubFieldNode {
         constructor();
+        // (undocumented)
+        readonly typeId: NodeTypeId.AttributeSubFieldHasValue;
     }
     // (undocumented)
     export const enum AttributeSubFieldId {
@@ -23431,7 +24068,7 @@ export namespace ScanFormula {
         SubSector = 7
     }
     // (undocumented)
-    export abstract class AttributeSubFieldNode<TypeId extends BooleanNodeTypeId> extends SubFieldNode<TypeId, FieldId.Attribute, AttributeSubFieldId> {
+    export abstract class AttributeSubFieldNode extends SubFieldNode<FieldId.Attribute, AttributeSubFieldId> {
     }
     // (undocumented)
     export class BooleanFieldEqualsNode extends BooleanFieldNode {
@@ -23454,7 +24091,7 @@ export namespace ScanFormula {
         readonly typeId: BooleanNodeTypeId;
     }
     // (undocumented)
-    export type BooleanNodeTypeId = PickEnum<NodeTypeId, NodeTypeId.And | NodeTypeId.Or | NodeTypeId.Not | NodeTypeId.NumericEquals | NodeTypeId.NumericGreaterThan | NodeTypeId.NumericGreaterThanOrEqual | NodeTypeId.NumericLessThan | NodeTypeId.NumericLessThanOrEqual | NodeTypeId.All | NodeTypeId.None | NodeTypeId.FieldHasValue | NodeTypeId.BooleanFieldEquals | NodeTypeId.NumericFieldEquals | NodeTypeId.NumericFieldInRange | NodeTypeId.DateFieldEquals | NodeTypeId.DateFieldInRange | NodeTypeId.TextFieldContains | NodeTypeId.SubFieldHasValue | NodeTypeId.PriceSubFieldHasValue | NodeTypeId.PriceSubFieldEquals | NodeTypeId.PriceSubFieldInRange | NodeTypeId.DateSubFieldHasValue | NodeTypeId.DateSubFieldEquals | NodeTypeId.DateSubFieldInRange | NodeTypeId.AltCodeSubFieldHasValue | NodeTypeId.AltCodeSubFieldContains | NodeTypeId.AttributeSubFieldHasValue | NodeTypeId.AttributeSubFieldContains>;
+    export type BooleanNodeTypeId = PickEnum<NodeTypeId, NodeTypeId.And | NodeTypeId.Or | NodeTypeId.Not | NodeTypeId.NumericEquals | NodeTypeId.NumericGreaterThan | NodeTypeId.NumericGreaterThanOrEqual | NodeTypeId.NumericLessThan | NodeTypeId.NumericLessThanOrEqual | NodeTypeId.All | NodeTypeId.None | NodeTypeId.FieldHasValue | NodeTypeId.BooleanFieldEquals | NodeTypeId.NumericFieldEquals | NodeTypeId.NumericFieldInRange | NodeTypeId.DateFieldEquals | NodeTypeId.DateFieldInRange | NodeTypeId.TextFieldContains | NodeTypeId.PriceSubFieldHasValue | NodeTypeId.PriceSubFieldEquals | NodeTypeId.PriceSubFieldInRange | NodeTypeId.DateSubFieldHasValue | NodeTypeId.DateSubFieldEquals | NodeTypeId.DateSubFieldInRange | NodeTypeId.AltCodeSubFieldHasValue | NodeTypeId.AltCodeSubFieldContains | NodeTypeId.AttributeSubFieldHasValue | NodeTypeId.AttributeSubFieldContains>;
     // (undocumented)
     export class DateFieldEqualsNode extends DateFieldNode {
         constructor();
@@ -23481,14 +24118,18 @@ export namespace ScanFormula {
         fieldId: DateFieldId;
     }
     // (undocumented)
-    export class DateSubFieldEqualsNode extends DateSubFieldNode<NodeTypeId.DateSubFieldEquals> {
+    export class DateSubFieldEqualsNode extends DateSubFieldNode {
         constructor();
         // (undocumented)
         target: SourceTzOffsetDateTime;
+        // (undocumented)
+        readonly typeId: NodeTypeId.DateSubFieldEquals;
     }
     // (undocumented)
-    export class DateSubFieldHasValueNode extends DateSubFieldNode<NodeTypeId.DateSubFieldHasValue> {
+    export class DateSubFieldHasValueNode extends DateSubFieldNode {
         constructor();
+        // (undocumented)
+        readonly typeId: NodeTypeId.DateSubFieldHasValue;
     }
     // (undocumented)
     export const enum DateSubFieldId {
@@ -23496,15 +24137,17 @@ export namespace ScanFormula {
         Dividend = 0
     }
     // (undocumented)
-    export class DateSubFieldInRangeNode extends DateSubFieldNode<NodeTypeId.DateSubFieldInRange> {
+    export class DateSubFieldInRangeNode extends DateSubFieldNode {
         constructor();
         // (undocumented)
         max: SourceTzOffsetDateTime | undefined;
         // (undocumented)
         min: SourceTzOffsetDateTime | undefined;
+        // (undocumented)
+        readonly typeId: NodeTypeId.DateSubFieldInRange;
     }
     // (undocumented)
-    export abstract class DateSubFieldNode<TypeId extends BooleanNodeTypeId> extends SubFieldNode<TypeId, FieldId.Date, DateSubFieldId> {
+    export abstract class DateSubFieldNode extends SubFieldNode<FieldId.Date, DateSubFieldId> {
     }
     // (undocumented)
     export namespace Field {
@@ -23667,15 +24310,15 @@ export namespace ScanFormula {
         // (undocumented)
         All = 8,
         // (undocumented)
-        AltCodeSubFieldContains = 35,
+        AltCodeSubFieldContains = 34,
         // (undocumented)
-        AltCodeSubFieldHasValue = 34,
+        AltCodeSubFieldHasValue = 33,
         // (undocumented)
         And = 0,
         // (undocumented)
-        AttributeSubFieldContains = 37,
+        AttributeSubFieldContains = 36,
         // (undocumented)
-        AttributeSubFieldHasValue = 36,
+        AttributeSubFieldHasValue = 35,
         // (undocumented)
         BooleanFieldEquals = 21,
         // (undocumented)
@@ -23683,11 +24326,11 @@ export namespace ScanFormula {
         // (undocumented)
         DateFieldInRange = 25,
         // (undocumented)
-        DateSubFieldEquals = 32,
+        DateSubFieldEquals = 31,
         // (undocumented)
-        DateSubFieldHasValue = 31,
+        DateSubFieldHasValue = 30,
         // (undocumented)
-        DateSubFieldInRange = 33,
+        DateSubFieldInRange = 32,
         // (undocumented)
         FieldHasValue = 20,
         // (undocumented)
@@ -23731,13 +24374,11 @@ export namespace ScanFormula {
         // (undocumented)
         Or = 1,
         // (undocumented)
-        PriceSubFieldEquals = 29,
+        PriceSubFieldEquals = 28,
         // (undocumented)
-        PriceSubFieldHasValue = 28,
+        PriceSubFieldHasValue = 27,
         // (undocumented)
-        PriceSubFieldInRange = 30,
-        // (undocumented)
-        SubFieldHasValue = 27,
+        PriceSubFieldInRange = 29,
         // (undocumented)
         TextFieldContains = 26
     }
@@ -23752,6 +24393,11 @@ export namespace ScanFormula {
         constructor();
         // (undocumented)
         readonly typeId: NodeTypeId.Not;
+    }
+    // (undocumented)
+    export namespace NotNode {
+        // (undocumented)
+        export function is(node: Node): node is NotNode;
     }
     // (undocumented)
     export class NumericAbsNode extends UnaryArithmeticNumericNode {
@@ -23816,6 +24462,11 @@ export namespace ScanFormula {
         fieldId: NumericFieldId;
         // (undocumented)
         readonly typeId: NodeTypeId.NumericFieldValueGet;
+    }
+    // (undocumented)
+    export namespace NumericFieldValueGetNode {
+        // (undocumented)
+        export function is(node: NumericNode): node is NumericFieldValueGetNode;
     }
     // (undocumented)
     export class NumericGreaterThanNode extends NumericComparisonBooleanNode {
@@ -23905,14 +24556,18 @@ export namespace ScanFormula {
         readonly typeId: NodeTypeId.Or;
     }
     // (undocumented)
-    export class PriceSubFieldEqualsNode extends PriceSubFieldNode<NodeTypeId.PriceSubFieldEquals> {
+    export class PriceSubFieldEqualsNode extends PriceSubFieldNode {
         constructor();
         // (undocumented)
         target: number;
+        // (undocumented)
+        readonly typeId: NodeTypeId.PriceSubFieldEquals;
     }
     // (undocumented)
-    export class PriceSubFieldHasValueNode extends PriceSubFieldNode<NodeTypeId.PriceSubFieldHasValue> {
+    export class PriceSubFieldHasValueNode extends PriceSubFieldNode {
         constructor();
+        // (undocumented)
+        readonly typeId: NodeTypeId.PriceSubFieldHasValue;
     }
     // (undocumented)
     export const enum PriceSubFieldId {
@@ -23920,15 +24575,17 @@ export namespace ScanFormula {
         Last = 0
     }
     // (undocumented)
-    export class PriceSubFieldInRangeNode extends PriceSubFieldNode<NodeTypeId.PriceSubFieldInRange> {
+    export class PriceSubFieldInRangeNode extends PriceSubFieldNode {
         constructor();
         // (undocumented)
         max: number | undefined;
         // (undocumented)
         min: number | undefined;
+        // (undocumented)
+        readonly typeId: NodeTypeId.PriceSubFieldInRange;
     }
     // (undocumented)
-    export abstract class PriceSubFieldNode<TypeId extends BooleanNodeTypeId> extends SubFieldNode<TypeId, FieldId.Price, PriceSubFieldId> {
+    export abstract class PriceSubFieldNode extends SubFieldNode<FieldId.Price, PriceSubFieldId> {
     }
     // (undocumented)
     export abstract class SingleOperandBooleanNode extends BooleanNode {
@@ -23938,17 +24595,11 @@ export namespace ScanFormula {
     // (undocumented)
     export type SubbedFieldId = PickEnum<FieldId, FieldId.Price | FieldId.Date | FieldId.AltCode | FieldId.Attribute>;
     // (undocumented)
-    export class SubFieldHasValueNode extends SubFieldNode<NodeTypeId.SubFieldHasValue, FieldId.AltCode | FieldId.Attribute | FieldId.Date | FieldId.Price, AltCodeSubFieldId | AttributeSubFieldId | DateSubFieldId | PriceSubFieldId> {
-        constructor();
-    }
-    // (undocumented)
-    export abstract class SubFieldNode<TypeId extends BooleanNodeTypeId, MySubbedFieldId extends SubbedFieldId, SubFieldId> extends FieldBooleanNode {
+    export abstract class SubFieldNode<MySubbedFieldId extends SubbedFieldId, SubFieldId> extends FieldBooleanNode {
         // (undocumented)
         fieldId: MySubbedFieldId;
         // (undocumented)
         subFieldId: SubFieldId;
-        // (undocumented)
-        typeId: TypeId;
     }
     // (undocumented)
     export const enum TextContainsAsId {
@@ -24295,11 +24946,11 @@ export class ScansService {
     // (undocumented)
     initialise(): void;
     // (undocumented)
-    openNewScanEditor(opener: LockOpenListItem.Opener, errorEventer?: ScanEditor.ErrorEventer): ScanEditor;
+    openNewScanEditor(opener: LockOpenListItem.Opener, emptyScanConditionSet: ScanConditionSet, errorEventer?: ScanEditor.ErrorEventer): ScanEditor;
     // (undocumented)
     readonly scanList: ScanList;
     // (undocumented)
-    tryOpenScanEditor(scanId: string | undefined, opener: LockOpenListItem.Opener, errorEventer?: ScanEditor.ErrorEventer): Promise<Result<ScanEditor | undefined>>;
+    tryOpenScanEditor(scanId: string | undefined, opener: LockOpenListItem.Opener, newScanConditionSetCallback: (this: void) => ScanConditionSet, errorEventer?: ScanEditor.ErrorEventer): Promise<Result<ScanEditor | undefined>>;
 }
 
 // @public (undocumented)
@@ -30630,6 +31281,23 @@ export namespace StringUiAction {
     export type ValuePushEventHander = (this: void, value: string | undefined, edited: boolean) => void;
 }
 
+// Warning: (ae-missing-release-tag) "SubFieldScanCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SubFieldScanCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface SubFieldScanCondition<MySubbedFieldId extends ScanFormula.SubbedFieldId, SubFieldId> extends FieldScanCondition {
+    // (undocumented)
+    fieldId: MySubbedFieldId;
+    // (undocumented)
+    subFieldId: SubFieldId;
+}
+
+// @public (undocumented)
+export namespace SubFieldScanCondition {
+    // (undocumented)
+    export function isEqual<MySubbedFieldId extends ScanFormula.SubbedFieldId, SubFieldId>(left: SubFieldScanCondition<MySubbedFieldId, SubFieldId>, right: SubFieldScanCondition<MySubbedFieldId, SubFieldId>): boolean;
+}
+
 // Warning: (ae-missing-release-tag) "SubscribabilityExtent" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -32474,6 +33142,35 @@ export const enum TDeliveryTypeId {
 
 // @public (undocumented)
 export function testRemoveFromArray<T>(array: T[], removeTest: ((element: T) => boolean)): Integer | undefined;
+
+// Warning: (ae-missing-release-tag) "TextFieldContainsScanCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TextFieldContainsScanCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface TextFieldContainsScanCondition extends TextFieldScanCondition {
+    // (undocumented)
+    readonly asId: ScanFormula.TextContainsAsId;
+    // (undocumented)
+    readonly ignoreCase: boolean;
+    // (undocumented)
+    readonly typeId: ScanCondition.TypeId.TextFieldContains;
+    // (undocumented)
+    readonly value: string;
+}
+
+// @public (undocumented)
+export namespace TextFieldContainsScanCondition {
+    // (undocumented)
+    export function isEqual(left: TextFieldContainsScanCondition, right: TextFieldContainsScanCondition): boolean;
+}
+
+// Warning: (ae-missing-release-tag) "TextFieldScanCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface TextFieldScanCondition extends FieldScanCondition {
+    // (undocumented)
+    readonly fieldId: ScanFormula.TextFieldId;
+}
 
 // @public (undocumented)
 export class TextFormatterService {

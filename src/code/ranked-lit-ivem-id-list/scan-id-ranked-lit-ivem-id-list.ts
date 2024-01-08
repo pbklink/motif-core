@@ -5,7 +5,7 @@
  */
 
 import { AdiService, LitIvemIdMatchesDataDefinition, LitIvemIdScanMatchesDataItem, RankScoredLitIvemIdList } from '../adi/adi-internal-api';
-import { Scan, ScanList, ScansService } from '../scan/scan-internal-api';
+import { Scan, ScanList, ScansService } from '../scan/internal-api';
 import { AssertInternalError, Err, ErrorCode, LockOpenListItem, Ok, Result } from "../sys/sys-internal-api";
 import { BaseRankedLitIvemIdList } from './base-ranked-lit-ivem-id-list';
 import { ScanIdRankedLitIvemIdListDefinition } from './definition/ranked-lit-ivem-id-list-definition-internal-api';

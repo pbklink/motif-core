@@ -15,7 +15,7 @@ export * from './keyboard/keyboard-internal-api';
 export * from './publisher/publisher-internal-api';
 export * from './ranked-lit-ivem-id-list/ranked-lit-ivem-id-list-internal-api';
 export * from './res/res-internal-api';
-export * from './scan/scan-internal-api';
+export * from './scan/internal-api';
 export * from './sequence-history/sequence-history-internal-api';
 export * from './services/services-internal-api';
 export * from './sys/sys-internal-api';
