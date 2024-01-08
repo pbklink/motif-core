@@ -5,7 +5,7 @@
  */
 
 // not used
-import { CellPainter, DataServer, DatalessViewCell } from 'revgrid';
+import { CellPainter, DataServer, DatalessViewCell } from '@xilytix/revgrid';
 import { GridField } from '../../field/grid-field-internal-api';
 import { AdaptedRevgrid } from '../adapted-revgrid/adapted-revgrid';
 import { AdaptedRevgridBehavioredColumnSettings } from '../settings/grid-revgrid-settings-internal-api';

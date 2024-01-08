@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { CellPainter, DatalessViewCell } from 'revgrid';
+import { CellPainter, DatalessViewCell } from '@xilytix/revgrid';
 import { RenderValue } from '../../../services/services-internal-api';
 import { GridField } from '../../field/grid-field-internal-api';
 import { RecordGridDataServer } from '../record-grid/grid-revgrid-record-grid-internal-api';

@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { TextTruncateType } from 'revgrid';
+import { TextTruncateType } from '@xilytix/revgrid';
 import { AdaptedRevgridOnlyGridSettings } from './adapted-revgrid-only-grid-settings';
 
 /** @public */

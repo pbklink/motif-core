@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { defaultColumnSettings } from 'revgrid';
+import { defaultColumnSettings } from '@xilytix/revgrid';
 import { AdaptedRevgridColumnSettings } from './adapted-revgrid-column-settings';
 // eslint-disable-next-line import/named
 import { defaultAdaptedRevgridOnlyColumnSettings } from './default-adapted-revgrid-only-column-settings';

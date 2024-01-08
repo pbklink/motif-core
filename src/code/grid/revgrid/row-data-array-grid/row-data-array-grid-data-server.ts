@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { DataRowArrayDataServer } from 'revgrid';
+import { DataRowArrayDataServer } from '@xilytix/revgrid';
 import { GridField } from '../../field/grid-field-internal-api';
 
 export class RowDataArrayGridDataServer extends DataRowArrayDataServer<GridField> {

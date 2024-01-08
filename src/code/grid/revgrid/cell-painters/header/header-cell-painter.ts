@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { CachedCanvasRenderingContext2D, CellPainter, DataServer, DatalessViewCell } from 'revgrid';
+import { CachedCanvasRenderingContext2D, CellPainter, DataServer, DatalessViewCell } from '@xilytix/revgrid';
 import { ColorSettings, ScalarSettings, SettingsService } from '../../../../services/services-internal-api';
 import { GridField } from '../../../field/grid-field-internal-api';
 import { AdaptedRevgrid } from '../../adapted-revgrid/grid-revgrid-adapted-revgrid-internal-api';
