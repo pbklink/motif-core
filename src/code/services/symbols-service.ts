@@ -10,7 +10,6 @@ import {
     ExchangeInfo,
     IvemId,
     LitIvemAlternateCodes,
-    LitIvemDetail,
     LitIvemId,
     MarketId,
     MarketInfo,
@@ -18,10 +17,12 @@ import {
     MarketsDataDefinition,
     MarketsDataItem,
     OrderRoute,
-    RoutedIvemId, SymbolField, SymbolFieldId
+    RoutedIvemId,
+    SearchSymbolsLitIvemBaseDetail,
+    SymbolField, SymbolFieldId
 } from '../adi/adi-internal-api';
 import { StringId, Strings } from '../res/res-internal-api';
-import { ExchangeSettings, ScalarSettings, SettingsService, TypedKeyValueScalarSettingsGroup, TypedKeyValueSettings } from '../settings/settings-internal-api';
+import { ExchangeSettings, ScalarSettings, SettingsService, TypedKeyValueScalarSettingsGroup, TypedKeyValueSettings } from './settings/settings-internal-api';
 import {
     AssertInternalError,
     EnumInfoOutOfOrderError,
@@ -226,7 +227,7 @@ export class SymbolsService {
         const marketsDefinition = new MarketsDataDefinition();
         this._marketsDataItem = this._adi.subscribe(marketsDefinition) as MarketsDataItem;
         this._marketListChangeEventSubscriptionId = this._marketsDataItem.subscribeListChangeEvent(
-            (listChangeTypeId, index, count) => this.handleMarketListChangeEvent(listChangeTypeId, index, count)
+            (listChangeTypeId, index, count) => { this.handleMarketListChangeEvent(listChangeTypeId, index, count); }
         );
 
         this.loadAllowedExchangeAndMarketIds();
@@ -432,7 +433,7 @@ export class SymbolsService {
         return new LitIvemId(routedIvemId.ivemId.code, litId);
     }
 
-    calculateSymbolNameFromLitIvemDetail(detail: LitIvemDetail) {
+    calculateSymbolNameFromLitIvemDetail(detail: SearchSymbolsLitIvemBaseDetail) {
         return this.calculateSymbolName(detail.exchangeId, detail.name, detail.litIvemId.code, detail.alternateCodes);
     }
 
@@ -605,6 +606,10 @@ export class SymbolsService {
                 throw new AssertInternalError('SSHMLCEBR19662');
             case UsableListChangeTypeId.AfterReplace:
                 throw new AssertInternalError('SSHMLCEAR19662');
+            case UsableListChangeTypeId.BeforeMove:
+                throw new AssertInternalError('SSHMLCEBM19662');
+            case UsableListChangeTypeId.AfterMove:
+                throw new AssertInternalError('SSHMLCEAM19662');
             case UsableListChangeTypeId.Remove:
                 this.loadAllowedExchangeAndMarketIds();
                 break;
@@ -671,12 +676,12 @@ export class SymbolsService {
 
             this._allowedExchangeIds.length = allowedExchangeIdCount;
 
-            const allowedMarketIdsChanged = isArrayEqualUniquely(this._allowedMarketIds, oldAllowedMarketIds);
+            const allowedMarketIdsChanged = !isArrayEqualUniquely(this._allowedMarketIds, oldAllowedMarketIds);
             if (allowedMarketIdsChanged) {
                 this.notifyAllowedMarketIdsChanged();
             }
 
-            const allowedExchangeIdsChanged = isArrayEqualUniquely(this._allowedExchangeIds, oldAllowedExchangeIds);
+            const allowedExchangeIdsChanged = !isArrayEqualUniquely(this._allowedExchangeIds, oldAllowedExchangeIds);
             if (allowedExchangeIdsChanged) {
                 this.notifyAllowedExchangeIdsChanged();
             }
@@ -1568,7 +1573,8 @@ export namespace SymbolsService {
         const infos = Object.values(infosObject);
 
         export function initialise() {
-            const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+            const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as ParseModeId);
             if (outOfOrderIdx >= 0) {
                 throw new EnumInfoOutOfOrderError('SymbolsService.ParseModeId', outOfOrderIdx, infos[outOfOrderIdx].jsonValue);
             }
@@ -1636,7 +1642,7 @@ export namespace SymbolsService {
         const infos = Object.values(infosObject);
 
         export function initialise() {
-            const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
+            const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as ExchangeHideModeId);
             if (outOfOrderIdx >= 0) {
                 throw new EnumInfoOutOfOrderError('SymbolsService.ExchangeHideMode', outOfOrderIdx, infos[outOfOrderIdx].jsonValue);
             }

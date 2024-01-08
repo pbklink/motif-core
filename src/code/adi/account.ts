@@ -359,7 +359,6 @@ export namespace Account {
         private _mapKey: MapKey;
 
         constructor(private readonly _id: Account.Id, environmentId?: TradingEnvironmentId) {
-            // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
             this._environmentId = environmentId === undefined ? TradingEnvironment.getDefaultId() : environmentId;
             this._mapKey = Key.generateMapKey(this.id, this.environmentId);
         }

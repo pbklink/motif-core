@@ -71,12 +71,13 @@ export class BrokerageAccountSubscriptionDataItem extends SubscribabilityExtentS
         ) as BrokerageAccountsDataItem;
 
         this._accountsCorrectnessChangeSubscriptionId = this._accountsDataItem.subscribeCorrectnessChangedEvent(
-            () => this.handleAccountsCorrectnessChangedEvent()
+            () => { this.handleAccountsCorrectnessChangedEvent(); }
         );
 
         this._accountsListChangeSubscriptionId = this._accountsDataItem.subscribeListChangeEvent(
-            (listChangeType, index, count) =>
-                this.handleAccountsListChangeEvent(listChangeType, index, count)
+            (listChangeType, index, count) => {
+                this.handleAccountsListChangeEvent(listChangeType, index, count);
+            }
         );
 
         super.start();
@@ -181,6 +182,10 @@ export class BrokerageAccountSubscriptionDataItem extends SubscribabilityExtentS
                 throw new AssertInternalError('BASDIPALCBR19662', this.definition.description);
             case UsableListChangeTypeId.AfterReplace:
                 throw new AssertInternalError('BASDIPALCAR19662', this.definition.description);
+            case UsableListChangeTypeId.BeforeMove:
+                throw new AssertInternalError('BASDIPALCBM19662', this.definition.description);
+            case UsableListChangeTypeId.AfterMove:
+                throw new AssertInternalError('BASDIPALCAM19662', this.definition.description);
             case UsableListChangeTypeId.Remove:
                 this.checkClearAccount(index, count);
                 break;
@@ -202,7 +207,7 @@ export class BrokerageAccountSubscriptionDataItem extends SubscribabilityExtentS
             );
             if (this._account !== undefined) {
                 this._accountCorrectnessChangedSubscriptionId = this._account.subscribeCorrectnessChangedEvent(
-                    () => this.handleAccountCorrectnessChangedEvent()
+                    () => { this.handleAccountCorrectnessChangedEvent(); }
                 );
                 this.processAccountBecameAvailable();
                 this.processAccountCorrectnessChanged();

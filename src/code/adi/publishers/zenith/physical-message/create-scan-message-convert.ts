@@ -32,12 +32,15 @@ export namespace CreateScanMessageConvert {
             versionId: definition.versionId,
             versioningInterrupted: definition.versioningInterrupted,
             lastSavedTime: definition.lastSavedTime,
+            lastEditSessionId: definition.lastEditSessionId,
             symbolListEnabled: definition.symbolListEnabled,
+            zenithCriteriaSource: definition.zenithCriteriaSource,
+            zenithRankSource: definition.zenithRankSource,
         }
 
         const details: ZenithProtocol.NotifyController.ScanDescriptor = {
             Name: definition.name,
-            Description: definition.description,
+            Description: definition.scanDescription,
             MetaData: ZenithNotifyConvert.ScanMetaType.from(convertMetaData),
         }
 
@@ -45,7 +48,8 @@ export namespace CreateScanMessageConvert {
             Criteria: definition.zenithCriteria,
             Rank: definition.zenithRank,
             Type: ZenithNotifyConvert.ScanType.fromId(definition.targetTypeId),
-            Target: ZenithNotifyConvert.Target.fromId(definition.targetTypeId, definition.targetLitIvemIds, definition.targetMarketIds),
+            Target: ZenithNotifyConvert.Target.fromId(definition.targetTypeId, definition.targets),
+            MaxMatchCount: definition.maxMatchCount,
         }
 
         const result: ZenithProtocol.NotifyController.CreateScan.PublishMessageContainer = {
@@ -66,7 +70,7 @@ export namespace CreateScanMessageConvert {
         actionId: ZenithConvert.MessageContainer.Action.Id) {
 
         if (message.Controller !== ZenithProtocol.MessageContainer.Controller.Notify) {
-            throw new ZenithDataError(ErrorCode.ZenithMessageConvert_CreateScan_Controller, message.Controller);
+            throw new ZenithDataError(ErrorCode.ZenithMessageConvert_Notify_Controller, message.Controller);
         } else {
             if (actionId !== ZenithConvert.MessageContainer.Action.Id.Publish) {
                 throw new ZenithDataError(ErrorCode.ZenithMessageConvert_CreateScan_Action, JSON.stringify(message));

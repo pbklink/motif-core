@@ -19,7 +19,6 @@
     { "path": "./publisher/tsconfig.json" },
     { "path": "./extension/tsconfig.json" },
     { "path": "./adi/tsconfig.json" },
-    { "path": "./settings/tsconfig.json" },
     { "path": "./command/tsconfig.json" },
     { "path": "./services/tsconfig.json" },
     { "path": "./watchmaker/tsconfig.json" },

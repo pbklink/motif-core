@@ -875,6 +875,18 @@ export function deepExtendValue(existingTarget: unknown, value: unknown): unknow
     }
 }
 
+export function isUndefinableStringNumberBooleanNestArrayEqual(left: unknown[] | undefined, right: unknown[] | undefined) {
+    if (left === undefined) {
+        return right === undefined;
+    } else {
+        if (right === undefined) {
+            return false;
+        } else {
+            return isStringNumberBooleanNestArrayEqual(left, right);
+        }
+    }
+}
+
 export function isStringNumberBooleanNestArrayEqual(left: unknown[], right: unknown[]) {
     const leftCount = left.length;
     const rightCount = right.length;
@@ -1473,6 +1485,16 @@ export function moveElementsInArray<T>(array: T[], fromIndex: Integer, toIndex: 
 
     for (let i = 0; i < count; i++) {
         array[toIndex + i] = temp[i];
+    }
+}
+
+/** @public */
+export function shuffleElementsUpInArray<T>(array: T[], index: Integer, count: Integer) {
+    // will overwrite elements at top of array
+    const elementCount = array.length;
+    let dstIdx = elementCount - 1;
+    for (let srcIdx = dstIdx - count; srcIdx >= index; srcIdx--) {
+        array[dstIdx--] = array[srcIdx];
     }
 }
 

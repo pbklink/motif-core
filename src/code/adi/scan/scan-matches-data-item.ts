@@ -44,6 +44,23 @@ export abstract class ScanMatchesDataItem<T> extends FeedSubscriptionDataItem {
         this._unrankedListChangeMultiEvent.unsubscribe(subscriptionId);
     }
 
+    protected override processSubscriptionPreOnline() {
+        this.clearRecords();
+    }
+
+    protected override processUsableChanged() {
+        if (this.usable) {
+            this.notifyUnrankedListChange(UsableListChangeTypeId.PreUsableClear, 0, 0);
+            const count = this.unrankedRecords.length;
+            if (count > 0) {
+                this.notifyUnrankedListChange(UsableListChangeTypeId.PreUsableAdd, 0, count);
+            }
+            this.notifyUnrankedListChange(UsableListChangeTypeId.Usable, 0, 0);
+        } else {
+            this.notifyUnrankedListChange(UsableListChangeTypeId.Unusable, 0, 0);
+        }
+    }
+
     protected processChanges(changes: MatchesDataMessage.Change<T>[]): void {
         let addStartMsgIdx = -1;
 
@@ -73,10 +90,7 @@ export abstract class ScanMatchesDataItem<T> extends FeedSubscriptionDataItem {
                     if (matchRecord === undefined) {
                         throw new ZenithDataError(ErrorCode.MatchesDataItem_UpdateChangeKeyDoesNotExists, `${mapKey}`);
                     } else {
-                        const index = matchRecord.unrankedIndex;
-                        this.checkUnrankedUsableNotifyListChange(UsableListChangeTypeId.BeforeReplace, index, 1);
                         matchRecord.update(updateChange.value, updateChange.rankScore);
-                        this.checkUnrankedUsableNotifyListChange(UsableListChangeTypeId.AfterReplace, index, 1);
                     }
                     break;
                 }

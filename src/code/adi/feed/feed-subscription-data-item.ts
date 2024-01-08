@@ -151,6 +151,10 @@ export abstract class FeedSubscriptionDataItem extends FeedStatusSubscriptionDat
                 throw new AssertInternalError('FSDIPFLCBR19662', this.definition.description);
             case UsableListChangeTypeId.AfterReplace:
                 throw new AssertInternalError('FSDIPFLCAR19662', this.definition.description);
+            case UsableListChangeTypeId.BeforeMove:
+                throw new AssertInternalError('FSDIPFLCBM19662', this.definition.description);
+            case UsableListChangeTypeId.AfterMove:
+                throw new AssertInternalError('FSDIPFLCAM19662', this.definition.description);
             case UsableListChangeTypeId.Remove:
                 this.checkClearFeed(index, count);
                 break;

@@ -21,26 +21,25 @@ import {
     RankedLitIvemIdListDefinitionFactoryService,
     RankedLitIvemIdListFactoryService,
 } from "./ranked-lit-ivem-id-list/ranked-lit-ivem-id-list-internal-api";
-import { ScansService } from './scan/scan-internal-api';
+import { ScansService } from './scan/internal-api';
 import {
     AppStorageService,
     CapabilitiesService,
-    IdleProcessingService,
+    IdleService,
     MotifServicesService,
+    SettingsService,
     SymbolDetailCacheService,
     SymbolsService
 } from "./services/services-internal-api";
-import { SettingsService } from './settings/settings-internal-api';
-import { MultiEvent } from './sys/sys-internal-api';
 import { TextFormatterService } from "./text-format/text-format-internal-api";
 import { WatchmakerService } from './watchmaker/watchmaker-internal-api';
 
 /** @public */
 export class CoreService {
-    readonly settingsService: SettingsService;
+    readonly idleService: IdleService;
     readonly motifServicesService: MotifServicesService;
     readonly appStorageService: AppStorageService;
-    readonly idleProcessingService: IdleProcessingService;
+    readonly settingsService: SettingsService;
     readonly adiService: AdiService;
     readonly capabilitiesService: CapabilitiesService;
     readonly symbolsService: SymbolsService;
@@ -63,20 +62,19 @@ export class CoreService {
 
     private _finalised = false;
 
-    private _settingsChangedSubscriptionId: MultiEvent.SubscriptionId;
     private _activeColorSchemeName: string;
 
     constructor() {
-        this.settingsService = new SettingsService();
-        this.motifServicesService = new MotifServicesService(this.settingsService);
+        this.idleService = new IdleService();
+        this.motifServicesService = new MotifServicesService();
         this.appStorageService = new AppStorageService(this.motifServicesService);
-        this.idleProcessingService = new IdleProcessingService();
+        this.settingsService = new SettingsService(this.idleService, this.motifServicesService, this.appStorageService);
         this.adiService = new AdiService();
         this.capabilitiesService = new CapabilitiesService();
         this.symbolsService = new SymbolsService(this.settingsService, this.adiService);
         this.symbolDetailCacheService = new SymbolDetailCacheService(this.adiService.dataMgr, this.symbolsService);
         this.watchmakerService = new WatchmakerService(this.adiService);
-        this.scansService = new ScansService(this.adiService);
+        this.scansService = new ScansService(this.adiService, this.symbolsService);
         this.rankedLitIvemIdListDefinitionFactoryService = new RankedLitIvemIdListDefinitionFactoryService();
         this.rankedLitIvemIdListFactoryService = new RankedLitIvemIdListFactoryService(
             this.adiService,
@@ -94,6 +92,7 @@ export class CoreService {
         );
         this.tableRecordSourceFactoryService = new TableRecordSourceFactoryService(
             this.adiService,
+            this.symbolDetailCacheService,
             this.rankedLitIvemIdListFactoryService,
             this.watchmakerService,
             this.scansService,
@@ -112,10 +111,6 @@ export class CoreService {
         );
         this.commandRegisterService = new CommandRegisterService();
         this.keyboardService = new KeyboardService();
-
-        this._settingsChangedSubscriptionId = this.settingsService.subscribeSettingsChangedEvent(() => {
-            this.handleSettingsChanged();
-        });
     }
 
     finalise() {
@@ -126,17 +121,10 @@ export class CoreService {
             this.symbolsService.finalise();
             this.textFormatterService.finalise();
 
-            this.idleProcessingService.finalise();
-
-            this.motifServicesService.finalise();
-            this.settingsService.unsubscribeSettingsChangedEvent(this._settingsChangedSubscriptionId);
-            this._settingsChangedSubscriptionId = undefined;
+            this.settingsService.finalise();
+            this.idleService.finalise();
 
             this._finalised = true;
         }
-    }
-
-    private handleSettingsChanged(): void {
-        //
     }
 }

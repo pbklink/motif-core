@@ -99,19 +99,6 @@ export const enum ListChangeTypeId {
 }
 
 /** @public */
-export const enum UsableListChangeTypeId {
-    Unusable,
-    PreUsableAdd,
-    PreUsableClear,
-    Usable,
-    Insert,
-    BeforeReplace,
-    AfterReplace,
-    Remove,
-    Clear,
-}
-
-/** @public */
 export interface Rect {
     left: number;
     top: number;

@@ -597,7 +597,6 @@ export namespace ZenithConvert {
         }
 
         export function encloseFromOverridableUnresolvedId(environmentId: DataEnvironmentId | undefined, exchangeId: ExchangeId) {
-            // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
             const resolvedEnvironmentId = environmentId !== undefined ? environmentId : ExchangeInfo.getDefaultDataEnvironmentId(exchangeId);
             return encloseFromId(resolvedEnvironmentId);
         }
@@ -1289,7 +1288,6 @@ export namespace ZenithConvert {
                     break;
             }
 
-            // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
             result.environment = environment === undefined ? ZenithProtocol.DataEnvironment.Production : environment;
 
             return result;
@@ -1501,78 +1499,83 @@ export namespace ZenithConvert {
                 return undefined;
             } else {
                 const zenithStatus = zenithFeed.Status;
-                const statusId = FeedStatus.toId(zenithStatus);
+                const statusId = zenithStatus === undefined ? FeedStatusId.Active :FeedStatus.toId(zenithStatus);
+                const zenithName = zenithFeed.Name;
                 // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-                if (statusId === undefined) {
-                    throw new ZenithDataError(ErrorCode.ZCFTASF874444934239, JSON.stringify(zenithFeed));
+                if (zenithName === undefined) {
+                    throw new ZenithDataError(ErrorCode.ZCFTANU874444934239, JSON.stringify(zenithFeed));
                 } else {
-                    const zenithName = zenithFeed.Name;
-                    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-                    if (zenithName === undefined) {
-                        throw new ZenithDataError(ErrorCode.ZCFTANU874444934239, JSON.stringify(zenithFeed));
-                    } else {
-                        let result: FeedsDataMessage.Feed;
-                        switch (classId) {
-                            case FeedClassId.Authority: {
-                                result = {
-                                    id: AuthorityFeed.toId(zenithName as ZenithProtocol.ZenithController.Feeds.AuthorityFeed),
-                                    statusId,
-                                };
-                                break;
-                            }
-                            case FeedClassId.Trading: {
-                                const { feedId, environmentId } = EnvironmentedTradingFeed.toId(zenithName);
-                                const tradingFeed: FeedsDataMessage.TradingFeed = {
-                                    id: feedId,
-                                    environmentId,
-                                    statusId,
-                                }
-                                result = tradingFeed;
-                                break;
-                            }
-                            case FeedClassId.Market: {
-                                const environmentedMarketId = EnvironmentedMarket.toId(zenithName);
-                                const environmentId = environmentedMarketId.environmentId;
-                                const marketId = environmentedMarketId.marketId;
-
-                                const dataFeed: FeedsDataMessage.DataFeed = {
-                                    id: MarketInfo.idToFeedId(marketId),
-                                    environmentId,
-                                    statusId,
-                                }
-                                result = dataFeed;
-                                break;
-                            }
-                            case FeedClassId.News: {
-                                const { feedId, environmentId } = EnvironmentedNewsFeed.toId(zenithName);
-                                const dataFeed: FeedsDataMessage.DataFeed = {
-                                    id: feedId,
-                                    environmentId,
-                                    statusId,
-                                }
-                                result = dataFeed;
-                                break;
-                            }
-                            case FeedClassId.Watchlist: {
-                                result = {
-                                    id: FeedId.Watchlist,
-                                    statusId,
-                                };
-                                break;
-                            }
-                            case FeedClassId.Scanner: {
-                                result = {
-                                    id: FeedId.Scanner,
-                                    statusId,
-                                };
-                                break;
-                            }
-                            default:
-                                throw new UnreachableCaseError('ZCFTACU688300211843', classId);
+                    let result: FeedsDataMessage.Feed;
+                    switch (classId) {
+                        case FeedClassId.Authority: {
+                            result = {
+                                id: AuthorityFeed.toId(zenithName as ZenithProtocol.ZenithController.Feeds.AuthorityFeed),
+                                statusId,
+                            };
+                            break;
                         }
+                        case FeedClassId.Trading: {
+                            const { feedId, environmentId } = EnvironmentedTradingFeed.toId(zenithName);
+                            const tradingFeed: FeedsDataMessage.TradingFeed = {
+                                id: feedId,
+                                environmentId,
+                                statusId,
+                            }
+                            result = tradingFeed;
+                            break;
+                        }
+                        case FeedClassId.Market: {
+                            const environmentedMarketId = EnvironmentedMarket.toId(zenithName);
+                            const environmentId = environmentedMarketId.environmentId;
+                            const marketId = environmentedMarketId.marketId;
 
-                        return result;
+                            const dataFeed: FeedsDataMessage.DataFeed = {
+                                id: MarketInfo.idToFeedId(marketId),
+                                environmentId,
+                                statusId,
+                            }
+                            result = dataFeed;
+                            break;
+                        }
+                        case FeedClassId.News: {
+                            const { feedId, environmentId } = EnvironmentedNewsFeed.toId(zenithName);
+                            const dataFeed: FeedsDataMessage.DataFeed = {
+                                id: feedId,
+                                environmentId,
+                                statusId,
+                            }
+                            result = dataFeed;
+                            break;
+                        }
+                        case FeedClassId.Watchlist: {
+                            result = {
+                                id: FeedId.Watchlist,
+                                statusId,
+                            };
+                            break;
+                        }
+                        case FeedClassId.Scanner: {
+                            result = {
+                                id: FeedId.Scanner,
+                                statusId,
+                            };
+                            break;
+                        }
+                        case FeedClassId.Channel: {
+                            result = {
+                                id: FeedId.Channel,
+                                statusId,
+                            };
+                            break;
+                        }
+                        default: {
+                            const neverValueIgnored: never = classId;
+                            Logger.logDataError('ZCFTAU98721', `${neverValueIgnored as Integer}`);
+                            return undefined;
+                        }
                     }
+
+                    return result;
                 }
             }
         }
@@ -1586,6 +1589,7 @@ export namespace ZenithConvert {
                     case ZenithProtocol.ZenithController.Feeds.FeedClass.Trading: return FeedClassId.Trading;
                     case ZenithProtocol.ZenithController.Feeds.FeedClass.Watchlist: return FeedClassId.Watchlist;
                     case ZenithProtocol.ZenithController.Feeds.FeedClass.Scanner: return FeedClassId.Scanner;
+                    case ZenithProtocol.ZenithController.Feeds.FeedClass.Channel: return FeedClassId.Channel;
                     default: {
                         const neverValueIgnored: never = value;
                         Logger.logDataError('ZCFFCU0092288573', `${neverValueIgnored as Integer}`);
@@ -1916,6 +1920,24 @@ export namespace ZenithConvert {
         }
         export function fromId(value: IvemClassId) {
             return IvemClass.fromId(value);
+        }
+    }
+
+    export namespace OrderFees {
+        export function toDecimal(value: ZenithProtocol.TradingController.OrderFees): AsDecimal {
+            const valueBrokerage = value.Brokerage;
+            const brokerage = valueBrokerage === undefined ? undefined : new Decimal(valueBrokerage);
+            const valueTax = value.Tax;
+            const tax = valueTax === undefined ? undefined : new Decimal(valueTax);
+            return {
+                brokerage,
+                tax,
+            };
+        }
+
+        export interface AsDecimal {
+            readonly brokerage: Decimal | undefined;
+            readonly tax: Decimal | undefined;
         }
     }
 
@@ -2746,7 +2768,6 @@ export namespace ZenithConvert {
                 sellCrossRef: tradeData.SellCrossRef,
                 marketId,
                 relatedId: tradeData.RelatedID,
-                // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
                 attributes: tradeData.Attributes === undefined ? [] : tradeData.Attributes,
                 buyDepthOrderId: tradeData.Buy,
                 sellDepthOrderId: tradeData.Sell,
@@ -2776,7 +2797,6 @@ export namespace ZenithConvert {
                 sellCrossRef: tradeData.SellCrossRef,
                 marketId,
                 relatedId: tradeData.RelatedID,
-                // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
                 attributes: tradeData.Attributes === undefined ? [] : tradeData.Attributes,
                 buyDepthOrderId: tradeData.Buy,
                 sellDepthOrderId: tradeData.Sell,

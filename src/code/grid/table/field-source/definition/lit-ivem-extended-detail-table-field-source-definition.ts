@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { LitIvemFullDetail } from '../../../../adi/adi-internal-api';
+import { SearchSymbolsLitIvemFullDetail } from '../../../../adi/adi-internal-api';
 import {
     AssertInternalError,
     CommaText,
@@ -48,18 +48,18 @@ export class LitIvemExtendedDetailTableFieldSourceDefinition extends TableFieldS
         this.fieldDefinitions = this.createFieldDefinitions();
     }
 
-    isFieldSupported(id: LitIvemFullDetail.ExtendedField.Id) {
+    isFieldSupported(id: SearchSymbolsLitIvemFullDetail.ExtendedField.Id) {
         return LitIvemExtendedDetailTableFieldSourceDefinition.Field.isIdSupported(id);
     }
 
-    getFieldNameById(id: LitIvemFullDetail.ExtendedField.Id) {
+    getFieldNameById(id: SearchSymbolsLitIvemFullDetail.ExtendedField.Id) {
         const sourcelessFieldName = LitIvemExtendedDetailTableFieldSourceDefinition.Field.getNameById(id);
         return CommaText.from2Values(this.name, sourcelessFieldName);
     }
 
-    getSupportedFieldNameById(id: LitIvemFullDetail.ExtendedField.Id) {
+    getSupportedFieldNameById(id: SearchSymbolsLitIvemFullDetail.ExtendedField.Id) {
         if (!this.isFieldSupported(id)) {
-            throw new AssertInternalError('LIEDTFSDGSFNBI30999', LitIvemFullDetail.ExtendedField.idToName(id));
+            throw new AssertInternalError('LIEDTFSDGSFNBI30999', SearchSymbolsLitIvemFullDetail.ExtendedField.idToName(id));
         } else {
             return this.getFieldNameById(id);
         }
@@ -91,47 +91,47 @@ export class LitIvemExtendedDetailTableFieldSourceDefinition extends TableFieldS
 
 export namespace LitIvemExtendedDetailTableFieldSourceDefinition {
     export namespace Field {
-        const unsupportedIds: LitIvemFullDetail.ExtendedField.Id[] = [
-            LitIvemFullDetail.ExtendedField.Id.Attributes,
-            LitIvemFullDetail.ExtendedField.Id.TmcLegs
+        const unsupportedIds: SearchSymbolsLitIvemFullDetail.ExtendedField.Id[] = [
+            SearchSymbolsLitIvemFullDetail.ExtendedField.Id.Attributes,
+            SearchSymbolsLitIvemFullDetail.ExtendedField.Id.TmcLegs
         ];
-        export const count = LitIvemFullDetail.ExtendedField.idCount - unsupportedIds.length;
+        export const count = SearchSymbolsLitIvemFullDetail.ExtendedField.idCount - unsupportedIds.length;
 
         class Info {
-            id: LitIvemFullDetail.ExtendedField.Id;
+            id: SearchSymbolsLitIvemFullDetail.ExtendedField.Id;
             fieldConstructor: CorrectnessTableField.Constructor;
             valueConstructor: CorrectnessTableValue.Constructor;
         }
 
         const infos = new Array<Info>(count);
-        const idFieldIndices = new Array<Integer>(LitIvemFullDetail.ExtendedField.idCount);
+        const idFieldIndices = new Array<Integer>(SearchSymbolsLitIvemFullDetail.ExtendedField.idCount);
 
-        function idToTableGridConstructors(id: LitIvemFullDetail.ExtendedField.Id):
+        function idToTableGridConstructors(id: SearchSymbolsLitIvemFullDetail.ExtendedField.Id):
             TableFieldSourceDefinition.CorrectnessTableGridConstructors {
             switch (id) {
-                case LitIvemFullDetail.ExtendedField.Id.Cfi:
+                case SearchSymbolsLitIvemFullDetail.ExtendedField.Id.Cfi:
                     return [StringCorrectnessTableField, StringCorrectnessTableValue];
-                case LitIvemFullDetail.ExtendedField.Id.DepthDirectionId:
+                case SearchSymbolsLitIvemFullDetail.ExtendedField.Id.DepthDirectionId:
                     return [EnumCorrectnessTableField, DepthDirectionIdCorrectnessTableValue];
-                case LitIvemFullDetail.ExtendedField.Id.IsIndex:
+                case SearchSymbolsLitIvemFullDetail.ExtendedField.Id.IsIndex:
                     return [BooleanCorrectnessTableField, IsIndexCorrectnessTableValue];
-                case LitIvemFullDetail.ExtendedField.Id.ExpiryDate:
+                case SearchSymbolsLitIvemFullDetail.ExtendedField.Id.ExpiryDate:
                     return [SourceTzOffsetDateCorrectnessTableField, SourceTzOffsetDateCorrectnessTableValue];
-                case LitIvemFullDetail.ExtendedField.Id.StrikePrice:
+                case SearchSymbolsLitIvemFullDetail.ExtendedField.Id.StrikePrice:
                     return [DecimalCorrectnessTableField, PriceCorrectnessTableValue];
-                case LitIvemFullDetail.ExtendedField.Id.ExerciseTypeId:
+                case SearchSymbolsLitIvemFullDetail.ExtendedField.Id.ExerciseTypeId:
                     return [EnumCorrectnessTableField, ExerciseTypeIdCorrectnessTableValue];
-                case LitIvemFullDetail.ExtendedField.Id.CallOrPutId:
+                case SearchSymbolsLitIvemFullDetail.ExtendedField.Id.CallOrPutId:
                     return [EnumCorrectnessTableField, CallOrPutIdCorrectnessTableValue];
-                case LitIvemFullDetail.ExtendedField.Id.ContractSize:
+                case SearchSymbolsLitIvemFullDetail.ExtendedField.Id.ContractSize:
                     return [DecimalCorrectnessTableField, DecimalCorrectnessTableValue];
-                case LitIvemFullDetail.ExtendedField.Id.LotSize:
+                case SearchSymbolsLitIvemFullDetail.ExtendedField.Id.LotSize:
                     return [IntegerCorrectnessTableField, IntegerCorrectnessTableValue];
-                case LitIvemFullDetail.ExtendedField.Id.Categories:
+                case SearchSymbolsLitIvemFullDetail.ExtendedField.Id.Categories:
                     return [StringArrayCorrectnessTableField, StringArrayCorrectnessTableValue];
-                case LitIvemFullDetail.ExtendedField.Id.Attributes:
-                case LitIvemFullDetail.ExtendedField.Id.TmcLegs:
-                    throw new AssertInternalError('LIEDTFDSFITTGCA1200069', LitIvemFullDetail.ExtendedField.idToName(id));
+                case SearchSymbolsLitIvemFullDetail.ExtendedField.Id.Attributes:
+                case SearchSymbolsLitIvemFullDetail.ExtendedField.Id.TmcLegs:
+                    throw new AssertInternalError('LIEDTFDSFITTGCA1200069', SearchSymbolsLitIvemFullDetail.ExtendedField.idToName(id));
                 default:
                     throw new UnreachableCaseError('LIEDTFDSFITTGCU1200069', id);
             }
@@ -142,19 +142,19 @@ export namespace LitIvemExtendedDetailTableFieldSourceDefinition {
         }
 
         export function getName(fieldIdx: Integer) {
-            return LitIvemFullDetail.ExtendedField.idToName(infos[fieldIdx].id);
+            return SearchSymbolsLitIvemFullDetail.ExtendedField.idToName(infos[fieldIdx].id);
         }
 
-        export function getNameById(id: LitIvemFullDetail.ExtendedField.Id) {
-            return LitIvemFullDetail.ExtendedField.idToName(id);
+        export function getNameById(id: SearchSymbolsLitIvemFullDetail.ExtendedField.Id) {
+            return SearchSymbolsLitIvemFullDetail.ExtendedField.idToName(id);
         }
 
         export function getHeading(fieldIdx: Integer) {
-            return LitIvemFullDetail.ExtendedField.idToHeading(infos[fieldIdx].id);
+            return SearchSymbolsLitIvemFullDetail.ExtendedField.idToHeading(infos[fieldIdx].id);
         }
 
         export function getDataTypeId(fieldIdx: Integer): FieldDataTypeId {
-            return LitIvemFullDetail.ExtendedField.idToFieldDataTypeId(infos[fieldIdx].id);
+            return SearchSymbolsLitIvemFullDetail.ExtendedField.idToFieldDataTypeId(infos[fieldIdx].id);
         }
 
         export function getTableFieldConstructor(fieldIdx: Integer) {
@@ -165,17 +165,17 @@ export namespace LitIvemExtendedDetailTableFieldSourceDefinition {
             return infos[fieldIdx].valueConstructor;
         }
 
-        export function indexOfId(id: LitIvemFullDetail.ExtendedField.Id) {
+        export function indexOfId(id: SearchSymbolsLitIvemFullDetail.ExtendedField.Id) {
             return idFieldIndices[id];
         }
 
-        export function isIdSupported(id: LitIvemFullDetail.ExtendedField.Id) {
+        export function isIdSupported(id: SearchSymbolsLitIvemFullDetail.ExtendedField.Id) {
             return !unsupportedIds.includes(id);
         }
 
         export function initialiseFieldStatic() {
             let fieldIdx = 0;
-            for (let id = 0; id < LitIvemFullDetail.ExtendedField.idCount; id++) {
+            for (let id = 0; id < SearchSymbolsLitIvemFullDetail.ExtendedField.idCount; id++) {
                 if (unsupportedIds.includes(id)) {
                     idFieldIndices[id] = -1;
                 } else {
@@ -190,6 +190,11 @@ export namespace LitIvemExtendedDetailTableFieldSourceDefinition {
                 }
             }
         }
+    }
+
+    export interface FieldId extends TableFieldSourceDefinition.FieldId {
+        sourceTypeId: TableFieldSourceDefinition.TypeId.LitIvemExtendedDetail;
+        id: SearchSymbolsLitIvemFullDetail.ExtendedField.Id;
     }
 
     export function initialiseStatic() {

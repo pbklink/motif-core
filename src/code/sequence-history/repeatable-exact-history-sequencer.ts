@@ -89,7 +89,7 @@ export class RepeatableExactHistorySequencer extends HistorySequencer {
         if (this.pointCount === 0) {
             return undefined;
         } else {
-            return this.pointList.getItem(this.pointCount - 1).offset;
+            return this.pointList.getAt(this.pointCount - 1).offset;
         }
     }
 
@@ -98,7 +98,7 @@ export class RepeatableExactHistorySequencer extends HistorySequencer {
     }
 
     unsubscribePointInsertedEvent(subscriptionId: MultiEvent.SubscriptionId) {
-         this._pointInsertedMultiEvent.unsubscribe(subscriptionId);
+        this._pointInsertedMultiEvent.unsubscribe(subscriptionId);
     }
 
     subscribePointUpdatedEvent(handler: RepeatableExactHistorySequencer.PointUpdatedEventHandler) {
@@ -106,7 +106,7 @@ export class RepeatableExactHistorySequencer extends HistorySequencer {
     }
 
     unsubscribePointUpdatedEvent(subscriptionId: MultiEvent.SubscriptionId) {
-         this._pointUpdatedMultiEvent.unsubscribe(subscriptionId);
+        this._pointUpdatedMultiEvent.unsubscribe(subscriptionId);
     }
 
     protected getPointCount() {
@@ -181,12 +181,12 @@ export namespace RepeatableExactHistorySequencer {
         }
 
         private isDateTimeAndRepeatIndexEqual(index: Integer, dateTime: Date, dateTimeRepeatIndex: Integer) {
-            const item = this.getItem(index);
+            const item = this.getAt(index);
             return isDateEqual(item.utcDate, dateTime) && item.dateTimeRepeatIndex === dateTimeRepeatIndex;
         }
 
         private compareDateTimeAndRepeatIndex(index: Integer, dateTime: Date, dateTimeRepeatIndex: Integer) {
-            const item = this.getItem(index);
+            const item = this.getAt(index);
 
             const dateCompareResult = compareDate(item.utcDate, dateTime);
             if (dateCompareResult !== ComparisonResult.LeftEqualsRight) {

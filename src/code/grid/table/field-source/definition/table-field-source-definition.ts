@@ -33,6 +33,7 @@ export abstract class TableFieldSourceDefinition extends GridFieldSourceDefiniti
 export namespace TableFieldSourceDefinition {
     export const enum TypeId {
         Feed,
+        LitIvemId,
         RankedLitIvemId,
         LitIvemBaseDetail,
         LitIvemExtendedDetail,
@@ -65,6 +66,7 @@ export namespace TableFieldSourceDefinition {
         export type Id = TypeId;
 
         export const feedName = 'Feed';
+        export const litIvemIdName = 'Lii';
         export const rankedLitIvemIdName = 'Rli';
         export const litIvemBaseDetailName = 'Lib';
         export const litIvemExtendedDetailName = 'Lie';
@@ -92,6 +94,7 @@ export namespace TableFieldSourceDefinition {
         type InfoObjects = { [id in keyof typeof TypeId]: Info };
         const infoObject: InfoObjects = {
             Feed: { id: TypeId.Feed, name: feedName },
+            LitIvemId: { id: TypeId.LitIvemId, name: litIvemIdName },
             RankedLitIvemId: { id: TypeId.RankedLitIvemId, name: rankedLitIvemIdName },
             LitIvemBaseDetail: { id: TypeId.LitIvemBaseDetail, name: litIvemBaseDetailName },
             LitIvemExtendedDetail: { id: TypeId.LitIvemExtendedDetail, name: litIvemExtendedDetailName },
@@ -181,5 +184,10 @@ export namespace TableFieldSourceDefinition {
                 }
             }
         }
+    }
+
+    export interface FieldId {
+        sourceTypeId: TableFieldSourceDefinition.TypeId;
+        id: number;
     }
 }

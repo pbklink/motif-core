@@ -169,6 +169,11 @@ export namespace BalancesTableFieldSourceDefinition {
         }
     }
 
+    export interface FieldId extends TableFieldSourceDefinition.FieldId {
+        sourceTypeId: TableFieldSourceDefinition.TypeId.BalancesDataItem;
+        id: Balances.FieldId;
+    }
+
     export function initialiseStatic() {
         Field.initialiseFieldStatic();
     }

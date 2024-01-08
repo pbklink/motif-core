@@ -9,9 +9,9 @@ import {
     AdiService,
     CallOrPutId,
     IvemId,
-    LitIvemFullDetail,
     LitIvemId,
     SearchSymbolsDataDefinition,
+    SearchSymbolsLitIvemFullDetail,
     SymbolFieldId,
     SymbolsDataItem
 } from '../../../adi/adi-internal-api';
@@ -139,10 +139,10 @@ export class CallPutFromUnderlyingTableRecordSource extends SingleDataItemTableR
         this._dataItemSubscribed = true;
         super.setSingleDataItem(this._dataItem);
         this._dataItemListChangeEventSubscriptionId = this._dataItem.subscribeListChangeEvent(
-            (listChangeTypeId, idx, count) => this.handleDataItemListChangeEvent(listChangeTypeId, idx, count)
+            (listChangeTypeId, idx, count) => { this.handleDataItemListChangeEvent(listChangeTypeId, idx, count); }
         );
         this._dataItemBadnessChangeEventSubscriptionId = this._dataItem.subscribeBadnessChangeEvent(
-            () => this.handleDataItemBadnessChangeEvent()
+            () => { this.handleDataItemBadnessChangeEvent(); }
         );
 
         super.openLocked(opener);
@@ -228,6 +228,10 @@ export class CallPutFromUnderlyingTableRecordSource extends SingleDataItemTableR
                 throw new AssertInternalError('CPFUTRSPDILCBR19662');
             case UsableListChangeTypeId.AfterReplace:
                 throw new AssertInternalError('CPFUTRSPDILCAR19662');
+            case UsableListChangeTypeId.BeforeMove:
+                throw new AssertInternalError('CPFUTRSPDILCBM19662');
+            case UsableListChangeTypeId.AfterMove:
+                throw new AssertInternalError('CPFUTRSPDILCAM19662');
             case UsableListChangeTypeId.Remove:
                 this.checkUsableNotifyListChange(UsableListChangeTypeId.Remove, idx, count);
                 this._recordList.splice(idx, count);
@@ -249,7 +253,7 @@ export class CallPutFromUnderlyingTableRecordSource extends SingleDataItemTableR
         this.setUsable(this._dataItem.badness);
     }
 
-    private createRecordList(symbolDetails: LitIvemFullDetail[]) {
+    private createRecordList(symbolDetails: SearchSymbolsLitIvemFullDetail[]) {
         const symbolDetailCount = symbolDetails.length;
         const newRecordList = new Array<CallPut>(symbolDetailCount);
         let count = 0;

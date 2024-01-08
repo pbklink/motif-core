@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { SettingsService } from '../../../settings/settings-internal-api';
+import { SettingsService } from '../../../services/services-internal-api';
 import { TextFormatterService } from '../../../text-format/text-format-internal-api';
 import { AdaptedRevgrid, SingleHeadingGridDataServer } from '../adapted-revgrid/grid-revgrid-adapted-revgrid-internal-api';
 import { RecordGrid, RecordGridDataServer } from '../record-grid/grid-revgrid-record-grid-internal-api';

@@ -30,6 +30,10 @@ export class IrrcFeedSubscriptionDataItem<T> extends FeedSubscriptionDataItem im
         return this.records[recordIndex];
     }
 
+    toArray(): readonly T[] {
+        return this.records;
+    }
+
     subscribeListChangeEvent(handler: RecordList.ListChangeEventHandler) {
         return this._listChangeMultiEvent.subscribe(handler);
     }

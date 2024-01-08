@@ -4,24 +4,19 @@
  * License: motionite.trade/license/motif
  */
 
-import { DataEnvironment, DataEnvironmentId } from '../adi/adi-internal-api';
 import { StringId, Strings } from '../res/res-internal-api';
-import { MasterSettings, SettingsService } from '../settings/settings-internal-api';
 import { ServiceOperator, ServiceOperatorId } from '../sys/service-operator';
 import {
-    AssertInternalError,
     EnumInfoOutOfOrderError,
     Err,
     Integer,
-    JsonElement,
     Logger,
     MultiEvent,
     Ok,
-    Result, UnreachableCaseError,
+    Result,
     checkLimitTextLength,
     getErrorMessage
 } from '../sys/sys-internal-api';
-import { KeyValueStore } from './key-value-store/services-key-value-store-internal-api';
 
 export class MotifServicesService {
     private _baseUrl: string;
@@ -30,29 +25,19 @@ export class MotifServicesService {
     private _applicationFlavour = MotifServicesService.defaultApplicationFlavour;
     private _applicationUserEnvironment = MotifServicesService.defaultApplicationUserEnvironment;
 
-    private _masterSettingsChangedEventSubscriptionId: MultiEvent.SubscriptionId;
-
     private _logEvent = new MultiEvent<MotifServicesService.LogEvent>();
 
-    constructor(private _settingsService: SettingsService) { }
-
     // eslint-disable-next-line max-len
-    async initialise(endpointBaseUrl: string, dataEnvironmentId: DataEnvironmentId,
+    initialise(
+        endpointBaseUrl: string,
         getAuthorizationHeaderValueCallback: MotifServicesService.GetAuthorizationHeaderValueCallback
     ) {
         this._baseUrl = endpointBaseUrl;
         this._getAuthorizationHeaderValue = getAuthorizationHeaderValueCallback;
-
-        await this.loadMasterSettings();
-
-        this.updateApplicationUserEnvironment(dataEnvironmentId);
-
-        this._masterSettingsChangedEventSubscriptionId =
-            this._settingsService.subscribeMasterSettingsChangedEvent(() => this.handleMasterSettingsChangedEvent());
     }
 
-    finalise() {
-        this._settingsService.unsubscribeMasterSettingsChangedEvent(this._masterSettingsChangedEventSubscriptionId);
+    setApplicationUserEnvironment(applicationUserEnvironmentId: MotifServicesService.ApplicationUserEnvironment.Id) {
+        this._applicationUserEnvironment = MotifServicesService.ApplicationUserEnvironment.idToValue(applicationUserEnvironmentId);
     }
 
     subscribeLogEvent(handler: MotifServicesService.LogEvent) {
@@ -93,18 +78,18 @@ export class MotifServicesService {
                     payload = JSON.parse(payloadText) as MotifServicesService.GetResponsePayload;
                 } catch (e) {
                     const result = this.createPayloadParseErrorResult<string | undefined>(e, payloadText);
-                    return Promise.resolve(result);
+                    return result;
                 }
                 if (payload.successful) {
                     const result: Result<string | undefined> = new Ok(payload.data);
-                    return await Promise.resolve(result);
+                    return result;
                 } else {
                     const result = new Err(`${Strings[StringId.MotifServicesResponsePayloadError]}: ${payload.reason}`);
-                    return await Promise.resolve(result);
+                    return result;
                 }
             } else {
                 const result = new Err(`${Strings[StringId.MotifServicesResponseStatusError]}: ${response.status}: ${response.statusText}`);
-                return await Promise.resolve(result);
+                return result;
             }
         } catch (reason) {
             const errorText = getErrorMessage(reason);
@@ -150,14 +135,14 @@ export class MotifServicesService {
                 }
                 if (payload.successful) {
                     const result: Result<void> = new Ok(undefined);
-                    return await Promise.resolve(result);
+                    return result;
                 } else {
                     const result = new Err(`${Strings[StringId.MotifServicesResponsePayloadError]}: ${payload.reason}`);
-                    return await Promise.resolve(result);
+                    return result;
                 }
             } else {
                 const result = new Err(`${Strings[StringId.MotifServicesResponseStatusError]}: ${response.status}: ${response.statusText}`);
-                return await Promise.resolve(result);
+                return result;
             }
         } catch (reason) {
             const errorText = getErrorMessage(reason);
@@ -197,14 +182,14 @@ export class MotifServicesService {
                 }
                 if (payload.successful) {
                     const result: Result<void> = new Ok(undefined);
-                    return await Promise.resolve(result);
+                    return result;
                 } else {
                     const result = new Err(`${Strings[StringId.MotifServicesResponsePayloadError]}: ${payload.reason}`);
-                    return await Promise.resolve(result);
+                    return result;
                 }
             } else {
                 const result = new Err(`${Strings[StringId.MotifServicesResponseStatusError]}: ${response.status}: ${response.statusText}`);
-                return await Promise.resolve(result);
+                return result;
             }
         } catch (reason) {
             const errorText = getErrorMessage(reason);
@@ -247,14 +232,14 @@ export class MotifServicesService {
                 }
                 if (payload.successful) {
                     const result: Result<string | undefined> = new Ok(payload.data);
-                    return await Promise.resolve(result);
+                    return result;
                 } else {
                     const result = new Err(`${Strings[StringId.MotifServicesResponsePayloadError]}: ${payload.reason}`);
-                    return await Promise.resolve(result);
+                    return result;
                 }
             } else {
                 const result = new Err(`${Strings[StringId.MotifServicesResponseStatusError]}: ${response.status}: ${response.statusText}`);
-                return await Promise.resolve(result);
+                return result;
             }
         } catch (reason) {
             const errorText = getErrorMessage(reason);
@@ -297,14 +282,14 @@ export class MotifServicesService {
                 }
                 if (payload.successful) {
                     const result: Result<string | undefined> = new Ok(payload.data);
-                    return await Promise.resolve(result);
+                    return result;
                 } else {
                     const result = new Err(`${Strings[StringId.MotifServicesResponsePayloadError]}: ${payload.reason}`);
-                    return await Promise.resolve(result);
+                    return result;
                 }
             } else {
                 const result = new Err(`${Strings[StringId.MotifServicesResponseStatusError]}: ${response.status}: ${response.statusText}`);
-                return await Promise.resolve(result);
+                return result;
             }
         } catch (reason) {
             const errorText = getErrorMessage(reason);
@@ -347,29 +332,20 @@ export class MotifServicesService {
                 }
                 if (payload.successful) {
                     const result: Result<string | undefined> = new Ok(payload.data);
-                    return await Promise.resolve(result);
+                    return result;
                 } else {
                     const result = new Err(`${Strings[StringId.MotifServicesResponsePayloadError]}: ${payload.reason}`);
-                    return await Promise.resolve(result);
+                    return result;
                 }
             } else {
                 const result = new Err(`${Strings[StringId.MotifServicesResponseStatusError]}: ${response.status}: ${response.statusText}`);
-                return await Promise.resolve(result);
+                return result;
             }
         } catch (reason) {
             const errorText = getErrorMessage(reason);
             const result = new Err(`${Strings[StringId.MotifServicesFetchError]}: ${errorText}`);
             return Promise.resolve(result);
         }
-    }
-
-    private handleMasterSettingsChangedEvent() {
-        // do not update applicationEnvironment. A restart is required for this.
-        const promise = this.saveMasterSettings();
-        promise.then(
-            () => {/**/},
-            (e) => { throw AssertInternalError.createIfNotError(e, 'MSSHMSCES21214') }
-        )
     }
 
     private notifyLog(time: Date, logLevelId: Logger.LevelId, text: string) {
@@ -393,60 +369,6 @@ export class MotifServicesService {
 
     private logError(text: string) {
         this.log(Logger.LevelId.Error, text);
-    }
-
-    private async loadMasterSettings() {
-        const masterSettings = this._settingsService.master;
-        const getMasterSettingsResult = await this.getUserSetting(
-            KeyValueStore.Key.MasterSettings,
-            undefined,
-            MotifServicesService.masterApplicationEnvironment
-        );
-        if (getMasterSettingsResult.isErr()) {
-            this.logWarning(`Master Settings error: "${getMasterSettingsResult.error}". Using defaults`);
-            masterSettings.load(undefined, undefined);
-            await this.saveMasterSettings();
-        } else {
-            const gottenMasterSettings = getMasterSettingsResult.value;
-            if (gottenMasterSettings === undefined) {
-                masterSettings.load(undefined, undefined);
-                await this.saveMasterSettings();
-            } else {
-                this.logInfo('Loading Master Settings');
-                const rootElement = new JsonElement();
-                const parseResult = rootElement.parse(gottenMasterSettings);
-                if (parseResult.isOk()) {
-                    masterSettings.load(rootElement, undefined);
-                } else {
-                    this.logWarning('Could not parse saved master settings. Using defaults.' + parseResult.error);
-                    masterSettings.load(undefined, undefined);
-                    await this.saveMasterSettings();
-                }
-            }
-        }
-    }
-
-    private async saveMasterSettings() {
-        const saveElements = this._settingsService.master.save();
-        const userElement = saveElements.user;
-        if (userElement === undefined) {
-            throw new AssertInternalError('MSSSMS33391');
-        } else {
-            const settingsAsJsonString = userElement.stringify();
-            await this.setUserSetting(
-                KeyValueStore.Key.MasterSettings,
-                settingsAsJsonString,
-                undefined,
-                MotifServicesService.masterApplicationEnvironment
-            );
-        }
-    }
-
-    private updateApplicationUserEnvironment(dataEnvironmentId: DataEnvironmentId) {
-        const selectorId = this._settingsService.master.applicationUserEnvironmentSelectorId;
-        const applicationUserEnvironmentId =
-            MotifServicesService.ApplicationUserEnvironment.idFromApplicationUserEnvironmentSelectorId(selectorId, dataEnvironmentId);
-        this._applicationUserEnvironment = MotifServicesService.ApplicationUserEnvironment.idToValue(applicationUserEnvironmentId);
     }
 
     private generateApplicationEnvironment(operatorId: ServiceOperatorId | undefined, overrideApplicationEnvironment: string | undefined) {
@@ -589,7 +511,7 @@ export namespace MotifServicesService {
         const infos = Object.values(infosObject);
 
         export function initialise() {
-            const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
+            const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as Id);
             if (outOfOrderIdx >= 0) {
                 throw new EnumInfoOutOfOrderError('ApplicationEnvironment', outOfOrderIdx, Strings[infos[outOfOrderIdx].displayId]);
             }
@@ -602,35 +524,6 @@ export namespace MotifServicesService {
         export function tryValueToId(value: string) {
             const foundInfo = infos.find((info) => info.value === value);
             return foundInfo?.id;
-        }
-
-        export function idFromApplicationUserEnvironmentSelectorId(selectorId: MasterSettings.ApplicationUserEnvironmentSelector.SelectorId,
-            dataEnvironmentId: DataEnvironment.Id) {
-            switch (selectorId) {
-                case MasterSettings.ApplicationUserEnvironmentSelector.SelectorId.Default:
-                    return ApplicationUserEnvironment.Id.Default;
-                case MasterSettings.ApplicationUserEnvironmentSelector.SelectorId.DataEnvironment:
-                    switch (dataEnvironmentId) {
-                        case DataEnvironmentId.Production: return ApplicationUserEnvironment.Id.DataEnvironment_Production;
-                        case DataEnvironmentId.DelayedProduction:
-                            return ApplicationUserEnvironment.Id.DataEnvironment_DelayedProduction;
-                        case DataEnvironmentId.Demo: return ApplicationUserEnvironment.Id.DataEnvironment_Demo;
-                        case DataEnvironmentId.Sample: return ApplicationUserEnvironment.Id.DataEnvironment_Sample;
-                        default: throw new UnreachableCaseError('MHSAESITAEEE398558', dataEnvironmentId);
-                    }
-                case MasterSettings.ApplicationUserEnvironmentSelector.SelectorId.DataEnvironment_Sample:
-                    return ApplicationUserEnvironment.Id.DataEnvironment_Sample;
-                case MasterSettings.ApplicationUserEnvironmentSelector.SelectorId.DataEnvironment_Demo:
-                    return ApplicationUserEnvironment.Id.DataEnvironment_Demo;
-                case MasterSettings.ApplicationUserEnvironmentSelector.SelectorId.DataEnvironment_DelayedProduction:
-                    return ApplicationUserEnvironment.Id.DataEnvironment_DelayedProduction;
-                case MasterSettings.ApplicationUserEnvironmentSelector.SelectorId.DataEnvironment_Production:
-                    return ApplicationUserEnvironment.Id.DataEnvironment_Production;
-                case MasterSettings.ApplicationUserEnvironmentSelector.SelectorId.Test:
-                    return ApplicationUserEnvironment.Id.Test;
-                default:
-                    throw new UnreachableCaseError('MHSAESITAED2905661', selectorId);
-            }
         }
     }
 }

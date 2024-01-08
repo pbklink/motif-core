@@ -5,19 +5,21 @@
  */
 
 import { AdiService } from '../adi/adi-internal-api';
-import { ScansService } from '../scan/scan-internal-api';
+import { ScansService } from '../scan/internal-api';
 import { UnreachableCaseError } from '../sys/sys-internal-api';
 import { WatchmakerService } from '../watchmaker/watchmaker-internal-api';
 import {
-    JsonRankedLitIvemIdListDefinition,
+    LitIvemIdArrayRankedLitIvemIdListDefinition,
+    LitIvemIdExecuteScanRankedLitIvemIdListDefinition,
     RankedLitIvemIdListDefinition,
-    ScanMatchesRankedLitIvemIdListDefinition,
-    WatchmakerRankedLitIvemIdListDefinition
+    ScanIdRankedLitIvemIdListDefinition,
+    WatchmakerListIdRankedLitIvemIdListDefinition
 } from "./definition/ranked-lit-ivem-id-list-definition-internal-api";
-import { JsonScoredRankedLitIvemIdList } from './json-scored-ranked-lit-ivem-id-list';
+import { LitIvemIdArrayRankedLitIvemIdList } from './lit-ivem-id-array-ranked-lit-ivem-id-list';
+import { LitIvemIdExecuteScanRankedLitIvemIdList } from './lit-ivem-id-execute-scan-ranked-lit-ivem-id-list';
 import { RankedLitIvemIdList } from './ranked-lit-ivem-id-list';
-import { ScanMatchesScoredRankedLitIvemIdList } from './scan-matches-scored-ranked-lit-ivem-id-list';
-import { WatchmakerScoredRankedLitIvemIdList } from './watchmaker-scored-ranked-lit-ivem-id-list';
+import { ScanIdRankedLitIvemIdList } from './scan-id-ranked-lit-ivem-id-list';
+import { WatchmakerListIdRankedLitIvemIdList } from './watchmaker-list-id-ranked-lit-ivem-id-list';
 
 /** @public */
 export class RankedLitIvemIdListFactoryService {
@@ -31,20 +33,25 @@ export class RankedLitIvemIdListFactoryService {
     // needs fixing
     createFromDefinition(definition: RankedLitIvemIdListDefinition): RankedLitIvemIdList {
         switch (definition.typeId) {
-            case RankedLitIvemIdListDefinition.TypeId.Json:
-                return new JsonScoredRankedLitIvemIdList(
-                    definition as JsonRankedLitIvemIdListDefinition
+            case RankedLitIvemIdListDefinition.TypeId.LitIvemIdArray:
+                return new LitIvemIdArrayRankedLitIvemIdList(
+                    definition as LitIvemIdArrayRankedLitIvemIdListDefinition
                 );
-            case RankedLitIvemIdListDefinition.TypeId.ScanMatches:
-                return new ScanMatchesScoredRankedLitIvemIdList(
+            case RankedLitIvemIdListDefinition.TypeId.WatchmakerListId:
+                return new WatchmakerListIdRankedLitIvemIdList(
+                    this._watchmakerService,
+                    definition as WatchmakerListIdRankedLitIvemIdListDefinition
+                );
+            case RankedLitIvemIdListDefinition.TypeId.ScanId:
+                return new ScanIdRankedLitIvemIdList(
                     this._adiService,
                     this._scansService,
-                    definition as ScanMatchesRankedLitIvemIdListDefinition
+                    definition as ScanIdRankedLitIvemIdListDefinition
                 );
-            case RankedLitIvemIdListDefinition.TypeId.Watchmaker:
-                return new WatchmakerScoredRankedLitIvemIdList(
-                    this._watchmakerService,
-                    definition as WatchmakerRankedLitIvemIdListDefinition
+            case RankedLitIvemIdListDefinition.TypeId.LitIvemIdExecuteScan:
+                return new LitIvemIdExecuteScanRankedLitIvemIdList(
+                    this._adiService,
+                    definition as LitIvemIdExecuteScanRankedLitIvemIdListDefinition
                 );
             default:
                 throw new UnreachableCaseError('RLILFSCFD15169', definition.typeId);

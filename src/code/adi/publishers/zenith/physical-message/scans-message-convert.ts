@@ -12,8 +12,8 @@ import {
     AdiPublisherSubscription,
     AurcChangeTypeId,
     QueryScanDescriptorsDataDefinition,
-    ScanStatusedDescriptorsDataMessage,
-    WatchmakerListDescriptorsDataDefinition
+    ScanDescriptorsDataDefinition,
+    ScanStatusedDescriptorsDataMessage
 } from "../../../common/adi-common-internal-api";
 import { ZenithProtocol } from './protocol/zenith-protocol';
 import { ZenithConvert } from './zenith-convert';
@@ -22,7 +22,7 @@ import { ZenithNotifyConvert } from './zenith-notify-convert';
 export namespace ScansMessageConvert {
     export function createRequestMessage(request: AdiPublisherRequest) {
         const definition = request.subscription.dataDefinition;
-        if (definition instanceof WatchmakerListDescriptorsDataDefinition) {
+        if (definition instanceof ScanDescriptorsDataDefinition) {
             return createSubUnsubMessage(request.typeId);
         } else {
             if (definition instanceof QueryScanDescriptorsDataDefinition) {
@@ -108,17 +108,21 @@ export namespace ScansMessageConvert {
                 const addUpdateZenithChange = zenithChange as ZenithProtocol.NotifyController.AddUpdateRemoveScanChange;
                 const scan = addUpdateZenithChange.Scan;
                 const scanStatusId = ZenithNotifyConvert.ScanStatus.toId(scan.Status);
-                const metaData = ZenithNotifyConvert.ScanMetaType.to(scan.MetaData);
+                const scanStateMetaData = scan.MetaData;
+                const metaData = scanStateMetaData === undefined ? undefined : ZenithNotifyConvert.ScanMetaType.to(scanStateMetaData);
                 const change: ScanStatusedDescriptorsDataMessage.AddUpdateChange = {
                     typeId: changeTypeId,
                     scanId: scan.ID,
                     scanName: scan.Name,
                     scanDescription: scan.Description,
-                    versionNumber: metaData.versionNumber,
-                    versionId: metaData.versionId,
-                    versioningInterrupted: metaData.versioningInterrupted,
-                    lastSavedTime: metaData.lastSavedTime,
-                    symbolListEnabled: metaData.symbolListEnabled,
+                    versionNumber: metaData === undefined ? undefined : metaData.versionNumber,
+                    versionId: metaData === undefined ? undefined : metaData.versionId,
+                    versioningInterrupted: metaData === undefined ? true : metaData.versioningInterrupted,
+                    lastSavedTime: metaData === undefined ? undefined : metaData.lastSavedTime,
+                    lastEditSessionId: metaData === undefined ? undefined : metaData.lastEditSessionId,
+                    symbolListEnabled: metaData === undefined ? undefined : metaData.symbolListEnabled,
+                    zenithCriteriaSource: metaData === undefined ? undefined : metaData.zenithCriteriaSource,
+                    zenithRankSource: metaData === undefined ? undefined : metaData.zenithRankSource,
                     readonly: !scan.IsWritable,
                     scanStatusId,
                 };

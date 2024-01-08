@@ -4,6 +4,6 @@
  * License: motionite.trade/license/motif
  */
 
+export * from './zenith-encoded-scan-formula';
 export * from './zenith-protocol-common';
-export * from './zenith-protocol-scan-criteria';
 

@@ -133,9 +133,13 @@ export class WatchmakerService extends LockOpenList<WatchmakerList> {
                 this.syncDescriptors(index, count);
                 break;
             case UsableListChangeTypeId.BeforeReplace:
-                throw new AssertInternalError('SSPSLCBR19662');
+                throw new AssertInternalError('WSPSLCBR19662');
             case UsableListChangeTypeId.AfterReplace:
-                throw new AssertInternalError('SSPSLCAR19662');
+                throw new AssertInternalError('WSPSLCAR19662');
+            case UsableListChangeTypeId.BeforeMove:
+                throw new AssertInternalError('WSPSLCBM19662');
+            case UsableListChangeTypeId.AfterMove:
+                throw new AssertInternalError('WSPSLCAM19662');
             case UsableListChangeTypeId.Remove:
                 // this.checkUsableNotifyListChange(UsableListChangeTypeId.Remove, orderIdx, 1);
                 this.deleteScans(index, count);
@@ -145,7 +149,7 @@ export class WatchmakerService extends LockOpenList<WatchmakerList> {
                 this.offlineAllScans(true);
                 break;
             default:
-                throw new UnreachableCaseError('SSPSLCD30871', listChangeTypeId);
+                throw new UnreachableCaseError('WSPSLCD30871', listChangeTypeId);
         }
     }
 

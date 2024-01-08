@@ -197,6 +197,12 @@ export class MarketIdTableValue extends EnumTableValue {
         this.renderValueTypeId = RenderValue.TypeId.MarketId;
     }
 }
+export class DataEnvironmentIdTableValue extends EnumTableValue {
+    constructor() {
+        super();
+        this.renderValueTypeId = RenderValue.TypeId.DataEnvironmentId;
+    }
+}
 export class ExerciseTypeIdTableValue extends EnumTableValue {
     constructor() {
         super();
@@ -604,7 +610,7 @@ export class RankedLitIvemIdListDirectoryItemTypeIdCorrectnessTableValue extends
     }
 }
 
-export class StringArrayCorrectnessTableValue extends GenericCorrectnessTableValue<string[]> {
+export class StringArrayCorrectnessTableValue extends GenericCorrectnessTableValue<readonly string[]> {
     protected createRenderValue() {
         return new StringArrayRenderValue(this.data);
     }

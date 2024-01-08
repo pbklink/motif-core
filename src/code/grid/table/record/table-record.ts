@@ -35,7 +35,7 @@ export class TableRecord extends TableValuesRecord {
     activate() {
         let values: TableValue[] = [];
         for (let i = 0; i < this._sources.count; i++) {
-            const source = this._sources.getItem(i);
+            const source = this._sources.getAt(i);
             const sourceValues = source.activate();
             values = values.concat(sourceValues);
         }
@@ -46,7 +46,7 @@ export class TableRecord extends TableValuesRecord {
 
     deactivate() {
         for (let i = 0; i < this._sources.count; i++) {
-            const source = this._sources.getItem(i);
+            const source = this._sources.getAt(i);
             source.deactivate();
         }
     }
@@ -75,12 +75,12 @@ export class TableRecord extends TableValuesRecord {
 
     getAllValues(): TableValue[] {
         if (this._sources.count === 1) {
-            return this._sources.getItem(0).getAllValues();
+            return this._sources.getAt(0).getAllValues();
         } else {
             const values = new Array<TableValue>(this._fieldCount);
             let idx = 0;
             for (let srcIdx = 0; srcIdx < this._sources.count; srcIdx++) {
-                const sourceValues = this._sources.getItem(srcIdx).getAllValues();
+                const sourceValues = this._sources.getAt(srcIdx).getAllValues();
                 for (let srcValueIdx = 0; srcValueIdx < sourceValues.length; srcValueIdx++) {
                     values[idx++] = sourceValues[srcValueIdx];
                 }
@@ -144,7 +144,7 @@ export class TableRecord extends TableValuesRecord {
     }
     private calculateBeenIncubated() {
         for (let i = 0; i < this._sources.count; i++) {
-            const source = this._sources.getItem(i);
+            const source = this._sources.getAt(i);
             if (!source.beenIncubated) {
                 return false;
             }

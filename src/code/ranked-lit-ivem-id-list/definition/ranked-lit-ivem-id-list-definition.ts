@@ -18,9 +18,10 @@ export abstract class RankedLitIvemIdListDefinition {
 
 export namespace RankedLitIvemIdListDefinition {
     export const enum TypeId {
-        Json,
-        Watchmaker,
-        ScanMatches,
+        LitIvemIdArray,
+        WatchmakerListId,
+        ScanId,
+        LitIvemIdExecuteScan,
     }
 
     export namespace Type {
@@ -37,26 +38,33 @@ export namespace RankedLitIvemIdListDefinition {
         type InfosObject = { [id in keyof typeof TypeId]: Info };
 
         const infosObject: InfosObject = {
-            Json: {
-                id: TypeId.Json,
-                name: 'Json',
-                jsonValue: 'Json', // was 'Explicit',
-                abbreviationId: StringId.RankedLitIvemIdListAbbreviation_Json,
-                displayId: StringId.RankedLitIvemIdListDisplay_Json,
+            LitIvemIdArray: {
+                id: TypeId.LitIvemIdArray,
+                name: 'LitIvemIdArray',
+                jsonValue: 'LitIvemIdArray', // was 'Explicit',
+                abbreviationId: StringId.RankedLitIvemIdListAbbreviation_LitIvemIdArray,
+                displayId: StringId.RankedLitIvemIdListDisplay_LitIvemIdArray,
             },
-            Watchmaker: {
-                id: TypeId.Watchmaker,
-                name: 'Watchmaker',
-                jsonValue: 'Watchmaker',
-                abbreviationId: StringId.RankedLitIvemIdListAbbreviation_Watchmaker,
-                displayId: StringId.RankedLitIvemIdListDisplay_Watchmaker,
+            WatchmakerListId: {
+                id: TypeId.WatchmakerListId,
+                name: 'WatchmakerListId',
+                jsonValue: 'WatchmakerListId',
+                abbreviationId: StringId.RankedLitIvemIdListAbbreviation_WatchmakerListId,
+                displayId: StringId.RankedLitIvemIdListDisplay_WatchmakerListId,
             },
-            ScanMatches: {
-                id: TypeId.ScanMatches,
-                name: 'ScanMatches',
-                jsonValue: 'ScanMatches',
-                abbreviationId: StringId.RankedLitIvemIdListAbbreviation_ScanMatches,
-                displayId: StringId.RankedLitIvemIdListDisplay_ScanMatches,
+            ScanId: {
+                id: TypeId.ScanId,
+                name: 'Scan',
+                jsonValue: 'Scan',
+                abbreviationId: StringId.RankedLitIvemIdListAbbreviation_ScanId,
+                displayId: StringId.RankedLitIvemIdListDisplay_ScanId,
+            },
+            LitIvemIdExecuteScan: {
+                id: TypeId.LitIvemIdExecuteScan,
+                name: 'LitIvemIdExecuteScan',
+                jsonValue: 'LitIvemIdExecuteScan',
+                abbreviationId: StringId.RankedLitIvemIdListAbbreviation_LitIvemIdExecuteScan,
+                displayId: StringId.RankedLitIvemIdListDisplay_LitIvemIdExecuteScan,
             },
         }
 

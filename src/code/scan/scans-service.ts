@@ -5,6 +5,7 @@
  */
 
 import { AdiService } from '../adi/adi-internal-api';
+import { SymbolsService } from '../services/services-internal-api';
 import {
     ErrorCode,
     Integer,
@@ -14,6 +15,7 @@ import {
     Result,
     UsableListChangeTypeId
 } from "../sys/sys-internal-api";
+import { ScanConditionSet } from './condition-set/internal-api';
 import { Scan } from './scan';
 import { ScanEditor } from './scan-editor';
 import { ScanList } from './scan-list';
@@ -28,9 +30,11 @@ export class ScansService {
 
     private _scanListChangeSubscriptionId: MultiEvent.SubscriptionId;
 
-    constructor(private readonly _adiService: AdiService) {
+    constructor(
+        private readonly _adiService: AdiService,
+        private readonly _symbolsService: SymbolsService
+    ) {
         this.scanList = new ScanList(this._adiService);
-
     }
 
     initialise() {
@@ -46,18 +50,30 @@ export class ScansService {
         this.scanList.finalise();
     }
 
-    openNewScanEditor(opener: LockOpenListItem.Opener): Result<ScanEditor> {
-        const editor = new ScanEditor(this._adiService,
+    openNewScanEditor(
+        opener: LockOpenListItem.Opener,
+        emptyScanConditionSet: ScanConditionSet,
+        errorEventer?: ScanEditor.ErrorEventer,
+    ): ScanEditor {
+        return new ScanEditor(
+            this._adiService,
+            this._symbolsService,
             undefined,
             opener,
+            emptyScanConditionSet,
             (createdScanId) => this.getOrWaitForScan(createdScanId),
+            errorEventer,
         );
-        return new Ok(editor);
     }
 
-    async tryOpenScanEditor(scanId: string | undefined, opener: LockOpenListItem.Opener): Promise<Result<ScanEditor | undefined>> {
+    async tryOpenScanEditor(
+        scanId: string | undefined,
+        opener: LockOpenListItem.Opener,
+        newScanConditionSetCallback: (this: void) => ScanConditionSet,
+        errorEventer?: ScanEditor.ErrorEventer,
+    ): Promise<Result<ScanEditor | undefined>> {
         if (scanId === undefined) {
-            return this.openNewScanEditor(opener);
+            return new Ok(this.openNewScanEditor(opener, newScanConditionSetCallback()));
         } else {
             const lockResult = await this.scanList.tryLockItemByKey(scanId, opener);
             if (lockResult.isErr()) {
@@ -72,9 +88,12 @@ export class ScansService {
                     if (openedEditor === undefined) {
                         openedEditor = new ScanEditor(
                             this._adiService,
+                            this._symbolsService,
                             scan,
                             opener,
+                            newScanConditionSetCallback(),
                             (createdScanId) => this.getOrWaitForScan(createdScanId),
+                            errorEventer,
                         );
                         this._openedScanEditors.set(scan, openedEditor);
                     }

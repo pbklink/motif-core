@@ -14,6 +14,7 @@ export class ScanList extends LockOpenList<Scan> {
     private _scanDescriptorsDataItemCorrectnessChangedSubscriptionId: MultiEvent.SubscriptionId;
 
     private _scanChangeMultiEvent = new MultiEvent<ScanList.RecordChangeEventHandler>();
+    private _suspendUnwantDetailOnScanLastCloseCount = 0;
 
     constructor(private readonly _adiService: AdiService) {
         super();
@@ -51,14 +52,14 @@ export class ScanList extends LockOpenList<Scan> {
         this._scanDescriptorsDataItem = undefined as unknown as ScanStatusedDescriptorsDataItem;
     }
 
-     // may not need this
-    subscribeScanChangeEvent(handler: ScanList.RecordChangeEventHandler) {
-        return this._scanChangeMultiEvent.subscribe(handler);
+    suspendUnwantDetailOnScanLastClose() {
+        this._suspendUnwantDetailOnScanLastCloseCount++;
     }
 
-     // may not need this
-    unsubscribeScanChangeEvent(subscriptionId: MultiEvent.SubscriptionId) {
-        this._scanChangeMultiEvent.unsubscribe(subscriptionId);
+    unsuspendUnwantDetailOnScanLastClose() {
+        if (--this._suspendUnwantDetailOnScanLastCloseCount === 0) {
+            this.unwantDetailOnClosedScans();
+        }
     }
 
     protected override processUsableChanged() {
@@ -145,9 +146,13 @@ export class ScanList extends LockOpenList<Scan> {
                 break;
             }
             case UsableListChangeTypeId.BeforeReplace:
-                throw new AssertInternalError('SLPSLCB45094');
+                throw new AssertInternalError('SLPSLCBR45094');
             case UsableListChangeTypeId.AfterReplace:
-                throw new AssertInternalError('SLPSLCA45094');
+                throw new AssertInternalError('SLPSLCAR45094');
+            case UsableListChangeTypeId.BeforeMove:
+                throw new AssertInternalError('SLPSLCBM45094');
+            case UsableListChangeTypeId.AfterMove:
+                throw new AssertInternalError('SLPSLCAM45094');
             case UsableListChangeTypeId.Remove:
                 this.deleteScans(index, count);
                 break;
@@ -168,6 +173,7 @@ export class ScanList extends LockOpenList<Scan> {
             this._adiService,
             descriptor,
             this.correctnessId,
+            () => this.requireUnwantDetailOnScanLastClose(),
             (aScanId) => { this.deleteItem(aScanId); },
         );
     }
@@ -197,6 +203,18 @@ export class ScanList extends LockOpenList<Scan> {
             const index = 0;
             const blockLength = blockLastIndex + 1;
             this.deleteItemsAtIndex(index, blockLength);
+        }
+    }
+
+    private requireUnwantDetailOnScanLastClose() {
+        return this._suspendUnwantDetailOnScanLastCloseCount === 0;
+    }
+
+    private unwantDetailOnClosedScans() {
+        const count = this.count;
+        for (let i = 0; i < count; i++) {
+            const scan = this.getAt(i);
+            scan.unwantDetailIfClosed();
         }
     }
 }

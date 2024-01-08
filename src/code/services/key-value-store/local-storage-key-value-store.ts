@@ -9,7 +9,7 @@ import { KeyValueStore } from './key-value-store';
 
 export class LocalStorageKeyValueStore implements KeyValueStore {
 
-    public async getItem(key: string, operatorId: ServiceOperatorId | undefined): Promise<Result<string | undefined>> {
+    public getItem(key: string, operatorId: ServiceOperatorId | undefined): Promise<Result<string | undefined>> {
         const resolvedKey = this.generateResolvedKey(key, operatorId);
         const item = window.localStorage.getItem(resolvedKey);
         const value = (item === null)
@@ -18,13 +18,13 @@ export class LocalStorageKeyValueStore implements KeyValueStore {
         return Promise.resolve(new Ok(value));
     }
 
-    public async setItem(key: string, value: string, operatorId: ServiceOperatorId | undefined): Promise<Result<void>> {
+    public setItem(key: string, value: string, operatorId: ServiceOperatorId | undefined): Promise<Result<void>> {
         const resolvedKey = this.generateResolvedKey(key, operatorId);
         window.localStorage.setItem(resolvedKey, value);
         return Promise.resolve(new Ok(undefined));
     }
 
-    public async removeItem(key: string, operatorId: ServiceOperatorId | undefined): Promise<Result<void>> {
+    public removeItem(key: string, operatorId: ServiceOperatorId | undefined): Promise<Result<void>> {
         const resolvedKey = this.generateResolvedKey(key, operatorId);
         window.localStorage.removeItem(resolvedKey);
         return Promise.resolve(new Ok(undefined));

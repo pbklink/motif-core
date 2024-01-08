@@ -69,7 +69,7 @@ import { TmcLeg } from './tmc-leg';
 import { TopShareholder } from './top-shareholder';
 import { TradingStates } from './trading-state';
 import { Transaction } from './transaction';
-import { ZenithProtocolScanCriteria } from './zenith-protocol/internal-api';
+import { ZenithEncodedScanFormula } from './zenith-protocol/internal-api';
 
 export abstract class DataMessage {
     dataItemRequestNr: number;
@@ -103,7 +103,7 @@ export class DataMessages extends ComparableList<DataMessage> {
 
     take(msgs: DataMessages) {
         for (let idx = 0; idx < msgs.count; idx++) {
-            this.add(msgs.getItem(idx));
+            this.add(msgs.getAt(idx));
         }
         msgs.clear();
     }
@@ -257,10 +257,10 @@ export namespace OrdersDataMessage {
         marketId: MarketId | undefined;
         marketBoardId: MarketBoardId | undefined;
         currencyId: CurrencyId | undefined;
-        estimatedBrokerage: Decimal;
-        currentBrokerage: Decimal;
-        estimatedTax: Decimal;
-        currentTax: Decimal;
+        estimatedBrokerage: Decimal | undefined;
+        currentBrokerage: Decimal | undefined;
+        estimatedTax: Decimal | undefined;
+        currentTax: Decimal | undefined;
         currentValue: Decimal;
         createdDate: SourceTzOffsetDateTime;
         updatedDate: SourceTzOffsetDateTime;
@@ -517,8 +517,8 @@ export namespace SymbolsDataMessage {
         name: string | undefined;
         ivemClassId: IvemClassId;
         exchangeId: ExchangeId;
-        subscriptionDataTypeIds: PublisherSubscriptionDataTypeId[];
-        tradingMarketIds: MarketId[];
+        subscriptionDataTypeIds: readonly PublisherSubscriptionDataTypeId[];
+        tradingMarketIds: readonly MarketId[];
     }
 
     export interface UpdateChange extends AddUpdateChange {
@@ -533,8 +533,8 @@ export namespace SymbolsDataMessage {
         lotSize: Integer | undefined | null;
         alternateCodes: LitIvemAlternateCodes | undefined | null;
         attributes: LitIvemAttributes | undefined | null;
-        tmcLegs: TmcLeg[] | undefined | null;
-        categories: string[] | undefined | null;
+        tmcLegs: readonly TmcLeg[] | undefined | null;
+        categories: readonly string[] | undefined | null;
     }
 
     export interface AddChange extends AddUpdateChange {
@@ -549,8 +549,8 @@ export namespace SymbolsDataMessage {
         lotSize: Integer | undefined;
         alternateCodes: LitIvemAlternateCodes | undefined;
         attributes: LitIvemAttributes | undefined;
-        tmcLegs: TmcLeg[] | undefined;
-        categories: string[] | undefined;
+        tmcLegs: readonly TmcLeg[] | undefined;
+        categories: readonly string[] | undefined;
     }
 
     export function isAddUpdateChange(change: Change): change is AddUpdateChange {
@@ -767,6 +767,22 @@ export class CreateScanDataMessage extends DataMessage {
     }
 }
 
+export class UpdateScanDataMessage extends DataMessage {
+    static readonly typeId = DataMessageTypeId.UpdateScan;
+
+    constructor() {
+        super(UpdateScanDataMessage.typeId);
+    }
+}
+
+export class DeleteScanDataMessage extends DataMessage {
+    static readonly typeId = DataMessageTypeId.DeleteScan;
+
+    constructor() {
+        super(DeleteScanDataMessage.typeId);
+    }
+}
+
 export class QueryScanDetailDataMessage extends DataMessage {
     static readonly typeId = DataMessageTypeId.QueryScanDetail;
 
@@ -779,9 +795,12 @@ export class QueryScanDetailDataMessage extends DataMessage {
     versionId: Guid | undefined;
     versioningInterrupted: boolean;
     lastSavedTime: Date | undefined;
+    lastEditSessionId: Guid | undefined;
     symbolListEnabled: boolean | undefined;
-    zenithCriteria: ZenithProtocolScanCriteria.BooleanTupleNode;
-    zenithRank: ZenithProtocolScanCriteria.NumericTupleNode;
+    zenithCriteriaSource: string | undefined;
+    zenithRankSource: string | undefined;
+    zenithCriteria: ZenithEncodedScanFormula.BooleanTupleNode;
+    zenithRank: ZenithEncodedScanFormula.NumericTupleNode | undefined;
     targetTypeId: ScanTargetTypeId;
     targetMarketIds: readonly MarketId[] | undefined;
     targetLitIvemIds: readonly LitIvemId[] | undefined;
@@ -827,7 +846,10 @@ export namespace ScanStatusedDescriptorsDataMessage {
         versionId: Guid | undefined;
         versioningInterrupted: boolean;
         lastSavedTime: Date | undefined;
+        lastEditSessionId: Guid | undefined;
         symbolListEnabled: boolean | undefined;
+        zenithCriteriaSource: string | undefined;
+        zenithRankSource: string | undefined;
     }
 
     export interface AddChange extends AddUpdateChange {
@@ -837,9 +859,13 @@ export namespace ScanStatusedDescriptorsDataMessage {
         scanDescription: string | undefined;
         readonly: boolean;
         scanStatusId: ScanStatusId;
-        versionId: string;
-        lastSavedTime: Date;
-        symbolListEnabled: boolean;
+        versionId: string | undefined;
+        versioningInterrupted: boolean;
+        lastSavedTime: Date | undefined;
+        lastEditSessionId: Guid | undefined;
+        symbolListEnabled: boolean | undefined;
+        zenithCriteriaSource: string | undefined;
+        zenithRankSource: string | undefined;
     }
 
     export interface UpdateChange extends AddUpdateChange {
@@ -1320,10 +1346,11 @@ export class ZenithCounterDataMessage extends DataMessage {
 
     authExpiryTime: SysTick.Time;
     authFetchSuccessiveFailureCount: Integer;
-    socketOpenSuccessiveFailureCount: Integer;
+    socketConnectingSuccessiveErrorCount: Integer;
     zenithTokenFetchSuccessiveFailureCount: Integer;
     zenithTokenRefreshSuccessiveFailureCount: Integer;
-    socketCloseSuccessiveFailureCount: Integer;
+    socketClosingSuccessiveErrorCount: Integer;
+    socketShortLivedClosedSuccessiveErrorCount: Integer;
     unexpectedSocketCloseCount: Integer;
     timeoutCount: Integer;
     lastTimeoutStateId: ZenithPublisherStateId | undefined;

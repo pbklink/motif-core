@@ -31,7 +31,7 @@ export class CopyWatchmakerListDataItem extends WatchmakerPublishDataItem {
     protected override processSubscriptionPreOnline() {
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         if (this._listId !== undefined) {
-            // We should never get more than one response to an order request
+            // We should never get more than one response to a query
             throw new AssertInternalError('CWLDIPSPO43112');
         }
     }

@@ -8,7 +8,7 @@
 // Version 3
 
 import { Integer } from '../../../../../sys/sys-internal-api';
-import { ZenithProtocolCommon, ZenithProtocolScanCriteria } from '../../../../common/zenith-protocol/internal-api';
+import { ZenithEncodedScanFormula, ZenithProtocolCommon } from '../../../../common/zenith-protocol/internal-api';
 
 export namespace ZenithProtocol {
 
@@ -327,6 +327,7 @@ export namespace ZenithProtocol {
                 Trading = 'Trading',
                 Watchlist = 'Watchlist',
                 Scanner = 'Scanner',
+                Channel = 'Channel',
             }
 
             export const enum AuthorityFeed {
@@ -360,7 +361,7 @@ export namespace ZenithProtocol {
             export interface Feed {
                 Name: string;
                 Class: FeedClass;
-                Status: FeedStatus;
+                Status?: FeedStatus;
             }
         }
     }
@@ -1362,6 +1363,11 @@ export namespace ZenithProtocol {
             export const ManagedFund = SecurityClass.ManagedFund;
         }
 
+        export interface OrderFees {
+            Brokerage?: number;
+            Tax?: number;
+        }
+
         export namespace Accounts {
             export type PublishSubUnsubMessageContainer = RequestMessageContainer;
 
@@ -1470,10 +1476,8 @@ export namespace ZenithProtocol {
                 Market: string;
                 TradingMarket: string;
                 Currency: Currency;
-                EstimatedBrokerage: number;
-                CurrentBrokerage: number;
-                EstimatedTax: number;
-                CurrentTax: number;
+                EstimatedFees?: OrderFees;
+                CurrentFees?: OrderFees;
                 CurrentValue: number;
                 CreatedDate: DateTimeIso8601;
                 UpdatedDate: DateTimeIso8601;
@@ -1877,8 +1881,7 @@ export namespace ZenithProtocol {
                 Result: OrderRequestResult;
                 Order?: Orders.AddUpdateOrder;
                 Errors?: OrderRequestError[];
-                EstimatedBrokerage?: Decimal;
-                EstimatedTax?: Decimal;
+                EstimatedFees?: OrderFees;
                 EstimatedValue?: Decimal;
             }
         }
@@ -1906,8 +1909,7 @@ export namespace ZenithProtocol {
                 Result: OrderRequestResult;
                 Order?: Orders.AddUpdateOrder;
                 Errors?: OrderRequestError[];
-                EstimatedBrokerage?: Decimal;
-                EstimatedTax?: Decimal;
+                EstimatedFees?: OrderFees;
                 EstimatedValue?: Decimal;
             }
         }
@@ -2044,7 +2046,7 @@ export namespace ZenithProtocol {
         export interface ScanDescriptor {
             readonly Name: string;
             readonly Description?: string;
-            readonly MetaData: MetaData;
+            readonly MetaData?: MetaData;
         }
 
         export interface ScanStatusedDescriptor extends ScanDescriptor {
@@ -2056,7 +2058,7 @@ export namespace ZenithProtocol {
             readonly ID: ScanID;
             readonly Name?: string;
             readonly Description?: string;
-            readonly MetaData: MetaData;
+            readonly MetaData?: MetaData;
             readonly IsWritable?: boolean;
             readonly Status: ScanStatus;
             readonly Type: ScanType;
@@ -2077,11 +2079,15 @@ export namespace ZenithProtocol {
         export type TargetMarket = string;
         export type Target = readonly TargetSymbol[] | readonly TargetMarket[];
 
-        export interface ScanParameters {
+        export interface ScanParametersWithoutNotifications {
             readonly Type: ScanType;
-            readonly Criteria: ZenithProtocolScanCriteria.BooleanTupleNode;
-            readonly Rank: ZenithProtocolScanCriteria.NumericTupleNode;
+            readonly Criteria: ZenithEncodedScanFormula.BooleanTupleNode;
+            readonly Rank?: ZenithEncodedScanFormula.NumericTupleNode;
             readonly Target: Target;
+            readonly MaxMatchCount?: Integer;
+        }
+
+        export interface ScanParameters extends ScanParametersWithoutNotifications {
             readonly Notifications?: [unknown];
         }
 
@@ -2100,7 +2106,6 @@ export namespace ZenithProtocol {
 
         export interface MatchChange {
             readonly Operation: AurcChangeType;
-            readonly Key?: string; // Symbol for symbol scans. In future, can be something else when different things can be scanned
         }
 
         export interface ClearMatchChange extends MatchChange {
@@ -2108,7 +2113,14 @@ export namespace ZenithProtocol {
         }
 
         export interface AddUpdateRemoveMatchChange extends MatchChange {
-            readonly Key: string;
+            readonly Key: string; // Symbol for symbol scans. In future, can be something else when different things can be scanned
+        }
+
+        export interface RemoveMatchChange extends AddUpdateRemoveMatchChange {
+        }
+
+        export interface AddUpdateMatchChange extends AddUpdateRemoveMatchChange {
+            readonly Rank?: number;
         }
 
         export namespace CreateScan {
@@ -2175,18 +2187,13 @@ export namespace ZenithProtocol {
         }
 
         export namespace ExecuteScan {
-            export interface QueryRequest {
-                readonly Type: ScanType;
-                readonly Criteria: ZenithProtocolScanCriteria.BooleanTupleNode;
-                readonly Rank: ZenithProtocolScanCriteria.NumericTupleNode;
-                readonly Target: Target;
-            }
+            export type QueryRequest = ScanParametersWithoutNotifications;
 
             export interface PublishMessageContainer extends RequestMessageContainer {
                 readonly Data: QueryRequest;
             }
 
-            export type PublishPayload = MatchChange[];
+            export type PublishPayload = readonly MatchChange[];
             export interface PublishPayloadMessageContainer extends ResponseUpdateMessageContainer {
                 readonly Data: PublishPayload;
             }

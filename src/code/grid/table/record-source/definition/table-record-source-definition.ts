@@ -27,7 +27,7 @@ export abstract class TableRecordSourceDefinition {
         private readonly _customHeadingsService: GridFieldCustomHeadingsService,
         readonly fieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
         readonly typeId: TableRecordSourceDefinition.TypeId,
-        readonly allowedFieldSourceDefinitionTypeIds: TableFieldSourceDefinition.TypeId[]
+        readonly allowedFieldSourceDefinitionTypeIds: TableFieldSourceDefinition.TypeId[],
     ) {
     }
 
@@ -56,21 +56,6 @@ export abstract class TableRecordSourceDefinition {
         element.setString(TableRecordSourceDefinition.jsonTag_TypeId, TableRecordSourceDefinition.Type.idToJson(this.typeId));
     }
 
-    protected createGridLayoutDefinitionColumnsFromFieldNames(fieldNames: string[]): GridLayoutDefinition.Column[] {
-        const count = fieldNames.length;
-        const columns = new Array<GridLayoutDefinition.Column>(count);
-        for (let i = 0; i < count; i++) {
-            const fieldName = fieldNames[i];
-            const column: GridLayoutDefinition.Column = {
-                fieldName,
-                visible: undefined,
-                autoSizableWidth: undefined,
-            };
-            columns[i] = column;
-        }
-        return columns;
-    }
-
     abstract createDefaultLayoutDefinition(): GridLayoutDefinition;
 }
 
@@ -81,8 +66,9 @@ export namespace TableRecordSourceDefinition {
 
     export const enum TypeId {
         Null,
-        LitIvemIdFromSearchSymbols,
-        RankedLitIvemIdList,
+        LitIvemIdComparableList,
+        LitIvemDetailsFromSearchSymbols,
+        Watchlist,
         MarketMovers,
         Gics,
         ProfitIvemHolding,
@@ -104,6 +90,7 @@ export namespace TableRecordSourceDefinition {
         RankedLitIvemIdListDirectoryItem,
         // eslint-disable-next-line @typescript-eslint/no-shadow
         GridField,
+        ScanTest,
     }
 
     export interface AddArrayResult {
@@ -130,17 +117,23 @@ export namespace TableRecordSourceDefinition {
                 display: StringId.TableRecordDefinitionList_ListTypeDisplay_Null,
                 abbr: StringId.TableRecordDefinitionList_ListTypeAbbr_Null
             },
-            LitIvemIdFromSearchSymbols: {
-                id: TableRecordSourceDefinition.TypeId.LitIvemIdFromSearchSymbols,
-                name: 'Symbol',
-                display: StringId.TableRecordDefinitionList_ListTypeDisplay_LitIvemIdFromSearchSymbols,
-                abbr: StringId.TableRecordDefinitionList_ListTypeAbbr_LitIvemIdFromSearchSymbols
+            LitIvemIdComparableList: {
+                id: TableRecordSourceDefinition.TypeId.LitIvemIdComparableList,
+                name: 'LitIvemIdList',
+                display: StringId.TableRecordDefinitionList_ListTypeDisplay_LitIvemIdList,
+                abbr: StringId.TableRecordDefinitionList_ListTypeAbbr_LitIvemIdList,
             },
-            RankedLitIvemIdList: {
-                id: TableRecordSourceDefinition.TypeId.RankedLitIvemIdList,
-                name: 'LitIvemId',
-                display: StringId.TableRecordDefinitionList_ListTypeDisplay_RankedLitIvemIdList,
-                abbr: StringId.TableRecordDefinitionList_ListTypeAbbr_RankedLitIvemIdList
+            LitIvemDetailsFromSearchSymbols: {
+                id: TableRecordSourceDefinition.TypeId.LitIvemDetailsFromSearchSymbols,
+                name: 'LitIvemDetailsFromSearchSymbols',
+                display: StringId.TableRecordDefinitionList_ListTypeDisplay_LitIvemDetailsFromSearchSymbols,
+                abbr: StringId.TableRecordDefinitionList_ListTypeAbbr_LitIvemDetailsFromSearchSymbols
+            },
+            Watchlist: {
+                id: TableRecordSourceDefinition.TypeId.Watchlist,
+                name: 'Watchlist',
+                display: StringId.TableRecordDefinitionList_ListTypeDisplay_Watchlist,
+                abbr: StringId.TableRecordDefinitionList_ListTypeAbbr_Watchlist
             },
             MarketMovers: {
                 id: TableRecordSourceDefinition.TypeId.MarketMovers,
@@ -261,6 +254,12 @@ export namespace TableRecordSourceDefinition {
                 name: 'GridField',
                 display: StringId.TableRecordDefinitionList_ListTypeDisplay_GridField,
                 abbr: StringId.TableRecordDefinitionList_ListTypeAbbr_GridField
+            },
+            ScanTest: {
+                id: TableRecordSourceDefinition.TypeId.ScanTest,
+                name: 'ScanTest',
+                display: StringId.TableRecordDefinitionList_ListTypeDisplay_ScanTest,
+                abbr: StringId.TableRecordDefinitionList_ListTypeAbbr_ScanTest
             },
         };
 

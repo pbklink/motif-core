@@ -114,6 +114,7 @@ export namespace InternalCommand {
         Grid_MoveBottom,
         Grid_Insert,
         Grid_Remove,
+        Grid_RemoveSelected,
 
         ColorSchemePresetCode_Ok,
         ColorSchemePresetCode_CopyToClipboard,
@@ -156,11 +157,18 @@ export namespace InternalCommand {
         ShowSelectedSearchResultDetails,
 
         NewScan,
+        ScanTest_Close,
+        ZenithScanFormulaViewDecodeProgress_Close,
 
+        Popout,
         ExpandSection,
         RestoreSection,
         CollapseSection,
 
+        ScanEditor_Apply,
+        ScanEditor_Revert,
+        ScanEditor_Delete,
+        ScanEditor_Test,
 
         RegisterContactRequestRegardingFocusedAdvertisement,
         RegisterInterestInFocusedAdvertisement,
@@ -270,6 +278,7 @@ export namespace InternalCommand {
         Grid_MoveBottom = 'Grid_MoveBottom',
         Grid_Insert = 'Grid_Insert',
         Grid_Remove = 'Grid_Remove',
+        Grid_RemoveSelected = 'Grid_RemoveSelected',
 
         ColorSchemePresetCode_Ok = 'ColorSchemePresetCode_Ok',
         ColorSchemePresetCode_CopyToClipboard = 'ColorSchemePresetCode_CopyToClipboard',
@@ -312,10 +321,18 @@ export namespace InternalCommand {
         ShowSelectedSearchResultDetails = 'ShowSelectedSearchResultDetails',
 
         NewScan = 'NewScan',
+        ScanTest_Close = 'ScanTest_Close',
+        ZenithScanFormulaViewDecodeProgress_Close = 'ZenithScanFormulaViewDecodeProgress_Close',
 
+        Popout = 'Popout',
         ExpandSection = 'ExpandSection',
         RestoreSection = 'RestoreSection',
         CollapseSection = 'CollapseSection',
+
+        ScanEditor_Apply = 'ScanEditor_Apply',
+        ScanEditor_Revert = 'ScanEditor_Revert',
+        ScanEditor_Delete = 'ScanEditor_Delete',
+        ScanEditor_Test = 'ScanEditor_Test',
 
         RegisterContactRequestRegardingFocusedAdvertisement = 'RegisterContactRequestRegardingFocusedAdvertisement',
         RegisterInterestInFocusedAdvertisement = 'RegisterInterestInFocusedAdvertisement',
@@ -419,6 +436,7 @@ export namespace InternalCommand {
         Grid_MoveBottom: { id: Id.Grid_MoveBottom, nameId: NameId.Grid_MoveBottom },
         Grid_Insert: { id: Id.Grid_Insert, nameId: NameId.Grid_Insert },
         Grid_Remove: { id: Id.Grid_Remove, nameId: NameId.Grid_Remove },
+        Grid_RemoveSelected: { id: Id.Grid_RemoveSelected, nameId: NameId.Grid_RemoveSelected },
         ColorSchemePresetCode_Ok: { id: Id.ColorSchemePresetCode_Ok, nameId: NameId.ColorSchemePresetCode_Ok },
         ColorSchemePresetCode_CopyToClipboard: { id: Id.ColorSchemePresetCode_CopyToClipboard, nameId: NameId.ColorSchemePresetCode_CopyToClipboard },
         Symbols_Query: { id: Id.Symbols_Query, nameId: NameId.Symbols_Query },
@@ -450,9 +468,16 @@ export namespace InternalCommand {
         Search: { id: Id.Search, nameId: NameId.Search },
         ShowSelectedSearchResultDetails: { id: Id.ShowSelectedSearchResultDetails, nameId: NameId.ShowSelectedSearchResultDetails },
         NewScan: { id: Id.NewScan, nameId: NameId.NewScan },
+        ScanTest_Close: { id: Id.ScanTest_Close, nameId: NameId.ScanTest_Close },
+        ZenithScanFormulaViewDecodeProgress_Close: { id: Id.ZenithScanFormulaViewDecodeProgress_Close, nameId: NameId.ZenithScanFormulaViewDecodeProgress_Close },
+        Popout: { id: Id.Popout, nameId: NameId.Popout },
         ExpandSection: { id: Id.ExpandSection, nameId: NameId.ExpandSection },
         RestoreSection: { id: Id.RestoreSection, nameId: NameId.RestoreSection },
         CollapseSection: { id: Id.CollapseSection, nameId: NameId.CollapseSection },
+        ScanEditor_Apply: { id: Id.ScanEditor_Apply, nameId: NameId.ScanEditor_Apply },
+        ScanEditor_Revert: { id: Id.ScanEditor_Revert, nameId: NameId.ScanEditor_Revert },
+        ScanEditor_Delete: { id: Id.ScanEditor_Delete, nameId: NameId.ScanEditor_Delete },
+        ScanEditor_Test: { id: Id.ScanEditor_Test, nameId: NameId.ScanEditor_Test },
         RegisterContactRequestRegardingFocusedAdvertisement: { id: Id.RegisterContactRequestRegardingFocusedAdvertisement, nameId: NameId.RegisterContactRequestRegardingFocusedAdvertisement},
         RegisterInterestInFocusedAdvertisement: { id: Id.RegisterInterestInFocusedAdvertisement, nameId: NameId.RegisterInterestInFocusedAdvertisement},
         RegisterInterestInSimilarToFocusedAdvertisement: { id: Id.RegisterInterestInSimilarToFocusedAdvertisement, nameId: NameId.RegisterInterestInSimilarToFocusedAdvertisement},

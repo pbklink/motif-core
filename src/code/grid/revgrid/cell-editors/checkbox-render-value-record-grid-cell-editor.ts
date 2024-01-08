@@ -5,7 +5,7 @@
  */
 
 import { StandardToggleClickBoxCellEditor } from 'revgrid';
-import { SettingsService } from '../../../settings/settings-internal-api';
+import { SettingsService } from '../../../services/services-internal-api';
 import { GridField } from '../../field/grid-field-internal-api';
 import { CheckboxRenderValueCellPainter, CheckboxRenderValueRecordGridCellPainter } from '../cell-painters/grid-revgrid-cell-painters-internal-api';
 import { RecordGrid, RecordGridDataServer } from '../record-grid/grid-revgrid-record-grid-internal-api';

@@ -115,10 +115,10 @@ export class TopShareholderTableRecordSource extends SingleDataItemTableRecordSo
         this._dataItemSubscribed = true;
         super.setSingleDataItem(this._dataItem);
         this._listChangeEventSubscriptionId = this._dataItem.subscribeListChangeEvent(
-                (listChangeTypeId, idx, count) => this.handleDataItemListChangeEvent(listChangeTypeId, idx, count)
+                (listChangeTypeId, idx, count) => { this.handleDataItemListChangeEvent(listChangeTypeId, idx, count); }
         );
         this._badnessChangeEventSubscriptionId = this._dataItem.subscribeBadnessChangeEvent(
-            () => this.handleDataItemBadnessChangeEvent()
+            () => { this.handleDataItemBadnessChangeEvent(); }
         );
 
         super.openLocked(opener);
@@ -225,6 +225,10 @@ export class TopShareholderTableRecordSource extends SingleDataItemTableRecordSo
                 throw new AssertInternalError('GLDCERTRSPDILCBR19662');
             case UsableListChangeTypeId.AfterReplace:
                 throw new AssertInternalError('GLDCERTRSPDILCAR19662');
+            case UsableListChangeTypeId.BeforeMove:
+                throw new AssertInternalError('GLDCERTRSPDILCBM19662');
+            case UsableListChangeTypeId.AfterMove:
+                throw new AssertInternalError('GLDCERTRSPDILCAM19662');
             case UsableListChangeTypeId.Remove:
                 this.checkUsableNotifyListChange(UsableListChangeTypeId.Remove, idx, count);
                 this.recordList.splice(idx, count);

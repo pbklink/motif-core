@@ -27,7 +27,7 @@ export class OhlcIntervalHistorySequenceSeries extends IntervalHistorySequenceSe
             (index) => this.handlePointUpdatedEvent(index)
         );
         this._emptyIntervalsInsertedEventSubscriptionId = this.intervalSequencer.subscribeEmptyIntervalsInsertedEvent(
-            (index, count) => this.handleEmptyIntervalsInsertedEvent(index, count)
+            (index, count) => { this.handleEmptyIntervalsInsertedEvent(index, count); }
         );
     }
 
@@ -43,7 +43,7 @@ export class OhlcIntervalHistorySequenceSeries extends IntervalHistorySequenceSe
     }
 
     getOhlcPoint(idx: Integer) {
-        return this.points.getItem(idx);
+        return this.points.getAt(idx);
     }
 
     stageOhlcTick(tickDateTime: Date, tickDateTimeRepeatCount: Integer,
@@ -178,7 +178,7 @@ export class OhlcIntervalHistorySequenceSeries extends IntervalHistorySequenceSe
     }
 
     private updatePointFromStagedTick(index: Integer, tick: OhlcIntervalHistorySequenceSeries.StagedTick) {
-        const point = this._points.getItem(index);
+        const point = this._points.getAt(index);
         let updated = false;
         if (tick.close === undefined) {
             if (!point.null) {

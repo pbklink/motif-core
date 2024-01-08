@@ -113,3 +113,10 @@ export class GridLayoutError extends ExternalError {
         super(StringId.GridLayoutExternalError, code, message);
     }
 }
+
+/** @public */
+export class DuplicateError extends ExternalError {
+    constructor(code: ErrorCode, message?: string) {
+        super(StringId.DuplicateExternalError, code, message);
+    }
+}

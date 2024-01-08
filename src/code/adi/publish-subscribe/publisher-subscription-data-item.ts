@@ -137,7 +137,6 @@ export abstract class PublisherSubscriptionDataItem extends DataItem {
         switch (this._publisherSubscriptionStateId) {
             case PublisherSubscriptionDataItem.SubscriptionStateId.NeverSubscribed:
             case PublisherSubscriptionDataItem.SubscriptionStateId.PublisherOfflining:
-            case PublisherSubscriptionDataItem.SubscriptionStateId.PublisherOnlineWaiting:
                 throw new AssertInternalError('PSDIAIOWN200199931',
                     `${this._publisherSubscriptionStateId} ${this.definition.description}`);
 
@@ -150,6 +149,7 @@ export abstract class PublisherSubscriptionDataItem extends DataItem {
                 break;
 
             case PublisherSubscriptionDataItem.SubscriptionStateId.RetryDelayWaiting:
+            case PublisherSubscriptionDataItem.SubscriptionStateId.PublisherOnlineWaiting:
             case PublisherSubscriptionDataItem.SubscriptionStateId.ResponseWaiting:
             case PublisherSubscriptionDataItem.SubscriptionStateId.SynchronisationWaiting:
             case PublisherSubscriptionDataItem.SubscriptionStateId.Synchronised:
@@ -270,15 +270,15 @@ export abstract class PublisherSubscriptionDataItem extends DataItem {
 
     protected processPublisherSubscriptionWarning(warningText: string) {
         const badness: Badness = {
-            reasonId: Badness.ReasonId.PublisherServerWarning,
+            reasonId: this.usable ? Badness.ReasonId.PublisherServerWarning_Usable : Badness.ReasonId.PublisherServerWarning_Suspect,
             reasonExtra: warningText,
         };
 
         const logText = Badness.generateText(badness);
         console.warn(logText);
 
-        if (this.usable) {
-            this.setUsable(badness);
+        if (!this.error) {
+            this.setBadness(badness);
         }
     }
 

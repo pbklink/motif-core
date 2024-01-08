@@ -33,6 +33,7 @@ import {
     LockOpenManager,
     Logger,
     MultiEvent,
+    Ok,
     RecordList,
     Result,
     ValueRecentChangeTypeId
@@ -203,6 +204,10 @@ export class WatchmakerList implements LockOpenListItem<RankedLitIvemIdListDirec
 
     getAt(index: number): RankScoredLitIvemId {
         return this.members[index];
+    }
+
+    toArray(): readonly RankScoredLitIvemId[] {
+        return this.members;
     }
 
     initiateCreateOnServer(name: string, description: string | undefined, category: string | undefined, members: readonly LitIvemId[]) {
@@ -478,7 +483,7 @@ export class WatchmakerList implements LockOpenListItem<RankedLitIvemIdListDirec
     }
 
     private tryProcessFirstLock(): Promise<Result<void>> {
-        return Err.createResolvedPromise('not implemented');
+        return Promise.resolve(new Ok(undefined));
     }
 
     private processLastUnlock() {

@@ -34,7 +34,8 @@ export namespace Badness {
         PublisherSubscriptionError_SubRequestError_Error,
         PublisherSubscriptionError_DataError_Suspect,
         PublisherSubscriptionError_DataError_Error,
-        PublisherServerWarning,
+        PublisherServerWarning_Usable,
+        PublisherServerWarning_Suspect,
         PublisherServerError,
         PublisherSubscriptionState_NeverSubscribed,
         PublisherSubscriptionState_PublisherOnlineWaiting,
@@ -268,9 +269,14 @@ export namespace Badness {
                 correctnessId: CorrectnessId.Error,
                 displayId: StringId.BadnessReasonId_PublisherSubscriptionError_DataError_Error,
             },
-            PublisherServerWarning: {
-                id: ReasonId.PublisherServerWarning,
+            PublisherServerWarning_Usable: {
+                id: ReasonId.PublisherServerWarning_Usable,
                 correctnessId: CorrectnessId.Usable,
+                displayId: StringId.BadnessReasonId_PublisherServerWarning,
+            },
+            PublisherServerWarning_Suspect: {
+                id: ReasonId.PublisherServerWarning_Suspect,
+                correctnessId: CorrectnessId.Suspect,
                 displayId: StringId.BadnessReasonId_PublisherServerWarning,
             },
             PublisherServerError: {

@@ -12,7 +12,8 @@ import { AssertInternalError } from './internal-error';
 import { LockOpenListItem } from './lock-open-list-item';
 import { MultiEvent } from './multi-event';
 import { Ok, Result } from './result';
-import { Guid, Integer, MapKey, UsableListChangeTypeId } from './types';
+import { Guid, Integer, MapKey } from './types';
+import { UsableListChangeTypeId } from './usable-list-change-type';
 
 export abstract class LockOpenList<Item extends LockOpenListItem<Item>> extends CorrectnessBadness implements BadnessList<Item> {
     // private localFilePath = '';
@@ -39,15 +40,8 @@ export abstract class LockOpenList<Item extends LockOpenListItem<Item>> extends 
     getItemByKey(key: MapKey) { return this._itemMap.get(key); }
     getAt(idx: Integer) { return this._items[idx]; }
 
-    getAllItemsAsArray(): Item[] {
-        const count = this._items.length;
-        const items = this._items;
-        const result = new Array<Item>(count);
-        for (let i = 0; i < count; i++) {
-            const item = items[i];
-            result[i] = item;
-        }
-        return result;
+    toArray(): readonly Item[] {
+        return this._items;
     }
 
     getItemLockCount(item: Item) { return this._items[item.index].lockCount; }

@@ -5,7 +5,7 @@
  */
 
 import { DataServer, DatalessViewCell, IndexSignatureHack, StandardTextPainter } from 'revgrid';
-import { ColorScheme, SettingsService } from '../../../../settings/settings-internal-api';
+import { ColorScheme, SettingsService } from '../../../../services/services-internal-api';
 import { GridField } from '../../../field/grid-field-internal-api';
 import { AdaptedRevgrid } from '../../adapted-revgrid/grid-revgrid-adapted-revgrid-internal-api';
 import { AdaptedRevgridBehavioredColumnSettings } from '../../settings/adapted-revgrid-behaviored-column-settings';

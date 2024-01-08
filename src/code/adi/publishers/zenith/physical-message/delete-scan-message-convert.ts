@@ -4,11 +4,12 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError } from '../../../../sys/sys-internal-api';
+import { AssertInternalError, ErrorCode, ZenithDataError } from '../../../../sys/sys-internal-api';
 import {
-    AdiPublisherRequest, DeleteScanDataDefinition
+    AdiPublisherRequest, AdiPublisherSubscription, DeleteScanDataDefinition, DeleteScanDataMessage
 } from '../../../common/adi-common-internal-api';
 import { ZenithProtocol } from './protocol/zenith-protocol';
+import { ZenithConvert } from './zenith-convert';
 
 export namespace DeleteScanMessageConvert {
     export function createRequestMessage(request: AdiPublisherRequest) {
@@ -27,10 +28,32 @@ export namespace DeleteScanMessageConvert {
             Action: ZenithProtocol.MessageContainer.Action.Publish,
             TransactionID: AdiPublisherRequest.getNextTransactionId(),
             Data: {
-                ScanID: definition.id,
+                ScanID: definition.scanId,
             }
         };
 
         return result;
+    }
+
+    export function parseMessage(subscription: AdiPublisherSubscription, message: ZenithProtocol.MessageContainer,
+        actionId: ZenithConvert.MessageContainer.Action.Id) {
+
+        if (message.Controller !== ZenithProtocol.MessageContainer.Controller.Notify) {
+            throw new ZenithDataError(ErrorCode.ZenithMessageConvert_Notify_Controller, message.Controller);
+        } else {
+            if (actionId !== ZenithConvert.MessageContainer.Action.Id.Publish) {
+                throw new ZenithDataError(ErrorCode.ZenithMessageConvert_DeleteScan_Action, JSON.stringify(message));
+            } else {
+                if (message.Topic as ZenithProtocol.NotifyController.TopicName !== ZenithProtocol.NotifyController.TopicName.DeleteScan) {
+                    throw new ZenithDataError(ErrorCode.ZenithMessageConvert_DeleteScan_Topic, message.Topic);
+                } else {
+                    const dataMessage = new DeleteScanDataMessage();
+                    dataMessage.dataItemId = subscription.dataItemId;
+                    dataMessage.dataItemRequestNr = subscription.dataItemRequestNr;
+
+                    return dataMessage;
+                }
+            }
+        }
     }
 }

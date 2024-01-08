@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { LitIvemFullDetail, SymbolsDataItem } from '../../../adi/adi-internal-api';
+import { SearchSymbolsLitIvemFullDetail, SymbolsDataItem } from '../../../adi/adi-internal-api';
 import { AssertInternalError, Integer, MultiEvent, UnreachableCaseError } from '../../../sys/sys-internal-api';
 import { LitIvemExtendedDetailTableFieldSourceDefinition } from '../field-source/definition/grid-table-field-source-definition-internal-api';
 import {
@@ -26,7 +26,7 @@ import { TableValueSource } from './table-value-source';
 export class LitIvemExtendedDetailTableValueSource extends TableValueSource {
     private _litIvemDetailExtendedChangedEventSubscriptionId: MultiEvent.SubscriptionId;
 
-    constructor(firstFieldIndexOffset: Integer, private _litIvemFullDetail: LitIvemFullDetail, private _dataItem: SymbolsDataItem) {
+    constructor(firstFieldIndexOffset: Integer, private _litIvemFullDetail: SearchSymbolsLitIvemFullDetail, private _dataItem: SymbolsDataItem) {
         super(firstFieldIndexOffset);
     }
 
@@ -63,7 +63,7 @@ export class LitIvemExtendedDetailTableValueSource extends TableValueSource {
         return LitIvemExtendedDetailTableFieldSourceDefinition.Field.count;
     }
 
-    private handleDetailChangedEvent(changedFieldIds: LitIvemFullDetail.ExtendedField.Id[]) {
+    private handleDetailChangedEvent(changedFieldIds: SearchSymbolsLitIvemFullDetail.ExtendedField.Id[]) {
         const changedFieldCount = changedFieldIds.length;
         const valueChanges = new Array<TableValueSource.ValueChange>(changedFieldCount);
         let foundCount = 0;
@@ -87,43 +87,43 @@ export class LitIvemExtendedDetailTableValueSource extends TableValueSource {
         return new valueConstructor();
     }
 
-    private loadValue(id: LitIvemFullDetail.ExtendedField.Id, value: CorrectnessTableValue) {
+    private loadValue(id: SearchSymbolsLitIvemFullDetail.ExtendedField.Id, value: CorrectnessTableValue) {
         value.dataCorrectnessId = this._dataItem.correctnessId;
 
         switch (id) {
-            case LitIvemFullDetail.ExtendedField.Id.Cfi:
+            case SearchSymbolsLitIvemFullDetail.ExtendedField.Id.Cfi:
                 (value as StringCorrectnessTableValue).data = this._litIvemFullDetail.cfi;
                 break;
-            case LitIvemFullDetail.ExtendedField.Id.DepthDirectionId:
+            case SearchSymbolsLitIvemFullDetail.ExtendedField.Id.DepthDirectionId:
                 (value as DepthDirectionIdCorrectnessTableValue).data = this._litIvemFullDetail.depthDirectionId;
                 break;
-            case LitIvemFullDetail.ExtendedField.Id.IsIndex:
+            case SearchSymbolsLitIvemFullDetail.ExtendedField.Id.IsIndex:
                 (value as BooleanCorrectnessTableValue).data = this._litIvemFullDetail.isIndex;
                 break;
-            case LitIvemFullDetail.ExtendedField.Id.ExpiryDate:
+            case SearchSymbolsLitIvemFullDetail.ExtendedField.Id.ExpiryDate:
                 (value as SourceTzOffsetDateCorrectnessTableValue).data = this._litIvemFullDetail.expiryDate;
                 break;
-            case LitIvemFullDetail.ExtendedField.Id.StrikePrice:
+            case SearchSymbolsLitIvemFullDetail.ExtendedField.Id.StrikePrice:
                 (value as PriceCorrectnessTableValue).data = this._litIvemFullDetail.strikePrice;
                 break;
-            case LitIvemFullDetail.ExtendedField.Id.ExerciseTypeId:
+            case SearchSymbolsLitIvemFullDetail.ExtendedField.Id.ExerciseTypeId:
                 (value as ExerciseTypeIdCorrectnessTableValue).data = this._litIvemFullDetail.exerciseTypeId;
                 break;
-            case LitIvemFullDetail.ExtendedField.Id.CallOrPutId:
+            case SearchSymbolsLitIvemFullDetail.ExtendedField.Id.CallOrPutId:
                 (value as CallOrPutIdCorrectnessTableValue).data = this._litIvemFullDetail.callOrPutId;
                 break;
-            case LitIvemFullDetail.ExtendedField.Id.ContractSize:
+            case SearchSymbolsLitIvemFullDetail.ExtendedField.Id.ContractSize:
                 (value as DecimalCorrectnessTableValue).data = this._litIvemFullDetail.contractSize;
                 break;
-            case LitIvemFullDetail.ExtendedField.Id.LotSize:
+            case SearchSymbolsLitIvemFullDetail.ExtendedField.Id.LotSize:
                 (value as IntegerCorrectnessTableValue).data = this._litIvemFullDetail.lotSize;
                 break;
-            case LitIvemFullDetail.ExtendedField.Id.Categories:
+            case SearchSymbolsLitIvemFullDetail.ExtendedField.Id.Categories:
                 (value as StringArrayCorrectnessTableValue).data = this._litIvemFullDetail.categories;
                 break;
-            case LitIvemFullDetail.ExtendedField.Id.Attributes:
-            case LitIvemFullDetail.ExtendedField.Id.TmcLegs:
-                throw new AssertInternalError('LIEDTVSLVA44824483', LitIvemFullDetail.ExtendedField.idToName(id));
+            case SearchSymbolsLitIvemFullDetail.ExtendedField.Id.Attributes:
+            case SearchSymbolsLitIvemFullDetail.ExtendedField.Id.TmcLegs:
+                throw new AssertInternalError('LIEDTVSLVA44824483', SearchSymbolsLitIvemFullDetail.ExtendedField.idToName(id));
             default:
                 throw new UnreachableCaseError('LIEDTVSLV577555493', id);
         }

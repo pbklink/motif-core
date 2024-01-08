@@ -4,12 +4,12 @@
  * License: motionite.trade/license/motif
  */
 
-import { AdiService } from '../../../adi/adi-internal-api';
+import { AdiService, RankedLitIvemId } from '../../../adi/adi-internal-api';
 import {
-    RankedLitIvemId,
     RankedLitIvemIdList,
     RankedLitIvemIdListFactoryService
 } from "../../../ranked-lit-ivem-id-list/ranked-lit-ivem-id-list-internal-api";
+import { SymbolDetailCacheService } from '../../../services/symbol-detail-cache-service';
 import { AssertInternalError, ErrorCode, Integer, LockOpenListItem, Ok, Result, UnreachableCaseError } from '../../../sys/sys-internal-api';
 import { TextFormatterService } from '../../../text-format/text-format-internal-api';
 import {
@@ -17,16 +17,18 @@ import {
 } from "../field-source/grid-table-field-source-internal-api";
 import { RankedLitIvemIdTableRecordDefinition, TableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
 import { TableRecord } from '../record/grid-table-record-internal-api';
-import { RankedLitIvemIdTableValueSource, SecurityDataItemTableValueSource } from '../value-source/grid-table-value-source-internal-api';
-import { BadnessListTableRecordSource } from './badness-list-table-record-source';
+import { LitIvemBaseDetailTableValueSource, RankedLitIvemIdTableValueSource, SecurityDataItemTableValueSource } from '../value-source/grid-table-value-source-internal-api';
 import { RankedLitIvemIdListTableRecordSourceDefinition, TableRecordSourceDefinitionFactoryService } from './definition/grid-table-record-source-definition-internal-api';
+import { PromisedLitIvemBaseDetail } from './promised-lit-ivem-base-detail';
+import { SubscribeBadnessListTableRecordSource } from './subscribe-badness-list-table-record-source';
 
-export class RankedLitIvemIdListTableRecordSource extends BadnessListTableRecordSource<RankedLitIvemId, RankedLitIvemIdList> {
+export class RankedLitIvemIdListTableRecordSource extends SubscribeBadnessListTableRecordSource<RankedLitIvemId, RankedLitIvemIdList> {
     readonly declare definition: RankedLitIvemIdListTableRecordSourceDefinition;
     private _lockedRankedLitIvemIdList: RankedLitIvemIdList;
 
     constructor(
         private readonly _adiService: AdiService,
+        private readonly _symbolDetailCacheService: SymbolDetailCacheService,
         private readonly _rankedLitIvemIdListFactoryService: RankedLitIvemIdListFactoryService,
         textFormatterService: TextFormatterService,
         tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService,
@@ -36,7 +38,7 @@ export class RankedLitIvemIdListTableRecordSource extends BadnessListTableRecord
             textFormatterService,
             tableRecordSourceDefinitionFactoryService,
             definition,
-            RankedLitIvemIdListTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
+            definition.allowedFieldSourceDefinitionTypeIds,
         );
     }
 
@@ -49,7 +51,7 @@ export class RankedLitIvemIdListTableRecordSource extends BadnessListTableRecord
             throw new AssertInternalError('RLIILORCD50091');
         } else {
             const listDefinition = list.createDefinition();
-            return this.tableRecordSourceDefinitionFactoryService.createRankedLitIvemIdList(listDefinition);
+            return this.tableRecordSourceDefinitionFactoryService.createRankedLitIvemIdList(this.definition.typeId, listDefinition);
         }
     }
 
@@ -71,10 +73,9 @@ export class RankedLitIvemIdListTableRecordSource extends BadnessListTableRecord
 
     override createRecordDefinition(idx: Integer): RankedLitIvemIdTableRecordDefinition {
         const rankedLitIvemId = this._lockedRankedLitIvemIdList.getAt(idx);
-        const litIvemId = rankedLitIvemId.litIvemId;
         return {
             typeId: TableRecordDefinition.TypeId.RankedLitIvemId,
-            mapKey: litIvemId.mapKey,
+            mapKey: RankedLitIvemIdTableRecordDefinition.createMapKey(rankedLitIvemId),
             rankedLitIvemId,
         };
     }
@@ -88,21 +89,33 @@ export class RankedLitIvemIdListTableRecordSource extends BadnessListTableRecord
         for (let i = 0; i < sourceCount; i++) {
             const fieldSource = fieldSources[i];
             const fieldSourceDefinition = fieldSource.definition;
-            const fieldSourceDefinitionTypeId =
-                fieldSourceDefinition.typeId as RankedLitIvemIdListTableRecordSourceDefinition.FieldSourceDefinitionTypeId;
-            switch (fieldSourceDefinitionTypeId) {
-                case TableFieldSourceDefinition.TypeId.SecurityDataItem: {
-                    const valueSource = new SecurityDataItemTableValueSource(result.fieldCount, rankedLitIvemId.litIvemId, this._adiService);
-                    result.addSource(valueSource);
-                    break;
+            const fieldSourceDefinitionTypeId = fieldSourceDefinition.typeId as RankedLitIvemIdListTableRecordSourceDefinition.FieldSourceDefinitionTypeId;
+            if (this.allowedFieldSourceDefinitionTypeIds.includes(fieldSourceDefinitionTypeId)) {
+                switch (fieldSourceDefinitionTypeId) {
+                    case TableFieldSourceDefinition.TypeId.LitIvemBaseDetail: {
+                        const litIvemBaseDetail = new PromisedLitIvemBaseDetail(this._symbolDetailCacheService, rankedLitIvemId.litIvemId);
+                        const valueSource = new LitIvemBaseDetailTableValueSource(
+                            result.fieldCount,
+                            litIvemBaseDetail,
+                            rankedLitIvemId,
+                        );
+                        result.addSource(valueSource);
+                        break;
+                    }
+
+                    case TableFieldSourceDefinition.TypeId.SecurityDataItem: {
+                        const valueSource = new SecurityDataItemTableValueSource(result.fieldCount, rankedLitIvemId.litIvemId, this._adiService);
+                        result.addSource(valueSource);
+                        break;
+                    }
+                    case TableFieldSourceDefinition.TypeId.RankedLitIvemId: {
+                        const valueSource = new RankedLitIvemIdTableValueSource(result.fieldCount, rankedLitIvemId);
+                        result.addSource(valueSource);
+                        break;
+                    }
+                    default:
+                        throw new UnreachableCaseError('LIITRSCTVK19909', fieldSourceDefinitionTypeId);
                 }
-                case TableFieldSourceDefinition.TypeId.RankedLitIvemId: {
-                    const valueSource = new RankedLitIvemIdTableValueSource(result.fieldCount, rankedLitIvemId);
-                    result.addSource(valueSource);
-                    break;
-                }
-                default:
-                    throw new UnreachableCaseError('LIITRSCTVK19909', fieldSourceDefinitionTypeId);
             }
         }
 
@@ -160,6 +173,6 @@ export class RankedLitIvemIdListTableRecordSource extends BadnessListTableRecord
     }
 
     protected override getDefaultFieldSourceDefinitionTypeIds() {
-        return RankedLitIvemIdListTableRecordSourceDefinition.defaultFieldSourceDefinitionTypeIds;
+        return this.definition.defaultFieldSourceDefinitionTypeIds;
     }
 }

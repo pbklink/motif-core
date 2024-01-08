@@ -12,7 +12,7 @@ import {
     SingleHeadingDataRowArrayServerSet,
     Subgrid
 } from 'revgrid';
-import { SettingsService } from '../../../settings/settings-internal-api';
+import { SettingsService } from '../../../services/services-internal-api';
 import { GridFieldHorizontalAlign } from '../../../sys/sys-internal-api';
 import { GridField, GridFieldDefinition, GridFieldSourceDefinition } from '../../field/grid-field-internal-api';
 import { AdaptedRevgrid, SingleHeadingGridDataServer } from '../adapted-revgrid/grid-revgrid-adapted-revgrid-internal-api';
@@ -138,14 +138,13 @@ export namespace RowDataArrayGrid {
     export type MainDblClickEventer = (this: void, columnIndex: number, rowIndex: number) => void;
 
     export function createField(
-        sourceDefinition: GridFieldSourceDefinition,
         sourcelessName: string,
         defaultHeading: string,
         defaultTextAlign: GridFieldHorizontalAlign,
         defaultWidth?:number,
     ) {
         const definition = new GridFieldDefinition(
-            sourceDefinition,
+            new GridFieldSourceDefinition(''),
             sourcelessName,
             defaultHeading,
             defaultTextAlign,

@@ -1,0 +1,432 @@
+/**
+ * %license Motif
+ * (c) 2021 Paritech Wealth Technology
+ * License: motionite.trade/license/motif
+ */
+
+import { LitIvemId, RankScoredLitIvemIdList } from '../adi/adi-internal-api';
+import { RankedLitIvemId } from '../adi/scan/ranked-lit-ivem-id';
+import {
+    AssertInternalError,
+    Badness,
+    BadnessList,
+    CorrectnessId,
+    Integer,
+    LockOpenListItem,
+    MultiEvent,
+    Ok,
+    RecordList,
+    Result,
+    UnreachableCaseError,
+    UsableListChangeType,
+    UsableListChangeTypeId,
+    anyBinarySearch,
+    compareNumber,
+    moveElementsInArray,
+    rangedAnyBinarySearch
+} from "../sys/sys-internal-api";
+import { RankedLitIvemIdListDefinition } from './definition/ranked-lit-ivem-id-list-definition-internal-api';
+import { RankedLitIvemIdList } from './ranked-lit-ivem-id-list';
+
+/** @public */
+export abstract class BaseRankedLitIvemIdList implements RankedLitIvemIdList {
+    // Only used by Json to mark referential as dirty and needing to be saved
+    referentialTargettedModifiedEventer: BaseRankedLitIvemIdList.ModifiedEventer | undefined;
+
+    protected _lockedScoredList: RankScoredLitIvemIdList;
+
+    private _records = new Array<RankedLitIvemId>();
+    private _rankSortedRecords = new Array<RankedLitIvemId>();
+
+    private _scoredListBadnessChangeSubscriptionId: MultiEvent.SubscriptionId;
+    private _scoredListCorrectnessChangeSubscriptionId: MultiEvent.SubscriptionId;
+    private _scoredListListChangeSubscriptionId: MultiEvent.SubscriptionId;
+
+    private _listChangeMultiEvent = new MultiEvent<RecordList.ListChangeEventHandler>();
+    private _badnessChangeMultiEvent = new MultiEvent<BadnessList.BadnessChangeEventHandler>();
+
+    constructor(
+        readonly typeId: RankedLitIvemIdListDefinition.TypeId,
+        readonly userCanAdd: boolean,
+        readonly userCanReplace: boolean,
+        readonly userCanRemove: boolean,
+        readonly userCanMove: boolean,
+    ) {
+    }
+
+    get usable() { return this._lockedScoredList.usable; }
+    get badness(): Badness { return this._lockedScoredList.badness; }
+    get correctnessId(): CorrectnessId { return this._lockedScoredList.correctnessId; }
+
+    get count() { return this._records.length; }
+
+    abstract get name(): string;
+    abstract get description(): string;
+    abstract get category(): string;
+
+    tryLock(_locker: LockOpenListItem.Locker): Promise<Result<void>> {
+        // descendants can override
+        return Ok.createResolvedPromise(undefined);
+    }
+
+    unlock(_locker: LockOpenListItem.Locker) {
+        // descendants can override
+    }
+
+    openLocked(_opener: LockOpenListItem.Opener): void {
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        if (this._lockedScoredList !== undefined) {
+            // cannot open more than once
+            throw new AssertInternalError('RLIILIO31313');
+        } else {
+            this._lockedScoredList = this.subscribeRankScoredLitIvemIdList();
+
+            const existingCount = this._lockedScoredList.count;
+            if (existingCount > 0) {
+                this.insertRecords(0, existingCount);
+            }
+
+            this._scoredListBadnessChangeSubscriptionId = this._lockedScoredList.subscribeBadnessChangeEvent(
+                () => { this.processScoredListBadnessChange() }
+            );
+            this._scoredListCorrectnessChangeSubscriptionId = this._lockedScoredList.subscribeCorrectnessChangedEvent(
+                () => { this.processScoredListCorrectnessChanged() }
+            );
+            this._scoredListListChangeSubscriptionId = this._lockedScoredList.subscribeListChangeEvent(
+                (listChangeTypeId, index, count) => { this.processScoredListListChange(listChangeTypeId, index, count) }
+            );
+        }
+    }
+
+    closeLocked(_opener: LockOpenListItem.Opener): void {
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        if (this._lockedScoredList === undefined) {
+            throw new AssertInternalError('RLIILIC31313');
+        } else {
+            this._lockedScoredList.unsubscribeListChangeEvent(this._scoredListListChangeSubscriptionId);
+            this._scoredListListChangeSubscriptionId = undefined;
+            this._lockedScoredList.unsubscribeCorrectnessChangedEvent(this._scoredListCorrectnessChangeSubscriptionId);
+            this._scoredListCorrectnessChangeSubscriptionId = undefined;
+            this._lockedScoredList.unsubscribeBadnessChangeEvent(this._scoredListBadnessChangeSubscriptionId);
+            this._scoredListBadnessChangeSubscriptionId = undefined;
+            this.unsubscribeRankScoredLitIvemIdList();
+        }
+    }
+
+    indexOf(record: RankedLitIvemId) {
+        const count = this.count;
+        for (let index = 0; index < count; index++) {
+            if (this._records[index] === record) {
+                return index;
+            }
+        }
+        return -1;
+    }
+
+    getAt(index: number): RankedLitIvemId {
+        return this._records[index];
+    }
+
+    toArray(): readonly RankedLitIvemId[] {
+        return this._records;
+    }
+
+    userAdd(_litIvemId: LitIvemId): Integer {
+        throw new AssertInternalError('RLIILIUA31313');
+    }
+
+    userAddArray(_litIvemIds: LitIvemId[]): void {
+        throw new AssertInternalError('RLIILIUAA31313');
+    }
+
+    userReplaceAt(_index: number, _litIvemIds: LitIvemId[]): void {
+        throw new AssertInternalError('RLIILIURPA31313');
+    }
+
+    userRemoveAt(_index: number, _count: number): void {
+        throw new AssertInternalError('RLIILIURMA31313');
+    }
+
+    userMoveAt(_fromIndex: number, _count: number, _toIndex: number): void {
+        throw new AssertInternalError('RLIILIUMA31313');
+    }
+
+    subscribeBadnessChangeEvent(handler: BadnessList.BadnessChangeEventHandler) {
+        return this._badnessChangeMultiEvent.subscribe(handler);
+    }
+
+    unsubscribeBadnessChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void {
+        this._badnessChangeMultiEvent.unsubscribe(subscriptionId);
+    }
+
+    subscribeListChangeEvent(handler: RecordList.ListChangeEventHandler) {
+        return this._listChangeMultiEvent.subscribe(handler);
+    }
+
+    unsubscribeListChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void {
+        this._listChangeMultiEvent.unsubscribe(subscriptionId);
+    }
+
+    private processScoredListBadnessChange() {
+        const handlers = this._badnessChangeMultiEvent.copyHandlers();
+        for (const handler of handlers) {
+            handler();
+        }
+    }
+
+    private processScoredListCorrectnessChanged() {
+        const correctnessId = this._lockedScoredList.correctnessId;
+        for (const rankedLitIvemId of this._records) {
+            rankedLitIvemId.setCorrectnessId(correctnessId);
+        }
+    }
+
+    private processScoredListListChange(listChangeTypeId: UsableListChangeTypeId, index: Integer, count: Integer) {
+        switch (listChangeTypeId) {
+            case UsableListChangeTypeId.Unusable:
+                this.notifyListChange(UsableListChangeTypeId.Unusable, 0, 0);
+                break;
+            case UsableListChangeTypeId.PreUsableClear: {
+                const oldCount = this.count;
+                if (oldCount !== 0) {
+                    this._records.length = 0;
+                }
+                break;
+            }
+            case UsableListChangeTypeId.PreUsableAdd:
+                if (count > 0) {
+                    this.insertRecords(index, count);
+                }
+                break;
+            case UsableListChangeTypeId.Usable: {
+                this.notifyListChange(UsableListChangeTypeId.PreUsableClear, 0, 0);
+                const recordCount = this.count;
+                if (count > 0) {
+                    this.notifyListChange(UsableListChangeTypeId.PreUsableAdd, 0, recordCount);
+                }
+                this.notifyListChange(UsableListChangeTypeId.Usable, 0, 0);
+                    // handled through badness change
+                break;
+            }
+            case UsableListChangeTypeId.Insert:
+                this.insertRecords(index, count);
+                this.checkUsableNotifyListChange(UsableListChangeTypeId.Insert, index, count);
+                break;
+            case UsableListChangeTypeId.BeforeReplace:
+                this.checkUsableNotifyListChange(UsableListChangeTypeId.BeforeReplace, index, count);
+                break;
+            case UsableListChangeTypeId.AfterReplace:
+                this.replaceRecords(index, count);
+                this.checkUsableNotifyListChange(UsableListChangeTypeId.AfterReplace, index, count);
+                break;
+            case UsableListChangeTypeId.BeforeMove:
+                this.checkUsableNotifyListChange(UsableListChangeTypeId.BeforeMove, index, count);
+                break;
+            case UsableListChangeTypeId.AfterMove: {
+                const { fromIndex, toIndex, count: moveCount } = UsableListChangeType.getMoveParameters(index); // index is actually move parameters registration index
+                this.moveRecords(fromIndex, toIndex, moveCount);
+                this.checkUsableNotifyListChange(UsableListChangeTypeId.AfterMove, index, count);
+                break;
+            }
+            case UsableListChangeTypeId.Remove:
+                this.removeRecords(index, count);
+                this.checkUsableNotifyListChange(UsableListChangeTypeId.Remove, index, count);
+                break;
+            case UsableListChangeTypeId.Clear:
+                this.notifyListChange(listChangeTypeId, index, count);
+                this.clearRecords();
+                break;
+            default:
+                throw new UnreachableCaseError('RLIILIPDILCD54483', listChangeTypeId);
+        }
+    }
+
+    private insertRecords(index: Integer, insertCount: Integer) {
+        if (insertCount > 0) {
+            const toBeInsertedRecords = new Array<RankedLitIvemId>(insertCount);
+            const scoredRecordList = this._lockedScoredList;
+            const correctnessId = this._lockedScoredList.correctnessId;
+            for (let i = 0; i < insertCount; i++) {
+                const matchRecord = scoredRecordList.getAt(index + i);
+                toBeInsertedRecords[i] = new RankedLitIvemId(matchRecord.value, correctnessId, -1, matchRecord.rankScore);
+            }
+
+            this._records.splice(index, 0, ...toBeInsertedRecords);
+            this.insertIntoSorting(toBeInsertedRecords);
+        }
+    }
+
+    private insertIntoSorting(insertRecords: RankedLitIvemId[]) {
+        const insertCount = insertRecords.length;
+        const existingCount = this.count;
+        if (insertCount === 1) {
+            this.insertOneIntoSorting(insertRecords[0]);
+        } else {
+            if (existingCount === 0 || insertCount >= 0.3 * existingCount) {
+                this.insertIntoSortingWithResortAll(insertRecords);
+            } else {
+                this.insertIntoSortingIndividually(insertRecords);
+            }
+        }
+    }
+
+    private insertOneIntoSorting(record: RankedLitIvemId) {
+        const sortedRecords = this._rankSortedRecords;
+        const searchResult = anyBinarySearch(
+            sortedRecords,
+            record,
+            (left, right) => compareNumber(left.rankScore, right.rankScore),
+        );
+        const insertIndex = searchResult.index;
+        sortedRecords.splice(insertIndex, 0, record);
+        this.reRank(insertIndex);
+    }
+
+    private insertIntoSortingWithResortAll(insertRecords: RankedLitIvemId[]) {
+        const sortedRecords = this._rankSortedRecords;
+        const oldCount = sortedRecords.length;
+        const oldSortedRecords = sortedRecords.slice();
+        sortedRecords.splice(oldCount, 0, ...insertRecords);
+        sortedRecords.sort((left, right) => compareNumber(left.rankScore, right.rankScore));
+        let firstReindexedIndex = oldCount;
+        for (let i = 0; i < oldCount; i++) {
+            const oldRankedLitIvemId = oldSortedRecords[i];
+            const newRankedLitIvemId = sortedRecords[i];
+            if (oldRankedLitIvemId !== newRankedLitIvemId) {
+                firstReindexedIndex = i;
+                break;
+            }
+        }
+
+        const sortRecordsCount = sortedRecords.length;
+        for (let i = firstReindexedIndex; i < sortRecordsCount; i++) {
+            const record = sortedRecords[i];
+            record.setRank(i + 1);
+        }
+    }
+
+    private insertIntoSortingIndividually(insertRecords: RankedLitIvemId[]) {
+        const sortedRecords = this._rankSortedRecords;
+        let sortedRecordsCount = sortedRecords.length;
+        let minSortInsertIndex = Number.MAX_SAFE_INTEGER;
+        for (const record of insertRecords) {
+            const searchResult = rangedAnyBinarySearch(
+                sortedRecords,
+                record,
+                (left, right) => compareNumber(left.rankScore, right.rankScore),
+                0,
+                sortedRecordsCount
+            );
+            const insertIndex = searchResult.index;
+            sortedRecords.splice(insertIndex, 0, record);
+            if (insertIndex < minSortInsertIndex) {
+                minSortInsertIndex = insertIndex;
+            }
+            sortedRecordsCount += 1;
+        }
+
+        this.reRank(minSortInsertIndex);
+    }
+
+    private removeRecords(index: Integer, removeCount: Integer) {
+        if (removeCount > 0) {
+            const sortedRecords = this._rankSortedRecords;
+            const sortedRecordsCount = sortedRecords.length;
+            if (removeCount === sortedRecordsCount) {
+                this.clearRecords();
+            } else {
+                this.removeRecordsFromSorting(index, removeCount);
+                this._records.splice(index, removeCount);
+            }
+        }
+    }
+
+    private removeRecordsFromSorting(index: Integer, removeCount: Integer) {
+        const sortedRecords = this._rankSortedRecords;
+        if (removeCount === 1) {
+            const removeRecord = this._records[index];
+            const removeRank = removeRecord.rank;
+            const removeRankSortedIndex = removeRank - 1;
+            sortedRecords.splice(removeRankSortedIndex, 1);
+            this.reRank(removeRankSortedIndex);
+        } else {
+            const nextRangeIndex = index + removeCount;
+            for (let i = index; i < nextRangeIndex; i++) {
+                const rankedLitIvemId = this._records[i];
+                rankedLitIvemId.setInvalidRank();
+            }
+
+            sortedRecords.sort((left, right) => compareNumber(left.rank, right.rank));
+
+            const sortedRecordsCount = sortedRecords.length;
+            for (let i = 0; i < sortedRecordsCount; i++) {
+                const rankedLitIvemId = sortedRecords[i];
+                if (!rankedLitIvemId.isRankInvalid()) {
+                    sortedRecords.splice(0, i);
+                    break;
+                }
+            }
+            this.reRank(0);
+        }
+    }
+
+    private replaceRecords(index: Integer, replaceCount: Integer) {
+        if (replaceCount > 0) {
+            this.removeRecordsFromSorting(index, replaceCount);
+
+            const newRecords = new Array<RankedLitIvemId>(replaceCount);
+            const scoredRecordList = this._lockedScoredList;
+            const correctnessId = this._lockedScoredList.correctnessId;
+            for (let i = 0; i < replaceCount; i++) {
+                const scoredRecord = scoredRecordList.getAt(index + i);
+                const newRecord = new RankedLitIvemId(scoredRecord.value, correctnessId, -1, scoredRecord.rankScore);
+                this._records[index + i] = newRecord;
+                newRecords[i] = newRecord;
+            }
+
+            this.insertIntoSorting(newRecords);
+        }
+    }
+
+    private moveRecords(fromIndex: Integer, toIndex: Integer, moveCount: Integer) {
+        if (moveCount > 0) {
+            moveElementsInArray(this._records, fromIndex, toIndex, moveCount);
+        }
+        // Since none of the record's values have changed, the sorting is not affected
+    }
+
+    private clearRecords() {
+        this._records.length = 0;
+        this._rankSortedRecords.length = 0;
+    }
+
+    private reRank(startIndex: Integer) {
+        const sortedRecords = this._rankSortedRecords;
+        const sortedRecordsCount = sortedRecords.length;
+        for (let i = startIndex; i < sortedRecordsCount; i++) {
+            const record = sortedRecords[i];
+            record.setRank(i + 1);
+        }
+    }
+
+    private notifyListChange(listChangeTypeId: UsableListChangeTypeId, recIdx: Integer, recCount: Integer) {
+        const handlers = this._listChangeMultiEvent.copyHandlers();
+        for (let i = 0; i < handlers.length; i++) {
+            handlers[i](listChangeTypeId, recIdx, recCount);
+        }
+    }
+
+    private checkUsableNotifyListChange(listChangeTypeId: UsableListChangeTypeId, recIdx: Integer, recCount: Integer) {
+        if (this.usable) {
+            this.notifyListChange(listChangeTypeId, recIdx, recCount);
+        }
+    }
+
+    abstract createDefinition(): RankedLitIvemIdListDefinition;
+    abstract subscribeRankScoredLitIvemIdList(): RankScoredLitIvemIdList;
+    abstract unsubscribeRankScoredLitIvemIdList(): void;
+}
+
+export namespace BaseRankedLitIvemIdList {
+    export type ModifiedEventer = (this: void) => void;
+}

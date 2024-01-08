@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { Scan } from '../../../../scan/scan-internal-api';
+import { Scan } from '../../../../scan/internal-api';
 import { PickEnum } from '../../../../sys/sys-internal-api';
 import { GridFieldCustomHeadingsService } from '../../../field/grid-field-internal-api';
 import { GridLayoutDefinition } from '../../../layout/grid-layout-internal-api';
@@ -15,8 +15,7 @@ import { TableRecordSourceDefinition } from './table-record-source-definition';
 export class ScanTableRecordSourceDefinition extends TableRecordSourceDefinition {
     constructor(
         customHeadingsService: GridFieldCustomHeadingsService,
-        tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService
-    ) {
+        tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService    ) {
         super(
             customHeadingsService,
             tableFieldSourceDefinitionRegistryService,
@@ -35,8 +34,7 @@ export class ScanTableRecordSourceDefinition extends TableRecordSourceDefinition
         fieldNames.push(scanFieldSourceDefinition.getSupportedFieldNameById(Scan.FieldId.StatusId));
         fieldNames.push(scanFieldSourceDefinition.getSupportedFieldNameById(Scan.FieldId.SymbolListEnabled));
 
-        const columns = this.createGridLayoutDefinitionColumnsFromFieldNames(fieldNames);
-        return new GridLayoutDefinition(columns);
+        return GridLayoutDefinition.createFromFieldNames(fieldNames);
     }
 }
 

@@ -18,4 +18,8 @@ export class SecurityDataItemTableFieldSourceDefinition extends PrefixableSecuri
 
 export namespace SecurityDataItemTableFieldSourceDefinition {
     export const fieldNameHeaderPrefix = '';
+
+    export interface FieldId extends PrefixableSecurityDataItemTableFieldSourceDefinition.FieldId {
+        sourceTypeId: TableFieldSourceDefinition.TypeId.SecurityDataItem;
+    }
 }

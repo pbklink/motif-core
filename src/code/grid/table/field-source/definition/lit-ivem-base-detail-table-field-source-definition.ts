@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { LitIvemDetail } from '../../../../adi/adi-internal-api';
+import { LitIvemBaseDetail } from '../../../../adi/adi-internal-api';
 import {
     AssertInternalError,
     CommaText,
@@ -42,18 +42,18 @@ export class LitIvemBaseDetailTableFieldSourceDefinition extends TableFieldSourc
         this.fieldDefinitions = this.createFieldDefinitions();
     }
 
-    isFieldSupported(id: LitIvemDetail.BaseField.Id) {
+    isFieldSupported(id: LitIvemBaseDetail.Field.Id) {
         return LitIvemBaseDetailTableFieldSourceDefinition.Field.isIdSupported(id);
     }
 
-    getFieldNameById(id: LitIvemDetail.BaseField.Id) {
+    getFieldNameById(id: LitIvemBaseDetail.Field.Id) {
         const sourcelessFieldName = LitIvemBaseDetailTableFieldSourceDefinition.Field.getNameById(id);
         return CommaText.from2Values(this.name, sourcelessFieldName);
     }
 
-    getSupportedFieldNameById(id: LitIvemDetail.BaseField.Id) {
+    getSupportedFieldNameById(id: LitIvemBaseDetail.Field.Id) {
         if (!this.isFieldSupported(id)) {
-            throw new AssertInternalError('LIBDTFSDGSFNBI30499', LitIvemDetail.BaseField.idToName(id));
+            throw new AssertInternalError('LIBDTFSDGSFNBI30499', LitIvemBaseDetail.Field.idToName(id));
         } else {
             return this.getFieldNameById(id);
         }
@@ -85,38 +85,38 @@ export class LitIvemBaseDetailTableFieldSourceDefinition extends TableFieldSourc
 
 export namespace LitIvemBaseDetailTableFieldSourceDefinition {
     export namespace Field {
-        const unsupportedIds: LitIvemDetail.BaseField.Id[] = [];
-        export const count = LitIvemDetail.BaseField.idCount - unsupportedIds.length;
+        const unsupportedIds: LitIvemBaseDetail.Field.Id[] = [];
+        export const count = LitIvemBaseDetail.Field.idCount - unsupportedIds.length;
 
         interface Info {
-            readonly id: LitIvemDetail.BaseField.Id;
+            readonly id: LitIvemBaseDetail.Field.Id;
             readonly fieldConstructor: CorrectnessTableField.Constructor;
             readonly valueConstructor: CorrectnessTableValue.Constructor;
         }
 
         const infos = new Array<Info>(count);
-        const idFieldIndices = new Array<Integer>(LitIvemDetail.BaseField.idCount);
+        const idFieldIndices = new Array<Integer>(LitIvemBaseDetail.Field.idCount);
 
-        function idToTableGridConstructors(id: LitIvemDetail.BaseField.Id):
+        function idToTableGridConstructors(id: LitIvemBaseDetail.Field.Id):
             TableFieldSourceDefinition.CorrectnessTableGridConstructors {
             switch (id) {
-                case LitIvemDetail.BaseField.Id.Id:
+                case LitIvemBaseDetail.Field.Id.Id:
                     return [LitIvemIdCorrectnessTableField, LitIvemIdCorrectnessTableValue];
-                case LitIvemDetail.BaseField.Id.Code:
+                case LitIvemBaseDetail.Field.Id.Code:
                     return [StringCorrectnessTableField, StringCorrectnessTableValue];
-                case LitIvemDetail.BaseField.Id.MarketId:
+                case LitIvemBaseDetail.Field.Id.MarketId:
                     return [EnumCorrectnessTableField, MarketIdCorrectnessTableValue];
-                case LitIvemDetail.BaseField.Id.IvemClassId:
+                case LitIvemBaseDetail.Field.Id.IvemClassId:
                     return [EnumCorrectnessTableField, IvemClassIdCorrectnessTableValue];
-                case LitIvemDetail.BaseField.Id.SubscriptionDataTypeIds:
+                case LitIvemBaseDetail.Field.Id.SubscriptionDataTypeIds:
                     return [IntegerArrayCorrectnessTableField, PublisherSubscriptionDataTypeIdArrayCorrectnessTableValue];
-                case LitIvemDetail.BaseField.Id.TradingMarketIds:
+                case LitIvemBaseDetail.Field.Id.TradingMarketIds:
                     return [IntegerArrayCorrectnessTableField, MarketIdArrayCorrectnessTableValue];
-                case LitIvemDetail.BaseField.Id.Name:
+                case LitIvemBaseDetail.Field.Id.Name:
                     return [StringCorrectnessTableField, StringCorrectnessTableValue];
-                case LitIvemDetail.BaseField.Id.ExchangeId:
+                case LitIvemBaseDetail.Field.Id.ExchangeId:
                     return [EnumCorrectnessTableField, ExchangeIdCorrectnessTableValue];
-                case LitIvemDetail.BaseField.Id.AlternateCodes:
+                case LitIvemBaseDetail.Field.Id.AlternateCodes:
                     return [StringCorrectnessTableField, StringCorrectnessTableValue];
                 default:
                     throw new UnreachableCaseError('LIBDTFDSFITTGC2039994', id);
@@ -128,19 +128,19 @@ export namespace LitIvemBaseDetailTableFieldSourceDefinition {
         }
 
         export function getName(fieldIdx: Integer) {
-            return LitIvemDetail.BaseField.idToName(infos[fieldIdx].id);
+            return LitIvemBaseDetail.Field.idToName(infos[fieldIdx].id);
         }
 
-        export function getNameById(id: LitIvemDetail.BaseField.Id) {
-            return LitIvemDetail.BaseField.idToName(id);
+        export function getNameById(id: LitIvemBaseDetail.Field.Id) {
+            return LitIvemBaseDetail.Field.idToName(id);
         }
 
         export function getHeading(fieldIdx: Integer) {
-            return LitIvemDetail.BaseField.idToHeading(infos[fieldIdx].id);
+            return LitIvemBaseDetail.Field.idToHeading(infos[fieldIdx].id);
         }
 
         export function getDataTypeId(fieldIdx: Integer): FieldDataTypeId {
-            return LitIvemDetail.BaseField.idToFieldDataTypeId(infos[fieldIdx].id);
+            return LitIvemBaseDetail.Field.idToFieldDataTypeId(infos[fieldIdx].id);
         }
 
         export function getTableFieldConstructor(fieldIdx: Integer) {
@@ -151,17 +151,17 @@ export namespace LitIvemBaseDetailTableFieldSourceDefinition {
             return infos[fieldIdx].valueConstructor;
         }
 
-        export function indexOfId(id: LitIvemDetail.BaseField.Id) {
+        export function indexOfId(id: LitIvemBaseDetail.Field.Id) {
             return idFieldIndices[id];
         }
 
-        export function isIdSupported(id: LitIvemDetail.BaseField.Id) {
+        export function isIdSupported(id: LitIvemBaseDetail.Field.Id) {
             return !unsupportedIds.includes(id);
         }
 
         export function initialiseFieldStatic() {
             let fieldIdx = 0;
-            for (let id = 0; id < LitIvemDetail.BaseField.idCount; id++) {
+            for (let id = 0; id < LitIvemBaseDetail.Field.idCount; id++) {
                 if (unsupportedIds.includes(id)) {
                     idFieldIndices[id] = -1;
                 } else {
@@ -176,6 +176,11 @@ export namespace LitIvemBaseDetailTableFieldSourceDefinition {
                 }
             }
         }
+    }
+
+    export interface FieldId extends TableFieldSourceDefinition.FieldId {
+        sourceTypeId: TableFieldSourceDefinition.TypeId.LitIvemBaseDetail;
+        id: LitIvemBaseDetail.Field.Id;
     }
 
     export function initialiseStatic() {

@@ -31,6 +31,7 @@ export abstract class AllBrokerageAccountRecordsDataItem<Record extends Brokerag
 
     readonly brokerageAccountGroup = new AllBrokerageAccountGroup();
 
+    // should refactor this to use change subscription in recordList
     private _recordList = new MappedComparableList<Record>();
 
     private _accountWrappers: AllBrokerageAccountRecordsDataItem.AccountWrapper<Record>[] = [];
@@ -49,6 +50,10 @@ export abstract class AllBrokerageAccountRecordsDataItem<Record extends Brokerag
 
     getAt(recordIndex: Integer) {
         return this._recordList.items[recordIndex];
+    }
+
+    toArray(): readonly Record[] {
+        return this._recordList.toArray();
     }
 
     getRecordByMapKey(key: MapKey) {
@@ -240,13 +245,16 @@ export abstract class AllBrokerageAccountRecordsDataItem<Record extends Brokerag
             const wrapper = new AllBrokerageAccountRecordsDataItem.AccountWrapper<Record>(recordsDataItem);
 
             if (!wrapper.error) {
-                wrapper.incubatedChangedEvent = (senderWrapper) => this.handleAccountWrapperIncubatedChangedEvent(senderWrapper);
-                wrapper.recordsInsertedEvent = (records, startIndex, insertCount) =>
+                wrapper.incubatedChangedEvent = (senderWrapper) => { this.handleAccountWrapperIncubatedChangedEvent(senderWrapper); };
+                wrapper.recordsInsertedEvent = (records, startIndex, insertCount) => {
                     this.handleAccountWrapperRecordsInsertedEvent(records, startIndex, insertCount);
-                wrapper.recordsRemoveEvent = (accountMapKey, records, startIndex, insertCount) =>
+                };
+                wrapper.recordsRemoveEvent = (accountMapKey, records, startIndex, insertCount) => {
                     this.handleAccountWrapperRecordsRemoveEvent(accountMapKey, records, startIndex, insertCount);
-                wrapper.recordsClearEvent = (accountMapKey, records) =>
+                };
+                wrapper.recordsClearEvent = (accountMapKey, records) => {
                     this.handleAccountWrapperRecordsClearEvent(accountMapKey, records);
+                };
 
                 this._accountWrappers[wrapperAddIdx++] = wrapper;
 
@@ -459,7 +467,7 @@ export abstract class AllBrokerageAccountRecordsDataItem<Record extends Brokerag
             const oldIdx = matcher.oldIdx;
             const newIdx = matcher.newIdx;
             this.notifyBeforeRecordChange(oldIdx);
-            this._recordList.replace(oldIdx, newRecords[newIdx]);
+            this._recordList.setAt(oldIdx, newRecords[newIdx]);
             this.notifyAfterRecordChanged(oldIdx);
         }
 
@@ -511,10 +519,10 @@ export namespace AllBrokerageAccountRecordsDataItem {
 
         constructor(private _dataItem: RecordsBrokerageAccountSubscriptionDataItem<Record>) {
             this._listChangeSubscriptionId = this._dataItem.subscribeListChangeEvent(
-                (listChangeTypeId, idx, count) => this.handleListChangeEvent(listChangeTypeId, idx, count)
+                (listChangeTypeId, idx, count) => { this.handleListChangeEvent(listChangeTypeId, idx, count); }
             );
             this._correctnessChangedSubscriptionId = this._dataItem.subscribeCorrectnessChangedEvent(
-                () => this.handleCorrectnessChangedEvent()
+                () => { this.handleCorrectnessChangedEvent(); }
             );
 
             this._incubated = this._dataItem.incubated;
@@ -558,6 +566,10 @@ export namespace AllBrokerageAccountRecordsDataItem {
                     throw new AssertInternalError('ABARDIHLCEBR19662');
                 case UsableListChangeTypeId.AfterReplace:
                     throw new AssertInternalError('ABARDIHLCEAR19662');
+                case UsableListChangeTypeId.BeforeMove:
+                    throw new AssertInternalError('ABARDIHLCEBM19662');
+                case UsableListChangeTypeId.AfterMove:
+                    throw new AssertInternalError('ABARDIHLCEAM19662');
                 case UsableListChangeTypeId.Remove:
                     this.checkNotifyRecordsRemove(this.accountMapKey, this._dataItem.records, index, count);
                     break;

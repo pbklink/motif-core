@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { ScanList, ScansService } from '../scan/scan-internal-api';
+import { ScanList, ScansService } from '../scan/internal-api';
 import { MultiEvent } from '../sys/multi-event';
 
 export class RankedLitIvemIdListsService /* extends LockOpenList<RankedLitIvemIdList>*/ {

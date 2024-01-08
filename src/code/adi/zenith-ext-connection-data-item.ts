@@ -38,10 +38,11 @@ export class ZenithExtConnectionDataItem extends ExtConnectionDataItem {
     private _selectedEndpoint = '';
     private _authExpiryTime = 0;
     private _authFetchSuccessiveFailureCount = 0;
-    private _socketOpenSuccessiveFailureCount = 0;
+    private _socketConnectingSuccessiveErrorCount = 0;
     private _zenithTokenFetchSuccessiveFailureCount = 0;
     private _zenithTokenRefreshSuccessiveFailureCount = 0;
-    private _socketCloseSuccessiveFailureCount = 0;
+    private _socketClosingSuccessiveErrorCount = 0;
+    private _socketShortLivedClosedSuccessiveErrorCount = 0;
     private _unexpectedSocketCloseCount = 0;
     private _timeoutCount = 0;
     private _lastTimeoutStateId: ZenithPublisherStateId | undefined;
@@ -86,10 +87,11 @@ export class ZenithExtConnectionDataItem extends ExtConnectionDataItem {
 
     get authExpiryTime() { return this._authExpiryTime; }
     get authFetchSuccessiveFailureCount() { return this._authFetchSuccessiveFailureCount; }
-    get socketOpenSuccessiveFailureCount() { return this._socketOpenSuccessiveFailureCount; }
+    get socketConnectingSuccessiveErrorCount() { return this._socketConnectingSuccessiveErrorCount; }
     get zenithTokenFetchSuccessiveFailureCount() { return this._zenithTokenFetchSuccessiveFailureCount; }
     get zenithTokenRefreshSuccessiveFailureCount() { return this._zenithTokenRefreshSuccessiveFailureCount; }
-    get socketCloseSuccessiveFailureCount() { return this._socketCloseSuccessiveFailureCount; }
+    get socketClosingSuccessiveErrorCount() { return this._socketClosingSuccessiveErrorCount; }
+    get socketShortLivedClosedSuccessiveErrorCount() { return this._socketShortLivedClosedSuccessiveErrorCount; }
     get unexpectedSocketCloseCount() { return this._unexpectedSocketCloseCount; }
     get timeoutCount() { return this._timeoutCount; }
     get lastTimeoutStateId() { return this._lastTimeoutStateId; }
@@ -196,10 +198,11 @@ export class ZenithExtConnectionDataItem extends ExtConnectionDataItem {
     processCounter(msg: ZenithCounterDataMessage) {
         this._authExpiryTime = msg.authExpiryTime;
         this._authFetchSuccessiveFailureCount = msg.authFetchSuccessiveFailureCount;
-        this._socketOpenSuccessiveFailureCount = msg.socketOpenSuccessiveFailureCount;
+        this._socketConnectingSuccessiveErrorCount = msg.socketConnectingSuccessiveErrorCount;
         this._zenithTokenFetchSuccessiveFailureCount = msg.zenithTokenFetchSuccessiveFailureCount;
         this._zenithTokenRefreshSuccessiveFailureCount = msg.zenithTokenRefreshSuccessiveFailureCount;
-        this._socketCloseSuccessiveFailureCount = msg.socketCloseSuccessiveFailureCount;
+        this._socketClosingSuccessiveErrorCount = msg.socketClosingSuccessiveErrorCount;
+        this._socketShortLivedClosedSuccessiveErrorCount = msg.socketShortLivedClosedSuccessiveErrorCount;
         this._unexpectedSocketCloseCount = msg.unexpectedSocketCloseCount;
         this._timeoutCount = msg.timeoutCount;
         this._lastTimeoutStateId = msg.lastTimeoutStateId;

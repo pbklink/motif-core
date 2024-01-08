@@ -158,6 +158,11 @@ export namespace TopShareholderTableFieldSourceDefinition {
         }
     }
 
+    export interface FieldId extends TableFieldSourceDefinition.FieldId {
+        sourceTypeId: TableFieldSourceDefinition.TypeId.TopShareholdersDataItem;
+        id: TopShareholder.FieldId;
+    }
+
     export function initialiseStatic() {
         Field.initialiseFieldStatic();
     }

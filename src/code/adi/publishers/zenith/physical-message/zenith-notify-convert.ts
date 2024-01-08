@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, UnreachableCaseError, parseIntStrict } from '../../../../sys/sys-internal-api';
+import { AssertInternalError, Guid, UnreachableCaseError, parseIntStrict } from '../../../../sys/sys-internal-api';
 import { LitIvemId, MarketId, ScanStatusId, ScanTargetTypeId } from '../../../common/adi-common-internal-api';
 import { ZenithProtocol } from './protocol/zenith-protocol';
 import { ZenithConvert } from './zenith-convert';
@@ -60,28 +60,37 @@ export namespace ZenithNotifyConvert {
 
         export function fromId(
             typeId: ScanTargetTypeId,
-            targetLitIvemIds: readonly LitIvemId[] | undefined,
-            targetMarketIds: readonly MarketId[] | undefined
-        ) {
+            targets: readonly MarketId[] | readonly LitIvemId[],
+        ): string[] {
             switch (typeId) {
                 case ScanTargetTypeId.Symbols: {
-                    if (targetLitIvemIds === undefined) {
-                        throw new AssertInternalError('ZNCTFIS44711');
+                    const targetLitIvemIds = targets as readonly LitIvemId[];
+                    if (targetLitIvemIds.length === 0) {
+                        return [];
                     } else {
-                        return ZenithConvert.Symbol.fromIdArray(targetLitIvemIds);
+                        if (typeof targetLitIvemIds[0] !== 'object') {
+                            throw new AssertInternalError('ZNCTFISO44711');
+                        } else {
+                            return ZenithConvert.Symbol.fromIdArray(targetLitIvemIds);
+                        }
                     }
                 }
                 case ScanTargetTypeId.Markets: {
-                    if (targetMarketIds === undefined) {
-                        throw new AssertInternalError('ZNCTFIM44711');
+                    const targetMarketIds = targets as readonly MarketId[];
+                    const count = targetMarketIds.length;
+                    if (count === 0) {
+                        return [];
                     } else {
-                        const count = targetMarketIds.length;
-                        const zenithMarkets = new Array<string>(count);
-                        for (let i = 0; i < count; i++) {
-                            const marketId = targetMarketIds[i];
-                            zenithMarkets[i] = ZenithConvert.EnvironmentedMarket.fromId(marketId);
+                        if (typeof targetMarketIds[0] !== 'number') {
+                            throw new AssertInternalError('ZNCTFIMN44711');
+                        } else {
+                            const zenithMarkets = new Array<string>(count);
+                            for (let i = 0; i < count; i++) {
+                                const marketId = targetMarketIds[i];
+                                zenithMarkets[i] = ZenithConvert.EnvironmentedMarket.fromId(marketId);
+                            }
+                            return zenithMarkets;
                         }
-                        return zenithMarkets;
                     }
                 }
                 default:
@@ -95,7 +104,10 @@ export namespace ZenithNotifyConvert {
         readonly versionId: string | undefined;
         readonly versioningInterrupted: boolean;
         readonly lastSavedTime: Date | undefined;
+        readonly lastEditSessionId: Guid | undefined;
         readonly symbolListEnabled: boolean | undefined;
+        readonly zenithCriteriaSource: string | undefined;
+        readonly zenithRankSource: string | undefined;
     }
 
     export namespace ScanMetaType {
@@ -112,15 +124,23 @@ export namespace ZenithNotifyConvert {
                     if (lastSavedTime === undefined) {
                         throw new AssertInternalError('ZNCSMTFLST44498');
                     } else {
-                        const symbolListEnabled = value.symbolListEnabled;
-                        if (symbolListEnabled === undefined) {
-                            throw new AssertInternalError('ZNCSMTFSLE44498');
+                        const lastEditSessionId = value.lastEditSessionId;
+                        if (lastEditSessionId === undefined) {
+                            throw new AssertInternalError('ZNCSMTFLESI44498');
                         } else {
-                            return {
-                                versionId,
-                                versioningInterrupted: value.versioningInterrupted ? 'true' : 'false',
-                                lastSavedTime: ZenithConvert.Date.DateTimeIso8601.fromDate(lastSavedTime),
-                                symbolListEnabled: symbolListEnabled ? 'true' : 'false',
+                            const symbolListEnabled = value.symbolListEnabled;
+                            if (symbolListEnabled === undefined) {
+                                throw new AssertInternalError('ZNCSMTFSLE44498');
+                            } else {
+                                return {
+                                    versionId,
+                                    versioningInterrupted: value.versioningInterrupted ? 'true' : 'false',
+                                    lastSavedTime: ZenithConvert.Date.DateTimeIso8601.fromDate(lastSavedTime),
+                                    lastEditSessionId: lastEditSessionId,
+                                    symbolListEnabled: symbolListEnabled ? 'true' : 'false',
+                                    zenithCriteriaSource: value.zenithCriteriaSource,
+                                    zenithRankSource: value.zenithRankSource,
+                                }
                             }
                         }
                     }
@@ -136,8 +156,11 @@ export namespace ZenithNotifyConvert {
             const versioningInterruptedAsString: string | undefined  = value['versioningInterrupted'];
             const versioningInterrupted = versioningInterruptedAsString === undefined || versioningInterruptedAsString.toUpperCase() !== 'FALSE';
             const lastSavedTimeAsString = value['lastSavedTime'];
+            const lastEditSessionId = value['lastEditSessionId'];
             const symbolListEnabledAsString = value['symbolListEnabled'];
             const symbolListEnabled = symbolListEnabledAsString === undefined ? undefined : symbolListEnabledAsString.toUpperCase() === 'TRUE';
+            const zenithCriteriaSource = value['zenithCriteriaSource'];
+            const zenithRankSource = value['zenithRankSource'];
             let lastSavedTime: Date | undefined;
             // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
             if (lastSavedTimeAsString === undefined) {
@@ -155,7 +178,10 @@ export namespace ZenithNotifyConvert {
                 versionId,
                 versioningInterrupted,
                 lastSavedTime,
+                lastEditSessionId,
                 symbolListEnabled,
+                zenithCriteriaSource,
+                zenithRankSource,
             }
         }
     }

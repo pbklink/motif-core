@@ -63,12 +63,11 @@ export abstract class MarketSubscriptionDataItem extends FeedStatusSubscriptionD
         ) as MarketsDataItem;
 
         this._marketsCorrectnessChangeSubscriptionId = this._marketsDataItem.subscribeCorrectnessChangedEvent(
-            () => this.handleMarketsCorrectnessChangedEvent()
+            () => { this.handleMarketsCorrectnessChangedEvent(); }
         );
 
         this._marketsListChangeSubscriptionId = this._marketsDataItem.subscribeListChangeEvent(
-            (listChangeType, index, count) =>
-                this.handleMarketsListChangeEvent(listChangeType, index, count)
+            (listChangeType, index, count) => { this.handleMarketsListChangeEvent(listChangeType, index, count); }
         );
 
         super.start();
@@ -164,6 +163,10 @@ export abstract class MarketSubscriptionDataItem extends FeedStatusSubscriptionD
                 throw new AssertInternalError('MSDIPMLCBR19662', this.definition.description);
             case UsableListChangeTypeId.AfterReplace:
                 throw new AssertInternalError('MSDIPMLCAR19662', this.definition.description);
+            case UsableListChangeTypeId.BeforeMove:
+                throw new AssertInternalError('MSDIPMLCBM19662', this.definition.description);
+            case UsableListChangeTypeId.AfterMove:
+                throw new AssertInternalError('MSDIPMLCAM19662', this.definition.description);
             case UsableListChangeTypeId.Remove:
                 this.checkClearMarket(index, count);
                 break;
@@ -180,10 +183,10 @@ export abstract class MarketSubscriptionDataItem extends FeedStatusSubscriptionD
             this._market = this._marketsDataItem.getMarket(this.marketId);
             if (this._market !== undefined) {
                 this._marketCorrectnessChangedSubscriptionId = this._market.subscribeCorrectnessChangedEvent(
-                    () => this.updateFeedStatusId()
+                    () => { this.updateFeedStatusId(); }
                 );
                 this._marketFeedStatusChangeSubscriptionId = this._market.subscribeFeedStatusChangeEvent(
-                    () => this.updateFeedStatusId()
+                    () => { this.updateFeedStatusId(); }
                 );
                 this.updateFeedStatusId();
                 this.processMarketBecameAvailable();

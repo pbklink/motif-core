@@ -4,6 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
+import { ScanFormulaStaticInitialise } from './formula/scan-formula-static-initialise';
 import { ScanModule } from './scan';
 import { ScanEditorModule } from './scan-editor';
 
@@ -12,5 +13,6 @@ export namespace ScanStaticInitialise {
     export function initialise() {
         ScanModule.initialiseStatic();
         ScanEditorModule.initialiseStatic();
+        ScanFormulaStaticInitialise.initialise();
     }
 }

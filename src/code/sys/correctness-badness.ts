@@ -12,14 +12,15 @@ import { CorrectnessRecord } from './correctness-record';
 import { AssertInternalError } from './internal-error';
 import { MultiEvent } from './multi-event';
 
-export abstract class CorrectnessBadness implements CorrectnessRecord {
+export class CorrectnessBadness implements CorrectnessRecord {
     private _badness = Badness.createCopy(Badness.inactive);
     private _correctnessId = CorrectnessId.Suspect;
     private _setGoodBadTransactionId = 0;
     private _good = false;
     private _usable = false;
     private _error = false;
-    private _correctnessChangeMultiEvent = new MultiEvent<CorrectnessBadness.CorrectnessChangedEventHandler>();
+    private _usableChangedMultiEvent = new MultiEvent<CorrectnessBadness.UsableChangedEventHandler>();
+    private _correctnessChangedMultiEvent = new MultiEvent<CorrectnessBadness.CorrectnessChangedEventHandler>();
     private _badnessChangeMultiEvent = new MultiEvent<CorrectnessBadness.BadnessChangeEventHandler>();
 
     get badness() { return this._badness; }
@@ -30,23 +31,7 @@ export abstract class CorrectnessBadness implements CorrectnessRecord {
     get errorText() { return Badness.generateText(this._badness); }
     get incubated() { return this._correctnessId !== CorrectnessId.Suspect; }
 
-    subscribeCorrectnessChangedEvent(handler: CorrectnessBadness.CorrectnessChangedEventHandler) {
-        return this._correctnessChangeMultiEvent.subscribe(handler);
-    }
-
-    unsubscribeCorrectnessChangedEvent(subscriptionId: MultiEvent.SubscriptionId) {
-        this._correctnessChangeMultiEvent.unsubscribe(subscriptionId);
-    }
-
-    subscribeBadnessChangeEvent(handler: CorrectnessBadness.BadnessChangeEventHandler) {
-        return this._badnessChangeMultiEvent.subscribe(handler);
-    }
-
-    unsubscribeBadnessChangeEvent(subscriptionId: MultiEvent.SubscriptionId) {
-        this._badnessChangeMultiEvent.unsubscribe(subscriptionId);
-    }
-
-    protected setBadness(badness: Badness) {
+    setBadness(badness: Badness) {
         if (Badness.isGood(badness)) {
             this.setGood();
         } else {
@@ -78,6 +63,30 @@ export abstract class CorrectnessBadness implements CorrectnessRecord {
         }
     }
 
+    subscribeUsableChangedEvent(handler: CorrectnessBadness.UsableChangedEventHandler) {
+        return this._usableChangedMultiEvent.subscribe(handler);
+    }
+
+    unsubscribeUsableChangedEvent(subscriptionId: MultiEvent.SubscriptionId) {
+        this._usableChangedMultiEvent.unsubscribe(subscriptionId);
+    }
+
+    subscribeCorrectnessChangedEvent(handler: CorrectnessBadness.CorrectnessChangedEventHandler) {
+        return this._correctnessChangedMultiEvent.subscribe(handler);
+    }
+
+    unsubscribeCorrectnessChangedEvent(subscriptionId: MultiEvent.SubscriptionId) {
+        this._correctnessChangedMultiEvent.unsubscribe(subscriptionId);
+    }
+
+    subscribeBadnessChangeEvent(handler: CorrectnessBadness.BadnessChangeEventHandler) {
+        return this._badnessChangeMultiEvent.subscribe(handler);
+    }
+
+    unsubscribeBadnessChangeEvent(subscriptionId: MultiEvent.SubscriptionId) {
+        this._badnessChangeMultiEvent.unsubscribe(subscriptionId);
+    }
+
     protected setUsable(badness: Badness) {
         if (Badness.isUnusable(badness)) {
             throw new AssertInternalError('CBSU129484'); // must always be usable
@@ -101,7 +110,7 @@ export abstract class CorrectnessBadness implements CorrectnessRecord {
     }
 
     protected processUsableChanged() {
-        // available for override
+        this.notifyUsableChanged();
     }
 
     protected processBadnessChange() {
@@ -157,7 +166,14 @@ export abstract class CorrectnessBadness implements CorrectnessRecord {
     }
 
     private notifyCorrectnessChanged(): void {
-        const handlers = this._correctnessChangeMultiEvent.copyHandlers();
+        const handlers = this._correctnessChangedMultiEvent.copyHandlers();
+        for (let i = 0; i < handlers.length; i++) {
+            handlers[i]();
+        }
+    }
+
+    private notifyUsableChanged(): void {
+        const handlers = this._usableChangedMultiEvent.copyHandlers();
         for (let i = 0; i < handlers.length; i++) {
             handlers[i]();
         }
@@ -165,6 +181,7 @@ export abstract class CorrectnessBadness implements CorrectnessRecord {
 }
 
 export namespace CorrectnessBadness {
+    export type UsableChangedEventHandler = (this: void) => void;
     export type CorrectnessChangedEventHandler = (this: void) => void;
     export type BadnessChangeEventHandler = (this: void) => void;
 }

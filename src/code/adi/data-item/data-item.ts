@@ -125,7 +125,7 @@ export abstract class DataItem extends CorrectnessBadness {
             this._active = true;
 
             // Delay so that DataItem events can be bound to
-            this._startDelayHandle = delay1Tick(() => this.start());
+            this._startDelayHandle = delay1Tick(() => { this.start(); });
 
         } finally {
             this.endUpdate();

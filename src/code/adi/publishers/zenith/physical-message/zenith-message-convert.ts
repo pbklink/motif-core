@@ -25,7 +25,6 @@ import { DeleteScanMessageConvert } from './delete-scan-message-convert';
 import { DeleteWatchlistMessageConvert } from './delete-watchlist-message-convert';
 import { DepthLevelsMessageConvert } from './depth-levels-message-convert';
 import { DepthMessageConvert } from './depth-message-convert';
-import { ExecuteScanMessageConvert } from './execute-scan-message-convert';
 import { FeedsMessageConvert } from './feeds-message-convert';
 import { FragmentsMessageConvert } from './fragments-message-convert';
 import { HoldingsMessageConvert } from './holdings-message-convert';
@@ -87,7 +86,6 @@ export namespace ZenithMessageConvert {
             case DataChannelId.QueryScanDetail:         return QueryScanMessageConvert.createRequestMessage(request);
             case DataChannelId.DeleteScan:              return DeleteScanMessageConvert.createRequestMessage(request);
             case DataChannelId.UpdateScan:              return UpdateScanMessageConvert.createRequestMessage(request);
-            case DataChannelId.ExecuteScan:             return ExecuteScanMessageConvert.createRequestMessage(request);
             case DataChannelId.ScanDescriptors:         return ScansMessageConvert.createRequestMessage(request);
             case DataChannelId.LitIvemIdMatches:        return MatchesMessageConvert.createRequestMessage(request);
             case DataChannelId.LitIvemIdCreateWatchmakerList:     return CreateWatchlistMessageConvert.createRequestMessage(request);
@@ -126,8 +124,7 @@ export namespace ZenithMessageConvert {
                 case DataChannelId.BrokerageAccountOrders: return OrdersMessageConvert.parseMessage(subscription, message, actionId);
                 case DataChannelId.BrokerageAccountHoldings: return HoldingsMessageConvert.parseMessage(subscription, message, actionId);
                 case DataChannelId.BrokerageAccountBalances: return BalancesMessageConvert.parseMessage(subscription, message, actionId);
-                case DataChannelId.BrokerageAccountTransactions: return TransactionsMessageConvert.parseMessage(subscription, message,
-                    actionId);
+                case DataChannelId.BrokerageAccountTransactions: return TransactionsMessageConvert.parseMessage(subscription, message, actionId);
                 case DataChannelId.OrderRequests: return OrderRequestsMessageConvert.parseMessage(subscription, message, actionId);
                 case DataChannelId.OrderAudit: return OrderAuditMessageConvert.parseMessage(subscription, message, actionId);
                 case DataChannelId.PlaceOrderRequest: return PlaceOrderMessageConvert.parseMessage(subscription, message, actionId);
@@ -135,6 +132,8 @@ export namespace ZenithMessageConvert {
                 case DataChannelId.CancelOrderRequest: return CancelOrderMessageConvert.parseMessage(subscription, message, actionId);
                 case DataChannelId.MoveOrderRequest: return MoveOrderMessageConvert.parseMessage(subscription, message, actionId);
                 case DataChannelId.CreateScan: return CreateScanMessageConvert.parseMessage(subscription, message, actionId);
+                case DataChannelId.UpdateScan: return UpdateScanMessageConvert.parseMessage(subscription, message, actionId);
+                case DataChannelId.DeleteScan: return DeleteScanMessageConvert.parseMessage(subscription, message, actionId);
                 case DataChannelId.QueryScanDetail: return QueryScanMessageConvert.parseMessage(subscription, message, actionId);
                 case DataChannelId.ScanDescriptors: return ScansMessageConvert.parseMessage(subscription, message, actionId);
                 case DataChannelId.LitIvemIdCreateWatchmakerList: return CreateWatchlistMessageConvert.parseMessage(subscription, message, actionId);
@@ -146,6 +145,7 @@ export namespace ZenithMessageConvert {
                 case DataChannelId.LitIvemIdAddToWatchmakerList: return AddToWatchlistMessageConvert.parseMessage(subscription, message, actionId);
                 case DataChannelId.LitIvemIdInsertIntoWatchmakerList: return InsertIntoWatchlistMessageConvert.parseMessage(subscription, message, actionId);
                 case DataChannelId.MoveInWatchmakerList: return MoveInWatchlistMessageConvert.parseMessage(subscription, message, actionId);
+                case DataChannelId.LitIvemIdMatches: return MatchesMessageConvert.parseMessage(subscription, message, actionId);
                 default:
                     throw new UnexpectedCaseError('MZCCDM113355', subscription.dataDefinition.channelId.toString(10));
             }

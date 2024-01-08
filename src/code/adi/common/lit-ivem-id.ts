@@ -4,11 +4,12 @@
  * License: motionite.trade/license/motif
  */
 
-import { ComparableList, compareString, Err, ErrorCode, JsonElement, Ok, Result } from '../../sys/sys-internal-api';
+import { StringId, Strings } from '../../res/res-internal-api';
+import { ComparableList, EnumInfoOutOfOrderError, Err, ErrorCode, FieldDataTypeId, JsonElement, Mappable, Ok, Result, compareString } from '../../sys/sys-internal-api';
 import { DataEnvironment, DataEnvironmentId, ExchangeId, ExchangeInfo, MarketId, MarketInfo } from './data-types';
 import { IvemId } from './ivem-id';
 
-export class LitIvemId {
+export class LitIvemId implements Mappable {
 
     private _environmentId: DataEnvironmentId;
     // Normally this is left undefined.  If undefined then default Exchange EnvironmentId is used.
@@ -317,4 +318,99 @@ export namespace LitIvemId {
     //     const tryResult = tryGetFromJsonElement(element, name, context);
     //     return (tryResult === undefined) ? defaultValue : tryResult;
     // }
+
+    export const enum FieldId {
+        // eslint-disable-next-line @typescript-eslint/no-shadow
+        LitIvemId,
+        Code,
+        LitId,
+        EnvironmentId,
+    }
+
+    export namespace Field {
+        export type Id = FieldId;
+
+        interface Info {
+            readonly id: FieldId;
+            readonly name: string;
+            readonly dataTypeId: FieldDataTypeId;
+            readonly displayId: StringId;
+            readonly headingId: StringId;
+        }
+
+        type InfosObject = { [id in keyof typeof FieldId]: Info };
+        const infosObject: InfosObject = {
+            LitIvemId: {
+                id: FieldId.LitIvemId,
+                name: 'LitIvemId',
+                dataTypeId: FieldDataTypeId.Object,
+                displayId: StringId.LitIvemIdFieldDisplay_LitIvemId,
+                headingId: StringId.LitIvemIdFieldHeading_LitIvemId,
+            },
+            Code: {
+                id: FieldId.Code,
+                name: 'Code',
+                dataTypeId: FieldDataTypeId.String,
+                displayId: StringId.LitIvemIdFieldDisplay_Code,
+                headingId: StringId.LitIvemIdFieldHeading_Code,
+            },
+            LitId: {
+                id: FieldId.LitId,
+                name: 'LitId',
+                dataTypeId: FieldDataTypeId.Enumeration,
+                displayId: StringId.LitIvemIdFieldDisplay_LitId,
+                headingId: StringId.LitIvemIdFieldHeading_LitId,
+            },
+            EnvironmentId: {
+                id: FieldId.EnvironmentId,
+                name: 'EnvironmentId',
+                dataTypeId: FieldDataTypeId.Enumeration,
+                displayId: StringId.LitIvemIdFieldDisplay_EnvironmentId,
+                headingId: StringId.LitIvemIdFieldHeading_EnvironmentId,
+            },
+        } as const;
+
+        const infos = Object.values(infosObject);
+        export const idCount = infos.length;
+
+        export function initialise() {
+            for (let id = 0; id < idCount; id++) {
+                const info = infos[id];
+                if (info.id !== id as FieldId) {
+                    throw new EnumInfoOutOfOrderError('LitIvemId.FieldId', id, idToName(id));
+                }
+            }
+        }
+
+        export function idToName(id: Id) {
+            return infos[id].name;
+        }
+
+        export function idToFieldDataTypeId(id: Id) {
+            return infos[id].dataTypeId;
+        }
+
+        export function idToDisplayId(id: Id) {
+            return infos[id].displayId;
+        }
+
+        export function idToDisplay(id: Id) {
+            return Strings[idToDisplayId(id)];
+        }
+
+        export function idToHeadingId(id: Id) {
+            return infos[id].headingId;
+        }
+
+        export function idToHeading(id: Id) {
+            return Strings[idToHeadingId(id)];
+        }
+    }
+}
+
+/** @internal */
+export namespace LitIvemIdModule {
+    export function initialiseStatic() {
+        LitIvemId.Field.initialise();
+    }
 }

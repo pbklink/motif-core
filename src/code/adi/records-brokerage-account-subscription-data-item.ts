@@ -47,6 +47,10 @@ export abstract class RecordsBrokerageAccountSubscriptionDataItem<Record extends
         return this._records[recordIndex];
     }
 
+    toArray(): readonly Record[] {
+        return this._records;
+    }
+
     getRecordByMapKey(mapKey: MapKey) {
         return this._recordsMap.get(mapKey);
     }

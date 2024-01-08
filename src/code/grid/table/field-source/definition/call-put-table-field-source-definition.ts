@@ -182,6 +182,19 @@ export namespace CallPutTableFieldSourceDefinition {
         }
     }
 
+    export interface FieldId extends TableFieldSourceDefinition.FieldId {
+        id: CallPut.FieldId;
+        sourceTypeId: TableFieldSourceDefinition.TypeId.CallPut;
+    }
+
+    // export interface CallFieldId extends CallPutFieldId {
+    //     sourceTypeId: TableFieldSourceDefinition.TypeId.CallSecurityDataItem;
+    // }
+
+    // export interface PutFieldId extends CallPutFieldId {
+    //     sourceTypeId: TableFieldSourceDefinition.TypeId.PutSecurityDataItem;
+    // }
+
     export function initialiseStatic() {
         Field.initialiseFieldStatic();
     }

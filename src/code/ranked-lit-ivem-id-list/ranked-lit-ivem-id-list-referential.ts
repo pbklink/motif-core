@@ -5,14 +5,14 @@
  */
 
 import { AdiService } from '../adi/adi-internal-api';
-import { ScansService } from '../scan/scan-internal-api';
+import { ScansService } from '../scan/internal-api';
 import { AssertInternalError, ErrorCode, Guid, IndexedRecord, Integer, LockOpenListItem, LockOpenManager, MapKey, Ok, Result, UnexpectedCaseError } from "../sys/sys-internal-api";
 import { WatchmakerService } from '../watchmaker/watchmaker-service';
-import { JsonRankedLitIvemIdListDefinition, RankedLitIvemIdListDefinition, ScanMatchesRankedLitIvemIdListDefinition, WatchmakerRankedLitIvemIdListDefinition } from "./definition/ranked-lit-ivem-id-list-definition-internal-api";
-import { JsonScoredRankedLitIvemIdList } from './json-scored-ranked-lit-ivem-id-list';
-import { ScanMatchesScoredRankedLitIvemIdList } from './scan-matches-scored-ranked-lit-ivem-id-list';
-import { ScoredRankedLitIvemIdList } from './scored-ranked-lit-ivem-id-list';
-import { WatchmakerScoredRankedLitIvemIdList } from './watchmaker-scored-ranked-lit-ivem-id-list';
+import { BaseRankedLitIvemIdList } from './base-ranked-lit-ivem-id-list';
+import { LitIvemIdArrayRankedLitIvemIdListDefinition, RankedLitIvemIdListDefinition, ScanIdRankedLitIvemIdListDefinition, WatchmakerListIdRankedLitIvemIdListDefinition } from "./definition/ranked-lit-ivem-id-list-definition-internal-api";
+import { LitIvemIdArrayRankedLitIvemIdList } from './lit-ivem-id-array-ranked-lit-ivem-id-list';
+import { ScanIdRankedLitIvemIdList } from './scan-id-ranked-lit-ivem-id-list';
+import { WatchmakerListIdRankedLitIvemIdList } from './watchmaker-list-id-ranked-lit-ivem-id-list';
 
 export class RankedLitIvemIdListReferential implements LockOpenListItem<RankedLitIvemIdListReferential>, IndexedRecord {
     readonly id: Guid;
@@ -26,7 +26,7 @@ export class RankedLitIvemIdListReferential implements LockOpenListItem<RankedLi
     private readonly _lockOpenManager: LockOpenManager<RankedLitIvemIdListReferential>;
 
     private _unlockedDefinition: RankedLitIvemIdListDefinition | undefined;
-    private _lockedList: ScoredRankedLitIvemIdList | undefined;
+    private _lockedList: BaseRankedLitIvemIdList | undefined;
 
     constructor(
         private readonly _adiService: AdiService,
@@ -154,27 +154,34 @@ export class RankedLitIvemIdListReferential implements LockOpenListItem<RankedLi
         this._becameDirtyEventer();
     }
 
-    private createList(definition: RankedLitIvemIdListDefinition): ScoredRankedLitIvemIdList {
+    private createList(definition: RankedLitIvemIdListDefinition): BaseRankedLitIvemIdList {
         switch (this.typeId) {
-            case RankedLitIvemIdListDefinition.TypeId.Json: {
-                if (!(definition instanceof JsonRankedLitIvemIdListDefinition)) {
+            case RankedLitIvemIdListDefinition.TypeId.LitIvemIdArray: {
+                if (!(definition instanceof LitIvemIdArrayRankedLitIvemIdListDefinition)) {
                     throw new AssertInternalError('RLIILRTPFLJ20281');
                 } else {
-                    return new JsonScoredRankedLitIvemIdList(definition);
+                    return new LitIvemIdArrayRankedLitIvemIdList(definition);
                 }
             }
-            case RankedLitIvemIdListDefinition.TypeId.Watchmaker: {
-                if (!(definition instanceof WatchmakerRankedLitIvemIdListDefinition)) {
+            case RankedLitIvemIdListDefinition.TypeId.WatchmakerListId: {
+                if (!(definition instanceof WatchmakerListIdRankedLitIvemIdListDefinition)) {
                     throw new AssertInternalError('RLIILRTPFLW20281');
                 } else {
-                    return new WatchmakerScoredRankedLitIvemIdList(this._watchmakerService, definition);
+                    return new WatchmakerListIdRankedLitIvemIdList(this._watchmakerService, definition);
                 }
             }
-            case RankedLitIvemIdListDefinition.TypeId.ScanMatches: {
-                if (!(definition instanceof ScanMatchesRankedLitIvemIdListDefinition)) {
+            case RankedLitIvemIdListDefinition.TypeId.ScanId: {
+                if (!(definition instanceof ScanIdRankedLitIvemIdListDefinition)) {
                     throw new AssertInternalError('RLIILRTPFLSM20281');
                 } else {
-                    return new ScanMatchesScoredRankedLitIvemIdList(this._adiService, this._scansService, definition);
+                    return new ScanIdRankedLitIvemIdList(this._adiService, this._scansService, definition);
+                }
+            }
+            case RankedLitIvemIdListDefinition.TypeId.LitIvemIdExecuteScan: {
+                if (!(definition instanceof ScanIdRankedLitIvemIdListDefinition)) {
+                    throw new AssertInternalError('RLIILRTPFLSM20281');
+                } else {
+                    return new ScanIdRankedLitIvemIdList(this._adiService, this._scansService, definition);
                 }
             }
             default: {

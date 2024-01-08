@@ -491,10 +491,9 @@ export class DepthLevelsDataItem extends MarketSubscriptionDataItem {
                         recentChangeTypeId,
                     };
                 }
-                const oldVolume = msgLevel.volume;
                 const newVolume = msgLevel.volume;
-                if (oldVolume !== newVolume) {
-                    const recentChangeTypeId = ValueRecentChangeType.calculateChangeTypeId(oldVolume, newVolume);
+                if (level.volume !== newVolume) {
+                    const recentChangeTypeId = ValueRecentChangeType.calculateChangeTypeId(level.volume, newVolume);
                     level.volume = newVolume;
                     valueChanges[count++] = {
                         fieldId: DepthLevelsDataItem.Level.Field.Id.Volume,

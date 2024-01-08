@@ -91,7 +91,7 @@ export class ZenithPublisherSubscriptionManager extends AdiPublisherSubscription
     // subsequent calls. This allows the request engine to throttle the outgoing packets if required.
     protected sendPackets(nowTickTime: SysTick.Time, sendQueue: AdiPublisherSubscriptionManager.SendQueue, count: number) {
         for (let index = 0; index < count; index++) {
-            const request = sendQueue.getItem(index);
+            const request = sendQueue.getAt(index);
             const subscription = request.subscription;
 
             if (!subscription.resendAllowed && subscription.beenSentAtLeastOnce) {

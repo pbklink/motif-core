@@ -243,7 +243,6 @@ export namespace SymbolsMessageConvert {
             ? undefined
             : ZenithConvert.SymbolConditionMatch.fromIds(condition.matchIds);
 
-        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
         const group = condition.group === undefined ? '--Common%%' : condition.group;
 
         const result: ZenithProtocol.MarketController.SearchSymbols.Condition = {

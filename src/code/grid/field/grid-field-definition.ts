@@ -4,8 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertError } from 'revgrid';
-import { CommaText, GridFieldHorizontalAlign, Integer } from '../../sys/sys-internal-api';
+import { AssertInternalError, CommaText, GridFieldHorizontalAlign, Integer } from '../../sys/sys-internal-api';
 import { GridFieldSourceDefinition } from './grid-field-source-definition';
 
 export class GridFieldDefinition {
@@ -24,18 +23,22 @@ export class GridFieldDefinition {
 
 export namespace GridFieldDefinition {
     export function composeName(sourceName: string, sourcelessName: string) {
-        return CommaText.from2Values(sourceName, sourcelessName);
+        if (sourceName === '') {
+            return sourcelessName; // for RowDataArrayGrid
+        } else {
+            return CommaText.from2Values(sourceName, sourcelessName);
+        }
     }
 
     export type DecomposedName = [sourceName: string, sourcelessName: string];
     export function decomposeName(name: string) {
         const toResult = CommaText.tryToStringArray(name, true);
         if (toResult.isErr()) {
-            throw new AssertError('GFDDNE30361', toResult.error);
+            throw new AssertInternalError('GFDDNE30361', toResult.error);
         } else {
             const result = toResult.value;
             if (result.length !== 2) {
-                throw new AssertError('GFDDNL30361', result.length.toString());
+                throw new AssertInternalError('GFDDNL30361', result.length.toString());
             } else {
                 return result as DecomposedName;
             }

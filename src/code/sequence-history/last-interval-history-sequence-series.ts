@@ -27,7 +27,7 @@ export class LastIntervalHistorySequenceSeries extends IntervalHistorySequenceSe
             (index) => this.handlePointUpdatedEvent(index)
         );
         this._emptyIntervalsInsertedEventSubscriptionId = this.intervalSequencer.subscribeEmptyIntervalsInsertedEvent(
-            (index, count) => this.handleEmptyIntervalsInsertedEvent(index, count)
+            (index, count) => { this.handleEmptyIntervalsInsertedEvent(index, count); }
         );
     }
 
@@ -43,7 +43,7 @@ export class LastIntervalHistorySequenceSeries extends IntervalHistorySequenceSe
     }
 
     getNumberPoint(idx: Integer) {
-        return this.points.getItem(idx);
+        return this.points.getAt(idx);
     }
 
     stageOhlcTick(tickDateTime: Date, tickDateTimeRepeatCount: Integer,
@@ -130,7 +130,7 @@ export class LastIntervalHistorySequenceSeries extends IntervalHistorySequenceSe
     }
 
     private insertPointFromStagedTick(index: Integer, tick: LastIntervalHistorySequenceSeries.StagedTick) {
-        const sequencerPoint = this.sequencerPoints.getItem(index);
+        const sequencerPoint = this.sequencerPoints.getAt(index);
         const tickDateTime = tick.tickDateTime;
         const closeDateTimeComparisonResult = compareDate(tickDateTime, sequencerPoint.utcDate);
         if (closeDateTimeComparisonResult === ComparisonResult.LeftGreaterThanRight) {
@@ -166,7 +166,7 @@ export class LastIntervalHistorySequenceSeries extends IntervalHistorySequenceSe
 
 
     private updatePointFromStagedTick(index: Integer, tick: LastIntervalHistorySequenceSeries.StagedTick) {
-        const point = this.points.getItem(index);
+        const point = this.points.getAt(index);
         const tickValue = tick.value;
         if (tickValue === undefined) {
             if (!point.null) {
@@ -178,7 +178,7 @@ export class LastIntervalHistorySequenceSeries extends IntervalHistorySequenceSe
             }
             return false;
         } else {
-            const sequencerPoint = this.sequencerPoints.getItem(index);
+            const sequencerPoint = this.sequencerPoints.getAt(index);
             const tickDateTime = tick.tickDateTime;
             const tickDateTimeRepeatCount = tick.tickDateTimeRepeatCount;
             const nextIntervalStartComparisonResult = compareDate(tickDateTime, sequencerPoint.utcDate);

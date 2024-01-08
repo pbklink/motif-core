@@ -13,12 +13,12 @@ import { DataItemModule } from './data-item/internal-api';
 import { DayTradesDataItemModule } from './day-trades-data-item';
 import { FeedModule } from './feed/internal-api';
 import { HoldingModule } from './holding';
-import { LitIvemDetailModule } from './lit-ivem-detail';
-import { FullLitIvemDetailModule } from './lit-ivem-full-detail';
 import { OrderModule } from './order';
 import { PublisherSubscriptionDataItemModule } from './publish-subscribe/internal-api';
 import { PublishersStaticInitialise } from './publishers/adi-publishers-internal-api';
 import { ScanDescriptorModule } from './scan/scan-statused-descriptor';
+import { LitIvemDetailModule } from './search-symbols-lit-ivem-base-detail';
+import { FullLitIvemDetailModule } from './search-symbols-lit-ivem-full-detail';
 import { SecurityDataItemModule } from './security-data-item';
 import { WatchmakerListDescriptorModule } from './watchmaker/watchmaker-list-descriptor';
 

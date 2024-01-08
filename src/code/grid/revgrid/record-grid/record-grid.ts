@@ -7,6 +7,7 @@
 import {
     Column,
     ColumnsManager,
+    DataServer,
     DatalessSubgrid,
     LinedHoverCell,
     ListChangedTypeId,
@@ -19,7 +20,7 @@ import {
     Subgrid,
     ViewCell
 } from 'revgrid';
-import { SettingsService } from '../../../settings/settings-internal-api';
+import { SettingsService } from '../../../services/services-internal-api';
 import {
     AssertInternalError,
     Integer,
@@ -49,6 +50,7 @@ export class RecordGrid extends AdaptedRevgrid implements GridLayout.ChangeIniti
     mainClickEventer: RecordGrid.MainClickEventer | undefined;
     mainDblClickEventer: RecordGrid.MainDblClickEventer | undefined;
     selectionChangedEventer: RecordGrid.SelectionChangedEventer | undefined;
+    dataServersRowListChangedEventer: RecordGrid.DataServersRowListChangedEventer | undefined;
 
     private _gridLayout: GridLayout | undefined;
     private _allowedFields: readonly GridField[] | undefined;
@@ -146,6 +148,7 @@ export class RecordGrid extends AdaptedRevgrid implements GridLayout.ChangeIniti
         }
     }
 
+    get mainRowCount(): number { return this.mainDataServer.getRowCount(); }
     get headerRowCount(): number { return this.headerDataServer.getRowCount(); }
     get isFiltered(): boolean { return this.mainDataServer.isFiltered; }
     get gridRightAligned(): boolean { return this.settings.gridRightAligned; }
@@ -215,7 +218,7 @@ export class RecordGrid extends AdaptedRevgrid implements GridLayout.ChangeIniti
                 }
             );
             this._gridLayoutWidthsChangedSubscriptionId = this._gridLayout.subscribeWidthsChangedEvent(
-                (initiator) => this.processGridLayoutWidthsChangedEvent(initiator)
+                (initiator) => { this.processGridLayoutWidthsChangedEvent(initiator); }
             );
 
             this.processGridLayoutChangedEvent(GridLayout.forceChangeInitiator);
@@ -470,6 +473,12 @@ export class RecordGrid extends AdaptedRevgrid implements GridLayout.ChangeIniti
         }
     }
 
+    protected override descendantProcessDataServersRowListChanged(dataServers: DataServer<GridField>[]) {
+        if (this.dataServersRowListChangedEventer !== undefined) {
+            this.dataServersRowListChangedEventer(dataServers);
+        }
+    }
+
     protected override applySettings() {
         const result = super.applySettings();
 
@@ -604,5 +613,6 @@ export namespace RecordGrid {
     export type MainClickEventer = (this: void, fieldIndex: RevRecordFieldIndex, recordIndex: RevRecordIndex) => void;
     export type MainDblClickEventer = (this: void, fieldIndex: RevRecordFieldIndex, recordIndex: RevRecordIndex) => void;
     export type SelectionChangedEventer = (this: void) => void;
+    export type DataServersRowListChangedEventer = (this: void, dataServers: DataServer<GridField>[]) => void;
     export type FieldSortedEventer = (this: void) => void;
 }

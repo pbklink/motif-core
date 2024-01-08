@@ -163,6 +163,11 @@ export namespace RankedLitIvemIdListDirectoryItemTableFieldSourceDefinition {
         }
     }
 
+    export interface FieldId extends TableFieldSourceDefinition.FieldId {
+        sourceTypeId: TableFieldSourceDefinition.TypeId.RankedLitIvemIdListDirectoryItem;
+        id: RankedLitIvemIdListDirectoryItem.FieldId;
+    }
+
     export function initialiseStatic() {
         Field.initialise();
     }

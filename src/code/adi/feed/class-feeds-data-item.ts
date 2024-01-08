@@ -56,10 +56,10 @@ export class ClassFeedsDataItem extends DataItem {
         this._allFeedsDataItem = this.subscribeDataItem(feedsDefinition) as FeedsDataItem;
 
         this._allBadnessChangeSubscriptionId = this._allFeedsDataItem.subscribeBadnessChangeEvent(
-            () => this.handleAllBadnessChangeEvent()
+            () => { this.handleAllBadnessChangeEvent(); }
         );
         this._allListChangeSubscriptionId = this._allFeedsDataItem.subscribeListChangeEvent(
-            (listChangeTypeId, index, count) => this.handleAllListChangeEvent(listChangeTypeId, index, count)
+            (listChangeTypeId, index, count) => { this.handleAllListChangeEvent(listChangeTypeId, index, count); }
         );
 
         if (this._allFeedsDataItem.usable) {
@@ -144,6 +144,10 @@ export class ClassFeedsDataItem extends DataItem {
                 throw new AssertInternalError('CFDIPALCBR19662', this.definition.description);
             case UsableListChangeTypeId.AfterReplace:
                 throw new AssertInternalError('CFDIPALCAR19662', this.definition.description);
+            case UsableListChangeTypeId.BeforeMove:
+                throw new AssertInternalError('CFDIPALCBM19662', this.definition.description);
+            case UsableListChangeTypeId.AfterMove:
+                throw new AssertInternalError('CFDIPALCAM19662', this.definition.description);
             case UsableListChangeTypeId.Remove:
                 throw new AssertInternalError('CFDIPALCRM19662', this.definition.description);
             case UsableListChangeTypeId.Clear:

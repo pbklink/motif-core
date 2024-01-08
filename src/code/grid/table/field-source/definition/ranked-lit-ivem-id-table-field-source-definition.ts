@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { RankedLitIvemId } from '../../../../ranked-lit-ivem-id-list/ranked-lit-ivem-id-list-internal-api';
+import { RankedLitIvemId } from '../../../../adi/adi-internal-api';
 import {
     AssertInternalError,
     CommaText,
@@ -16,12 +16,14 @@ import {
 import {
     CorrectnessTableField,
     IntegerCorrectnessTableField,
+    LitIvemIdCorrectnessTableField,
     NumberCorrectnessTableField,
     TableField
 } from "../../field/grid-table-field-internal-api";
 import {
     CorrectnessTableValue,
     IntegerCorrectnessTableValue,
+    LitIvemIdCorrectnessTableValue,
     NumberCorrectnessTableValue
 } from "../../value/grid-table-value-internal-api";
 import { TableFieldSourceDefinition } from './table-field-source-definition';
@@ -97,9 +99,11 @@ export namespace RankedLitIvemIdTableFieldSourceDefinition {
         function idToTableGridConstructors(id: RankedLitIvemId.FieldId):
             TableFieldSourceDefinition.CorrectnessTableGridConstructors {
             switch (id) {
+                case RankedLitIvemId.FieldId.LitIvemId:
+                    return [LitIvemIdCorrectnessTableField, LitIvemIdCorrectnessTableValue];
                 case RankedLitIvemId.FieldId.Rank:
                     return [IntegerCorrectnessTableField, IntegerCorrectnessTableValue];
-                case RankedLitIvemId.FieldId.rankScore:
+                case RankedLitIvemId.FieldId.RankScore:
                     return [NumberCorrectnessTableField, NumberCorrectnessTableValue];
                 default:
                     throw new UnreachableCaseError('RLIITFSDFITTGC12049', id);
@@ -159,6 +163,11 @@ export namespace RankedLitIvemIdTableFieldSourceDefinition {
                 }
             }
         }
+    }
+
+    export interface FieldId extends TableFieldSourceDefinition.FieldId {
+        sourceTypeId: TableFieldSourceDefinition.TypeId.RankedLitIvemId;
+        id: RankedLitIvemId.FieldId;
     }
 
     export function initialiseStatic() {

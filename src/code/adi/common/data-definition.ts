@@ -34,7 +34,7 @@ import { OrderDetails } from './order-details';
 import { OrderRoute } from './order-route';
 import { OrderTrigger } from './order-trigger';
 import { ScanNotification } from './scan-types';
-import { ZenithProtocolScanCriteria } from './zenith-protocol/internal-api';
+import { ZenithEncodedScanFormula } from './zenith-protocol/internal-api';
 
 export abstract class DataDefinition {
     private static _lastConstructedId = 0;
@@ -1218,13 +1218,15 @@ export class CreateScanDataDefinition extends FeedSubscriptionDataDefinition {
     versionId: Guid;
     versioningInterrupted: boolean;
     lastSavedTime: Date;
+    lastEditSessionId: Guid;
+    zenithCriteriaSource: string | undefined;
+    zenithRankSource: string | undefined;
     symbolListEnabled: boolean;
     targetTypeId: ScanTargetTypeId;
-    targetMarketIds: readonly MarketId[] | undefined;
-    targetLitIvemIds: readonly LitIvemId[] | undefined;
-    maxMatchCount: Integer;
-    zenithCriteria: ZenithProtocolScanCriteria.BooleanTupleNode;
-    zenithRank: ZenithProtocolScanCriteria.NumericTupleNode;
+    targets: readonly MarketId[] | readonly LitIvemId[];
+    maxMatchCount: Integer | undefined;
+    zenithCriteria: ZenithEncodedScanFormula.BooleanTupleNode;
+    zenithRank: ZenithEncodedScanFormula.NumericTupleNode | undefined;
     notifications: readonly ScanNotification[] | undefined;
 
     constructor() {
@@ -1247,7 +1249,7 @@ export class QueryScanDetailDataDefinition extends FeedSubscriptionDataDefinitio
 }
 
 export class DeleteScanDataDefinition extends FeedSubscriptionDataDefinition {
-    id: string;
+    scanId: string;
 
     constructor() {
         super(DataChannelId.DeleteScan);
@@ -1265,12 +1267,15 @@ export class UpdateScanDataDefinition extends FeedSubscriptionDataDefinition {
     versionId: Guid;
     versioningInterrupted: boolean;
     lastSavedTime: Date;
+    lastEditSessionId: Guid;
     symbolListEnabled: boolean;
-    zenithCriteria: ZenithProtocolScanCriteria.BooleanTupleNode;
-    zenithRank: ZenithProtocolScanCriteria.NumericTupleNode;
+    zenithCriteriaSource: string | undefined;
+    zenithRankSource: string | undefined;
+    zenithCriteria: ZenithEncodedScanFormula.BooleanTupleNode;
+    zenithRank: ZenithEncodedScanFormula.NumericTupleNode | undefined;
     targetTypeId: ScanTargetTypeId;
-    targetMarketIds: readonly MarketId[] | undefined;
-    targetLitIvemIds: readonly LitIvemId[] | undefined;
+    targets: readonly MarketId[] | readonly LitIvemId[];
+    maxMatchCount: Integer | undefined;
     notifications: readonly ScanNotification[] | undefined;
 
     constructor() {
@@ -1281,19 +1286,21 @@ export class UpdateScanDataDefinition extends FeedSubscriptionDataDefinition {
     get referencable(): boolean { return false; }
 }
 
-export class ExecuteScanDataDefinition extends FeedSubscriptionDataDefinition {
-    zenithCriteria: ZenithProtocolScanCriteria.BooleanTupleNode;
-    zenithRank: ZenithProtocolScanCriteria.NumericTupleNode;
+export abstract class ExecuteScanDataDefinition extends FeedSubscriptionDataDefinition {
+    zenithCriteria: ZenithEncodedScanFormula.BooleanTupleNode;
+    zenithRank: ZenithEncodedScanFormula.NumericTupleNode | undefined;
     targetTypeId: ScanTargetTypeId;
-    targetMarketIds: readonly MarketId[] | undefined;
-    targetLitIvemIds: readonly LitIvemId[] | undefined;
-
-    constructor() {
-        super(DataChannelId.ExecuteScan);
-    }
+    targets: readonly MarketId[] | readonly LitIvemId[];
+    maxMatchCount: Integer | undefined;
 
     // eslint-disable-next-line @typescript-eslint/class-literal-property-style
     get referencable(): boolean { return false; }
+}
+
+export class LitIvemIdExecuteScanDataDefinition extends ExecuteScanDataDefinition {
+    constructor() {
+        super(DataChannelId.LitIvemIdMatches);
+    }
 }
 
 export class ScanDescriptorsDataDefinition extends FeedSubscriptionDataDefinition {

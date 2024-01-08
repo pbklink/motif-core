@@ -6,7 +6,9 @@
 
 export * from './authorisations';
 export * from './badness';
+export * from './badness-comparable-list';
 export * from './badness-list';
+export * from './change-subscribable-comparable-list';
 export * from './comma-text';
 export * from './comparable-list';
 export * from './correctness';
@@ -41,6 +43,9 @@ export * from './record-list';
 export * from './resource-badness';
 export * from './result';
 export * from './service-operator';
+export * from './ui-badness-comparable-list';
+export * from './usable-list';
+export * from './usable-list-change-type';
 // export * from './Scheduler';
 export * from './source-tz-offset-date';
 export * from './source-tz-offset-date-time';

@@ -19,6 +19,7 @@ import {
     ResourceBadness,
     Result,
     UnreachableCaseError,
+    UsableListChangeType,
     UsableListChangeTypeId,
     removeFromArray
 } from '../sys/sys-internal-api';
@@ -67,6 +68,10 @@ export class RankedLitIvemIdListDirectory extends CorrectnessBadness implements 
 
     getAt(index: Integer) {
         return this._itemList.getAt(index);
+    }
+
+    toArray(): readonly RankedLitIvemIdListDirectoryItem[] {
+        return this._itemList.toArray();
     }
 
     open() {
@@ -141,6 +146,18 @@ export class RankedLitIvemIdListDirectory extends CorrectnessBadness implements 
             case UsableListChangeTypeId.AfterReplace:
                 if (source.list.usable) {
                     this.enqueueSourceRecordRangeListChangeAndProcess(RankedLitIvemIdListDirectory.ListChangeQueue.Change.TypeId.InsertSourceRange, source, idx, count);
+                }
+                break;
+            case UsableListChangeTypeId.BeforeMove:
+                if (source.list.usable) {
+                    const { fromIndex, toIndex: ignoredToIndex, count: moveCount } = UsableListChangeType.getMoveParameters(idx); // idx is actually move parameters registration index
+                    this.enqueueSourceRecordRangeListChangeAndProcess(RankedLitIvemIdListDirectory.ListChangeQueue.Change.TypeId.RemoveSourceRange, source, fromIndex, moveCount);
+                }
+                break;
+            case UsableListChangeTypeId.AfterMove:
+                if (source.list.usable) {
+                    const { fromIndex: ignoredFromIndex, toIndex, count: moveCount } = UsableListChangeType.getMoveParameters(idx); // idx is actually move parameters registration index
+                    this.enqueueSourceRecordRangeListChangeAndProcess(RankedLitIvemIdListDirectory.ListChangeQueue.Change.TypeId.InsertSourceRange, source, toIndex, moveCount);
                 }
                 break;
             case UsableListChangeTypeId.Remove:

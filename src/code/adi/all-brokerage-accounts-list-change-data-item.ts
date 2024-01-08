@@ -21,10 +21,10 @@ export abstract class AllBrokerageAccountsListChangeDataItem extends DataItem {
         const accountDataDefinition = new BrokerageAccountsDataDefinition();
         this._accountsDataItem = this.subscribeDataItem(accountDataDefinition) as BrokerageAccountsDataItem;
         this._accountsBadnessChangeSubscriptionId = this._accountsDataItem.subscribeBadnessChangeEvent(
-            () => this.handleAccountsBadnessChangeEvent()
+            () => { this.handleAccountsBadnessChangeEvent(); }
         );
         this._accountsListChangeSubscriptionId = this._accountsDataItem.subscribeListChangeEvent(
-            (listChangeType, index, count) => this.handleAccountsListChangeEvent(listChangeType, index, count)
+            (listChangeType, index, count) => { this.handleAccountsListChangeEvent(listChangeType, index, count); }
         );
 
         if (this._accountsDataItem.usable) {
@@ -100,6 +100,10 @@ export abstract class AllBrokerageAccountsListChangeDataItem extends DataItem {
                 throw new AssertInternalError('ABALCDIPALCBR30911', this.definition.description);
             case UsableListChangeTypeId.AfterReplace:
                 throw new AssertInternalError('ABALCDIPALCAR30911', this.definition.description);
+            case UsableListChangeTypeId.BeforeMove:
+                throw new AssertInternalError('ABALCDIPALCBM30911', this.definition.description);
+            case UsableListChangeTypeId.AfterMove:
+                throw new AssertInternalError('ABALCDIPALCAM30911', this.definition.description);
             case UsableListChangeTypeId.Remove:
                 throw new AssertInternalError('ABADRDIPALCR30911', this.definition.description);
             case UsableListChangeTypeId.Clear: {

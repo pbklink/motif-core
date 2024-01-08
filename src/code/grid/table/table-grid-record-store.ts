@@ -27,6 +27,7 @@ export class TableGridRecordStore implements GridRecordStore {
     private _recordsLoadedSubscriptionId: MultiEvent.SubscriptionId;
     private _recordsInsertedSubscriptionId: MultiEvent.SubscriptionId;
     private _recordsReplacedSubscriptionId: MultiEvent.SubscriptionId;
+    private _recordsMovedSubscriptionId: MultiEvent.SubscriptionId;
     private _recordsDeletedSubscriptionId: MultiEvent.SubscriptionId;
     private _recordValuesChangedSubscriptionId: MultiEvent.SubscriptionId;
     private _recordSequentialFieldValuesChangedSubscriptionId: MultiEvent.SubscriptionId;
@@ -110,6 +111,9 @@ export class TableGridRecordStore implements GridRecordStore {
         this._recordsReplacedSubscriptionId = table.subscribeRecordsReplacedEvent(
             (index, count) => { this._recordsEventers.recordsReplaced(index, count); }
         );
+        this._recordsMovedSubscriptionId = table.subscribeRecordsMovedEvent(
+            (fromIndex, toIndex, count) => { this._recordsEventers.recordsMoved(fromIndex, toIndex, count); }
+        );
         this._recordsDeletedSubscriptionId = table.subscribeRecordsDeletedEvent(
             (index, count) => { this._recordsEventers.recordsDeleted(index, count); }
         );
@@ -133,6 +137,8 @@ export class TableGridRecordStore implements GridRecordStore {
         this._recordsInsertedSubscriptionId = undefined;
         table.unsubscribeRecordsReplacedEvent(this._recordsReplacedSubscriptionId);
         this._recordsReplacedSubscriptionId = undefined;
+        table.unsubscribeRecordsMovedEvent(this._recordsMovedSubscriptionId);
+        this._recordsMovedSubscriptionId = undefined;
         table.unsubscribeRecordsDeletedEvent(this._recordsDeletedSubscriptionId);
         this._recordsDeletedSubscriptionId = undefined;
         table.unsubscribeRecordValuesChangedEvent(this._recordValuesChangedSubscriptionId);

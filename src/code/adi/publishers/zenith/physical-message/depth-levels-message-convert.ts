@@ -66,7 +66,7 @@ export namespace DepthLevelsMessageConvert {
 
     export function parseMessage(subscription: AdiPublisherSubscription, message: ZenithProtocol.MessageContainer,
         actionId: ZenithConvert.MessageContainer.Action.Id): DataMessage {
-        assert(message.Controller === 'Market', 'ID:3422111853');
+        assert(message.Controller === 'Market' as ZenithProtocol.MessageContainer.Controller, 'ID:3422111853');
         // eslint-disable-next-line @typescript-eslint/prefer-optional-chain, @typescript-eslint/no-unnecessary-condition
         assert((message.Topic !== undefined && message.Topic.startsWith('Levels!')), 'ID:3522111822');
 

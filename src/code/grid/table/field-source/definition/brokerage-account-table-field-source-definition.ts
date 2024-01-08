@@ -165,6 +165,11 @@ export namespace BrokerageAccountTableFieldSourceDefinition {
         }
     }
 
+    export interface FieldId extends TableFieldSourceDefinition.FieldId {
+        sourceTypeId: TableFieldSourceDefinition.TypeId.BrokerageAccounts;
+        id: Account.FieldId;
+    }
+
     export function initialiseStatic() {
         Field.initialiseFieldStatic();
     }

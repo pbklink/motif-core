@@ -15,6 +15,7 @@ export * from './holding-table-field-source-definition';
 export * from './lit-ivem-alternate-codes-table-field-source-definition';
 export * from './lit-ivem-base-detail-table-field-source-definition';
 export * from './lit-ivem-extended-detail-table-field-source-definition';
+export * from './lit-ivem-id-table-field-source-definition';
 export * from './myx-lit-ivem-attributes-table-field-source-definition';
 export * from './order-table-field-source-definition';
 export * from './prefixable-security-data-item-table-field-source-definition';

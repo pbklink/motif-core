@@ -11,7 +11,7 @@
   },
   "include": [
     "*.ts",
-    "../lit-ivem-id-record.ts",
+    "../lit-ivem-id-keyed-correctness-list-item.ts",
   ],
 
   "references": [

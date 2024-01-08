@@ -149,4 +149,13 @@ export namespace GridFieldTableFieldSourceDefinition {
             return constructors[1];
         }
     }
+
+    export interface FieldId extends TableFieldSourceDefinition.FieldId {
+        sourceTypeId: TableFieldSourceDefinition.TypeId.GridField;
+        id: GridField.FieldId;
+    }
+
+    export function initialiseStatic() {
+        Field.initialise();
+    }
 }

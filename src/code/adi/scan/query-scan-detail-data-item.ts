@@ -5,13 +5,13 @@
  */
 
 import { DataMessage, DataMessageTypeId, QueryScanDetailDataMessage } from '../common/adi-common-internal-api';
-import { ScanDetail } from './scan-detail';
+import { ScanDescriptorAndDetail } from './scan-descriptor-and-detail';
 import { ScanPublishDataItem } from './scan-publish-data-item';
 
 export class QueryScanDetailDataItem extends ScanPublishDataItem {
-    private _detail: ScanDetail;
+    private _descriptorAndDetail: ScanDescriptorAndDetail;
 
-    get detail() { return this._detail; }
+    get descriptorAndDetail() { return this._descriptorAndDetail; }
 
     override processMessage(msg: DataMessage) {
         if (msg.typeId !== DataMessageTypeId.QueryScanDetail) {
@@ -29,7 +29,7 @@ export class QueryScanDetailDataItem extends ScanPublishDataItem {
     }
 
     private processMessage_QueryScanDetailResponse(msg: QueryScanDetailDataMessage) {
-        this._detail = {
+        this._descriptorAndDetail = {
             id: msg.scanId,
             name: msg.scanName,
             description: msg.scanDescription,
@@ -39,7 +39,10 @@ export class QueryScanDetailDataItem extends ScanPublishDataItem {
             versionId: msg.versionId,
             versioningInterrupted: msg.versioningInterrupted,
             lastSavedTime: msg.lastSavedTime,
+            lastEditSessionId: msg.lastEditSessionId,
             symbolListEnabled: msg.symbolListEnabled,
+            zenithCriteriaSource: msg.zenithCriteriaSource,
+            zenithRankSource: msg.zenithRankSource,
             zenithCriteria: msg.zenithCriteria,
             zenithRank: msg.zenithRank,
             targetTypeId: msg.targetTypeId,

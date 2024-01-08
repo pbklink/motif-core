@@ -6,7 +6,8 @@
 
 import { AdiService } from '../../../adi/adi-internal-api';
 import { RankedLitIvemIdListFactoryService } from '../../../ranked-lit-ivem-id-list/ranked-lit-ivem-id-list-internal-api';
-import { ScansService } from '../../../scan/scan-internal-api';
+import { ScansService } from '../../../scan/internal-api';
+import { SymbolDetailCacheService } from '../../../services/symbol-detail-cache-service';
 import { AssertInternalError, NotImplementedError, UnreachableCaseError } from '../../../sys/sys-internal-api';
 import { TextFormatterService } from '../../../text-format/text-format-internal-api';
 import { WatchmakerService } from '../../../watchmaker/watchmaker-internal-api';
@@ -16,22 +17,28 @@ import { CallPutFromUnderlyingTableRecordSource } from './call-put-from-underlyi
 import {
     BalancesTableRecordSourceDefinition,
     BrokerageAccountTableRecordSourceDefinition,
-    CallPutFromUnderlyingTableRecordSourceDefinition, EditableGridLayoutDefinitionColumnTableRecordSourceDefinition, FeedTableRecordSourceDefinition,
-    GridFieldTableRecordSourceDefinition, HoldingTableRecordSourceDefinition,
-    LitIvemIdFromSearchSymbolsTableRecordSourceDefinition,
+    CallPutFromUnderlyingTableRecordSourceDefinition,
+    EditableGridLayoutDefinitionColumnTableRecordSourceDefinition,
+    FeedTableRecordSourceDefinition,
+    GridFieldTableRecordSourceDefinition,
+    HoldingTableRecordSourceDefinition,
+    LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition,
+    LitIvemIdComparableListTableRecordSourceDefinition,
     OrderTableRecordSourceDefinition,
     RankedLitIvemIdListDirectoryItemTableRecordSourceDefinition,
     RankedLitIvemIdListTableRecordSourceDefinition,
     ScanTableRecordSourceDefinition,
+    ScanTestTableRecordSourceDefinition,
     TableRecordSourceDefinition,
     TableRecordSourceDefinitionFactoryService,
-    TopShareholderTableRecordSourceDefinition
-} from "./definition/grid-table-record-source-definition-internal-api";
+    TopShareholderTableRecordSourceDefinition,
+} from './definition/grid-table-record-source-definition-internal-api';
 import { EditableGridLayoutDefinitionColumnTableRecordSource } from './editable-grid-layout-definition-column-table-record-source';
 import { FeedTableRecordSource } from './feed-table-record-source';
 import { GridFieldTableRecordSource } from './grid-field-table-record-source';
 import { HoldingTableRecordSource } from './holding-table-record-source';
-import { LitIvemIdFromSearchSymbolsTableRecordSource } from './lit-ivem-id-from-search-symbols-table-record-source';
+import { LitIvemDetailFromSearchSymbolsTableRecordSource } from './lit-ivem-detail-from-search-symbols-table-record-source';
+import { LitIvemIdComparableListTableRecordSource } from './lit-ivem-id-comparable-list-table-record-source';
 import { OrderTableRecordSource } from './order-table-record-source';
 import { RankedLitIvemIdListDirectoryItemTableRecordSource } from './ranked-lit-ivem-id-list-directory-item-table-record-source';
 import { RankedLitIvemIdListTableRecordSource } from './ranked-lit-ivem-id-list-table-record-source';
@@ -43,7 +50,8 @@ import { TopShareholderTableRecordSource } from './top-shareholder-table-record-
 export class TableRecordSourceFactoryService {
     constructor(
         private readonly _adiService: AdiService,
-        private readonly _litIvemIdListFactoryService: RankedLitIvemIdListFactoryService,
+        private readonly _symbolDetailCacheService: SymbolDetailCacheService,
+        private readonly _rankedLitIvemIdListFactoryService: RankedLitIvemIdListFactoryService,
         private readonly _watchmakerService: WatchmakerService,
         private readonly _scansService: ScansService,
         private readonly _textFormatterService: TextFormatterService,
@@ -53,8 +61,9 @@ export class TableRecordSourceFactoryService {
     createFromDefinition(definition: TableRecordSourceDefinition): TableRecordSource {
         switch (definition.typeId) {
             case TableRecordSourceDefinition.TypeId.Null: throw new NotImplementedError('TRSFCFDN29984');
-            case TableRecordSourceDefinition.TypeId.LitIvemIdFromSearchSymbols: return this.createLitIvemIdFromSearchSymbols(definition);
-            case TableRecordSourceDefinition.TypeId.RankedLitIvemIdList: return this.createRankedLitIvemIdList(definition);
+            case TableRecordSourceDefinition.TypeId.LitIvemIdComparableList: return this.createLitIvemIdComparableList(definition);
+            case TableRecordSourceDefinition.TypeId.LitIvemDetailsFromSearchSymbols: return this.createLitIvemDetailFromSearchSymbols(definition);
+            case TableRecordSourceDefinition.TypeId.Watchlist: return this.createWatchlist(definition);
             case TableRecordSourceDefinition.TypeId.MarketMovers: throw new NotImplementedError('TRSFCFDMM3820');
             case TableRecordSourceDefinition.TypeId.Gics: throw new NotImplementedError('TRSFCFDG78783');
             case TableRecordSourceDefinition.TypeId.ProfitIvemHolding: throw new NotImplementedError('TRSFCFDP18885');
@@ -75,13 +84,28 @@ export class TableRecordSourceFactoryService {
             case TableRecordSourceDefinition.TypeId.Scan: return this.createScan(definition);
             case TableRecordSourceDefinition.TypeId.RankedLitIvemIdListDirectoryItem: return this.createRankedLitIvemIdListDirectoryItem(definition);
             case TableRecordSourceDefinition.TypeId.GridField: return this.createGridField(definition);
+            case TableRecordSourceDefinition.TypeId.ScanTest: return this.createScanTest(definition);
             default: throw new UnreachableCaseError('TDLFCFTID17742', definition.typeId);
         }
     }
 
-    createLitIvemIdFromSearchSymbols(definition: TableRecordSourceDefinition) {
-        if (definition instanceof LitIvemIdFromSearchSymbolsTableRecordSourceDefinition) {
-            return new LitIvemIdFromSearchSymbolsTableRecordSource(
+    createLitIvemIdComparableList(definition: TableRecordSourceDefinition) {
+        if (definition instanceof LitIvemIdComparableListTableRecordSourceDefinition) {
+            return new LitIvemIdComparableListTableRecordSource(
+                this._adiService,
+                this._symbolDetailCacheService,
+                this._textFormatterService,
+                this._tableRecordSourceDefinitionFactoryService,
+                definition
+            );
+        } else {
+            throw new AssertInternalError('TRSFCLIIFSS21099');
+        }
+    }
+
+    createLitIvemDetailFromSearchSymbols(definition: TableRecordSourceDefinition) {
+        if (definition instanceof LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition) {
+            return new LitIvemDetailFromSearchSymbolsTableRecordSource(
                 this._adiService,
                 this._textFormatterService,
                 this._tableRecordSourceDefinitionFactoryService,
@@ -92,17 +116,18 @@ export class TableRecordSourceFactoryService {
         }
     }
 
-    createRankedLitIvemIdList(definition: TableRecordSourceDefinition) {
+    createWatchlist(definition: TableRecordSourceDefinition) {
         if (definition instanceof RankedLitIvemIdListTableRecordSourceDefinition) {
             return new RankedLitIvemIdListTableRecordSource(
                 this._adiService,
-                this._litIvemIdListFactoryService,
+                this._symbolDetailCacheService,
+                this._rankedLitIvemIdListFactoryService,
                 this._textFormatterService,
                 this._tableRecordSourceDefinitionFactoryService,
-                definition
+                definition,
             );
         } else {
-            throw new AssertInternalError('TRSFCLIIFL21099');
+            throw new AssertInternalError('TRSFCW21099');
         }
     }
 
@@ -243,6 +268,21 @@ export class TableRecordSourceFactoryService {
             );
         } else {
             throw new AssertInternalError('TRSFSCGF21099');
+        }
+    }
+
+    createScanTest(definition: TableRecordSourceDefinition) {
+        if (definition instanceof ScanTestTableRecordSourceDefinition) {
+            return new RankedLitIvemIdListTableRecordSource(
+                this._adiService,
+                this._symbolDetailCacheService,
+                this._rankedLitIvemIdListFactoryService,
+                this._textFormatterService,
+                this._tableRecordSourceDefinitionFactoryService,
+                definition,
+            );
+        } else {
+            throw new AssertInternalError('TRSFSCST21099');
         }
     }
 }

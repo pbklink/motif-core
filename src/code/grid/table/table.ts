@@ -9,7 +9,9 @@ import {
     GridRecordInvalidatedValue, Integer, LockOpenListItem,
     MultiEvent,
     UnreachableCaseError,
-    UsableListChangeTypeId
+    UsableListChangeType,
+    UsableListChangeTypeId,
+    moveElementsInArray
 } from "../../sys/sys-internal-api";
 import { AllowedGridField } from '../field/allowed-grid-field';
 import { TableFieldSourceDefinition } from './field-source/grid-table-field-source-internal-api';
@@ -50,6 +52,7 @@ export class Table extends CorrectnessBadness {
     private _recordsLoadedMultiEvent = new MultiEvent<Table.RecordsLoadedEventHandler>();
     private _recordsInsertedMultiEvent = new MultiEvent<Table.RecordsInsertedEventHandler>();
     private _recordsReplacedMultiEvent = new MultiEvent<Table.RecordsReplacedEventHandler>();
+    private _recordsMovedMultiEvent = new MultiEvent<Table.RecordsMovedEventHandler>();
     private _recordsSplicedMultiEvent = new MultiEvent<Table.RecordsSplicedEventHandler>();
     private _recordsDeletedMultiEvent = new MultiEvent<Table.RecordsDeletedEventHandler>();
     private _allRecordsDeletedMultiEvent = new MultiEvent<Table.AllRecordsDeletedEventHandler>();
@@ -231,19 +234,20 @@ export class Table extends CorrectnessBadness {
         }
 
         this._recordSourceBadnessChangeSubscriptionId = this.recordSource.subscribeBadnessChangeEvent(
-            () => this.handleRecordSourceBadnessChangeEvent()
+            () => { this.handleRecordSourceBadnessChangeEvent(); }
         );
         this._recordSourceListChangeSubscriptionId = this.recordSource.subscribeListChangeEvent(
-            (listChangeType, recordIdx, recordCount) =>
-                this.handleRecordSourceListChangeEvent(listChangeType, recordIdx, recordCount)
+            (listChangeType, recordIdx, recordCount) => {
+                this.handleRecordSourceListChangeEvent(listChangeType, recordIdx, recordCount);
+            }
         );
         this._recordSourceBeforeRecDefinitionChangeSubscriptionId =
             this.recordSource.subscribeBeforeRecDefinitionChangeEvent(
-                (recordIdx) => this.handleRecordDefinitionListBeforeRecDefinitionChangeEvent(recordIdx)
+                (recordIdx) => { this.handleRecordDefinitionListBeforeRecDefinitionChangeEvent(recordIdx); }
             );
         this._recordSourceAfterRecDefinitionChangeSubscriptionId =
             this.recordSource.subscribeAfterRecDefinitionChangeEvent(
-                (recordIdx) => this.handleRecordDefinitionListAfterRecDefinitionChangeEvent(recordIdx)
+                (recordIdx) => { this.handleRecordDefinitionListAfterRecDefinitionChangeEvent(recordIdx); }
             );
     }
 
@@ -523,6 +527,13 @@ export class Table extends CorrectnessBadness {
         this._recordsReplacedMultiEvent.unsubscribe(subscriptionId);
     }
 
+    subscribeRecordsMovedEvent(handler: Table.RecordsMovedEventHandler) {
+        return this._recordsMovedMultiEvent.subscribe(handler);
+    }
+    unsubscribeRecordsMovedEvent(subscriptionId: MultiEvent.SubscriptionId) {
+        this._recordsMovedMultiEvent.unsubscribe(subscriptionId);
+    }
+
     subscribeRecordsSplicedEvent(handler: Table.RecordsSplicedEventHandler) {
         return this._recordsSplicedMultiEvent.subscribe(handler);
     }
@@ -687,6 +698,13 @@ export class Table extends CorrectnessBadness {
         }
     }
 
+    private notifyRecordsMoved(fromIndex: Integer, toIndex: Integer, moveCount: Integer) {
+        const handlers = this._recordsMovedMultiEvent.copyHandlers();
+        for (let i = 0; i < handlers.length; i++) {
+            handlers[i](fromIndex, toIndex, moveCount);
+        }
+    }
+
     private notifyRecordsSpliced(firstRecordIdx: Integer, count: Integer) {
         const handlers = this._recordsSplicedMultiEvent.copyHandlers();
         for (let i = 0; i < handlers.length; i++) {
@@ -783,6 +801,14 @@ export class Table extends CorrectnessBadness {
                 this.replaceRecords(recordIdx, recordCount);
                 this.notifyRecordsReplaced(recordIdx, recordCount);
                 break;
+            case UsableListChangeTypeId.BeforeMove:
+                break;
+            case UsableListChangeTypeId.AfterMove: {
+                const { fromIndex, toIndex, count: moveCount } = UsableListChangeType.getMoveParameters(recordIdx); // recordIdx is actually move parameters registration index
+                this.moveRecords(fromIndex, toIndex, moveCount);
+                this.notifyRecordsMoved(fromIndex, toIndex, moveCount);
+                break;
+            }
             case UsableListChangeTypeId.Remove:
                 // Delete records before notifying so that grid matches correctly
                 this.deleteRecords(recordIdx, recordCount);
@@ -882,9 +908,9 @@ export class Table extends CorrectnessBadness {
 
     private createRecord(recIdx: Integer) {
         const eventHandlers: TableRecord.EventHandlers = {
-            valuesChanged: (recordIdx, invalidatedValues) => this.notifyRecordValuesChanged(recordIdx, invalidatedValues),
-            sequentialfieldValuesChanged: (recordIdx, fieldIndex, fieldCount) => this.notifyRecordSequentialFieldValuesChanged(recordIdx, fieldIndex, fieldCount),
-            recordChanged: (recordIdx) => this.notifyRecordChanged(recordIdx),
+            valuesChanged: (recordIdx, invalidatedValues) => { this.notifyRecordValuesChanged(recordIdx, invalidatedValues); },
+            sequentialfieldValuesChanged: (recordIdx, fieldIndex, fieldCount) => { this.notifyRecordSequentialFieldValuesChanged(recordIdx, fieldIndex, fieldCount); },
+            recordChanged: (recordIdx) => { this.notifyRecordChanged(recordIdx); },
         }
         const record = this.recordSource.createTableRecord(recIdx, eventHandlers);
         return record;
@@ -900,9 +926,7 @@ export class Table extends CorrectnessBadness {
 
         this._records.splice(idx, 0, ...newRecordsArray);
 
-        for (let i = idx + insertCount; i < this._records.length; i++) {
-            this._records[i].index = i;
-        }
+        this.reindexRecordRange(idx + insertCount, this._records.length);
 
         // this._valueChangedEventSuppressed = true;
         // try {
@@ -939,6 +963,16 @@ export class Table extends CorrectnessBadness {
         }
     }
 
+    private moveRecords(fromIndex: Integer, toIndex: Integer, count: Integer) {
+        moveElementsInArray(this._records, fromIndex, toIndex, count);
+
+        if (fromIndex < toIndex) {
+            this.reindexRecordRange(fromIndex, toIndex - fromIndex + count);
+        } else {
+            this.reindexRecordRange(toIndex, fromIndex - toIndex + count);
+        }
+    }
+
     private deleteRecords(idx: Integer, deleteCount: Integer) {
         for (let i = idx; i < idx + deleteCount; i++) {
             this._records[i].deactivate();
@@ -946,9 +980,7 @@ export class Table extends CorrectnessBadness {
 
         this._records.splice(idx, deleteCount);
 
-        for (let i = idx; i < this._records.length; i++) {
-            this._records[i].index = i;
-        }
+        this.reindexRecordRange(idx, this._records.length);
     }
 
     private clearRecords() {
@@ -958,6 +990,12 @@ export class Table extends CorrectnessBadness {
             }
 
             this._records.length = 0;
+        }
+    }
+
+    private reindexRecordRange(rangeStartIndex: Integer, afterRangeIndex: Integer) {
+        for (let i = rangeStartIndex; i < afterRangeIndex; i++) {
+            this._records[i].index = i;
         }
     }
 
@@ -1046,6 +1084,7 @@ export namespace Table {
     export type RecordsLoadedEventHandler = (this: void) => void;
     export type RecordsInsertedEventHandler = (this: void, index: Integer, count: Integer) => void;
     export type RecordsReplacedEventHandler = (this: void, index: Integer, count: Integer) => void;
+    export type RecordsMovedEventHandler = (this: void, fromIndex: Integer, toIndex: Integer, count: Integer) => void;
     export type RecordsSplicedEventHandler = (this: void, index: Integer, count: Integer) => void;
     export type RecordsDeletedEventHandler = (this: void, index: Integer, count: Integer) => void;
     export type AllRecordsDeletedEventHandler = (this: void) => void;

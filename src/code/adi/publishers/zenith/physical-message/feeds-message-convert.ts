@@ -49,7 +49,7 @@ export namespace FeedsMessageConvert {
             if (actionId !== ZenithConvert.MessageContainer.Action.Id.Sub) {
                 throw new ZenithDataError(ErrorCode.FMCPMA5583200023, JSON.stringify(message));
             } else {
-                if (message.Topic !== ZenithProtocol.ZenithController.TopicName.Feeds) {
+                if (message.Topic as ZenithProtocol.ZenithController.TopicName !== ZenithProtocol.ZenithController.TopicName.Feeds) {
                     throw new ZenithDataError(ErrorCode.FMCPMT5583200023, JSON.stringify(message));
                 } else {
                     const subMsg = message as ZenithProtocol.ZenithController.Feeds.PayloadMessageContainer;

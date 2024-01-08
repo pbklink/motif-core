@@ -5,6 +5,7 @@
  */
 
 import {
+    AssertInternalError,
     EnumInfoOutOfOrderError,
     ErrorCode,
     Guid,
@@ -14,33 +15,40 @@ import {
     ZenithDataError
 } from "../../sys/sys-internal-api";
 import { ScanStatusId, ScanStatusedDescriptorsDataMessage } from '../common/adi-common-internal-api';
+import { ScanStatusedDescriptorInterface } from './scan-statused-descriptor-interface';
 
-export class ScanStatusedDescriptor {
+export class ScanStatusedDescriptor implements ScanStatusedDescriptorInterface {
     readonly id: string;
 
     private _name: string;
-    private _description: string;
+    private _description: string | undefined;
     private _readonly: boolean;
     private _statusId: ScanStatusId;
     private _versionNumber: Integer | undefined;
     private _versionId: Guid | undefined;
     private _versioningInterrupted: boolean;
-    private _lastSavedTime: Date;
-    private _symbolListEnabled: boolean;
+    private _lastSavedTime: Date | undefined;
+    private _lastEditSessionId: Guid | undefined;
+    private _symbolListEnabled: boolean | undefined;
+    private _zenithCriteriaSource: string | undefined;
+    private _zenithRankSource: string | undefined;
 
-    private _changedMultiEvent = new MultiEvent<ScanStatusedDescriptor.ChangedEventHandler>();
+    private _updatedMultiEvent = new MultiEvent<ScanStatusedDescriptor.UpdatedEventHandler>();
 
     constructor(change: ScanStatusedDescriptorsDataMessage.AddChange) {
         this.id = change.scanId;
         this._name = change.scanName;
-        this._description = change.scanDescription ?? '';
+        this._description = change.scanDescription;
         this._readonly = change.readonly;
         this._statusId = change.scanStatusId;
         this._versionNumber = change.versionNumber;
         this._versionId = change.versionId;
         this._versioningInterrupted = change.versioningInterrupted;
         this._lastSavedTime = change.lastSavedTime;
+        this._lastEditSessionId = change.lastEditSessionId;
         this._symbolListEnabled = change.symbolListEnabled;
+        this._zenithCriteriaSource = change.zenithCriteriaSource;
+        this._zenithRankSource = change.zenithRankSource;
     }
 
     get name() { return this._name; }
@@ -51,10 +59,13 @@ export class ScanStatusedDescriptor {
     get versionId() { return this._versionId; }
     get versioningInterrupted() { return this._versioningInterrupted; }
     get lastSavedTime() { return this._lastSavedTime; }
+    get lastEditSessionId() { return this._lastEditSessionId; }
     get symbolListEnabled() { return this._symbolListEnabled; }
+    get zenithCriteriaSource() { return this._zenithCriteriaSource; }
+    get zenithRankSource() { return this._zenithRankSource; }
 
     update(change: ScanStatusedDescriptorsDataMessage.UpdateChange) {
-        const changedFieldIds = new Array<ScanStatusedDescriptor.FieldId>(ScanStatusedDescriptor.Field.count);
+        const changedFieldIds = new Array<ScanStatusedDescriptor.FieldId>(ScanStatusedDescriptor.Field.idCount);
         let changedCount = 0;
 
         if (change.scanId !== this.id) {
@@ -68,7 +79,7 @@ export class ScanStatusedDescriptor {
         }
 
         const newDescription = change.scanDescription;
-        if (newDescription !== undefined && newDescription !== this._description) {
+        if (newDescription !== this._description) {
             this._description = newDescription;
             changedFieldIds[changedCount++] = ScanStatusedDescriptor.FieldId.Description;
         }
@@ -101,28 +112,44 @@ export class ScanStatusedDescriptor {
             changedFieldIds[changedCount++] = ScanStatusedDescriptor.FieldId.LastSavedTime;
         }
 
+        const newLastEditSessionId = change.lastEditSessionId;
+        if (newLastEditSessionId !== this._lastEditSessionId) {
+            this._lastEditSessionId = newLastEditSessionId;
+            changedFieldIds[changedCount++] = ScanStatusedDescriptor.FieldId.LastEditSessionId;
+        }
+
         const newSymbolListEnabled = change.symbolListEnabled;
         if (newSymbolListEnabled !== undefined && newSymbolListEnabled !== this._symbolListEnabled) {
             this._symbolListEnabled = newSymbolListEnabled;
             changedFieldIds[changedCount++] = ScanStatusedDescriptor.FieldId.SymbolListEnabled;
         }
 
-        if (changedCount >= 0) {
-            changedFieldIds.length = changedCount;
-            this.notifyChanged(changedFieldIds);
+        const newZenithCriteriaSource = change.zenithCriteriaSource;
+        if (newZenithCriteriaSource !== this._zenithCriteriaSource) {
+            this._zenithCriteriaSource = newZenithCriteriaSource;
+            changedFieldIds[changedCount++] = ScanStatusedDescriptor.FieldId.ZenithCriteriaSource;
         }
+
+        const newZenithRankSource = change.zenithRankSource;
+        if (newZenithRankSource !== this._zenithRankSource) {
+            this._zenithRankSource = newZenithRankSource;
+            changedFieldIds[changedCount++] = ScanStatusedDescriptor.FieldId.ZenithRankSource;
+        }
+
+        changedFieldIds.length = changedCount;
+        this.notifyUpdated(changedFieldIds);
     }
 
     updateWithQueryResponse() {
         //
     }
 
-    subscribeChangedEvent(handler: ScanStatusedDescriptor.ChangedEventHandler) {
-        return this._changedMultiEvent.subscribe(handler);
+    subscribeUpdatedEvent(handler: ScanStatusedDescriptor.UpdatedEventHandler) {
+        return this._updatedMultiEvent.subscribe(handler);
     }
 
-    unsubscribeChangedEvent(subscriptionId: MultiEvent.SubscriptionId) {
-        this._changedMultiEvent.unsubscribe(subscriptionId);
+    unsubscribeUpdatedEvent(subscriptionId: MultiEvent.SubscriptionId) {
+        this._updatedMultiEvent.unsubscribe(subscriptionId);
     }
 
     // subscribeCorrectnessChangedEvent(handler: KeyedCorrectnessListItem.CorrectnessChangedEventHandler) {
@@ -133,8 +160,8 @@ export class ScanStatusedDescriptor {
     //     this._correctnessChangedMultiEvent.unsubscribe(subscriptionId);
     // }
 
-    private notifyChanged(changedFieldIds: ScanStatusedDescriptor.FieldId[]) {
-        const handlers = this._changedMultiEvent.copyHandlers();
+    private notifyUpdated(changedFieldIds: ScanStatusedDescriptor.FieldId[]) {
+        const handlers = this._updatedMultiEvent.copyHandlers();
         for (let index = 0; index < handlers.length; index++) {
             handlers[index](changedFieldIds);
         }
@@ -142,7 +169,7 @@ export class ScanStatusedDescriptor {
 }
 
 export namespace ScanStatusedDescriptor {
-    export type ChangedEventHandler = (this: void, changedFieldIds: ScanStatusedDescriptor.FieldId[]) => void;
+    export type UpdatedEventHandler = (this: void, changedFieldIds: ScanStatusedDescriptor.FieldId[]) => void;
     export type CorrectnessChangedEventHandler = (this: void) => void;
 
     export const enum FieldId {
@@ -153,10 +180,27 @@ export namespace ScanStatusedDescriptor {
         StatusId,
         Version,
         LastSavedTime,
+        LastEditSessionId,
         SymbolListEnabled,
+        ZenithCriteriaSource,
+        ZenithRankSource,
     }
 
     export namespace Field {
+        export const allIds: readonly FieldId[] = [
+            FieldId.Id,
+            FieldId.Name,
+            FieldId.Description,
+            FieldId.Readonly,
+            FieldId.StatusId,
+            FieldId.Version,
+            FieldId.LastSavedTime,
+            FieldId.LastEditSessionId,
+            FieldId.SymbolListEnabled,
+            FieldId.ZenithCriteriaSource,
+            FieldId.ZenithRankSource,
+        ];
+
         // eslint-disable-next-line @typescript-eslint/no-shadow
         export type Id = ScanStatusedDescriptor.FieldId;
         interface Info {
@@ -195,23 +239,42 @@ export namespace ScanStatusedDescriptor {
                 id: FieldId.LastSavedTime,
                 name: 'LastSavedTime',
             },
+            LastEditSessionId: {
+                id: FieldId.LastEditSessionId,
+                name: 'LastEditSessionId',
+            },
             SymbolListEnabled: {
                 id: FieldId.SymbolListEnabled,
                 name: 'SymbolListEnabled',
             },
+            ZenithCriteriaSource: {
+                id: FieldId.ZenithCriteriaSource,
+                name: 'ZenithCriteriaSource',
+            },
+            ZenithRankSource: {
+                id: FieldId.ZenithRankSource,
+                name: 'ZenithRankSource',
+            },
         };
 
-        export const count = Object.keys(infoObject).length;
         const infos = Object.values(infoObject);
+        export const idCount = infos.length;
 
         export function idToName(id: Id) {
             return infos[id].name;
         }
 
         export function initialise() {
-            const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as FieldId);
-            if (outOfOrderIdx >= 0) {
-                throw new EnumInfoOutOfOrderError('SFI07196', outOfOrderIdx, infos[outOfOrderIdx].name);
+            for (let i = 0; i < idCount; i++) {
+                const id = i as FieldId;
+                if (allIds[i] !== id) {
+                    throw new AssertInternalError('SSDFIA23987');
+                } else {
+                    const info = infos[i];
+                    if (info.id !== id) {
+                        throw new EnumInfoOutOfOrderError('SFI07196', i, infos[i].name);
+                    }
+                }
             }
         }
     }

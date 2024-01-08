@@ -4,8 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
+import { RankedLitIvemIdModule } from '../adi/scan/ranked-lit-ivem-id';
 import { RankedLitIvemIdListDefinitionStaticInitialise } from './definition/ranked-lit-ivem-id-list-definition-static-initialise';
-import { RankedLitIvemIdModule } from './ranked-lit-ivem-id';
 
 /** @internal */
 export namespace RankedLitIvemIdListStaticInitialise {

@@ -88,18 +88,20 @@ export class LatestTradingDayTradesDataItem extends DataItem implements TradesDa
         const subscriptionDefinition = new TradesDataDefinition();
         subscriptionDefinition.litIvemId = this._litIvemId;
         this._subscriptionDataItem = this.subscribeDataItem(subscriptionDefinition) as TradesDataItem;
-        this._subscriptionBadnessChangeSubscriptionId = this._subscriptionDataItem.subscribeBadnessChangeEvent(() =>
-            this.handleSubscriptionBadnessChangeEvent()
+        this._subscriptionBadnessChangeSubscriptionId = this._subscriptionDataItem.subscribeBadnessChangeEvent(() => {
+            this.handleSubscriptionBadnessChangeEvent();
+        });
+        this._subscriptionListChangeSubscriptionId = this._subscriptionDataItem.subscribeListChangeEvent(
+            (listChangeTypeId, index, count) => {
+                this.handleSubscriptionListChangeEvent(listChangeTypeId, index, count);
+            }
         );
-        this._subscriptionListChangeSubscriptionId = this._subscriptionDataItem.subscribeListChangeEvent((listChangeTypeId, index, count) =>
-            this.handleSubscriptionListChangeEvent(listChangeTypeId, index, count)
-        );
-        this._subscriptionRecordChangeSubscriptionId = this._subscriptionDataItem.subscribeRecordChangeEvent((index, oldRecord) =>
-            this.handleSubscriptionRecordChangeEvent(index, oldRecord)
-        );
-        this._subscriptionOutOfRangeUpdateChangeSubscriptionId = this._subscriptionDataItem.subscribeOutOfRangeUpdateChangeEvent((change) =>
-            this.handleSubscriptionOutOfRangeUpdateChangeEvent(change)
-        );
+        this._subscriptionRecordChangeSubscriptionId = this._subscriptionDataItem.subscribeRecordChangeEvent((index, oldRecord) => {
+            this.handleSubscriptionRecordChangeEvent(index, oldRecord);
+        });
+        this._subscriptionOutOfRangeUpdateChangeSubscriptionId = this._subscriptionDataItem.subscribeOutOfRangeUpdateChangeEvent((change) => {
+            this.handleSubscriptionOutOfRangeUpdateChangeEvent(change);
+        });
 
         if (this._subscriptionDataItem.usable) {
             this.procesSubscriptionBecameUsable();
@@ -318,6 +320,10 @@ export class LatestTradingDayTradesDataItem extends DataItem implements TradesDa
                 throw new AssertInternalError('LTDTDIPSLCBR19662', this.definition.description);
             case UsableListChangeTypeId.AfterReplace:
                 throw new AssertInternalError('LTDTDIPSLCAR19662', this.definition.description);
+            case UsableListChangeTypeId.BeforeMove:
+                throw new AssertInternalError('LTDTDIPSLCBM19662', this.definition.description);
+            case UsableListChangeTypeId.AfterMove:
+                throw new AssertInternalError('LTDTDIPSLCAM19662', this.definition.description);
             case UsableListChangeTypeId.Remove: {
                 this.checkUsableNotifyListChange(UsableListChangeTypeId.Remove, this._queryRecordCount + index, count);
                 this._recordCount -= count;
@@ -403,6 +409,10 @@ export class LatestTradingDayTradesDataItem extends DataItem implements TradesDa
                 throw new AssertInternalError('LTDTDIPQLCBR19662', this.definition.description);
             case UsableListChangeTypeId.AfterReplace:
                 throw new AssertInternalError('LTDTDIPQLCAR19662', this.definition.description);
+            case UsableListChangeTypeId.BeforeMove:
+                throw new AssertInternalError('LTDTDIPQLCBM19662', this.definition.description);
+            case UsableListChangeTypeId.AfterMove:
+                throw new AssertInternalError('LTDTDIPQLCAM19662', this.definition.description);
             case UsableListChangeTypeId.Remove: {
                 this.checkUsableNotifyListChange(UsableListChangeTypeId.Remove, index, count);
                 this._recordCount -= count;
@@ -430,15 +440,17 @@ export class LatestTradingDayTradesDataItem extends DataItem implements TradesDa
         } else {
             queryDefinition.tradingDate = this._tradingDate;
             this._queryDataItem = this.subscribeDataItem(queryDefinition) as TradesDataItem;
-            this._queryBadnessChangeSubscriptionId = this._queryDataItem.subscribeBadnessChangeEvent(() =>
-                this.handleQueryBadnessChangeEvent()
+            this._queryBadnessChangeSubscriptionId = this._queryDataItem.subscribeBadnessChangeEvent(() =>{
+                this.handleQueryBadnessChangeEvent();
+            });
+            this._queryListChangeSubscriptionId = this._queryDataItem.subscribeListChangeEvent(
+                (listChangeTypeId, index, count) =>{
+                    this.handleQueryListChangeEvent(listChangeTypeId, index, count);
+                }
             );
-            this._queryListChangeSubscriptionId = this._queryDataItem.subscribeListChangeEvent((listChangeTypeId, index, count) =>
-                this.handleQueryListChangeEvent(listChangeTypeId, index, count)
-            );
-            this._queryRecordChangeSubscriptionId = this._queryDataItem.subscribeRecordChangeEvent((index, oldRecord) =>
-                this.handleQueryRecordChangeEvent(index, oldRecord)
-            );
+            this._queryRecordChangeSubscriptionId = this._queryDataItem.subscribeRecordChangeEvent((index, oldRecord) =>{
+                this.handleQueryRecordChangeEvent(index, oldRecord);
+            });
             if (this._queryDataItem.usable) {
                 // should never happen because this is a query
                 this.processQueryListChange(UsableListChangeTypeId.PreUsableClear, 0, 0);

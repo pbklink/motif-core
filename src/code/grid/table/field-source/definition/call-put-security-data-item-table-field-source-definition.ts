@@ -45,4 +45,12 @@ export namespace CallPutSecurityDataItemTableFieldSourceDefinition {
                 throw new UnreachableCaseError('CPSDITFSDCTIAP33382', callOrPutId);
         }
     }
+
+    export interface CallFieldId extends PrefixableSecurityDataItemTableFieldSourceDefinition.FieldId {
+        sourceTypeId: TableFieldSourceDefinition.TypeId.CallSecurityDataItem;
+    }
+
+    export interface PutFieldId extends PrefixableSecurityDataItemTableFieldSourceDefinition.FieldId {
+        sourceTypeId: TableFieldSourceDefinition.TypeId.PutSecurityDataItem;
+    }
 }

@@ -43,6 +43,10 @@ export class RecordsPublisherSubscriptionDataItem<Record extends KeyedCorrectnes
         return this._records[recordIndex];
     }
 
+    toArray(): readonly Record[] {
+        return this._records;
+    }
+
     getRecordByMapKey(mapKey: MapKey) {
         return this._recordsMap.get(mapKey);
     }

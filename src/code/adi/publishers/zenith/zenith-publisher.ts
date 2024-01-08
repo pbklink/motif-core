@@ -72,22 +72,23 @@ export class ZenithPublisher extends AdiPublisher {
     constructor() {
         super();
 
-        this._stateEngine.actionEvent = (actionId, waitId) => this.handleStateEngineActionEvent(actionId, waitId);
-        this._stateEngine.cameOnlineEvent = () => this.handleStateEngineCameOnlineEvent();
-        this._stateEngine.wentOfflineEvent = (socketCloseCode, socketCloseReason, socketCloseWasClean) =>
+        this._stateEngine.actionEvent = (actionId, waitId) => { this.handleStateEngineActionEvent(actionId, waitId); };
+        this._stateEngine.cameOnlineEvent = () => { this.handleStateEngineCameOnlineEvent(); };
+        this._stateEngine.wentOfflineEvent = (socketCloseCode, socketCloseReason, socketCloseWasClean) => {
             this.handleStateEngineWentOfflineEvent(socketCloseCode, socketCloseReason, socketCloseWasClean);
-        this._stateEngine.stateChangeEvent = (stateId, waitId) => this.handleStateEngineStateChangeEvent(stateId, waitId);
-        this._stateEngine.reconnectEvent = (reasonId) => this.handleStateEngineReconnectEvent(reasonId);
-        this._stateEngine.logEvent = (logLevelId, text) => this.log(logLevelId, text, true);
+        };
+        this._stateEngine.stateChangeEvent = (stateId, waitId) => { this.handleStateEngineStateChangeEvent(stateId, waitId); };
+        this._stateEngine.reconnectEvent = (reasonId) => { this.handleStateEngineReconnectEvent(reasonId); };
+        this._stateEngine.logEvent = (logLevelId, text) => { this.log(logLevelId, text, true); };
         this._requestEngine = new ZenithPublisherSubscriptionManager();
-        this._requestEngine.subscriptionErrorEvent = (typeId) => this.handleRequestEngineSubscriptionErrorEvent(typeId);
-        this._requestEngine.serverWarningEvent = () => this.handleRequestEngineServerWarningEvent();
+        this._requestEngine.subscriptionErrorEvent = (typeId) => { this.handleRequestEngineSubscriptionErrorEvent(typeId); };
+        this._requestEngine.serverWarningEvent = () => { this.handleRequestEngineServerWarningEvent(); };
         this._requestEngine.sendPhysicalMessageEvent = (message) => this.handleRequestEngineSendPhysicalMessageEvent(message);
-        this._requestEngine.authMessageReceivedEvent = (message) => this.handleRequestEngineAuthMessageReceivedEvent(message);
-        this._websocket.openEvent = () => this.handleWebsocketOpenEvent();
-        this._websocket.messageEvent = (message) => this.handleWebsocketMessageEvent(message);
-        this._websocket.closeEvent = (code, reason, wasClean) => this.handleWebsocketCloseEvent(code, reason, wasClean);
-        this._websocket.errorEvent = (errorType) => this.handleWebsocketErrorEvent(errorType);
+        this._requestEngine.authMessageReceivedEvent = (message) => { this.handleRequestEngineAuthMessageReceivedEvent(message); };
+        this._websocket.openEvent = () => { this.handleWebsocketOpenEvent(); };
+        this._websocket.messageEvent = (message) => { this.handleWebsocketMessageEvent(message); };
+        this._websocket.closeEvent = (code, reason, wasClean) => { this.handleWebsocketCloseEvent(code, reason, wasClean); };
+        this._websocket.errorEvent = (errorType) => { this.handleWebsocketErrorEvent(errorType); };
     }
 
     override finalise(): boolean { // virtual
@@ -131,7 +132,7 @@ export class ZenithPublisher extends AdiPublisher {
             const synchronisedDataMessage = this.createSynchronisedDataMessage();
             this._dataMessages.add(synchronisedDataMessage);
 
-            this._counterIntervalHandle = setInterval(() => this.handleCounterInterval(), ZenithPublisher.counterDataMessageInterval);
+            this._counterIntervalHandle = setInterval(() => { this.handleCounterInterval(); }, ZenithPublisher.counterDataMessageInterval);
 
             return true; // For this subscription, Publisher is always considered online
         }
@@ -256,7 +257,7 @@ export class ZenithPublisher extends AdiPublisher {
 
     private handleWebsocketCloseEvent(code: number, reason: string, wasClean: boolean) {
         this.logInfo(`Websocket closed. Code: ${code} Reason: ${reason}`);
-        if (code < ZenithProtocol.WebSocket.CloseCode.SessionTerminatedRangeStart) {
+        if (code < (ZenithProtocol.WebSocket.CloseCode.SessionTerminatedRangeStart as Integer)) {
             this._stateEngine.adviseSocketClose(ZenithPublisherReconnectReasonId.UnexpectedSocketClose, code, reason, wasClean);
         } else {
             const dataMessage = this.createSessionTerminatedDataMessage(code, reason);
@@ -269,7 +270,7 @@ export class ZenithPublisher extends AdiPublisher {
         switch (this._websocket.readyState) {
             case ZenithWebsocket.ReadyState.Connecting:
                 this.logError(`Websocket connecting error: ${errorType}`);
-                this._stateEngine.adviseSocketOpenFailure();
+                this._stateEngine.adviseSocketConnectingError();
                 break;
             case ZenithWebsocket.ReadyState.Open:
                 this.logError(`Websocket opened error: ${errorType}`);
@@ -277,10 +278,11 @@ export class ZenithPublisher extends AdiPublisher {
                 break;
             case ZenithWebsocket.ReadyState.Closing:
                 this.logError(`Websocket closing error: ${errorType}, State: ${this._stateEngine.activeWaitId}`);
-                this._stateEngine.adviseSocketCloseFailure();
+                this._stateEngine.adviseSocketClosingError();
                 break;
             case ZenithWebsocket.ReadyState.Closed:
                 this.logError(`Websocket closed error: ${errorType}`);
+                this._stateEngine.adviseSocketClosedError();
                 break;
         }
     }
@@ -536,7 +538,7 @@ export class ZenithPublisher extends AdiPublisher {
     private delayReconnect(waitId: Integer) {
         const span = this.calculateReconnectDelaySpan();
         this.checkClearReconnectDelayTimeout();
-        this._reconnectDelayTimeoutHandle = setTimeout(() => this.processReconnectDelayCompleted(waitId), span);
+        this._reconnectDelayTimeoutHandle = setTimeout(() => { this.processReconnectDelayCompleted(waitId); }, span);
     }
 
     private calculateReconnectDelaySpan(): SysTick.Span {
@@ -549,20 +551,17 @@ export class ZenithPublisher extends AdiPublisher {
                 default: return 20000;
             }
         } else {
-            const socketOpenSuccessiveFailureCount = this._stateEngine.socketOpenSuccessiveFailureCount;
-            if (socketOpenSuccessiveFailureCount > 0) {
-                switch (socketOpenSuccessiveFailureCount) {
+            const socketConnectingPlusShortLivedErrorCount = this._stateEngine.socketConnectingSuccessiveErrorCount + this._stateEngine.socketShortLivedClosedSuccessiveErrorCount;
+            if (socketConnectingPlusShortLivedErrorCount > 0) {
+                switch (socketConnectingPlusShortLivedErrorCount) {
                     case 1: return 50;
                     case 2: return 2000;
                     case 3: return 2000;
                     case 4: return 2000;
                     case 5: return 2000;
-                    case 6: return 2000;
-                    case 7: return 2000;
-                    case 8: return 2000;
-                    case 9: return 10000;
-                    case 10: return 10000;
-                    case 11: return 10000;
+                    case 6: return 10000;
+                    case 7: return 10000;
+                    case 8: return 10000;
                     default: return 15000;
                 }
             } else {
@@ -575,7 +574,7 @@ export class ZenithPublisher extends AdiPublisher {
                         default: return 20000;
                     }
                 } else {
-                    return 50;
+                    return 8000;
                 }
             }
         }
@@ -662,10 +661,11 @@ export class ZenithPublisher extends AdiPublisher {
 
         dataMessage.authExpiryTime = this._stateEngine.authExpiryTime;
         dataMessage.authFetchSuccessiveFailureCount = this._stateEngine.authFetchSuccessiveFailureCount;
-        dataMessage.socketOpenSuccessiveFailureCount = this._stateEngine.socketOpenSuccessiveFailureCount;
+        dataMessage.socketConnectingSuccessiveErrorCount = this._stateEngine.socketConnectingSuccessiveErrorCount;
         dataMessage.zenithTokenFetchSuccessiveFailureCount = this._stateEngine.zenithTokenFetchSuccessiveFailureCount;
         dataMessage.zenithTokenRefreshSuccessiveFailureCount = this._stateEngine.zenithTokenRefreshSuccessiveFailureCount;
-        dataMessage.socketCloseSuccessiveFailureCount = this._stateEngine.socketCloseSuccessiveFailureCount;
+        dataMessage.socketClosingSuccessiveErrorCount = this._stateEngine.socketClosingSuccessiveErrorCount;
+        dataMessage.socketShortLivedClosedSuccessiveErrorCount = this._stateEngine.socketShortLivedClosedSuccessiveErrorCount;
         dataMessage.unexpectedSocketCloseCount = this._stateEngine.unexpectedSocketCloseCount;
         dataMessage.timeoutCount = this._stateEngine.timeoutCount;
         dataMessage.lastTimeoutStateId = this._stateEngine.lastTimeoutStateId;
