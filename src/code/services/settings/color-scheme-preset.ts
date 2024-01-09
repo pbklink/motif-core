@@ -216,6 +216,7 @@ export namespace ColorSchemePreset {
 
             Panel: { id: ColorScheme.ItemId.Panel, bkgd: BtnFaceColor, fore: WindowTextColor },
             Panel_Hoisted: { id: ColorScheme.ItemId.Panel_Hoisted, bkgd: inherit, fore: inherit },
+            Panel_Alert: { id: ColorScheme.ItemId.Panel_Alert, bkgd: 'brown', fore: NoneColor },
             Panel_Divider: { id: ColorScheme.ItemId.Panel_Divider, bkgd: inherit, fore: '#686869' },
             Panel_Splitter: { id: ColorScheme.ItemId.Panel_Splitter, bkgd: inherit, fore: inherit },
             Panel_ItemHover: { id: ColorScheme.ItemId.Panel_ItemHover, bkgd: inherit, fore: NoneColor },
@@ -489,6 +490,7 @@ export namespace ColorSchemePreset {
             SectionDividerLine: { id: ColorScheme.ItemId.SectionDividerLine, bkgd: NoneColor, fore: inherit },
             Panel: { id: ColorScheme.ItemId.Panel, bkgd: '#171717', fore: '#EDE2E6' },
             Panel_Hoisted: { id: ColorScheme.ItemId.Panel_Hoisted, bkgd: '#1b1b1b', fore: inherit },
+            Panel_Alert: { id: ColorScheme.ItemId.Panel_Alert, bkgd: 'brown', fore: NoneColor },
             Panel_Divider: { id: ColorScheme.ItemId.Panel_Divider, bkgd: inherit, fore: '#686869' },
             Panel_Splitter: { id: ColorScheme.ItemId.Panel_Splitter, bkgd: inherit, fore: inherit },
             Panel_ItemHover: { id: ColorScheme.ItemId.Panel_ItemHover, bkgd: '#272727', fore: inherit },

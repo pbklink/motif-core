@@ -81,6 +81,8 @@ export namespace UserAlertService {
                 AttemptingSessionRenewal,
                 SettingChanged,
                 ResetLayout,
+                DataSavingBeforeLeave,
+                CanLeave,
             }
 
             interface Info {
@@ -88,6 +90,7 @@ export namespace UserAlertService {
                 readonly name: string;
                 readonly error: boolean;
                 readonly cancellable: boolean;
+                readonly restartable: boolean;
                 readonly restartReasonStringId: StringId | undefined;
             }
 
@@ -99,42 +102,64 @@ export namespace UserAlertService {
                     name: 'Exception',
                     error: true,
                     cancellable: false,
-                    restartReasonStringId: StringId.UserAlertRestartReason_Unstable,
+                    restartable: true,
+                    restartReasonStringId: StringId.UserAlert_RestartReason_Unstable,
                 },
                 UnhandledError: {
                     id: Id.UnhandledError,
                     name: 'UnhandledError',
                     error: true,
                     cancellable: false,
-                    restartReasonStringId: StringId.UserAlertRestartReason_Unstable,
+                    restartable: true,
+                    restartReasonStringId: StringId.UserAlert_RestartReason_Unstable,
                 },
                 NewSessionRequired: {
                     id: Id.NewSessionRequired,
                     name: 'NewSessionRequired',
                     error: true,
                     cancellable: false,
-                    restartReasonStringId: StringId.UserAlertRestartReason_NewSessionRequired,
+                    restartable: true,
+                    restartReasonStringId: StringId.UserAlert_RestartReason_NewSessionRequired,
                 },
                 AttemptingSessionRenewal: {
                     id: Id.AttemptingSessionRenewal,
                     name: 'AttemptingSessionRenewal',
                     error: true,
                     cancellable: true,
-                    restartReasonStringId: StringId.UserAlertRestartReason_AttemptingSessionRenewal,
+                    restartable: true,
+                    restartReasonStringId: StringId.UserAlert_RestartReason_AttemptingSessionRenewal,
                 },
                 SettingChanged: {
                     id: Id.SettingChanged,
                     name: 'SettingChanged',
                     error: false,
                     cancellable: true,
-                    restartReasonStringId: StringId.UserAlertRestartReason_UserAction,
+                    restartable: true,
+                    restartReasonStringId: StringId.UserAlert_RestartReason_UserAction,
                 },
                 ResetLayout: {
                     id: Id.ResetLayout,
                     name: 'ResetLayout',
                     error: false,
                     cancellable: true,
-                    restartReasonStringId: StringId.UserAlertRestartReason_UserAction,
+                    restartable: true,
+                    restartReasonStringId: StringId.UserAlert_RestartReason_UserAction,
+                },
+                DataSavingBeforeLeave: {
+                    id: Id.DataSavingBeforeLeave,
+                    name: 'DataSavingBeforeLeave',
+                    error: false,
+                    cancellable: false,
+                    restartable: false,
+                    restartReasonStringId: undefined,
+                },
+                CanLeave: {
+                    id: Id.CanLeave,
+                    name: 'CanLeave',
+                    error: false,
+                    cancellable: false,
+                    restartable: false,
+                    restartReasonStringId: undefined,
                 },
             } as const;
 
@@ -143,7 +168,7 @@ export namespace UserAlertService {
 
             export function initialise() {
                 for (let id = 0; id < idCount; id++) {
-                    if (infos[id].id !== id) {
+                    if (infos[id].id !== id as Id) {
                         throw new EnumInfoOutOfOrderError('UserAlertService.Alert.Type.Id', id, infos[id].name);
                     }
                 }
@@ -151,6 +176,10 @@ export namespace UserAlertService {
 
             export function idIsCancellable(id: Id) {
                 return infos[id].cancellable;
+            }
+
+            export function idIsRestartable(id: Id) {
+                return infos[id].restartable;
             }
 
             export function idIsError(id: Id) {

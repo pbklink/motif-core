@@ -358,6 +358,7 @@ export namespace ColorScheme {
 
         Panel,
         Panel_Hoisted,
+        Panel_Alert,
         Panel_Divider,
         Panel_Splitter,
         Panel_ItemHover,
@@ -2058,6 +2059,13 @@ export namespace ColorScheme {
                 display: 'Panel: Hoisted',
                 bkgdResolver: resolveBkgdColor_Panel_Hoisted,
                 foreResolver: resolveForeColor_Panel_Hoisted,
+            },
+            Panel_Alert: {
+                id: ItemId.Panel_Alert,
+                name: 'Panel_Alert',
+                display: 'Panel: Alert',
+                bkgdResolver: resolveBkgdColor_Panel_Alert,
+                foreResolver: undefined,
             },
             Panel_Divider: {
                 id: ItemId.Panel_Divider,
@@ -4363,6 +4371,10 @@ export namespace ColorScheme {
     function resolveForeColor_Panel_Hoisted(items: Item[]) {
         const itemColor = items[ItemId.Panel_Hoisted].fore;
         return (itemColor === schemeInheritColor) ? resolveForeColor_Panel(items) : itemColor;
+    }
+    function resolveBkgdColor_Panel_Alert(items: Item[]) {
+        const itemColor = items[ItemId.Panel_Alert].bkgd;
+        return (itemColor === schemeInheritColor) ? resolveBkgdColor_Panel(items) : itemColor;
     }
     function resolveBkgdColor_Panel_Divider(items: Item[]) {
         const itemColor = items[ItemId.Panel_Divider].bkgd;

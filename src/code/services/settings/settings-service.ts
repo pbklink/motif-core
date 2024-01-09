@@ -37,6 +37,8 @@ export class SettingsService {
 
     private _masterChangedMultiEvent = new MultiEvent<SettingsService.ChangedEventHandler>();
     private _changedMultiEvent = new MultiEvent<SettingsService.ChangedEventHandler>();
+    private _beginSaveWaitingMultiEvent = new MultiEvent<SettingsService.SaveWaitingEventHandler>();
+    private _endSaveWaitingMultiEvent = new MultiEvent<SettingsService.SaveWaitingEventHandler>();
 
     constructor(
         private readonly _idleService: IdleService,
@@ -56,7 +58,6 @@ export class SettingsService {
         this.register(this._color);
         this._exchanges = new ExchangesSettings();
         this.register(this._exchanges);
-        document.addEventListener('visibilitychange', this._documentVisibilityChangeListener);
     }
 
     get restartRequired() { return this._restartRequired; }
@@ -66,7 +67,6 @@ export class SettingsService {
     get color() { return this._color; }
 
     finalise() {
-        document.removeEventListener('visibilitychange', this._documentVisibilityChangeListener);
         this.checkCancelSaveRequest(); // should already have been saved in visibility change
     }
 
@@ -246,6 +246,61 @@ export class SettingsService {
         }
     }
 
+    async save(): Promise<Result<void>> {
+        const { user: userElement, operator: operatorElement } = this.saveAsElements();
+        let result: Result<void>;
+        try {
+            if (userElement === undefined) {
+                if (operatorElement === undefined) {
+                    return new Ok(undefined);
+                } else {
+                    const operatorSettings = operatorElement.stringify()
+                    await this._appStorageService.setItem(KeyValueStore.Key.Settings, operatorSettings, true);
+                }
+            } else {
+                const userSettings = userElement.stringify()
+                if (operatorElement === undefined) {
+                    await this._appStorageService.setItem(KeyValueStore.Key.Settings, userSettings, false);
+                } else {
+                    const operatorSettings = operatorElement.stringify()
+                    await Promise.all([
+                        this._appStorageService.setItem(KeyValueStore.Key.Settings, userSettings, false),
+                        this._appStorageService.setItem(KeyValueStore.Key.Settings, operatorSettings, true)
+                    ]);
+                }
+            }
+
+            result = new Ok(undefined);
+        } catch (e) {
+            result = new Err(getErrorMessage(e));
+        }
+        return result;
+    }
+
+    checkCancelSaveRequest() {
+        if (this._saveRequestPromise === undefined) {
+            return false;
+        } else {
+            this._idleService.cancelRequest(this._saveRequestPromise);
+            this._saveRequestPromise = undefined;
+            return true;
+        }
+    }
+
+    processSaveResult(result: Result<void>, initiator: SettingsService.SaveInitiator) {
+        if (result.isOk()) {
+            if (this._lastSaveFailed) {
+                // Logger.log(Logger.LevelId.Warning, 'Save settings succeeded');
+                this._lastSaveFailed = false;
+            }
+        } else {
+            if (!this._lastSaveFailed) {
+                Logger.log(Logger.LevelId.Warning, `${initiator} save settings error: ${getErrorMessage(result.error)}`);
+                this._lastSaveFailed = true;
+            }
+        }
+    }
+
     hasSymbolNameFieldIdChanged() {
         for (const {group, id} of this._changedSettings) {
             if (group === this.exchanges && id as ExchangeSettings.Id === ExchangeSettings.Id.SymbolNameFieldId) {
@@ -271,25 +326,20 @@ export class SettingsService {
         this._changedMultiEvent.unsubscribe(id);
     }
 
-    private _documentVisibilityChangeListener = () => { this.handleDocumentVisibilityChange(); };
+    subscribeBeginSaveWaitingEvent(handler: SettingsService.SaveWaitingEventHandler): MultiEvent.DefinedSubscriptionId {
+        return this._beginSaveWaitingMultiEvent.subscribe(handler);
+    }
 
-    private handleDocumentVisibilityChange() {
-        const documentHidden = document.hidden;
-        if (documentHidden) {
-            const saveRequired = this.checkCancelSaveRequest();
-            if (saveRequired) {
-                // do save immediately (may be shutting down)
-                const promise = this.save();
-                promise.then(
-                    (result) => {
-                        this.processSaveResult(result, true);
-                    },
-                    (reason) => {
-                        throw AssertInternalError.createIfNotError(reason, 'SSHDVC40498');
-                    }
-                );
-            }
-        }
+    unsubscribeBeginSaveWaitingEvent(id: MultiEvent.SubscriptionId): void {
+        this._beginSaveWaitingMultiEvent.unsubscribe(id);
+    }
+
+    subscribeEndSaveWaitingEvent(handler: SettingsService.SaveWaitingEventHandler): MultiEvent.DefinedSubscriptionId {
+        return this._endSaveWaitingMultiEvent.subscribe(handler);
+    }
+
+    unsubscribeEndSaveWaitingEvent(id: MultiEvent.SubscriptionId): void {
+        this._endSaveWaitingMultiEvent.unsubscribe(id);
     }
 
     private handleMasterBeginChangesEvent() {
@@ -351,6 +401,20 @@ export class SettingsService {
         this._changedSettings.length = 0;
     }
 
+    private notifyBeginSaveWaiting() {
+        const handlers = this._beginSaveWaitingMultiEvent.copyHandlers();
+        for (let i = 0; i < handlers.length; i++) {
+            handlers[i]();
+        }
+    }
+
+    private notifyEndSaveWaiting() {
+        const handlers = this._endSaveWaitingMultiEvent.copyHandlers();
+        for (let i = 0; i < handlers.length; i++) {
+            handlers[i]();
+        }
+    }
+
     private getRegisteredGroup(name: string) {
         const count = this._registeredGroups.length;
         for (let i = 0; i < count; i++) {
@@ -393,22 +457,12 @@ export class SettingsService {
             if (this._changed) {
                 this.notifyChanged();
                 this._changed = false;
-                this.requestSave();
+                this.requestSave(SettingsService.SaveInitiator.Change);
             }
         }
     }
 
-    private checkCancelSaveRequest() {
-        if (this._saveRequestPromise === undefined) {
-            return false;
-        } else {
-            this._idleService.cancelRequest(this._saveRequestPromise);
-            this._saveRequestPromise = undefined;
-            return true;
-        }
-    }
-
-    private requestSave() {
+    private requestSave(initiator: SettingsService.SaveInitiator) {
         if (this._saveRequestPromise === undefined) {
             this._saveRequestPromise = this._idleService.addRequest<Result<void>>(
                 () => this.idleRequestSave(),
@@ -418,13 +472,15 @@ export class SettingsService {
             this._saveRequestPromise.then(
                 (result) => {
                     if (result !== undefined) {
-                        this.processSaveResult(result, false);
+                        this.processSaveResult(result, initiator);
                     }
+                    this.notifyEndSaveWaiting();
                 },
                 (reason) => {
                     throw AssertInternalError.createIfNotError(reason, 'SSRS40498');
                 }
             );
+            this.notifyBeginSaveWaiting();
         }
     }
 
@@ -432,51 +488,6 @@ export class SettingsService {
         // Do not undefine this._saveRequestPromise in Promise.then(). The then() function runs in next microtask, so it is possible for save to be completed while this._saveRequestPromise is still defined
         this._saveRequestPromise = undefined;
         return this.save();
-    }
-
-    private async save(): Promise<Result<void>> {
-        const { user: userElement, operator: operatorElement } = this.saveAsElements();
-        let result: Result<void>;
-        try {
-            if (userElement === undefined) {
-                if (operatorElement === undefined) {
-                    return new Ok(undefined);
-                } else {
-                    const operatorSettings = operatorElement.stringify()
-                    await this._appStorageService.setItem(KeyValueStore.Key.Settings, operatorSettings, true);
-                }
-            } else {
-                const userSettings = userElement.stringify()
-                if (operatorElement === undefined) {
-                    await this._appStorageService.setItem(KeyValueStore.Key.Settings, userSettings, false);
-                } else {
-                    const operatorSettings = operatorElement.stringify()
-                    await Promise.all([
-                        this._appStorageService.setItem(KeyValueStore.Key.Settings, userSettings, false),
-                        this._appStorageService.setItem(KeyValueStore.Key.Settings, operatorSettings, true)
-                    ]);
-                }
-            }
-
-            result = new Ok(undefined);
-        } catch (e) {
-            result = new Err(getErrorMessage(e));
-        }
-        return result;
-    }
-
-    private processSaveResult(result: Result<void>, docHiding: boolean) {
-        if (result.isOk()) {
-            if (this._lastSaveFailed) {
-                // Logger.log(Logger.LevelId.Warning, 'Save settings succeeded');
-                this._lastSaveFailed = false;
-            }
-        } else {
-            if (!this._lastSaveFailed) {
-                Logger.log(Logger.LevelId.Warning, `${docHiding ? 'Hiding s' : 'S' }ave settings error: ${getErrorMessage(result.error)}`);
-                this._lastSaveFailed = true;
-            }
-        }
     }
 
     private saveAsElements(): SettingsService.SaveElements {
@@ -538,6 +549,9 @@ export class SettingsService {
 }
 
 export namespace SettingsService {
+    export type ChangedEventHandler = (this: void) => void;
+    export type SaveWaitingEventHandler = (this: void) => void;
+
     export type RegistryEntry = SettingsGroup | undefined;
 
     export interface GroupSetting {
@@ -569,19 +583,21 @@ export namespace SettingsService {
         }
     }
 
+    export const enum SaveInitiator {
+        Change = 'Change',
+        Hide = 'Hide',
+        Unload = 'Unload',
+    }
 
     export interface SaveElements {
         user: JsonElement | undefined;
         operator: JsonElement | undefined;
     }
 
-    export type ChangedEventHandler = (this: void) => void;
-    export type SaveRequiredEventHandler = (this: void) => void;
-
     export const enum JsonName {
         Groups = 'groups',
     }
 
-    export const saveDebounceTime = 5 * mSecsPerSec;
-    export const saveWaitIdleTime = 3 * mSecsPerSec;
+    export const saveDebounceTime = 1.5 * mSecsPerSec;
+    export const saveWaitIdleTime = 2 * mSecsPerSec;
 }
