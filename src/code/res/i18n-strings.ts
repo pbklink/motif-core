@@ -98,10 +98,6 @@ export const enum StringId {
     Version,
     Service,
     Restart,
-    UserAlertRestartReason_Unstable,
-    UserAlertRestartReason_NewSessionRequired,
-    UserAlertRestartReason_AttemptingSessionRenewal,
-    UserAlertRestartReason_UserAction,
     ErrorCount,
     Hide,
     CopyToClipboard,
@@ -2126,6 +2122,12 @@ export const enum StringId {
     DiagnosticsDitemGroup_DebugCaption,
     DiagnosticsDitemGroup_DebugTitle,
     Diagnostics_CloseSocketConnection,
+    UserAlert_RestartReason_Unstable,
+    UserAlert_RestartReason_NewSessionRequired,
+    UserAlert_RestartReason_AttemptingSessionRenewal,
+    UserAlert_RestartReason_UserAction,
+    UserAlert_PleaseWaitSavingChanges,
+    UserAlert_ChangesSavedOkToLeaveOrRestorePage,
 }
 
 /** @public */
@@ -2615,26 +2617,6 @@ export namespace I18nStrings {
         Restart: {
             id: StringId.Restart, translations: {
                 en: 'Restart',
-            }
-        },
-        UserAlertRestartReason_Unstable: {
-            id: StringId.UserAlertRestartReason_Unstable, translations: {
-                en: 'Motif may be unstable! Click "Restart" to begin new session',
-            }
-        },
-        UserAlertRestartReason_NewSessionRequired: {
-            id: StringId.UserAlertRestartReason_NewSessionRequired, translations: {
-                en: 'New Motif session required! Click "Restart" to begin new session',
-            }
-        },
-        UserAlertRestartReason_AttemptingSessionRenewal: {
-            id: StringId.UserAlertRestartReason_AttemptingSessionRenewal, translations: {
-                en: 'Attempting to renew Motif session! Click "Restart" to begin new session',
-            }
-        },
-        UserAlertRestartReason_UserAction: {
-            id: StringId.UserAlertRestartReason_UserAction, translations: {
-                en: 'Restart required due to user action',
             }
         },
         ErrorCount: {
@@ -12761,6 +12743,36 @@ export namespace I18nStrings {
         Diagnostics_CloseSocketConnection: {
             id: StringId.Diagnostics_CloseSocketConnection, translations: {
                 en: 'Close Socket Connection'
+            }
+        },
+        UserAlert_RestartReason_Unstable: {
+            id: StringId.UserAlert_RestartReason_Unstable, translations: {
+                en: 'Motif may be unstable! Click "Restart" to begin new session',
+            }
+        },
+        UserAlert_RestartReason_NewSessionRequired: {
+            id: StringId.UserAlert_RestartReason_NewSessionRequired, translations: {
+                en: 'New Motif session required! Click "Restart" to begin new session',
+            }
+        },
+        UserAlert_RestartReason_AttemptingSessionRenewal: {
+            id: StringId.UserAlert_RestartReason_AttemptingSessionRenewal, translations: {
+                en: 'Attempting to renew Motif session! Click "Restart" to begin new session',
+            }
+        },
+        UserAlert_RestartReason_UserAction: {
+            id: StringId.UserAlert_RestartReason_UserAction, translations: {
+                en: 'Restart required due to user action',
+            }
+        },
+        UserAlert_PleaseWaitSavingChanges: {
+            id: StringId.UserAlert_PleaseWaitSavingChanges, translations: {
+                en: 'Please wait - saving changes.',
+            }
+        },
+        UserAlert_ChangesSavedOkToLeaveOrRestorePage: {
+            id: StringId.UserAlert_ChangesSavedOkToLeaveOrRestorePage, translations: {
+                en: 'Changes saved! Ok to leave or restore page.',
             }
         },
 
