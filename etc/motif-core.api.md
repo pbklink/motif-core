@@ -31799,6 +31799,9 @@ export class SymbolsService {
     // (undocumented)
     setDefaultDefaultExchangeId(value: ExchangeId): void;
     // (undocumented)
+    get settingsServiceLinked(): boolean;
+    set settingsServiceLinked(value: boolean);
+    // (undocumented)
     start(): void;
     // (undocumented)
     subscribeAllowedExchangeIdsChangedEvent(handler: SymbolsService.AllowedExchangeIdsChangedEventHandler): number;
