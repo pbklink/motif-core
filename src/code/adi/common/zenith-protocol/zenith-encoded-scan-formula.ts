@@ -19,9 +19,10 @@ export namespace ZenithEncodedScanFormula {
     export type TupleNode<T extends TupleNodeType> = [T, ...ParamTupleMap[T]];
 
     // Logical Criteria Nodes
+    export type NotTupleNode = TupleNode<typeof NotTupleNodeType>;
+    export type XorTupleNode = TupleNode<typeof XorTupleNodeType>;
     export type AndTupleNode = TupleNode<typeof AndTupleNodeType>;
     export type OrTupleNode = TupleNode<typeof OrTupleNodeType>;
-    export type NotTupleNode = TupleNode<typeof NotTupleNodeType>;
 
     // Matching
     export type AltCodeTupleNode = TupleNode<typeof AltCodeTupleNodeType>;
@@ -106,9 +107,10 @@ export namespace ZenithEncodedScanFormula {
     export type IfTupleNode = TupleNode<typeof IfTupleNodeType>;
 
     export type LogicalTupleNodeType = PickEnum<TupleNodeType,
+        typeof NotTupleNodeType |
+        typeof XorTupleNodeType |
         typeof AndTupleNodeType |
-        typeof OrTupleNodeType |
-        typeof NotTupleNodeType
+        typeof OrTupleNodeType
     >;
 
     export type NumericField = PickEnum<TupleNodeType,
@@ -238,7 +240,7 @@ export namespace ZenithEncodedScanFormula {
     export type BooleanTupleNodeType = LogicalTupleNodeType | MatchingField | ComparisonTupleNodeType;
     export type ExpressionTupleNodeType = BinaryTupleNodeType | UnaryTupleNodeType | UnaryOrBinaryTupleNodeType | typeof IfTupleNodeType;
 
-    export type LogicalTupleNodeUnion = AndTupleNode | OrTupleNode | NotTupleNode;
+    export type LogicalTupleNodeUnion = NotTupleNode | XorTupleNode | AndTupleNode | OrTupleNode;
     export type LogicalTupleNode = [nodeType: LogicalTupleNodeType, ...params: BooleanParam[]];
 
     export type MatchingTupleNodeUnion =
@@ -480,8 +482,9 @@ export namespace ZenithEncodedScanFormula {
 
     export const SingleDefault_IsIndex = true;
 
-    export const AndTupleNodeType = 'And';
     export const NotTupleNodeType = 'Not';
+    export const XorTupleNodeType = 'Xor';
+    export const AndTupleNodeType = 'And';
     export const OrTupleNodeType = 'Or';
     export const AltCodeTupleNodeType = 'AltCode';
     export const AttributeTupleNodeType = 'Attribute';
@@ -557,8 +560,9 @@ export namespace ZenithEncodedScanFormula {
 
     export interface ParamTupleMap {
         // Logical
-        'And': LogicalParams;
         'Not': LogicalParams;
+        'Xor': LogicalParams;
+        'And': LogicalParams;
         'Or': LogicalParams;
 
         // Matching

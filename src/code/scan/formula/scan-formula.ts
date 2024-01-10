@@ -12,6 +12,7 @@ export namespace ScanFormula {
         And,
         Or,
         Not,
+        Xor,
 
         // Comparison
         NumericEquals,
@@ -64,6 +65,7 @@ export namespace ScanFormula {
         NodeTypeId.And |
         NodeTypeId.Or |
         NodeTypeId.Not |
+        NodeTypeId.Xor |
         NodeTypeId.NumericEquals |
         NodeTypeId.NumericGreaterThan |
         NodeTypeId.NumericGreaterThanOrEqual |
@@ -128,6 +130,11 @@ export namespace ScanFormula {
         operand: BooleanNode;
     }
 
+    export abstract class LeftRightOperandBooleanNode extends BooleanNode {
+        leftOperand: BooleanNode;
+        rightOperand: BooleanNode;
+    }
+
     export abstract class NumericComparisonBooleanNode extends BooleanNode {
         leftOperand: NumericNode | number;
         rightOperand: NumericNode | number;
@@ -164,6 +171,20 @@ export namespace ScanFormula {
     export namespace NotNode {
         export function is(node: Node): node is NotNode {
             return node.typeId === NodeTypeId.Not;
+        }
+    }
+
+    export class XorNode extends LeftRightOperandBooleanNode {
+        declare readonly typeId: NodeTypeId.Xor;
+
+        constructor() {
+            super(NodeTypeId.Xor);
+        }
+    }
+
+    export namespace XorNode {
+        export function is(node: Node): node is XorNode {
+            return node.typeId === NodeTypeId.Xor;
         }
     }
 

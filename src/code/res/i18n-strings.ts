@@ -1927,7 +1927,9 @@ export const enum StringId {
     ScanFormulaZenithEncodingError_BooleanTupleNodeIsNotAnArray,
     ScanFormulaZenithEncodingError_BooleanTupleNodeArrayIsZeroLength,
     ScanFormulaZenithEncodingError_BooleanTupleNodeTypeIsNotString,
-    ScanFormulaZenithEncodingError_LogicalBooleanMissingOperands,
+    ScanFormulaZenithEncodingError_SingleOperandLogicalBooleanDoesNotHaveOneOperand,
+    ScanFormulaZenithEncodingError_LeftRightOperandLogicalBooleanDoesNotHaveTwoOperands,
+    ScanFormulaZenithEncodingError_MultiOperandLogicalBooleanMissingOperands,
     ScanFormulaZenithEncodingError_LogicalBooleanMissingOperand,
     ScanFormulaZenithEncodingError_NumericComparisonDoesNotHave2Operands,
     ScanFormulaZenithEncodingError_NumericParameterIsNotNumberOrComparableFieldOrArray,
@@ -11767,8 +11769,18 @@ export namespace I18nStrings {
                 en: 'Boolean tuple node type is not string',
             }
         },
-        ScanFormulaZenithEncodingError_LogicalBooleanMissingOperands: {
-            id: StringId.ScanFormulaZenithEncodingError_LogicalBooleanMissingOperands, translations: {
+        ScanFormulaZenithEncodingError_SingleOperandLogicalBooleanDoesNotHaveOneOperand: {
+            id: StringId.ScanFormulaZenithEncodingError_SingleOperandLogicalBooleanDoesNotHaveOneOperand, translations: {
+                en: 'Logical boolean does not have one operand'
+            }
+        },
+        ScanFormulaZenithEncodingError_LeftRightOperandLogicalBooleanDoesNotHaveTwoOperands: {
+            id: StringId.ScanFormulaZenithEncodingError_LeftRightOperandLogicalBooleanDoesNotHaveTwoOperands, translations: {
+                en: 'Logical boolean does not have two operands'
+            }
+        },
+        ScanFormulaZenithEncodingError_MultiOperandLogicalBooleanMissingOperands: {
+            id: StringId.ScanFormulaZenithEncodingError_MultiOperandLogicalBooleanMissingOperands, translations: {
                 en: 'Logical boolean missing operands',
             }
         },

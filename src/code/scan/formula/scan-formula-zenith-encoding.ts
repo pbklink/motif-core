@@ -128,9 +128,10 @@ export namespace ScanFormulaZenithEncoding {
 
     function encodeBooleanNode(node: ScanFormula.BooleanNode): ZenithEncodedScanFormula.BooleanTupleNode {
         switch (node.typeId) {
+            case ScanFormula.NodeTypeId.Not: return encodeSingleOperandBooleanNode(ZenithEncodedScanFormula.NotTupleNodeType, node as ScanFormula.SingleOperandBooleanNode);
+            case ScanFormula.NodeTypeId.Xor: return encodeLeftRightOperandBooleanNode(ZenithEncodedScanFormula.NotTupleNodeType, node as ScanFormula.LeftRightOperandBooleanNode);
             case ScanFormula.NodeTypeId.And: return encodeMultiOperandBooleanNode(ZenithEncodedScanFormula.AndTupleNodeType, node as ScanFormula.MultiOperandBooleanNode);
             case ScanFormula.NodeTypeId.Or: return encodeMultiOperandBooleanNode(ZenithEncodedScanFormula.OrTupleNodeType, node as ScanFormula.MultiOperandBooleanNode);
-            case ScanFormula.NodeTypeId.Not: return encodeSingleOperandBooleanNode(ZenithEncodedScanFormula.NotTupleNodeType, node as ScanFormula.SingleOperandBooleanNode);
             case ScanFormula.NodeTypeId.NumericEquals: return encodeNumericComparisonNode(ZenithEncodedScanFormula.EqualTupleNodeType, node as ScanFormula.NumericComparisonBooleanNode);
             case ScanFormula.NodeTypeId.NumericGreaterThan: return encodeNumericComparisonNode(ZenithEncodedScanFormula.GreaterThanTupleNodeType, node as ScanFormula.NumericComparisonBooleanNode);
             case ScanFormula.NodeTypeId.NumericGreaterThanOrEqual: return encodeNumericComparisonNode(ZenithEncodedScanFormula.GreaterThanOrEqualTupleNodeType, node as ScanFormula.NumericComparisonBooleanNode);
@@ -179,6 +180,12 @@ export namespace ScanFormulaZenithEncoding {
     function encodeSingleOperandBooleanNode(type: typeof ZenithEncodedScanFormula.NotTupleNodeType, node: ScanFormula.SingleOperandBooleanNode): ZenithEncodedScanFormula.LogicalTupleNode {
         const param = encodeBooleanNode(node);
         return [type, param];
+    }
+
+    function encodeLeftRightOperandBooleanNode(type: typeof ZenithEncodedScanFormula.NotTupleNodeType, node: ScanFormula.LeftRightOperandBooleanNode): ZenithEncodedScanFormula.LogicalTupleNode {
+        const leftParam = encodeBooleanNode(node.leftOperand);
+        const rightParam = encodeBooleanNode(node.rightOperand);
+        return [type, leftParam, rightParam];
     }
 
     function encodeNumericNode(node: ScanFormula.NumericNode): ZenithEncodedScanFormula.NumericTupleNode | ZenithEncodedScanFormula.NumericField {
@@ -485,9 +492,10 @@ export namespace ScanFormulaZenithEncoding {
 
         switch (nodeType) {
             // Logical
+            case ZenithEncodedScanFormula.NotTupleNodeType: return tryDecodeSingleOperandLogicalBooleanNode(tupleNode as ZenithEncodedScanFormula.LogicalTupleNode, ScanFormula.NotNode, toProgress);
+            case ZenithEncodedScanFormula.XorTupleNodeType: return tryDecodeLeftRightOperandLogicalBooleanNode(tupleNode as ZenithEncodedScanFormula.LogicalTupleNode, ScanFormula.XorNode, toProgress);
             case ZenithEncodedScanFormula.AndTupleNodeType: return tryDecodeMultiOperandLogicalBooleanNode(tupleNode as ZenithEncodedScanFormula.LogicalTupleNode, ScanFormula.AndNode, toProgress);
             case ZenithEncodedScanFormula.OrTupleNodeType: return tryDecodeMultiOperandLogicalBooleanNode(tupleNode as ZenithEncodedScanFormula.LogicalTupleNode, ScanFormula.OrNode, toProgress);
-            case ZenithEncodedScanFormula.NotTupleNodeType: return tryDecodeSingleOperandLogicalBooleanNode(tupleNode as ZenithEncodedScanFormula.LogicalTupleNode, ScanFormula.NotNode, toProgress);
 
             // Comparison
             case ZenithEncodedScanFormula.EqualTupleNodeType: return tryDecodeNumericComparisonNode(tupleNode as ZenithEncodedScanFormula.ComparisonTupleNode, ScanFormula.NumericEqualsNode, toProgress);
@@ -556,6 +564,53 @@ export namespace ScanFormulaZenithEncoding {
         }
     }
 
+    function tryDecodeSingleOperandLogicalBooleanNode(
+        tulipNode: ZenithEncodedScanFormula.LogicalTupleNode,
+        nodeConstructor: new() => ScanFormula.SingleOperandBooleanNode,
+        toProgress: DecodeProgress,
+    ): Result<ScanFormula.SingleOperandBooleanNode, DecodeError> {
+        if (tulipNode.length !== 2) {
+            return createDecodeErrorResult(ErrorId.SingleOperandLogicalBooleanDoesNotHaveOneOperand, tulipNode[0]);
+        } else {
+            const tupleNodeResult = tryDecodeExpectedBooleanOperand(tulipNode[1], toProgress);
+            if (tupleNodeResult.isErr()) {
+                return tupleNodeResult.createType();
+            } else {
+                const resultNode = new nodeConstructor();
+                resultNode.operand = tupleNodeResult.value;
+                return new Ok(resultNode);
+            }
+        }
+    }
+
+    function tryDecodeLeftRightOperandLogicalBooleanNode(
+        tulipNode: ZenithEncodedScanFormula.LogicalTupleNode,
+        nodeConstructor: new() => ScanFormula.LeftRightOperandBooleanNode,
+        toProgress: DecodeProgress,
+    ): Result<ScanFormula.LeftRightOperandBooleanNode, DecodeError> {
+        const tulipNodeLength = tulipNode.length;
+        if (tulipNodeLength !== 3) {
+            return createDecodeErrorResult(ErrorId.LeftRightOperandLogicalBooleanDoesNotHaveTwoOperands, tulipNode[0]);
+        } else {
+            const leftOperandResult = tryDecodeExpectedBooleanOperand(tulipNode[1], toProgress);
+            if (leftOperandResult.isErr()) {
+                return leftOperandResult.createType();
+            } else {
+                const leftOperand = leftOperandResult.value;
+                const rightOperandResult = tryDecodeExpectedBooleanOperand(tulipNode[2], toProgress);
+                if (rightOperandResult.isErr()) {
+                    return rightOperandResult.createType();
+                } else {
+                    const rightOperand = rightOperandResult.value;
+                    const resultNode = new nodeConstructor();
+                    resultNode.leftOperand = leftOperand;
+                    resultNode.rightOperand = rightOperand;
+                    return new Ok(resultNode);
+                }
+            }
+        }
+    }
+
     function tryDecodeMultiOperandLogicalBooleanNode(
         tulipNode: ZenithEncodedScanFormula.LogicalTupleNode,
         nodeConstructor: new() => ScanFormula.MultiOperandBooleanNode,
@@ -563,7 +618,7 @@ export namespace ScanFormulaZenithEncoding {
     ): Result<ScanFormula.MultiOperandBooleanNode, DecodeError> {
         const tulipNodeLength = tulipNode.length;
         if (tulipNodeLength < 2) {
-            return createDecodeErrorResult(ErrorId.LogicalBooleanMissingOperands, tulipNode[0]);
+            return createDecodeErrorResult(ErrorId.MultiOperandLogicalBooleanMissingOperands, tulipNode[0]);
         } else {
             const operands = new Array<ScanFormula.BooleanNode>(tulipNodeLength - 1);
             for (let i = 1; i < tulipNodeLength; i++) {
@@ -579,25 +634,6 @@ export namespace ScanFormulaZenithEncoding {
             const resultNode = new nodeConstructor();
             resultNode.operands = operands;
             return new Ok(resultNode);
-        }
-    }
-
-    function tryDecodeSingleOperandLogicalBooleanNode(
-        tulipNode: ZenithEncodedScanFormula.LogicalTupleNode,
-        nodeConstructor: new() => ScanFormula.SingleOperandBooleanNode,
-        toProgress: DecodeProgress,
-    ): Result<ScanFormula.SingleOperandBooleanNode, DecodeError> {
-        if (tulipNode.length !== 2) {
-            return createDecodeErrorResult(ErrorId.LogicalBooleanMissingOperand, tulipNode[0]);
-        } else {
-            const tupleNodeResult = tryDecodeExpectedBooleanOperand(tulipNode[1], toProgress);
-            if (tupleNodeResult.isErr()) {
-                return tupleNodeResult.createType();
-            } else {
-                const resultNode = new nodeConstructor();
-                resultNode.operand = tupleNodeResult.value;
-                return new Ok(resultNode);
-            }
         }
     }
 
@@ -1980,8 +2016,9 @@ export namespace ScanFormulaZenithEncoding {
         BooleanTupleNodeIsNotAnArray,
         BooleanTupleNodeArrayIsZeroLength,
         BooleanTupleNodeTypeIsNotString,
-        LogicalBooleanMissingOperands,
-        LogicalBooleanMissingOperand,
+        SingleOperandLogicalBooleanDoesNotHaveOneOperand,
+        LeftRightOperandLogicalBooleanDoesNotHaveTwoOperands,
+        MultiOperandLogicalBooleanMissingOperands,
         NumericComparisonDoesNotHave2Operands,
         NumericParameterIsNotNumberOrComparableFieldOrArray,
         UnexpectedBooleanParamType,
@@ -2057,13 +2094,17 @@ export namespace ScanFormulaZenithEncoding {
                 id: ErrorId.BooleanTupleNodeTypeIsNotString,
                 summaryId: StringId.ScanFormulaZenithEncodingError_BooleanTupleNodeTypeIsNotString
             },
-            LogicalBooleanMissingOperands: {
-                id: ErrorId.LogicalBooleanMissingOperands,
-                summaryId: StringId.ScanFormulaZenithEncodingError_LogicalBooleanMissingOperands
+            SingleOperandLogicalBooleanDoesNotHaveOneOperand: {
+                id: ErrorId.SingleOperandLogicalBooleanDoesNotHaveOneOperand,
+                summaryId: StringId.ScanFormulaZenithEncodingError_SingleOperandLogicalBooleanDoesNotHaveOneOperand
             },
-            LogicalBooleanMissingOperand: {
-                id: ErrorId.LogicalBooleanMissingOperand,
-                summaryId: StringId.ScanFormulaZenithEncodingError_LogicalBooleanMissingOperand
+            LeftRightOperandLogicalBooleanDoesNotHaveTwoOperands: {
+                id: ErrorId.LeftRightOperandLogicalBooleanDoesNotHaveTwoOperands,
+                summaryId: StringId.ScanFormulaZenithEncodingError_LeftRightOperandLogicalBooleanDoesNotHaveTwoOperands
+            },
+            MultiOperandLogicalBooleanMissingOperands: {
+                id: ErrorId.MultiOperandLogicalBooleanMissingOperands,
+                summaryId: StringId.ScanFormulaZenithEncodingError_MultiOperandLogicalBooleanMissingOperands
             },
             NumericComparisonDoesNotHave2Operands: {
                 id: ErrorId.NumericComparisonDoesNotHave2Operands,

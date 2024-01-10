@@ -169,9 +169,6 @@ export namespace ScanConditionSet {
 
     function createCondition(operandNode: ScanFormula.BooleanNode, factory: ScanConditionFactory, not: boolean): Result<ScanCondition, ScanConditionSetLoadError> {
         switch (operandNode.typeId) {
-            case ScanFormula.NodeTypeId.And:
-            case ScanFormula.NodeTypeId.Or:
-                return new Err({ typeId: ScanConditionSetLoadErrorTypeId.UnsupportedConditionNodeType, extra: operandNode.typeId.toString() })
             case ScanFormula.NodeTypeId.Not: {
                 const notNode = operandNode as ScanFormula.NotNode;
                 const createResult = createCondition(notNode.operand, factory, !not);
@@ -183,6 +180,10 @@ export namespace ScanConditionSet {
                     return new Ok(condition);
                 }
             }
+            case ScanFormula.NodeTypeId.Xor:
+            case ScanFormula.NodeTypeId.And:
+            case ScanFormula.NodeTypeId.Or:
+                return new Err({ typeId: ScanConditionSetLoadErrorTypeId.UnsupportedConditionNodeType, extra: operandNode.typeId.toString() })
             case ScanFormula.NodeTypeId.NumericEquals: {
                 const numericComparisonBooleanNode = operandNode as ScanFormula.NumericComparisonBooleanNode;
                 return factory.createNumericComparison(numericComparisonBooleanNode, not, NumericComparisonScanCondition.OperationId.Equals);
