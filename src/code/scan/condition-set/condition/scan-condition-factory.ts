@@ -27,19 +27,21 @@ import {
     PriceSubFieldEqualsScanCondition,
     PriceSubFieldHasValueScanCondition,
     PriceSubFieldInRangeScanCondition,
-    TextFieldContainsScanCondition
+    TextFieldContainsScanCondition,
+    TextFieldIncludesScanCondition
 } from './scan-condition';
 
 export interface ScanConditionFactory {
-    createNumericComparison(formulaNode: ScanFormula.NumericComparisonBooleanNode, not: boolean, operationId: NumericComparisonScanCondition.OperationId): Result<NumericComparisonScanCondition, ScanConditionSetLoadError>;
-    createAll(formulaNode: ScanFormula.AllNode, not: boolean): Result<AllScanCondition, ScanConditionSetLoadError>;
-    createNone(formulaNode: ScanFormula.NoneNode, not: boolean): Result<NoneScanCondition, ScanConditionSetLoadError>;
+    createNumericComparison(formulaNode: ScanFormula.NumericComparisonBooleanNode, operationId: NumericComparisonScanCondition.OperationId): Result<NumericComparisonScanCondition, ScanConditionSetLoadError>;
+    createAll(formulaNode: ScanFormula.AllNode): Result<AllScanCondition, ScanConditionSetLoadError>;
+    createNone(formulaNode: ScanFormula.NoneNode): Result<NoneScanCondition, ScanConditionSetLoadError>;
     createFieldHasValue(formulaNode: ScanFormula.FieldHasValueNode, not: boolean): Result<FieldHasValueScanCondition, ScanConditionSetLoadError>;
     createBooleanFieldEquals(formulaNode: ScanFormula.BooleanFieldEqualsNode, not: boolean): Result<BooleanFieldEqualsScanCondition, ScanConditionSetLoadError>;
     createNumericFieldEquals(formulaNode: ScanFormula.NumericFieldEqualsNode, not: boolean): Result<NumericFieldEqualsScanCondition, ScanConditionSetLoadError>;
     createNumericFieldInRange(formulaNode: ScanFormula.NumericFieldInRangeNode, not: boolean): Result<NumericFieldInRangeScanCondition, ScanConditionSetLoadError>;
     createDateFieldEquals(formulaNode: ScanFormula.DateFieldEqualsNode, not: boolean): Result<DateFieldEqualsScanCondition, ScanConditionSetLoadError>;
     createDateFieldInRange(formulaNode: ScanFormula.DateFieldInRangeNode, not: boolean): Result<DateFieldInRangeScanCondition, ScanConditionSetLoadError>;
+    createTextFieldIncludes(formulaNode: ScanFormula.TextFieldIncludesNode, not: boolean): Result<TextFieldIncludesScanCondition, ScanConditionSetLoadError>;
     createTextFieldContains(formulaNode: ScanFormula.TextFieldContainsNode, not: boolean): Result<TextFieldContainsScanCondition, ScanConditionSetLoadError>;
     createPriceSubFieldHasValue(formulaNode: ScanFormula.PriceSubFieldHasValueNode, not: boolean): Result<PriceSubFieldHasValueScanCondition, ScanConditionSetLoadError>;
     createPriceSubFieldEquals(formulaNode: ScanFormula.PriceSubFieldEqualsNode, not: boolean): Result<PriceSubFieldEqualsScanCondition, ScanConditionSetLoadError>;

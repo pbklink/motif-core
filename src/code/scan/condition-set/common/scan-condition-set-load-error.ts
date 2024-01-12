@@ -2,7 +2,9 @@ export const enum ScanConditionSetLoadErrorTypeId {
     // ConditionSet
     UnsupportedConditionsNodeType,
     UnsupportedConditionNodeType,
-    UnsupportedNumericComparisonOperandType,
+    LeftAndRightNumericComparisonOperandTypesAreBothNumber,
+    LeftNumericComparisonOperandTypeIsUnsupported,
+    RightNumericComparisonOperandTypeIsUnsupported,
 }
 
 export interface ScanConditionSetLoadError {

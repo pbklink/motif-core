@@ -27,7 +27,8 @@ import {
     PriceSubFieldInRangeScanCondition,
     ScanCondition,
     ScanConditionFactory,
-    TextFieldContainsScanCondition
+    TextFieldContainsScanCondition,
+    TextFieldIncludesScanCondition
 } from './condition/internal-api';
 
 export interface ScanConditionSet {
@@ -124,13 +125,13 @@ export namespace ScanConditionSet {
 
         for (let i = 0; i < conditionCount; i++) {
             const condition = conditions.getAt(i);
-            const operandBooleanNode = createConditionBooleanNode(condition);
-            if (condition.not) {
+            const createdOperandBooleanNode = createBooleanNodeForCondition(condition);
+            if (createdOperandBooleanNode.requiresNot) {
                 const notNode = new ScanFormula.NotNode();
-                notNode.operand = operandBooleanNode;
+                notNode.operand = createdOperandBooleanNode.node;
                 operands[i] = notNode;
             } else {
-                operands[i] = operandBooleanNode;
+                operands[i] = createdOperandBooleanNode.node;
             }
         }
 
@@ -167,117 +168,125 @@ export namespace ScanConditionSet {
         }
     }
 
-    function createCondition(operandNode: ScanFormula.BooleanNode, factory: ScanConditionFactory, not: boolean): Result<ScanCondition, ScanConditionSetLoadError> {
-        switch (operandNode.typeId) {
+    function createCondition(node: ScanFormula.BooleanNode, factory: ScanConditionFactory, not: boolean): Result<ScanCondition, ScanConditionSetLoadError> {
+        switch (node.typeId) {
             case ScanFormula.NodeTypeId.Not: {
-                const notNode = operandNode as ScanFormula.NotNode;
+                const notNode = node as ScanFormula.NotNode;
                 const createResult = createCondition(notNode.operand, factory, !not);
                 if (createResult.isErr()) {
                     return createResult;
                 } else {
                     const condition = createResult.value;
-                    condition.not = !condition.not;
                     return new Ok(condition);
                 }
             }
             case ScanFormula.NodeTypeId.Xor:
             case ScanFormula.NodeTypeId.And:
             case ScanFormula.NodeTypeId.Or:
-                return new Err({ typeId: ScanConditionSetLoadErrorTypeId.UnsupportedConditionNodeType, extra: operandNode.typeId.toString() })
+                return new Err({ typeId: ScanConditionSetLoadErrorTypeId.UnsupportedConditionNodeType, extra: node.typeId.toString() })
             case ScanFormula.NodeTypeId.NumericEquals: {
-                const numericComparisonBooleanNode = operandNode as ScanFormula.NumericComparisonBooleanNode;
-                return factory.createNumericComparison(numericComparisonBooleanNode, not, NumericComparisonScanCondition.OperationId.Equals);
+                const numericComparisonBooleanNode = node as ScanFormula.NumericComparisonBooleanNode;
+                const operationId = not ? NumericComparisonScanCondition.OperationId.NotEquals : NumericComparisonScanCondition.OperationId.Equals;
+                return factory.createNumericComparison(numericComparisonBooleanNode, operationId);
             }
             case ScanFormula.NodeTypeId.NumericGreaterThan: {
-                const numericComparisonBooleanNode = operandNode as ScanFormula.NumericComparisonBooleanNode;
-                return factory.createNumericComparison(numericComparisonBooleanNode, not, NumericComparisonScanCondition.OperationId.GreaterThan);
+                const numericComparisonBooleanNode = node as ScanFormula.NumericComparisonBooleanNode;
+                const operationId = not ? NumericComparisonScanCondition.OperationId.LessThanOrEqual : NumericComparisonScanCondition.OperationId.GreaterThan;
+                return factory.createNumericComparison(numericComparisonBooleanNode, operationId);
             }
             case ScanFormula.NodeTypeId.NumericGreaterThanOrEqual: {
-                const numericComparisonBooleanNode = operandNode as ScanFormula.NumericComparisonBooleanNode;
-                return factory.createNumericComparison(numericComparisonBooleanNode, not, NumericComparisonScanCondition.OperationId.GreaterThanOrEqual);
+                const numericComparisonBooleanNode = node as ScanFormula.NumericComparisonBooleanNode;
+                const operationId = not ? NumericComparisonScanCondition.OperationId.LessThan : NumericComparisonScanCondition.OperationId.GreaterThanOrEqual;
+                return factory.createNumericComparison(numericComparisonBooleanNode, operationId);
             }
             case ScanFormula.NodeTypeId.NumericLessThan: {
-                const numericComparisonBooleanNode = operandNode as ScanFormula.NumericComparisonBooleanNode;
-                return factory.createNumericComparison(numericComparisonBooleanNode, not, NumericComparisonScanCondition.OperationId.LessThan);
+                const numericComparisonBooleanNode = node as ScanFormula.NumericComparisonBooleanNode;
+                const operationId = not ? NumericComparisonScanCondition.OperationId.GreaterThanOrEqual : NumericComparisonScanCondition.OperationId.LessThan;
+                return factory.createNumericComparison(numericComparisonBooleanNode, operationId);
             }
             case ScanFormula.NodeTypeId.NumericLessThanOrEqual: {
-                const numericComparisonBooleanNode = operandNode as ScanFormula.NumericComparisonBooleanNode;
-                return factory.createNumericComparison(numericComparisonBooleanNode, not, NumericComparisonScanCondition.OperationId.LessThanOrEqual);
+                const numericComparisonBooleanNode = node as ScanFormula.NumericComparisonBooleanNode;
+                const operationId = not ? NumericComparisonScanCondition.OperationId.GreaterThan : NumericComparisonScanCondition.OperationId.LessThanOrEqual;
+                return factory.createNumericComparison(numericComparisonBooleanNode, operationId);
             }
             case ScanFormula.NodeTypeId.All:
-                return factory.createAll(operandNode as ScanFormula.AllNode, not);
+                return factory.createAll(node as ScanFormula.AllNode);
             case ScanFormula.NodeTypeId.None:
-                return factory.createNone(operandNode as ScanFormula.NoneNode, not);
+                return factory.createNone(node as ScanFormula.NoneNode);
             case ScanFormula.NodeTypeId.FieldHasValue: {
-                const fieldHasValueNode = operandNode as ScanFormula.FieldHasValueNode;
+                const fieldHasValueNode = node as ScanFormula.FieldHasValueNode;
                 return factory.createFieldHasValue(fieldHasValueNode, not);
             }
             case ScanFormula.NodeTypeId.BooleanFieldEquals: {
-                const booleanFieldEqualsNode = operandNode as ScanFormula.BooleanFieldEqualsNode;
+                const booleanFieldEqualsNode = node as ScanFormula.BooleanFieldEqualsNode;
                 return factory.createBooleanFieldEquals(booleanFieldEqualsNode, not);
             }
             case ScanFormula.NodeTypeId.NumericFieldEquals: {
-                const numericFieldEqualsNode = operandNode as ScanFormula.NumericFieldEqualsNode;
+                const numericFieldEqualsNode = node as ScanFormula.NumericFieldEqualsNode;
                 return factory.createNumericFieldEquals(numericFieldEqualsNode, not);
             }
             case ScanFormula.NodeTypeId.NumericFieldInRange: {
-                const numericFieldInRangeNode = operandNode as ScanFormula.NumericFieldInRangeNode;
+                const numericFieldInRangeNode = node as ScanFormula.NumericFieldInRangeNode;
                 return factory.createNumericFieldInRange(numericFieldInRangeNode, not);
             }
             case ScanFormula.NodeTypeId.DateFieldEquals: {
-                const dateFieldEqualsNode = operandNode as ScanFormula.DateFieldEqualsNode;
+                const dateFieldEqualsNode = node as ScanFormula.DateFieldEqualsNode;
                 return factory.createDateFieldEquals(dateFieldEqualsNode, not);
             }
             case ScanFormula.NodeTypeId.DateFieldInRange: {
-                const dateFieldInRangeNode = operandNode as ScanFormula.DateFieldInRangeNode;
+                const dateFieldInRangeNode = node as ScanFormula.DateFieldInRangeNode;
                 return factory.createDateFieldInRange(dateFieldInRangeNode, not);
             }
+            case ScanFormula.NodeTypeId.TextFieldIncludes: {
+                const textFieldIncludesNode = node as ScanFormula.TextFieldIncludesNode;
+                return factory.createTextFieldIncludes(textFieldIncludesNode, not);
+            }
             case ScanFormula.NodeTypeId.TextFieldContains: {
-                const textFieldContainsNode = operandNode as ScanFormula.TextFieldContainsNode;
+                const textFieldContainsNode = node as ScanFormula.TextFieldContainsNode;
                 return factory.createTextFieldContains(textFieldContainsNode, not);
             }
             case ScanFormula.NodeTypeId.PriceSubFieldHasValue: {
-                const priceSubFieldHasValueNode = operandNode as ScanFormula.PriceSubFieldHasValueNode;
+                const priceSubFieldHasValueNode = node as ScanFormula.PriceSubFieldHasValueNode;
                 return factory.createPriceSubFieldHasValue(priceSubFieldHasValueNode, not);
             }
             case ScanFormula.NodeTypeId.PriceSubFieldEquals: {
-                const priceSubFieldEqualsNode = operandNode as ScanFormula.PriceSubFieldEqualsNode;
+                const priceSubFieldEqualsNode = node as ScanFormula.PriceSubFieldEqualsNode;
                 return factory.createPriceSubFieldEquals(priceSubFieldEqualsNode, not);
             }
             case ScanFormula.NodeTypeId.PriceSubFieldInRange: {
-                const priceSubFieldInRangeNode = operandNode as ScanFormula.PriceSubFieldInRangeNode;
+                const priceSubFieldInRangeNode = node as ScanFormula.PriceSubFieldInRangeNode;
                 return factory.createPriceSubFieldInRange(priceSubFieldInRangeNode, not);
             }
             case ScanFormula.NodeTypeId.DateSubFieldHasValue: {
-                const dateSubFieldHasValueNode = operandNode as ScanFormula.DateSubFieldHasValueNode;
+                const dateSubFieldHasValueNode = node as ScanFormula.DateSubFieldHasValueNode;
                 return factory.createDateSubFieldHasValue(dateSubFieldHasValueNode, not);
             }
             case ScanFormula.NodeTypeId.DateSubFieldEquals: {
-                const dateSubFieldEqualsNode = operandNode as ScanFormula.DateSubFieldEqualsNode;
+                const dateSubFieldEqualsNode = node as ScanFormula.DateSubFieldEqualsNode;
                 return factory.createDateSubFieldEquals(dateSubFieldEqualsNode, not);
             }
             case ScanFormula.NodeTypeId.DateSubFieldInRange: {
-                const dateSubFieldInRangeNode = operandNode as ScanFormula.DateSubFieldInRangeNode;
+                const dateSubFieldInRangeNode = node as ScanFormula.DateSubFieldInRangeNode;
                 return factory.createDateSubFieldInRange(dateSubFieldInRangeNode, not);
             }
             case ScanFormula.NodeTypeId.AltCodeSubFieldHasValue: {
-                const altCodeSubFieldHasValueNode = operandNode as ScanFormula.AltCodeSubFieldHasValueNode;
+                const altCodeSubFieldHasValueNode = node as ScanFormula.AltCodeSubFieldHasValueNode;
                 return factory.createAltCodeSubFieldHasValue(altCodeSubFieldHasValueNode, not);
             }
             case ScanFormula.NodeTypeId.AltCodeSubFieldContains: {
-                const altCodeSubFieldContainsNode = operandNode as ScanFormula.AltCodeSubFieldContainsNode;
+                const altCodeSubFieldContainsNode = node as ScanFormula.AltCodeSubFieldContainsNode;
                 return factory.createAltCodeSubFieldContains(altCodeSubFieldContainsNode, not);
             }
             case ScanFormula.NodeTypeId.AttributeSubFieldHasValue: {
-                const attributeSubFieldHasValueNode = operandNode as ScanFormula.AttributeSubFieldHasValueNode;
+                const attributeSubFieldHasValueNode = node as ScanFormula.AttributeSubFieldHasValueNode;
                 return factory.createAttributeSubFieldHasValue(attributeSubFieldHasValueNode, not);
             }
             case ScanFormula.NodeTypeId.AttributeSubFieldContains: {
-                const attributeSubFieldContainsNode = operandNode as ScanFormula.AttributeSubFieldContainsNode;
+                const attributeSubFieldContainsNode = node as ScanFormula.AttributeSubFieldContainsNode;
                 return factory.createAttributeSubFieldContains(attributeSubFieldContainsNode, not);
             }
             default:
-                throw new UnreachableCaseError('SCSCC44991', operandNode.typeId);
+                throw new UnreachableCaseError('SCSCC44991', node.typeId);
         }
 
     }
@@ -291,37 +300,57 @@ export namespace ScanConditionSet {
         }
     }
 
-    function createConditionBooleanNode(condition: ScanCondition): ScanFormula.BooleanNode {
+    interface CreatedBooleanNode {
+        node: ScanFormula.BooleanNode;
+        requiresNot: boolean;
+    }
+
+    function createBooleanNodeForCondition(condition: ScanCondition): CreatedBooleanNode {
         switch (condition.typeId) {
             case ScanCondition.TypeId.NumericComparison: {
                 const numericComparisonCondition  = condition as NumericComparisonScanCondition;
                 return createNumericComparisonBooleanNode(numericComparisonCondition);
             }
             case ScanCondition.TypeId.All: {
-                return new ScanFormula.AllNode();
+                return {
+                    node: new ScanFormula.AllNode(),
+                    requiresNot: false,
+                };
             }
             case ScanCondition.TypeId.None: {
-                return new ScanFormula.NoneNode();
+                return {
+                    node: new ScanFormula.NoneNode(),
+                    requiresNot: false,
+                };
             }
             case ScanCondition.TypeId.FieldHasValue: {
                 const fieldHasValueCondition  = condition as FieldHasValueScanCondition;
                 const fieldHasValueNode = new ScanFormula.FieldHasValueNode();
                 fieldHasValueNode.fieldId = fieldHasValueCondition.fieldId;
-                return fieldHasValueNode;
+                return {
+                    node: fieldHasValueNode,
+                    requiresNot: fieldHasValueCondition.not,
+                };
             }
             case ScanCondition.TypeId.BooleanFieldEquals: {
                 const booleanFieldEqualsCondition  = condition as BooleanFieldEqualsScanCondition;
                 const booleanFieldEqualsNode = new ScanFormula.BooleanFieldEqualsNode();
                 booleanFieldEqualsNode.fieldId = booleanFieldEqualsCondition.fieldId;
                 booleanFieldEqualsNode.target = booleanFieldEqualsCondition.target;
-                return booleanFieldEqualsNode;
+                return {
+                    node: booleanFieldEqualsNode,
+                    requiresNot: booleanFieldEqualsCondition.not,
+                };
             }
             case ScanCondition.TypeId.NumericFieldEquals: {
                 const numericFieldEqualsCondition  = condition as NumericFieldEqualsScanCondition;
                 const numericFieldEqualsNode = new ScanFormula.NumericFieldEqualsNode();
                 numericFieldEqualsNode.fieldId = numericFieldEqualsCondition.fieldId;
                 numericFieldEqualsNode.target = numericFieldEqualsCondition.target;
-                return numericFieldEqualsNode;
+                return {
+                    node: numericFieldEqualsNode,
+                    requiresNot: numericFieldEqualsCondition.not,
+                };
             }
             case ScanCondition.TypeId.NumericFieldInRange: {
                 const numericFieldInRangeCondition  = condition as NumericFieldInRangeScanCondition;
@@ -329,14 +358,20 @@ export namespace ScanConditionSet {
                 numericFieldInRangeNode.fieldId = numericFieldInRangeCondition.fieldId;
                 numericFieldInRangeNode.min = numericFieldInRangeCondition.min;
                 numericFieldInRangeNode.max = numericFieldInRangeCondition.max;
-                return numericFieldInRangeNode;
+                return {
+                    node: numericFieldInRangeNode,
+                    requiresNot: numericFieldInRangeCondition.not,
+                };
             }
             case ScanCondition.TypeId.DateFieldEquals: {
                 const dateFieldEqualsCondition  = condition as DateFieldEqualsScanCondition;
                 const dateFieldEqualsNode = new ScanFormula.DateFieldEqualsNode();
                 dateFieldEqualsNode.fieldId = dateFieldEqualsCondition.fieldId;
                 dateFieldEqualsNode.target = SourceTzOffsetDateTime.createCopy(dateFieldEqualsCondition.target);
-                return dateFieldEqualsNode;
+                return {
+                    node: dateFieldEqualsNode,
+                    requiresNot: dateFieldEqualsCondition.not,
+                };
             }
             case ScanCondition.TypeId.DateFieldInRange: {
                 const dateFieldInRangeCondition  = condition as DateFieldInRangeScanCondition;
@@ -344,7 +379,20 @@ export namespace ScanConditionSet {
                 dateFieldInRangeNode.fieldId = dateFieldInRangeCondition.fieldId;
                 dateFieldInRangeNode.min = SourceTzOffsetDateTime.newUndefinable(dateFieldInRangeCondition.min);
                 dateFieldInRangeNode.max = SourceTzOffsetDateTime.newUndefinable(dateFieldInRangeCondition.max);
-                return dateFieldInRangeNode;
+                return {
+                    node: dateFieldInRangeNode,
+                    requiresNot: dateFieldInRangeCondition.not,
+                };
+            }
+            case ScanCondition.TypeId.TextFieldIncludes: {
+                const textFieldIncludesCondition  = condition as TextFieldIncludesScanCondition;
+                const textFieldIncludesNode = new ScanFormula.TextFieldIncludesNode();
+                textFieldIncludesNode.fieldId = textFieldIncludesCondition.fieldId;
+                textFieldIncludesNode.values = textFieldIncludesCondition.values.slice();
+                return {
+                    node: textFieldIncludesNode,
+                    requiresNot: textFieldIncludesCondition.not,
+                };
             }
             case ScanCondition.TypeId.TextFieldContains: {
                 const textFieldContainsCondition  = condition as TextFieldContainsScanCondition;
@@ -353,14 +401,20 @@ export namespace ScanConditionSet {
                 textFieldContainsNode.value = textFieldContainsCondition.value;
                 textFieldContainsNode.asId = textFieldContainsCondition.asId;
                 textFieldContainsNode.ignoreCase = textFieldContainsCondition.ignoreCase;
-                return textFieldContainsNode;
+                return {
+                    node: textFieldContainsNode,
+                    requiresNot: textFieldContainsCondition.not,
+                };
             }
             case ScanCondition.TypeId.PriceSubFieldHasValue: {
                 const priceSubFieldHasValueCondition  = condition as PriceSubFieldHasValueScanCondition;
                 const priceSubFieldHasValueNode = new ScanFormula.PriceSubFieldHasValueNode();
                 priceSubFieldHasValueNode.fieldId = priceSubFieldHasValueCondition.fieldId;
                 priceSubFieldHasValueNode.subFieldId = priceSubFieldHasValueCondition.subFieldId;
-                return priceSubFieldHasValueNode;
+                return {
+                    node: priceSubFieldHasValueNode,
+                    requiresNot: priceSubFieldHasValueCondition.not,
+                };
             }
             case ScanCondition.TypeId.PriceSubFieldEquals: {
                 const priceSubFieldEqualsCondition  = condition as PriceSubFieldEqualsScanCondition;
@@ -368,7 +422,10 @@ export namespace ScanConditionSet {
                 priceSubFieldEqualsNode.fieldId = priceSubFieldEqualsCondition.fieldId;
                 priceSubFieldEqualsNode.subFieldId = priceSubFieldEqualsCondition.subFieldId;
                 priceSubFieldEqualsNode.target = priceSubFieldEqualsCondition.target;
-                return priceSubFieldEqualsNode;
+                return {
+                    node: priceSubFieldEqualsNode,
+                    requiresNot: priceSubFieldEqualsCondition.not,
+                };
             }
             case ScanCondition.TypeId.PriceSubFieldInRange: {
                 const pricesubFieldInRangeCondition  = condition as PriceSubFieldInRangeScanCondition;
@@ -377,14 +434,20 @@ export namespace ScanConditionSet {
                 pricesubFieldInRangeNode.subFieldId = pricesubFieldInRangeCondition.subFieldId;
                 pricesubFieldInRangeNode.min = pricesubFieldInRangeCondition.min;
                 pricesubFieldInRangeNode.max = pricesubFieldInRangeCondition.max;
-                return pricesubFieldInRangeNode;
+                return {
+                    node: pricesubFieldInRangeNode,
+                    requiresNot: pricesubFieldInRangeCondition.not,
+                };
             }
             case ScanCondition.TypeId.DateSubFieldHasValue: {
                 const dateSubFieldHasValueCondition  = condition as DateSubFieldHasValueScanCondition;
                 const dateSubFieldHasValueNode = new ScanFormula.DateSubFieldHasValueNode();
                 dateSubFieldHasValueNode.fieldId = dateSubFieldHasValueCondition.fieldId;
                 dateSubFieldHasValueNode.subFieldId = dateSubFieldHasValueCondition.subFieldId;
-                return dateSubFieldHasValueNode;
+                return {
+                    node: dateSubFieldHasValueNode,
+                    requiresNot: dateSubFieldHasValueCondition.not,
+                };
             }
             case ScanCondition.TypeId.DateSubFieldEquals: {
                 const dateSubFieldEqualsCondition  = condition as DateSubFieldEqualsScanCondition;
@@ -392,7 +455,10 @@ export namespace ScanConditionSet {
                 dateSubFieldEqualsNode.fieldId = dateSubFieldEqualsCondition.fieldId;
                 dateSubFieldEqualsNode.subFieldId = dateSubFieldEqualsCondition.subFieldId;
                 dateSubFieldEqualsNode.target = SourceTzOffsetDateTime.createCopy(dateSubFieldEqualsCondition.target);
-                return dateSubFieldEqualsNode;
+                return {
+                    node: dateSubFieldEqualsNode,
+                    requiresNot: dateSubFieldEqualsCondition.not,
+                };
             }
             case ScanCondition.TypeId.DateSubFieldInRange: {
                 const datesubFieldInRangeCondition  = condition as DateSubFieldInRangeScanCondition;
@@ -401,14 +467,20 @@ export namespace ScanConditionSet {
                 datesubFieldInRangeNode.subFieldId = datesubFieldInRangeCondition.subFieldId;
                 datesubFieldInRangeNode.min = SourceTzOffsetDateTime.newUndefinable(datesubFieldInRangeCondition.min);
                 datesubFieldInRangeNode.max = SourceTzOffsetDateTime.newUndefinable(datesubFieldInRangeCondition.max);
-                return datesubFieldInRangeNode;
+                return {
+                    node: datesubFieldInRangeNode,
+                    requiresNot: datesubFieldInRangeCondition.not,
+                };
             }
             case ScanCondition.TypeId.AltCodeSubFieldHasValue: {
                 const altcodeSubFieldHasValueCondition  = condition as AltCodeSubFieldHasValueScanCondition;
                 const altcodeSubFieldHasValueNode = new ScanFormula.AltCodeSubFieldHasValueNode();
                 altcodeSubFieldHasValueNode.fieldId = altcodeSubFieldHasValueCondition.fieldId;
                 altcodeSubFieldHasValueNode.subFieldId = altcodeSubFieldHasValueCondition.subFieldId;
-                return altcodeSubFieldHasValueNode;
+                return {
+                    node: altcodeSubFieldHasValueNode,
+                    requiresNot: altcodeSubFieldHasValueCondition.not,
+                };
             }
             case ScanCondition.TypeId.AltCodeSubFieldContains: {
                 const altCodeSubFieldContainsCondition  = condition as AltCodeSubFieldContainsScanCondition;
@@ -418,14 +490,20 @@ export namespace ScanConditionSet {
                 altCodeSubFieldContainsNode.value = altCodeSubFieldContainsCondition.value;
                 altCodeSubFieldContainsNode.asId = altCodeSubFieldContainsCondition.asId;
                 altCodeSubFieldContainsNode.ignoreCase = altCodeSubFieldContainsCondition.ignoreCase;
-                return altCodeSubFieldContainsNode;
+                return {
+                    node: altCodeSubFieldContainsNode,
+                    requiresNot: altCodeSubFieldContainsCondition.not,
+                };
             }
             case ScanCondition.TypeId.AttributeSubFieldHasValue: {
                 const attributeSubFieldHasValueCondition  = condition as AttributeSubFieldHasValueScanCondition;
                 const attributeSubFieldHasValueNode = new ScanFormula.AttributeSubFieldHasValueNode();
                 attributeSubFieldHasValueNode.fieldId = attributeSubFieldHasValueCondition.fieldId;
                 attributeSubFieldHasValueNode.subFieldId = attributeSubFieldHasValueCondition.subFieldId;
-                return attributeSubFieldHasValueNode;
+                return {
+                    node: attributeSubFieldHasValueNode,
+                    requiresNot: attributeSubFieldHasValueCondition.not,
+                };
             }
             case ScanCondition.TypeId.AttributeSubFieldContains: {
                 const attributeSubFieldContainsCondition  = condition as AttributeSubFieldContainsScanCondition;
@@ -435,44 +513,77 @@ export namespace ScanConditionSet {
                 attributeSubFieldContainsNode.value = attributeSubFieldContainsCondition.value;
                 attributeSubFieldContainsNode.asId = attributeSubFieldContainsCondition.asId;
                 attributeSubFieldContainsNode.ignoreCase = attributeSubFieldContainsCondition.ignoreCase;
-                return attributeSubFieldContainsNode;
+                return {
+                    node: attributeSubFieldContainsNode,
+                    requiresNot: attributeSubFieldContainsCondition.not,
+                };
             }
             default:
                 throw new UnreachableCaseError('SCSCCBN10873', condition.typeId);
         }
     }
 
-    function createNumericComparisonBooleanNode(condition: NumericComparisonScanCondition): ScanFormula.NumericComparisonBooleanNode {
+    interface CreatedNumericComparisonBooleanNode {
+        node: ScanFormula.NumericComparisonBooleanNode;
+        requiresNot: boolean;
+    }
+
+
+    function createNumericComparisonBooleanNode(condition: NumericComparisonScanCondition): CreatedNumericComparisonBooleanNode {
+        const resultLeftOperand = new ScanFormula.NumericFieldValueGetNode();
+        resultLeftOperand.fieldId = condition.leftOperand.fieldId;
+
+        let resultRightOperand: ScanFormula.NumericFieldValueGetNode | number;
+        const conditionRightOperand = condition.rightOperand;
+        switch (conditionRightOperand.typeId) {
+            case NumericComparisonScanCondition.TypedOperand.TypeId.Number: {
+                resultRightOperand = (conditionRightOperand as NumericComparisonScanCondition.NumberTypedOperand).value;
+                break;
+            }
+            case NumericComparisonScanCondition.TypedOperand.TypeId.Field: {
+                resultRightOperand = new ScanFormula.NumericFieldValueGetNode();
+                resultRightOperand.fieldId = (conditionRightOperand as NumericComparisonScanCondition.FieldTypedOperand).fieldId;
+                break;
+            }
+            default:
+                throw new UnreachableCaseError('SCSCNCBN34316', conditionRightOperand.typeId);
+        }
+
         const result = createEmptyNumericComparisonBooleanNode(condition);
-        result.leftOperand = createNumericComparisonBooleanNodeOperand(condition.leftOperand);
-        result.rightOperand = createNumericComparisonBooleanNodeOperand(condition.rightOperand);
+        const resultNode = result.node;
+        resultNode.leftOperand = resultLeftOperand;
+        resultNode.rightOperand = resultRightOperand;
         return result;
     }
 
-    function createEmptyNumericComparisonBooleanNode(condition: NumericComparisonScanCondition): ScanFormula.NumericComparisonBooleanNode {
+    function createEmptyNumericComparisonBooleanNode(condition: NumericComparisonScanCondition): CreatedNumericComparisonBooleanNode {
         switch (condition.operationId) {
-            case NumericComparisonScanCondition.OperationId.Equals: return new ScanFormula.NumericEqualsNode();
-            case NumericComparisonScanCondition.OperationId.GreaterThan: return new ScanFormula.NumericGreaterThanNode();
-            case NumericComparisonScanCondition.OperationId.GreaterThanOrEqual: return new ScanFormula.NumericGreaterThanOrEqualNode();
-            case NumericComparisonScanCondition.OperationId.LessThan: return new ScanFormula.NumericLessThanNode();
-            case NumericComparisonScanCondition.OperationId.LessThanOrEqual: return new ScanFormula.NumericLessThanOrEqualNode();
+            case NumericComparisonScanCondition.OperationId.Equals: return {
+                node: new ScanFormula.NumericEqualsNode(),
+                requiresNot: false,
+            }
+            case NumericComparisonScanCondition.OperationId.NotEquals: return {
+                node: new ScanFormula.NumericEqualsNode(),
+                requiresNot: true,
+            }
+            case NumericComparisonScanCondition.OperationId.GreaterThan: return {
+                node: new ScanFormula.NumericGreaterThanNode(),
+                requiresNot: false,
+            }
+            case NumericComparisonScanCondition.OperationId.GreaterThanOrEqual: return {
+                node: new ScanFormula.NumericGreaterThanOrEqualNode(),
+                requiresNot: false,
+            }
+            case NumericComparisonScanCondition.OperationId.LessThan: return {
+                node: new ScanFormula.NumericLessThanNode(),
+                requiresNot: false,
+            }
+            case NumericComparisonScanCondition.OperationId.LessThanOrEqual: return {
+                node: new ScanFormula.NumericLessThanOrEqualNode(),
+                requiresNot: false,
+            }
             default:
                 throw new UnreachableCaseError('SCSCENCBN40812', condition.operationId);
-        }
-    }
-
-    function createNumericComparisonBooleanNodeOperand(operand: NumericComparisonScanCondition.Operand): ScanFormula.NumericNode | number {
-        switch (operand.typeId) {
-            case NumericComparisonScanCondition.Operand.TypeId.Number: {
-                const numberOperand = operand as NumericComparisonScanCondition.NumberOperand;
-                return numberOperand.value;
-            }
-            case NumericComparisonScanCondition.Operand.TypeId.NumericFieldValueGet: {
-                const numericFieldValueGetOperand = operand as NumericComparisonScanCondition.NumericFieldValueGetOperand;
-                const node = new ScanFormula.NumericFieldValueGetNode();
-                node.fieldId = numericFieldValueGetOperand.fieldId;
-                return node;
-            }
         }
     }
 }

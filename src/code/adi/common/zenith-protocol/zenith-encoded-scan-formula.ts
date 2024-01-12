@@ -309,6 +309,7 @@ export namespace ZenithEncodedScanFormula {
     export type TextSingleMatchingTupleNode = [nodeType: TextField, ...params: TextSingleParam];
     export type TextSingle_DefaultMatchingTupleNode = [nodeType: TextField, ...params: TextSingleParam_Default];
     export type TextSingle_ExistsMatchingTupleNode = [nodeType: TextField, ...params: TextSingleParam_Exists];
+    export type TextMultipleMatchingTupleNode = [nodeType: TextField, ...params: TextMultipleParam];
 
     export type MatchingTupleNode =
         NumericRangeMatchingTupleNode |
@@ -325,7 +326,8 @@ export namespace ZenithEncodedScanFormula {
         NumericSingle_ExistsMatchingTupleNode |
         TextSingleMatchingTupleNode |
         TextSingle_DefaultMatchingTupleNode |
-        TextSingle_ExistsMatchingTupleNode;
+        TextSingle_ExistsMatchingTupleNode |
+        TextMultipleMatchingTupleNode;
 
     export type ComparisonTupleNodeUnion =
         EqualTupleNode |
@@ -408,7 +410,8 @@ export namespace ZenithEncodedScanFormula {
     export type TextParams_SecondForm = [value: string]; // Contains
     export type TextParams_ThirdForm = [value: string, as?: TextContainsAsEnum, ignoreCase?: boolean]; // Advanced contains
     export type TextParams_FourthForm = [value: string, namedParameters: TextNamedParameters];
-    export type TextParams = TextParams_FirstForm | TextParams_SecondForm | TextParams_ThirdForm | TextParams_FourthForm;
+    export type TextParams_MultipleForm = string[]; // multiple
+    export type TextParams = TextParams_FirstForm | TextParams_SecondForm | TextParams_ThirdForm | TextParams_FourthForm | TextParams_MultipleForm;
 
     export type NamedTextParams_FirstForm = [subField: TextSubField]; // exists
     export type NamedTextParams_SecondForm = [subField: TextSubField, value: string]; // Contains
@@ -470,6 +473,7 @@ export namespace ZenithEncodedScanFormula {
     export type TextSingleParam = TextSingleParam_EqualsValue; // equals
     export type TextSingleParam_Default = TextSingleParam_EqualsValue | SingleParam_EqualsDefault; // equals value or equals default
     export type TextSingleParam_Exists = TextSingleParam_EqualsValue | SingleParam_IsSet; // equals value or is set
+    export type TextMultipleParam = string[]; // multiple
 
     export type ConditionalArm = [condition: BooleanParam, value: NumericParam];
     // It is not possible to nest rest operators to properly represent If parameters as follows:
@@ -577,19 +581,19 @@ export namespace ZenithEncodedScanFormula {
         'BestBidCount': NumericRangeParams;
         'BestBidPrice': NumericRangeParams;
         'BestBidQuantity': NumericRangeParams;
-        'Board': TextSingleParam;
+        'Board': TextMultipleParam;
         'CallOrPut': TextSingleParam_Exists;
-        'Category': TextSingleParam;
+        'Category': TextMultipleParam;
         'CFI': TextSingleParam;
         'Class': TextSingleParam;
         'ClosePrice': NumericRangeParams;
         'Code': TextParams;
         'ContractSize': NumericRangeParams;
-        'Currency': TextSingleParam;
+        'Currency': TextMultipleParam;
         'Data': TextSingleParam;
         'Date': DateNamedRangeParams;
         'ExerciseType': TextSingleParam_Exists;
-        'Exchange': TextSingleParam;
+        'Exchange': TextMultipleParam;
         'ExpiryDate': DateRangeParams;
         'HighPrice': NumericRangeParams;
         'IsIndex': BooleanSingleParam_Default;
@@ -597,21 +601,21 @@ export namespace ZenithEncodedScanFormula {
         'LastPrice': NumericRangeParams;
         'LotSize': NumericRangeParams;
         'LowPrice': NumericRangeParams;
-        'Market': TextSingleParam;
+        'Market': TextMultipleParam;
         'Name': TextParams;
         'OpenInterest': NumericRangeParams;
         'OpenPrice': NumericRangeParams;
         'Price': NumericNamedRangeParams;
         'PreviousClose': NumericRangeParams;
-        'QuotationBasis': TextSingleParam;
+        'QuotationBasis': TextMultipleParam;
         'Remainder': NumericRangeParams;
         'ShareIssue': NumericRangeParams;
-        'State': TextSingleParam;
+        'State': TextMultipleParam;
         'StateAllows': TextSingleParam;
-        'StatusNote': TextSingleParam;
+        'StatusNote': TextMultipleParam;
         'StrikePrice': NumericRangeParams;
         'Trades': NumericRangeParams;
-        'TradingMarket': TextSingleParam;
+        'TradingMarket': TextMultipleParam;
         'ValueTraded': NumericRangeParams;
         'Volume': NumericRangeParams;
         'VWAP': NumericRangeParams;

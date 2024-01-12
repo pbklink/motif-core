@@ -1930,6 +1930,8 @@ export const enum StringId {
     ScanFormulaZenithEncodingError_SingleOperandLogicalBooleanDoesNotHaveOneOperand,
     ScanFormulaZenithEncodingError_LeftRightOperandLogicalBooleanDoesNotHaveTwoOperands,
     ScanFormulaZenithEncodingError_MultiOperandLogicalBooleanMissingOperands,
+    ScanFormulaZenithEncodingError_MultipleMatchingTupleNodeMissingParameters,
+    ScanFormulaZenithEncodingError_TextMultipleMatchingTupleNodeParameterIsNotString,
     ScanFormulaZenithEncodingError_LogicalBooleanMissingOperand,
     ScanFormulaZenithEncodingError_NumericComparisonDoesNotHave2Operands,
     ScanFormulaZenithEncodingError_NumericParameterIsNotNumberOrComparableFieldOrArray,
@@ -1992,12 +1994,8 @@ export const enum StringId {
     ScanCriteriaTypeDisplay_PriceLessThanValue,
     ScanCriteriaTypeDisplay_TodayPriceIncreaseGreaterThanPercentage,
     ScanCriteriaTypeDisplay_TodayPriceDecreaseGreaterThanPercentage,
-    ScanCriteriaViewDisplay_Default,
-    ScanCriteriaViewDescription_Default,
-    ScanCriteriaViewDisplay_List,
-    ScanCriteriaViewDescription_List,
-    ScanCriteriaViewDisplay_Formula,
-    ScanCriteriaViewDescription_Formula,
+    ScanCriteriaViewDisplay_ConditionSet,
+    ScanCriteriaViewDescription_ConditionSet,
     ScanCriteriaViewDisplay_Zenith,
     ScanCriteriaViewDescription_Zenith,
     ScansGridHeading_Id,
@@ -11784,6 +11782,16 @@ export namespace I18nStrings {
                 en: 'Logical boolean missing operands',
             }
         },
+        ScanFormulaZenithEncodingError_MultipleMatchingTupleNodeMissingParameters: {
+            id: StringId.ScanFormulaZenithEncodingError_MultipleMatchingTupleNodeMissingParameters, translations: {
+                en: 'Multiple matching tuple node missing parameters',
+            }
+        },
+        ScanFormulaZenithEncodingError_TextMultipleMatchingTupleNodeParameterIsNotString: {
+            id: StringId.ScanFormulaZenithEncodingError_TextMultipleMatchingTupleNodeParameterIsNotString, translations: {
+                en: 'Text multiple matching tuple node parameter is not a string',
+            }
+        },
         ScanFormulaZenithEncodingError_LogicalBooleanMissingOperand: {
             id: StringId.ScanFormulaZenithEncodingError_LogicalBooleanMissingOperand, translations: {
                 en: 'Logical boolean missing operand',
@@ -12094,35 +12102,14 @@ export namespace I18nStrings {
                 en: 'Today price decrease > percentage',
             }
         },
-
-        ScanCriteriaViewDisplay_Default: {
-            id: StringId.ScanCriteriaViewDisplay_Default, translations: {
-                en: 'Default',
+        ScanCriteriaViewDisplay_ConditionSet: {
+            id: StringId.ScanCriteriaViewDisplay_ConditionSet, translations: {
+                en: 'Condition set',
             }
         },
-        ScanCriteriaViewDescription_Default: {
-            id: StringId.ScanCriteriaViewDescription_Default, translations: {
-                en: 'View/edit scan criteria with either list or formula view as appropriate',
-            }
-        },
-        ScanCriteriaViewDisplay_List: {
-            id: StringId.ScanCriteriaViewDisplay_List, translations: {
-                en: 'List',
-            }
-        },
-        ScanCriteriaViewDescription_List: {
-            id: StringId.ScanCriteriaViewDescription_List, translations: {
-                en: 'View/edit scan criteria as list',
-            }
-        },
-        ScanCriteriaViewDisplay_Formula: {
-            id: StringId.ScanCriteriaViewDisplay_Formula, translations: {
-                en: 'Formula',
-            }
-        },
-        ScanCriteriaViewDescription_Formula: {
-            id: StringId.ScanCriteriaViewDescription_Formula, translations: {
-                en: 'View/edit scan criteria as formula',
+        ScanCriteriaViewDescription_ConditionSet: {
+            id: StringId.ScanCriteriaViewDescription_ConditionSet, translations: {
+                en: 'View/edit scan criteria conditions',
             }
         },
         ScanCriteriaViewDisplay_Zenith: {

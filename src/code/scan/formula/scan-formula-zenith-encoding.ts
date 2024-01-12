@@ -145,6 +145,7 @@ export namespace ScanFormulaZenithEncoding {
             case ScanFormula.NodeTypeId.NumericFieldInRange: return encodeNumericFieldInRangeNode(node as ScanFormula.NumericFieldInRangeNode);
             case ScanFormula.NodeTypeId.DateFieldEquals: return encodeDateFieldEqualsNode(node as ScanFormula.DateFieldEqualsNode);
             case ScanFormula.NodeTypeId.DateFieldInRange: return encodeDateFieldInRangeNode(node as ScanFormula.DateFieldInRangeNode);
+            case ScanFormula.NodeTypeId.TextFieldIncludes: return encodeTextFieldIncludesNode(node as ScanFormula.TextFieldIncludesNode);
             case ScanFormula.NodeTypeId.TextFieldContains: return encodeTextFieldContainsNode(node as ScanFormula.TextFieldContainsNode);
             case ScanFormula.NodeTypeId.PriceSubFieldHasValue: return encodePriceSubFieldHasValueNode(node as ScanFormula.PriceSubFieldHasValueNode);
             case ScanFormula.NodeTypeId.PriceSubFieldEquals: return encodePriceSubFieldEqualsNode(node as ScanFormula.PriceSubFieldEqualsNode);
@@ -215,7 +216,7 @@ export namespace ScanFormulaZenithEncoding {
         node: ScanFormula.NumericComparisonBooleanNode
     ): ZenithEncodedScanFormula.ComparisonTupleNode {
         const leftOperand = encodeNumericOperand(node.leftOperand);
-        const rightOperand = encodeNumericOperand(node.leftOperand);
+        const rightOperand = encodeNumericOperand(node.rightOperand);
         return [type, leftOperand, rightOperand];
     }
 
@@ -347,6 +348,12 @@ export namespace ScanFormulaZenithEncoding {
             Max: nodeMax === undefined ? undefined: DateValue.encodeDate(nodeMax.utcDate),
         }
         return [field, namedParameters];
+    }
+
+    function encodeTextFieldIncludesNode(node: ScanFormula.TextFieldIncludesNode): ZenithEncodedScanFormula.TextMatchingTupleNode {
+        const field = Field.textFromId(node.fieldId);
+        const values = node.values;
+        return [field, ...values];
     }
 
     function encodeTextFieldContainsNode(node: ScanFormula.TextFieldContainsNode): ZenithEncodedScanFormula.TextMatchingTupleNode {
@@ -669,72 +676,103 @@ export namespace ScanFormulaZenithEncoding {
         fieldId: ScanFormula.FieldId,
         toProgress: DecodeProgress
     ): Result<ScanFormula.FieldBooleanNode, DecodeError> {
-        const paramCount = node.length - 1;
-        switch (paramCount) {
-            case 0: {
-                if (fieldId === ScanFormula.FieldId.IsIndex) {
-                    return tryDecodeBooleanFieldEqualsNode(fieldId, ZenithEncodedScanFormula.SingleDefault_IsIndex);
-                } else {
-                    return new Ok(toFieldHasValueNode(fieldId));
-                }
+        const multipleParams = ScanFormula.Field.isMultiple(fieldId);
+        if (multipleParams) {
+            if (node.length <= 1) {
+                return createDecodeErrorResult(ErrorId.MultipleMatchingTupleNodeMissingParameters, node[0]);
+            } else {
+                const params: unknown[] = node.slice(1);
+                return tryDecodeTextMultipleMatchingTupleNode(fieldId as ScanFormula.TextFieldId, params);
             }
-            case 1: {
-                const param1 = node[1];
-                const fieldSubbed = ScanFormula.Field.isSubbed(fieldId);
-                if (fieldSubbed) {
-                    return tryDecodeSubFieldHasValueNode(fieldId as ScanFormula.SubbedFieldId, param1);
-                } else {
-                    if (typeof param1 === 'object') {
-                        return tryNamedParametersToFieldEqualsOrInRangeNode(fieldId, param1);
+        } else {
+            const paramCount = node.length - 1;
+            switch (paramCount) {
+                case 0: {
+                    if (fieldId === ScanFormula.FieldId.IsIndex) {
+                        return tryDecodeBooleanFieldEqualsNode(fieldId, ZenithEncodedScanFormula.SingleDefault_IsIndex);
                     } else {
-                        return tryDecodeFieldEqualsOrContainsNode(fieldId, param1);
+                        return new Ok(toFieldHasValueNode(fieldId));
                     }
                 }
-            }
-            case 2: {
-                const param1 = node[1];
-                const param2 = node[2];
-                const fieldSubbed = ScanFormula.Field.isSubbed(fieldId);
-                if (fieldSubbed) {
-                    if (typeof param2 === 'object') {
-                        return tryNamedParametersToSubFieldEqualsOrInRangeNode(fieldId as ScanFormula.SubbedFieldId, param1, param2);
+                case 1: {
+                    const param1 = node[1];
+                    const fieldSubbed = ScanFormula.Field.isSubbed(fieldId);
+                    if (fieldSubbed) {
+                        return tryDecodeSubFieldHasValueNode(fieldId as ScanFormula.SubbedFieldId, param1);
                     } else {
-                        return tryDecodeSubFieldEqualsOrContainsNode(fieldId as ScanFormula.SubbedFieldId, param1, param2);
-                    }
-                } else {
-                    return tryDecodeFieldContainsOrInRangeNode(fieldId as ScanFormula.SubbedFieldId, param1, param2);
-                }
-            }
-            case 3: {
-                const param1 = node[1];
-                const param2 = node[2];
-                const param3 = node[3];
-                const fieldSubbed = ScanFormula.Field.isSubbed(fieldId);
-                if (fieldSubbed) {
-                    return tryDecodeSubFieldContainsOrInRangeNode(fieldId as ScanFormula.SubbedFieldId, param1, param2, param3);
-                } else {
-                    if (ScanFormula.Field.idToDataTypeId(fieldId) === ScanFormula.FieldDataTypeId.Text) {
-                        return tryDecodeTextFieldContainsNode(fieldId as ScanFormula.TextFieldId, param1, param2, param3);
-                    } else {
-                        return createDecodeErrorResult(ErrorId.OnlySubFieldOrTextFieldNodesCanHave3Parameters, paramCount.toString());
+                        if (typeof param1 === 'object') {
+                            return tryNamedParametersToFieldEqualsOrInRangeNode(fieldId, param1);
+                        } else {
+                            return tryDecodeFieldEqualsOrContainsNode(fieldId, param1);
+                        }
                     }
                 }
-                break;
-            }
-            case 4: {
-                if (!ScanFormula.Field.isSubbed(fieldId)) {
-                    return createDecodeErrorResult(ErrorId.OnlySubFieldNodeCanHave4Parameters, paramCount.toString());
-                } else {
+                case 2: {
+                    const param1 = node[1];
+                    const param2 = node[2];
+                    const fieldSubbed = ScanFormula.Field.isSubbed(fieldId);
+                    if (fieldSubbed) {
+                        if (typeof param2 === 'object') {
+                            return tryNamedParametersToSubFieldEqualsOrInRangeNode(fieldId as ScanFormula.SubbedFieldId, param1, param2);
+                        } else {
+                            return tryDecodeSubFieldEqualsOrContainsNode(fieldId as ScanFormula.SubbedFieldId, param1, param2);
+                        }
+                    } else {
+                        return tryDecodeFieldContainsOrInRangeNode(fieldId as ScanFormula.SubbedFieldId, param1, param2);
+                    }
+                }
+                case 3: {
                     const param1 = node[1];
                     const param2 = node[2];
                     const param3 = node[3];
-                    const param4 = node[4];
-                    return tryDecodeTextSubFieldContainsNode(fieldId as ScanFormula.SubbedFieldId, param1, param2, param3, param4);
+                    const fieldSubbed = ScanFormula.Field.isSubbed(fieldId);
+                    if (fieldSubbed) {
+                        return tryDecodeSubFieldContainsOrInRangeNode(fieldId as ScanFormula.SubbedFieldId, param1, param2, param3);
+                    } else {
+                        if (ScanFormula.Field.idToDataTypeId(fieldId) === ScanFormula.FieldDataTypeId.Text) {
+                            return tryDecodeTextFieldContainsNode(fieldId as ScanFormula.TextFieldId, param1, param2, param3);
+                        } else {
+                            return createDecodeErrorResult(ErrorId.OnlySubFieldOrTextFieldNodesCanHave3Parameters, paramCount.toString());
+                        }
+                    }
+                    break;
                 }
+                case 4: {
+                    if (!ScanFormula.Field.isSubbed(fieldId)) {
+                        return createDecodeErrorResult(ErrorId.OnlySubFieldNodeCanHave4Parameters, paramCount.toString());
+                    } else {
+                        const param1 = node[1];
+                        const param2 = node[2];
+                        const param3 = node[3];
+                        const param4 = node[4];
+                        return tryDecodeTextSubFieldContainsNode(fieldId as ScanFormula.SubbedFieldId, param1, param2, param3, param4);
+                    }
+                }
+                default:
+                    return createDecodeErrorResult(ErrorId.FieldBooleanNodeHasTooManyParameters, paramCount.toString());
             }
-            default:
-                return createDecodeErrorResult(ErrorId.FieldBooleanNodeHasTooManyParameters, paramCount.toString());
         }
+    }
+
+    function tryDecodeTextMultipleMatchingTupleNode(
+        fieldId: ScanFormula.TextFieldId,
+        params: unknown[],
+    ): Result<ScanFormula.FieldBooleanNode, DecodeError> {
+        const count = params.length;
+        const values = new Array<string>(count);
+        for (let i = 0; i < count; i++) {
+            const param = params[i];
+            if (typeof param !== 'string') {
+                return createDecodeErrorResult(ErrorId.TextMultipleMatchingTupleNodeParameterIsNotString, i.toString());
+            } else {
+                values[i] = param;
+            }
+        }
+
+        const node = new ScanFormula.TextFieldIncludesNode();
+        node.fieldId = fieldId;
+        node.values = values;
+        return new Ok(node);
     }
 
     function toFieldHasValueNode(fieldId: ScanFormula.FieldId): ScanFormula.FieldHasValueNode {
@@ -2019,6 +2057,8 @@ export namespace ScanFormulaZenithEncoding {
         SingleOperandLogicalBooleanDoesNotHaveOneOperand,
         LeftRightOperandLogicalBooleanDoesNotHaveTwoOperands,
         MultiOperandLogicalBooleanMissingOperands,
+        MultipleMatchingTupleNodeMissingParameters,
+        TextMultipleMatchingTupleNodeParameterIsNotString,
         NumericComparisonDoesNotHave2Operands,
         NumericParameterIsNotNumberOrComparableFieldOrArray,
         UnexpectedBooleanParamType,
@@ -2105,6 +2145,14 @@ export namespace ScanFormulaZenithEncoding {
             MultiOperandLogicalBooleanMissingOperands: {
                 id: ErrorId.MultiOperandLogicalBooleanMissingOperands,
                 summaryId: StringId.ScanFormulaZenithEncodingError_MultiOperandLogicalBooleanMissingOperands
+            },
+            MultipleMatchingTupleNodeMissingParameters: {
+                id: ErrorId.MultipleMatchingTupleNodeMissingParameters,
+                summaryId: StringId.ScanFormulaZenithEncodingError_MultipleMatchingTupleNodeMissingParameters,
+            },
+            TextMultipleMatchingTupleNodeParameterIsNotString: {
+                id: ErrorId.TextMultipleMatchingTupleNodeParameterIsNotString,
+                summaryId: StringId.ScanFormulaZenithEncodingError_TextMultipleMatchingTupleNodeParameterIsNotString,
             },
             NumericComparisonDoesNotHave2Operands: {
                 id: ErrorId.NumericComparisonDoesNotHave2Operands,
