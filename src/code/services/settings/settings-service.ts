@@ -10,6 +10,7 @@ import { AppStorageService } from '../app-storage-service';
 import { IdleService } from '../idle-service';
 import { KeyValueStore } from '../key-value-store/services-key-value-store-internal-api';
 import { MotifServicesService } from '../motif-services-service';
+import { SaveManagement } from '../save-management';
 import { ColorSettings } from './color-settings';
 import { ExchangeSettings } from './exchange-settings';
 import { ExchangesSettings } from './exchanges-settings';
@@ -17,7 +18,7 @@ import { MasterSettings } from './master-settings';
 import { ScalarSettings } from './scalar-settings';
 import { SettingsGroup } from './settings-group';
 
-export class SettingsService {
+export class SettingsService implements SaveManagement {
     private _registeredGroups = new Array<SettingsGroup>();
     private _beginMasterChangesCount = 0;
     private _masterChanged = false;
@@ -37,8 +38,8 @@ export class SettingsService {
 
     private _masterChangedMultiEvent = new MultiEvent<SettingsService.ChangedEventHandler>();
     private _changedMultiEvent = new MultiEvent<SettingsService.ChangedEventHandler>();
-    private _beginSaveWaitingMultiEvent = new MultiEvent<SettingsService.SaveWaitingEventHandler>();
-    private _endSaveWaitingMultiEvent = new MultiEvent<SettingsService.SaveWaitingEventHandler>();
+    private _beginSaveWaitingMultiEvent = new MultiEvent<SaveManagement.SaveWaitingEventHandler>();
+    private _endSaveWaitingMultiEvent = new MultiEvent<SaveManagement.SaveWaitingEventHandler>();
 
     constructor(
         private readonly _idleService: IdleService,
@@ -287,7 +288,7 @@ export class SettingsService {
         }
     }
 
-    processSaveResult(result: Result<void>, initiator: SettingsService.SaveInitiator) {
+    processSaveResult(result: Result<void>, initiateReasonId: SaveManagement.InitiateReasonId) {
         if (result.isOk()) {
             if (this._lastSaveFailed) {
                 // Logger.log(Logger.LevelId.Warning, 'Save settings succeeded');
@@ -295,7 +296,7 @@ export class SettingsService {
             }
         } else {
             if (!this._lastSaveFailed) {
-                Logger.log(Logger.LevelId.Warning, `${initiator} save settings error: ${getErrorMessage(result.error)}`);
+                Logger.log(Logger.LevelId.Warning, `${SaveManagement.InitiateReason.idToName(initiateReasonId)} save settings error: ${getErrorMessage(result.error)}`);
                 this._lastSaveFailed = true;
             }
         }
@@ -326,7 +327,7 @@ export class SettingsService {
         this._changedMultiEvent.unsubscribe(id);
     }
 
-    subscribeBeginSaveWaitingEvent(handler: SettingsService.SaveWaitingEventHandler): MultiEvent.DefinedSubscriptionId {
+    subscribeBeginSaveWaitingEvent(handler: SaveManagement.SaveWaitingEventHandler): MultiEvent.DefinedSubscriptionId {
         return this._beginSaveWaitingMultiEvent.subscribe(handler);
     }
 
@@ -334,7 +335,7 @@ export class SettingsService {
         this._beginSaveWaitingMultiEvent.unsubscribe(id);
     }
 
-    subscribeEndSaveWaitingEvent(handler: SettingsService.SaveWaitingEventHandler): MultiEvent.DefinedSubscriptionId {
+    subscribeEndSaveWaitingEvent(handler: SaveManagement.SaveWaitingEventHandler): MultiEvent.DefinedSubscriptionId {
         return this._endSaveWaitingMultiEvent.subscribe(handler);
     }
 
@@ -457,12 +458,12 @@ export class SettingsService {
             if (this._changed) {
                 this.notifyChanged();
                 this._changed = false;
-                this.requestSave(SettingsService.SaveInitiator.Change);
+                this.requestSave(SaveManagement.InitiateReasonId.Change);
             }
         }
     }
 
-    private requestSave(initiator: SettingsService.SaveInitiator) {
+    private requestSave(initiateReasonId: SaveManagement.InitiateReasonId) {
         if (this._saveRequestPromise === undefined) {
             this._saveRequestPromise = this._idleService.addRequest<Result<void>>(
                 () => this.idleRequestSave(),
@@ -472,7 +473,7 @@ export class SettingsService {
             this._saveRequestPromise.then(
                 (result) => {
                     if (result !== undefined) {
-                        this.processSaveResult(result, initiator);
+                        this.processSaveResult(result, initiateReasonId);
                     }
                     this.notifyEndSaveWaiting();
                 },
@@ -550,7 +551,6 @@ export class SettingsService {
 
 export namespace SettingsService {
     export type ChangedEventHandler = (this: void) => void;
-    export type SaveWaitingEventHandler = (this: void) => void;
 
     export type RegistryEntry = SettingsGroup | undefined;
 
@@ -581,12 +581,6 @@ export namespace SettingsService {
             }
             return -1;
         }
-    }
-
-    export const enum SaveInitiator {
-        Change = 'Change',
-        Hide = 'Hide',
-        Unload = 'Unload',
     }
 
     export interface SaveElements {

@@ -11,6 +11,7 @@ import { ChartHistoryIntervalModule } from './chart-history-interval';
 import { MotifServicesServiceModule } from './motif-services-service';
 import { OrderPadModule } from './order-pad';
 import { RankedLitIvemIdListDirectoryItemModule } from './ranked-lit-ivem-id-list-directory-item';
+import { SaveManagementModule } from './save-management';
 
 /** @internal */
 export namespace ServicesStaticInitialise {
@@ -22,5 +23,6 @@ export namespace ServicesStaticInitialise {
         OrderPadModule.initialiseStatic();
         InternalCommandModule.initialiseStatic();
         RankedLitIvemIdListDirectoryItemModule.initialiseStatic();
+        SaveManagementModule.initialiseStatic();
     }
 }
