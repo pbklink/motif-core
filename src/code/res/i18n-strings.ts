@@ -56,6 +56,7 @@ export const enum StringId {
     Not,
     Blank,
     Filter,
+    Exclude,
     Open,
     Close,
     Create,
@@ -1927,7 +1928,11 @@ export const enum StringId {
     ScanFormulaZenithEncodingError_BooleanTupleNodeIsNotAnArray,
     ScanFormulaZenithEncodingError_BooleanTupleNodeArrayIsZeroLength,
     ScanFormulaZenithEncodingError_BooleanTupleNodeTypeIsNotString,
-    ScanFormulaZenithEncodingError_LogicalBooleanMissingOperands,
+    ScanFormulaZenithEncodingError_SingleOperandLogicalBooleanDoesNotHaveOneOperand,
+    ScanFormulaZenithEncodingError_LeftRightOperandLogicalBooleanDoesNotHaveTwoOperands,
+    ScanFormulaZenithEncodingError_MultiOperandLogicalBooleanMissingOperands,
+    ScanFormulaZenithEncodingError_MultipleMatchingTupleNodeMissingParameters,
+    ScanFormulaZenithEncodingError_TextMultipleMatchingTupleNodeParameterIsNotString,
     ScanFormulaZenithEncodingError_LogicalBooleanMissingOperand,
     ScanFormulaZenithEncodingError_NumericComparisonDoesNotHave2Operands,
     ScanFormulaZenithEncodingError_NumericParameterIsNotNumberOrComparableFieldOrArray,
@@ -1965,7 +1970,9 @@ export const enum StringId {
     ScanFormulaZenithEncodingError_OnlySubFieldOrTextFieldNodesCanHave3Parameters,
     ScanFormulaZenithEncodingError_OnlySubFieldNodeCanHave4Parameters,
     ScanFormulaZenithEncodingError_OnlyTextSubFieldContainsNodeCanHave4Parameters,
-    ScanFormulaZenithEncodingError_FieldBooleanNodeHasTooManyParameters,
+    ScanFormulaZenithEncodingError_FieldBooleanTupleNodeHasTooManyParameters,
+    ScanFormulaZenithEncodingError_IsBooleanTupleNodeParameterIsNotBoolean,
+    ScanFormulaZenithEncodingError_IsBooleanTupleNodeHasTooManyParameters,
     ScanFormulaZenithEncodingError_NumericTupleNodeIsZeroLength,
     ScanFormulaZenithEncodingError_NumericTupleNodeTypeIsNotString,
     ScanFormulaZenithEncodingError_NumericTupleNodeRequires2Or3Parameters,
@@ -1990,12 +1997,8 @@ export const enum StringId {
     ScanCriteriaTypeDisplay_PriceLessThanValue,
     ScanCriteriaTypeDisplay_TodayPriceIncreaseGreaterThanPercentage,
     ScanCriteriaTypeDisplay_TodayPriceDecreaseGreaterThanPercentage,
-    ScanCriteriaViewDisplay_Default,
-    ScanCriteriaViewDescription_Default,
-    ScanCriteriaViewDisplay_List,
-    ScanCriteriaViewDescription_List,
-    ScanCriteriaViewDisplay_Formula,
-    ScanCriteriaViewDescription_Formula,
+    ScanCriteriaViewDisplay_ConditionSet,
+    ScanCriteriaViewDescription_ConditionSet,
     ScanCriteriaViewDisplay_Zenith,
     ScanCriteriaViewDescription_Zenith,
     ScansGridHeading_Id,
@@ -2016,6 +2019,8 @@ export const enum StringId {
     ScanPropertiesTitle_Type,
     ScanPropertiesCaption_SymbolList,
     ScanPropertiesTitle_SymbolList,
+    ScanPropertiesCaption_ShowRank,
+    ScanPropertiesTitle_ShowRank,
     ScanPropertiesCaption_SymbolListMaxCount,
     ScanPropertiesTitle_SymbolListMaxCount,
     ScanPropertiesCaption_View,
@@ -2128,6 +2133,33 @@ export const enum StringId {
     UserAlert_RestartReason_UserAction,
     UserAlert_PleaseWaitSavingChanges,
     UserAlert_ChangesSavedOkToLeaveOrRestorePage,
+    ConditionSetScanFormulaViewNgComponentCaption_SetOperation,
+    ConditionSetScanFormulaViewNgComponentTitle_SetOperation,
+    ConditionSetScanFormulaViewNgComponentTitle_Exclude,
+    ConditionSetScanFormulaViewNgComponentCaption_NewCondition,
+    ConditionSetScanFormulaViewNgComponentTitle_NewCondition,
+    ConditionSetScanFormulaViewNgComponent_SetOperationCaption_Any,
+    ConditionSetScanFormulaViewNgComponent_SetOperationTitle_Any,
+    ConditionSetScanFormulaViewNgComponent_SetOperationCaption_All,
+    ConditionSetScanFormulaViewNgComponent_SetOperationTitle_All,
+    ConditionSetScanFormulaViewNgComponent_ConditionKindCaption_Compare,
+    ConditionSetScanFormulaViewNgComponent_ConditionKindTitle_Compare,
+    ConditionSetScanFormulaViewNgComponent_ConditionKindCaption_InRange,
+    ConditionSetScanFormulaViewNgComponent_ConditionKindTitle_InRange,
+    ConditionSetScanFormulaViewNgComponent_ConditionKindCaption_Equals,
+    ConditionSetScanFormulaViewNgComponent_ConditionKindTitle_Equals,
+    ConditionSetScanFormulaViewNgComponent_ConditionKindCaption_Includes,
+    ConditionSetScanFormulaViewNgComponent_ConditionKindTitle_Includes,
+    ConditionSetScanFormulaViewNgComponent_ConditionKindCaption_Contains,
+    ConditionSetScanFormulaViewNgComponent_ConditionKindTitle_Contains,
+    ConditionSetScanFormulaViewNgComponent_ConditionKindCaption_Has,
+    ConditionSetScanFormulaViewNgComponent_ConditionKindTitle_Has,
+    ConditionSetScanFormulaViewNgComponent_ConditionKindCaption_Is,
+    ConditionSetScanFormulaViewNgComponent_ConditionKindTitle_Is,
+    ConditionSetScanFormulaViewNgComponent_ConditionKindCaption_All,
+    ConditionSetScanFormulaViewNgComponent_ConditionKindTitle_All,
+    ConditionSetScanFormulaViewNgComponent_ConditionKindCaption_None,
+    ConditionSetScanFormulaViewNgComponent_ConditionKindTitle_None,
 }
 
 /** @public */
@@ -2411,6 +2443,11 @@ export namespace I18nStrings {
         Filter: {
             id: StringId.Filter, translations: {
                 en: 'Filter',
+            }
+        },
+        Exclude: {
+            id: StringId.Exclude, translations: {
+                en: 'Exclude',
             }
         },
         Open: {
@@ -11767,9 +11804,29 @@ export namespace I18nStrings {
                 en: 'Boolean tuple node type is not string',
             }
         },
-        ScanFormulaZenithEncodingError_LogicalBooleanMissingOperands: {
-            id: StringId.ScanFormulaZenithEncodingError_LogicalBooleanMissingOperands, translations: {
+        ScanFormulaZenithEncodingError_SingleOperandLogicalBooleanDoesNotHaveOneOperand: {
+            id: StringId.ScanFormulaZenithEncodingError_SingleOperandLogicalBooleanDoesNotHaveOneOperand, translations: {
+                en: 'Logical boolean does not have one operand'
+            }
+        },
+        ScanFormulaZenithEncodingError_LeftRightOperandLogicalBooleanDoesNotHaveTwoOperands: {
+            id: StringId.ScanFormulaZenithEncodingError_LeftRightOperandLogicalBooleanDoesNotHaveTwoOperands, translations: {
+                en: 'Logical boolean does not have two operands'
+            }
+        },
+        ScanFormulaZenithEncodingError_MultiOperandLogicalBooleanMissingOperands: {
+            id: StringId.ScanFormulaZenithEncodingError_MultiOperandLogicalBooleanMissingOperands, translations: {
                 en: 'Logical boolean missing operands',
+            }
+        },
+        ScanFormulaZenithEncodingError_MultipleMatchingTupleNodeMissingParameters: {
+            id: StringId.ScanFormulaZenithEncodingError_MultipleMatchingTupleNodeMissingParameters, translations: {
+                en: 'Multiple matching tuple node missing parameters',
+            }
+        },
+        ScanFormulaZenithEncodingError_TextMultipleMatchingTupleNodeParameterIsNotString: {
+            id: StringId.ScanFormulaZenithEncodingError_TextMultipleMatchingTupleNodeParameterIsNotString, translations: {
+                en: 'Text multiple matching tuple node parameter is not a string',
             }
         },
         ScanFormulaZenithEncodingError_LogicalBooleanMissingOperand: {
@@ -11957,9 +12014,19 @@ export namespace I18nStrings {
                 en: 'Only text sub-field contains node can have 4 parameters',
             }
         },
-        ScanFormulaZenithEncodingError_FieldBooleanNodeHasTooManyParameters: {
-            id: StringId.ScanFormulaZenithEncodingError_FieldBooleanNodeHasTooManyParameters, translations: {
-                en: 'Field BooleanNode has too many parameters',
+        ScanFormulaZenithEncodingError_FieldBooleanTupleNodeHasTooManyParameters: {
+            id: StringId.ScanFormulaZenithEncodingError_FieldBooleanTupleNodeHasTooManyParameters, translations: {
+                en: 'Field tuple node has too many parameters',
+            }
+        },
+        ScanFormulaZenithEncodingError_IsBooleanTupleNodeParameterIsNotBoolean: {
+            id: StringId.ScanFormulaZenithEncodingError_IsBooleanTupleNodeParameterIsNotBoolean, translations: {
+                en: '"Is" tuple node parameter is not boolean',
+            }
+        },
+        ScanFormulaZenithEncodingError_IsBooleanTupleNodeHasTooManyParameters: {
+            id: StringId.ScanFormulaZenithEncodingError_IsBooleanTupleNodeHasTooManyParameters, translations: {
+                en: '"Is" tuple node has too many parameters',
             }
         },
         ScanFormulaZenithEncodingError_NumericTupleNodeIsZeroLength: {
@@ -12082,35 +12149,14 @@ export namespace I18nStrings {
                 en: 'Today price decrease > percentage',
             }
         },
-
-        ScanCriteriaViewDisplay_Default: {
-            id: StringId.ScanCriteriaViewDisplay_Default, translations: {
-                en: 'Default',
+        ScanCriteriaViewDisplay_ConditionSet: {
+            id: StringId.ScanCriteriaViewDisplay_ConditionSet, translations: {
+                en: 'Condition set',
             }
         },
-        ScanCriteriaViewDescription_Default: {
-            id: StringId.ScanCriteriaViewDescription_Default, translations: {
-                en: 'View/edit scan criteria with either list or formula view as appropriate',
-            }
-        },
-        ScanCriteriaViewDisplay_List: {
-            id: StringId.ScanCriteriaViewDisplay_List, translations: {
-                en: 'List',
-            }
-        },
-        ScanCriteriaViewDescription_List: {
-            id: StringId.ScanCriteriaViewDescription_List, translations: {
-                en: 'View/edit scan criteria as list',
-            }
-        },
-        ScanCriteriaViewDisplay_Formula: {
-            id: StringId.ScanCriteriaViewDisplay_Formula, translations: {
-                en: 'Formula',
-            }
-        },
-        ScanCriteriaViewDescription_Formula: {
-            id: StringId.ScanCriteriaViewDescription_Formula, translations: {
-                en: 'View/edit scan criteria as formula',
+        ScanCriteriaViewDescription_ConditionSet: {
+            id: StringId.ScanCriteriaViewDescription_ConditionSet, translations: {
+                en: 'View/edit scan criteria conditions',
             }
         },
         ScanCriteriaViewDisplay_Zenith: {
@@ -12211,6 +12257,16 @@ export namespace I18nStrings {
         ScanPropertiesTitle_SymbolList: {
             id: StringId.ScanPropertiesTitle_SymbolList, translations: {
                 en: 'Scan matches generate a symbol list which can be viewed in a watchlist',
+            }
+        },
+        ScanPropertiesCaption_ShowRank: {
+            id: StringId.ScanPropertiesCaption_ShowRank, translations: {
+                en: 'Show rank',
+            }
+        },
+        ScanPropertiesTitle_ShowRank: {
+            id: StringId.ScanPropertiesTitle_ShowRank, translations: {
+                en: 'Show rank formula editor',
             }
         },
         ScanPropertiesCaption_SymbolListMaxCount: {
@@ -12773,6 +12829,142 @@ export namespace I18nStrings {
         UserAlert_ChangesSavedOkToLeaveOrRestorePage: {
             id: StringId.UserAlert_ChangesSavedOkToLeaveOrRestorePage, translations: {
                 en: 'Changes saved! Ok to leave or restore page.',
+            }
+        },
+
+        ConditionSetScanFormulaViewNgComponentCaption_SetOperation: {
+            id: StringId.ConditionSetScanFormulaViewNgComponentCaption_SetOperation, translations: {
+                en: 'Set operation',
+            }
+        },
+        ConditionSetScanFormulaViewNgComponentTitle_SetOperation: {
+            id: StringId.ConditionSetScanFormulaViewNgComponentTitle_SetOperation, translations: {
+                en: 'Specifies whether all or only at least one condition must be met',
+            }
+        },
+        ConditionSetScanFormulaViewNgComponentTitle_Exclude: {
+            id: StringId.ConditionSetScanFormulaViewNgComponentTitle_Exclude, translations: {
+                en: 'Match securites not matched by condition set',
+            }
+        },
+        ConditionSetScanFormulaViewNgComponentCaption_NewCondition: {
+            id: StringId.ConditionSetScanFormulaViewNgComponentCaption_NewCondition, translations: {
+                en: 'New condition',
+            }
+        },
+        ConditionSetScanFormulaViewNgComponentTitle_NewCondition: {
+            id: StringId.ConditionSetScanFormulaViewNgComponentTitle_NewCondition, translations: {
+                en: 'Add a new condition to the set',
+            }
+        },
+        ConditionSetScanFormulaViewNgComponent_SetOperationCaption_Any: {
+            id: StringId.ConditionSetScanFormulaViewNgComponent_SetOperationCaption_Any, translations: {
+                en: 'Any',
+            }
+        },
+        ConditionSetScanFormulaViewNgComponent_SetOperationTitle_Any: {
+            id: StringId.ConditionSetScanFormulaViewNgComponent_SetOperationTitle_Any, translations: {
+                en: 'Just one condition needs to be met for a security to be matched',
+            }
+        },
+        ConditionSetScanFormulaViewNgComponent_SetOperationCaption_All: {
+            id: StringId.ConditionSetScanFormulaViewNgComponent_SetOperationCaption_All, translations: {
+                en: 'All',
+            }
+        },
+        ConditionSetScanFormulaViewNgComponent_SetOperationTitle_All: {
+            id: StringId.ConditionSetScanFormulaViewNgComponent_SetOperationTitle_All, translations: {
+                en: 'All conditions must be met for a security to be matched',
+            }
+        },
+        ConditionSetScanFormulaViewNgComponent_ConditionKindCaption_Compare: {
+            id: StringId.ConditionSetScanFormulaViewNgComponent_ConditionKindCaption_Compare, translations: {
+                en: 'Compare',
+            }
+        },
+        ConditionSetScanFormulaViewNgComponent_ConditionKindTitle_Compare: {
+            id: StringId.ConditionSetScanFormulaViewNgComponent_ConditionKindTitle_Compare, translations: {
+                en: 'Compare a numerical field value with a constant or the value from another numerical field',
+            }
+        },
+        ConditionSetScanFormulaViewNgComponent_ConditionKindCaption_InRange: {
+            id: StringId.ConditionSetScanFormulaViewNgComponent_ConditionKindCaption_InRange, translations: {
+                en: 'In Range',
+            }
+        },
+        ConditionSetScanFormulaViewNgComponent_ConditionKindTitle_InRange: {
+            id: StringId.ConditionSetScanFormulaViewNgComponent_ConditionKindTitle_InRange, translations: {
+                en: 'Check if the value from a numerical field is within a range',
+            }
+        },
+        ConditionSetScanFormulaViewNgComponent_ConditionKindCaption_Equals: {
+            id: StringId.ConditionSetScanFormulaViewNgComponent_ConditionKindCaption_Equals, translations: {
+                en: 'Equals',
+            }
+        },
+        ConditionSetScanFormulaViewNgComponent_ConditionKindTitle_Equals: {
+            id: StringId.ConditionSetScanFormulaViewNgComponent_ConditionKindTitle_Equals, translations: {
+                en: 'Check if the value from a numerical field equals a constant',
+            }
+        },
+        ConditionSetScanFormulaViewNgComponent_ConditionKindCaption_Includes: {
+            id: StringId.ConditionSetScanFormulaViewNgComponent_ConditionKindCaption_Includes, translations: {
+                en: 'Includes',
+            }
+        },
+        ConditionSetScanFormulaViewNgComponent_ConditionKindTitle_Includes: {
+            id: StringId.ConditionSetScanFormulaViewNgComponent_ConditionKindTitle_Includes, translations: {
+                en: 'Check if a text field value or one its values equals any of the constants specified',
+            }
+        },
+        ConditionSetScanFormulaViewNgComponent_ConditionKindCaption_Contains: {
+            id: StringId.ConditionSetScanFormulaViewNgComponent_ConditionKindCaption_Contains, translations: {
+                en: 'Contains',
+            }
+        },
+        ConditionSetScanFormulaViewNgComponent_ConditionKindTitle_Contains: {
+            id: StringId.ConditionSetScanFormulaViewNgComponent_ConditionKindTitle_Contains, translations: {
+                en: 'Check if the value of a text field contains the specified sub string',
+            }
+        },
+        ConditionSetScanFormulaViewNgComponent_ConditionKindCaption_Has: {
+            id: StringId.ConditionSetScanFormulaViewNgComponent_ConditionKindCaption_Has, translations: {
+                en: 'Has',
+            }
+        },
+        ConditionSetScanFormulaViewNgComponent_ConditionKindTitle_Has: {
+            id: StringId.ConditionSetScanFormulaViewNgComponent_ConditionKindTitle_Has, translations: {
+                en: 'Check if a field\'s value is defined',
+            }
+        },
+        ConditionSetScanFormulaViewNgComponent_ConditionKindCaption_Is: {
+            id: StringId.ConditionSetScanFormulaViewNgComponent_ConditionKindCaption_Is, translations: {
+                en: 'Is',
+            }
+        },
+        ConditionSetScanFormulaViewNgComponent_ConditionKindTitle_Is: {
+            id: StringId.ConditionSetScanFormulaViewNgComponent_ConditionKindTitle_Is, translations: {
+                en: 'Check if the security is in the specified category',
+            }
+        },
+        ConditionSetScanFormulaViewNgComponent_ConditionKindCaption_All: {
+            id: StringId.ConditionSetScanFormulaViewNgComponent_ConditionKindCaption_All, translations: {
+                en: 'All',
+            }
+        },
+        ConditionSetScanFormulaViewNgComponent_ConditionKindTitle_All: {
+            id: StringId.ConditionSetScanFormulaViewNgComponent_ConditionKindTitle_All, translations: {
+                en: 'All securities',
+            }
+        },
+        ConditionSetScanFormulaViewNgComponent_ConditionKindCaption_None: {
+            id: StringId.ConditionSetScanFormulaViewNgComponent_ConditionKindCaption_None, translations: {
+                en: 'None',
+            }
+        },
+        ConditionSetScanFormulaViewNgComponent_ConditionKindTitle_None: {
+            id: StringId.ConditionSetScanFormulaViewNgComponent_ConditionKindTitle_None, translations: {
+                en: 'No securities',
             }
         },
 

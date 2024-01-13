@@ -12,6 +12,7 @@ export namespace ScanFormula {
         And,
         Or,
         Not,
+        Xor,
 
         // Comparison
         NumericEquals,
@@ -40,13 +41,17 @@ export namespace ScanFormula {
         NumericFieldValueGet,
         // DateFieldValueGet,
 
-        // Field Comparison
+        // Type
+        Is,
+
+        // Field
         FieldHasValue,
         BooleanFieldEquals,
         NumericFieldEquals,
         NumericFieldInRange,
         DateFieldEquals,
         DateFieldInRange,
+        TextFieldIncludes,
         TextFieldContains,
         PriceSubFieldHasValue,
         PriceSubFieldEquals,
@@ -64,6 +69,7 @@ export namespace ScanFormula {
         NodeTypeId.And |
         NodeTypeId.Or |
         NodeTypeId.Not |
+        NodeTypeId.Xor |
         NodeTypeId.NumericEquals |
         NodeTypeId.NumericGreaterThan |
         NodeTypeId.NumericGreaterThanOrEqual |
@@ -71,12 +77,14 @@ export namespace ScanFormula {
         NodeTypeId.NumericLessThanOrEqual |
         NodeTypeId.All |
         NodeTypeId.None |
+        NodeTypeId.Is |
         NodeTypeId.FieldHasValue |
         NodeTypeId.BooleanFieldEquals |
         NodeTypeId.NumericFieldEquals |
         NodeTypeId.NumericFieldInRange |
         NodeTypeId.DateFieldEquals |
         NodeTypeId.DateFieldInRange |
+        NodeTypeId.TextFieldIncludes |
         NodeTypeId.TextFieldContains |
         NodeTypeId.PriceSubFieldHasValue |
         NodeTypeId.PriceSubFieldEquals |
@@ -128,6 +136,11 @@ export namespace ScanFormula {
         operand: BooleanNode;
     }
 
+    export abstract class LeftRightOperandBooleanNode extends BooleanNode {
+        leftOperand: BooleanNode;
+        rightOperand: BooleanNode;
+    }
+
     export abstract class NumericComparisonBooleanNode extends BooleanNode {
         leftOperand: NumericNode | number;
         rightOperand: NumericNode | number;
@@ -167,6 +180,20 @@ export namespace ScanFormula {
         }
     }
 
+    export class XorNode extends LeftRightOperandBooleanNode {
+        declare readonly typeId: NodeTypeId.Xor;
+
+        constructor() {
+            super(NodeTypeId.Xor);
+        }
+    }
+
+    export namespace XorNode {
+        export function is(node: Node): node is XorNode {
+            return node.typeId === NodeTypeId.Xor;
+        }
+    }
+
     export class AndNode extends MultiOperandBooleanNode {
         declare readonly typeId: NodeTypeId.And;
 
@@ -180,6 +207,23 @@ export namespace ScanFormula {
 
         constructor() {
             super(NodeTypeId.Or);
+        }
+    }
+
+    export class IsNode extends BooleanNode {
+        declare readonly typeId: NodeTypeId.Is;
+
+        categoryId: IsNode.CategoryId;
+        trueFalse: boolean;
+
+        constructor() {
+            super(NodeTypeId.Is);
+        }
+    }
+
+    export namespace IsNode {
+        export const enum CategoryId {
+            Index,
         }
     }
 
@@ -256,6 +300,15 @@ export namespace ScanFormula {
 
     export abstract class TextFieldNode extends FieldBooleanNode {
         declare fieldId: TextFieldId;
+    }
+
+    export class TextFieldIncludesNode extends TextFieldNode {
+        declare readonly typeId: NodeTypeId.TextFieldIncludes;
+        values: string[];
+
+        constructor() {
+            super(NodeTypeId.TextFieldIncludes);
+        }
     }
 
     export class TextFieldContainsNode extends TextFieldNode {
@@ -570,41 +623,41 @@ export namespace ScanFormula {
         BestBidCount, // Numeric
         BestBidPrice, // Numeric
         BestBidQuantity, // Numeric
-        Board, // Text
-        CallOrPut, // Text
-        Category, // Text
-        Cfi, // Text
-        Class, // Text
+        Board, // Text, Multiple
+        CallOrPut, // Text, Single, Exists
+        Category, // Text, Multiple
+        Cfi, // Text, Single
+        Class, // Text, Single
         ClosePrice, // Numeric
         Code, // Text
         ContractSize, // Numeric
-        Currency, // Text
-        Data, // Text
+        Currency, // Text, Multiple
+        Data, // Text, Single
         Date, // Date, Subbed
-        Exchange, // Text
-        ExerciseType, // Text
+        Exchange, // Text, Multiple
+        ExerciseType, // Text, Single, Exists
         ExpiryDate, // Date
         HighPrice, // Numeric
-        IsIndex, // Boolean
+        IsIndex, // Boolean, Single, Default
         LastPrice, // Numeric
-        Leg, // Text
+        Leg, // Text, Single
         LotSize, // Numeric
         LowPrice, // Numeric
-        Market, // Text
+        Market, // Text, Multiple
         Name, // Text
         OpenInterest, // Numeric
         OpenPrice, // Numeric
         Price, // Numeric, Subbed
         PreviousClose, // Numeric
-        QuotationBasis, // Text
+        QuotationBasis, // Text, Multiple
         Remainder, // Numeric
         ShareIssue, // Numeric
-        State, // Text
-        StateAllows, // Text
-        StatusNote, // Text
+        State, // Text, Multiple
+        StateAllows, // Text, Single
+        StatusNote, // Text, Multiple
         StrikePrice, // Numeric
         Trades, // Numeric
-        TradingMarket, // Text
+        TradingMarket, // Text, Multiple
         ValueTraded, // Numeric
         Volume, // Numeric
         Vwap, // Numeric
@@ -617,7 +670,7 @@ export namespace ScanFormula {
             readonly id: Id;
             readonly dataTypeId: FieldDataTypeId;
             readonly subbed: boolean;
-            readonly comparable: boolean;
+            readonly multiple: boolean;
         }
 
         type InfosObject = { [id in keyof typeof FieldId]: Info };
@@ -627,295 +680,295 @@ export namespace ScanFormula {
                 id: FieldId.AltCode,
                 dataTypeId: FieldDataTypeId.Text,
                 subbed: true,
-                comparable: false,
+                multiple: false,
             },
             Attribute: {
                 id: FieldId.Attribute,
                 dataTypeId: FieldDataTypeId.Text,
                 subbed: true,
-                comparable: false,
+                multiple: false,
             },
             Auction: {
                 id: FieldId.Auction,
                 dataTypeId: FieldDataTypeId.Numeric,
                 subbed: false,
-                comparable: true,
+                multiple: false,
             },
             AuctionLast: {
                 id: FieldId.AuctionLast,
                 dataTypeId: FieldDataTypeId.Numeric,
                 subbed: false,
-                comparable: true,
+                multiple: false,
             },
             AuctionQuantity: {
                 id: FieldId.AuctionQuantity,
                 dataTypeId: FieldDataTypeId.Numeric,
                 subbed: false,
-                comparable: true,
+                multiple: false,
             },
             BestAskCount: {
                 id: FieldId.BestAskCount,
                 dataTypeId: FieldDataTypeId.Numeric,
                 subbed: false,
-                comparable: true,
+                multiple: false,
             },
             BestAskPrice: {
                 id: FieldId.BestAskPrice,
                 dataTypeId: FieldDataTypeId.Numeric,
                 subbed: false,
-                comparable: true,
+                multiple: false,
             },
             BestAskQuantity: {
                 id: FieldId.BestAskQuantity,
                 dataTypeId: FieldDataTypeId.Numeric,
                 subbed: false,
-                comparable: true,
+                multiple: false,
             },
             BestBidCount: {
                 id: FieldId.BestBidCount,
                 dataTypeId: FieldDataTypeId.Numeric,
                 subbed: false,
-                comparable: true,
+                multiple: false,
             },
             BestBidPrice: {
                 id: FieldId.BestBidPrice,
                 dataTypeId: FieldDataTypeId.Numeric,
                 subbed: false,
-                comparable: true,
+                multiple: false,
             },
             BestBidQuantity: {
                 id: FieldId.BestBidQuantity,
                 dataTypeId: FieldDataTypeId.Numeric,
                 subbed: false,
-                comparable: true,
+                multiple: false,
             },
             Board: {
                 id: FieldId.Board,
                 dataTypeId: FieldDataTypeId.Text,
                 subbed: false,
-                comparable: false,
+                multiple: true,
             },
             CallOrPut: {
                 id: FieldId.CallOrPut,
                 dataTypeId: FieldDataTypeId.Text,
                 subbed: false,
-                comparable: false,
+                multiple: false,
             },
             Category: {
                 id: FieldId.Category,
                 dataTypeId: FieldDataTypeId.Text,
                 subbed: false,
-                comparable: false,
+                multiple: true,
             },
             Cfi: {
                 id: FieldId.Cfi,
                 dataTypeId: FieldDataTypeId.Text,
                 subbed: false,
-                comparable: false,
+                multiple: false,
             },
             Class: {
                 id: FieldId.Class,
                 dataTypeId: FieldDataTypeId.Text,
                 subbed: false,
-                comparable: false,
+                multiple: false,
             },
             ClosePrice: {
                 id: FieldId.ClosePrice,
                 dataTypeId: FieldDataTypeId.Numeric,
                 subbed: false,
-                comparable: true,
+                multiple: false,
             },
             Code: {
                 id: FieldId.Code,
                 dataTypeId: FieldDataTypeId.Text,
                 subbed: false,
-                comparable: false,
+                multiple: false,
             },
             ContractSize: {
                 id: FieldId.ContractSize,
                 dataTypeId: FieldDataTypeId.Numeric,
                 subbed: false,
-                comparable: true,
+                multiple: false,
             },
             Currency: {
                 id: FieldId.Currency,
                 dataTypeId: FieldDataTypeId.Text,
                 subbed: false,
-                comparable: false,
+                multiple: true,
             },
             Data: {
                 id: FieldId.Data,
                 dataTypeId: FieldDataTypeId.Text,
                 subbed: false,
-                comparable: false,
+                multiple: false,
             },
             Date: {
                 id: FieldId.Date,
                 dataTypeId: FieldDataTypeId.Date,
                 subbed: true,
-                comparable: false,
+                multiple: false,
             },
             Exchange: {
                 id: FieldId.Exchange,
                 dataTypeId: FieldDataTypeId.Text,
                 subbed: false,
-                comparable: false,
+                multiple: true,
             },
             ExerciseType: {
                 id: FieldId.ExerciseType,
                 dataTypeId: FieldDataTypeId.Text,
                 subbed: false,
-                comparable: false,
+                multiple: false,
             },
             ExpiryDate: {
                 id: FieldId.ExpiryDate,
                 dataTypeId: FieldDataTypeId.Date,
                 subbed: false,
-                comparable: false,
+                multiple: false,
             },
             HighPrice: {
                 id: FieldId.HighPrice,
                 dataTypeId: FieldDataTypeId.Numeric,
                 subbed: false,
-                comparable: true,
+                multiple: false,
             },
             IsIndex: {
                 id: FieldId.IsIndex,
                 dataTypeId: FieldDataTypeId.Boolean,
                 subbed: false,
-                comparable: false,
+                multiple: false,
             },
             LastPrice: {
                 id: FieldId.LastPrice,
                 dataTypeId: FieldDataTypeId.Numeric,
                 subbed: false,
-                comparable: true,
+                multiple: false,
             },
             Leg: {
                 id: FieldId.Leg,
                 dataTypeId: FieldDataTypeId.Text,
                 subbed: false,
-                comparable: false,
+                multiple: false,
             },
             LotSize: {
                 id: FieldId.LotSize,
                 dataTypeId: FieldDataTypeId.Numeric,
                 subbed: false,
-                comparable: true,
+                multiple: false,
             },
             LowPrice: {
                 id: FieldId.LowPrice,
                 dataTypeId: FieldDataTypeId.Numeric,
                 subbed: false,
-                comparable: true,
+                multiple: false,
             },
             Market: {
                 id: FieldId.Market,
                 dataTypeId: FieldDataTypeId.Text,
                 subbed: false,
-                comparable: false,
+                multiple: true,
             },
             Name: {
                 id: FieldId.Name,
                 dataTypeId: FieldDataTypeId.Text,
                 subbed: false,
-                comparable: false,
+                multiple: false,
             },
             OpenInterest: {
                 id: FieldId.OpenInterest,
                 dataTypeId: FieldDataTypeId.Numeric,
                 subbed: false,
-                comparable: true,
+                multiple: false,
             },
             OpenPrice: {
                 id: FieldId.OpenPrice,
                 dataTypeId: FieldDataTypeId.Numeric,
                 subbed: false,
-                comparable: true,
+                multiple: false,
             },
             Price: {
                 id: FieldId.Price,
                 dataTypeId: FieldDataTypeId.Numeric,
                 subbed: true,
-                comparable: true,
+                multiple: false,
             },
             PreviousClose: {
                 id: FieldId.PreviousClose,
                 dataTypeId: FieldDataTypeId.Numeric,
                 subbed: false,
-                comparable: true,
+                multiple: false,
             },
             QuotationBasis: {
                 id: FieldId.QuotationBasis,
                 dataTypeId: FieldDataTypeId.Text,
                 subbed: false,
-                comparable: false,
+                multiple: true,
             },
             Remainder: {
                 id: FieldId.Remainder,
                 dataTypeId: FieldDataTypeId.Numeric,
                 subbed: false,
-                comparable: true,
+                multiple: false,
             },
             ShareIssue: {
                 id: FieldId.ShareIssue,
                 dataTypeId: FieldDataTypeId.Numeric,
                 subbed: false,
-                comparable: true,
+                multiple: false,
             },
             State: {
                 id: FieldId.State,
                 dataTypeId: FieldDataTypeId.Text,
                 subbed: false,
-                comparable: false,
+                multiple: true,
             },
             StateAllows: {
                 id: FieldId.StateAllows,
                 dataTypeId: FieldDataTypeId.Text,
                 subbed: false,
-                comparable: false,
+                multiple: false,
             },
             StatusNote: {
                 id: FieldId.StatusNote,
                 dataTypeId: FieldDataTypeId.Text,
                 subbed: false,
-                comparable: false,
+                multiple: true,
             },
             StrikePrice: {
                 id: FieldId.StrikePrice,
                 dataTypeId: FieldDataTypeId.Numeric,
                 subbed: false,
-                comparable: true,
+                multiple: false,
             },
             Trades: {
                 id: FieldId.Trades,
                 dataTypeId: FieldDataTypeId.Numeric,
                 subbed: false,
-                comparable: true,
+                multiple: false,
             },
             TradingMarket: {
                 id: FieldId.TradingMarket,
                 dataTypeId: FieldDataTypeId.Text,
                 subbed: false,
-                comparable: false,
+                multiple: true,
             },
             ValueTraded: {
                 id: FieldId.ValueTraded,
                 dataTypeId: FieldDataTypeId.Numeric,
                 subbed: false,
-                comparable: true,
+                multiple: false,
             },
             Volume: {
                 id: FieldId.Volume,
                 dataTypeId: FieldDataTypeId.Numeric,
                 subbed: false,
-                comparable: true,
+                multiple: false,
             },
             Vwap: {
                 id: FieldId.Vwap,
                 dataTypeId: FieldDataTypeId.Numeric,
                 subbed: false,
-                comparable: true,
+                multiple: false,
             },
         } as const;
 
@@ -938,8 +991,8 @@ export namespace ScanFormula {
             return infos[id].subbed;
         }
 
-        export function isComparable(id: Id) {
-            return infos[id].comparable;
+        export function isMultiple(id: Id) {
+            return infos[id].multiple;
         }
     }
 

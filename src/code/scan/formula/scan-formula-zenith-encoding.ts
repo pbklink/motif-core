@@ -102,7 +102,7 @@ export namespace ScanFormulaZenithEncoding {
         }
     }
 
-    export function encodeNumeric(node: ScanFormula.NumericNode): ZenithEncodedScanFormula.NumericTupleNode | ZenithEncodedScanFormula.NumericField {
+    export function encodeNumeric(node: ScanFormula.NumericNode): ZenithEncodedScanFormula.NumericTupleNode | ZenithEncodedScanFormula.NumericFieldTupleNodeType {
         return encodeNumericNode(node);
     }
 
@@ -128,9 +128,10 @@ export namespace ScanFormulaZenithEncoding {
 
     function encodeBooleanNode(node: ScanFormula.BooleanNode): ZenithEncodedScanFormula.BooleanTupleNode {
         switch (node.typeId) {
+            case ScanFormula.NodeTypeId.Not: return encodeSingleOperandBooleanNode(ZenithEncodedScanFormula.NotTupleNodeType, node as ScanFormula.SingleOperandBooleanNode);
+            case ScanFormula.NodeTypeId.Xor: return encodeLeftRightOperandBooleanNode(ZenithEncodedScanFormula.NotTupleNodeType, node as ScanFormula.LeftRightOperandBooleanNode);
             case ScanFormula.NodeTypeId.And: return encodeMultiOperandBooleanNode(ZenithEncodedScanFormula.AndTupleNodeType, node as ScanFormula.MultiOperandBooleanNode);
             case ScanFormula.NodeTypeId.Or: return encodeMultiOperandBooleanNode(ZenithEncodedScanFormula.OrTupleNodeType, node as ScanFormula.MultiOperandBooleanNode);
-            case ScanFormula.NodeTypeId.Not: return encodeSingleOperandBooleanNode(ZenithEncodedScanFormula.NotTupleNodeType, node as ScanFormula.SingleOperandBooleanNode);
             case ScanFormula.NodeTypeId.NumericEquals: return encodeNumericComparisonNode(ZenithEncodedScanFormula.EqualTupleNodeType, node as ScanFormula.NumericComparisonBooleanNode);
             case ScanFormula.NodeTypeId.NumericGreaterThan: return encodeNumericComparisonNode(ZenithEncodedScanFormula.GreaterThanTupleNodeType, node as ScanFormula.NumericComparisonBooleanNode);
             case ScanFormula.NodeTypeId.NumericGreaterThanOrEqual: return encodeNumericComparisonNode(ZenithEncodedScanFormula.GreaterThanOrEqualTupleNodeType, node as ScanFormula.NumericComparisonBooleanNode);
@@ -138,12 +139,14 @@ export namespace ScanFormulaZenithEncoding {
             case ScanFormula.NodeTypeId.NumericLessThanOrEqual: return encodeNumericComparisonNode(ZenithEncodedScanFormula.LessThanOrEqualTupleNodeType, node as ScanFormula.NumericComparisonBooleanNode);
             case ScanFormula.NodeTypeId.All: return [ZenithEncodedScanFormula.AllTupleNodeType];
             case ScanFormula.NodeTypeId.None: return [ZenithEncodedScanFormula.NoneTupleNodeType];
+            case ScanFormula.NodeTypeId.Is: return encodeIsNode(node as ScanFormula.IsNode);
             case ScanFormula.NodeTypeId.FieldHasValue: return encodeFieldHasValueNode(node as ScanFormula.FieldHasValueNode);
             case ScanFormula.NodeTypeId.BooleanFieldEquals: return encodeBooleanFieldEqualsNode(node as ScanFormula.BooleanFieldEqualsNode);
             case ScanFormula.NodeTypeId.NumericFieldEquals: return encodeNumericFieldEqualsNode(node as ScanFormula.NumericFieldEqualsNode);
             case ScanFormula.NodeTypeId.NumericFieldInRange: return encodeNumericFieldInRangeNode(node as ScanFormula.NumericFieldInRangeNode);
             case ScanFormula.NodeTypeId.DateFieldEquals: return encodeDateFieldEqualsNode(node as ScanFormula.DateFieldEqualsNode);
             case ScanFormula.NodeTypeId.DateFieldInRange: return encodeDateFieldInRangeNode(node as ScanFormula.DateFieldInRangeNode);
+            case ScanFormula.NodeTypeId.TextFieldIncludes: return encodeTextFieldIncludesNode(node as ScanFormula.TextFieldIncludesNode);
             case ScanFormula.NodeTypeId.TextFieldContains: return encodeTextFieldContainsNode(node as ScanFormula.TextFieldContainsNode);
             case ScanFormula.NodeTypeId.PriceSubFieldHasValue: return encodePriceSubFieldHasValueNode(node as ScanFormula.PriceSubFieldHasValueNode);
             case ScanFormula.NodeTypeId.PriceSubFieldEquals: return encodePriceSubFieldEqualsNode(node as ScanFormula.PriceSubFieldEqualsNode);
@@ -181,7 +184,13 @@ export namespace ScanFormulaZenithEncoding {
         return [type, param];
     }
 
-    function encodeNumericNode(node: ScanFormula.NumericNode): ZenithEncodedScanFormula.NumericTupleNode | ZenithEncodedScanFormula.NumericField {
+    function encodeLeftRightOperandBooleanNode(type: typeof ZenithEncodedScanFormula.NotTupleNodeType, node: ScanFormula.LeftRightOperandBooleanNode): ZenithEncodedScanFormula.LogicalTupleNode {
+        const leftParam = encodeBooleanNode(node.leftOperand);
+        const rightParam = encodeBooleanNode(node.rightOperand);
+        return [type, leftParam, rightParam];
+    }
+
+    function encodeNumericNode(node: ScanFormula.NumericNode): ZenithEncodedScanFormula.NumericTupleNode | ZenithEncodedScanFormula.NumericFieldTupleNodeType {
         switch (node.typeId) {
             case ScanFormula.NodeTypeId.NumericAdd: return encodeLeftRightArithmeticNumericNode(ZenithEncodedScanFormula.AddTupleNodeType, node as ScanFormula.LeftRightArithmeticNumericNode);
             case ScanFormula.NodeTypeId.NumericDiv: return encodeLeftRightArithmeticNumericNode(ZenithEncodedScanFormula.DivTupleNodeType, node as ScanFormula.LeftRightArithmeticNumericNode);
@@ -208,7 +217,7 @@ export namespace ScanFormulaZenithEncoding {
         node: ScanFormula.NumericComparisonBooleanNode
     ): ZenithEncodedScanFormula.ComparisonTupleNode {
         const leftOperand = encodeNumericOperand(node.leftOperand);
-        const rightOperand = encodeNumericOperand(node.leftOperand);
+        const rightOperand = encodeNumericOperand(node.rightOperand);
         return [type, leftOperand, rightOperand];
     }
 
@@ -266,7 +275,7 @@ export namespace ScanFormulaZenithEncoding {
         return [type, leftParam, rightParam];
     }
 
-    function encodeNumericFieldValueGetNode(node: ScanFormula.NumericFieldValueGetNode): ZenithEncodedScanFormula.NumericField {
+    function encodeNumericFieldValueGetNode(node: ScanFormula.NumericFieldValueGetNode): ZenithEncodedScanFormula.NumericFieldTupleNodeType {
         return Field.numericFromId(node.fieldId);
     }
 
@@ -285,6 +294,11 @@ export namespace ScanFormulaZenithEncoding {
         tupleNode[index] = encodeNumericOperand(node.falseArm.value);
 
         return tupleNode as ZenithEncodedScanFormula.NumericIfTupleNode;
+    }
+
+    function encodeIsNode(node: ScanFormula.IsNode): ZenithEncodedScanFormula.BooleanSingleMatchingTupleNode {
+        const tupleNodeType = Is.categoryIdToTupleNodeType(node.categoryId);
+        return [tupleNodeType, node.trueFalse]
     }
 
     function encodeBooleanFieldEqualsNode(node: ScanFormula.BooleanFieldEqualsNode): ZenithEncodedScanFormula.BooleanSingleMatchingTupleNode {
@@ -340,6 +354,12 @@ export namespace ScanFormulaZenithEncoding {
             Max: nodeMax === undefined ? undefined: DateValue.encodeDate(nodeMax.utcDate),
         }
         return [field, namedParameters];
+    }
+
+    function encodeTextFieldIncludesNode(node: ScanFormula.TextFieldIncludesNode): ZenithEncodedScanFormula.TextMatchingTupleNode {
+        const field = Field.textFromId(node.fieldId);
+        const values = node.values;
+        return [field, ...values];
     }
 
     function encodeTextFieldContainsNode(node: ScanFormula.TextFieldContainsNode): ZenithEncodedScanFormula.TextMatchingTupleNode {
@@ -485,9 +505,10 @@ export namespace ScanFormulaZenithEncoding {
 
         switch (nodeType) {
             // Logical
+            case ZenithEncodedScanFormula.NotTupleNodeType: return tryDecodeSingleOperandLogicalBooleanNode(tupleNode as ZenithEncodedScanFormula.LogicalTupleNode, ScanFormula.NotNode, toProgress);
+            case ZenithEncodedScanFormula.XorTupleNodeType: return tryDecodeLeftRightOperandLogicalBooleanNode(tupleNode as ZenithEncodedScanFormula.LogicalTupleNode, ScanFormula.XorNode, toProgress);
             case ZenithEncodedScanFormula.AndTupleNodeType: return tryDecodeMultiOperandLogicalBooleanNode(tupleNode as ZenithEncodedScanFormula.LogicalTupleNode, ScanFormula.AndNode, toProgress);
             case ZenithEncodedScanFormula.OrTupleNodeType: return tryDecodeMultiOperandLogicalBooleanNode(tupleNode as ZenithEncodedScanFormula.LogicalTupleNode, ScanFormula.OrNode, toProgress);
-            case ZenithEncodedScanFormula.NotTupleNodeType: return tryDecodeSingleOperandLogicalBooleanNode(tupleNode as ZenithEncodedScanFormula.LogicalTupleNode, ScanFormula.NotNode, toProgress);
 
             // Comparison
             case ZenithEncodedScanFormula.EqualTupleNodeType: return tryDecodeNumericComparisonNode(tupleNode as ZenithEncodedScanFormula.ComparisonTupleNode, ScanFormula.NumericEqualsNode, toProgress);
@@ -499,59 +520,106 @@ export namespace ScanFormulaZenithEncoding {
             case ZenithEncodedScanFormula.NoneTupleNodeType: return new Ok(new ScanFormula.NoneNode());
 
             // Matching
-            case ZenithEncodedScanFormula.AltCodeTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.AltCode, toProgress);
-            case ZenithEncodedScanFormula.AttributeTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.Attribute, toProgress);
-            case ZenithEncodedScanFormula.AuctionTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.Auction, toProgress);
-            case ZenithEncodedScanFormula.AuctionLastTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.Auction, toProgress);
-            case ZenithEncodedScanFormula.AuctionQuantityTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.AuctionQuantity, toProgress);
-            case ZenithEncodedScanFormula.BestAskCountTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.BestAskCount, toProgress);
-            case ZenithEncodedScanFormula.BestAskPriceTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.BestAskPrice, toProgress);
-            case ZenithEncodedScanFormula.BestAskQuantityTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.BestAskQuantity, toProgress);
-            case ZenithEncodedScanFormula.BestBidCountTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.BestBidCount, toProgress);
-            case ZenithEncodedScanFormula.BestBidPriceTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.BestBidPrice, toProgress);
-            case ZenithEncodedScanFormula.BestBidQuantityTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.BestBidQuantity, toProgress);
-            case ZenithEncodedScanFormula.BoardTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.Board, toProgress);
-            case ZenithEncodedScanFormula.CallOrPutTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.CallOrPut, toProgress);
-            case ZenithEncodedScanFormula.CategoryTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.Category, toProgress);
-            case ZenithEncodedScanFormula.CfiTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.Cfi, toProgress);
-            case ZenithEncodedScanFormula.ClassTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.Class, toProgress);
-            case ZenithEncodedScanFormula.ClosePriceTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.ClosePrice, toProgress);
-            case ZenithEncodedScanFormula.CodeTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.Code, toProgress);
-            case ZenithEncodedScanFormula.ContractSizeTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.ContractSize, toProgress);
-            case ZenithEncodedScanFormula.CurrencyTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.Currency, toProgress);
-            case ZenithEncodedScanFormula.DataTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.Data, toProgress);
-            case ZenithEncodedScanFormula.DateTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.Date, toProgress);
-            case ZenithEncodedScanFormula.ExerciseTypeTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.ExerciseType, toProgress);
-            case ZenithEncodedScanFormula.ExchangeTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.Exchange, toProgress);
-            case ZenithEncodedScanFormula.ExpiryDateTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.ExpiryDate, toProgress);
-            case ZenithEncodedScanFormula.HighPriceTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.HighPrice, toProgress);
-            case ZenithEncodedScanFormula.IsIndexTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.IsIndex, toProgress);
-            case ZenithEncodedScanFormula.LegTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.Leg, toProgress);
-            case ZenithEncodedScanFormula.LastPriceTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.LastPrice, toProgress);
-            case ZenithEncodedScanFormula.LotSizeTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.LotSize, toProgress);
-            case ZenithEncodedScanFormula.LowPriceTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.LowPrice, toProgress);
-            case ZenithEncodedScanFormula.MarketTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.Market, toProgress);
-            case ZenithEncodedScanFormula.NameTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.Name, toProgress);
-            case ZenithEncodedScanFormula.OpenInterestTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.OpenInterest, toProgress);
-            case ZenithEncodedScanFormula.OpenPriceTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.OpenPrice, toProgress);
-            case ZenithEncodedScanFormula.PriceTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.Price, toProgress);
-            case ZenithEncodedScanFormula.PreviousCloseTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.PreviousClose, toProgress);
-            case ZenithEncodedScanFormula.QuotationBasisTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.QuotationBasis, toProgress);
-            case ZenithEncodedScanFormula.RemainderTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.Remainder, toProgress);
-            case ZenithEncodedScanFormula.ShareIssueTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.ShareIssue, toProgress);
-            case ZenithEncodedScanFormula.StateTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.State, toProgress);
-            case ZenithEncodedScanFormula.StateAllowsTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.StateAllows, toProgress);
-            case ZenithEncodedScanFormula.StatusNoteTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.StatusNote, toProgress);
-            case ZenithEncodedScanFormula.StrikePriceTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.StrikePrice, toProgress);
-            case ZenithEncodedScanFormula.TradesTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.Trades, toProgress);
-            case ZenithEncodedScanFormula.TradingMarketTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.TradingMarket, toProgress);
-            case ZenithEncodedScanFormula.ValueTradedTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.ValueTraded, toProgress);
-            case ZenithEncodedScanFormula.VolumeTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.Volume, toProgress);
-            case ZenithEncodedScanFormula.VwapTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.Vwap, toProgress);
+            case ZenithEncodedScanFormula.AltCodeTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.AltCode);
+            case ZenithEncodedScanFormula.AttributeTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.Attribute);
+            case ZenithEncodedScanFormula.AuctionTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.Auction);
+            case ZenithEncodedScanFormula.AuctionLastTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.Auction);
+            case ZenithEncodedScanFormula.AuctionQuantityTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.AuctionQuantity);
+            case ZenithEncodedScanFormula.BestAskCountTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.BestAskCount);
+            case ZenithEncodedScanFormula.BestAskPriceTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.BestAskPrice);
+            case ZenithEncodedScanFormula.BestAskQuantityTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.BestAskQuantity);
+            case ZenithEncodedScanFormula.BestBidCountTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.BestBidCount);
+            case ZenithEncodedScanFormula.BestBidPriceTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.BestBidPrice);
+            case ZenithEncodedScanFormula.BestBidQuantityTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.BestBidQuantity);
+            case ZenithEncodedScanFormula.BoardTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.Board);
+            case ZenithEncodedScanFormula.CallOrPutTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.CallOrPut);
+            case ZenithEncodedScanFormula.CategoryTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.Category);
+            case ZenithEncodedScanFormula.CfiTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.Cfi);
+            case ZenithEncodedScanFormula.ClassTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.Class);
+            case ZenithEncodedScanFormula.ClosePriceTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.ClosePrice);
+            case ZenithEncodedScanFormula.CodeTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.Code);
+            case ZenithEncodedScanFormula.ContractSizeTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.ContractSize);
+            case ZenithEncodedScanFormula.CurrencyTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.Currency);
+            case ZenithEncodedScanFormula.DataTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.Data);
+            case ZenithEncodedScanFormula.DateTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.Date);
+            case ZenithEncodedScanFormula.ExerciseTypeTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.ExerciseType);
+            case ZenithEncodedScanFormula.ExchangeTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.Exchange);
+            case ZenithEncodedScanFormula.ExpiryDateTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.ExpiryDate);
+            case ZenithEncodedScanFormula.HighPriceTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.HighPrice);
+            case ZenithEncodedScanFormula.IsIndexTupleNodeType: return tryDecodeIsBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.IsNode.CategoryId.Index);
+            case ZenithEncodedScanFormula.LegTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.Leg);
+            case ZenithEncodedScanFormula.LastPriceTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.LastPrice);
+            case ZenithEncodedScanFormula.LotSizeTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.LotSize);
+            case ZenithEncodedScanFormula.LowPriceTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.LowPrice);
+            case ZenithEncodedScanFormula.MarketTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.Market);
+            case ZenithEncodedScanFormula.NameTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.Name);
+            case ZenithEncodedScanFormula.OpenInterestTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.OpenInterest);
+            case ZenithEncodedScanFormula.OpenPriceTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.OpenPrice);
+            case ZenithEncodedScanFormula.PriceTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.Price);
+            case ZenithEncodedScanFormula.PreviousCloseTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.PreviousClose);
+            case ZenithEncodedScanFormula.QuotationBasisTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.QuotationBasis);
+            case ZenithEncodedScanFormula.RemainderTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.Remainder);
+            case ZenithEncodedScanFormula.ShareIssueTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.ShareIssue);
+            case ZenithEncodedScanFormula.StateTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.State);
+            case ZenithEncodedScanFormula.StateAllowsTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.StateAllows);
+            case ZenithEncodedScanFormula.StatusNoteTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.StatusNote);
+            case ZenithEncodedScanFormula.StrikePriceTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.StrikePrice);
+            case ZenithEncodedScanFormula.TradesTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.Trades);
+            case ZenithEncodedScanFormula.TradingMarketTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.TradingMarket);
+            case ZenithEncodedScanFormula.ValueTradedTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.ValueTraded);
+            case ZenithEncodedScanFormula.VolumeTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.Volume);
+            case ZenithEncodedScanFormula.VwapTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.Vwap);
 
             default: {
                 const neverTupleNodeType: never = nodeType;
                 return createDecodeErrorResult(ErrorId.UnknownBooleanTupleNodeType, `${neverTupleNodeType as string}`);
+            }
+        }
+    }
+
+    function tryDecodeSingleOperandLogicalBooleanNode(
+        tulipNode: ZenithEncodedScanFormula.LogicalTupleNode,
+        nodeConstructor: new() => ScanFormula.SingleOperandBooleanNode,
+        toProgress: DecodeProgress,
+    ): Result<ScanFormula.SingleOperandBooleanNode, DecodeError> {
+        if (tulipNode.length !== 2) {
+            return createDecodeErrorResult(ErrorId.SingleOperandLogicalBooleanDoesNotHaveOneOperand, tulipNode[0]);
+        } else {
+            const tupleNodeResult = tryDecodeExpectedBooleanOperand(tulipNode[1], toProgress);
+            if (tupleNodeResult.isErr()) {
+                return tupleNodeResult.createType();
+            } else {
+                const resultNode = new nodeConstructor();
+                resultNode.operand = tupleNodeResult.value;
+                return new Ok(resultNode);
+            }
+        }
+    }
+
+    function tryDecodeLeftRightOperandLogicalBooleanNode(
+        tulipNode: ZenithEncodedScanFormula.LogicalTupleNode,
+        nodeConstructor: new() => ScanFormula.LeftRightOperandBooleanNode,
+        toProgress: DecodeProgress,
+    ): Result<ScanFormula.LeftRightOperandBooleanNode, DecodeError> {
+        const tulipNodeLength = tulipNode.length;
+        if (tulipNodeLength !== 3) {
+            return createDecodeErrorResult(ErrorId.LeftRightOperandLogicalBooleanDoesNotHaveTwoOperands, tulipNode[0]);
+        } else {
+            const leftOperandResult = tryDecodeExpectedBooleanOperand(tulipNode[1], toProgress);
+            if (leftOperandResult.isErr()) {
+                return leftOperandResult.createType();
+            } else {
+                const leftOperand = leftOperandResult.value;
+                const rightOperandResult = tryDecodeExpectedBooleanOperand(tulipNode[2], toProgress);
+                if (rightOperandResult.isErr()) {
+                    return rightOperandResult.createType();
+                } else {
+                    const rightOperand = rightOperandResult.value;
+                    const resultNode = new nodeConstructor();
+                    resultNode.leftOperand = leftOperand;
+                    resultNode.rightOperand = rightOperand;
+                    return new Ok(resultNode);
+                }
             }
         }
     }
@@ -563,7 +631,7 @@ export namespace ScanFormulaZenithEncoding {
     ): Result<ScanFormula.MultiOperandBooleanNode, DecodeError> {
         const tulipNodeLength = tulipNode.length;
         if (tulipNodeLength < 2) {
-            return createDecodeErrorResult(ErrorId.LogicalBooleanMissingOperands, tulipNode[0]);
+            return createDecodeErrorResult(ErrorId.MultiOperandLogicalBooleanMissingOperands, tulipNode[0]);
         } else {
             const operands = new Array<ScanFormula.BooleanNode>(tulipNodeLength - 1);
             for (let i = 1; i < tulipNodeLength; i++) {
@@ -582,25 +650,6 @@ export namespace ScanFormulaZenithEncoding {
         }
     }
 
-    function tryDecodeSingleOperandLogicalBooleanNode(
-        tulipNode: ZenithEncodedScanFormula.LogicalTupleNode,
-        nodeConstructor: new() => ScanFormula.SingleOperandBooleanNode,
-        toProgress: DecodeProgress,
-    ): Result<ScanFormula.SingleOperandBooleanNode, DecodeError> {
-        if (tulipNode.length !== 2) {
-            return createDecodeErrorResult(ErrorId.LogicalBooleanMissingOperand, tulipNode[0]);
-        } else {
-            const tupleNodeResult = tryDecodeExpectedBooleanOperand(tulipNode[1], toProgress);
-            if (tupleNodeResult.isErr()) {
-                return tupleNodeResult.createType();
-            } else {
-                const resultNode = new nodeConstructor();
-                resultNode.operand = tupleNodeResult.value;
-                return new Ok(resultNode);
-            }
-        }
-    }
-
     function tryDecodeExpectedBooleanOperand(
         param: ZenithEncodedScanFormula.BooleanParam,
         toProgress: DecodeProgress
@@ -612,11 +661,31 @@ export namespace ScanFormulaZenithEncoding {
                 // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
                 return createDecodeErrorResult(ErrorId.UnexpectedBooleanParamType, `${param}`);
             } else {
-                const fieldId = Field.tryMatchingToId(param);
-                if (fieldId === undefined) {
-                    return createDecodeErrorResult(ErrorId.UnknownFieldBooleanParam, `${param}`);
+                let fieldId: ScanFormula.FieldId | undefined = Field.tryNumericToId(param as ZenithEncodedScanFormula.NumericFieldTupleNodeType);
+                if (fieldId !== undefined) {
+                    return new Ok(createFieldHasValueNode(fieldId));
                 } else {
-                    return new Ok(toFieldHasValueNode(fieldId));
+                    fieldId = Field.tryTextToId(param as ZenithEncodedScanFormula.TextFieldTupleNodeType);
+                    if (fieldId !== undefined) {
+                        return new Ok(createFieldHasValueNode(fieldId));
+                    } else {
+                        fieldId = Field.tryDateToId(param as ZenithEncodedScanFormula.DateFieldTupleNodeType);
+                        if (fieldId !== undefined) {
+                            return new Ok(createFieldHasValueNode(fieldId));
+                        } else {
+                            fieldId = Field.tryBooleanToId(param as ZenithEncodedScanFormula.BooleanFieldTupleNodeType);
+                            if (fieldId !== undefined) {
+                                const categoryIdAndDefault = Is.tryFieldIdToIsCategoryId(fieldId);
+                                if (categoryIdAndDefault !== undefined) {
+                                    return new Ok(createIsNode(categoryIdAndDefault.categoryId, categoryIdAndDefault.default));
+                                } else {
+                                    return new Ok(createFieldHasValueNode(fieldId));
+                                }
+                            } else {
+                                return createDecodeErrorResult(ErrorId.UnknownFieldBooleanParam, `${param}`);
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -628,80 +697,136 @@ export namespace ScanFormulaZenithEncoding {
     //     }
     // }
 
-    function tryDecodeFieldBooleanNode(
+    function tryDecodeIsBooleanNode(
         node: ZenithEncodedScanFormula.MatchingTupleNode,
-        fieldId: ScanFormula.FieldId,
-        toProgress: DecodeProgress
-    ): Result<ScanFormula.FieldBooleanNode, DecodeError> {
+        categoryId: ScanFormula.IsNode.CategoryId,
+    ): Result<ScanFormula.IsNode, DecodeError> {
         const paramCount = node.length - 1;
         switch (paramCount) {
             case 0: {
-                if (fieldId === ScanFormula.FieldId.IsIndex) {
-                    return tryDecodeBooleanFieldEqualsNode(fieldId, ZenithEncodedScanFormula.SingleDefault_IsIndex);
-                } else {
-                    return new Ok(toFieldHasValueNode(fieldId));
-                }
+                const defaultTrueFalse = Is.categoryIdToDefaultTrueFalse(categoryId);
+                return new Ok(createIsNode(categoryId, defaultTrueFalse));
             }
             case 1: {
-                const param1 = node[1];
-                const fieldSubbed = ScanFormula.Field.isSubbed(fieldId);
-                if (fieldSubbed) {
-                    return tryDecodeSubFieldHasValueNode(fieldId as ScanFormula.SubbedFieldId, param1);
+                const param = node[1];
+                if (typeof param === 'boolean') {
+                    return new Ok(createIsNode(categoryId, param));
                 } else {
-                    if (typeof param1 === 'object') {
-                        return tryNamedParametersToFieldEqualsOrInRangeNode(fieldId, param1);
-                    } else {
-                        return tryDecodeFieldEqualsOrContainsNode(fieldId, param1);
-                    }
-                }
-            }
-            case 2: {
-                const param1 = node[1];
-                const param2 = node[2];
-                const fieldSubbed = ScanFormula.Field.isSubbed(fieldId);
-                if (fieldSubbed) {
-                    if (typeof param2 === 'object') {
-                        return tryNamedParametersToSubFieldEqualsOrInRangeNode(fieldId as ScanFormula.SubbedFieldId, param1, param2);
-                    } else {
-                        return tryDecodeSubFieldEqualsOrContainsNode(fieldId as ScanFormula.SubbedFieldId, param1, param2);
-                    }
-                } else {
-                    return tryDecodeFieldContainsOrInRangeNode(fieldId as ScanFormula.SubbedFieldId, param1, param2);
-                }
-            }
-            case 3: {
-                const param1 = node[1];
-                const param2 = node[2];
-                const param3 = node[3];
-                const fieldSubbed = ScanFormula.Field.isSubbed(fieldId);
-                if (fieldSubbed) {
-                    return tryDecodeSubFieldContainsOrInRangeNode(fieldId as ScanFormula.SubbedFieldId, param1, param2, param3);
-                } else {
-                    if (ScanFormula.Field.idToDataTypeId(fieldId) === ScanFormula.FieldDataTypeId.Text) {
-                        return tryDecodeTextFieldContainsNode(fieldId as ScanFormula.TextFieldId, param1, param2, param3);
-                    } else {
-                        return createDecodeErrorResult(ErrorId.OnlySubFieldOrTextFieldNodesCanHave3Parameters, paramCount.toString());
-                    }
-                }
-                break;
-            }
-            case 4: {
-                if (!ScanFormula.Field.isSubbed(fieldId)) {
-                    return createDecodeErrorResult(ErrorId.OnlySubFieldNodeCanHave4Parameters, paramCount.toString());
-                } else {
-                    const param1 = node[1];
-                    const param2 = node[2];
-                    const param3 = node[3];
-                    const param4 = node[4];
-                    return tryDecodeTextSubFieldContainsNode(fieldId as ScanFormula.SubbedFieldId, param1, param2, param3, param4);
+                    return createDecodeErrorResult(ErrorId.IsBooleanTupleNodeParameterIsNotBoolean, typeof param);
                 }
             }
             default:
-                return createDecodeErrorResult(ErrorId.FieldBooleanNodeHasTooManyParameters, paramCount.toString());
+                return createDecodeErrorResult(ErrorId.IsBooleanTupleNodeHasTooManyParameters, paramCount.toString());
+            }
+    }
+
+    function tryDecodeFieldBooleanNode(
+        node: ZenithEncodedScanFormula.MatchingTupleNode,
+        fieldId: ScanFormula.FieldId,
+    ): Result<ScanFormula.FieldBooleanNode, DecodeError> {
+        const multipleParams = ScanFormula.Field.isMultiple(fieldId);
+        if (multipleParams) {
+            if (node.length <= 1) {
+                return createDecodeErrorResult(ErrorId.MultipleMatchingTupleNodeMissingParameters, node[0]);
+            } else {
+                const params: unknown[] = node.slice(1);
+                return tryDecodeTextMultipleMatchingTupleNode(fieldId as ScanFormula.TextFieldId, params);
+            }
+        } else {
+            const paramCount = node.length - 1;
+            switch (paramCount) {
+                case 0: {
+                    return new Ok(createFieldHasValueNode(fieldId));
+                }
+                case 1: {
+                    const param1 = node[1];
+                    const fieldSubbed = ScanFormula.Field.isSubbed(fieldId);
+                    if (fieldSubbed) {
+                        return tryDecodeSubFieldHasValueNode(fieldId as ScanFormula.SubbedFieldId, param1);
+                    } else {
+                        if (typeof param1 === 'object') {
+                            return tryNamedParametersToFieldEqualsOrInRangeNode(fieldId, param1);
+                        } else {
+                            return tryDecodeFieldEqualsOrContainsNode(fieldId, param1);
+                        }
+                    }
+                }
+                case 2: {
+                    const param1 = node[1];
+                    const param2 = node[2];
+                    const fieldSubbed = ScanFormula.Field.isSubbed(fieldId);
+                    if (fieldSubbed) {
+                        if (typeof param2 === 'object') {
+                            return tryNamedParametersToSubFieldEqualsOrInRangeNode(fieldId as ScanFormula.SubbedFieldId, param1, param2);
+                        } else {
+                            return tryDecodeSubFieldEqualsOrContainsNode(fieldId as ScanFormula.SubbedFieldId, param1, param2);
+                        }
+                    } else {
+                        return tryDecodeFieldContainsOrInRangeNode(fieldId as ScanFormula.SubbedFieldId, param1, param2);
+                    }
+                }
+                case 3: {
+                    const param1 = node[1];
+                    const param2 = node[2];
+                    const param3 = node[3];
+                    const fieldSubbed = ScanFormula.Field.isSubbed(fieldId);
+                    if (fieldSubbed) {
+                        return tryDecodeSubFieldContainsOrInRangeNode(fieldId as ScanFormula.SubbedFieldId, param1, param2, param3);
+                    } else {
+                        if (ScanFormula.Field.idToDataTypeId(fieldId) === ScanFormula.FieldDataTypeId.Text) {
+                            return tryDecodeTextFieldContainsNode(fieldId as ScanFormula.TextFieldId, param1, param2, param3);
+                        } else {
+                            return createDecodeErrorResult(ErrorId.OnlySubFieldOrTextFieldNodesCanHave3Parameters, paramCount.toString());
+                        }
+                    }
+                    break;
+                }
+                case 4: {
+                    if (!ScanFormula.Field.isSubbed(fieldId)) {
+                        return createDecodeErrorResult(ErrorId.OnlySubFieldNodeCanHave4Parameters, paramCount.toString());
+                    } else {
+                        const param1 = node[1];
+                        const param2 = node[2];
+                        const param3 = node[3];
+                        const param4 = node[4];
+                        return tryDecodeTextSubFieldContainsNode(fieldId as ScanFormula.SubbedFieldId, param1, param2, param3, param4);
+                    }
+                }
+                default:
+                    return createDecodeErrorResult(ErrorId.FieldBooleanTupleNodeHasTooManyParameters, paramCount.toString());
+            }
         }
     }
 
-    function toFieldHasValueNode(fieldId: ScanFormula.FieldId): ScanFormula.FieldHasValueNode {
+    function tryDecodeTextMultipleMatchingTupleNode(
+        fieldId: ScanFormula.TextFieldId,
+        params: unknown[],
+    ): Result<ScanFormula.FieldBooleanNode, DecodeError> {
+        const count = params.length;
+        const values = new Array<string>(count);
+        for (let i = 0; i < count; i++) {
+            const param = params[i];
+            if (typeof param !== 'string') {
+                return createDecodeErrorResult(ErrorId.TextMultipleMatchingTupleNodeParameterIsNotString, i.toString());
+            } else {
+                values[i] = param;
+            }
+        }
+
+        const node = new ScanFormula.TextFieldIncludesNode();
+        node.fieldId = fieldId;
+        node.values = values;
+        return new Ok(node);
+    }
+
+    function createIsNode(categoryId: ScanFormula.IsNode.CategoryId, trueFalse: boolean): ScanFormula.IsNode {
+        const isNode = new ScanFormula.IsNode();
+        isNode.categoryId = categoryId;
+        isNode.trueFalse = trueFalse;
+        return isNode;
+    }
+
+    function createFieldHasValueNode(fieldId: ScanFormula.FieldId): ScanFormula.FieldHasValueNode {
         const hasValueNode = new ScanFormula.FieldHasValueNode();
         hasValueNode.fieldId = fieldId;
         return hasValueNode;
@@ -1004,7 +1129,7 @@ export namespace ScanFormulaZenithEncoding {
         switch (fieldId) {
             case ScanFormula.FieldId.Price:
             case ScanFormula.FieldId.Date: {
-                return createDecodeErrorResult<T>(ErrorId.OnlyTextSubFieldContainsNodeCanHave4Parameters, Field.matchingFromId(fieldId));
+                return createDecodeErrorResult<T>(ErrorId.OnlyTextSubFieldContainsNodeCanHave4Parameters, Field.idToTupleNodeType(fieldId));
             }
             case ScanFormula.FieldId.AltCode: return tryDecodeAltCodeSubFieldContains(subField, value, as, ignoreCase);
             case ScanFormula.FieldId.Attribute: return tryDecodeAttributeSubFieldContains(subField, value, as, ignoreCase);
@@ -1277,7 +1402,7 @@ export namespace ScanFormulaZenithEncoding {
             return new Ok(numericParam);
         } else {
             if (typeof numericParam === 'string') {
-                return tryDecodeNumericFieldValueGet(numericParam as ZenithEncodedScanFormula.NumericField);
+                return tryDecodeNumericFieldValueGet(numericParam as ZenithEncodedScanFormula.NumericFieldTupleNodeType);
             } else {
                 if (Array.isArray(numericParam)) {
                     return tryDecodeExpectedArithmeticNumericNode(numericParam as ZenithEncodedScanFormula.NumericTupleNode, toProgress);
@@ -1503,7 +1628,7 @@ export namespace ScanFormulaZenithEncoding {
         }
     }
 
-    function tryDecodeNumericFieldValueGet(field: ZenithEncodedScanFormula.NumericField): Result<ScanFormula.NumericFieldValueGetNode, DecodeError> {
+    function tryDecodeNumericFieldValueGet(field: ZenithEncodedScanFormula.NumericFieldTupleNodeType): Result<ScanFormula.NumericFieldValueGetNode, DecodeError> {
         const fieldId = Field.tryNumericToId(field);
         if (fieldId === undefined) {
             return createDecodeErrorResult(ErrorId.UnknownNumericField, field);
@@ -1564,24 +1689,10 @@ export namespace ScanFormulaZenithEncoding {
             }
         }
     }
+
     namespace Field {
-        export function tryMatchingToId(value: ZenithEncodedScanFormula.MatchingField): ScanFormula.FieldId | undefined {
-            let fieldId: ScanFormula.FieldId | undefined = tryNumericToId(value as ZenithEncodedScanFormula.NumericField);
-            if (fieldId === undefined) {
-                fieldId = tryTextToId(value as ZenithEncodedScanFormula.TextField);
-                if (fieldId === undefined) {
-                    fieldId = tryDateToId(value as ZenithEncodedScanFormula.DateField);
-                    if (fieldId === undefined) {
-                        fieldId = tryBooleanToId(value as ZenithEncodedScanFormula.BooleanField); // fieldId is left undefined if this try fails
-                    }
-                }
-            }
-
-            return fieldId;
-        }
-
-        export function matchingFromId(value: ScanFormula.FieldId): ZenithEncodedScanFormula.MatchingField {
-            let field: ZenithEncodedScanFormula.MatchingField | undefined = tryNumericFromId(value as ScanFormula.NumericFieldId);
+        export function idToTupleNodeType(value: ScanFormula.FieldId): ZenithEncodedScanFormula.MatchingFieldTupleNodeType {
+            let field: ZenithEncodedScanFormula.MatchingFieldTupleNodeType | undefined = tryNumericFromId(value as ScanFormula.NumericFieldId);
             if (field === undefined) {
                 field = tryTextFromId(value as ScanFormula.TextFieldId);
                 if (field === undefined) {
@@ -1598,7 +1709,7 @@ export namespace ScanFormulaZenithEncoding {
             return field;
         }
 
-        export function tryDateToId(value: ZenithEncodedScanFormula.DateField): ScanFormula.DateFieldId | undefined {
+        export function tryDateToId(value: ZenithEncodedScanFormula.DateFieldTupleNodeType): ScanFormula.DateFieldId | undefined {
             switch (value) {
                 case ZenithEncodedScanFormula.ExpiryDateTupleNodeType: return ScanFormula.FieldId.ExpiryDate;
                 default:
@@ -1606,7 +1717,7 @@ export namespace ScanFormulaZenithEncoding {
             }
         }
 
-        export function dateFromId(value: ScanFormula.DateFieldId): ZenithEncodedScanFormula.DateField {
+        export function dateFromId(value: ScanFormula.DateFieldId): ZenithEncodedScanFormula.DateFieldTupleNodeType {
             const result = tryDateFromId(value);
             if (result === undefined) {
                 throw new AssertInternalError('ZSCCFDFI16179', `${value}`);
@@ -1615,7 +1726,7 @@ export namespace ScanFormulaZenithEncoding {
             }
         }
 
-        function tryDateFromId(value: ScanFormula.DateFieldId): ZenithEncodedScanFormula.DateField | undefined {
+        function tryDateFromId(value: ScanFormula.DateFieldId): ZenithEncodedScanFormula.DateFieldTupleNodeType | undefined {
             switch (value) {
                 case ScanFormula.FieldId.ExpiryDate: return ZenithEncodedScanFormula.ExpiryDateTupleNodeType;
                 default: {
@@ -1625,7 +1736,7 @@ export namespace ScanFormulaZenithEncoding {
             }
         }
 
-        export function tryNumericToId(value: ZenithEncodedScanFormula.NumericField): ScanFormula.NumericFieldId | undefined {
+        export function tryNumericToId(value: ZenithEncodedScanFormula.NumericFieldTupleNodeType): ScanFormula.NumericFieldId | undefined {
             switch (value) {
                 case ZenithEncodedScanFormula.AuctionTupleNodeType: return ScanFormula.FieldId.Auction;
                 case ZenithEncodedScanFormula.AuctionLastTupleNodeType: return ScanFormula.FieldId.AuctionLast;
@@ -1657,7 +1768,7 @@ export namespace ScanFormulaZenithEncoding {
             }
         }
 
-        export function numericFromId(value: ScanFormula.NumericFieldId): ZenithEncodedScanFormula.NumericField {
+        export function numericFromId(value: ScanFormula.NumericFieldId): ZenithEncodedScanFormula.NumericFieldTupleNodeType {
             const result = tryNumericFromId(value);
             if (result === undefined) {
                 throw new AssertInternalError('ZSCCFNFI16179', `${value}`);
@@ -1666,7 +1777,7 @@ export namespace ScanFormulaZenithEncoding {
             }
         }
 
-        function tryNumericFromId(value: ScanFormula.NumericFieldId): ZenithEncodedScanFormula.NumericField | undefined {
+        function tryNumericFromId(value: ScanFormula.NumericFieldId): ZenithEncodedScanFormula.NumericFieldTupleNodeType | undefined {
             switch (value) {
                 case ScanFormula.FieldId.Auction: return ZenithEncodedScanFormula.AuctionTupleNodeType;
                 case ScanFormula.FieldId.AuctionLast: return ZenithEncodedScanFormula.AuctionLastTupleNodeType;
@@ -1700,7 +1811,7 @@ export namespace ScanFormulaZenithEncoding {
             }
         }
 
-        export function tryTextToId(value: ZenithEncodedScanFormula.TextField): ScanFormula.TextFieldId | undefined {
+        export function tryTextToId(value: ZenithEncodedScanFormula.TextFieldTupleNodeType): ScanFormula.TextFieldId | undefined {
             switch (value) {
                 case ZenithEncodedScanFormula.BoardTupleNodeType: return ScanFormula.FieldId.Board;
                 case ZenithEncodedScanFormula.CallOrPutTupleNodeType: return ScanFormula.FieldId.CallOrPut;
@@ -1725,7 +1836,7 @@ export namespace ScanFormulaZenithEncoding {
             }
         }
 
-        export function textFromId(value: ScanFormula.TextFieldId): ZenithEncodedScanFormula.TextField {
+        export function textFromId(value: ScanFormula.TextFieldId): ZenithEncodedScanFormula.TextFieldTupleNodeType {
             const result = tryTextFromId(value);
             if (result === undefined) {
                 throw new AssertInternalError('ZSCCFTFI16179', `${value}`);
@@ -1734,7 +1845,7 @@ export namespace ScanFormulaZenithEncoding {
             }
         }
 
-        function tryTextFromId(value: ScanFormula.TextFieldId): ZenithEncodedScanFormula.TextField | undefined {
+        function tryTextFromId(value: ScanFormula.TextFieldId): ZenithEncodedScanFormula.TextFieldTupleNodeType | undefined {
             switch (value) {
                 case ScanFormula.FieldId.Board: return ZenithEncodedScanFormula.BoardTupleNodeType;
                 case ScanFormula.FieldId.CallOrPut: return ZenithEncodedScanFormula.CallOrPutTupleNodeType;
@@ -1761,7 +1872,7 @@ export namespace ScanFormulaZenithEncoding {
             }
         }
 
-        export function tryBooleanToId(value: ZenithEncodedScanFormula.BooleanField): ScanFormula.BooleanFieldId | undefined {
+        export function tryBooleanToId(value: ZenithEncodedScanFormula.BooleanFieldTupleNodeType): ScanFormula.BooleanFieldId | undefined {
             switch (value) {
                 case ZenithEncodedScanFormula.IsIndexTupleNodeType: return ScanFormula.FieldId.IsIndex;
                 default:
@@ -1769,7 +1880,7 @@ export namespace ScanFormulaZenithEncoding {
             }
         }
 
-        export function booleanFromId(value: ScanFormula.BooleanFieldId): ZenithEncodedScanFormula.BooleanField {
+        export function booleanFromId(value: ScanFormula.BooleanFieldId): ZenithEncodedScanFormula.BooleanFieldTupleNodeType {
             const result = tryBooleanFromId(value);
             if (result === undefined) {
                 throw new AssertInternalError('ZSCCFBFI16179', `${value}`);
@@ -1778,13 +1889,47 @@ export namespace ScanFormulaZenithEncoding {
             }
         }
 
-        function tryBooleanFromId(value: ScanFormula.BooleanFieldId): ZenithEncodedScanFormula.BooleanField | undefined {
+        function tryBooleanFromId(value: ScanFormula.BooleanFieldId): ZenithEncodedScanFormula.BooleanFieldTupleNodeType | undefined {
             switch (value) {
                 case ScanFormula.FieldId.IsIndex: return ZenithEncodedScanFormula.IsIndexTupleNodeType;
                 default: {
                     const neverValueIgnored: never = value;
                     return undefined;
                 }
+            }
+        }
+    }
+
+    namespace Is {
+        export interface CategoryIdAndDefault {
+            categoryId: ScanFormula.IsNode.CategoryId;
+            default: boolean;
+        }
+        export function tryFieldIdToIsCategoryId(value: ScanFormula.FieldId): CategoryIdAndDefault | undefined {
+            if (value === ScanFormula.FieldId.IsIndex) {
+                const categoryId = ScanFormula.IsNode.CategoryId.Index;
+                return {
+                    categoryId,
+                    default: categoryIdToDefaultTrueFalse(categoryId),
+                };
+            } else {
+                return undefined;
+            }
+        }
+
+        export function categoryIdToDefaultTrueFalse(categoryId: ScanFormula.IsNode.CategoryId) {
+            switch (categoryId) {
+                case ScanFormula.IsNode.CategoryId.Index: return ZenithEncodedScanFormula.SingleDefault_IsIndex;
+                default:
+                    throw new UnreachableCaseError('SFZEICITD69312', categoryId);
+            }
+        }
+
+        export function categoryIdToTupleNodeType(categoryId: ScanFormula.IsNode.CategoryId): ZenithEncodedScanFormula.BooleanFieldTupleNodeType {
+            switch (categoryId) {
+                case ScanFormula.IsNode.CategoryId.Index: return ZenithEncodedScanFormula.IsIndexTupleNodeType;
+                default:
+                    throw new UnreachableCaseError('SFZEEIN50502', categoryId);
             }
         }
     }
@@ -1980,8 +2125,11 @@ export namespace ScanFormulaZenithEncoding {
         BooleanTupleNodeIsNotAnArray,
         BooleanTupleNodeArrayIsZeroLength,
         BooleanTupleNodeTypeIsNotString,
-        LogicalBooleanMissingOperands,
-        LogicalBooleanMissingOperand,
+        SingleOperandLogicalBooleanDoesNotHaveOneOperand,
+        LeftRightOperandLogicalBooleanDoesNotHaveTwoOperands,
+        MultiOperandLogicalBooleanMissingOperands,
+        MultipleMatchingTupleNodeMissingParameters,
+        TextMultipleMatchingTupleNodeParameterIsNotString,
         NumericComparisonDoesNotHave2Operands,
         NumericParameterIsNotNumberOrComparableFieldOrArray,
         UnexpectedBooleanParamType,
@@ -2018,7 +2166,9 @@ export namespace ScanFormulaZenithEncoding {
         OnlySubFieldOrTextFieldNodesCanHave3Parameters,
         OnlySubFieldNodeCanHave4Parameters,
         OnlyTextSubFieldContainsNodeCanHave4Parameters,
-        FieldBooleanNodeHasTooManyParameters,
+        FieldBooleanTupleNodeHasTooManyParameters,
+        IsBooleanTupleNodeParameterIsNotBoolean,
+        IsBooleanTupleNodeHasTooManyParameters,
         NumericTupleNodeIsZeroLength,
         NumericTupleNodeTypeIsNotString,
         NumericTupleNodeRequires2Or3Parameters,
@@ -2057,13 +2207,25 @@ export namespace ScanFormulaZenithEncoding {
                 id: ErrorId.BooleanTupleNodeTypeIsNotString,
                 summaryId: StringId.ScanFormulaZenithEncodingError_BooleanTupleNodeTypeIsNotString
             },
-            LogicalBooleanMissingOperands: {
-                id: ErrorId.LogicalBooleanMissingOperands,
-                summaryId: StringId.ScanFormulaZenithEncodingError_LogicalBooleanMissingOperands
+            SingleOperandLogicalBooleanDoesNotHaveOneOperand: {
+                id: ErrorId.SingleOperandLogicalBooleanDoesNotHaveOneOperand,
+                summaryId: StringId.ScanFormulaZenithEncodingError_SingleOperandLogicalBooleanDoesNotHaveOneOperand
             },
-            LogicalBooleanMissingOperand: {
-                id: ErrorId.LogicalBooleanMissingOperand,
-                summaryId: StringId.ScanFormulaZenithEncodingError_LogicalBooleanMissingOperand
+            LeftRightOperandLogicalBooleanDoesNotHaveTwoOperands: {
+                id: ErrorId.LeftRightOperandLogicalBooleanDoesNotHaveTwoOperands,
+                summaryId: StringId.ScanFormulaZenithEncodingError_LeftRightOperandLogicalBooleanDoesNotHaveTwoOperands
+            },
+            MultiOperandLogicalBooleanMissingOperands: {
+                id: ErrorId.MultiOperandLogicalBooleanMissingOperands,
+                summaryId: StringId.ScanFormulaZenithEncodingError_MultiOperandLogicalBooleanMissingOperands
+            },
+            MultipleMatchingTupleNodeMissingParameters: {
+                id: ErrorId.MultipleMatchingTupleNodeMissingParameters,
+                summaryId: StringId.ScanFormulaZenithEncodingError_MultipleMatchingTupleNodeMissingParameters,
+            },
+            TextMultipleMatchingTupleNodeParameterIsNotString: {
+                id: ErrorId.TextMultipleMatchingTupleNodeParameterIsNotString,
+                summaryId: StringId.ScanFormulaZenithEncodingError_TextMultipleMatchingTupleNodeParameterIsNotString,
             },
             NumericComparisonDoesNotHave2Operands: {
                 id: ErrorId.NumericComparisonDoesNotHave2Operands,
@@ -2209,9 +2371,17 @@ export namespace ScanFormulaZenithEncoding {
                 id: ErrorId.OnlyTextSubFieldContainsNodeCanHave4Parameters,
                 summaryId: StringId.ScanFormulaZenithEncodingError_OnlyTextSubFieldContainsNodeCanHave4Parameters
             },
-            FieldBooleanNodeHasTooManyParameters: {
-                id: ErrorId.FieldBooleanNodeHasTooManyParameters,
-                summaryId: StringId.ScanFormulaZenithEncodingError_FieldBooleanNodeHasTooManyParameters
+            FieldBooleanTupleNodeHasTooManyParameters: {
+                id: ErrorId.FieldBooleanTupleNodeHasTooManyParameters,
+                summaryId: StringId.ScanFormulaZenithEncodingError_FieldBooleanTupleNodeHasTooManyParameters
+            },
+            IsBooleanTupleNodeParameterIsNotBoolean: {
+                id: ErrorId.IsBooleanTupleNodeParameterIsNotBoolean,
+                summaryId: StringId.ScanFormulaZenithEncodingError_IsBooleanTupleNodeParameterIsNotBoolean,
+            },
+            IsBooleanTupleNodeHasTooManyParameters: {
+                id: ErrorId.IsBooleanTupleNodeHasTooManyParameters,
+                summaryId: StringId.ScanFormulaZenithEncodingError_IsBooleanTupleNodeHasTooManyParameters,
             },
             NumericTupleNodeIsZeroLength: {
                 id: ErrorId.NumericTupleNodeIsZeroLength,

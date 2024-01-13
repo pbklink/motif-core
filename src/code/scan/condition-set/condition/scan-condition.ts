@@ -4,12 +4,11 @@
  * License: motionite.trade/license/motif
  */
 
-import { PickEnum, SourceTzOffsetDateTime, UnreachableCaseError } from '../../../sys/sys-internal-api';
+import { PickEnum, SourceTzOffsetDateTime, UnreachableCaseError, isArrayEqualUniquely } from '../../../sys/sys-internal-api';
 import { ScanFormula } from '../../formula/internal-api';
 
 export interface ScanCondition {
     readonly typeId: ScanCondition.TypeId;
-    not: boolean;
 }
 
 export namespace ScanCondition {
@@ -17,12 +16,14 @@ export namespace ScanCondition {
         NumericComparison,
         All,
         None,
+        Is,
         FieldHasValue,
         BooleanFieldEquals,
         NumericFieldEquals,
         NumericFieldInRange,
         DateFieldEquals,
         DateFieldInRange,
+        TextFieldIncludes,
         TextFieldContains,
         PriceSubFieldHasValue,
         PriceSubFieldEquals,
@@ -53,112 +54,105 @@ export namespace ScanCondition {
         if (left.typeId !== right.typeId) {
             return false;
         } else {
-            if (left.not !== right.not) {
-                return false;
-            } else {
-                switch (left.typeId) {
-                    case ScanCondition.TypeId.NumericComparison: return NumericComparisonScanCondition.isEqual(left as NumericComparisonScanCondition, right as NumericComparisonScanCondition);
-                    case ScanCondition.TypeId.All: return AllScanCondition.isEqual(left as AllScanCondition, right as AllScanCondition);
-                    case ScanCondition.TypeId.None: return NoneScanCondition.isEqual(left as NoneScanCondition, right as NoneScanCondition);
-                    case ScanCondition.TypeId.FieldHasValue: return FieldHasValueScanCondition.isEqual(left as FieldHasValueScanCondition, right as FieldHasValueScanCondition);
-                    case ScanCondition.TypeId.BooleanFieldEquals: return BooleanFieldEqualsScanCondition.isEqual(left as BooleanFieldEqualsScanCondition, right as BooleanFieldEqualsScanCondition);
-                    case ScanCondition.TypeId.NumericFieldEquals: return NumericFieldEqualsScanCondition.isEqual(left as NumericFieldEqualsScanCondition, right as NumericFieldEqualsScanCondition);
-                    case ScanCondition.TypeId.NumericFieldInRange: return NumericFieldInRangeScanCondition.isEqual(left as NumericFieldInRangeScanCondition, right as NumericFieldInRangeScanCondition);
-                    case ScanCondition.TypeId.DateFieldEquals: return DateFieldEqualsScanCondition.isEqual(left as DateFieldEqualsScanCondition, right as DateFieldEqualsScanCondition);
-                    case ScanCondition.TypeId.DateFieldInRange: return DateFieldInRangeScanCondition.isEqual(left as DateFieldInRangeScanCondition, right as DateFieldInRangeScanCondition);
-                    case ScanCondition.TypeId.TextFieldContains: return TextFieldContainsScanCondition.isEqual(left as TextFieldContainsScanCondition, right as TextFieldContainsScanCondition);
-                    case ScanCondition.TypeId.PriceSubFieldHasValue: return PriceSubFieldHasValueScanCondition.isEqual(left as PriceSubFieldHasValueScanCondition, right as PriceSubFieldHasValueScanCondition);
-                    case ScanCondition.TypeId.PriceSubFieldEquals: return PriceSubFieldEqualsScanCondition.isEqual(left as PriceSubFieldEqualsScanCondition, right as PriceSubFieldEqualsScanCondition);
-                    case ScanCondition.TypeId.PriceSubFieldInRange: return PriceSubFieldInRangeScanCondition.isEqual(left as PriceSubFieldInRangeScanCondition, right as PriceSubFieldInRangeScanCondition);
-                    case ScanCondition.TypeId.DateSubFieldHasValue: return DateSubFieldHasValueScanCondition.isEqual(left as DateSubFieldHasValueScanCondition, right as DateSubFieldHasValueScanCondition);
-                    case ScanCondition.TypeId.DateSubFieldEquals: return DateSubFieldEqualsScanCondition.isEqual(left as DateSubFieldEqualsScanCondition, right as DateSubFieldEqualsScanCondition);
-                    case ScanCondition.TypeId.DateSubFieldInRange: return DateSubFieldInRangeScanCondition.isEqual(left as DateSubFieldInRangeScanCondition, right as DateSubFieldInRangeScanCondition);
-                    case ScanCondition.TypeId.AltCodeSubFieldHasValue: return AltCodeSubFieldHasValueScanCondition.isEqual(left as AltCodeSubFieldHasValueScanCondition, right as AltCodeSubFieldHasValueScanCondition);
-                    case ScanCondition.TypeId.AltCodeSubFieldContains: return AltCodeSubFieldContainsScanCondition.isEqual(left as AltCodeSubFieldContainsScanCondition, right as AltCodeSubFieldContainsScanCondition);
-                    case ScanCondition.TypeId.AttributeSubFieldHasValue: return AttributeSubFieldHasValueScanCondition.isEqual(left as AttributeSubFieldHasValueScanCondition, right as AttributeSubFieldHasValueScanCondition);
-                    case ScanCondition.TypeId.AttributeSubFieldContains: return AttributeSubFieldContainsScanCondition.isEqual(left as AttributeSubFieldContainsScanCondition, right as AttributeSubFieldContainsScanCondition);
-                }
+            switch (left.typeId) {
+                case ScanCondition.TypeId.NumericComparison: return NumericComparisonScanCondition.isEqual(left as NumericComparisonScanCondition, right as NumericComparisonScanCondition);
+                case ScanCondition.TypeId.All: return AllScanCondition.isEqual(left as AllScanCondition, right as AllScanCondition);
+                case ScanCondition.TypeId.None: return NoneScanCondition.isEqual(left as NoneScanCondition, right as NoneScanCondition);
+                case ScanCondition.TypeId.Is: return IsScanCondition.isEqual(left as IsScanCondition, right as IsScanCondition);
+                case ScanCondition.TypeId.FieldHasValue: return FieldHasValueScanCondition.isEqual(left as FieldHasValueScanCondition, right as FieldHasValueScanCondition);
+                case ScanCondition.TypeId.BooleanFieldEquals: return BooleanFieldEqualsScanCondition.isEqual(left as BooleanFieldEqualsScanCondition, right as BooleanFieldEqualsScanCondition);
+                case ScanCondition.TypeId.NumericFieldEquals: return NumericFieldEqualsScanCondition.isEqual(left as NumericFieldEqualsScanCondition, right as NumericFieldEqualsScanCondition);
+                case ScanCondition.TypeId.NumericFieldInRange: return NumericFieldInRangeScanCondition.isEqual(left as NumericFieldInRangeScanCondition, right as NumericFieldInRangeScanCondition);
+                case ScanCondition.TypeId.DateFieldEquals: return DateFieldEqualsScanCondition.isEqual(left as DateFieldEqualsScanCondition, right as DateFieldEqualsScanCondition);
+                case ScanCondition.TypeId.DateFieldInRange: return DateFieldInRangeScanCondition.isEqual(left as DateFieldInRangeScanCondition, right as DateFieldInRangeScanCondition);
+                case ScanCondition.TypeId.TextFieldIncludes: return TextFieldIncludesScanCondition.isEqual(left as TextFieldIncludesScanCondition, right as TextFieldIncludesScanCondition);
+                case ScanCondition.TypeId.TextFieldContains: return TextFieldContainsScanCondition.isEqual(left as TextFieldContainsScanCondition, right as TextFieldContainsScanCondition);
+                case ScanCondition.TypeId.PriceSubFieldHasValue: return PriceSubFieldHasValueScanCondition.isEqual(left as PriceSubFieldHasValueScanCondition, right as PriceSubFieldHasValueScanCondition);
+                case ScanCondition.TypeId.PriceSubFieldEquals: return PriceSubFieldEqualsScanCondition.isEqual(left as PriceSubFieldEqualsScanCondition, right as PriceSubFieldEqualsScanCondition);
+                case ScanCondition.TypeId.PriceSubFieldInRange: return PriceSubFieldInRangeScanCondition.isEqual(left as PriceSubFieldInRangeScanCondition, right as PriceSubFieldInRangeScanCondition);
+                case ScanCondition.TypeId.DateSubFieldHasValue: return DateSubFieldHasValueScanCondition.isEqual(left as DateSubFieldHasValueScanCondition, right as DateSubFieldHasValueScanCondition);
+                case ScanCondition.TypeId.DateSubFieldEquals: return DateSubFieldEqualsScanCondition.isEqual(left as DateSubFieldEqualsScanCondition, right as DateSubFieldEqualsScanCondition);
+                case ScanCondition.TypeId.DateSubFieldInRange: return DateSubFieldInRangeScanCondition.isEqual(left as DateSubFieldInRangeScanCondition, right as DateSubFieldInRangeScanCondition);
+                case ScanCondition.TypeId.AltCodeSubFieldHasValue: return AltCodeSubFieldHasValueScanCondition.isEqual(left as AltCodeSubFieldHasValueScanCondition, right as AltCodeSubFieldHasValueScanCondition);
+                case ScanCondition.TypeId.AltCodeSubFieldContains: return AltCodeSubFieldContainsScanCondition.isEqual(left as AltCodeSubFieldContainsScanCondition, right as AltCodeSubFieldContainsScanCondition);
+                case ScanCondition.TypeId.AttributeSubFieldHasValue: return AttributeSubFieldHasValueScanCondition.isEqual(left as AttributeSubFieldHasValueScanCondition, right as AttributeSubFieldHasValueScanCondition);
+                case ScanCondition.TypeId.AttributeSubFieldContains: return AttributeSubFieldContainsScanCondition.isEqual(left as AttributeSubFieldContainsScanCondition, right as AttributeSubFieldContainsScanCondition);
+                default:
+                    throw new UnreachableCaseError('SCIE78567', left.typeId);
             }
         }
     }
-
 }
 
 export interface NumericComparisonScanCondition extends ScanCondition {
     readonly operationId: NumericComparisonScanCondition.OperationId;
-    readonly leftOperand: NumericComparisonScanCondition.Operand;
-    readonly rightOperand: NumericComparisonScanCondition.Operand;
+    readonly leftOperand: NumericComparisonScanCondition.FieldOperand; // do not support left and right being a number
+    readonly rightOperand: NumericComparisonScanCondition.TypedOperand;
 }
 
 export namespace NumericComparisonScanCondition {
     export const enum OperationId {
         Equals,
+        NotEquals,
         GreaterThan,
         GreaterThanOrEqual,
         LessThan,
         LessThanOrEqual,
     }
 
-    export interface Operand {
-        readonly typeId: Operand.TypeId;
+    export interface FieldOperand {
+        readonly fieldId: ScanFormula.NumericFieldId;
     }
 
-    export namespace Operand {
+    export namespace FieldOperand {
+        // eslint-disable-next-line @typescript-eslint/no-shadow
+        export function isEqual(left: FieldOperand, right: FieldOperand) {
+            return left.fieldId === right.fieldId;
+        }
+    }
+
+    export interface TypedOperand {
+        readonly typeId: TypedOperand.TypeId;
+    }
+
+    export namespace TypedOperand {
         export const enum TypeId {
             Number,
-            NumericFieldValueGet,
+            Field,
             // NumericSubFieldValueGet, // not implemented in ScanFormula
         }
 
         // eslint-disable-next-line @typescript-eslint/no-shadow
-        export function isEqual(left: Operand, right: Operand) {
-            return left.typeId === right.typeId;
+        export function isEqual(left: TypedOperand, right: TypedOperand) {
+            if (left.typeId !== right.typeId) {
+                return false;
+            } else {
+                switch (left.typeId) {
+                    case TypedOperand.TypeId.Number: return (left as NumberTypedOperand).value === (right as NumberTypedOperand).value;
+                    case TypedOperand.TypeId.Field: return (left as FieldTypedOperand).fieldId === (right as FieldTypedOperand).fieldId;
+                    default:
+                        throw new UnreachableCaseError('SCNCSCIOE44498', left.typeId);
+                }
+            }
         }
     }
 
-    export interface NumberOperand extends Operand {
+    export interface NumberTypedOperand extends TypedOperand {
         readonly value: number;
     }
 
-    export namespace NumberOperand {
-        // eslint-disable-next-line @typescript-eslint/no-shadow
-        export function isEqual(left: NumberOperand, right: NumberOperand) {
-            return Operand.isEqual(left, right) && (left.value === right.value);
-        }
-    }
-
-    export interface NumericFieldValueGetOperand extends Operand {
+    export interface FieldTypedOperand extends TypedOperand {
         readonly fieldId: ScanFormula.NumericFieldId;
-    }
-
-    export namespace NumericFieldValueGetOperand {
-        // eslint-disable-next-line @typescript-eslint/no-shadow
-        export function isEqual(left: NumericFieldValueGetOperand, right: NumericFieldValueGetOperand) {
-            return Operand.isEqual(left, right) && (left.fieldId === right.fieldId);
-        }
-    }
-
-    export function isOperandEqual(left: Operand, right: Operand) {
-        if (left.typeId !== right.typeId) {
-            return false;
-        } else {
-            switch (left.typeId) {
-                case Operand.TypeId.Number: return NumberOperand.isEqual(left as NumberOperand, right as NumberOperand);
-                case Operand.TypeId.NumericFieldValueGet: return NumericFieldValueGetOperand.isEqual(left as NumericFieldValueGetOperand, right as NumericFieldValueGetOperand);
-                default:
-                    throw new UnreachableCaseError('SCNCSCIOE44498', left.typeId);
-            }
-        }
     }
 
     export function isEqual(left: NumericComparisonScanCondition, right: NumericComparisonScanCondition) {
         if (left.operationId !== right.operationId) {
             return false;
         } else {
-            if (!isOperandEqual(left.leftOperand, right.leftOperand)) {
+            if (!FieldOperand.isEqual(left.leftOperand, right.leftOperand)) {
                 return false;
             } else {
-                return isOperandEqual(left.rightOperand, right.rightOperand);
+                return TypedOperand.isEqual(left.rightOperand, right.rightOperand);
             }
         }
     }
@@ -184,13 +178,26 @@ export namespace NoneScanCondition {
     }
 }
 
+export interface IsScanCondition extends ScanCondition {
+    readonly categoryId: ScanFormula.IsNode.CategoryId;
+    not: boolean;
+}
+
+export namespace IsScanCondition {
+    export function isEqual(left: IsScanCondition, right: IsScanCondition) {
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        return (left.categoryId === right.categoryId) && left.not === right.not;
+    }
+}
+
 export interface FieldScanCondition extends ScanCondition {
     readonly fieldId: ScanFormula.FieldId;
+    not: boolean;
 }
 
 export namespace FieldScanCondition {
     export function isEqual(left: FieldScanCondition, right: FieldScanCondition) {
-        return left.fieldId === right.fieldId;
+        return (left.fieldId === right.fieldId) && left.not === right.not;
     }
 }
 
@@ -286,6 +293,19 @@ export namespace DateFieldInRangeScanCondition {
 
 export interface TextFieldScanCondition extends FieldScanCondition {
     readonly fieldId: ScanFormula.TextFieldId;
+}
+
+export interface TextFieldIncludesScanCondition extends TextFieldScanCondition {
+    readonly typeId: ScanCondition.TypeId.TextFieldIncludes;
+    readonly values: string[];
+}
+
+export namespace TextFieldIncludesScanCondition {
+    export function isEqual(left: TextFieldIncludesScanCondition, right: TextFieldIncludesScanCondition) {
+        return (
+            FieldScanCondition.isEqual(left, right) && isArrayEqualUniquely(left.values, right.values)
+        );
+    }
 }
 
 export interface TextFieldContainsScanCondition extends TextFieldScanCondition {
