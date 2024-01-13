@@ -50,6 +50,15 @@ export namespace ScanConditionSet {
         And,
     }
 
+    export namespace SetOperation {
+        export function getAllIds() {
+            return [
+                SetOperationId.Or,
+                SetOperationId.And,
+            ];
+        }
+    }
+
     // Implementable by ComparableList
     export interface Conditions {
         readonly count: Integer;

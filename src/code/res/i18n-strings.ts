@@ -56,6 +56,7 @@ export const enum StringId {
     Not,
     Blank,
     Filter,
+    Exclude,
     Open,
     Close,
     Create,
@@ -2132,6 +2133,33 @@ export const enum StringId {
     UserAlert_RestartReason_UserAction,
     UserAlert_PleaseWaitSavingChanges,
     UserAlert_ChangesSavedOkToLeaveOrRestorePage,
+    ConditionSetScanFormulaViewNgComponentCaption_SetOperation,
+    ConditionSetScanFormulaViewNgComponentTitle_SetOperation,
+    ConditionSetScanFormulaViewNgComponentTitle_Exclude,
+    ConditionSetScanFormulaViewNgComponentCaption_NewCondition,
+    ConditionSetScanFormulaViewNgComponentTitle_NewCondition,
+    ConditionSetScanFormulaViewNgComponent_SetOperationCaption_Any,
+    ConditionSetScanFormulaViewNgComponent_SetOperationTitle_Any,
+    ConditionSetScanFormulaViewNgComponent_SetOperationCaption_All,
+    ConditionSetScanFormulaViewNgComponent_SetOperationTitle_All,
+    ConditionSetScanFormulaViewNgComponent_ConditionKindCaption_Compare,
+    ConditionSetScanFormulaViewNgComponent_ConditionKindTitle_Compare,
+    ConditionSetScanFormulaViewNgComponent_ConditionKindCaption_InRange,
+    ConditionSetScanFormulaViewNgComponent_ConditionKindTitle_InRange,
+    ConditionSetScanFormulaViewNgComponent_ConditionKindCaption_Equals,
+    ConditionSetScanFormulaViewNgComponent_ConditionKindTitle_Equals,
+    ConditionSetScanFormulaViewNgComponent_ConditionKindCaption_Includes,
+    ConditionSetScanFormulaViewNgComponent_ConditionKindTitle_Includes,
+    ConditionSetScanFormulaViewNgComponent_ConditionKindCaption_Contains,
+    ConditionSetScanFormulaViewNgComponent_ConditionKindTitle_Contains,
+    ConditionSetScanFormulaViewNgComponent_ConditionKindCaption_Has,
+    ConditionSetScanFormulaViewNgComponent_ConditionKindTitle_Has,
+    ConditionSetScanFormulaViewNgComponent_ConditionKindCaption_Is,
+    ConditionSetScanFormulaViewNgComponent_ConditionKindTitle_Is,
+    ConditionSetScanFormulaViewNgComponent_ConditionKindCaption_All,
+    ConditionSetScanFormulaViewNgComponent_ConditionKindTitle_All,
+    ConditionSetScanFormulaViewNgComponent_ConditionKindCaption_None,
+    ConditionSetScanFormulaViewNgComponent_ConditionKindTitle_None,
 }
 
 /** @public */
@@ -2415,6 +2443,11 @@ export namespace I18nStrings {
         Filter: {
             id: StringId.Filter, translations: {
                 en: 'Filter',
+            }
+        },
+        Exclude: {
+            id: StringId.Exclude, translations: {
+                en: 'Exclude',
             }
         },
         Open: {
@@ -12796,6 +12829,142 @@ export namespace I18nStrings {
         UserAlert_ChangesSavedOkToLeaveOrRestorePage: {
             id: StringId.UserAlert_ChangesSavedOkToLeaveOrRestorePage, translations: {
                 en: 'Changes saved! Ok to leave or restore page.',
+            }
+        },
+
+        ConditionSetScanFormulaViewNgComponentCaption_SetOperation: {
+            id: StringId.ConditionSetScanFormulaViewNgComponentCaption_SetOperation, translations: {
+                en: 'Set operation',
+            }
+        },
+        ConditionSetScanFormulaViewNgComponentTitle_SetOperation: {
+            id: StringId.ConditionSetScanFormulaViewNgComponentTitle_SetOperation, translations: {
+                en: 'Specifies whether all or only at least one condition must be met',
+            }
+        },
+        ConditionSetScanFormulaViewNgComponentTitle_Exclude: {
+            id: StringId.ConditionSetScanFormulaViewNgComponentTitle_Exclude, translations: {
+                en: 'Match securites not matched by condition set',
+            }
+        },
+        ConditionSetScanFormulaViewNgComponentCaption_NewCondition: {
+            id: StringId.ConditionSetScanFormulaViewNgComponentCaption_NewCondition, translations: {
+                en: 'New condition',
+            }
+        },
+        ConditionSetScanFormulaViewNgComponentTitle_NewCondition: {
+            id: StringId.ConditionSetScanFormulaViewNgComponentTitle_NewCondition, translations: {
+                en: 'Add a new condition to the set',
+            }
+        },
+        ConditionSetScanFormulaViewNgComponent_SetOperationCaption_Any: {
+            id: StringId.ConditionSetScanFormulaViewNgComponent_SetOperationCaption_Any, translations: {
+                en: 'Any',
+            }
+        },
+        ConditionSetScanFormulaViewNgComponent_SetOperationTitle_Any: {
+            id: StringId.ConditionSetScanFormulaViewNgComponent_SetOperationTitle_Any, translations: {
+                en: 'Just one condition needs to be met for a security to be matched',
+            }
+        },
+        ConditionSetScanFormulaViewNgComponent_SetOperationCaption_All: {
+            id: StringId.ConditionSetScanFormulaViewNgComponent_SetOperationCaption_All, translations: {
+                en: 'All',
+            }
+        },
+        ConditionSetScanFormulaViewNgComponent_SetOperationTitle_All: {
+            id: StringId.ConditionSetScanFormulaViewNgComponent_SetOperationTitle_All, translations: {
+                en: 'All conditions must be met for a security to be matched',
+            }
+        },
+        ConditionSetScanFormulaViewNgComponent_ConditionKindCaption_Compare: {
+            id: StringId.ConditionSetScanFormulaViewNgComponent_ConditionKindCaption_Compare, translations: {
+                en: 'Compare',
+            }
+        },
+        ConditionSetScanFormulaViewNgComponent_ConditionKindTitle_Compare: {
+            id: StringId.ConditionSetScanFormulaViewNgComponent_ConditionKindTitle_Compare, translations: {
+                en: 'Compare a numerical field value with a constant or the value from another numerical field',
+            }
+        },
+        ConditionSetScanFormulaViewNgComponent_ConditionKindCaption_InRange: {
+            id: StringId.ConditionSetScanFormulaViewNgComponent_ConditionKindCaption_InRange, translations: {
+                en: 'In Range',
+            }
+        },
+        ConditionSetScanFormulaViewNgComponent_ConditionKindTitle_InRange: {
+            id: StringId.ConditionSetScanFormulaViewNgComponent_ConditionKindTitle_InRange, translations: {
+                en: 'Check if the value from a numerical field is within a range',
+            }
+        },
+        ConditionSetScanFormulaViewNgComponent_ConditionKindCaption_Equals: {
+            id: StringId.ConditionSetScanFormulaViewNgComponent_ConditionKindCaption_Equals, translations: {
+                en: 'Equals',
+            }
+        },
+        ConditionSetScanFormulaViewNgComponent_ConditionKindTitle_Equals: {
+            id: StringId.ConditionSetScanFormulaViewNgComponent_ConditionKindTitle_Equals, translations: {
+                en: 'Check if the value from a numerical field equals a constant',
+            }
+        },
+        ConditionSetScanFormulaViewNgComponent_ConditionKindCaption_Includes: {
+            id: StringId.ConditionSetScanFormulaViewNgComponent_ConditionKindCaption_Includes, translations: {
+                en: 'Includes',
+            }
+        },
+        ConditionSetScanFormulaViewNgComponent_ConditionKindTitle_Includes: {
+            id: StringId.ConditionSetScanFormulaViewNgComponent_ConditionKindTitle_Includes, translations: {
+                en: 'Check if a text field value or one its values equals any of the constants specified',
+            }
+        },
+        ConditionSetScanFormulaViewNgComponent_ConditionKindCaption_Contains: {
+            id: StringId.ConditionSetScanFormulaViewNgComponent_ConditionKindCaption_Contains, translations: {
+                en: 'Contains',
+            }
+        },
+        ConditionSetScanFormulaViewNgComponent_ConditionKindTitle_Contains: {
+            id: StringId.ConditionSetScanFormulaViewNgComponent_ConditionKindTitle_Contains, translations: {
+                en: 'Check if the value of a text field contains the specified sub string',
+            }
+        },
+        ConditionSetScanFormulaViewNgComponent_ConditionKindCaption_Has: {
+            id: StringId.ConditionSetScanFormulaViewNgComponent_ConditionKindCaption_Has, translations: {
+                en: 'Has',
+            }
+        },
+        ConditionSetScanFormulaViewNgComponent_ConditionKindTitle_Has: {
+            id: StringId.ConditionSetScanFormulaViewNgComponent_ConditionKindTitle_Has, translations: {
+                en: 'Check if a field\'s value is defined',
+            }
+        },
+        ConditionSetScanFormulaViewNgComponent_ConditionKindCaption_Is: {
+            id: StringId.ConditionSetScanFormulaViewNgComponent_ConditionKindCaption_Is, translations: {
+                en: 'Is',
+            }
+        },
+        ConditionSetScanFormulaViewNgComponent_ConditionKindTitle_Is: {
+            id: StringId.ConditionSetScanFormulaViewNgComponent_ConditionKindTitle_Is, translations: {
+                en: 'Check if the security is in the specified category',
+            }
+        },
+        ConditionSetScanFormulaViewNgComponent_ConditionKindCaption_All: {
+            id: StringId.ConditionSetScanFormulaViewNgComponent_ConditionKindCaption_All, translations: {
+                en: 'All',
+            }
+        },
+        ConditionSetScanFormulaViewNgComponent_ConditionKindTitle_All: {
+            id: StringId.ConditionSetScanFormulaViewNgComponent_ConditionKindTitle_All, translations: {
+                en: 'All securities',
+            }
+        },
+        ConditionSetScanFormulaViewNgComponent_ConditionKindCaption_None: {
+            id: StringId.ConditionSetScanFormulaViewNgComponent_ConditionKindCaption_None, translations: {
+                en: 'None',
+            }
+        },
+        ConditionSetScanFormulaViewNgComponent_ConditionKindTitle_None: {
+            id: StringId.ConditionSetScanFormulaViewNgComponent_ConditionKindTitle_None, translations: {
+                en: 'No securities',
             }
         },
 
