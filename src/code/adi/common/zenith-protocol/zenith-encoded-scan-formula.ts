@@ -113,7 +113,7 @@ export namespace ZenithEncodedScanFormula {
         typeof OrTupleNodeType
     >;
 
-    export type NumericField = PickEnum<TupleNodeType,
+    export type NumericFieldTupleNodeType = PickEnum<TupleNodeType,
         typeof AuctionTupleNodeType |
         typeof AuctionLastTupleNodeType |
         typeof AuctionQuantityTupleNodeType |
@@ -142,16 +142,16 @@ export namespace ZenithEncodedScanFormula {
         typeof VwapTupleNodeType
     >;
 
-    export type DateField = PickEnum<TupleNodeType,
+    export type DateFieldTupleNodeType = PickEnum<TupleNodeType,
         typeof DateTupleNodeType |
         typeof ExpiryDateTupleNodeType
     >;
 
-    export type BooleanField = PickEnum<TupleNodeType,
+    export type BooleanFieldTupleNodeType = PickEnum<TupleNodeType,
         typeof IsIndexTupleNodeType
     >;
 
-    export type TextField = PickEnum<TupleNodeType,
+    export type TextFieldTupleNodeType = PickEnum<TupleNodeType,
         typeof AltCodeTupleNodeType |
         typeof AttributeTupleNodeType |
         typeof BoardTupleNodeType |
@@ -174,21 +174,21 @@ export namespace ZenithEncodedScanFormula {
         typeof TradingMarketTupleNodeType
     >;
 
-    export type PriceSubbedField = typeof PriceTupleNodeType;
-    export type NumericSubbedField = PriceSubbedField;
-    export type DateSubbedField = typeof DateTupleNodeType;
-    export type AltCodeSubbedField = typeof AltCodeTupleNodeType;
-    export type AttributeSubbedField = typeof AttributeTupleNodeType;
-    export type TextSubbedField = AltCodeSubbedField | AttributeSubbedField;
+    export type PriceSubbedFieldTupleNodeType = typeof PriceTupleNodeType;
+    export type NumericSubbedFieldTupleNodeType = PriceSubbedFieldTupleNodeType;
+    export type DateSubbedFieldTupleNodeType = typeof DateTupleNodeType;
+    export type AltCodeSubbedFieldTupleNodeType = typeof AltCodeTupleNodeType;
+    export type AttributeSubbedFieldTupleNodeType = typeof AttributeTupleNodeType;
+    export type TextSubbedFieldTupleNodeType = AltCodeSubbedFieldTupleNodeType | AttributeSubbedFieldTupleNodeType;
 
-    export type MatchingField =
-        NumericField |
-        DateField |
-        BooleanField |
-        TextField |
-        NumericSubbedField |
-        DateSubbedField |
-        TextSubbedField;
+    export type MatchingFieldTupleNodeType =
+        NumericFieldTupleNodeType |
+        DateFieldTupleNodeType |
+        BooleanFieldTupleNodeType |
+        TextFieldTupleNodeType |
+        NumericSubbedFieldTupleNodeType |
+        DateSubbedFieldTupleNodeType |
+        TextSubbedFieldTupleNodeType;
 
     export const enum PriceSubFieldEnum {
         LastPrice = 'LastPrice',
@@ -237,7 +237,7 @@ export namespace ZenithEncodedScanFormula {
         typeof AddOrPosSymbolTupleNodeType
     >;
 
-    export type BooleanTupleNodeType = LogicalTupleNodeType | MatchingField | ComparisonTupleNodeType;
+    export type BooleanTupleNodeType = LogicalTupleNodeType | MatchingFieldTupleNodeType | ComparisonTupleNodeType;
     export type ExpressionTupleNodeType = BinaryTupleNodeType | UnaryTupleNodeType | UnaryOrBinaryTupleNodeType | typeof IfTupleNodeType;
 
     export type LogicalTupleNodeUnion = NotTupleNode | XorTupleNode | AndTupleNode | OrTupleNode;
@@ -294,22 +294,22 @@ export namespace ZenithEncodedScanFormula {
         VolumeTupleNode |
         VwapTupleNode;
 
-    export type NumericRangeMatchingTupleNode = [nodeType: NumericField, ...params: NumericRangeParams];
-    export type NumericNamedRangeMatchingTupleNode = [nodeType: NumericField, ...params: NumericNamedRangeParams];
-    export type DateRangeMatchingTupleNode = [nodeType: DateField, ...params: DateRangeParams];
-    export type DateNamedRangeMatchingTupleNode = [nodeType: DateField, ...params: DateNamedRangeParams];
-    export type TextMatchingTupleNode = [nodeType: TextField, ...params: TextParams];
-    export type NamedTextMatchingTupleNode = [nodeType: TextField, ...params: NamedTextParams];
-    export type BooleanSingleMatchingTupleNode = [nodeType: BooleanField, ...params: BooleanSingleParam];
-    export type BooleanSingle_DefaultMatchingTupleNode = [nodeType: BooleanField, ...params: BooleanSingleParam_Default];
-    export type BooleanSingle_ExistsMatchingTupleNode = [nodeType: BooleanField, ...params: BooleanSingleParam_Exists];
-    export type NumericSingleMatchingTupleNode = [nodeType: NumericField, ...params: NumericSingleParam];
-    export type NumericSingle_DefaultMatchingTupleNode = [nodeType: NumericField, ...params: NumericSingleParam_Default];
-    export type NumericSingle_ExistsMatchingTupleNode = [nodeType: NumericField, ...params: NumericSingleParam_Exists];
-    export type TextSingleMatchingTupleNode = [nodeType: TextField, ...params: TextSingleParam];
-    export type TextSingle_DefaultMatchingTupleNode = [nodeType: TextField, ...params: TextSingleParam_Default];
-    export type TextSingle_ExistsMatchingTupleNode = [nodeType: TextField, ...params: TextSingleParam_Exists];
-    export type TextMultipleMatchingTupleNode = [nodeType: TextField, ...params: TextMultipleParam];
+    export type NumericRangeMatchingTupleNode = [nodeType: NumericFieldTupleNodeType, ...params: NumericRangeParams];
+    export type NumericNamedRangeMatchingTupleNode = [nodeType: NumericFieldTupleNodeType, ...params: NumericNamedRangeParams];
+    export type DateRangeMatchingTupleNode = [nodeType: DateFieldTupleNodeType, ...params: DateRangeParams];
+    export type DateNamedRangeMatchingTupleNode = [nodeType: DateFieldTupleNodeType, ...params: DateNamedRangeParams];
+    export type TextMatchingTupleNode = [nodeType: TextFieldTupleNodeType, ...params: TextParams];
+    export type NamedTextMatchingTupleNode = [nodeType: TextFieldTupleNodeType, ...params: NamedTextParams];
+    export type BooleanSingleMatchingTupleNode = [nodeType: BooleanFieldTupleNodeType, ...params: BooleanSingleParam];
+    export type BooleanSingle_DefaultMatchingTupleNode = [nodeType: BooleanFieldTupleNodeType, ...params: BooleanSingleParam_Default];
+    export type BooleanSingle_ExistsMatchingTupleNode = [nodeType: BooleanFieldTupleNodeType, ...params: BooleanSingleParam_Exists];
+    export type NumericSingleMatchingTupleNode = [nodeType: NumericFieldTupleNodeType, ...params: NumericSingleParam];
+    export type NumericSingle_DefaultMatchingTupleNode = [nodeType: NumericFieldTupleNodeType, ...params: NumericSingleParam_Default];
+    export type NumericSingle_ExistsMatchingTupleNode = [nodeType: NumericFieldTupleNodeType, ...params: NumericSingleParam_Exists];
+    export type TextSingleMatchingTupleNode = [nodeType: TextFieldTupleNodeType, ...params: TextSingleParam];
+    export type TextSingle_DefaultMatchingTupleNode = [nodeType: TextFieldTupleNodeType, ...params: TextSingleParam_Default];
+    export type TextSingle_ExistsMatchingTupleNode = [nodeType: TextFieldTupleNodeType, ...params: TextSingleParam_Exists];
+    export type TextMultipleMatchingTupleNode = [nodeType: TextFieldTupleNodeType, ...params: TextMultipleParam];
 
     export type MatchingTupleNode =
         NumericRangeMatchingTupleNode |
@@ -395,9 +395,9 @@ export namespace ZenithEncodedScanFormula {
 
     export type NoParams = [];
     export type LogicalParams = (BooleanParam)[];
-    export type BooleanParam = LogicalTupleNode | MatchingTupleNode | ComparisonTupleNode | AllNoneTupleNode | MatchingField;
+    export type BooleanParam = LogicalTupleNode | MatchingTupleNode | ComparisonTupleNode | AllNoneTupleNode | MatchingFieldTupleNodeType;
     export type NumericUnion = number | NumericTupleNodeUnion;
-    export type NumericParam = number | NumericTupleNode | NumericField;
+    export type NumericParam = number | NumericTupleNode | NumericFieldTupleNodeType;
     export type SingleNumericUnionParams = [value: NumericUnion];
     export type SingleNumericParams = [value: NumericParam];
     export type LeftRightNumericUnionParams = [left: NumericUnion, right: NumericUnion];
@@ -483,8 +483,6 @@ export namespace ZenithEncodedScanFormula {
     export type ConditionalParams_2True = [...trueArm1: ConditionalArm, ...trueArm2: ConditionalArm, ...falseArm: ConditionalArm];
     export type ConditionalParams_3True = [...trueArm1: ConditionalArm, ...trueArm2: ConditionalArm, ...trueArm3: ConditionalArm, ...falseArm: ConditionalArm];
     export type ConditionalParams = ConditionalParams_1True | ConditionalParams_2True | ConditionalParams_3True;
-
-    export const SingleDefault_IsIndex = true;
 
     export const NotTupleNodeType = 'Not';
     export const XorTupleNodeType = 'Xor';
@@ -682,6 +680,10 @@ export namespace ZenithEncodedScanFormula {
     // }
 
     // export type ComparableField = keyof typeof ComparableFieldEnum;
+
+    export const SingleDefault_IsIndex = true;
+    export const trueBooleanParameter = 'true';
+    export const falseBooleanParameter = 'false';
 
     export const enum TextContainsAsEnum {
         None = 'None',

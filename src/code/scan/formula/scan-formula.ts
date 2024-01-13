@@ -41,7 +41,10 @@ export namespace ScanFormula {
         NumericFieldValueGet,
         // DateFieldValueGet,
 
-        // Field Comparison
+        // Type
+        Is,
+
+        // Field
         FieldHasValue,
         BooleanFieldEquals,
         NumericFieldEquals,
@@ -74,6 +77,7 @@ export namespace ScanFormula {
         NodeTypeId.NumericLessThanOrEqual |
         NodeTypeId.All |
         NodeTypeId.None |
+        NodeTypeId.Is |
         NodeTypeId.FieldHasValue |
         NodeTypeId.BooleanFieldEquals |
         NodeTypeId.NumericFieldEquals |
@@ -203,6 +207,23 @@ export namespace ScanFormula {
 
         constructor() {
             super(NodeTypeId.Or);
+        }
+    }
+
+    export class IsNode extends BooleanNode {
+        declare readonly typeId: NodeTypeId.Is;
+
+        categoryId: IsNode.CategoryId;
+        trueFalse: boolean;
+
+        constructor() {
+            super(NodeTypeId.Is);
+        }
+    }
+
+    export namespace IsNode {
+        export const enum CategoryId {
+            Index,
         }
     }
 

@@ -16,6 +16,7 @@ export namespace ScanCondition {
         NumericComparison,
         All,
         None,
+        Is,
         FieldHasValue,
         BooleanFieldEquals,
         NumericFieldEquals,
@@ -57,6 +58,7 @@ export namespace ScanCondition {
                 case ScanCondition.TypeId.NumericComparison: return NumericComparisonScanCondition.isEqual(left as NumericComparisonScanCondition, right as NumericComparisonScanCondition);
                 case ScanCondition.TypeId.All: return AllScanCondition.isEqual(left as AllScanCondition, right as AllScanCondition);
                 case ScanCondition.TypeId.None: return NoneScanCondition.isEqual(left as NoneScanCondition, right as NoneScanCondition);
+                case ScanCondition.TypeId.Is: return IsScanCondition.isEqual(left as IsScanCondition, right as IsScanCondition);
                 case ScanCondition.TypeId.FieldHasValue: return FieldHasValueScanCondition.isEqual(left as FieldHasValueScanCondition, right as FieldHasValueScanCondition);
                 case ScanCondition.TypeId.BooleanFieldEquals: return BooleanFieldEqualsScanCondition.isEqual(left as BooleanFieldEqualsScanCondition, right as BooleanFieldEqualsScanCondition);
                 case ScanCondition.TypeId.NumericFieldEquals: return NumericFieldEqualsScanCondition.isEqual(left as NumericFieldEqualsScanCondition, right as NumericFieldEqualsScanCondition);
@@ -173,6 +175,18 @@ export interface NoneScanCondition extends ScanCondition {
 export namespace NoneScanCondition {
     export function isEqual(_left: NoneScanCondition, _right: NoneScanCondition) {
         return true;
+    }
+}
+
+export interface IsScanCondition extends ScanCondition {
+    readonly categoryId: ScanFormula.IsNode.CategoryId;
+    not: boolean;
+}
+
+export namespace IsScanCondition {
+    export function isEqual(left: IsScanCondition, right: IsScanCondition) {
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        return (left.categoryId === right.categoryId) && left.not === right.not;
     }
 }
 

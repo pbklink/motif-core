@@ -19,6 +19,7 @@ import {
     DateSubFieldHasValueScanCondition,
     DateSubFieldInRangeScanCondition,
     FieldHasValueScanCondition,
+    IsScanCondition,
     NumericComparisonScanCondition,
     NumericFieldEqualsScanCondition,
     NumericFieldInRangeScanCondition,
@@ -82,7 +83,7 @@ export namespace ScanConditionSet {
         }
 
         if (conditionsNode === undefined) {
-            conditionSet.loadError = { typeId: ScanConditionSetLoadErrorTypeId.UnsupportedConditionsNodeType, extra: conditionsBooleanNode.typeId.toString() };
+            conditionSet.loadError = { typeId: ScanConditionSetLoadErrorTypeId.ConditionsNodeTypeNotSupported, extra: conditionsBooleanNode.typeId.toString() };
             return false;
         } else {
             const operandNodes = conditionsNode.operands;
@@ -183,7 +184,7 @@ export namespace ScanConditionSet {
             case ScanFormula.NodeTypeId.Xor:
             case ScanFormula.NodeTypeId.And:
             case ScanFormula.NodeTypeId.Or:
-                return new Err({ typeId: ScanConditionSetLoadErrorTypeId.UnsupportedConditionNodeType, extra: node.typeId.toString() })
+                return new Err({ typeId: ScanConditionSetLoadErrorTypeId.ConditionNodeTypeIsNotSupported, extra: node.typeId.toString() })
             case ScanFormula.NodeTypeId.NumericEquals: {
                 const numericComparisonBooleanNode = node as ScanFormula.NumericComparisonBooleanNode;
                 const operationId = not ? NumericComparisonScanCondition.OperationId.NotEquals : NumericComparisonScanCondition.OperationId.Equals;
@@ -210,9 +211,21 @@ export namespace ScanConditionSet {
                 return factory.createNumericComparison(numericComparisonBooleanNode, operationId);
             }
             case ScanFormula.NodeTypeId.All:
-                return factory.createAll(node as ScanFormula.AllNode);
+                if (not) {
+                    return new Err({ typeId: ScanConditionSetLoadErrorTypeId.NotOfAllNotSupported, extra: '' })
+                } else {
+                    return factory.createAll(node as ScanFormula.AllNode);
+                }
             case ScanFormula.NodeTypeId.None:
-                return factory.createNone(node as ScanFormula.NoneNode);
+                if (not) {
+                    return new Err({ typeId: ScanConditionSetLoadErrorTypeId.NotOfNoneNotSupported, extra: '' })
+                } else {
+                    return factory.createNone(node as ScanFormula.NoneNode);
+                }
+            case ScanFormula.NodeTypeId.Is: {
+                const isNode = node as ScanFormula.IsNode;
+                return factory.createIs(isNode, not);
+            }
             case ScanFormula.NodeTypeId.FieldHasValue: {
                 const fieldHasValueNode = node as ScanFormula.FieldHasValueNode;
                 return factory.createFieldHasValue(fieldHasValueNode, not);
@@ -320,6 +333,16 @@ export namespace ScanConditionSet {
             case ScanCondition.TypeId.None: {
                 return {
                     node: new ScanFormula.NoneNode(),
+                    requiresNot: false,
+                };
+            }
+            case ScanCondition.TypeId.Is: {
+                const isCondition  = condition as IsScanCondition;
+                const isNode = new ScanFormula.IsNode();
+                isNode.categoryId = isCondition.categoryId;
+                isNode.trueFalse = !isCondition.not;
+                return {
+                    node: isNode,
                     requiresNot: false,
                 };
             }

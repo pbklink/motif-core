@@ -20,6 +20,7 @@ import {
     DateSubFieldHasValueScanCondition,
     DateSubFieldInRangeScanCondition,
     FieldHasValueScanCondition,
+    IsScanCondition,
     NoneScanCondition,
     NumericComparisonScanCondition,
     NumericFieldEqualsScanCondition,
@@ -35,6 +36,7 @@ export interface ScanConditionFactory {
     createNumericComparison(formulaNode: ScanFormula.NumericComparisonBooleanNode, operationId: NumericComparisonScanCondition.OperationId): Result<NumericComparisonScanCondition, ScanConditionSetLoadError>;
     createAll(formulaNode: ScanFormula.AllNode): Result<AllScanCondition, ScanConditionSetLoadError>;
     createNone(formulaNode: ScanFormula.NoneNode): Result<NoneScanCondition, ScanConditionSetLoadError>;
+    createIs(formulaNode: ScanFormula.IsNode, not: boolean): Result<IsScanCondition, ScanConditionSetLoadError>;
     createFieldHasValue(formulaNode: ScanFormula.FieldHasValueNode, not: boolean): Result<FieldHasValueScanCondition, ScanConditionSetLoadError>;
     createBooleanFieldEquals(formulaNode: ScanFormula.BooleanFieldEqualsNode, not: boolean): Result<BooleanFieldEqualsScanCondition, ScanConditionSetLoadError>;
     createNumericFieldEquals(formulaNode: ScanFormula.NumericFieldEqualsNode, not: boolean): Result<NumericFieldEqualsScanCondition, ScanConditionSetLoadError>;

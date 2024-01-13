@@ -1969,7 +1969,9 @@ export const enum StringId {
     ScanFormulaZenithEncodingError_OnlySubFieldOrTextFieldNodesCanHave3Parameters,
     ScanFormulaZenithEncodingError_OnlySubFieldNodeCanHave4Parameters,
     ScanFormulaZenithEncodingError_OnlyTextSubFieldContainsNodeCanHave4Parameters,
-    ScanFormulaZenithEncodingError_FieldBooleanNodeHasTooManyParameters,
+    ScanFormulaZenithEncodingError_FieldBooleanTupleNodeHasTooManyParameters,
+    ScanFormulaZenithEncodingError_IsBooleanTupleNodeParameterIsNotBoolean,
+    ScanFormulaZenithEncodingError_IsBooleanTupleNodeHasTooManyParameters,
     ScanFormulaZenithEncodingError_NumericTupleNodeIsZeroLength,
     ScanFormulaZenithEncodingError_NumericTupleNodeTypeIsNotString,
     ScanFormulaZenithEncodingError_NumericTupleNodeRequires2Or3Parameters,
@@ -2016,6 +2018,8 @@ export const enum StringId {
     ScanPropertiesTitle_Type,
     ScanPropertiesCaption_SymbolList,
     ScanPropertiesTitle_SymbolList,
+    ScanPropertiesCaption_ShowRank,
+    ScanPropertiesTitle_ShowRank,
     ScanPropertiesCaption_SymbolListMaxCount,
     ScanPropertiesTitle_SymbolListMaxCount,
     ScanPropertiesCaption_View,
@@ -11977,9 +11981,19 @@ export namespace I18nStrings {
                 en: 'Only text sub-field contains node can have 4 parameters',
             }
         },
-        ScanFormulaZenithEncodingError_FieldBooleanNodeHasTooManyParameters: {
-            id: StringId.ScanFormulaZenithEncodingError_FieldBooleanNodeHasTooManyParameters, translations: {
-                en: 'Field BooleanNode has too many parameters',
+        ScanFormulaZenithEncodingError_FieldBooleanTupleNodeHasTooManyParameters: {
+            id: StringId.ScanFormulaZenithEncodingError_FieldBooleanTupleNodeHasTooManyParameters, translations: {
+                en: 'Field tuple node has too many parameters',
+            }
+        },
+        ScanFormulaZenithEncodingError_IsBooleanTupleNodeParameterIsNotBoolean: {
+            id: StringId.ScanFormulaZenithEncodingError_IsBooleanTupleNodeParameterIsNotBoolean, translations: {
+                en: '"Is" tuple node parameter is not boolean',
+            }
+        },
+        ScanFormulaZenithEncodingError_IsBooleanTupleNodeHasTooManyParameters: {
+            id: StringId.ScanFormulaZenithEncodingError_IsBooleanTupleNodeHasTooManyParameters, translations: {
+                en: '"Is" tuple node has too many parameters',
             }
         },
         ScanFormulaZenithEncodingError_NumericTupleNodeIsZeroLength: {
@@ -12210,6 +12224,16 @@ export namespace I18nStrings {
         ScanPropertiesTitle_SymbolList: {
             id: StringId.ScanPropertiesTitle_SymbolList, translations: {
                 en: 'Scan matches generate a symbol list which can be viewed in a watchlist',
+            }
+        },
+        ScanPropertiesCaption_ShowRank: {
+            id: StringId.ScanPropertiesCaption_ShowRank, translations: {
+                en: 'Show rank',
+            }
+        },
+        ScanPropertiesTitle_ShowRank: {
+            id: StringId.ScanPropertiesTitle_ShowRank, translations: {
+                en: 'Show rank formula editor',
             }
         },
         ScanPropertiesCaption_SymbolListMaxCount: {
