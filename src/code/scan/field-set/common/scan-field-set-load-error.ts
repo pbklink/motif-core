@@ -1,4 +1,10 @@
-export const enum ScanConditionSetLoadErrorTypeId {
+/**
+ * %license Motif
+ * (c) 2021 Paritech Wealth Technology
+ * License: motionite.trade/license/motif
+ */
+
+export const enum ScanFieldSetLoadErrorTypeId {
     // ConditionSet
     XorSetOperationNotSupported,
     UnexpectedConditionSetOperandTypeId,
@@ -14,7 +20,7 @@ export const enum ScanConditionSetLoadErrorTypeId {
     RightNumericComparisonOperandTypeIsNotSupported,
 }
 
-export interface ScanConditionSetLoadError {
-    typeId: ScanConditionSetLoadErrorTypeId;
-    extra: string;
+export interface ScanFieldSetLoadError {
+    typeId: ScanFieldSetLoadErrorTypeId;
+    extra?: string;
 }

@@ -1925,9 +1925,11 @@ export const enum StringId {
     BannerAdvert_SimilarTitle,
     BannerAdvert_NotInterestedTitle,
     ScanFormulaZenithEncodingError_InvalidJson,
+    ScanFormulaZenithEncodingError_ErrorCode,
     ScanFormulaZenithEncodingError_BooleanTupleNodeIsNotAnArray,
     ScanFormulaZenithEncodingError_BooleanTupleNodeArrayIsZeroLength,
     ScanFormulaZenithEncodingError_BooleanTupleNodeTypeIsNotString,
+    ScanFormulaZenithEncodingError_UnknownField,
     ScanFormulaZenithEncodingError_SingleOperandLogicalBooleanDoesNotHaveOneOperand,
     ScanFormulaZenithEncodingError_LeftRightOperandLogicalBooleanDoesNotHaveTwoOperands,
     ScanFormulaZenithEncodingError_MultiOperandLogicalBooleanMissingOperands,
@@ -1938,6 +1940,7 @@ export const enum StringId {
     ScanFormulaZenithEncodingError_NumericParameterIsNotNumberOrComparableFieldOrArray,
     ScanFormulaZenithEncodingError_UnexpectedBooleanParamType,
     ScanFormulaZenithEncodingError_UnknownFieldBooleanParam,
+    ScanFormulaZenithEncodingError_FieldBooleanParamCannotBeSubbedField,
     ScanFormulaZenithEncodingError_SubFieldIsNotString,
     ScanFormulaZenithEncodingError_PriceSubFieldHasValueSubFieldIsUnknown,
     ScanFormulaZenithEncodingError_DateSubFieldHasValueSubFieldIsUnknown,
@@ -1948,29 +1951,25 @@ export const enum StringId {
     ScanFormulaZenithEncodingError_RangeMaxIsDefinedButNotNumber,
     ScanFormulaZenithEncodingError_RangeMinAndMaxAreBothUndefined,
     ScanFormulaZenithEncodingError_DateFieldEqualsTargetIsNotString,
+    ScanFormulaZenithEncodingError_TextSubFieldIsMissing,
     ScanFormulaZenithEncodingError_TextFieldContainsValueIsNotString,
     ScanFormulaZenithEncodingError_TextFieldContainsAsIsNotString,
     ScanFormulaZenithEncodingError_TextFieldContainsAsHasInvalidFormat,
     ScanFormulaZenithEncodingError_TextFieldContainsAsIsNotBoolean,
-    ScanFormulaZenithEncodingError_BooleanFieldEqualsTargetIsNotBoolean,
+    ScanFormulaZenithEncodingError_SingleFieldMustHaveOneParameter,
     ScanFormulaZenithEncodingError_PriceSubFieldEqualsSubFieldIsUnknown,
     ScanFormulaZenithEncodingError_DateSubFieldEqualsSubFieldIsUnknown,
     ScanFormulaZenithEncodingError_DateSubFieldEqualsTargetIsNotString,
     ScanFormulaZenithEncodingError_AltCodeSubFieldContainsSubFieldIsUnknown,
     ScanFormulaZenithEncodingError_AttributeSubFieldContainsSubFieldIsUnknown,
     ScanFormulaZenithEncodingError_TargetHasInvalidDateFormat,
+    ScanFormulaZenithEncodingError_RangeSubFieldIsMissing,
     ScanFormulaZenithEncodingError_RangeMinIsDefinedButNotString,
     ScanFormulaZenithEncodingError_RangeMinHasInvalidDateFormat,
     ScanFormulaZenithEncodingError_RangeMaxIsDefinedButNotString,
     ScanFormulaZenithEncodingError_RangeMaxHasInvalidDateFormat,
     ScanFormulaZenithEncodingError_NamedParametersCannotBeNull,
-    ScanFormulaZenithEncodingError_FirstParameterCannotBeObjectOrNull,
-    ScanFormulaZenithEncodingError_SecondParameterCannotBeObjectOrNull,
-    ScanFormulaZenithEncodingError_BooleanFieldCanOnlyHaveOneParameter,
-    ScanFormulaZenithEncodingError_OnlySubFieldOrTextFieldNodesCanHave3Parameters,
-    ScanFormulaZenithEncodingError_OnlySubFieldNodeCanHave4Parameters,
-    ScanFormulaZenithEncodingError_OnlyTextSubFieldContainsNodeCanHave4Parameters,
-    ScanFormulaZenithEncodingError_FieldBooleanTupleNodeHasTooManyParameters,
+    ScanFormulaZenithEncodingError_RangeFieldBooleanTupleNodeHasTooManyParameters,
     ScanFormulaZenithEncodingError_IsBooleanTupleNodeParameterIsNotBoolean,
     ScanFormulaZenithEncodingError_IsBooleanTupleNodeHasTooManyParameters,
     ScanFormulaZenithEncodingError_NumericTupleNodeIsZeroLength,
@@ -1981,6 +1980,15 @@ export const enum StringId {
     ScanFormulaZenithEncodingError_UnknownBooleanTupleNodeType,
     ScanFormulaZenithEncodingError_UnknownNumericTupleNodeType,
     ScanFormulaZenithEncodingError_UnknownNumericField,
+    ScanFormulaZenithEncodingError_FieldBooleanParamMustBeRangeOrExistsSingle,
+    ScanFormulaZenithEncodingError_NumericRangeFirstParameterMustBeNumberOrNamed,
+    ScanFormulaZenithEncodingError_DateRangeFirstParameterMustBeStringOrNamed,
+    ScanFormulaZenithEncodingError_TextFieldMustHaveAtLeastOneParameter,
+    ScanFormulaZenithEncodingError_TextRangeSecondParameterMustBeStringOrNamed,
+    ScanFormulaZenithEncodingError_ExistsSingleFieldMustNotHaveMoreThan1Parameter,
+    ScanFormulaZenithEncodingError_SingleFieldParameterIsNotString,
+    ScanFormulaZenithEncodingError_TextFieldBooleanTupleNodeHasTooManyParameters,
+    ScanFormulaZenithEncodingError_UnknownCurrency,
     ScanFormulaZenithEncodingError_IfTupleNodeRequiresAtLeast4Parameters,
     ScanFormulaZenithEncodingError_IfTupleNodeRequiresAnEvenNumberOfParameters,
     ScanSyncStatusDisplay_Saving, // remove when Watchmaker no longer references
@@ -11789,6 +11797,11 @@ export namespace I18nStrings {
                 en: 'Invalid JSON',
             }
         },
+        ScanFormulaZenithEncodingError_ErrorCode: {
+            id: StringId.ScanFormulaZenithEncodingError_ErrorCode, translations: {
+                en: 'Error Code',
+            }
+        },
         ScanFormulaZenithEncodingError_BooleanTupleNodeIsNotAnArray: {
             id: StringId.ScanFormulaZenithEncodingError_BooleanTupleNodeIsNotAnArray, translations: {
                 en: 'Boolean tuple node is not an array',
@@ -11802,6 +11815,11 @@ export namespace I18nStrings {
         ScanFormulaZenithEncodingError_BooleanTupleNodeTypeIsNotString: {
             id: StringId.ScanFormulaZenithEncodingError_BooleanTupleNodeTypeIsNotString, translations: {
                 en: 'Boolean tuple node type is not string',
+            }
+        },
+        ScanFormulaZenithEncodingError_UnknownField: {
+            id: StringId.ScanFormulaZenithEncodingError_UnknownField, translations: {
+                en: 'Unknown field',
             }
         },
         ScanFormulaZenithEncodingError_SingleOperandLogicalBooleanDoesNotHaveOneOperand: {
@@ -11854,6 +11872,11 @@ export namespace I18nStrings {
                 en: 'Unknown field boolean parameter',
             }
         },
+        ScanFormulaZenithEncodingError_FieldBooleanParamCannotBeSubbedField: {
+            id: StringId.ScanFormulaZenithEncodingError_FieldBooleanParamCannotBeSubbedField, translations: {
+                en: 'Field boolean parameter cannot be subbed field',
+            }
+        },
         ScanFormulaZenithEncodingError_SubFieldIsNotString: {
             id: StringId.ScanFormulaZenithEncodingError_SubFieldIsNotString, translations: {
                 en: 'Sub-field is not string',
@@ -11904,6 +11927,11 @@ export namespace I18nStrings {
                 en: 'Date field equals target is not a string',
             }
         },
+        ScanFormulaZenithEncodingError_TextSubFieldIsMissing: {
+            id: StringId.ScanFormulaZenithEncodingError_DateFieldEqualsTargetIsNotString, translations: {
+                en: 'Text sub field is missing',
+            }
+        },
         ScanFormulaZenithEncodingError_TextFieldContainsValueIsNotString: {
             id: StringId.ScanFormulaZenithEncodingError_TextFieldContainsValueIsNotString, translations: {
                 en: 'Text field contains value is not a string',
@@ -11924,9 +11952,9 @@ export namespace I18nStrings {
                 en: 'Text field contains as is not a boolean',
             }
         },
-        ScanFormulaZenithEncodingError_BooleanFieldEqualsTargetIsNotBoolean: {
-            id: StringId.ScanFormulaZenithEncodingError_BooleanFieldEqualsTargetIsNotBoolean, translations: {
-                en: 'Boolean field equals target is not a boolean',
+        ScanFormulaZenithEncodingError_SingleFieldMustHaveOneParameter: {
+            id: StringId.ScanFormulaZenithEncodingError_SingleFieldMustHaveOneParameter, translations: {
+                en: 'Single field must have one parameter',
             }
         },
         ScanFormulaZenithEncodingError_PriceSubFieldEqualsSubFieldIsUnknown: {
@@ -11959,6 +11987,11 @@ export namespace I18nStrings {
                 en: 'Target has invalid date format',
             }
         },
+        ScanFormulaZenithEncodingError_RangeSubFieldIsMissing: {
+            id: StringId.ScanFormulaZenithEncodingError_RangeSubFieldIsMissing, translations: {
+                en: 'Range sub field is missing',
+            }
+        },
         ScanFormulaZenithEncodingError_RangeMinIsDefinedButNotString: {
             id: StringId.ScanFormulaZenithEncodingError_RangeMinIsDefinedButNotString, translations: {
                 en: 'Range minimum is defined but not a string',
@@ -11984,39 +12017,9 @@ export namespace I18nStrings {
                 en: 'Named parameters cannot be null',
             }
         },
-        ScanFormulaZenithEncodingError_FirstParameterCannotBeObjectOrNull: {
-            id: StringId.ScanFormulaZenithEncodingError_FirstParameterCannotBeObjectOrNull, translations: {
-                en: 'First parameter cannot be an object or null',
-            }
-        },
-        ScanFormulaZenithEncodingError_SecondParameterCannotBeObjectOrNull: {
-            id: StringId.ScanFormulaZenithEncodingError_SecondParameterCannotBeObjectOrNull, translations: {
-                en: 'Second parameter cannot be an object or null',
-            }
-        },
-        ScanFormulaZenithEncodingError_BooleanFieldCanOnlyHaveOneParameter: {
-            id: StringId.ScanFormulaZenithEncodingError_BooleanFieldCanOnlyHaveOneParameter, translations: {
-                en: 'Boolean field can only have one parameter',
-            }
-        },
-        ScanFormulaZenithEncodingError_OnlySubFieldOrTextFieldNodesCanHave3Parameters: {
-            id: StringId.ScanFormulaZenithEncodingError_OnlySubFieldOrTextFieldNodesCanHave3Parameters, translations: {
-                en: 'Only sub-field or text field Nodes can have 3 parameters',
-            }
-        },
-        ScanFormulaZenithEncodingError_OnlySubFieldNodeCanHave4Parameters: {
-            id: StringId.ScanFormulaZenithEncodingError_OnlySubFieldNodeCanHave4Parameters, translations: {
-                en: 'Only sub-field nodes can have 4 parameters',
-            }
-        },
-        ScanFormulaZenithEncodingError_OnlyTextSubFieldContainsNodeCanHave4Parameters: {
-            id: StringId.ScanFormulaZenithEncodingError_OnlyTextSubFieldContainsNodeCanHave4Parameters, translations: {
-                en: 'Only text sub-field contains node can have 4 parameters',
-            }
-        },
-        ScanFormulaZenithEncodingError_FieldBooleanTupleNodeHasTooManyParameters: {
-            id: StringId.ScanFormulaZenithEncodingError_FieldBooleanTupleNodeHasTooManyParameters, translations: {
-                en: 'Field tuple node has too many parameters',
+        ScanFormulaZenithEncodingError_RangeFieldBooleanTupleNodeHasTooManyParameters: {
+            id: StringId.ScanFormulaZenithEncodingError_RangeFieldBooleanTupleNodeHasTooManyParameters, translations: {
+                en: 'Range field boolean tuple node has too many parameters',
             }
         },
         ScanFormulaZenithEncodingError_IsBooleanTupleNodeParameterIsNotBoolean: {
@@ -12069,6 +12072,52 @@ export namespace I18nStrings {
                 en: 'Unknown numeric field',
             }
         },
+        ScanFormulaZenithEncodingError_FieldBooleanParamMustBeRangeOrExistsSingle:{
+            id: StringId.ScanFormulaZenithEncodingError_FieldBooleanParamMustBeRangeOrExistsSingle, translations: {
+                en: 'Field boolean parameter must be range or \'exists single\'',
+            }
+        },
+        ScanFormulaZenithEncodingError_NumericRangeFirstParameterMustBeNumberOrNamed:{
+            id: StringId.ScanFormulaZenithEncodingError_NumericRangeFirstParameterMustBeNumberOrNamed, translations: {
+                en: 'Numeric range first parameter must be number or named',
+            }
+        },
+        ScanFormulaZenithEncodingError_DateRangeFirstParameterMustBeStringOrNamed:{
+            id: StringId.ScanFormulaZenithEncodingError_DateRangeFirstParameterMustBeStringOrNamed, translations: {
+                en: 'Date range first parameter must be string or named',
+            }
+        },
+        ScanFormulaZenithEncodingError_TextFieldMustHaveAtLeastOneParameter:{
+            id: StringId.ScanFormulaZenithEncodingError_TextFieldMustHaveAtLeastOneParameter, translations: {
+                en: 'Text field must have at least one parameter',
+            }
+        },
+        ScanFormulaZenithEncodingError_TextRangeSecondParameterMustBeStringOrNamed:{
+            id: StringId.ScanFormulaZenithEncodingError_TextRangeSecondParameterMustBeStringOrNamed, translations: {
+                en: 'Text range second parameter must be string or named',
+            }
+        },
+        ScanFormulaZenithEncodingError_ExistsSingleFieldMustNotHaveMoreThan1Parameter:{
+            id: StringId.ScanFormulaZenithEncodingError_ExistsSingleFieldMustNotHaveMoreThan1Parameter, translations: {
+                en: '\'Exists single\' field must not have more than 1 parameter',
+            }
+        },
+        ScanFormulaZenithEncodingError_SingleFieldParameterIsNotString:{
+            id: StringId.ScanFormulaZenithEncodingError_SingleFieldParameterIsNotString, translations: {
+                en: 'Single field parameter is not string',
+            }
+        },
+        ScanFormulaZenithEncodingError_TextFieldBooleanTupleNodeHasTooManyParameters:{
+            id: StringId.ScanFormulaZenithEncodingError_TextFieldBooleanTupleNodeHasTooManyParameters, translations: {
+                en: 'Text field boolean tuple node has too many parameters',
+            }
+        },
+        ScanFormulaZenithEncodingError_UnknownCurrency:{
+            id: StringId.ScanFormulaZenithEncodingError_UnknownCurrency, translations: {
+                en: 'Unknown currency',
+            }
+        },
+
         ScanFormulaZenithEncodingError_IfTupleNodeRequiresAtLeast4Parameters: {
             id: StringId.ScanFormulaZenithEncodingError_IfTupleNodeRequiresAtLeast4Parameters, translations: {
                 en: 'If tuple node requires at least 4 parameters',

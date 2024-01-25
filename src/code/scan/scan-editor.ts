@@ -38,6 +38,7 @@ import {
     newGuid
 } from '../sys/sys-internal-api';
 import { ScanConditionSet } from './condition-set/internal-api';
+import { ScanFieldSet } from './field-set/internal-api';
 import { ScanFormula } from './formula/scan-formula';
 import { ScanFormulaZenithEncoding } from './formula/scan-formula-zenith-encoding';
 import { Scan } from './scan';
@@ -45,6 +46,7 @@ import { Scan } from './scan';
 export class ScanEditor {
     readonly readonly: boolean;
     readonly criteriaAsConditionSet: ScanConditionSet;
+    readonly criteriaAsFieldSet: ScanFieldSet;
 
     private _finalised = false;
 
@@ -101,11 +103,13 @@ export class ScanEditor {
         scan: Scan | undefined,
         opener: LockOpenListItem.Opener,
         emptyScanConditionSet: ScanConditionSet,
+        emptyScanFieldSet: ScanFieldSet,
         private readonly _getOrWaitForScanEventer: ScanEditor.GetOrWaitForScanEventer,
         private readonly _errorEventer: ScanEditor.ErrorEventer | undefined,
     ) {
         this._openers.push(opener);
         this.criteriaAsConditionSet = emptyScanConditionSet;
+        this.criteriaAsFieldSet = emptyScanFieldSet;
 
         this._editSessionId = newGuid();
 
@@ -360,14 +364,17 @@ export class ScanEditor {
             }
         }
         if (sourceId !== ScanEditor.SourceId.ConditionSet) {
-            ScanConditionSet.tryLoadConditionSetFromFormulaNode(this.criteriaAsConditionSet, this._criteria);
+            ScanConditionSet.tryLoadFromFormulaNode(this.criteriaAsConditionSet, this._criteria);
+        }
+        if (sourceId !== ScanEditor.SourceId.FieldSet) {
+            ScanFieldSet.tryLoadFromFormulaNode(this.criteriaAsFieldSet, this._criteria);
         }
         this._criteriaSourceValid = true;
 
         this.endFieldChanges();
     }
 
-    setCriteriaAsZenithText(value: string, modifier?: ScanEditor.Modifier): ScanEditor.SetAsZenithTextResult | undefined {
+    setCriteriaAsZenithText(value: string, modifier?: ScanEditor.Modifier, strict = true): ScanEditor.SetAsZenithTextResult | undefined {
         if (value === this._criteriaAsZenithText) {
             return undefined;
         } else {
@@ -394,7 +401,7 @@ export class ScanEditor {
                 zenithCriteria = ['None']; // ignored
             }
             if (result === undefined) {
-                const decodeResult = ScanFormulaZenithEncoding.tryDecodeBoolean(zenithCriteria);
+                const decodeResult = ScanFormulaZenithEncoding.tryDecodeBoolean(zenithCriteria, strict);
                 if (decodeResult.isOk()) {
                     const decodedBoolean = decodeResult.value;
                     this.setCriteria(decodedBoolean.node, ScanEditor.SourceId.Zenith);
@@ -424,6 +431,21 @@ export class ScanEditor {
 
             const criteria = ScanConditionSet.createFormulaNode(value);
             this.setCriteria(criteria, ScanEditor.SourceId.ConditionSet);
+            this.endFieldChanges();
+            return true;
+        }
+    }
+
+    setCriteriaAsFieldSet(value: ScanFieldSet, modifier?: ScanEditor.Modifier) {
+        if (ScanFieldSet.isEqual(value, this.criteriaAsFieldSet)) {
+            return false;
+        } else {
+            this.beginFieldChanges(modifier)
+            this.criteriaAsFieldSet.assign(value);
+            this.addFieldChange(ScanEditor.FieldId.CriteriaAsFieldSet);
+
+            const criteria = ScanFieldSet.createFormulaNode(value);
+            this.setCriteria(criteria, ScanEditor.SourceId.FieldSet);
             this.endFieldChanges();
             return true;
         }
@@ -459,7 +481,7 @@ export class ScanEditor {
         }
     }
 
-    setRankAsZenithText(value: string, modifier?: ScanEditor.Modifier): ScanEditor.SetAsZenithTextResult | undefined {
+    setRankAsZenithText(value: string, modifier?: ScanEditor.Modifier, strict = true): ScanEditor.SetAsZenithTextResult | undefined {
         if (value === this._rankAsZenithText) {
             return undefined;
         } else {
@@ -496,7 +518,7 @@ export class ScanEditor {
                         error: undefined,
                     };
                 } else {
-                    const decodeResult = ScanFormulaZenithEncoding.tryDecodeNumeric(zenithRank);
+                    const decodeResult = ScanFormulaZenithEncoding.tryDecodeNumeric(zenithRank, strict);
                     if (decodeResult.isOk()) {
                         const decodedNumeric = decodeResult.value;
                         this.setRank(decodedNumeric.node, ScanEditor.SourceId.Zenith);
@@ -1077,7 +1099,7 @@ export class ScanEditor {
 
     private loadZenithCriteria(zenithCriteria: ZenithEncodedScanFormula.BooleanTupleNode, scanId: string, defaultIfError: boolean, sourceId: ScanEditor.SourceId | undefined) {
         let criteria: ScanFormula.BooleanNode | undefined;
-        const decodeResult = ScanFormulaZenithEncoding.tryDecodeBoolean(zenithCriteria);
+        const decodeResult = ScanFormulaZenithEncoding.tryDecodeBoolean(zenithCriteria, false);
         if (decodeResult.isErr()) {
             const decodedError = decodeResult.error;
             const decodeError = decodedError.error;
@@ -1104,7 +1126,7 @@ export class ScanEditor {
     private loadZenithRank(zenithRank: ZenithEncodedScanFormula.NumericTupleNode | undefined, scanId: string, defaultIfError: boolean, sourceId: ScanEditor.SourceId | undefined) {
         let rank: ScanFormula.NumericNode | undefined;
         if (zenithRank !== undefined) {
-            const decodeResult = ScanFormulaZenithEncoding.tryDecodeNumeric(zenithRank);
+            const decodeResult = ScanFormulaZenithEncoding.tryDecodeNumeric(zenithRank, false);
             if (decodeResult.isErr()) {
                 const decodedError = decodeResult.error;
                 const decodeError = decodedError.error;
@@ -1334,6 +1356,7 @@ export namespace ScanEditor {
         Criteria,
         CriteriaAsFormula,
         CriteriaAsConditionSet,
+        CriteriaAsFieldSet,
         CriteriaAsZenithText,
         Rank,
         RankAsFormula,
@@ -1398,6 +1421,9 @@ export namespace ScanEditor {
             CriteriaAsConditionSet: { fieldId: FieldId.CriteriaAsConditionSet,
                 scanFieldId: Scan.FieldId.ZenithCriteria,
             },
+            CriteriaAsFieldSet: { fieldId: FieldId.CriteriaAsFieldSet,
+                scanFieldId: Scan.FieldId.ZenithCriteria,
+            },
             CriteriaAsZenithText: { fieldId: FieldId.CriteriaAsZenithText,
                 scanFieldId: Scan.FieldId.ZenithCriteria,
             },
@@ -1452,6 +1478,7 @@ export namespace ScanEditor {
     export const enum SourceId {
         Formula,
         ConditionSet,
+        FieldSet,
         Zenith,
     }
 

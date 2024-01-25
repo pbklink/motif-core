@@ -13,14 +13,18 @@ import {
     AltCodeSubFieldHasValueScanCondition,
     AttributeSubFieldContainsScanCondition,
     AttributeSubFieldHasValueScanCondition,
-    BooleanFieldEqualsScanCondition,
+    CurrencyFieldOverlapsScanCondition,
+    // BooleanFieldEqualsScanCondition,
     DateFieldEqualsScanCondition,
     DateFieldInRangeScanCondition,
     DateSubFieldEqualsScanCondition,
     DateSubFieldHasValueScanCondition,
     DateSubFieldInRangeScanCondition,
+    ExchangeFieldOverlapsScanCondition,
     FieldHasValueScanCondition,
     IsScanCondition,
+    MarketBoardFieldOverlapsScanCondition,
+    MarketFieldOverlapsScanCondition,
     NoneScanCondition,
     NumericComparisonScanCondition,
     NumericFieldEqualsScanCondition,
@@ -28,8 +32,9 @@ import {
     PriceSubFieldEqualsScanCondition,
     PriceSubFieldHasValueScanCondition,
     PriceSubFieldInRangeScanCondition,
+    StringFieldOverlapsScanCondition,
     TextFieldContainsScanCondition,
-    TextFieldIncludesScanCondition
+    TextFieldEqualsScanCondition
 } from './scan-condition';
 
 export interface ScanConditionFactory {
@@ -38,12 +43,17 @@ export interface ScanConditionFactory {
     createNone(formulaNode: ScanFormula.NoneNode): Result<NoneScanCondition, ScanConditionSetLoadError>;
     createIs(formulaNode: ScanFormula.IsNode, not: boolean): Result<IsScanCondition, ScanConditionSetLoadError>;
     createFieldHasValue(formulaNode: ScanFormula.FieldHasValueNode, not: boolean): Result<FieldHasValueScanCondition, ScanConditionSetLoadError>;
-    createBooleanFieldEquals(formulaNode: ScanFormula.BooleanFieldEqualsNode, not: boolean): Result<BooleanFieldEqualsScanCondition, ScanConditionSetLoadError>;
+    // createBooleanFieldEquals(formulaNode: ScanFormula.BooleanFieldEqualsNode, not: boolean): Result<BooleanFieldEqualsScanCondition, ScanConditionSetLoadError>;
     createNumericFieldEquals(formulaNode: ScanFormula.NumericFieldEqualsNode, not: boolean): Result<NumericFieldEqualsScanCondition, ScanConditionSetLoadError>;
     createNumericFieldInRange(formulaNode: ScanFormula.NumericFieldInRangeNode, not: boolean): Result<NumericFieldInRangeScanCondition, ScanConditionSetLoadError>;
     createDateFieldEquals(formulaNode: ScanFormula.DateFieldEqualsNode, not: boolean): Result<DateFieldEqualsScanCondition, ScanConditionSetLoadError>;
     createDateFieldInRange(formulaNode: ScanFormula.DateFieldInRangeNode, not: boolean): Result<DateFieldInRangeScanCondition, ScanConditionSetLoadError>;
-    createTextFieldIncludes(formulaNode: ScanFormula.TextFieldIncludesNode, not: boolean): Result<TextFieldIncludesScanCondition, ScanConditionSetLoadError>;
+    createStringFieldOverlaps(formulaNode: ScanFormula.StringFieldOverlapsNode, not: boolean): Result<StringFieldOverlapsScanCondition, ScanConditionSetLoadError>;
+    createCurrencyFieldOverlaps(formulaNode: ScanFormula.CurrencyFieldOverlapsNode, not: boolean): Result<CurrencyFieldOverlapsScanCondition, ScanConditionSetLoadError>;
+    createExchangeFieldOverlaps(formulaNode: ScanFormula.ExchangeFieldOverlapsNode, not: boolean): Result<ExchangeFieldOverlapsScanCondition, ScanConditionSetLoadError>;
+    createMarketFieldOverlaps(formulaNode: ScanFormula.MarketFieldOverlapsNode, not: boolean): Result<MarketFieldOverlapsScanCondition, ScanConditionSetLoadError>;
+    createMarketBoardFieldOverlaps(formulaNode: ScanFormula.MarketBoardFieldOverlapsNode, not: boolean): Result<MarketBoardFieldOverlapsScanCondition, ScanConditionSetLoadError>;
+    createTextFieldEquals(formulaNode: ScanFormula.TextFieldEqualsNode, not: boolean): Result<TextFieldEqualsScanCondition, ScanConditionSetLoadError>;
     createTextFieldContains(formulaNode: ScanFormula.TextFieldContainsNode, not: boolean): Result<TextFieldContainsScanCondition, ScanConditionSetLoadError>;
     createPriceSubFieldHasValue(formulaNode: ScanFormula.PriceSubFieldHasValueNode, not: boolean): Result<PriceSubFieldHasValueScanCondition, ScanConditionSetLoadError>;
     createPriceSubFieldEquals(formulaNode: ScanFormula.PriceSubFieldEqualsNode, not: boolean): Result<PriceSubFieldEqualsScanCondition, ScanConditionSetLoadError>;

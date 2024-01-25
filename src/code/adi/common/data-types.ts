@@ -1212,12 +1212,32 @@ export namespace Currency {
         return infos[id].codeId;
     }
 
+    export function tryCodeToId(code: string) {
+        for (let i = 0; i < idCount; i++) {
+            const info = infos[i];
+            if (Strings[info.codeId] === code) {
+                return info.id;
+            }
+        }
+        return undefined;
+    }
+
     export function idToDisplayId(id: Id) {
         return infos[id].codeId;
     }
 
     export function idToDisplay(id: Id) {
         return Strings[idToDisplayId(id)];
+    }
+
+    export function tryDisplayToId(display: string) {
+        for (let i = 0; i < idCount; i++) {
+            const info = infos[i];
+            if (Strings[info.codeId] === display) {
+                return info.id;
+            }
+        }
+        return undefined;
     }
 
     export function compareId(Left: Id, Right: Id): ComparisonResult {
@@ -1229,8 +1249,13 @@ export namespace Currency {
     }
 
     export function tryNameToId(name: string) {
-        const index = infos.findIndex(info => info.name === name);
-        return index >= 0 ? infos[index].id : undefined;
+        for (let i = 0; i < idCount; i++) {
+            const info = infos[i];
+            if (info.name === name) {
+                return info.id;
+            }
+        }
+        return undefined;
     }
 
     export function idToJsonValue(id: Id) {
@@ -1786,6 +1811,7 @@ export namespace MarketBoard {
     interface Info {
         readonly id: Id;
         readonly name: string;
+        readonly exchangeId: ExchangeId;
         readonly displayId: StringId;
         readonly orderDestination: MarketId | undefined;
     }
@@ -1796,396 +1822,462 @@ export namespace MarketBoard {
         AsxBookBuild: {
             id: MarketBoardId.AsxBookBuild,
             name: 'AsxBookBuild',
+            exchangeId: ExchangeId.Asx,
             displayId: StringId.MarketBoardIdDisplay_AsxBookBuild,
             orderDestination: undefined,
         },
         AsxTradeMatchCentrePoint: {
             id: MarketBoardId.AsxTradeMatchCentrePoint,
             name: 'AsxCentrePoint',
+            exchangeId: ExchangeId.Asx,
             displayId: StringId.MarketBoardIdDisplay_AsxCentrePoint,
             orderDestination: MarketId.AsxTradeMatchCentrePoint,
         },
         AsxTradeMatch: {
             id: MarketBoardId.AsxTradeMatch,
             name: 'AsxTradeMatch',
+            exchangeId: ExchangeId.Asx,
             displayId: StringId.MarketBoardIdDisplay_AsxTradeMatch,
             orderDestination: MarketId.AsxTradeMatch,
         },
         AsxTradeMatchAgric: {
             id: MarketBoardId.AsxTradeMatchAgric,
             name: 'AsxTradeMatchAgric',
+            exchangeId: ExchangeId.Asx,
             displayId: StringId.MarketBoardIdDisplay_AsxTradeMatchAgric,
             orderDestination: MarketId.AsxTradeMatch,
         },
         AsxTradeMatchAus: {
             id: MarketBoardId.AsxTradeMatchAus,
             name: 'AsxTradeMatchAus',
+            exchangeId: ExchangeId.Asx,
             displayId: StringId.MarketBoardIdDisplay_AsxTradeMatchAus,
             orderDestination: MarketId.AsxTradeMatch,
         },
         AsxTradeMatchDerivatives: {
             id: MarketBoardId.AsxTradeMatchDerivatives,
             name: 'AsxTradeMatchDerivatives',
+            exchangeId: ExchangeId.Asx,
             displayId: StringId.MarketBoardIdDisplay_AsxTradeMatchDerivatives,
             orderDestination: MarketId.AsxTradeMatch,
         },
         AsxTradeMatchEquity1: {
             id: MarketBoardId.AsxTradeMatchEquity1,
             name: 'AsxTradeMatchEquity1',
+            exchangeId: ExchangeId.Asx,
             displayId: StringId.MarketBoardIdDisplay_AsxTradeMatchEquity1,
             orderDestination: MarketId.AsxTradeMatch,
         },
         AsxTradeMatchEquity2: {
             id: MarketBoardId.AsxTradeMatchEquity2,
             name: 'AsxTradeMatchEquity2',
+            exchangeId: ExchangeId.Asx,
             displayId: StringId.MarketBoardIdDisplay_AsxTradeMatchEquity2,
             orderDestination: MarketId.AsxTradeMatch,
         },
         AsxTradeMatchEquity3: {
             id: MarketBoardId.AsxTradeMatchEquity3,
             name: 'AsxTradeMatchEquity3',
+            exchangeId: ExchangeId.Asx,
             displayId: StringId.MarketBoardIdDisplay_AsxTradeMatchEquity3,
             orderDestination: MarketId.AsxTradeMatch,
         },
         AsxTradeMatchEquity4: {
             id: MarketBoardId.AsxTradeMatchEquity4,
             name: 'AsxTradeMatchEquity4',
+            exchangeId: ExchangeId.Asx,
             displayId: StringId.MarketBoardIdDisplay_AsxTradeMatchEquity4,
             orderDestination: MarketId.AsxTradeMatch,
         },
         AsxTradeMatchEquity5: {
             id: MarketBoardId.AsxTradeMatchEquity5,
             name: 'AsxTradeMatchEquity5',
+            exchangeId: ExchangeId.Asx,
             displayId: StringId.MarketBoardIdDisplay_AsxTradeMatchEquity5,
             orderDestination: MarketId.AsxTradeMatch,
         },
         AsxTradeMatchIndex: {
             id: MarketBoardId.AsxTradeMatchIndex,
             name: 'AsxTradeMatchIndex',
+            exchangeId: ExchangeId.Asx,
             displayId: StringId.MarketBoardIdDisplay_AsxTradeMatchIndex,
             orderDestination: MarketId.AsxTradeMatch,
         },
         AsxTradeMatchIndexDerivatives: {
             id: MarketBoardId.AsxTradeMatchIndexDerivatives,
             name: 'AsxTradeMatchIndexDerivatives',
+            exchangeId: ExchangeId.Asx,
             displayId: StringId.MarketBoardIdDisplay_AsxTradeMatchIndexDerivatives,
             orderDestination: MarketId.AsxTradeMatch,
         },
         AsxTradeMatchInterestRate: {
             id: MarketBoardId.AsxTradeMatchInterestRate,
             name: 'AsxTradeMatchInterestRate',
+            exchangeId: ExchangeId.Asx,
             displayId: StringId.MarketBoardIdDisplay_AsxTradeMatchInterestRate,
             orderDestination: MarketId.AsxTradeMatch,
         },
         AsxTradeMatchPrivate: {
             id: MarketBoardId.AsxTradeMatchPrivate,
             name: 'AsxTradeMatchPrivate',
+            exchangeId: ExchangeId.Asx,
             displayId: StringId.MarketBoardIdDisplay_AsxTradeMatchPrivate,
             orderDestination: MarketId.AsxTradeMatch,
         },
         AsxTradeMatchQuoteDisplayBoard: {
             id: MarketBoardId.AsxTradeMatchQuoteDisplayBoard,
             name: 'AsxTradeMatchQuoteDisplayBoard',
+            exchangeId: ExchangeId.Asx,
             displayId: StringId.MarketBoardIdDisplay_AsxTradeMatchQuoteDisplayBoard,
             orderDestination: MarketId.AsxTradeMatch,
         },
         AsxTradeMatchPractice: {
             id: MarketBoardId.AsxTradeMatchPractice,
             name: 'AsxTradeMatchPractice',
+            exchangeId: ExchangeId.Asx,
             displayId: StringId.MarketBoardIdDisplay_AsxTradeMatchPractice,
             orderDestination: MarketId.AsxTradeMatch,
         },
         AsxTradeMatchWarrants: {
             id: MarketBoardId.AsxTradeMatchWarrants,
             name: 'AsxTradeMatchWarrants',
+            exchangeId: ExchangeId.Asx,
             displayId: StringId.MarketBoardIdDisplay_AsxTradeMatchWarrants,
             orderDestination: MarketId.AsxTradeMatch,
         },
         AsxTradeMatchAD: {
             id: MarketBoardId.AsxTradeMatchAD,
             name: 'AsxTradeMatchAD',
+            exchangeId: ExchangeId.Asx,
             displayId: StringId.ZenithDataExternalError,
             orderDestination: MarketId.AsxTradeMatch,
         },
         AsxTradeMatchED: {
             id: MarketBoardId.AsxTradeMatchED,
             name: 'AsxTradeMatchED',
+            exchangeId: ExchangeId.Asx,
             displayId: StringId.ZenithDataExternalError,
             orderDestination: MarketId.AsxTradeMatch,
         },
         AsxPureMatch: {
             id: MarketBoardId.AsxPureMatch,
             name: 'AsxPureMatch',
+            exchangeId: ExchangeId.Asx,
             displayId: StringId.MarketBoardIdDisplay_AsxPureMatch,
             orderDestination: MarketId.AsxPureMatch,
         },
         AsxPureMatchEquity1: {
             id: MarketBoardId.AsxPureMatchEquity1,
             name: 'AsxPureMatchEquity1',
+            exchangeId: ExchangeId.Asx,
             displayId: StringId.MarketBoardIdDisplay_AsxPureMatchEquity1,
             orderDestination: MarketId.AsxPureMatch,
         },
         AsxPureMatchEquity2: {
             id: MarketBoardId.AsxPureMatchEquity2,
             name: 'AsxPureMatchEquity2',
+            exchangeId: ExchangeId.Asx,
             displayId: StringId.MarketBoardIdDisplay_AsxPureMatchEquity2,
             orderDestination: MarketId.AsxPureMatch,
         },
         AsxPureMatchEquity3: {
             id: MarketBoardId.AsxPureMatchEquity3,
             name: 'AsxPureMatchEquity3',
+            exchangeId: ExchangeId.Asx,
             displayId: StringId.MarketBoardIdDisplay_AsxPureMatchEquity3,
             orderDestination: MarketId.AsxPureMatch,
         },
         AsxPureMatchEquity4: {
             id: MarketBoardId.AsxPureMatchEquity4,
             name: 'AsxPureMatchEquity4',
+            exchangeId: ExchangeId.Asx,
             displayId: StringId.MarketBoardIdDisplay_AsxPureMatchEquity4,
             orderDestination: MarketId.AsxPureMatch,
         },
         AsxPureMatchEquity5: {
             id: MarketBoardId.AsxPureMatchEquity5,
             name: 'AsxPureMatchEquity5',
+            exchangeId: ExchangeId.Asx,
             displayId: StringId.MarketBoardIdDisplay_AsxPureMatchEquity5,
             orderDestination: MarketId.AsxPureMatch,
         },
         AsxVolumeMatch: {
             id: MarketBoardId.AsxVolumeMatch,
             name: 'AsxVolumeMatch',
+            exchangeId: ExchangeId.Asx,
             displayId: StringId.MarketBoardIdDisplay_AsxVolumeMatch,
             orderDestination: undefined,
         },
         ChixAustFarPoint: {
             id: MarketBoardId.ChixAustFarPoint,
             name: 'ChixAustFarPoint',
+            exchangeId: ExchangeId.Cxa,
             displayId: StringId.MarketBoardIdDisplay_ChixAustFarPoint,
             orderDestination: MarketId.ChixAustFarPoint,
         },
         ChixAustLimit: {
             id: MarketBoardId.ChixAustLimit,
             name: 'ChixAustLimit',
+            exchangeId: ExchangeId.Cxa,
             displayId: StringId.MarketBoardIdDisplay_ChixAustLimit,
             orderDestination: MarketId.ChixAustLimit,
         },
         ChixAustMarketOnClose: {
             id: MarketBoardId.ChixAustMarketOnClose,
             name: 'ChixAustMarketOnClose',
+            exchangeId: ExchangeId.Cxa,
             displayId: StringId.MarketBoardIdDisplay_ChixAustMarketOnClose,
             orderDestination: MarketId.ChixAustMarketOnClose,
         },
         ChixAustMidPoint: {
             id: MarketBoardId.ChixAustMidPoint,
             name: 'ChixAustMidPoint',
+            exchangeId: ExchangeId.Cxa,
             displayId: StringId.MarketBoardIdDisplay_ChixAustMidPoint,
             orderDestination: MarketId.ChixAustMidPoint,
         },
         ChixAustNearPoint: {
             id: MarketBoardId.ChixAustNearPoint,
             name: 'ChixAustNearPoint',
+            exchangeId: ExchangeId.Cxa,
             displayId: StringId.MarketBoardIdDisplay_ChixAustNearPoint,
             orderDestination: MarketId.ChixAustNearPoint,
         },
         NsxMain: {
             id: MarketBoardId.NsxMain,
             name: 'NsxMain',
+            exchangeId: ExchangeId.Nsx,
             displayId: StringId.MarketBoardIdDisplay_NsxMain,
             orderDestination: MarketId.Nsx,
         },
         NsxCommunityBanks: {
             id: MarketBoardId.NsxCommunityBanks,
             name: 'NsxCommunityBanks',
+            exchangeId: ExchangeId.Nsx,
             displayId: StringId.MarketBoardIdDisplay_NsxCommunityBanks,
             orderDestination: MarketId.Nsx,
         },
         NsxIndustrial: {
             id: MarketBoardId.NsxIndustrial,
             name: 'NsxIndustrial',
+            exchangeId: ExchangeId.Nsx,
             displayId: StringId.MarketBoardIdDisplay_NsxIndustrial,
             orderDestination: MarketId.Nsx,
         },
         NsxDebt: {
             id: MarketBoardId.NsxDebt,
             name: 'NsxDebt',
+            exchangeId: ExchangeId.Nsx,
             displayId: StringId.MarketBoardIdDisplay_NsxDebt,
             orderDestination: MarketId.Nsx,
         },
         NsxMiningAndEnergy: {
             id: MarketBoardId.NsxMiningAndEnergy,
             name: 'NsxMiningAndEnergy',
+            exchangeId: ExchangeId.Nsx,
             displayId: StringId.MarketBoardIdDisplay_NsxMiningAndEnergy,
             orderDestination: MarketId.Nsx,
         },
         NsxCertifiedProperty: {
             id: MarketBoardId.NsxCertifiedProperty,
             name: 'NsxCertifiedProperty',
+            exchangeId: ExchangeId.Nsx,
             displayId: StringId.MarketBoardIdDisplay_NsxCertifiedProperty,
             orderDestination: MarketId.Nsx,
         },
         NsxProperty: {
             id: MarketBoardId.NsxProperty,
             name: 'NsxProperty',
+            exchangeId: ExchangeId.Nsx,
             displayId: StringId.MarketBoardIdDisplay_NsxProperty,
             orderDestination: MarketId.Nsx,
         },
         NsxRestricted: {
             id: MarketBoardId.NsxRestricted,
             name: 'NsxRestricted',
+            exchangeId: ExchangeId.Nsx,
             displayId: StringId.MarketBoardIdDisplay_NsxRestricted,
             orderDestination: MarketId.Nsx,
         },
         SimVenture: {
             id: MarketBoardId.SimVenture,
             name: 'SimVenture',
+            exchangeId: ExchangeId.Nsx,
             displayId: StringId.MarketBoardIdDisplay_SimVenture,
             orderDestination: MarketId.SimVenture,
         },
         SouthPacificStockExchangeEquities: {
             id: MarketBoardId.SouthPacificStockExchangeEquities,
             name: 'SouthPacificStockExchangeEquities',
+            exchangeId: ExchangeId.Nsx,
             displayId: StringId.MarketBoardIdDisplay_SouthPacificStockExchangeEquities,
             orderDestination: MarketId.SouthPacific,
         },
         SouthPacificStockExchangeRestricted: {
             id: MarketBoardId.SouthPacificStockExchangeRestricted,
             name: 'SouthPacificStockExchangeRestricted',
+            exchangeId: ExchangeId.Nsx,
             displayId: StringId.MarketBoardIdDisplay_SouthPacificStockExchangeRestricted,
             orderDestination: MarketId.SouthPacific,
         },
         NzxMainBoard: {
             id: MarketBoardId.NzxMainBoard,
             name: 'NzxMainBoard',
+            exchangeId: ExchangeId.Nzx,
             displayId: StringId.MarketBoardIdDisplay_NzxMainBoard,
             orderDestination: undefined,
         },
         NzxSpec: {
             id: MarketBoardId.NzxSpec,
             name: 'NzxSpec',
+            exchangeId: ExchangeId.Nzx,
             displayId: StringId.MarketBoardIdDisplay_NzxSpec,
             orderDestination: undefined,
         },
         NzxFonterraShareholders: {
             id: MarketBoardId.NzxFonterraShareholders,
             name: 'NzxFonterraShareholders',
+            exchangeId: ExchangeId.Nzx,
             displayId: StringId.MarketBoardIdDisplay_NzxFonterraShareholders,
             orderDestination: undefined,
         },
         NzxIndex: {
             id: MarketBoardId.NzxIndex,
             name: 'NzxIndex',
+            exchangeId: ExchangeId.Nzx,
             displayId: StringId.MarketBoardIdDisplay_NzxIndex,
             orderDestination: undefined,
         },
         NzxDebtMarket: {
             id: MarketBoardId.NzxDebtMarket,
             name: 'NzxDebtMarket',
+            exchangeId: ExchangeId.Nzx,
             displayId: StringId.MarketBoardIdDisplay_NzxDebt,
             orderDestination: undefined,
         },
         NzxComm: {
             id: MarketBoardId.NzxComm,
             name: 'NzxComm',
+            exchangeId: ExchangeId.Nzx,
             displayId: StringId.MarketBoardIdDisplay_NzxComm,
             orderDestination: undefined,
         },
         NzxDerivativeFutures: {
             id: MarketBoardId.NzxDerivativeFutures,
             name: 'NzxDerivativeFutures',
+            exchangeId: ExchangeId.Nzx,
             displayId: StringId.MarketBoardIdDisplay_NzxDerivativeFutures,
             orderDestination: undefined,
         },
         NzxDerivativeOptions: {
             id: MarketBoardId.NzxDerivativeOptions,
             name: 'NzxDerivativeOptions',
+            exchangeId: ExchangeId.Nzx,
             displayId: StringId.MarketBoardIdDisplay_NzxDerivativeOptions,
             orderDestination: undefined,
         },
         NzxIndexFutures: {
             id: MarketBoardId.NzxIndexFutures,
             name: 'NzxIndexFutures',
+            exchangeId: ExchangeId.Nzx,
             displayId: StringId.MarketBoardIdDisplay_NzxIndexFutures,
             orderDestination: undefined,
         },
         NzxEOpt: {
             id: MarketBoardId.NzxEOpt,
             name: 'NzxEOpt',
+            exchangeId: ExchangeId.Nzx,
             displayId: StringId.MarketBoardIdDisplay_NzxEOpt,
             orderDestination: undefined,
         },
         NzxMFut: {
             id: MarketBoardId.NzxMFut,
             name: 'NzxMFut',
+            exchangeId: ExchangeId.Nzx,
             displayId: StringId.MarketBoardIdDisplay_NzxMFut,
             orderDestination: undefined,
         },
         NzxMOpt: {
             id: MarketBoardId.NzxMOpt,
             name: 'NzxMOpt',
+            exchangeId: ExchangeId.Nzx,
             displayId: StringId.MarketBoardIdDisplay_NzxMOpt,
             orderDestination: undefined,
         },
         NzxDStgy: {
             id: MarketBoardId.NzxDStgy,
             name: 'NzxDStgy',
+            exchangeId: ExchangeId.Nzx,
             displayId: StringId.MarketBoardIdDisplay_NzxDStgy,
             orderDestination: undefined,
         },
         NzxMStgy: {
             id: MarketBoardId.NzxMStgy,
             name: 'NzxMStgy',
+            exchangeId: ExchangeId.Nzx,
             displayId: StringId.MarketBoardIdDisplay_NzxMStgy,
             orderDestination: undefined,
         },
         MyxNormalMarket: {
             id: MarketBoardId.MyxNormalMarket,
             name: 'MyxNormal',
+            exchangeId: ExchangeId.Myx,
             displayId: StringId.MarketBoardIdDisplay_MyxNormal,
             orderDestination: undefined,
         },
         MyxDirectBusinessTransactionMarket: {
             id: MarketBoardId.MyxDirectBusinessTransactionMarket,
             name: 'MyxDirectBusinessTransaction',
+            exchangeId: ExchangeId.Myx,
             displayId: StringId.MarketBoardIdDisplay_MyxDirectBusinessTransaction,
             orderDestination: undefined,
         },
         MyxIndexMarket: {
             id: MarketBoardId.MyxIndexMarket,
             name: 'MyxIndex',
+            exchangeId: ExchangeId.Myx,
             displayId: StringId.MarketBoardIdDisplay_MyxIndex,
             orderDestination: undefined,
         },
         MyxBuyInMarket: {
             id: MarketBoardId.MyxBuyInMarket,
             name: 'MyxBuyIn',
+            exchangeId: ExchangeId.Myx,
             displayId: StringId.MarketBoardIdDisplay_MyxBuyIn,
             orderDestination: undefined,
         },
         MyxOddLotMarket: {
             id: MarketBoardId.MyxOddLotMarket,
             name: 'MyxOddLot',
+            exchangeId: ExchangeId.Myx,
             displayId: StringId.MarketBoardIdDisplay_MyxOddLot,
             orderDestination: undefined,
         },
         Ptx: {
             id: MarketBoardId.Ptx,
             name: 'Ptx',
+            exchangeId: ExchangeId.Ptx,
             displayId: StringId.MarketBoardIdDisplay_Ptx,
             orderDestination: undefined,
         },
         Fnsx: {
             id: MarketBoardId.Fnsx,
             name: 'Fnsx',
+            exchangeId: ExchangeId.Fnsx,
             displayId: StringId.MarketBoardIdDisplay_Fnsx,
             orderDestination: undefined,
         },
         Fpsx: {
             id: MarketBoardId.Fpsx,
             name: 'Fpsx',
+            exchangeId: ExchangeId.Fpsx,
             displayId: StringId.MarketBoardIdDisplay_Fpsx,
             orderDestination: undefined,
         },
         Cfxt: {
             id: MarketBoardId.Cfxt,
             name: 'Cfxt',
+            exchangeId: ExchangeId.Cfx,
             displayId: StringId.MarketBoardIdDisplay_Cfxt,
             orderDestination: undefined,
         },
@@ -2216,6 +2308,10 @@ export namespace MarketBoard {
     export function tryNameToId(name: string) {
         const index = infos.findIndex(info => info.name === name);
         return index >= 0 ? infos[index].id : undefined;
+    }
+
+    export function idToExchangeId(id: Id) {
+        return infos[id].exchangeId;
     }
 
     export function idToOrderDestination(id: Id) {

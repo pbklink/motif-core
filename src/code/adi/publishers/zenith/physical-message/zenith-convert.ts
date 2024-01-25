@@ -10,7 +10,11 @@ import {
     CommaText,
     concatenateArrayUniquely,
     defined,
-    EnumInfoOutOfOrderError, ErrorCode, Integer,
+    EnumInfoOutOfOrderError,
+    ErrorCode,
+    ErrorCodeWithExtra,
+    ErrorCodeWithExtraErr,
+    Integer,
     Logger,
     mSecsPerDay,
     mSecsPerHour,
@@ -18,15 +22,16 @@ import {
     mSecsPerSec,
     newUndefinableDecimal,
     NotImplementedError,
+    Ok,
     parseIntStrict,
     parseNumberStrict,
+    Result,
     SourceTzOffsetDate,
     SourceTzOffsetDateTime,
     UnexpectedCaseError,
     UnreachableCaseError,
     ZenithDataError,
-    ZenithDataStateError
-} from "../../../../sys/sys-internal-api";
+} from '../../../../sys/sys-internal-api';
 import {
     OrderRequestError as AdiOrderRequestError,
     OrderStatus as AdiOrderStatus,
@@ -63,6 +68,7 @@ import {
     LitIvemId,
     ManagedFundOrderDetails,
     ManagedFundTransaction,
+    MarketBoard,
     MarketBoardId,
     MarketId,
     MarketInfo,
@@ -387,6 +393,16 @@ export namespace ZenithConvert {
                 default: return undefined;
             }
         }
+
+        export function fromId(value: CurrencyId): ZenithProtocol.Currency {
+            switch (value) {
+                case CurrencyId.Aud: return ZenithProtocol.Currency.Aud;
+                case CurrencyId.Usd: return ZenithProtocol.Currency.Usd;
+                case CurrencyId.Myr: return ZenithProtocol.Currency.Myr;
+                case CurrencyId.Gbp: return ZenithProtocol.Currency.Gbp;
+                default: throw new UnreachableCaseError('ZCCFI44478', value);
+            }
+        }
     }
 
     export namespace AuiChangeType {
@@ -522,7 +538,7 @@ export namespace ZenithConvert {
     }
 
     export namespace Exchange {
-        export function toId(value: ZenithProtocol.Exchange): ExchangeId {
+        export function tryToId(value: ZenithProtocol.Exchange): ExchangeId | undefined {
             switch (value) {
                 case ZenithProtocol.Exchange.Asx: return ExchangeId.Asx;
                 case ZenithProtocol.Exchange.Cxa: return ExchangeId.Cxa;
@@ -536,7 +552,7 @@ export namespace ZenithConvert {
                 case ZenithProtocol.Exchange.Cfx: return ExchangeId.Cfx;
                 case ZenithProtocol.Exchange.AsxCxa: return ExchangeId.AsxCxa;
                 default:
-                    throw new UnreachableCaseError('ZCETI84772', value);
+                    return undefined;
             }
         }
 
@@ -560,14 +576,14 @@ export namespace ZenithConvert {
     }
 
     export namespace DataEnvironment {
-        export function toId(value: ZenithProtocol.DataEnvironment) {
+        export function tryToId(value: ZenithProtocol.DataEnvironment) {
             switch (value) {
                 case ZenithProtocol.DataEnvironment.Production: return DataEnvironmentId.Production;
                 case ZenithProtocol.DataEnvironment.Delayed: return DataEnvironmentId.DelayedProduction;
                 case ZenithProtocol.DataEnvironment.Demo: return DataEnvironmentId.Demo;
                 case ZenithProtocol.DataEnvironment.Sample: return DataEnvironmentId.Sample;
                 default:
-                    throw new UnreachableCaseError('ZCEETI22985', value);
+                    return undefined;
             }
         }
 
@@ -650,13 +666,36 @@ export namespace ZenithConvert {
 
     export namespace EnvironmentedExchange {
         export function toId(value: string): EnvironmentedExchangeId {
-            const components = ExchangeMarketBoardParser.parse(value);
-            if (components.exchange === undefined) {
-                throw new ZenithDataError(ErrorCode.ZCEETIP122995, `${value}`);
+            const result = tryToId(value, true);
+            if (result.isErr()) {
+                const error = result.error;
+                throw new AssertInternalError(error.code, error.extra); // since we are trying harder, undefined is never returned
             } else {
-                return {
-                    exchangeId: Exchange.toId(components.exchange),
-                    environmentId: DataEnvironment.toId(components.environment)
+                return result.value;
+            }
+        }
+
+        export function tryToId(value: string, tryHarder: boolean): Result<EnvironmentedExchangeId, ErrorCodeWithExtra> {
+            const parseResult = ExchangeMarketBoard.tryParse(value);
+            if (parseResult.isErr()) {
+                const { code, extra } = parseResult.error;
+                throw new ZenithDataError(code, extra);
+            } else {
+                const parts = parseResult.value;
+                const exchangeId = Exchange.tryToId(parts.exchange);
+                if (exchangeId === undefined) {
+                    return new ErrorCodeWithExtraErr({ code: ErrorCode.EnvironmentedExchange_InvalidExchange, extra: parts.exchange });
+                } else {
+                    const environmentId = DataEnvironment.tryToId(parts.environment);
+                    if (environmentId === undefined) {
+                        return new ErrorCodeWithExtraErr({ code: ErrorCode.EnvironmentedExchange_InvalidEnvironment, extra: parts.environment });
+                    } else {
+                        const environmentedExchangeId: EnvironmentedExchangeId = {
+                            exchangeId,
+                            environmentId
+                        }
+                        return new Ok(environmentedExchangeId);
+                    }
                 }
             }
         }
@@ -681,23 +720,43 @@ export namespace ZenithConvert {
     }
 
     export namespace EnvironmentedMarket {
-        class M1M2 {
-            constructor(public m1?: string, public m2?: string) { }
+        export function toId(value: string): EnvironmentedMarketId {
+            const result = tryToId(value, true);
+            if (result.isErr()) {
+                const error = result.error;
+                throw new AssertInternalError(error.code, error.extra); // since we are trying harder, undefined is never returned
+            } else {
+                return result.value;
+            }
         }
 
-        export function toId(value: string): EnvironmentedMarketId {
-            const components = ExchangeMarketBoardParser.parse(value);
-            if (components.exchange === undefined) {
-                throw new ZenithDataError(ErrorCode.ZCEMTIP2244995, `${value}`);
+        export function tryToId(value: string, tryHarder: boolean): Result<EnvironmentedMarketId, ErrorCodeWithExtra> {
+            const tryParseResult = ExchangeMarketBoard.tryParse(value);
+            if (tryParseResult.isErr()) {
+                const { code, extra } = tryParseResult.error;
+                throw new ZenithDataError(code, extra);
             } else {
-                const exchangeId = Exchange.toId(components.exchange);
-                const environmentId = DataEnvironment.toId(components.environment);
-                const marketId = calculateMarketId(exchangeId, components.m1, components.m2);
-
-                return {
-                    marketId,
-                    environmentId
-                };
+                const parts = tryParseResult.value;
+                const exchangeId = Exchange.tryToId(parts.exchange);
+                if (exchangeId === undefined) {
+                    return new ErrorCodeWithExtraErr({ code: ErrorCode.EnvironmentedMarket_InvalidExchange, extra: parts.exchange });
+                } else {
+                    const environmentId = DataEnvironment.tryToId(parts.environment);
+                    if (environmentId === undefined) {
+                        return new ErrorCodeWithExtraErr({ code: ErrorCode.EnvironmentedMarket_InvalidEnvironment, extra: parts.environment });
+                    } else {
+                        const marketId = tryCalculateMarketId(exchangeId, parts.m1, parts.m2, tryHarder);
+                        if (marketId === undefined) {
+                            return new ErrorCodeWithExtraErr({ code: ErrorCode.EnvironmentedMarket_InvalidMarket, extra: value });
+                        } else {
+                            const environmentedMarketId: EnvironmentedMarketId = {
+                                marketId,
+                                environmentId
+                            }
+                            return new Ok(environmentedMarketId);
+                        }
+                    }
+                }
             }
         }
 
@@ -711,29 +770,13 @@ export namespace ZenithConvert {
             return fromM1M2(m1M2, marketId);
         }
 
-        function fromM1M2(m1M2: M1M2, marketId: MarketId, environmentId?: DataEnvironmentId): string {
+        function fromM1M2(m1M2: ExchangeMarketBoard.M1M2, marketId: MarketId, environmentId?: DataEnvironmentId): string {
             const exchangeId = MarketInfo.idToExchangeId(marketId);
-            const { exchange, enclosedEnvironment } = EnvironmentedExchange.calculateFrom(exchangeId, environmentId);
-
-            const m2 = m1M2.m2;
-            const m2ZeroLength = m2 === undefined || m2.length === 0;
-
-            const m1 = m1M2.m1;
-            const m1ZeroLength = m1 === undefined || m1.length === 0;
-            let delimitedM1: string;
-            if (m1ZeroLength) {
-                delimitedM1 = m2ZeroLength ? '' : ZenithProtocol.marketDelimiter;
-            } else {
-                delimitedM1 = ZenithProtocol.marketDelimiter + m1;
-            }
-
-            const delimitedM2 = m2ZeroLength ? '' : ZenithProtocol.marketDelimiter + m2;
-
-            return exchange + delimitedM1 + delimitedM2 + enclosedEnvironment;
+            return ExchangeMarketBoard.create(m1M2, exchangeId, environmentId);
         }
 
-        function calculateMarketId(exchangeId: ExchangeId, m1: string | undefined, m2: string | undefined): MarketId {
-
+        function tryCalculateMarketId(exchangeId: ExchangeId, m1: string | undefined, m2: string | undefined, tryHarder: boolean): MarketId | undefined {
+            // need to implement tryHarder
             const defaultMarket = ExchangeInfo.idToDefaultMarketId(exchangeId);
 
             switch (exchangeId) {
@@ -892,33 +935,33 @@ export namespace ZenithConvert {
 
         function calculateM1M2(marketId: MarketId) {
             switch (marketId) {
-                case MarketId.AsxTradeMatch: return new M1M2();
-                case MarketId.AsxBookBuild: return new M1M2(ZenithProtocol.Market1Node.AsxBookBuild);
-                case MarketId.AsxTradeMatchCentrePoint: return new M1M2(undefined, ZenithProtocol.Market2Node.AsxCentrePoint);
-                case MarketId.AsxPureMatch: return new M1M2(ZenithProtocol.Market1Node.AsxPureMatch);
-                case MarketId.AsxVolumeMatch: return new M1M2(ZenithProtocol.Market1Node.AsxVolumeMatch);
+                case MarketId.AsxTradeMatch: return new ExchangeMarketBoard.M1M2();
+                case MarketId.AsxBookBuild: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market1Node.AsxBookBuild);
+                case MarketId.AsxTradeMatchCentrePoint: return new ExchangeMarketBoard.M1M2(undefined, ZenithProtocol.Market2Node.AsxCentrePoint);
+                case MarketId.AsxPureMatch: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market1Node.AsxPureMatch);
+                case MarketId.AsxVolumeMatch: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market1Node.AsxVolumeMatch);
                 // NOTE: for ChiX, see https://paritech.myjetbrains.com/youtrack/issue/MOTIF-162
-                case MarketId.ChixAustFarPoint: return new M1M2();
-                case MarketId.ChixAustLimit: return new M1M2();
-                case MarketId.ChixAustMarketOnClose: return new M1M2();
-                case MarketId.ChixAustMidPoint: return new M1M2();
-                case MarketId.ChixAustNearPoint: return new M1M2();
-                case MarketId.Nsx: return new M1M2(ZenithProtocol.Market1Node.NsxNsx);
-                case MarketId.SimVenture: return new M1M2(ZenithProtocol.Market1Node.SimVenture);
-                case MarketId.SouthPacific: return new M1M2(ZenithProtocol.Market1Node.SouthPacific);
-                case MarketId.Nzx: return new M1M2(ZenithProtocol.Market1Node.NzxMain);
-                case MarketId.MyxNormal: return new M1M2();
-                case MarketId.MyxDirectBusiness: return new M1M2(ZenithProtocol.Market1Node.MyxNormal,
+                case MarketId.ChixAustFarPoint: return new ExchangeMarketBoard.M1M2();
+                case MarketId.ChixAustLimit: return new ExchangeMarketBoard.M1M2();
+                case MarketId.ChixAustMarketOnClose: return new ExchangeMarketBoard.M1M2();
+                case MarketId.ChixAustMidPoint: return new ExchangeMarketBoard.M1M2();
+                case MarketId.ChixAustNearPoint: return new ExchangeMarketBoard.M1M2();
+                case MarketId.Nsx: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market1Node.NsxNsx);
+                case MarketId.SimVenture: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market1Node.SimVenture);
+                case MarketId.SouthPacific: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market1Node.SouthPacific);
+                case MarketId.Nzx: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market1Node.NzxMain);
+                case MarketId.MyxNormal: return new ExchangeMarketBoard.M1M2();
+                case MarketId.MyxDirectBusiness: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market1Node.MyxNormal,
                     ZenithProtocol.Market2Node.MyxDirectBusinessTransactionMarket);
-                case MarketId.MyxIndex: return new M1M2(ZenithProtocol.Market1Node.MyxNormal,
+                case MarketId.MyxIndex: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market1Node.MyxNormal,
                     ZenithProtocol.Market2Node.MyxIndexMarket);
-                case MarketId.MyxOddLot: return new M1M2(ZenithProtocol.Market1Node.MyxOddLot);
-                case MarketId.MyxBuyIn: return new M1M2(ZenithProtocol.Market1Node.MyxBuyIn);
-                case MarketId.Ptx: return new M1M2();
-                case MarketId.Fnsx: return new M1M2();
-                case MarketId.Fpsx: return new M1M2();
-                case MarketId.Cfxt: return new M1M2();
-                case MarketId.AsxCxa: return new M1M2();
+                case MarketId.MyxOddLot: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market1Node.MyxOddLot);
+                case MarketId.MyxBuyIn: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market1Node.MyxBuyIn);
+                case MarketId.Ptx: return new ExchangeMarketBoard.M1M2();
+                case MarketId.Fnsx: return new ExchangeMarketBoard.M1M2();
+                case MarketId.Fpsx: return new ExchangeMarketBoard.M1M2();
+                case MarketId.Cfxt: return new ExchangeMarketBoard.M1M2();
+                case MarketId.AsxCxa: return new ExchangeMarketBoard.M1M2();
                 case MarketId.Calastone: throw new NotImplementedError('ZCEMCMMN29998');
                 default: throw new UnreachableCaseError('ZCEMCMMU33997', marketId);
             }
@@ -926,19 +969,19 @@ export namespace ZenithConvert {
 
         function calculateTradingM1M2(marketId: MarketId) {
             switch (marketId) {
-                case MarketId.Ptx: return new M1M2(ZenithProtocol.Market1Node.PtxPtx, ZenithProtocol.Market2Node.Ptx);
-                case MarketId.Fnsx: return new M1M2(ZenithProtocol.Market1Node.FnsxFnsx, ZenithProtocol.Market2Node.Fnsx);
-                case MarketId.Fpsx: return new M1M2(ZenithProtocol.Market1Node.FpsxFpsx, ZenithProtocol.Market2Node.Fpsx);
-                case MarketId.Cfxt: return new M1M2(ZenithProtocol.Market1Node.CfxCfx, ZenithProtocol.Market2Node.Cfxt);
+                case MarketId.Ptx: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market1Node.PtxPtx, ZenithProtocol.Market2Node.Ptx);
+                case MarketId.Fnsx: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market1Node.FnsxFnsx, ZenithProtocol.Market2Node.Fnsx);
+                case MarketId.Fpsx: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market1Node.FpsxFpsx, ZenithProtocol.Market2Node.Fpsx);
+                case MarketId.Cfxt: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market1Node.CfxCfx, ZenithProtocol.Market2Node.Cfxt);
 
-                case MarketId.MyxNormal: return new M1M2(ZenithProtocol.Market1Node.MyxNormal, ZenithProtocol.Market2Node.MyxNormalMarket);
-                case MarketId.MyxDirectBusiness: return new M1M2(ZenithProtocol.Market1Node.MyxNormal,
+                case MarketId.MyxNormal: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market1Node.MyxNormal, ZenithProtocol.Market2Node.MyxNormalMarket);
+                case MarketId.MyxDirectBusiness: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market1Node.MyxNormal,
                     ZenithProtocol.Market2Node.MyxDirectBusinessTransactionMarket);
-                case MarketId.MyxOddLot: return new M1M2(ZenithProtocol.Market1Node.MyxOddLot);
-                case MarketId.MyxBuyIn: return new M1M2(ZenithProtocol.Market1Node.MyxBuyIn);
+                case MarketId.MyxOddLot: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market1Node.MyxOddLot);
+                case MarketId.MyxBuyIn: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market1Node.MyxBuyIn);
 
-                case MarketId.AsxTradeMatch: return new M1M2();
-                case MarketId.AsxTradeMatchCentrePoint: return new M1M2(undefined, ZenithProtocol.Market2Node.AsxCentrePoint);
+                case MarketId.AsxTradeMatch: return new ExchangeMarketBoard.M1M2();
+                case MarketId.AsxTradeMatchCentrePoint: return new ExchangeMarketBoard.M1M2(undefined, ZenithProtocol.Market2Node.AsxCentrePoint);
                 case MarketId.AsxBookBuild:
                 case MarketId.AsxPureMatch:
                 case MarketId.AsxVolumeMatch:
@@ -961,22 +1004,53 @@ export namespace ZenithConvert {
 
     export namespace EnvironmentedMarketBoard {
         export function toId(value: string): EnvironmentedMarketBoardId {
-            const components = ExchangeMarketBoardParser.parse(value);
-            if (components.exchange === undefined) {
-                throw new ZenithDataError(ErrorCode.ZCEMBTIE54253399, `${value}`);
+            const result = tryToId(value, true);
+            if (result.isErr()) {
+                const error = result.error;
+                throw new AssertInternalError(error.code, error.extra); // since we are trying harder, undefined is never returned
             } else {
-                const exchangeId = Exchange.toId(components.exchange);
-                const environmentId = DataEnvironment.toId(components.environment);
-                const marketBoardId = calculateMarketBoardId(exchangeId, components.m1, components.m2);
-
-                return {
-                    marketBoardId,
-                    environmentId
-                };
+                return result.value;
             }
         }
 
-        function calculateMarketBoardId(exchangeId: ExchangeId, m1: string | undefined, m2: string | undefined): MarketBoardId {
+        export function tryToId(value: string, tryHarder: boolean): Result<EnvironmentedMarketBoardId, ErrorCodeWithExtra> {
+            const tryParseResult = ExchangeMarketBoard.tryParse(value);
+            if (tryParseResult.isErr()) {
+                const { code, extra } = tryParseResult.error;
+                throw new ZenithDataError(code, extra);
+            } else {
+                const parts = tryParseResult.value;
+                const exchangeId = Exchange.tryToId(parts.exchange);
+                if (exchangeId === undefined) {
+                    return new ErrorCodeWithExtraErr({ code: ErrorCode.EnvironmentedMarketBoard_InvalidExchange, extra: parts.exchange });
+                } else {
+                    const environmentId = DataEnvironment.tryToId(parts.environment);
+                    if (environmentId === undefined) {
+                        return new ErrorCodeWithExtraErr({ code: ErrorCode.EnvironmentedMarketBoard_InvalidEnvironment, extra: parts.environment });
+                    } else {
+                        const marketBoardId = tryCalculateMarketBoardId(exchangeId, parts.m1, parts.m2, tryHarder);
+
+                        if (marketBoardId === undefined) {
+                            return new ErrorCodeWithExtraErr({ code: ErrorCode.EnvironmentedMarketBoard_InvalidMarketBoard, extra: value});
+                        } else {
+                            const environmentedMarketBoardId: EnvironmentedMarketBoardId = {
+                                marketBoardId,
+                                environmentId
+                            }
+                            return new Ok(environmentedMarketBoardId);
+                        }
+                    }
+                }
+            }
+        }
+
+        export function fromId(marketBoardId: MarketBoardId, environmentId?: DataEnvironmentId): string {
+            const m1M2 = calculateM1M2(marketBoardId);
+            const exchangeId = MarketBoard.idToExchangeId(marketBoardId);
+            return ExchangeMarketBoard.create(m1M2, exchangeId, environmentId);
+        }
+
+        function tryCalculateMarketBoardId(exchangeId: ExchangeId, m1: string | undefined, m2: string | undefined, tryHarder: boolean): MarketBoardId | undefined {
             /* eslint-disable max-len */
             switch (exchangeId) {
                 case ExchangeId.Asx:
@@ -1006,8 +1080,12 @@ export namespace ZenithConvert {
                                 case ZenithProtocol.Market2Node.AsxTradeMatchAD: return MarketBoardId.AsxTradeMatchAD;
                                 case ZenithProtocol.Market2Node.AsxTradeMatchED: return MarketBoardId.AsxTradeMatchED;
                                 default:
-                                    Logger.logDataError('ZCEMCMBIAT223', `${m2}: Using Tradematch`);
-                                    return MarketBoardId.AsxTradeMatch;
+                                    if (tryHarder) {
+                                        Logger.logDataError('ZCEMCMBIAT223', `${m2}: Using Tradematch`);
+                                        return MarketBoardId.AsxTradeMatch;
+                                    } else {
+                                        return undefined;
+                                    }
                             }
 
                         case ZenithProtocol.Market1Node.AsxPureMatch:
@@ -1019,21 +1097,47 @@ export namespace ZenithConvert {
                                 case ZenithProtocol.Market2Node.AsxPureMatchEquity4: return MarketBoardId.AsxPureMatchEquity4;
                                 case ZenithProtocol.Market2Node.AsxPureMatchEquity5: return MarketBoardId.AsxPureMatchEquity5;
                                 default:
-                                    Logger.logDataError('ZCEMCMBIAP847', `${m2}: Using Purematch`);
-                                    return MarketBoardId.AsxPureMatch;
+                                    if (tryHarder) {
+                                        Logger.logDataError('ZCEMCMBIAP847', `${m2}: Using Purematch`);
+                                        return MarketBoardId.AsxPureMatch;
+                                    } else {
+                                        return undefined;
+                                    }
                             }
-                        default: throw new ZenithDataError(ErrorCode.ZCEMCMBAD39971, `${m1 ?? '<undefined>'}`);
+                        default:
+                            if (tryHarder) {
+                                throw new ZenithDataError(ErrorCode.ZCEMCMBAD39971, `${m1 ?? '<undefined>'}`);
+                            } else {
+                                return undefined;
+                            }
                     }
+
                 case ExchangeId.Cxa:
                     switch (m2) {
-                        case undefined: throw new ZenithDataError(ErrorCode.ZCEMCMBCU11008, '');
+                        case undefined:
+                            if (tryHarder) {
+                                throw new ZenithDataError(ErrorCode.ZCEMCMBCU11008, '');
+                            } else {
+                                return undefined;
+                            }
                         case ZenithProtocol.Market2Node.ChixAustFarPoint: return MarketBoardId.ChixAustFarPoint;
                         case ZenithProtocol.Market2Node.ChixAustLimit: return MarketBoardId.ChixAustLimit;
                         case ZenithProtocol.Market2Node.ChixAustMarketOnClose: return MarketBoardId.ChixAustMarketOnClose;
                         case ZenithProtocol.Market2Node.ChixAustMidPoint: return MarketBoardId.ChixAustMidPoint;
                         case ZenithProtocol.Market2Node.ChixAustNearPoint: return MarketBoardId.ChixAustNearPoint;
-                        default: throw new ZenithDataError(ErrorCode.ZCEMCMBCD11136, `${m2}`);
+                        default:
+                            if (tryHarder) {
+                                throw new ZenithDataError(ErrorCode.ZCEMCMBCD11136, `${m2}`);
+                            } else {
+                                return undefined;
+                            }
                     }
+
+                case ExchangeId.AsxCxa:
+                    throw new AssertInternalError('ZCEMBTCMBIAC41987');
+
+                case ExchangeId.Calastone:
+                    throw new AssertInternalError('ZCEMBTCMBIC41987');
 
                 case ExchangeId.Nsx:
                     switch (m1) {
@@ -1041,8 +1145,12 @@ export namespace ZenithConvert {
                         case ZenithProtocol.Market1Node.NsxNsx:
                             switch (m2) {
                                 case undefined:
-                                    Logger.logDataError('ZCEMCMBNNU33885', 'Using NSX Main');
-                                    return MarketBoardId.NsxMain;
+                                    if (tryHarder) {
+                                        Logger.logDataError('ZCEMCMBNNU33885', 'Using NSX Main');
+                                        return MarketBoardId.NsxMain;
+                                    } else {
+                                        return undefined;
+                                    }
                                 case ZenithProtocol.Market2Node.NsxCommunityBanks: return MarketBoardId.NsxCommunityBanks;
                                 case ZenithProtocol.Market2Node.NsxIndustrial: return MarketBoardId.NsxIndustrial;
                                 case ZenithProtocol.Market2Node.NsxDebt: return MarketBoardId.NsxDebt;
@@ -1051,32 +1159,52 @@ export namespace ZenithConvert {
                                 case ZenithProtocol.Market2Node.NsxProperty: return MarketBoardId.NsxProperty;
                                 case ZenithProtocol.Market2Node.NsxRestricted: return MarketBoardId.NsxRestricted;
                                 default:
-                                    Logger.logDataError('ZCEMCMBNND77541', `${m2}: Using NSX Main`);
-                                    return MarketBoardId.NsxMain;
+                                    if (tryHarder) {
+                                        Logger.logDataError('ZCEMCMBNND77541', `${m2}: Using NSX Main`);
+                                        return MarketBoardId.NsxMain;
+                                    } else {
+                                        return undefined;
+                                    }
                             }
                         case ZenithProtocol.Market1Node.SouthPacific:
                             switch (m2) {
                                 case undefined:
-                                    Logger.logDataError('ZCEMCMBNSPU33997', 'Using NSX Main');
-                                    return MarketBoardId.NsxMain;
+                                    if (tryHarder) {
+                                        Logger.logDataError('ZCEMCMBNSPU33997', 'Using NSX Main');
+                                        return MarketBoardId.NsxMain;
+                                    } else {
+                                        return undefined;
+                                    }
                                 case ZenithProtocol.Market2Node.SouthPacificStockExchangeEquities: return MarketBoardId.SouthPacificStockExchangeEquities;
                                 case ZenithProtocol.Market2Node.SouthPacificStockExchangeRestricted: return MarketBoardId.SouthPacificStockExchangeRestricted;
                                 default:
-                                    Logger.logDataError('ZCEMCMBNSPD23232', `${m2}: Using NSX Main`);
-                                    return MarketBoardId.NsxMain;
+                                    if (tryHarder) {
+                                        Logger.logDataError('ZCEMCMBNSPD23232', `${m2}: Using NSX Main`);
+                                        return MarketBoardId.NsxMain;
+                                    } else {
+                                        return undefined;
+                                    }
                             }
 
                         default:
-                            Logger.logDataError('ZCEMCMBND55558', `${m1 ?? '<undefined>'}: Using NSX Main`);
-                            return MarketBoardId.NsxMain;
+                            if (tryHarder) {
+                                Logger.logDataError('ZCEMCMBND55558', `${m1 ?? '<undefined>'}: Using NSX Main`);
+                                return MarketBoardId.NsxMain;
+                            } else {
+                                return undefined;
+                            }
                     }
                 case ExchangeId.Nzx:
                     switch (m1) {
                         case ZenithProtocol.Market1Node.NzxMain:
                             switch (m2) {
                                 case undefined:
-                                    Logger.logDataError('ZCEMBCMBINZMU66685', 'Using NZX Main');
-                                    return MarketBoardId.NzxMainBoard;
+                                    if (tryHarder) {
+                                        Logger.logDataError('ZCEMBCMBINZMU66685', 'Using NZX Main');
+                                        return MarketBoardId.NzxMainBoard;
+                                    } else {
+                                        return undefined;
+                                    }
                                 case ZenithProtocol.Market2Node.NzxMainBoard: return MarketBoardId.NzxMainBoard;
                                 case ZenithProtocol.Market2Node.NzxSpec: return MarketBoardId.NzxSpec;
                                 case ZenithProtocol.Market2Node.NzxFonterraShareholders: return MarketBoardId.NzxFonterraShareholders;
@@ -1092,12 +1220,20 @@ export namespace ZenithConvert {
                                 case ZenithProtocol.Market2Node.NzxDStgy: return MarketBoardId.NzxDStgy;
                                 case ZenithProtocol.Market2Node.NzxMStgy: return MarketBoardId.NzxMStgy;
                                 default:
-                                    Logger.logDataError('ZCEMBCMBINZMD23239', `${m2}: Using NZX Main`);
-                                    return MarketBoardId.NzxMainBoard;
+                                    if (tryHarder) {
+                                        Logger.logDataError('ZCEMBCMBINZMD23239', `${m2}: Using NZX Main`);
+                                        return MarketBoardId.NzxMainBoard;
+                                    } else {
+                                        return undefined;
+                                    }
                             }
                         default:
-                            Logger.logDataError('ZCEMBCMBINZD77559', `${m1 ?? '<undefined>'}: Using NZX Main`);
-                            return MarketBoardId.NzxMainBoard;
+                            if (tryHarder) {
+                                Logger.logDataError('ZCEMBCMBINZD77559', `${m1 ?? '<undefined>'}: Using NZX Main`);
+                                return MarketBoardId.NzxMainBoard;
+                            } else {
+                                return undefined;
+                            }
                     }
                 case ExchangeId.Myx:
                     switch (m1) {
@@ -1107,21 +1243,31 @@ export namespace ZenithConvert {
                                 case ZenithProtocol.Market2Node.MyxIndexMarket: return MarketBoardId.MyxIndexMarket;
                                 case ZenithProtocol.Market2Node.MyxDirectBusinessTransactionMarket: return MarketBoardId.MyxDirectBusinessTransactionMarket;
                                 default:
-                                    Logger.logDataError('ZCEMCMBIMYXN239987', `Unknown "${m2 ?? '<undefined>'}": Using MYX Normal`);
-                                    return MarketBoardId.MyxNormalMarket;
+                                    if (tryHarder) {
+                                        Logger.logDataError('ZCEMCMBIMYXN239987', `Unknown "${m2 ?? '<undefined>'}": Using MYX Normal`);
+                                        return MarketBoardId.MyxNormalMarket;
+                                    } else {
+                                        return undefined;
+                                    }
                             }
                         case ZenithProtocol.Market1Node.MyxBuyIn:
                             if (m2 !== undefined) {
-                                Logger.logDataError('ZCEMCMBIMYXBI39286', `Unexpected "${m2}": Using MYX BuyIn`);
+                                if (tryHarder) {
+                                    Logger.logDataError('ZCEMCMBIMYXBI39286', `Unexpected "${m2}": Using MYX BuyIn`);
+                                }
                             }
                             return MarketBoardId.MyxBuyInMarket;
                         case ZenithProtocol.Market1Node.MyxOddLot:
                             if (m2 !== undefined) {
-                                Logger.logDataError('ZCEMCMBIMYXOL88453', `Unexpected "${m2}": Using MYX OddLot`);
+                                if (tryHarder) {
+                                    Logger.logDataError('ZCEMCMBIMYXOL88453', `Unexpected "${m2}": Using MYX OddLot`);
+                                }
                             }
                             return MarketBoardId.MyxOddLotMarket;
                         default:
-                            Logger.logDataError('ZCEMCMBIMYXD12995', `Unsupported ${m1 ?? '<undefined>'}: Using MYX Normal`);
+                            if (tryHarder) {
+                                Logger.logDataError('ZCEMCMBIMYXD12995', `Unsupported ${m1 ?? '<undefined>'}: Using MYX Normal`);
+                            }
                             return MarketBoardId.MyxNormalMarket;
                     }
                 case ExchangeId.Ptx:
@@ -1129,37 +1275,130 @@ export namespace ZenithConvert {
                         case undefined: return MarketBoardId.Ptx;
                         case ZenithProtocol.Market2Node.Ptx: return MarketBoardId.Ptx;
                         default:
-                            throw new ZenithDataError(ErrorCode.ZCEMCMBP39394, `m1: "${m1 ?? '<undefined>'}" m2: "${m2}"`);
+                            if (tryHarder) {
+                                throw new ZenithDataError(ErrorCode.ZCEMCMBP39394, `m1: "${m1 ?? '<undefined>'}" m2: "${m2}"`);
+                            } else {
+                                return undefined;
+                            }
                     }
                 case ExchangeId.Fnsx:
                     switch (m2) {
                         case undefined: return MarketBoardId.Fnsx;
                         case ZenithProtocol.Market2Node.Fnsx: return MarketBoardId.Fnsx;
                         default:
-                            throw new ZenithDataError(ErrorCode.ZCEMCMBFN39394, `m1: "${m1 ?? '<undefined>'}" m2: "${m2}"`);
+                            if (tryHarder) {
+                                throw new ZenithDataError(ErrorCode.ZCEMCMBFN39394, `m1: "${m1 ?? '<undefined>'}" m2: "${m2}"`);
+                            } else {
+                                return undefined;
+                            }
                     }
                 case ExchangeId.Fpsx:
                     switch (m2) {
                         case undefined: return MarketBoardId.Fpsx;
                         case ZenithProtocol.Market2Node.Fpsx: return MarketBoardId.Fpsx;
                         default:
-                            throw new ZenithDataError(ErrorCode.ZCEMCMBFN39394, `m1: "${m1 ?? '<undefined>'}" m2: "${m2}"`);
+                            if (tryHarder) {
+                                throw new ZenithDataError(ErrorCode.ZCEMCMBFN39394, `m1: "${m1 ?? '<undefined>'}" m2: "${m2}"`);
+                            } else {
+                                return undefined;
+                            }
                     }
                 case ExchangeId.Cfx:
                     switch (m2) {
                         case undefined: return MarketBoardId.Cfxt;
                         case ZenithProtocol.Market2Node.Cfxt: return MarketBoardId.Cfxt;
                         default:
-                            throw new ZenithDataError(ErrorCode.ZenithCalculateMarketBoardId_UnsupportedCfxM2Node, `m1: "${m1 ?? '<undefined>'}" m2: "${m2}"`);
+                            if (tryHarder) {
+                                throw new ZenithDataError(ErrorCode.ZenithCalculateMarketBoardId_UnsupportedCfxM2Node, `m1: "${m1 ?? '<undefined>'}" m2: "${m2}"`);
+                            } else {
+                                return undefined;
+                            }
                     }
                 default:
-                    throw new ZenithDataError(ErrorCode.ZCEMCMBD56569, '');
+                    throw new UnreachableCaseError('ZCEMBTCMBI34987', exchangeId);
             }
             /* eslint-enable max-len */
         }
+
+        function calculateM1M2(marketBoardId: MarketBoardId): ExchangeMarketBoard.M1M2 {
+            switch (marketBoardId) {
+                case MarketBoardId.AsxBookBuild: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market1Node.AsxBookBuild)
+                case MarketBoardId.AsxTradeMatchCentrePoint:
+                case MarketBoardId.AsxTradeMatch: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market1Node.AsxTradeMatch);
+                case MarketBoardId.AsxTradeMatchAgric: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market1Node.AsxTradeMatch, ZenithProtocol.Market2Node.AsxTradeMatchAgric);
+                case MarketBoardId.AsxTradeMatchAus: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market1Node.AsxTradeMatch, ZenithProtocol.Market2Node.AsxTradeMatchAus);
+                case MarketBoardId.AsxTradeMatchDerivatives: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market1Node.AsxTradeMatch, ZenithProtocol.Market2Node.AsxTradeMatchDerivatives);
+                case MarketBoardId.AsxTradeMatchEquity1: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market1Node.AsxTradeMatch, ZenithProtocol.Market2Node.AsxTradeMatchEquity1);
+                case MarketBoardId.AsxTradeMatchEquity2: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market1Node.AsxTradeMatch, ZenithProtocol.Market2Node.AsxTradeMatchEquity2);
+                case MarketBoardId.AsxTradeMatchEquity3: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market1Node.AsxTradeMatch, ZenithProtocol.Market2Node.AsxTradeMatchEquity3);
+                case MarketBoardId.AsxTradeMatchEquity4: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market1Node.AsxTradeMatch, ZenithProtocol.Market2Node.AsxTradeMatchEquity4);
+                case MarketBoardId.AsxTradeMatchEquity5: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market1Node.AsxTradeMatch, ZenithProtocol.Market2Node.AsxTradeMatchEquity5);
+                case MarketBoardId.AsxTradeMatchIndex: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market1Node.AsxTradeMatch, ZenithProtocol.Market2Node.AsxTradeMatchIndex);
+                case MarketBoardId.AsxTradeMatchIndexDerivatives: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market1Node.AsxTradeMatch, ZenithProtocol.Market2Node.AsxTradeMatchIndexDerivatives);
+                case MarketBoardId.AsxTradeMatchInterestRate: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market1Node.AsxTradeMatch, ZenithProtocol.Market2Node.AsxTradeMatchInterestRate);
+                case MarketBoardId.AsxTradeMatchPrivate: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market1Node.AsxTradeMatch, ZenithProtocol.Market2Node.AsxTradeMatchPrivate);
+                case MarketBoardId.AsxTradeMatchQuoteDisplayBoard: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market1Node.AsxTradeMatch, ZenithProtocol.Market2Node.AsxTradeMatchQuoteDisplayBoard);
+                case MarketBoardId.AsxTradeMatchPractice: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market1Node.AsxTradeMatch, ZenithProtocol.Market2Node.AsxTradeMatchPractice);
+                case MarketBoardId.AsxTradeMatchWarrants: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market1Node.AsxTradeMatch, ZenithProtocol.Market2Node.AsxTradeMatchWarrants);
+                case MarketBoardId.AsxTradeMatchAD: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market1Node.AsxTradeMatch, ZenithProtocol.Market2Node.AsxTradeMatchAD);
+                case MarketBoardId.AsxTradeMatchED: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market1Node.AsxTradeMatch, ZenithProtocol.Market2Node.AsxTradeMatchED);
+                case MarketBoardId.AsxPureMatch: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market1Node.AsxPureMatch);
+                case MarketBoardId.AsxPureMatchEquity1: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market1Node.AsxPureMatch, ZenithProtocol.Market2Node.AsxPureMatchEquity1);
+                case MarketBoardId.AsxPureMatchEquity2: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market1Node.AsxPureMatch, ZenithProtocol.Market2Node.AsxPureMatchEquity2);
+                case MarketBoardId.AsxPureMatchEquity3: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market1Node.AsxPureMatch, ZenithProtocol.Market2Node.AsxPureMatchEquity3);
+                case MarketBoardId.AsxPureMatchEquity4: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market1Node.AsxPureMatch, ZenithProtocol.Market2Node.AsxPureMatchEquity4);
+                case MarketBoardId.AsxPureMatchEquity5: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market1Node.AsxPureMatch, ZenithProtocol.Market2Node.AsxPureMatchEquity5);
+                case MarketBoardId.AsxVolumeMatch: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market1Node.AsxVolumeMatch);
+                case MarketBoardId.ChixAustFarPoint: return new ExchangeMarketBoard.M1M2(undefined, ZenithProtocol.Market2Node.ChixAustFarPoint);
+                case MarketBoardId.ChixAustLimit: return new ExchangeMarketBoard.M1M2(undefined, ZenithProtocol.Market2Node.ChixAustLimit);
+                case MarketBoardId.ChixAustMarketOnClose: return new ExchangeMarketBoard.M1M2(undefined, ZenithProtocol.Market2Node.ChixAustMarketOnClose);
+                case MarketBoardId.ChixAustMidPoint: return new ExchangeMarketBoard.M1M2(undefined, ZenithProtocol.Market2Node.ChixAustMidPoint);
+                case MarketBoardId.ChixAustNearPoint: return new ExchangeMarketBoard.M1M2(undefined, ZenithProtocol.Market2Node.ChixAustNearPoint);
+                case MarketBoardId.NsxMain: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market1Node.SimVenture);
+                case MarketBoardId.NsxCommunityBanks: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market1Node.SimVenture, ZenithProtocol.Market2Node.NsxCommunityBanks);
+                case MarketBoardId.NsxIndustrial: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market1Node.SimVenture, ZenithProtocol.Market2Node.NsxIndustrial);
+                case MarketBoardId.NsxDebt: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market1Node.SimVenture, ZenithProtocol.Market2Node.NsxDebt);
+                case MarketBoardId.NsxMiningAndEnergy: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market1Node.SimVenture, ZenithProtocol.Market2Node.NsxMiningAndEnergy);
+                case MarketBoardId.NsxCertifiedProperty: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market1Node.SimVenture, ZenithProtocol.Market2Node.NsxCertifiedProperty);
+                case MarketBoardId.NsxProperty: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market1Node.SimVenture, ZenithProtocol.Market2Node.NsxProperty);
+                case MarketBoardId.NsxRestricted: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market1Node.SimVenture, ZenithProtocol.Market2Node.NsxRestricted);
+                case MarketBoardId.SimVenture: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market1Node.SimVenture);
+                case MarketBoardId.SouthPacificStockExchangeEquities: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market1Node.SouthPacific, ZenithProtocol.Market2Node.SouthPacificStockExchangeEquities);
+                case MarketBoardId.SouthPacificStockExchangeRestricted: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market1Node.SouthPacific, ZenithProtocol.Market2Node.SouthPacificStockExchangeRestricted);
+                case MarketBoardId.NzxMainBoard: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market1Node.NzxMain, ZenithProtocol.Market2Node.NzxMainBoard);
+                case MarketBoardId.NzxSpec: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market1Node.NzxMain, ZenithProtocol.Market2Node.NzxSpec);
+                case MarketBoardId.NzxFonterraShareholders: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market1Node.NzxMain, ZenithProtocol.Market2Node.NzxFonterraShareholders);
+                case MarketBoardId.NzxIndex: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market1Node.NzxMain, ZenithProtocol.Market2Node.NzxIndex);
+                case MarketBoardId.NzxDebtMarket: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market1Node.NzxMain, ZenithProtocol.Market2Node.NzxDebtMarket);
+                case MarketBoardId.NzxComm: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market1Node.NzxMain, ZenithProtocol.Market2Node.NzxComm);
+                case MarketBoardId.NzxDerivativeFutures: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market1Node.NzxMain, ZenithProtocol.Market2Node.NzxDerivativeFutures);
+                case MarketBoardId.NzxDerivativeOptions: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market1Node.NzxMain, ZenithProtocol.Market2Node.NzxDerivativeOptions);
+                case MarketBoardId.NzxIndexFutures: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market1Node.NzxMain, ZenithProtocol.Market2Node.NzxIndexFutures);
+                case MarketBoardId.NzxEOpt: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market1Node.NzxMain, ZenithProtocol.Market2Node.NzxEOpt);
+                case MarketBoardId.NzxMFut: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market1Node.NzxMain, ZenithProtocol.Market2Node.NzxMFut);
+                case MarketBoardId.NzxMOpt: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market1Node.NzxMain, ZenithProtocol.Market2Node.NzxMOpt);
+                case MarketBoardId.NzxDStgy: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market1Node.NzxMain, ZenithProtocol.Market2Node.NzxDStgy);
+                case MarketBoardId.NzxMStgy: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market1Node.NzxMain, ZenithProtocol.Market2Node.NzxMStgy);
+                case MarketBoardId.MyxNormalMarket: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market1Node.MyxNormal, ZenithProtocol.Market2Node.MyxNormalMarket);
+                case MarketBoardId.MyxDirectBusinessTransactionMarket: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market1Node.MyxNormal, ZenithProtocol.Market2Node.MyxDirectBusinessTransactionMarket);
+                case MarketBoardId.MyxIndexMarket: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market1Node.MyxNormal, ZenithProtocol.Market2Node.MyxIndexMarket);
+                case MarketBoardId.MyxBuyInMarket: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market1Node.MyxBuyIn);
+                case MarketBoardId.MyxOddLotMarket: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market1Node.MyxOddLot);
+                case MarketBoardId.Ptx: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market2Node.Ptx);
+                case MarketBoardId.Fnsx: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market2Node.Fnsx);
+                case MarketBoardId.Fpsx: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market2Node.Fpsx);
+                case MarketBoardId.Cfxt: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market2Node.Cfxt);
+                default:
+                    throw new UnreachableCaseError('ZCEMBCMM30814', marketBoardId);
+            }
+        }
     }
 
-    export namespace ExchangeMarketBoardParser {
+    export namespace ExchangeMarketBoard {
+        export class M1M2 {
+            constructor(public m1?: string, public m2?: string) { }
+        }
+
         enum ParseState {
             OutStart,
             InExchange,
@@ -1169,16 +1408,33 @@ export namespace ZenithConvert {
             OutFinished,
         }
 
-        export class Components {
-            exchange: ZenithProtocol.Exchange | undefined;
+        export class Parts {
+            exchange: ZenithProtocol.Exchange;
             m1: string | undefined;
             m2: string | undefined;
             environment: ZenithProtocol.DataEnvironment;
         }
 
-        export function parse(value: string): Components {
-            const result = new Components();
+        export namespace Parts {
+            export interface Error {
+                readonly code: ErrorCode;
+                readonly extra: string;
+            }
+
+            export function createError(code: ErrorCode, extra: string): ErrorCodeWithExtraErr<Parts> {
+                return new ErrorCodeWithExtraErr<Parts>({
+                    code,
+                    extra,
+                });
+            }
+        }
+
+        export function tryParse(value: string): Result<Parts, ErrorCodeWithExtra> {
+            let exchange: string | undefined;
+            let m1: string | undefined;
+            let m2: string | undefined;
             let environment: ZenithProtocol.DataEnvironment | undefined;
+
             let bldr = '';
             let state = ParseState.OutStart;
 
@@ -1190,21 +1446,21 @@ export namespace ZenithConvert {
                                 state = ParseState.InM1;
                                 break;
                             case ParseState.InExchange:
-                                result.exchange = bldr as ZenithProtocol.Exchange;
+                                exchange = bldr as ZenithProtocol.Exchange;
                                 bldr = '';
                                 state = ParseState.InM1;
                                 break;
                             case ParseState.InM1:
-                                result.m1 = bldr;
+                                m1 = bldr;
                                 bldr = '';
                                 state = ParseState.InM2;
                                 break;
                             case ParseState.InM2:
-                                throw new ZenithDataStateError(ErrorCode.ZCEMPMMDM12953, `${value}`);
+                                return Parts.createError(ErrorCode.ExchangeMarketBoardParts_MarketDelimiterInM2, `${value}`);
                             case ParseState.InEnvironment:
-                                throw new ZenithDataStateError(ErrorCode.ZCEMPMMDE34499, `${value}`);
+                                return Parts.createError(ErrorCode.ExchangeMarketBoardParts_MarketDelimiterInEnvironment, `${value}`);
                             case ParseState.OutFinished:
-                                throw new ZenithDataStateError(ErrorCode.ZCEMPMMDF22733, `${value}`);
+                                return Parts.createError(ErrorCode.ExchangeMarketBoardParts_MarketDelimiterAfterEnvironment, `${value}`);
                             default:
                                 throw new UnreachableCaseError('ZCEMPMMDD48832', state);
                         }
@@ -1213,26 +1469,26 @@ export namespace ZenithConvert {
                     case ZenithProtocol.environmentOpenChar:
                         switch (state) {
                             case ParseState.OutStart:
-                                throw new ZenithDataStateError(ErrorCode.ZCEMPMEOO88447, `${value}`);
+                                return Parts.createError(ErrorCode.ExchangeMarketBoardParts_EnvironmentOpenCharAtStart, `${value}`);
                             case ParseState.InExchange:
-                                result.exchange = bldr as ZenithProtocol.Exchange;
+                                exchange = bldr as ZenithProtocol.Exchange;
                                 bldr = '';
                                 state = ParseState.InEnvironment;
                                 break;
                             case ParseState.InM1:
-                                result.m1 = bldr;
+                                m1 = bldr;
                                 bldr = '';
                                 state = ParseState.InEnvironment;
                                 break;
                             case ParseState.InM2:
-                                result.m2 = bldr;
+                                m2 = bldr;
                                 bldr = '';
                                 state = ParseState.InEnvironment;
                                 break;
                             case ParseState.InEnvironment:
-                                throw new ZenithDataStateError(ErrorCode.ZCEMPMEOE98166, `${value}`);
+                                return Parts.createError(ErrorCode.ExchangeMarketBoardParts_EnvironmentOpenCharInEnvironment, `${value}`);
                             case ParseState.OutFinished:
-                                throw new ZenithDataStateError(ErrorCode.ZCEMPMEOF77765, `${value}`);
+                                return Parts.createError(ErrorCode.ExchangeMarketBoardParts_EnvironmentOpenCharAfterEnvironment, `${value}`);
                             default:
                                 throw new UnreachableCaseError('ZCEMPMEOD23887', state);
                         }
@@ -1241,20 +1497,20 @@ export namespace ZenithConvert {
                     case ZenithProtocol.environmentCloseChar:
                         switch (state) {
                             case ParseState.OutStart:
-                                throw new ZenithDataStateError(ErrorCode.ZCEMPMECO55586, `${value}`);
+                                return Parts.createError(ErrorCode.ExchangeMarketBoardParts_EnvironmentCloseCharAtStart, `${value}`);
                             case ParseState.InExchange:
-                                throw new ZenithDataStateError(ErrorCode.ZCEMPMECE48883, `${value}`);
+                                return Parts.createError(ErrorCode.ExchangeMarketBoardParts_EnvironmentCloseCharInEnvironment, `${value}`);
                             case ParseState.InM1:
-                                throw new ZenithDataStateError(ErrorCode.ZCEMPMECM133398, `${value}`);
+                                return Parts.createError(ErrorCode.ExchangeMarketBoardParts_EnvironmentCloseCharInM1, `${value}`);
                             case ParseState.InM2:
-                                throw new ZenithDataStateError(ErrorCode.ZCEMPMECM247766, `${value}`);
+                                return Parts.createError(ErrorCode.ExchangeMarketBoardParts_EnvironmentCloseCharInM2, `${value}`);
                             case ParseState.InEnvironment:
                                 environment = bldr as ZenithProtocol.DataEnvironment;
                                 bldr = '';
                                 state = ParseState.OutFinished;
                                 break;
                             case ParseState.OutFinished:
-                                throw new ZenithDataStateError(ErrorCode.ZCEMPMECF11187, `${value}`);
+                                return Parts.createError(ErrorCode.ExchangeMarketBoardParts_EnvironmentCloseCharAfterEnvironment, `${value}`);
                             default:
                                 throw new UnreachableCaseError('ZCEMPMEOD23887', state);
                         }
@@ -1267,7 +1523,7 @@ export namespace ZenithConvert {
                                 state = ParseState.InExchange;
                                 break;
                             case ParseState.OutFinished:
-                                throw new ZenithDataStateError(ErrorCode.ZCEMPMDFF37776, `${value}`);
+                                return Parts.createError(ErrorCode.ExchangeMarketBoardParts_CharAfterEnvironment, `${value}`);
                             default:
                                 bldr += value[i];
                                 break;
@@ -1278,20 +1534,53 @@ export namespace ZenithConvert {
 
             switch (state) {
                 case ParseState.InExchange:
-                    result.exchange = bldr as ZenithProtocol.Exchange;
+                    exchange = bldr as ZenithProtocol.Exchange;
                     break;
                 case ParseState.InM1:
-                    result.m1 = bldr;
+                    m1 = bldr;
                     break;
                 case ParseState.InM2:
-                    result.m2 = bldr;
+                    m2 = bldr;
                     break;
             }
 
-            result.environment = environment === undefined ? ZenithProtocol.DataEnvironment.Production : environment;
+            environment = environment === undefined ? ZenithProtocol.DataEnvironment.Production : environment;
 
-            return result;
+            if (exchange === undefined) {
+                return Parts.createError(ErrorCode.ExchangeMarketBoardParts_ExchangeNotSpecified, `${value}`);
+            } else {
+                const parts: Parts = {
+                    exchange: exchange as ZenithProtocol.Exchange,
+                    m1,
+                    m2,
+                    environment,
+                }
+
+                return new Ok(parts);
+            }
         }
+
+        export function create(m1M2: M1M2, exchangeId: ExchangeId, environmentId?: DataEnvironmentId): string {
+            const { exchange, enclosedEnvironment } = EnvironmentedExchange.calculateFrom(exchangeId, environmentId);
+
+            const m2 = m1M2.m2;
+            const m2ZeroLength = m2 === undefined || m2.length === 0;
+
+            const m1 = m1M2.m1;
+            const m1ZeroLength = m1 === undefined || m1.length === 0;
+            let delimitedM1: string;
+            if (m1ZeroLength) {
+                delimitedM1 = m2ZeroLength ? '' : ZenithProtocol.marketDelimiter;
+            } else {
+                delimitedM1 = ZenithProtocol.marketDelimiter + m1;
+            }
+
+            const delimitedM2 = m2ZeroLength ? '' : ZenithProtocol.marketDelimiter + m2;
+
+            return exchange + delimitedM1 + delimitedM2 + enclosedEnvironment;
+        }
+
+
     }
 
     /*export namespace OrderDestination {
@@ -1656,7 +1945,12 @@ export namespace ZenithConvert {
                 if (environment === undefined) {
                     environmentId = DataEnvironmentId.Production;
                 } else {
-                    environmentId = DataEnvironment.toId(environment as ZenithProtocol.DataEnvironment);
+                    const environmentIdTry = DataEnvironment.tryToId(environment as ZenithProtocol.DataEnvironment);
+                    if (environmentIdTry === undefined) {
+                        environmentId = DataEnvironmentId.Production;
+                    } else {
+                        environmentId = environmentIdTry;
+                    }
                 }
 
                 const feedId = NewsFeed.toFeedId(name as ZenithProtocol.ZenithController.Feeds.NewsFeed);

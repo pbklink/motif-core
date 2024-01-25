@@ -16,6 +16,7 @@ import {
     UsableListChangeTypeId
 } from "../sys/sys-internal-api";
 import { ScanConditionSet } from './condition-set/internal-api';
+import { ScanFieldSet } from './field-set/internal-api';
 import { Scan } from './scan';
 import { ScanEditor } from './scan-editor';
 import { ScanList } from './scan-list';
@@ -70,6 +71,7 @@ export class ScansService {
         scanId: string | undefined,
         opener: LockOpenListItem.Opener,
         newScanConditionSetCallback: (this: void) => ScanConditionSet,
+        newScanFieldSetCallback: (this: void) => ScanFieldSet,
         errorEventer?: ScanEditor.ErrorEventer,
     ): Promise<Result<ScanEditor | undefined>> {
         if (scanId === undefined) {
