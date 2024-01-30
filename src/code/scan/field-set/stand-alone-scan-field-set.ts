@@ -4,9 +4,10 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, ComparableList, Ok, Result, UnreachableCaseError } from '../../sys/sys-internal-api';
+import { CurrencyId, ExchangeId, MarketBoardId, MarketId } from '../../adi/adi-internal-api';
+import { AssertInternalError, ComparableList, Ok, Result, SourceTzOffsetDateTime, UnreachableCaseError } from '../../sys/sys-internal-api';
 import { ScanFormula } from '../formula/internal-api';
-import { ScanFieldSetLoadError, ScanFieldSetLoadErrorTypeId } from './common/internal-api';
+import { ScanFieldSetLoadError } from './common/internal-api';
 import {
     AltCodeSubbedScanField,
     AttributeSubbedScanField,
@@ -150,7 +151,7 @@ export class StandAloneScanFieldSet implements ScanFieldSet {
     private cloneDateInRangeScanField(fieldSet: ScanFieldSet, field: DateInRangeScanField): DateInRangeScanField {
         const createResult = this.fieldFactory.createDateInRange(fieldSet, field.fieldId);
         if (createResult.isErr()) {
-            throw new AssertInternalError('SASFSCDIRSF12123', createResult.error.typeId.toString());
+            throw new AssertInternalError('SASFSCDIRSF12123', createResult.error);
         } else {
             const clonedField = createResult.value;
             clonedField.conditionsOperationId = field.conditionsOperationId;
@@ -171,7 +172,7 @@ export class StandAloneScanFieldSet implements ScanFieldSet {
     private cloneDateSubbedScanField(fieldSet: ScanFieldSet, field: DateSubbedScanField): DateSubbedScanField {
         const createResult = this.fieldFactory.createDateSubbed(fieldSet, field.subFieldId);
         if (createResult.isErr()) {
-            throw new AssertInternalError('SASFSCDSSF12123', createResult.error.typeId.toString());
+            throw new AssertInternalError('SASFSCDSSF12123', createResult.error);
         } else {
             const clonedField = createResult.value;
             clonedField.conditionsOperationId = field.conditionsOperationId;
@@ -192,7 +193,7 @@ export class StandAloneScanFieldSet implements ScanFieldSet {
     private cloneTextContainsScanField(fieldSet: ScanFieldSet, field: TextContainsScanField): TextContainsScanField {
         const createResult = this.fieldFactory.createTextContains(fieldSet, field.fieldId);
         if (createResult.isErr()) {
-            throw new AssertInternalError('SASFSCTCSF12123', createResult.error.typeId.toString());
+            throw new AssertInternalError('SASFSCTCSF12123', createResult.error);
         } else {
             const clonedField = createResult.value;
             clonedField.conditionsOperationId = field.conditionsOperationId;
@@ -213,7 +214,7 @@ export class StandAloneScanFieldSet implements ScanFieldSet {
     private cloneAltCodeSubbedScanField(fieldSet: ScanFieldSet, field: AltCodeSubbedScanField): AltCodeSubbedScanField {
         const createResult = this.fieldFactory.createAltCodeSubbed(fieldSet, field.subFieldId);
         if (createResult.isErr()) {
-            throw new AssertInternalError('SASFSCACSSF12123', createResult.error.typeId.toString());
+            throw new AssertInternalError('SASFSCACSSF12123', createResult.error);
         } else {
             const clonedField = createResult.value;
             clonedField.conditionsOperationId = field.conditionsOperationId;
@@ -234,7 +235,7 @@ export class StandAloneScanFieldSet implements ScanFieldSet {
     private cloneAttributeSubbedScanField(fieldSet: ScanFieldSet, field: AttributeSubbedScanField): AttributeSubbedScanField {
         const createResult = this.fieldFactory.createAttributeSubbed(fieldSet, field.subFieldId);
         if (createResult.isErr()) {
-            throw new AssertInternalError('SASFSCASSF12123', createResult.error.typeId.toString());
+            throw new AssertInternalError('SASFSCASSF12123', createResult.error);
         } else {
             const clonedField = createResult.value;
             clonedField.conditionsOperationId = field.conditionsOperationId;
@@ -255,7 +256,7 @@ export class StandAloneScanFieldSet implements ScanFieldSet {
     private cloneTextEqualsScanField(fieldSet: ScanFieldSet, field: TextEqualsScanField): TextEqualsScanField {
         const createResult = this.fieldFactory.createTextEquals(fieldSet, field.fieldId);
         if (createResult.isErr()) {
-            throw new AssertInternalError('SASFSCTESF12123', createResult.error.typeId.toString());
+            throw new AssertInternalError('SASFSCTESF12123', createResult.error);
         } else {
             const clonedField = createResult.value;
             clonedField.conditionsOperationId = field.conditionsOperationId;
@@ -276,7 +277,7 @@ export class StandAloneScanFieldSet implements ScanFieldSet {
     private cloneTextHasValueEqualsScanField(fieldSet: ScanFieldSet, field: TextHasValueEqualsScanField): TextHasValueEqualsScanField {
         const createResult = this.fieldFactory.createTextHasValueEquals(fieldSet, field.fieldId);
         if (createResult.isErr()) {
-            throw new AssertInternalError('SASFSCTHVESF12123', createResult.error.typeId.toString());
+            throw new AssertInternalError('SASFSCTHVESF12123', createResult.error);
         } else {
             const clonedField = createResult.value;
             clonedField.conditionsOperationId = field.conditionsOperationId;
@@ -297,7 +298,7 @@ export class StandAloneScanFieldSet implements ScanFieldSet {
     private cloneStringOverlapsScanField(fieldSet: ScanFieldSet, field: StringOverlapsScanField): StringOverlapsScanField {
         const createResult = this.fieldFactory.createStringOverlaps(fieldSet, field.fieldId);
         if (createResult.isErr()) {
-            throw new AssertInternalError('SASFSCSOSF12123', createResult.error.typeId.toString());
+            throw new AssertInternalError('SASFSCSOSF12123', createResult.error);
         } else {
             const clonedField = createResult.value;
             clonedField.conditionsOperationId = field.conditionsOperationId;
@@ -318,7 +319,7 @@ export class StandAloneScanFieldSet implements ScanFieldSet {
     private cloneCurrencyOverlapsScanField(fieldSet: ScanFieldSet, field: CurrencyOverlapsScanField): CurrencyOverlapsScanField {
         const createResult = this.fieldFactory.createCurrencyOverlaps(fieldSet, field.fieldId);
         if (createResult.isErr()) {
-            throw new AssertInternalError('SASFSCCOSF12123', createResult.error.typeId.toString());
+            throw new AssertInternalError('SASFSCCOSF12123', createResult.error);
         } else {
             const clonedField = createResult.value;
             clonedField.conditionsOperationId = field.conditionsOperationId;
@@ -339,7 +340,7 @@ export class StandAloneScanFieldSet implements ScanFieldSet {
     private cloneExchangeOverlapsScanField(fieldSet: ScanFieldSet, field: ExchangeOverlapsScanField): ExchangeOverlapsScanField {
         const createResult = this.fieldFactory.createExchangeOverlaps(fieldSet, field.fieldId);
         if (createResult.isErr()) {
-            throw new AssertInternalError('SASFSCEOSF12123', createResult.error.typeId.toString());
+            throw new AssertInternalError('SASFSCEOSF12123', createResult.error);
         } else {
             const clonedField = createResult.value;
             clonedField.conditionsOperationId = field.conditionsOperationId;
@@ -360,7 +361,7 @@ export class StandAloneScanFieldSet implements ScanFieldSet {
     private cloneMarketOverlapsScanField(fieldSet: ScanFieldSet, field: MarketOverlapsScanField): MarketOverlapsScanField {
         const createResult = this.fieldFactory.createMarketOverlaps(fieldSet, field.fieldId);
         if (createResult.isErr()) {
-            throw new AssertInternalError('SASFSCMOSF12123', createResult.error.typeId.toString());
+            throw new AssertInternalError('SASFSCMOSF12123', createResult.error);
         } else {
             const clonedField = createResult.value;
             clonedField.conditionsOperationId = field.conditionsOperationId;
@@ -381,7 +382,7 @@ export class StandAloneScanFieldSet implements ScanFieldSet {
     private cloneMarketBoardOverlapsScanField(fieldSet: ScanFieldSet, field: MarketBoardOverlapsScanField): MarketBoardOverlapsScanField {
         const createResult = this.fieldFactory.createMarketBoardOverlaps(fieldSet, field.fieldId);
         if (createResult.isErr()) {
-            throw new AssertInternalError('SASFSCMBOSF12123', createResult.error.typeId.toString());
+            throw new AssertInternalError('SASFSCMBOSF12123', createResult.error);
         } else {
             const clonedField = createResult.value;
             clonedField.conditionsOperationId = field.conditionsOperationId;
@@ -402,7 +403,7 @@ export class StandAloneScanFieldSet implements ScanFieldSet {
     private cloneIsScanField(fieldSet: ScanFieldSet, field: IsScanField): IsScanField {
         const createResult = this.fieldFactory.createIs(fieldSet, field.fieldId);
         if (createResult.isErr()) {
-            throw new AssertInternalError('SASFSCISF12123', createResult.error.typeId.toString());
+            throw new AssertInternalError('SASFSCISF12123', createResult.error);
         } else {
             const clonedField = createResult.value;
             clonedField.conditionsOperationId = field.conditionsOperationId;
@@ -644,7 +645,7 @@ export class StandAloneScanFieldSet implements ScanFieldSet {
 
 export namespace StandAloneScanFieldSet {
     export class FieldFactory implements ScanFieldSet.FieldFactory {
-        createNumericInRange(_fieldSet: ScanFieldSet, fieldId: ScanFormula.NumericRangeFieldId): Result<NumericInRangeScanField, ScanFieldSetLoadError> {
+        createNumericInRange(_fieldSet: ScanFieldSet, fieldId: ScanFormula.NumericRangeFieldId): Result<NumericInRangeScanField> {
             const field: NumericInRangeScanField = {
                 typeId: ScanField.TypeId.NumericInRange,
                 fieldId,
@@ -655,7 +656,7 @@ export namespace StandAloneScanFieldSet {
             }
             return new Ok(field);
         }
-        createPriceSubbed(_fieldSet: ScanFieldSet, subFieldId: ScanFormula.PriceSubFieldId): Result<PriceSubbedScanField, ScanFieldSetLoadError> {
+        createPriceSubbed(_fieldSet: ScanFieldSet, subFieldId: ScanFormula.PriceSubFieldId): Result<PriceSubbedScanField> {
             const field: PriceSubbedScanField = {
                 typeId: ScanField.TypeId.PriceSubbed,
                 fieldId: ScanFormula.FieldId.PriceSubbed,
@@ -666,7 +667,7 @@ export namespace StandAloneScanFieldSet {
             }
             return new Ok(field);
         }
-        createDateInRange(_fieldSet: ScanFieldSet, fieldId: ScanFormula.DateRangeFieldId): Result<DateInRangeScanField, ScanFieldSetLoadError> {
+        createDateInRange(_fieldSet: ScanFieldSet, fieldId: ScanFormula.DateRangeFieldId): Result<DateInRangeScanField> {
             const field: DateInRangeScanField = {
                 typeId: ScanField.TypeId.DateInRange,
                 fieldId,
@@ -677,7 +678,7 @@ export namespace StandAloneScanFieldSet {
             }
             return new Ok(field);
         }
-        createDateSubbed(_fieldSet: ScanFieldSet, subFieldId: ScanFormula.DateSubFieldId): Result<DateSubbedScanField, ScanFieldSetLoadError> {
+        createDateSubbed(_fieldSet: ScanFieldSet, subFieldId: ScanFormula.DateSubFieldId): Result<DateSubbedScanField> {
             const field: DateSubbedScanField = {
                 typeId: ScanField.TypeId.DateSubbed,
                 fieldId: ScanFormula.FieldId.DateSubbed,
@@ -688,7 +689,7 @@ export namespace StandAloneScanFieldSet {
             }
             return new Ok(field);
         }
-        createTextContains(_fieldSet: ScanFieldSet, fieldId: ScanFormula.TextContainsFieldId): Result<TextContainsScanField, ScanFieldSetLoadError> {
+        createTextContains(_fieldSet: ScanFieldSet, fieldId: ScanFormula.TextContainsFieldId): Result<TextContainsScanField> {
             const field: TextContainsScanField = {
                 typeId: ScanField.TypeId.TextContains,
                 fieldId,
@@ -699,7 +700,7 @@ export namespace StandAloneScanFieldSet {
             }
             return new Ok(field);
         }
-        createAltCodeSubbed(_fieldSet: ScanFieldSet, subFieldId: ScanFormula.AltCodeSubFieldId): Result<AltCodeSubbedScanField, ScanFieldSetLoadError> {
+        createAltCodeSubbed(_fieldSet: ScanFieldSet, subFieldId: ScanFormula.AltCodeSubFieldId): Result<AltCodeSubbedScanField> {
             const field: AltCodeSubbedScanField = {
                 typeId: ScanField.TypeId.AltCodeSubbed,
                 fieldId: ScanFormula.FieldId.AltCodeSubbed,
@@ -710,7 +711,7 @@ export namespace StandAloneScanFieldSet {
             }
             return new Ok(field);
         }
-        createAttributeSubbed(_fieldSet: ScanFieldSet, subFieldId: ScanFormula.AttributeSubFieldId): Result<AttributeSubbedScanField, ScanFieldSetLoadError> {
+        createAttributeSubbed(_fieldSet: ScanFieldSet, subFieldId: ScanFormula.AttributeSubFieldId): Result<AttributeSubbedScanField> {
             const field: AttributeSubbedScanField = {
                 typeId: ScanField.TypeId.AttributeSubbed,
                 fieldId: ScanFormula.FieldId.AttributeSubbed,
@@ -721,7 +722,7 @@ export namespace StandAloneScanFieldSet {
             }
             return new Ok(field);
         }
-        createTextEquals(_fieldSet: ScanFieldSet, fieldId: ScanFormula.TextEqualsFieldId): Result<TextEqualsScanField, ScanFieldSetLoadError> {
+        createTextEquals(_fieldSet: ScanFieldSet, fieldId: ScanFormula.TextEqualsFieldId): Result<TextEqualsScanField> {
             const field: TextEqualsScanField = {
                 typeId: ScanField.TypeId.TextEquals,
                 fieldId,
@@ -732,7 +733,7 @@ export namespace StandAloneScanFieldSet {
             }
             return new Ok(field);
         }
-        createTextHasValueEquals(_fieldSet: ScanFieldSet, fieldId: ScanFormula.TextHasValueEqualsFieldId): Result<TextHasValueEqualsScanField, ScanFieldSetLoadError> {
+        createTextHasValueEquals(_fieldSet: ScanFieldSet, fieldId: ScanFormula.TextHasValueEqualsFieldId): Result<TextHasValueEqualsScanField> {
             const field: TextHasValueEqualsScanField = {
                 typeId: ScanField.TypeId.TextHasValueEquals,
                 fieldId,
@@ -743,7 +744,7 @@ export namespace StandAloneScanFieldSet {
             }
             return new Ok(field);
         }
-        createStringOverlaps(_fieldSet: ScanFieldSet, fieldId: ScanFormula.StringOverlapsFieldId): Result<StringOverlapsScanField, ScanFieldSetLoadError> {
+        createStringOverlaps(_fieldSet: ScanFieldSet, fieldId: ScanFormula.StringOverlapsFieldId): Result<StringOverlapsScanField> {
             const field: StringOverlapsScanField = {
                 typeId: ScanField.TypeId.StringOverlaps,
                 fieldId,
@@ -754,7 +755,7 @@ export namespace StandAloneScanFieldSet {
             }
             return new Ok(field);
         }
-        createCurrencyOverlaps(_fieldSet: ScanFieldSet, fieldId: ScanFormula.FieldId.Currency): Result<CurrencyOverlapsScanField, ScanFieldSetLoadError> {
+        createCurrencyOverlaps(_fieldSet: ScanFieldSet, fieldId: ScanFormula.FieldId.Currency): Result<CurrencyOverlapsScanField> {
             const field: CurrencyOverlapsScanField = {
                 typeId: ScanField.TypeId.CurrencyOverlaps,
                 fieldId,
@@ -765,7 +766,7 @@ export namespace StandAloneScanFieldSet {
             }
             return new Ok(field);
         }
-        createExchangeOverlaps(_fieldSet: ScanFieldSet, fieldId: ScanFormula.FieldId.Exchange): Result<ExchangeOverlapsScanField, ScanFieldSetLoadError> {
+        createExchangeOverlaps(_fieldSet: ScanFieldSet, fieldId: ScanFormula.FieldId.Exchange): Result<ExchangeOverlapsScanField> {
             const field: ExchangeOverlapsScanField = {
                 typeId: ScanField.TypeId.ExchangeOverlaps,
                 fieldId,
@@ -776,7 +777,7 @@ export namespace StandAloneScanFieldSet {
             }
             return new Ok(field);
         }
-        createMarketOverlaps(_fieldSet: ScanFieldSet, fieldId: ScanFormula.MarketOverlapsFieldId): Result<MarketOverlapsScanField, ScanFieldSetLoadError> {
+        createMarketOverlaps(_fieldSet: ScanFieldSet, fieldId: ScanFormula.MarketOverlapsFieldId): Result<MarketOverlapsScanField> {
             const field: MarketOverlapsScanField = {
                 typeId: ScanField.TypeId.MarketOverlaps,
                 fieldId,
@@ -787,7 +788,7 @@ export namespace StandAloneScanFieldSet {
             }
             return new Ok(field);
         }
-        createMarketBoardOverlaps(_fieldSet: ScanFieldSet, fieldId: ScanFormula.FieldId.MarketBoard): Result<MarketBoardOverlapsScanField, ScanFieldSetLoadError> {
+        createMarketBoardOverlaps(_fieldSet: ScanFieldSet, fieldId: ScanFormula.FieldId.MarketBoard): Result<MarketBoardOverlapsScanField> {
             const field: MarketBoardOverlapsScanField = {
                 typeId: ScanField.TypeId.MarketBoardOverlaps,
                 fieldId,
@@ -798,7 +799,7 @@ export namespace StandAloneScanFieldSet {
             }
             return new Ok(field);
         }
-        createIs(_fieldSet: ScanFieldSet, fieldId: ScanFormula.FieldId.Is): Result<IsScanField, ScanFieldSetLoadError> {
+        createIs(_fieldSet: ScanFieldSet, fieldId: ScanFormula.FieldId.Is): Result<IsScanField> {
             const field: IsScanField = {
                 typeId: ScanField.TypeId.Is,
                 fieldId,
@@ -812,36 +813,10 @@ export namespace StandAloneScanFieldSet {
     }
 
     export class ConditionFactory implements ScanField.ConditionFactory {
-        createNumericComparisonFromNumericComparison(
+        createNumericComparisonWithHasValue(
             _field: ScanField,
-            formulaNode: ScanFormula.NumericComparisonBooleanNode,
             operatorId: NumericComparisonScanFieldCondition.OperatorId,
-            useRightOperandAsValue: boolean
-        ): Result<NumericComparisonScanFieldCondition, ScanFieldSetLoadError> {
-            const numberOperand = useRightOperandAsValue ? formulaNode.rightOperand : formulaNode.leftOperand;
-
-            if (!ScanFormula.NumericComparisonBooleanNode.isOperandValue(numberOperand)) {
-                return ScanFieldSetLoadError.createErr(ScanFieldSetLoadErrorTypeId.SpecifiedNumericComparisonOperandIsNotValue, useRightOperandAsValue ? 'right' : 'left');
-            } else {
-                const operands: BaseNumericScanFieldCondition.ValueOperands = {
-                    typeId: BaseNumericScanFieldCondition.Operands.TypeId.Value,
-                    value: numberOperand,
-                }
-                const result: NumericComparisonScanFieldCondition = {
-                    typeId: ScanFieldCondition.TypeId.NumericComparison,
-                    operatorId,
-                    operands,
-                }
-
-                return new Ok(result);
-            }
-        }
-
-        createNumericComparisonFromFieldHasValue(
-            _field: ScanField,
-            _formulaNode: ScanFormula.FieldHasValueNode,
-            operatorId: NumericComparisonScanFieldCondition.OperatorId,
-        ): Result<NumericComparisonScanFieldCondition, ScanFieldSetLoadError> {
+        ): Result<NumericComparisonScanFieldCondition> {
             const operands: BaseNumericScanFieldCondition.HasValueOperands = {
                 typeId: BaseNumericScanFieldCondition.Operands.TypeId.HasValue,
             };
@@ -855,14 +830,14 @@ export namespace StandAloneScanFieldSet {
             return new Ok(condition);
         }
 
-        createNumericComparisonFromNumericFieldEquals(
+        createNumericComparisonWithValue(
             _field: ScanField,
-            formulaNode: ScanFormula.NumericFieldEqualsNode,
             operatorId: NumericComparisonScanFieldCondition.OperatorId,
-        ): Result<NumericComparisonScanFieldCondition, ScanFieldSetLoadError> {
+            value: number,
+        ): Result<NumericComparisonScanFieldCondition> {
             const operands: BaseNumericScanFieldCondition.ValueOperands = {
                 typeId: BaseNumericScanFieldCondition.Operands.TypeId.Value,
-                value: formulaNode.value,
+                value,
             };
 
             const condition: NumericComparisonScanFieldCondition = {
@@ -874,15 +849,16 @@ export namespace StandAloneScanFieldSet {
             return new Ok(condition);
         }
 
-        createNumericComparisonFromNumericFieldInRange(
+        createNumericComparisonWithRange(
             _field: ScanField,
-            formulaNode: ScanFormula.NumericFieldInRangeNode,
             operatorId: NumericComparisonScanFieldCondition.OperatorId,
-        ): Result<NumericComparisonScanFieldCondition, ScanFieldSetLoadError> {
+            min: number | undefined,
+            max: number | undefined,
+        ): Result<NumericComparisonScanFieldCondition> {
             const operands: BaseNumericScanFieldCondition.RangeOperands = {
                 typeId: BaseNumericScanFieldCondition.Operands.TypeId.Range,
-                min: formulaNode.min,
-                max: formulaNode.max,
+                min,
+                max,
             };
 
             const condition: NumericComparisonScanFieldCondition = {
@@ -894,11 +870,10 @@ export namespace StandAloneScanFieldSet {
             return new Ok(condition);
         }
 
-        createNumericFromPriceSubFieldHasValue(
+        createNumericWithHasValue(
             _field: ScanField,
-            _formulaNode: ScanFormula.PriceSubFieldHasValueNode,
             operatorId: NumericScanFieldCondition.OperatorId,
-        ): Result<NumericScanFieldCondition, ScanFieldSetLoadError> {
+        ): Result<NumericScanFieldCondition> {
             const operands: BaseNumericScanFieldCondition.HasValueOperands = {
                 typeId: BaseNumericScanFieldCondition.Operands.TypeId.HasValue,
             };
@@ -912,14 +887,14 @@ export namespace StandAloneScanFieldSet {
             return new Ok(condition);
         }
 
-        createNumericFromPriceSubFieldEquals(
+        createNumericWithValue(
             _field: ScanField,
-            formulaNode: ScanFormula.PriceSubFieldEqualsNode,
             operatorId: NumericScanFieldCondition.OperatorId,
-        ): Result<NumericScanFieldCondition, ScanFieldSetLoadError> {
+            value: number,
+        ): Result<NumericScanFieldCondition> {
             const operands: BaseNumericScanFieldCondition.ValueOperands = {
                 typeId: BaseNumericScanFieldCondition.Operands.TypeId.Value,
-                value: formulaNode.value,
+                value,
             };
 
             const condition: NumericScanFieldCondition = {
@@ -931,15 +906,16 @@ export namespace StandAloneScanFieldSet {
             return new Ok(condition);
         }
 
-        createNumericFromPriceSubFieldInRange(
+        createNumericWithRange(
             _field: ScanField,
-            formulaNode: ScanFormula.PriceSubFieldInRangeNode,
             operatorId: NumericScanFieldCondition.OperatorId,
-        ): Result<NumericScanFieldCondition, ScanFieldSetLoadError> {
+            min: number | undefined,
+            max: number | undefined,
+        ): Result<NumericScanFieldCondition> {
             const operands: BaseNumericScanFieldCondition.RangeOperands = {
                 typeId: BaseNumericScanFieldCondition.Operands.TypeId.Range,
-                min: formulaNode.min,
-                max: formulaNode.max,
+                min,
+                max,
             };
 
             const condition: NumericScanFieldCondition = {
@@ -951,11 +927,10 @@ export namespace StandAloneScanFieldSet {
             return new Ok(condition);
         }
 
-        createDateFromFieldHasValue(
+        createDateWithHasValue(
             _field: ScanField,
-            _formulaNode: ScanFormula.FieldHasValueNode,
             operatorId: DateScanFieldCondition.OperatorId,
-        ): Result<DateScanFieldCondition, ScanFieldSetLoadError> {
+        ): Result<DateScanFieldCondition> {
             const operands: DateScanFieldCondition.HasValueOperands = {
                 typeId: DateScanFieldCondition.Operands.TypeId.HasValue,
             };
@@ -969,14 +944,14 @@ export namespace StandAloneScanFieldSet {
             return new Ok(condition);
         }
 
-        createDateFromDateFieldEquals(
+        createDateWithEquals(
             _field: ScanField,
-            formulaNode: ScanFormula.DateFieldEqualsNode,
             operatorId: DateScanFieldCondition.OperatorId,
-        ): Result<DateScanFieldCondition, ScanFieldSetLoadError> {
+            value: SourceTzOffsetDateTime,
+        ): Result<DateScanFieldCondition> {
             const operands: DateScanFieldCondition.ValueOperands = {
                 typeId: DateScanFieldCondition.Operands.TypeId.Value,
-                value: formulaNode.value,
+                value,
             };
 
             const condition: DateScanFieldCondition = {
@@ -988,15 +963,16 @@ export namespace StandAloneScanFieldSet {
             return new Ok(condition);
         }
 
-        createDateFromDateFieldInRange(
+        createDateWithRange(
             _field: ScanField,
-            formulaNode: ScanFormula.DateFieldInRangeNode,
             operatorId: DateScanFieldCondition.OperatorId,
-        ): Result<DateScanFieldCondition, ScanFieldSetLoadError> {
+            min: SourceTzOffsetDateTime | undefined,
+            max: SourceTzOffsetDateTime | undefined,
+        ): Result<DateScanFieldCondition> {
             const operands: DateScanFieldCondition.RangeOperands = {
                 typeId: DateScanFieldCondition.Operands.TypeId.Range,
-                min: formulaNode.min,
-                max: formulaNode.max,
+                min,
+                max,
             };
 
             const condition: DateScanFieldCondition = {
@@ -1008,71 +984,14 @@ export namespace StandAloneScanFieldSet {
             return new Ok(condition);
         }
 
-        createDateFromDateSubFieldHasValue(
+        createTextEquals(
             _field: ScanField,
-            _formulaNode: ScanFormula.DateSubFieldHasValueNode,
-            operatorId: DateScanFieldCondition.OperatorId,
-        ): Result<DateScanFieldCondition, ScanFieldSetLoadError> {
-            const operands: DateScanFieldCondition.HasValueOperands = {
-                typeId: DateScanFieldCondition.Operands.TypeId.HasValue,
-            };
-
-            const condition: DateScanFieldCondition = {
-                typeId: ScanFieldCondition.TypeId.Date,
-                operatorId,
-                operands,
-            };
-
-            return new Ok(condition);
-        }
-
-        createDateFromDateSubFieldEquals(
-            _field: ScanField,
-            formulaNode: ScanFormula.DateSubFieldEqualsNode,
-            operatorId: DateScanFieldCondition.OperatorId,
-        ): Result<DateScanFieldCondition, ScanFieldSetLoadError> {
-            const operands: DateScanFieldCondition.ValueOperands = {
-                typeId: DateScanFieldCondition.Operands.TypeId.Value,
-                value: formulaNode.value,
-            };
-
-            const condition: DateScanFieldCondition = {
-                typeId: ScanFieldCondition.TypeId.Date,
-                operatorId,
-                operands,
-            };
-
-            return new Ok(condition);
-        }
-
-        createDateFromDateSubFieldInRange(
-            _field: ScanField,
-            formulaNode: ScanFormula.DateSubFieldInRangeNode,
-            operatorId: DateScanFieldCondition.OperatorId,
-        ): Result<DateScanFieldCondition, ScanFieldSetLoadError> {
-            const operands: DateScanFieldCondition.RangeOperands = {
-                typeId: DateScanFieldCondition.Operands.TypeId.Range,
-                min: formulaNode.min,
-                max: formulaNode.max,
-            };
-
-            const condition: DateScanFieldCondition = {
-                typeId: ScanFieldCondition.TypeId.Date,
-                operatorId,
-                operands,
-            };
-
-            return new Ok(condition);
-        }
-
-        createTextEqualsFromTextFieldEquals(
-            _field: ScanField,
-            formulaNode: ScanFormula.TextFieldEqualsNode,
             operatorId: TextEqualsScanFieldCondition.OperatorId,
-        ): Result<TextEqualsScanFieldCondition, ScanFieldSetLoadError> {
+            value: string,
+        ): Result<TextEqualsScanFieldCondition> {
             const operands: BaseTextScanFieldCondition.ValueOperands = {
                 typeId: BaseTextScanFieldCondition.Operands.TypeId.Value,
-                value: formulaNode.value,
+                value,
             };
 
             const condition: TextEqualsScanFieldCondition = {
@@ -1084,17 +1003,19 @@ export namespace StandAloneScanFieldSet {
             return new Ok(condition);
         }
 
-        createTextContainsFromTextFieldContains(
+        createTextContains(
             _field: ScanField,
-            formulaNode: ScanFormula.TextFieldContainsNode,
             operatorId: TextContainsScanFieldCondition.OperatorId,
-        ): Result<TextContainsScanFieldCondition, ScanFieldSetLoadError> {
+            value: string,
+            asId: ScanFormula.TextContainsAsId,
+            ignoreCase: boolean,
+        ): Result<TextContainsScanFieldCondition> {
             const operands: BaseTextScanFieldCondition.ContainsOperands = {
                 typeId: BaseTextScanFieldCondition.Operands.TypeId.Contains,
                 contains: {
-                    value: formulaNode.value,
-                    asId: formulaNode.asId,
-                    ignoreCase: formulaNode.ignoreCase,
+                    value,
+                    asId,
+                    ignoreCase,
                 }
             };
 
@@ -1107,11 +1028,10 @@ export namespace StandAloneScanFieldSet {
             return new Ok(condition);
         }
 
-        createTextHasValueEqualsFromFieldHasValue(
+        createTextHasValueEqualsWithHasValue(
             _field: ScanField,
-            _formulaNode: ScanFormula.FieldHasValueNode,
             operatorId: TextHasValueEqualsScanFieldCondition.OperatorId,
-        ): Result<TextHasValueEqualsScanFieldCondition, ScanFieldSetLoadError> {
+        ): Result<TextHasValueEqualsScanFieldCondition> {
             const operands: BaseTextScanFieldCondition.HasValueOperands = {
                 typeId: BaseTextScanFieldCondition.Operands.TypeId.HasValue,
             };
@@ -1125,14 +1045,14 @@ export namespace StandAloneScanFieldSet {
             return new Ok(condition);
         }
 
-        createTextHasValueEqualsFromTextFieldEquals(
+        createTextHasValueEqualsWithValue(
             _field: ScanField,
-            formulaNode: ScanFormula.TextFieldEqualsNode,
             operatorId: TextHasValueEqualsScanFieldCondition.OperatorId,
-        ): Result<TextHasValueEqualsScanFieldCondition, ScanFieldSetLoadError> {
+            value: string,
+        ): Result<TextHasValueEqualsScanFieldCondition> {
             const operands: BaseTextScanFieldCondition.ValueOperands = {
                 typeId: BaseTextScanFieldCondition.Operands.TypeId.Value,
-                value: formulaNode.value,
+                value,
             };
 
             const condition: TextHasValueEqualsScanFieldCondition = {
@@ -1144,11 +1064,10 @@ export namespace StandAloneScanFieldSet {
             return new Ok(condition);
         }
 
-        createTextHasValueContainsFromAltCodeSubFieldHasValue(
+        createTextHasValueContainsWithHasValue(
             _field: ScanField,
-            _formulaNode: ScanFormula.AltCodeSubFieldHasValueNode,
             operatorId: TextHasValueContainsScanFieldCondition.OperatorId,
-        ): Result<TextHasValueContainsScanFieldCondition, ScanFieldSetLoadError> {
+        ): Result<TextHasValueContainsScanFieldCondition> {
             const operands: BaseTextScanFieldCondition.HasValueOperands = {
                 typeId: BaseTextScanFieldCondition.Operands.TypeId.HasValue,
             };
@@ -1162,17 +1081,19 @@ export namespace StandAloneScanFieldSet {
             return new Ok(condition);
         }
 
-        createTextHasValueContainsFromAltCodeSubFieldContains(
+        createTextHasValueContainsWithContains(
             _field: ScanField,
-            formulaNode: ScanFormula.AltCodeSubFieldContainsNode,
             operatorId: TextHasValueContainsScanFieldCondition.OperatorId,
-        ): Result<TextHasValueContainsScanFieldCondition, ScanFieldSetLoadError> {
+            value: string,
+            asId: ScanFormula.TextContainsAsId,
+            ignoreCase: boolean,
+        ): Result<TextHasValueContainsScanFieldCondition> {
             const operands: BaseTextScanFieldCondition.ContainsOperands = {
                 typeId: BaseTextScanFieldCondition.Operands.TypeId.Contains,
                 contains: {
-                    value: formulaNode.value,
-                    asId: formulaNode.asId,
-                    ignoreCase: formulaNode.ignoreCase,
+                    value,
+                    asId,
+                    ignoreCase,
                 }
             };
 
@@ -1185,137 +1106,96 @@ export namespace StandAloneScanFieldSet {
             return new Ok(condition);
         }
 
-        createTextHasValueContainsFromAttributeSubFieldHasValue(
+        createStringOverlaps(
             _field: ScanField,
-            _formulaNode: ScanFormula.AttributeSubFieldHasValueNode,
-            operatorId: TextHasValueContainsScanFieldCondition.OperatorId,
-        ): Result<TextHasValueContainsScanFieldCondition, ScanFieldSetLoadError> {
-            const operands: BaseTextScanFieldCondition.HasValueOperands = {
-                typeId: BaseTextScanFieldCondition.Operands.TypeId.HasValue,
-            };
-
-            const condition: TextHasValueContainsScanFieldCondition = {
-                typeId: ScanFieldCondition.TypeId.TextHasValueContains,
-                operatorId,
-                operands,
-            };
-
-            return new Ok(condition);
-        }
-
-        createTextHasValueContainsFromAttributeSubFieldContains(
-            _field: ScanField,
-            formulaNode: ScanFormula.AttributeSubFieldContainsNode,
-            operatorId: TextHasValueContainsScanFieldCondition.OperatorId,
-        ): Result<TextHasValueContainsScanFieldCondition, ScanFieldSetLoadError> {
-            const operands: BaseTextScanFieldCondition.ContainsOperands = {
-                typeId: BaseTextScanFieldCondition.Operands.TypeId.Contains,
-                contains: {
-                    value: formulaNode.value,
-                    asId: formulaNode.asId,
-                    ignoreCase: formulaNode.ignoreCase,
-                }
-            };
-
-            const condition: TextHasValueContainsScanFieldCondition = {
-                typeId: ScanFieldCondition.TypeId.TextHasValueContains,
-                operatorId,
-                operands,
-            };
-
-            return new Ok(condition);
-        }
-
-        createStringOverlapsFromStringFieldOverlaps(
-            _field: ScanField,
-            formulaNode: ScanFormula.StringFieldOverlapsNode,
             operatorId: OverlapsScanFieldCondition.OperatorId,
-        ): Result<StringOverlapsScanFieldCondition, ScanFieldSetLoadError> {
+            values: readonly string[],
+        ): Result<StringOverlapsScanFieldCondition> {
             const condition: StringOverlapsScanFieldCondition = {
                 typeId: ScanFieldCondition.TypeId.StringOverlaps,
                 operatorId,
                 operands: {
-                    values: formulaNode.values.slice(),
+                    values: values.slice(),
                 }
             };
 
             return new Ok(condition);
         }
 
-        createCurrencyOverlapsFromCurrencyFieldOverlaps(
+        createCurrencyOverlaps(
             _field: ScanField,
-            formulaNode: ScanFormula.CurrencyFieldOverlapsNode,
             operatorId: OverlapsScanFieldCondition.OperatorId,
-        ): Result<CurrencyOverlapsScanFieldCondition, ScanFieldSetLoadError> {
+            values: readonly CurrencyId[],
+        ): Result<CurrencyOverlapsScanFieldCondition> {
             const condition: CurrencyOverlapsScanFieldCondition = {
                 typeId: ScanFieldCondition.TypeId.CurrencyOverlaps,
                 operatorId,
                 operands: {
-                    values: formulaNode.values.slice(),
+                    values: values.slice(),
                 }
             };
 
             return new Ok(condition);
         }
 
-        createExchangeOverlapsFromExchangeFieldOverlaps(
+        createExchangeOverlaps(
             _field: ScanField,
-            formulaNode: ScanFormula.ExchangeFieldOverlapsNode,
             operatorId: OverlapsScanFieldCondition.OperatorId,
-        ): Result<ExchangeOverlapsScanFieldCondition, ScanFieldSetLoadError> {
+            values: readonly ExchangeId[],
+        ): Result<ExchangeOverlapsScanFieldCondition> {
             const condition: ExchangeOverlapsScanFieldCondition = {
                 typeId: ScanFieldCondition.TypeId.ExchangeOverlaps,
                 operatorId,
                 operands: {
-                    values: formulaNode.values.slice(),
+                    values: values.slice(),
                 }
             };
 
             return new Ok(condition);
         }
 
-        createMarketOverlapsFromMarketFieldOverlaps(
+        createMarketOverlaps(
             _field: ScanField,
-            formulaNode: ScanFormula.MarketFieldOverlapsNode,
             operatorId: OverlapsScanFieldCondition.OperatorId,
-        ): Result<MarketOverlapsScanFieldCondition, ScanFieldSetLoadError> {
+            values: readonly MarketId[],
+        ): Result<MarketOverlapsScanFieldCondition> {
             const condition: MarketOverlapsScanFieldCondition = {
                 typeId: ScanFieldCondition.TypeId.MarketOverlaps,
                 operatorId,
                 operands: {
-                    values: formulaNode.values.slice(),
+                    values: values.slice(),
                 }
             };
 
             return new Ok(condition);
         }
 
-        createMarketBoardOverlapsFromMarketBoardFieldOverlaps(
+        createMarketBoardOverlaps(
             _field: ScanField,
-            formulaNode: ScanFormula.MarketBoardFieldOverlapsNode,
             operatorId: OverlapsScanFieldCondition.OperatorId,
-        ): Result<MarketBoardOverlapsScanFieldCondition, ScanFieldSetLoadError> {
+            values: readonly MarketBoardId[],
+        ): Result<MarketBoardOverlapsScanFieldCondition> {
             const condition: MarketBoardOverlapsScanFieldCondition = {
                 typeId: ScanFieldCondition.TypeId.MarketBoardOverlaps,
                 operatorId,
                 operands: {
-                    values: formulaNode.values.slice(),
+                    values: values.slice(),
                 }
             };
 
             return new Ok(condition);
         }
 
-        createIsFromIs(
+        createIs(
             _field: ScanField,
-            formulaNode: ScanFormula.IsNode,
             operatorId: IsScanFieldCondition.OperatorId,
-        ): Result<IsScanFieldCondition, ScanFieldSetLoadError> {
+            categoryId: ScanFormula.IsNode.CategoryId,
+        ): Result<IsScanFieldCondition> {
             const condition: IsScanFieldCondition = {
                 typeId: ScanFieldCondition.TypeId.Is,
                 operatorId,
                 operands: {
-                    categoryId: formulaNode.categoryId,
+                    categoryId,
                 }
             }
 

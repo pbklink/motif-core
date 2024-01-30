@@ -24974,59 +24974,47 @@ export namespace ScanField {
     // (undocumented)
     export interface ConditionFactory {
         // (undocumented)
-        createCurrencyOverlapsFromCurrencyFieldOverlaps(field: ScanField, formulaNode: ScanFormula.CurrencyFieldOverlapsNode, operatorId: OverlapsScanFieldCondition.OperatorId): Result<CurrencyOverlapsScanFieldCondition, ScanFieldSetLoadError>;
+        createCurrencyOverlaps(field: ScanField, operatorId: OverlapsScanFieldCondition.OperatorId, values: readonly CurrencyId[]): Result<CurrencyOverlapsScanFieldCondition>;
         // (undocumented)
-        createDateFromDateFieldEquals(field: ScanField, formulaNode: ScanFormula.DateFieldEqualsNode, operatorId: DateScanFieldCondition.OperatorId): Result<DateScanFieldCondition, ScanFieldSetLoadError>;
+        createDateWithEquals(field: ScanField, operatorId: DateScanFieldCondition.OperatorId, value: SourceTzOffsetDateTime): Result<DateScanFieldCondition>;
         // (undocumented)
-        createDateFromDateFieldInRange(field: ScanField, formulaNode: ScanFormula.DateFieldInRangeNode, operatorId: DateScanFieldCondition.OperatorId): Result<DateScanFieldCondition, ScanFieldSetLoadError>;
+        createDateWithHasValue(field: ScanField, operatorId: DateScanFieldCondition.OperatorId): Result<DateScanFieldCondition>;
         // (undocumented)
-        createDateFromDateSubFieldEquals(field: ScanField, formulaNode: ScanFormula.DateSubFieldEqualsNode, operatorId: DateScanFieldCondition.OperatorId): Result<DateScanFieldCondition, ScanFieldSetLoadError>;
+        createDateWithRange(field: ScanField, operatorId: DateScanFieldCondition.OperatorId, min: SourceTzOffsetDateTime | undefined, max: SourceTzOffsetDateTime | undefined): Result<DateScanFieldCondition>;
         // (undocumented)
-        createDateFromDateSubFieldHasValue(field: ScanField, formulaNode: ScanFormula.DateSubFieldHasValueNode, operatorId: DateScanFieldCondition.OperatorId): Result<DateScanFieldCondition, ScanFieldSetLoadError>;
+        createExchangeOverlaps(field: ScanField, operatorId: OverlapsScanFieldCondition.OperatorId, values: readonly ExchangeId[]): Result<ExchangeOverlapsScanFieldCondition>;
         // (undocumented)
-        createDateFromDateSubFieldInRange(field: ScanField, formulaNode: ScanFormula.DateSubFieldInRangeNode, operatorId: DateScanFieldCondition.OperatorId): Result<DateScanFieldCondition, ScanFieldSetLoadError>;
+        createIs(field: ScanField, operatorId: IsScanFieldCondition.OperatorId, categoryId: ScanFormula.IsNode.CategoryId): Result<IsScanFieldCondition>;
         // (undocumented)
-        createDateFromFieldHasValue(field: ScanField, formulaNode: ScanFormula.FieldHasValueNode, operatorId: DateScanFieldCondition.OperatorId): Result<DateScanFieldCondition, ScanFieldSetLoadError>;
+        createMarketBoardOverlaps(field: ScanField, operatorId: OverlapsScanFieldCondition.OperatorId, values: readonly MarketBoardId[]): Result<MarketBoardOverlapsScanFieldCondition>;
         // (undocumented)
-        createExchangeOverlapsFromExchangeFieldOverlaps(field: ScanField, formulaNode: ScanFormula.ExchangeFieldOverlapsNode, operatorId: OverlapsScanFieldCondition.OperatorId): Result<ExchangeOverlapsScanFieldCondition, ScanFieldSetLoadError>;
+        createMarketOverlaps(field: ScanField, operatorId: OverlapsScanFieldCondition.OperatorId, values: readonly MarketId[]): Result<MarketOverlapsScanFieldCondition>;
         // (undocumented)
-        createIsFromIs(field: ScanField, formulaNode: ScanFormula.IsNode, operatorId: IsScanFieldCondition.OperatorId): Result<IsScanFieldCondition, ScanFieldSetLoadError>;
+        createNumericComparisonWithHasValue(field: ScanField, operatorId: NumericComparisonScanFieldCondition.OperatorId): Result<NumericComparisonScanFieldCondition>;
         // (undocumented)
-        createMarketBoardOverlapsFromMarketBoardFieldOverlaps(field: ScanField, formulaNode: ScanFormula.MarketBoardFieldOverlapsNode, operatorId: OverlapsScanFieldCondition.OperatorId): Result<MarketBoardOverlapsScanFieldCondition, ScanFieldSetLoadError>;
+        createNumericComparisonWithRange(field: ScanField, operatorId: NumericComparisonScanFieldCondition.OperatorId, min: number | undefined, max: number | undefined): Result<NumericComparisonScanFieldCondition>;
         // (undocumented)
-        createMarketOverlapsFromMarketFieldOverlaps(field: ScanField, formulaNode: ScanFormula.MarketFieldOverlapsNode, operatorId: OverlapsScanFieldCondition.OperatorId): Result<MarketOverlapsScanFieldCondition, ScanFieldSetLoadError>;
+        createNumericComparisonWithValue(field: ScanField, operatorId: NumericComparisonScanFieldCondition.OperatorId, value: number): Result<NumericComparisonScanFieldCondition>;
         // (undocumented)
-        createNumericComparisonFromFieldHasValue(field: ScanField, formulaNode: ScanFormula.FieldHasValueNode, operatorId: NumericComparisonScanFieldCondition.OperatorId): Result<NumericComparisonScanFieldCondition, ScanFieldSetLoadError>;
+        createNumericWithHasValue(field: ScanField, operatorId: NumericScanFieldCondition.OperatorId): Result<NumericScanFieldCondition>;
         // (undocumented)
-        createNumericComparisonFromNumericComparison(field: ScanField, formulaNode: ScanFormula.NumericComparisonBooleanNode, operatorId: NumericComparisonScanFieldCondition.OperatorId, useRightOperandAsValue: boolean): Result<NumericComparisonScanFieldCondition, ScanFieldSetLoadError>;
+        createNumericWithRange(field: ScanField, operatorId: NumericScanFieldCondition.OperatorId, min: number | undefined, max: number | undefined): Result<NumericScanFieldCondition>;
         // (undocumented)
-        createNumericComparisonFromNumericFieldEquals(field: ScanField, formulaNode: ScanFormula.NumericFieldEqualsNode, operatorId: NumericComparisonScanFieldCondition.OperatorId): Result<NumericComparisonScanFieldCondition, ScanFieldSetLoadError>;
+        createNumericWithValue(field: ScanField, operatorId: NumericScanFieldCondition.OperatorId, value: number): Result<NumericScanFieldCondition>;
         // (undocumented)
-        createNumericComparisonFromNumericFieldInRange(field: ScanField, formulaNode: ScanFormula.NumericFieldInRangeNode, operatorId: NumericComparisonScanFieldCondition.OperatorId): Result<NumericComparisonScanFieldCondition, ScanFieldSetLoadError>;
+        createStringOverlaps(field: ScanField, operatorId: OverlapsScanFieldCondition.OperatorId, values: readonly string[]): Result<StringOverlapsScanFieldCondition>;
         // (undocumented)
-        createNumericFromPriceSubFieldEquals(field: ScanField, formulaNode: ScanFormula.PriceSubFieldEqualsNode, operatorId: NumericScanFieldCondition.OperatorId): Result<NumericScanFieldCondition, ScanFieldSetLoadError>;
+        createTextContains(field: ScanField, operatorId: TextContainsScanFieldCondition.OperatorId, value: string, asId: ScanFormula.TextContainsAsId, ignoreCase: boolean): Result<TextContainsScanFieldCondition>;
         // (undocumented)
-        createNumericFromPriceSubFieldHasValue(field: ScanField, formulaNode: ScanFormula.PriceSubFieldHasValueNode, operatorId: NumericScanFieldCondition.OperatorId): Result<NumericScanFieldCondition, ScanFieldSetLoadError>;
+        createTextEquals(field: ScanField, operatorId: TextEqualsScanFieldCondition.OperatorId, value: string): Result<TextEqualsScanFieldCondition>;
         // (undocumented)
-        createNumericFromPriceSubFieldInRange(field: ScanField, formulaNode: ScanFormula.PriceSubFieldInRangeNode, operatorId: NumericScanFieldCondition.OperatorId): Result<NumericScanFieldCondition, ScanFieldSetLoadError>;
+        createTextHasValueContainsWithContains(field: ScanField, operatorId: TextHasValueContainsScanFieldCondition.OperatorId, value: string, asId: ScanFormula.TextContainsAsId, ignoreCase: boolean): Result<TextHasValueContainsScanFieldCondition>;
         // (undocumented)
-        createStringOverlapsFromStringFieldOverlaps(field: ScanField, formulaNode: ScanFormula.StringFieldOverlapsNode, operatorId: OverlapsScanFieldCondition.OperatorId): Result<StringOverlapsScanFieldCondition, ScanFieldSetLoadError>;
+        createTextHasValueContainsWithHasValue(field: ScanField, operatorId: TextHasValueContainsScanFieldCondition.OperatorId): Result<TextHasValueContainsScanFieldCondition>;
         // (undocumented)
-        createTextContainsFromTextFieldContains(field: ScanField, formulaNode: ScanFormula.TextFieldContainsNode, operatorId: TextContainsScanFieldCondition.OperatorId): Result<TextContainsScanFieldCondition, ScanFieldSetLoadError>;
+        createTextHasValueEqualsWithHasValue(field: ScanField, operatorId: TextHasValueEqualsScanFieldCondition.OperatorId): Result<TextHasValueEqualsScanFieldCondition>;
         // (undocumented)
-        createTextEqualsFromTextFieldEquals(field: ScanField, formulaNode: ScanFormula.TextFieldEqualsNode, operatorId: TextEqualsScanFieldCondition.OperatorId): Result<TextEqualsScanFieldCondition, ScanFieldSetLoadError>;
-        // (undocumented)
-        createTextHasValueContainsFromAltCodeSubFieldContains(field: ScanField, formulaNode: ScanFormula.AltCodeSubFieldContainsNode, operatorId: TextHasValueContainsScanFieldCondition.OperatorId): Result<TextHasValueContainsScanFieldCondition, ScanFieldSetLoadError>;
-        // (undocumented)
-        createTextHasValueContainsFromAltCodeSubFieldHasValue(field: ScanField, formulaNode: ScanFormula.AltCodeSubFieldHasValueNode, operatorId: TextHasValueContainsScanFieldCondition.OperatorId): Result<TextHasValueContainsScanFieldCondition, ScanFieldSetLoadError>;
-        // (undocumented)
-        createTextHasValueContainsFromAttributeSubFieldContains(field: ScanField, formulaNode: ScanFormula.AttributeSubFieldContainsNode, operatorId: TextHasValueContainsScanFieldCondition.OperatorId): Result<TextHasValueContainsScanFieldCondition, ScanFieldSetLoadError>;
-        // (undocumented)
-        createTextHasValueContainsFromAttributeSubFieldHasValue(field: ScanField, formulaNode: ScanFormula.AttributeSubFieldHasValueNode, operatorId: TextHasValueContainsScanFieldCondition.OperatorId): Result<TextHasValueContainsScanFieldCondition, ScanFieldSetLoadError>;
-        // (undocumented)
-        createTextHasValueEqualsFromFieldHasValue(field: ScanField, formulaNode: ScanFormula.FieldHasValueNode, operatorId: TextHasValueEqualsScanFieldCondition.OperatorId): Result<TextHasValueEqualsScanFieldCondition, ScanFieldSetLoadError>;
-        // (undocumented)
-        createTextHasValueEqualsFromTextFieldEquals(field: ScanField, formulaNode: ScanFormula.TextFieldEqualsNode, operatorId: TextHasValueEqualsScanFieldCondition.OperatorId): Result<TextHasValueEqualsScanFieldCondition, ScanFieldSetLoadError>;
+        createTextHasValueEqualsWithValue(field: ScanField, operatorId: TextHasValueEqualsScanFieldCondition.OperatorId, value: string): Result<TextHasValueEqualsScanFieldCondition>;
     }
     // (undocumented)
     export interface Conditions {
@@ -25174,66 +25162,6 @@ export namespace ScanFieldCondition {
     }
 }
 
-// Warning: (ae-missing-release-tag) "ScanFieldConditionFactory" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export interface ScanFieldConditionFactory {
-    // (undocumented)
-    createCurrencyOverlapsFromCurrencyFieldOverlaps(formulaNode: ScanFormula.CurrencyFieldOverlapsNode, operatorId: OverlapsScanFieldCondition.OperatorId): Result<CurrencyOverlapsScanFieldCondition, ScanFieldSetLoadError>;
-    // (undocumented)
-    createDateFromDateFieldEquals(formulaNode: ScanFormula.DateFieldEqualsNode, operatorId: DateScanFieldCondition.OperatorId): Result<DateScanFieldCondition, ScanFieldSetLoadError>;
-    // (undocumented)
-    createDateFromDateFieldInRange(formulaNode: ScanFormula.DateFieldInRangeNode, operatorId: DateScanFieldCondition.OperatorId): Result<DateScanFieldCondition, ScanFieldSetLoadError>;
-    // (undocumented)
-    createDateFromDateSubFieldEquals(formulaNode: ScanFormula.DateSubFieldEqualsNode, operatorId: DateScanFieldCondition.OperatorId): Result<DateScanFieldCondition, ScanFieldSetLoadError>;
-    // (undocumented)
-    createDateFromDateSubFieldHasValue(formulaNode: ScanFormula.DateSubFieldHasValueNode, operatorId: DateScanFieldCondition.OperatorId): Result<DateScanFieldCondition, ScanFieldSetLoadError>;
-    // (undocumented)
-    createDateFromDateSubFieldInRange(formulaNode: ScanFormula.DateSubFieldInRangeNode, operatorId: DateScanFieldCondition.OperatorId): Result<DateScanFieldCondition, ScanFieldSetLoadError>;
-    // (undocumented)
-    createDateFromFieldHasValue(formulaNode: ScanFormula.FieldHasValueNode, operatorId: DateScanFieldCondition.OperatorId): Result<DateScanFieldCondition, ScanFieldSetLoadError>;
-    // (undocumented)
-    createExchangeOverlapsFromExchangeFieldOverlaps(formulaNode: ScanFormula.ExchangeFieldOverlapsNode, operatorId: OverlapsScanFieldCondition.OperatorId): Result<ExchangeOverlapsScanFieldCondition, ScanFieldSetLoadError>;
-    // (undocumented)
-    createIsFromIs(formulaNode: ScanFormula.IsNode, operatorId: IsScanFieldCondition.OperatorId): Result<IsScanFieldCondition, ScanFieldSetLoadError>;
-    // (undocumented)
-    createMarketBoardOverlapsFromMarketBoardFieldOverlaps(formulaNode: ScanFormula.MarketBoardFieldOverlapsNode, operatorId: OverlapsScanFieldCondition.OperatorId): Result<MarketBoardOverlapsScanFieldCondition, ScanFieldSetLoadError>;
-    // (undocumented)
-    createMarketOverlapsFromMarketFieldOverlaps(formulaNode: ScanFormula.MarketFieldOverlapsNode, operatorId: OverlapsScanFieldCondition.OperatorId): Result<MarketOverlapsScanFieldCondition, ScanFieldSetLoadError>;
-    // (undocumented)
-    createNumericComparisonFromFieldHasValue(formulaNode: ScanFormula.FieldHasValueNode, operatorId: NumericComparisonScanFieldCondition.OperatorId): Result<NumericComparisonScanFieldCondition, ScanFieldSetLoadError>;
-    // (undocumented)
-    createNumericComparisonFromNumericComparison(formulaNode: ScanFormula.NumericComparisonBooleanNode, operatorId: NumericComparisonScanFieldCondition.OperatorId, useRightOperandAsValue: boolean): Result<NumericComparisonScanFieldCondition, ScanFieldSetLoadError>;
-    // (undocumented)
-    createNumericComparisonFromNumericFieldEquals(formulaNode: ScanFormula.NumericFieldEqualsNode, operatorId: NumericComparisonScanFieldCondition.OperatorId): Result<NumericComparisonScanFieldCondition, ScanFieldSetLoadError>;
-    // (undocumented)
-    createNumericComparisonFromNumericFieldInRange(formulaNode: ScanFormula.NumericFieldInRangeNode, operatorId: NumericComparisonScanFieldCondition.OperatorId): Result<NumericComparisonScanFieldCondition, ScanFieldSetLoadError>;
-    // (undocumented)
-    createNumericFromPriceSubFieldEquals(formulaNode: ScanFormula.PriceSubFieldEqualsNode, operatorId: NumericScanFieldCondition.OperatorId): Result<NumericScanFieldCondition, ScanFieldSetLoadError>;
-    // (undocumented)
-    createNumericFromPriceSubFieldHasValue(formulaNode: ScanFormula.PriceSubFieldHasValueNode, operatorId: NumericScanFieldCondition.OperatorId): Result<NumericScanFieldCondition, ScanFieldSetLoadError>;
-    // (undocumented)
-    createNumericFromPriceSubFieldInRange(formulaNode: ScanFormula.PriceSubFieldInRangeNode, operatorId: NumericScanFieldCondition.OperatorId): Result<NumericScanFieldCondition, ScanFieldSetLoadError>;
-    // (undocumented)
-    createStringOverlapsFromStringFieldOverlaps(formulaNode: ScanFormula.StringFieldOverlapsNode, operatorId: OverlapsScanFieldCondition.OperatorId): Result<StringOverlapsScanFieldCondition, ScanFieldSetLoadError>;
-    // (undocumented)
-    createTextContainsFromTextFieldContains(formulaNode: ScanFormula.TextFieldContainsNode, operatorId: TextContainsScanFieldCondition.OperatorId): Result<TextContainsScanFieldCondition, ScanFieldSetLoadError>;
-    // (undocumented)
-    createTextEqualsFromTextFieldEquals(formulaNode: ScanFormula.TextFieldEqualsNode, operatorId: TextEqualsScanFieldCondition.OperatorId): Result<TextEqualsScanFieldCondition, ScanFieldSetLoadError>;
-    // (undocumented)
-    createTextHasValueContainsFromAltCodeSubFieldContains(formulaNode: ScanFormula.AltCodeSubFieldContainsNode, operatorId: TextHasValueContainsScanFieldCondition.OperatorId): Result<TextHasValueContainsScanFieldCondition, ScanFieldSetLoadError>;
-    // (undocumented)
-    createTextHasValueContainsFromAltCodeSubFieldHasValue(formulaNode: ScanFormula.AltCodeSubFieldHasValueNode, operatorId: TextHasValueContainsScanFieldCondition.OperatorId): Result<TextHasValueContainsScanFieldCondition, ScanFieldSetLoadError>;
-    // (undocumented)
-    createTextHasValueContainsFromAttributeSubFieldContains(formulaNode: ScanFormula.AttributeSubFieldContainsNode, operatorId: TextHasValueContainsScanFieldCondition.OperatorId): Result<TextHasValueContainsScanFieldCondition, ScanFieldSetLoadError>;
-    // (undocumented)
-    createTextHasValueContainsFromAttributeSubFieldHasValue(formulaNode: ScanFormula.AttributeSubFieldHasValueNode, operatorId: TextHasValueContainsScanFieldCondition.OperatorId): Result<TextHasValueContainsScanFieldCondition, ScanFieldSetLoadError>;
-    // (undocumented)
-    createTextHasValueEqualsFromFieldHasValue(formulaNode: ScanFormula.FieldHasValueNode, operatorId: TextHasValueEqualsScanFieldCondition.OperatorId): Result<TextHasValueEqualsScanFieldCondition, ScanFieldSetLoadError>;
-    // (undocumented)
-    createTextHasValueEqualsFromTextFieldEquals(formulaNode: ScanFormula.TextFieldEqualsNode, operatorId: TextHasValueEqualsScanFieldCondition.OperatorId): Result<TextHasValueEqualsScanFieldCondition, ScanFieldSetLoadError>;
-}
-
 // Warning: (ae-missing-release-tag) "ScanFieldSet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "ScanFieldSet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -25256,35 +25184,35 @@ export namespace ScanFieldSet {
     // (undocumented)
     export interface FieldFactory {
         // (undocumented)
-        createAltCodeSubbed(fieldSet: ScanFieldSet, subFieldId: ScanFormula.AltCodeSubFieldId): Result<AltCodeSubbedScanField, ScanFieldSetLoadError>;
+        createAltCodeSubbed(fieldSet: ScanFieldSet, subFieldId: ScanFormula.AltCodeSubFieldId): Result<AltCodeSubbedScanField>;
         // (undocumented)
-        createAttributeSubbed(fieldSet: ScanFieldSet, subFieldId: ScanFormula.AttributeSubFieldId): Result<AttributeSubbedScanField, ScanFieldSetLoadError>;
+        createAttributeSubbed(fieldSet: ScanFieldSet, subFieldId: ScanFormula.AttributeSubFieldId): Result<AttributeSubbedScanField>;
         // (undocumented)
-        createCurrencyOverlaps(fieldSet: ScanFieldSet, fieldId: ScanFormula.FieldId.Currency): Result<CurrencyOverlapsScanField, ScanFieldSetLoadError>;
+        createCurrencyOverlaps(fieldSet: ScanFieldSet, fieldId: ScanFormula.FieldId.Currency): Result<CurrencyOverlapsScanField>;
         // (undocumented)
-        createDateInRange(fieldSet: ScanFieldSet, fieldId: ScanFormula.DateRangeFieldId): Result<DateInRangeScanField, ScanFieldSetLoadError>;
+        createDateInRange(fieldSet: ScanFieldSet, fieldId: ScanFormula.DateRangeFieldId): Result<DateInRangeScanField>;
         // (undocumented)
-        createDateSubbed(fieldSet: ScanFieldSet, subFieldId: ScanFormula.DateSubFieldId): Result<DateSubbedScanField, ScanFieldSetLoadError>;
+        createDateSubbed(fieldSet: ScanFieldSet, subFieldId: ScanFormula.DateSubFieldId): Result<DateSubbedScanField>;
         // (undocumented)
-        createExchangeOverlaps(fieldSet: ScanFieldSet, fieldId: ScanFormula.FieldId.Exchange): Result<ExchangeOverlapsScanField, ScanFieldSetLoadError>;
+        createExchangeOverlaps(fieldSet: ScanFieldSet, fieldId: ScanFormula.FieldId.Exchange): Result<ExchangeOverlapsScanField>;
         // (undocumented)
-        createIs(fieldSet: ScanFieldSet, fieldId: ScanFormula.FieldId.Is): Result<IsScanField, ScanFieldSetLoadError>;
+        createIs(fieldSet: ScanFieldSet, fieldId: ScanFormula.FieldId.Is): Result<IsScanField>;
         // (undocumented)
-        createMarketBoardOverlaps(fieldSet: ScanFieldSet, fieldId: ScanFormula.FieldId.MarketBoard): Result<MarketBoardOverlapsScanField, ScanFieldSetLoadError>;
+        createMarketBoardOverlaps(fieldSet: ScanFieldSet, fieldId: ScanFormula.FieldId.MarketBoard): Result<MarketBoardOverlapsScanField>;
         // (undocumented)
-        createMarketOverlaps(fieldSet: ScanFieldSet, fieldId: ScanFormula.MarketOverlapsFieldId): Result<MarketOverlapsScanField, ScanFieldSetLoadError>;
+        createMarketOverlaps(fieldSet: ScanFieldSet, fieldId: ScanFormula.MarketOverlapsFieldId): Result<MarketOverlapsScanField>;
         // (undocumented)
-        createNumericInRange(fieldSet: ScanFieldSet, fieldId: ScanFormula.NumericRangeFieldId): Result<NumericInRangeScanField, ScanFieldSetLoadError>;
+        createNumericInRange(fieldSet: ScanFieldSet, fieldId: ScanFormula.NumericRangeFieldId): Result<NumericInRangeScanField>;
         // (undocumented)
-        createPriceSubbed(fieldSet: ScanFieldSet, subFieldId: ScanFormula.PriceSubFieldId): Result<PriceSubbedScanField, ScanFieldSetLoadError>;
+        createPriceSubbed(fieldSet: ScanFieldSet, subFieldId: ScanFormula.PriceSubFieldId): Result<PriceSubbedScanField>;
         // (undocumented)
-        createStringOverlaps(fieldSet: ScanFieldSet, fieldId: ScanFormula.StringOverlapsFieldId): Result<StringOverlapsScanField, ScanFieldSetLoadError>;
+        createStringOverlaps(fieldSet: ScanFieldSet, fieldId: ScanFormula.StringOverlapsFieldId): Result<StringOverlapsScanField>;
         // (undocumented)
-        createTextContains(fieldSet: ScanFieldSet, fieldId: ScanFormula.TextContainsFieldId): Result<TextContainsScanField, ScanFieldSetLoadError>;
+        createTextContains(fieldSet: ScanFieldSet, fieldId: ScanFormula.TextContainsFieldId): Result<TextContainsScanField>;
         // (undocumented)
-        createTextEquals(fieldSet: ScanFieldSet, fieldId: ScanFormula.TextEqualsFieldId): Result<TextEqualsScanField, ScanFieldSetLoadError>;
+        createTextEquals(fieldSet: ScanFieldSet, fieldId: ScanFormula.TextEqualsFieldId): Result<TextEqualsScanField>;
         // (undocumented)
-        createTextHasValueEquals(fieldSet: ScanFieldSet, fieldId: ScanFormula.TextHasValueEqualsFieldId): Result<TextHasValueEqualsScanField, ScanFieldSetLoadError>;
+        createTextHasValueEquals(fieldSet: ScanFieldSet, fieldId: ScanFormula.TextHasValueEqualsFieldId): Result<TextHasValueEqualsScanField>;
     }
     // (undocumented)
     export interface Fields {
@@ -25339,6 +25267,10 @@ export const enum ScanFieldSetLoadErrorTypeId {
     // (undocumented)
     AndFieldOperatorCannotBeNegated = 8,
     // (undocumented)
+    FactoryCreateFieldConditionError = 17,
+    // (undocumented)
+    FactoryCreateFieldError = 16,
+    // (undocumented)
     fieldConditionsOperationIdMismatch = 13,
     // (undocumented)
     NoneConditionNotSupported = 12,
@@ -25352,8 +25284,6 @@ export const enum ScanFieldSetLoadErrorTypeId {
     OrFieldHasXorChild = 3,
     // (undocumented)
     OrFieldOperatorCannotBeNegated = 9,
-    // (undocumented)
-    SpecifiedNumericComparisonOperandIsNotValue = 16,
     // (undocumented)
     XOrFieldDoesNotHave2Children = 4,
     // (undocumented)
@@ -28612,92 +28542,80 @@ export namespace StandAloneScanFieldSet {
     // (undocumented)
     export class ConditionFactory implements ScanField.ConditionFactory {
         // (undocumented)
-        createCurrencyOverlapsFromCurrencyFieldOverlaps(_field: ScanField, formulaNode: ScanFormula.CurrencyFieldOverlapsNode, operatorId: OverlapsScanFieldCondition.OperatorId): Result<CurrencyOverlapsScanFieldCondition, ScanFieldSetLoadError>;
+        createCurrencyOverlaps(_field: ScanField, operatorId: OverlapsScanFieldCondition.OperatorId, values: readonly CurrencyId[]): Result<CurrencyOverlapsScanFieldCondition>;
         // (undocumented)
-        createDateFromDateFieldEquals(_field: ScanField, formulaNode: ScanFormula.DateFieldEqualsNode, operatorId: DateScanFieldCondition.OperatorId): Result<DateScanFieldCondition, ScanFieldSetLoadError>;
+        createDateWithEquals(_field: ScanField, operatorId: DateScanFieldCondition.OperatorId, value: SourceTzOffsetDateTime): Result<DateScanFieldCondition>;
         // (undocumented)
-        createDateFromDateFieldInRange(_field: ScanField, formulaNode: ScanFormula.DateFieldInRangeNode, operatorId: DateScanFieldCondition.OperatorId): Result<DateScanFieldCondition, ScanFieldSetLoadError>;
+        createDateWithHasValue(_field: ScanField, operatorId: DateScanFieldCondition.OperatorId): Result<DateScanFieldCondition>;
         // (undocumented)
-        createDateFromDateSubFieldEquals(_field: ScanField, formulaNode: ScanFormula.DateSubFieldEqualsNode, operatorId: DateScanFieldCondition.OperatorId): Result<DateScanFieldCondition, ScanFieldSetLoadError>;
+        createDateWithRange(_field: ScanField, operatorId: DateScanFieldCondition.OperatorId, min: SourceTzOffsetDateTime | undefined, max: SourceTzOffsetDateTime | undefined): Result<DateScanFieldCondition>;
         // (undocumented)
-        createDateFromDateSubFieldHasValue(_field: ScanField, _formulaNode: ScanFormula.DateSubFieldHasValueNode, operatorId: DateScanFieldCondition.OperatorId): Result<DateScanFieldCondition, ScanFieldSetLoadError>;
+        createExchangeOverlaps(_field: ScanField, operatorId: OverlapsScanFieldCondition.OperatorId, values: readonly ExchangeId[]): Result<ExchangeOverlapsScanFieldCondition>;
         // (undocumented)
-        createDateFromDateSubFieldInRange(_field: ScanField, formulaNode: ScanFormula.DateSubFieldInRangeNode, operatorId: DateScanFieldCondition.OperatorId): Result<DateScanFieldCondition, ScanFieldSetLoadError>;
+        createIs(_field: ScanField, operatorId: IsScanFieldCondition.OperatorId, categoryId: ScanFormula.IsNode.CategoryId): Result<IsScanFieldCondition>;
         // (undocumented)
-        createDateFromFieldHasValue(_field: ScanField, _formulaNode: ScanFormula.FieldHasValueNode, operatorId: DateScanFieldCondition.OperatorId): Result<DateScanFieldCondition, ScanFieldSetLoadError>;
+        createMarketBoardOverlaps(_field: ScanField, operatorId: OverlapsScanFieldCondition.OperatorId, values: readonly MarketBoardId[]): Result<MarketBoardOverlapsScanFieldCondition>;
         // (undocumented)
-        createExchangeOverlapsFromExchangeFieldOverlaps(_field: ScanField, formulaNode: ScanFormula.ExchangeFieldOverlapsNode, operatorId: OverlapsScanFieldCondition.OperatorId): Result<ExchangeOverlapsScanFieldCondition, ScanFieldSetLoadError>;
+        createMarketOverlaps(_field: ScanField, operatorId: OverlapsScanFieldCondition.OperatorId, values: readonly MarketId[]): Result<MarketOverlapsScanFieldCondition>;
         // (undocumented)
-        createIsFromIs(_field: ScanField, formulaNode: ScanFormula.IsNode, operatorId: IsScanFieldCondition.OperatorId): Result<IsScanFieldCondition, ScanFieldSetLoadError>;
+        createNumericComparisonWithHasValue(_field: ScanField, operatorId: NumericComparisonScanFieldCondition.OperatorId): Result<NumericComparisonScanFieldCondition>;
         // (undocumented)
-        createMarketBoardOverlapsFromMarketBoardFieldOverlaps(_field: ScanField, formulaNode: ScanFormula.MarketBoardFieldOverlapsNode, operatorId: OverlapsScanFieldCondition.OperatorId): Result<MarketBoardOverlapsScanFieldCondition, ScanFieldSetLoadError>;
+        createNumericComparisonWithRange(_field: ScanField, operatorId: NumericComparisonScanFieldCondition.OperatorId, min: number | undefined, max: number | undefined): Result<NumericComparisonScanFieldCondition>;
         // (undocumented)
-        createMarketOverlapsFromMarketFieldOverlaps(_field: ScanField, formulaNode: ScanFormula.MarketFieldOverlapsNode, operatorId: OverlapsScanFieldCondition.OperatorId): Result<MarketOverlapsScanFieldCondition, ScanFieldSetLoadError>;
+        createNumericComparisonWithValue(_field: ScanField, operatorId: NumericComparisonScanFieldCondition.OperatorId, value: number): Result<NumericComparisonScanFieldCondition>;
         // (undocumented)
-        createNumericComparisonFromFieldHasValue(_field: ScanField, _formulaNode: ScanFormula.FieldHasValueNode, operatorId: NumericComparisonScanFieldCondition.OperatorId): Result<NumericComparisonScanFieldCondition, ScanFieldSetLoadError>;
+        createNumericWithHasValue(_field: ScanField, operatorId: NumericScanFieldCondition.OperatorId): Result<NumericScanFieldCondition>;
         // (undocumented)
-        createNumericComparisonFromNumericComparison(_field: ScanField, formulaNode: ScanFormula.NumericComparisonBooleanNode, operatorId: NumericComparisonScanFieldCondition.OperatorId, useRightOperandAsValue: boolean): Result<NumericComparisonScanFieldCondition, ScanFieldSetLoadError>;
+        createNumericWithRange(_field: ScanField, operatorId: NumericScanFieldCondition.OperatorId, min: number | undefined, max: number | undefined): Result<NumericScanFieldCondition>;
         // (undocumented)
-        createNumericComparisonFromNumericFieldEquals(_field: ScanField, formulaNode: ScanFormula.NumericFieldEqualsNode, operatorId: NumericComparisonScanFieldCondition.OperatorId): Result<NumericComparisonScanFieldCondition, ScanFieldSetLoadError>;
+        createNumericWithValue(_field: ScanField, operatorId: NumericScanFieldCondition.OperatorId, value: number): Result<NumericScanFieldCondition>;
         // (undocumented)
-        createNumericComparisonFromNumericFieldInRange(_field: ScanField, formulaNode: ScanFormula.NumericFieldInRangeNode, operatorId: NumericComparisonScanFieldCondition.OperatorId): Result<NumericComparisonScanFieldCondition, ScanFieldSetLoadError>;
+        createStringOverlaps(_field: ScanField, operatorId: OverlapsScanFieldCondition.OperatorId, values: readonly string[]): Result<StringOverlapsScanFieldCondition>;
         // (undocumented)
-        createNumericFromPriceSubFieldEquals(_field: ScanField, formulaNode: ScanFormula.PriceSubFieldEqualsNode, operatorId: NumericScanFieldCondition.OperatorId): Result<NumericScanFieldCondition, ScanFieldSetLoadError>;
+        createTextContains(_field: ScanField, operatorId: TextContainsScanFieldCondition.OperatorId, value: string, asId: ScanFormula.TextContainsAsId, ignoreCase: boolean): Result<TextContainsScanFieldCondition>;
         // (undocumented)
-        createNumericFromPriceSubFieldHasValue(_field: ScanField, _formulaNode: ScanFormula.PriceSubFieldHasValueNode, operatorId: NumericScanFieldCondition.OperatorId): Result<NumericScanFieldCondition, ScanFieldSetLoadError>;
+        createTextEquals(_field: ScanField, operatorId: TextEqualsScanFieldCondition.OperatorId, value: string): Result<TextEqualsScanFieldCondition>;
         // (undocumented)
-        createNumericFromPriceSubFieldInRange(_field: ScanField, formulaNode: ScanFormula.PriceSubFieldInRangeNode, operatorId: NumericScanFieldCondition.OperatorId): Result<NumericScanFieldCondition, ScanFieldSetLoadError>;
+        createTextHasValueContainsWithContains(_field: ScanField, operatorId: TextHasValueContainsScanFieldCondition.OperatorId, value: string, asId: ScanFormula.TextContainsAsId, ignoreCase: boolean): Result<TextHasValueContainsScanFieldCondition>;
         // (undocumented)
-        createStringOverlapsFromStringFieldOverlaps(_field: ScanField, formulaNode: ScanFormula.StringFieldOverlapsNode, operatorId: OverlapsScanFieldCondition.OperatorId): Result<StringOverlapsScanFieldCondition, ScanFieldSetLoadError>;
+        createTextHasValueContainsWithHasValue(_field: ScanField, operatorId: TextHasValueContainsScanFieldCondition.OperatorId): Result<TextHasValueContainsScanFieldCondition>;
         // (undocumented)
-        createTextContainsFromTextFieldContains(_field: ScanField, formulaNode: ScanFormula.TextFieldContainsNode, operatorId: TextContainsScanFieldCondition.OperatorId): Result<TextContainsScanFieldCondition, ScanFieldSetLoadError>;
+        createTextHasValueEqualsWithHasValue(_field: ScanField, operatorId: TextHasValueEqualsScanFieldCondition.OperatorId): Result<TextHasValueEqualsScanFieldCondition>;
         // (undocumented)
-        createTextEqualsFromTextFieldEquals(_field: ScanField, formulaNode: ScanFormula.TextFieldEqualsNode, operatorId: TextEqualsScanFieldCondition.OperatorId): Result<TextEqualsScanFieldCondition, ScanFieldSetLoadError>;
-        // (undocumented)
-        createTextHasValueContainsFromAltCodeSubFieldContains(_field: ScanField, formulaNode: ScanFormula.AltCodeSubFieldContainsNode, operatorId: TextHasValueContainsScanFieldCondition.OperatorId): Result<TextHasValueContainsScanFieldCondition, ScanFieldSetLoadError>;
-        // (undocumented)
-        createTextHasValueContainsFromAltCodeSubFieldHasValue(_field: ScanField, _formulaNode: ScanFormula.AltCodeSubFieldHasValueNode, operatorId: TextHasValueContainsScanFieldCondition.OperatorId): Result<TextHasValueContainsScanFieldCondition, ScanFieldSetLoadError>;
-        // (undocumented)
-        createTextHasValueContainsFromAttributeSubFieldContains(_field: ScanField, formulaNode: ScanFormula.AttributeSubFieldContainsNode, operatorId: TextHasValueContainsScanFieldCondition.OperatorId): Result<TextHasValueContainsScanFieldCondition, ScanFieldSetLoadError>;
-        // (undocumented)
-        createTextHasValueContainsFromAttributeSubFieldHasValue(_field: ScanField, _formulaNode: ScanFormula.AttributeSubFieldHasValueNode, operatorId: TextHasValueContainsScanFieldCondition.OperatorId): Result<TextHasValueContainsScanFieldCondition, ScanFieldSetLoadError>;
-        // (undocumented)
-        createTextHasValueEqualsFromFieldHasValue(_field: ScanField, _formulaNode: ScanFormula.FieldHasValueNode, operatorId: TextHasValueEqualsScanFieldCondition.OperatorId): Result<TextHasValueEqualsScanFieldCondition, ScanFieldSetLoadError>;
-        // (undocumented)
-        createTextHasValueEqualsFromTextFieldEquals(_field: ScanField, formulaNode: ScanFormula.TextFieldEqualsNode, operatorId: TextHasValueEqualsScanFieldCondition.OperatorId): Result<TextHasValueEqualsScanFieldCondition, ScanFieldSetLoadError>;
+        createTextHasValueEqualsWithValue(_field: ScanField, operatorId: TextHasValueEqualsScanFieldCondition.OperatorId, value: string): Result<TextHasValueEqualsScanFieldCondition>;
     }
     // (undocumented)
     export class FieldFactory implements ScanFieldSet.FieldFactory {
         // (undocumented)
-        createAltCodeSubbed(_fieldSet: ScanFieldSet, subFieldId: ScanFormula.AltCodeSubFieldId): Result<AltCodeSubbedScanField, ScanFieldSetLoadError>;
+        createAltCodeSubbed(_fieldSet: ScanFieldSet, subFieldId: ScanFormula.AltCodeSubFieldId): Result<AltCodeSubbedScanField>;
         // (undocumented)
-        createAttributeSubbed(_fieldSet: ScanFieldSet, subFieldId: ScanFormula.AttributeSubFieldId): Result<AttributeSubbedScanField, ScanFieldSetLoadError>;
+        createAttributeSubbed(_fieldSet: ScanFieldSet, subFieldId: ScanFormula.AttributeSubFieldId): Result<AttributeSubbedScanField>;
         // (undocumented)
-        createCurrencyOverlaps(_fieldSet: ScanFieldSet, fieldId: ScanFormula.FieldId.Currency): Result<CurrencyOverlapsScanField, ScanFieldSetLoadError>;
+        createCurrencyOverlaps(_fieldSet: ScanFieldSet, fieldId: ScanFormula.FieldId.Currency): Result<CurrencyOverlapsScanField>;
         // (undocumented)
-        createDateInRange(_fieldSet: ScanFieldSet, fieldId: ScanFormula.DateRangeFieldId): Result<DateInRangeScanField, ScanFieldSetLoadError>;
+        createDateInRange(_fieldSet: ScanFieldSet, fieldId: ScanFormula.DateRangeFieldId): Result<DateInRangeScanField>;
         // (undocumented)
-        createDateSubbed(_fieldSet: ScanFieldSet, subFieldId: ScanFormula.DateSubFieldId): Result<DateSubbedScanField, ScanFieldSetLoadError>;
+        createDateSubbed(_fieldSet: ScanFieldSet, subFieldId: ScanFormula.DateSubFieldId): Result<DateSubbedScanField>;
         // (undocumented)
-        createExchangeOverlaps(_fieldSet: ScanFieldSet, fieldId: ScanFormula.FieldId.Exchange): Result<ExchangeOverlapsScanField, ScanFieldSetLoadError>;
+        createExchangeOverlaps(_fieldSet: ScanFieldSet, fieldId: ScanFormula.FieldId.Exchange): Result<ExchangeOverlapsScanField>;
         // (undocumented)
-        createIs(_fieldSet: ScanFieldSet, fieldId: ScanFormula.FieldId.Is): Result<IsScanField, ScanFieldSetLoadError>;
+        createIs(_fieldSet: ScanFieldSet, fieldId: ScanFormula.FieldId.Is): Result<IsScanField>;
         // (undocumented)
-        createMarketBoardOverlaps(_fieldSet: ScanFieldSet, fieldId: ScanFormula.FieldId.MarketBoard): Result<MarketBoardOverlapsScanField, ScanFieldSetLoadError>;
+        createMarketBoardOverlaps(_fieldSet: ScanFieldSet, fieldId: ScanFormula.FieldId.MarketBoard): Result<MarketBoardOverlapsScanField>;
         // (undocumented)
-        createMarketOverlaps(_fieldSet: ScanFieldSet, fieldId: ScanFormula.MarketOverlapsFieldId): Result<MarketOverlapsScanField, ScanFieldSetLoadError>;
+        createMarketOverlaps(_fieldSet: ScanFieldSet, fieldId: ScanFormula.MarketOverlapsFieldId): Result<MarketOverlapsScanField>;
         // (undocumented)
-        createNumericInRange(_fieldSet: ScanFieldSet, fieldId: ScanFormula.NumericRangeFieldId): Result<NumericInRangeScanField, ScanFieldSetLoadError>;
+        createNumericInRange(_fieldSet: ScanFieldSet, fieldId: ScanFormula.NumericRangeFieldId): Result<NumericInRangeScanField>;
         // (undocumented)
-        createPriceSubbed(_fieldSet: ScanFieldSet, subFieldId: ScanFormula.PriceSubFieldId): Result<PriceSubbedScanField, ScanFieldSetLoadError>;
+        createPriceSubbed(_fieldSet: ScanFieldSet, subFieldId: ScanFormula.PriceSubFieldId): Result<PriceSubbedScanField>;
         // (undocumented)
-        createStringOverlaps(_fieldSet: ScanFieldSet, fieldId: ScanFormula.StringOverlapsFieldId): Result<StringOverlapsScanField, ScanFieldSetLoadError>;
+        createStringOverlaps(_fieldSet: ScanFieldSet, fieldId: ScanFormula.StringOverlapsFieldId): Result<StringOverlapsScanField>;
         // (undocumented)
-        createTextContains(_fieldSet: ScanFieldSet, fieldId: ScanFormula.TextContainsFieldId): Result<TextContainsScanField, ScanFieldSetLoadError>;
+        createTextContains(_fieldSet: ScanFieldSet, fieldId: ScanFormula.TextContainsFieldId): Result<TextContainsScanField>;
         // (undocumented)
-        createTextEquals(_fieldSet: ScanFieldSet, fieldId: ScanFormula.TextEqualsFieldId): Result<TextEqualsScanField, ScanFieldSetLoadError>;
+        createTextEquals(_fieldSet: ScanFieldSet, fieldId: ScanFormula.TextEqualsFieldId): Result<TextEqualsScanField>;
         // (undocumented)
-        createTextHasValueEquals(_fieldSet: ScanFieldSet, fieldId: ScanFormula.TextHasValueEqualsFieldId): Result<TextHasValueEqualsScanField, ScanFieldSetLoadError>;
+        createTextHasValueEquals(_fieldSet: ScanFieldSet, fieldId: ScanFormula.TextHasValueEqualsFieldId): Result<TextHasValueEqualsScanField>;
     }
 }
 

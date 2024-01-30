@@ -23,9 +23,8 @@ export const enum ScanFieldSetLoadErrorTypeId {
     fieldConditionsOperationIdMismatch,
     NumericComparisonBooleanNodeDoesNotHaveANumericFieldValueGetOperand,
     NumericComparisonBooleanNodeDoesNotHaveANumberOperand,
-
-    // Standalone
-    SpecifiedNumericComparisonOperandIsNotValue,
+    FactoryCreateFieldError,
+    FactoryCreateFieldConditionError,
 }
 
 export interface ScanFieldSetLoadError {

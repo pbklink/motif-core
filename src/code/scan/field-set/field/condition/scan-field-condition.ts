@@ -963,8 +963,8 @@ export namespace ScanFieldCondition {
 export interface BaseNumericScanFieldCondition extends ScanFieldCondition {
     readonly typeId: ScanFieldCondition.TypeId.Numeric | ScanFieldCondition.TypeId.NumericComparison;
     // readonly fieldId: ScanFormula.NumericRangeFieldId | ScanFormula.NumericRangeSubbedFieldId,
-    operands: BaseNumericScanFieldCondition.Operands;
     operatorId: BaseNumericScanFieldCondition.OperatorId;
+    operands: BaseNumericScanFieldCondition.Operands;
 }
 
 export namespace BaseNumericScanFieldCondition {
@@ -1370,8 +1370,8 @@ export namespace DateScanFieldCondition {
 
 export interface BaseTextScanFieldCondition extends ScanFieldCondition {
     // readonly fieldId: ScanFormula.TextTextFieldId | ScanFormula.TextTextSubbedFieldId
-    operands: BaseTextScanFieldCondition.Operands;
     operatorId: BaseTextScanFieldCondition.OperatorId;
+    operands: BaseTextScanFieldCondition.Operands;
 }
 
 export namespace BaseTextScanFieldCondition {
