@@ -5,5 +5,4 @@
  */
 
 export * from './scan-field-condition';
-export * from './scan-field-condition-factory';
 

@@ -5,6 +5,7 @@
  */
 
 export * from './condition-set/internal-api';
+export * from './field-set/internal-api';
 export * from './formula/internal-api';
 export * from './scan';
 export * from './scan-editor';

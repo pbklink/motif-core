@@ -6,5 +6,4 @@
 
 export * from './condition/internal-api';
 export * from './scan-field';
-export * from './scan-field-factory';
 
