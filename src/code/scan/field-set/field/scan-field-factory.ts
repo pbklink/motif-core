@@ -10,35 +10,35 @@ import { ScanFieldSetLoadError } from '../common/internal-api';
 import {
     AltCodeSubbedScanField,
     AttributeSubbedScanField,
-    BoardOverlapsScanField,
     CurrencyOverlapsScanField,
-    DateScanField,
+    DateInRangeScanField,
     DateSubbedScanField,
     ExchangeOverlapsScanField,
     IsScanField,
+    MarketBoardOverlapsScanField,
     MarketOverlapsScanField,
-    NumericScanField,
+    NumericInRangeScanField,
     PriceSubbedScanField,
     StringOverlapsScanField,
-    TextEqualsSingleScanField,
-    TextExistsSingleScanField,
-    TextScanField,
+    TextContainsScanField,
+    TextEqualsScanField,
+    TextHasValueEqualsScanField
 } from './scan-field';
 
 export interface ScanFieldFactory {
-    createNumeric(formulaNode: ScanFormula.BooleanNode): Result<NumericScanField, ScanFieldSetLoadError>;
-    createPriceSub(formulaNode: ScanFormula.BooleanNode): Result<PriceSubbedScanField, ScanFieldSetLoadError>;
-    createDate(formulaNode: ScanFormula.BooleanNode): Result<DateScanField, ScanFieldSetLoadError>;
-    createDateSub(formulaNode: ScanFormula.BooleanNode): Result<DateSubbedScanField, ScanFieldSetLoadError>;
-    createText(formulaNode: ScanFormula.BooleanNode): Result<TextScanField, ScanFieldSetLoadError>;
-    createAltCodeSub(formulaNode: ScanFormula.BooleanNode): Result<AltCodeSubbedScanField, ScanFieldSetLoadError>;
-    createAttributeSub(formulaNode: ScanFormula.BooleanNode): Result<AttributeSubbedScanField, ScanFieldSetLoadError>;
-    createTextEqualsSingle(formulaNode: ScanFormula.BooleanNode): Result<TextEqualsSingleScanField, ScanFieldSetLoadError>;
-    createTextExistsSingle(formulaNode: ScanFormula.BooleanNode): Result<TextExistsSingleScanField, ScanFieldSetLoadError>;
-    createStringOverlaps(formulaNode: ScanFormula.BooleanNode): Result<StringOverlapsScanField, ScanFieldSetLoadError>;
-    createBoardOverlaps(formulaNode: ScanFormula.BooleanNode): Result<BoardOverlapsScanField, ScanFieldSetLoadError>;
-    createCurrencyOverlaps(formulaNode: ScanFormula.BooleanNode): Result<CurrencyOverlapsScanField, ScanFieldSetLoadError>;
-    createExchangeOverlaps(formulaNode: ScanFormula.BooleanNode): Result<ExchangeOverlapsScanField, ScanFieldSetLoadError>;
-    createMarketOverlaps(formulaNode: ScanFormula.BooleanNode): Result<MarketOverlapsScanField, ScanFieldSetLoadError>;
-    createIs(formulaNode: ScanFormula.BooleanNode): Result<IsScanField, ScanFieldSetLoadError>;
+    createNumericInRange(fieldId: ScanFormula.NumericRangeFieldId): Result<NumericInRangeScanField, ScanFieldSetLoadError>;
+    createPriceSubbed(subFieldId: ScanFormula.PriceSubFieldId): Result<PriceSubbedScanField, ScanFieldSetLoadError>;
+    createDateInRange(fieldId: ScanFormula.DateRangeFieldId): Result<DateInRangeScanField, ScanFieldSetLoadError>;
+    createDateSubbed(subFieldId: ScanFormula.DateSubFieldId): Result<DateSubbedScanField, ScanFieldSetLoadError>;
+    createTextContains(fieldId: ScanFormula.TextContainsFieldId): Result<TextContainsScanField, ScanFieldSetLoadError>;
+    createAltCodeSubbed(subFieldId: ScanFormula.AltCodeSubFieldId): Result<AltCodeSubbedScanField, ScanFieldSetLoadError>;
+    createAttributeSubbed(subFieldId: ScanFormula.AttributeSubFieldId): Result<AttributeSubbedScanField, ScanFieldSetLoadError>;
+    createTextEquals(fieldId: ScanFormula.TextEqualsFieldId): Result<TextEqualsScanField, ScanFieldSetLoadError>;
+    createTextHasValueEquals(fieldId: ScanFormula.TextHasValueEqualsFieldId): Result<TextHasValueEqualsScanField, ScanFieldSetLoadError>;
+    createStringOverlaps(fieldId: ScanFormula.StringOverlapsFieldId): Result<StringOverlapsScanField, ScanFieldSetLoadError>;
+    createMarketBoardOverlaps(fieldId: ScanFormula.FieldId.MarketBoard): Result<MarketBoardOverlapsScanField, ScanFieldSetLoadError>;
+    createCurrencyOverlaps(fieldId: ScanFormula.FieldId.Currency): Result<CurrencyOverlapsScanField, ScanFieldSetLoadError>;
+    createExchangeOverlaps(fieldId: ScanFormula.FieldId.Exchange): Result<ExchangeOverlapsScanField, ScanFieldSetLoadError>;
+    createMarketOverlaps(fieldId: ScanFormula.MarketOverlapsFieldId): Result<MarketOverlapsScanField, ScanFieldSetLoadError>;
+    createIs(fieldId: ScanFormula.FieldId.Is): Result<IsScanField, ScanFieldSetLoadError>;
 }

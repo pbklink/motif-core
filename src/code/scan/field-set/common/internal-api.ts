@@ -5,5 +5,4 @@
  */
 
 export * from './scan-field-set-load-error';
-export * from './scan-field-type-id';
 

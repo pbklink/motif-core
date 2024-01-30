@@ -213,7 +213,7 @@ export namespace IsScanCondition {
 }
 
 export interface FieldHasValueScanCondition extends FieldScanCondition {
-    readonly fieldId: ScanFormula.TextExistsSingleFieldId | ScanFormula.NumericRangeFieldId | ScanFormula.DateRangeFieldId;
+    readonly fieldId: ScanFormula.TextHasValueEqualsFieldId | ScanFormula.NumericRangeFieldId | ScanFormula.DateRangeFieldId;
     readonly typeId: ScanCondition.TypeId.FieldHasValue;
 }
 
@@ -373,11 +373,11 @@ export namespace MarketBoardFieldOverlapsScanCondition {
 }
 
 export interface TextFieldScanCondition extends FieldScanCondition {
-    readonly fieldId: ScanFormula.TextTextFieldId | ScanFormula.TextSingleFieldId;
+    readonly fieldId: ScanFormula.TextContainsFieldId | ScanFormula.TextEqualsFieldId;
 }
 
 export interface TextFieldEqualsScanCondition extends TextFieldScanCondition {
-    readonly fieldId: ScanFormula.TextSingleFieldId;
+    readonly fieldId: ScanFormula.TextEqualsFieldId;
     readonly typeId: ScanCondition.TypeId.TextFieldEquals;
     readonly target: string;
 }
@@ -393,7 +393,7 @@ export namespace TextFieldEqualsScanCondition {
 }
 
 export interface TextFieldContainsScanCondition extends TextFieldScanCondition {
-    readonly fieldId: ScanFormula.TextTextFieldId;
+    readonly fieldId: ScanFormula.TextContainsFieldId;
     readonly typeId: ScanCondition.TypeId.TextFieldContains;
     readonly value: string;
     readonly asId: ScanFormula.TextContainsAsId;
@@ -425,7 +425,7 @@ export namespace SubFieldScanCondition {
     }
 }
 
-export interface PriceSubfieldScanCondition extends SubFieldScanCondition<ScanFormula.FieldId.Price, ScanFormula.PriceSubFieldId> {
+export interface PriceSubfieldScanCondition extends SubFieldScanCondition<ScanFormula.FieldId.PriceSubbed, ScanFormula.PriceSubFieldId> {
 
 }
 
@@ -466,7 +466,7 @@ export namespace PriceSubFieldInRangeScanCondition {
     }
 }
 
-export interface DateSubfieldScanCondition extends SubFieldScanCondition<ScanFormula.FieldId.Date, ScanFormula.DateSubFieldId> {
+export interface DateSubfieldScanCondition extends SubFieldScanCondition<ScanFormula.FieldId.DateSubbed, ScanFormula.DateSubFieldId> {
 
 }
 
@@ -510,7 +510,7 @@ export namespace DateSubFieldInRangeScanCondition {
     }
 }
 
-export interface AltCodeSubfieldScanCondition extends SubFieldScanCondition<ScanFormula.FieldId.AltCode, ScanFormula.AltCodeSubFieldId> {
+export interface AltCodeSubfieldScanCondition extends SubFieldScanCondition<ScanFormula.FieldId.AltCodeSubbed, ScanFormula.AltCodeSubFieldId> {
 
 }
 
@@ -542,7 +542,7 @@ export namespace AltCodeSubFieldContainsScanCondition {
     }
 }
 
-export interface AttributeSubfieldScanCondition extends SubFieldScanCondition<ScanFormula.FieldId.Attribute, ScanFormula.AttributeSubFieldId> {
+export interface AttributeSubfieldScanCondition extends SubFieldScanCondition<ScanFormula.FieldId.AttributeSubbed, ScanFormula.AttributeSubFieldId> {
 
 }
 

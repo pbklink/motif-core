@@ -4,23 +4,41 @@
  * License: motionite.trade/license/motif
  */
 
+import { Err, Result } from '../../../sys/sys-internal-api';
+
 export const enum ScanFieldSetLoadErrorTypeId {
-    // ConditionSet
-    XorSetOperationNotSupported,
-    UnexpectedConditionSetOperandTypeId,
-    UnexpectedFieldSetOperandTypeId,
-    ConditionNodeTypeIsNotSupported,
-    XorFieldBooleanOperationNotSupported,
-    FieldDoesNotHaveRequiredBooleanOperationId,
-    // Conditions
-    NotOfAllNotSupported,
-    NotOfNoneNotSupported,
-    LeftAndRightNumericComparisonOperandTypesAreBothNumber,
-    LeftNumericComparisonOperandTypeIsNotSupported,
-    RightNumericComparisonOperandTypeIsNotSupported,
+    AndFieldHasOrChild,
+    AndFieldHasXorChild,
+    OrFieldHasAndChild,
+    OrFieldHasXorChild,
+    XOrFieldDoesNotHave2Children,
+    XorFieldHasAndChild,
+    XorFieldHasOrChild,
+    XorFieldHasXorChild,
+    AndFieldOperatorCannotBeNegated,
+    OrFieldOperatorCannotBeNegated,
+    XorFieldOperatorCannotBeNegated,
+    AllConditionNotSupported,
+    NoneConditionNotSupported,
+    fieldConditionsOperationIdMismatch,
+    NumericComparisonBooleanNodeDoesNotHaveANumericFieldValueGetOperand,
+    NumericComparisonBooleanNodeDoesNotHaveANumberOperand,
+
+    // Standalone
+    SpecifiedNumericComparisonOperandIsNotValue,
 }
 
 export interface ScanFieldSetLoadError {
     typeId: ScanFieldSetLoadErrorTypeId;
     extra?: string;
+}
+
+export namespace ScanFieldSetLoadError {
+    export function createErr<T>(typeId: ScanFieldSetLoadErrorTypeId, extra?: string): Result<T, ScanFieldSetLoadError> {
+        const error: ScanFieldSetLoadError = {
+            typeId,
+            extra
+        };
+        return new Err(error);
+    }
 }

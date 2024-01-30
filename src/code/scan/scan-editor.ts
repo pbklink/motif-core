@@ -45,8 +45,6 @@ import { Scan } from './scan';
 
 export class ScanEditor {
     readonly readonly: boolean;
-    readonly criteriaAsConditionSet: ScanConditionSet;
-    readonly criteriaAsFieldSet: ScanFieldSet;
 
     private _finalised = false;
 
@@ -83,6 +81,8 @@ export class ScanEditor {
     private _criteria: ScanFormula.BooleanNode | undefined; // This is not the scan criteria sent to Zenith Server
     private _criteriaAsFormula: string | undefined; // This is not the scan criteria sent to Zenith Server
     private _criteriaAsZenithText: string | undefined; // This is not the scan criteria sent to Zenith Server
+    private _criteriaAsConditionSet: ScanConditionSet | undefined;
+    private _criteriaAsFieldSet: ScanFieldSet | undefined;
     private _rank: ScanFormula.NumericNode | undefined;
     private _rankAsFormula: string | undefined;
     private _rankAsZenithText: string | undefined;
@@ -102,14 +102,14 @@ export class ScanEditor {
         private readonly _symbolsService: SymbolsService,
         scan: Scan | undefined,
         opener: LockOpenListItem.Opener,
-        emptyScanConditionSet: ScanConditionSet,
-        emptyScanFieldSet: ScanFieldSet,
+        emptyScanFieldSet: ScanFieldSet | undefined,
+        emptyScanConditionSet: ScanConditionSet | undefined,
         private readonly _getOrWaitForScanEventer: ScanEditor.GetOrWaitForScanEventer,
         private readonly _errorEventer: ScanEditor.ErrorEventer | undefined,
     ) {
         this._openers.push(opener);
-        this.criteriaAsConditionSet = emptyScanConditionSet;
-        this.criteriaAsFieldSet = emptyScanFieldSet;
+        this._criteriaAsFieldSet = emptyScanFieldSet;
+        this._criteriaAsConditionSet = emptyScanConditionSet;
 
         this._editSessionId = newGuid();
 
@@ -349,8 +349,8 @@ export class ScanEditor {
         }
     }
 
-    setCriteria(value: ScanFormula.BooleanNode, sourceId: ScanEditor.SourceId | undefined) {
-        this.beginFieldChanges(undefined)
+    setCriteria(value: ScanFormula.BooleanNode, sourceId: ScanEditor.SourceId | undefined, modifier: ScanEditor.Modifier | undefined) {
+        this.beginFieldChanges(modifier)
         this._criteria = value;
         this.addFieldChange(ScanEditor.FieldId.Criteria);
 
@@ -363,11 +363,13 @@ export class ScanEditor {
                 this.addFieldChange(ScanEditor.FieldId.CriteriaAsZenithText);
             }
         }
-        if (sourceId !== ScanEditor.SourceId.ConditionSet) {
-            ScanConditionSet.tryLoadFromFormulaNode(this.criteriaAsConditionSet, this._criteria);
+        if (sourceId !== ScanEditor.SourceId.ConditionSet && this._criteriaAsConditionSet !== undefined) {
+            ScanConditionSet.tryLoadFromFormulaNode(this._criteriaAsConditionSet, this._criteria);
+            this.addFieldChange(ScanEditor.FieldId.CriteriaAsConditionSet);
         }
-        if (sourceId !== ScanEditor.SourceId.FieldSet) {
-            ScanFieldSet.tryLoadFromFormulaNode(this.criteriaAsFieldSet, this._criteria);
+        if (sourceId !== ScanEditor.SourceId.FieldSet && this._criteriaAsFieldSet !== undefined) {
+            ScanFieldSet.tryLoadFromFormulaNode(this._criteriaAsFieldSet, this._criteria);
+            this.addFieldChange(ScanEditor.FieldId.CriteriaAsFieldSet);
         }
         this._criteriaSourceValid = true;
 
@@ -404,7 +406,7 @@ export class ScanEditor {
                 const decodeResult = ScanFormulaZenithEncoding.tryDecodeBoolean(zenithCriteria, strict);
                 if (decodeResult.isOk()) {
                     const decodedBoolean = decodeResult.value;
-                    this.setCriteria(decodedBoolean.node, ScanEditor.SourceId.Zenith);
+                    this.setCriteria(decodedBoolean.node, ScanEditor.SourceId.Zenith, modifier);
                     result = {
                         progress: decodedBoolean.progress,
                         error: undefined,
@@ -422,32 +424,36 @@ export class ScanEditor {
     }
 
     setCriteriaAsConditionSet(value: ScanConditionSet, modifier?: ScanEditor.Modifier) {
-        if (ScanConditionSet.isEqual(value, this.criteriaAsConditionSet)) {
-            return false;
-        } else {
-            this.beginFieldChanges(modifier)
-            this.criteriaAsConditionSet.assign(value);
-            this.addFieldChange(ScanEditor.FieldId.CriteriaAsConditionSet);
+        this.beginFieldChanges(modifier);
+        this._criteriaAsConditionSet = value;
+        this.addFieldChange(ScanEditor.FieldId.CriteriaAsConditionSet);
 
-            const criteria = ScanConditionSet.createFormulaNode(value);
-            this.setCriteria(criteria, ScanEditor.SourceId.ConditionSet);
-            this.endFieldChanges();
-            return true;
-        }
+        const criteria = ScanConditionSet.createFormulaNode(value);
+        this.setCriteria(criteria, ScanEditor.SourceId.ConditionSet, modifier);
+        this.endFieldChanges();
     }
 
     setCriteriaAsFieldSet(value: ScanFieldSet, modifier?: ScanEditor.Modifier) {
-        if (ScanFieldSet.isEqual(value, this.criteriaAsFieldSet)) {
-            return false;
+        this.beginFieldChanges(modifier);
+        this._criteriaAsFieldSet = value;
+        this.addFieldChange(ScanEditor.FieldId.CriteriaAsFieldSet);
+
+        const criteria = ScanFieldSet.createFormulaNode(value);
+        this.setCriteria(criteria, ScanEditor.SourceId.FieldSet, modifier);
+        this.endFieldChanges();
+    }
+
+    flagCriteriaAsFieldSetChanged(modifier?: ScanEditor.Modifier) {
+        const criteriaAsFieldSet = this._criteriaAsFieldSet;
+        if (criteriaAsFieldSet === undefined) {
+            throw new AssertInternalError('SEFCAFSC22209');
         } else {
-            this.beginFieldChanges(modifier)
-            this.criteriaAsFieldSet.assign(value);
+            this.beginFieldChanges(modifier);
             this.addFieldChange(ScanEditor.FieldId.CriteriaAsFieldSet);
 
-            const criteria = ScanFieldSet.createFormulaNode(value);
-            this.setCriteria(criteria, ScanEditor.SourceId.FieldSet);
+            const criteria = ScanFieldSet.createFormulaNode(criteriaAsFieldSet);
+            this.setCriteria(criteria, ScanEditor.SourceId.FieldSet, modifier);
             this.endFieldChanges();
-            return true;
         }
     }
 
@@ -1052,7 +1058,7 @@ export class ScanEditor {
         this.setTargetMarketIds([defaultMarketId]);
         this.setTargetTypeId(ScanTargetTypeId.Markets);
         this.setMaxMatchCount(10);
-        this.setCriteria(ScanEditor.DefaultCriteria, undefined);
+        this.setCriteria(ScanEditor.DefaultCriteria, undefined, undefined);
         this.setRank(ScanEditor.DefaultRank, undefined);
         this._versionNumber = 0;
         this._versionId = undefined;
@@ -1119,7 +1125,7 @@ export class ScanEditor {
         }
 
         if (criteria !== undefined) {
-            this.setCriteria(criteria, sourceId);
+            this.setCriteria(criteria, sourceId, undefined);
         }
     }
 

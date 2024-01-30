@@ -463,7 +463,7 @@ export namespace ScanConditionSet {
                 const numericFieldEqualsCondition  = condition as NumericFieldEqualsScanCondition;
                 const numericFieldEqualsNode = new ScanFormula.NumericFieldEqualsNode();
                 numericFieldEqualsNode.fieldId = numericFieldEqualsCondition.fieldId;
-                numericFieldEqualsNode.target = numericFieldEqualsCondition.target;
+                numericFieldEqualsNode.value = numericFieldEqualsCondition.target;
                 return {
                     node: numericFieldEqualsNode,
                     requiresNot: numericFieldEqualsCondition.not,
@@ -484,7 +484,7 @@ export namespace ScanConditionSet {
                 const dateFieldEqualsCondition  = condition as DateFieldEqualsScanCondition;
                 const dateFieldEqualsNode = new ScanFormula.DateFieldEqualsNode();
                 dateFieldEqualsNode.fieldId = dateFieldEqualsCondition.fieldId;
-                dateFieldEqualsNode.target = SourceTzOffsetDateTime.createCopy(dateFieldEqualsCondition.target);
+                dateFieldEqualsNode.value = SourceTzOffsetDateTime.createCopy(dateFieldEqualsCondition.target);
                 return {
                     node: dateFieldEqualsNode,
                     requiresNot: dateFieldEqualsCondition.not,
@@ -555,7 +555,7 @@ export namespace ScanConditionSet {
                 const textFieldEqualsCondition  = condition as TextFieldEqualsScanCondition;
                 const textFieldEqualsNode = new ScanFormula.TextFieldEqualsNode();
                 textFieldEqualsNode.fieldId = textFieldEqualsCondition.fieldId;
-                textFieldEqualsNode.target = textFieldEqualsCondition.target;
+                textFieldEqualsNode.value = textFieldEqualsCondition.target;
                 return {
                     node: textFieldEqualsNode,
                     requiresNot: textFieldEqualsCondition.not,
@@ -588,7 +588,7 @@ export namespace ScanConditionSet {
                 const priceSubFieldEqualsNode = new ScanFormula.PriceSubFieldEqualsNode();
                 priceSubFieldEqualsNode.fieldId = priceSubFieldEqualsCondition.fieldId;
                 priceSubFieldEqualsNode.subFieldId = priceSubFieldEqualsCondition.subFieldId;
-                priceSubFieldEqualsNode.target = priceSubFieldEqualsCondition.target;
+                priceSubFieldEqualsNode.value = priceSubFieldEqualsCondition.target;
                 return {
                     node: priceSubFieldEqualsNode,
                     requiresNot: priceSubFieldEqualsCondition.not,
@@ -621,7 +621,7 @@ export namespace ScanConditionSet {
                 const dateSubFieldEqualsNode = new ScanFormula.DateSubFieldEqualsNode();
                 dateSubFieldEqualsNode.fieldId = dateSubFieldEqualsCondition.fieldId;
                 dateSubFieldEqualsNode.subFieldId = dateSubFieldEqualsCondition.subFieldId;
-                dateSubFieldEqualsNode.target = SourceTzOffsetDateTime.createCopy(dateSubFieldEqualsCondition.target);
+                dateSubFieldEqualsNode.value = SourceTzOffsetDateTime.createCopy(dateSubFieldEqualsCondition.target);
                 return {
                     node: dateSubFieldEqualsNode,
                     requiresNot: dateSubFieldEqualsCondition.not,

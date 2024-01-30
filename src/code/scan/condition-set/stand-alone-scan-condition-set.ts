@@ -443,7 +443,7 @@ export namespace StandAloneScanConditionSet {
                 typeId: ScanCondition.TypeId.NumericFieldEquals,
                 not,
                 fieldId: formulaNode.fieldId,
-                target: formulaNode.target,
+                target: formulaNode.value,
             });
         }
         createNumericFieldInRange(formulaNode: ScanFormula.NumericFieldInRangeNode, not: boolean): Result<NumericFieldInRangeScanCondition, ScanConditionSetLoadError> {
@@ -460,7 +460,7 @@ export namespace StandAloneScanConditionSet {
                 typeId: ScanCondition.TypeId.DateFieldEquals,
                 not,
                 fieldId: formulaNode.fieldId,
-                target: SourceTzOffsetDateTime.createCopy(formulaNode.target),
+                target: SourceTzOffsetDateTime.createCopy(formulaNode.value),
             });
         }
         createDateFieldInRange(formulaNode: ScanFormula.DateFieldInRangeNode, not: boolean): Result<DateFieldInRangeScanCondition, ScanConditionSetLoadError> {
@@ -517,7 +517,7 @@ export namespace StandAloneScanConditionSet {
                 typeId: ScanCondition.TypeId.TextFieldEquals,
                 not,
                 fieldId: formulaNode.fieldId,
-                target: formulaNode.target,
+                target: formulaNode.value,
             });
         }
         createTextFieldContains(formulaNode: ScanFormula.TextFieldContainsNode, not: boolean): Result<TextFieldContainsScanCondition, ScanConditionSetLoadError> {
@@ -544,7 +544,7 @@ export namespace StandAloneScanConditionSet {
                 not,
                 fieldId: formulaNode.fieldId,
                 subFieldId: formulaNode.subFieldId,
-                target: formulaNode.target,
+                target: formulaNode.value,
             });
         }
         createPriceSubFieldInRange(formulaNode: ScanFormula.PriceSubFieldInRangeNode, not: boolean): Result<PriceSubFieldInRangeScanCondition, ScanConditionSetLoadError> {
@@ -571,7 +571,7 @@ export namespace StandAloneScanConditionSet {
                 not,
                 fieldId: formulaNode.fieldId,
                 subFieldId: formulaNode.subFieldId,
-                target: SourceTzOffsetDateTime.createCopy(formulaNode.target),
+                target: SourceTzOffsetDateTime.createCopy(formulaNode.value),
             });
         }
         createDateSubFieldInRange(formulaNode: ScanFormula.DateSubFieldInRangeNode, not: boolean): Result<DateSubFieldInRangeScanCondition, ScanConditionSetLoadError> {
