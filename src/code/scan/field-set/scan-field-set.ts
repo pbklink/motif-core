@@ -10,6 +10,7 @@ import { ScanFieldSetLoadError, ScanFieldSetLoadErrorTypeId } from './common/int
 import {
     AltCodeSubbedScanField,
     AttributeSubbedScanField,
+    BaseNumericScanFieldCondition,
     CurrencyOverlapsScanField,
     DateInRangeScanField,
     DateSubbedScanField,
@@ -17,7 +18,6 @@ import {
     IsScanField,
     MarketBoardOverlapsScanField,
     MarketOverlapsScanField,
-    NumericComparisonScanFieldCondition,
     NumericInRangeScanField,
     PriceSubbedScanField,
     ScanField,
@@ -32,7 +32,7 @@ export interface ScanFieldSet {
     readonly conditionFactory: ScanField.ConditionFactory;
     readonly fieldFactory: ScanFieldSet.FieldFactory;
 
-    fields: ScanFieldSet.Fields;
+    readonly fields: ScanFieldSet.Fields;
 
     loadError: ScanFieldSetLoadError | undefined;
 
@@ -46,7 +46,6 @@ export namespace ScanFieldSet {
         capacity: Integer;
 
         getAt(index: Integer): ScanField;
-        setAt(index: Integer, value: ScanField): void;
         clear(): void;
         add(field: ScanField): Integer;
         remove(field: ScanField): void;
@@ -625,7 +624,7 @@ export namespace ScanFieldSet {
         fieldSet: ScanFieldSet,
         node: ScanFormula.NumericComparisonBooleanNode,
         fieldOperationId: ScanField.BooleanOperationId,
-        conditionOperatorId: NumericComparisonScanFieldCondition.OperatorId,
+        conditionOperatorId: BaseNumericScanFieldCondition.ValueOperands.OperatorId,
     ): boolean {
         let fieldId: ScanFormula.FieldId;
         let value: number;

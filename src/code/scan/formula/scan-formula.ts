@@ -172,16 +172,19 @@ export namespace ScanFormula {
     }
 
     export class NoneNode extends ZeroOperandBooleanNode {
-        declare readonly typeId: NodeTypeId.None;
+        declare readonly typeId: NoneNode.TypeId;
 
         constructor() {
-            super(NodeTypeId.None);
+            super(NoneNode.typeId);
         }
     }
 
     export namespace NoneNode {
+        export type TypeId = NodeTypeId.None;
+        export const typeId: TypeId = NodeTypeId.None;
+
         export function is(node: ScanFormula.Node): node is NoneNode {
-            return node.typeId === ScanFormula.NodeTypeId.None;
+            return node.typeId === typeId;
         }
     }
 
@@ -774,6 +777,7 @@ export namespace ScanFormula {
             readonly styleId: StyleId;
             readonly dataTypeId: DataTypeId;
             readonly subbed: boolean; // Named
+            readonly name: string;
         }
 
         type InfosObject = { [id in keyof typeof FieldId]: Info };
@@ -784,294 +788,343 @@ export namespace ScanFormula {
                 styleId: StyleId.Contains,
                 dataTypeId: DataTypeId.Text,
                 subbed: true,
+                name: 'AltCode-Subbed',
             },
             AttributeSubbed: {
                 id: FieldId.AttributeSubbed,
                 styleId: StyleId.Contains,
                 dataTypeId: DataTypeId.Text,
                 subbed: true,
+                name: 'Attribute-Subbed',
             },
             Auction: {
                 id: FieldId.Auction,
                 styleId: StyleId.InRange,
                 dataTypeId: DataTypeId.Numeric,
                 subbed: false,
+                name: 'Auction',
             },
             AuctionLast: {
                 id: FieldId.AuctionLast,
                 styleId: StyleId.InRange,
                 dataTypeId: DataTypeId.Numeric,
                 subbed: false,
+                name: 'Auction: Last',
             },
             AuctionQuantity: {
                 id: FieldId.AuctionQuantity,
                 styleId: StyleId.InRange,
                 dataTypeId: DataTypeId.Numeric,
                 subbed: false,
+                name: 'Auction: Quantity',
             },
             BestAskCount: {
                 id: FieldId.BestAskCount,
                 styleId: StyleId.InRange,
                 dataTypeId: DataTypeId.Numeric,
                 subbed: false,
+                name: 'Best ask count',
             },
             BestAskPrice: {
                 id: FieldId.BestAskPrice,
                 styleId: StyleId.InRange,
                 dataTypeId: DataTypeId.Numeric,
                 subbed: false,
+                name: 'Best ask price',
             },
             BestAskQuantity: {
                 id: FieldId.BestAskQuantity,
                 styleId: StyleId.InRange,
                 dataTypeId: DataTypeId.Numeric,
                 subbed: false,
+                name: 'Best ask quantity',
             },
             BestBidCount: {
                 id: FieldId.BestBidCount,
                 styleId: StyleId.InRange,
                 dataTypeId: DataTypeId.Numeric,
                 subbed: false,
+                name: 'Best bid count',
             },
             BestBidPrice: {
                 id: FieldId.BestBidPrice,
                 styleId: StyleId.InRange,
                 dataTypeId: DataTypeId.Numeric,
                 subbed: false,
+                name: 'Best bid price',
             },
             BestBidQuantity: {
                 id: FieldId.BestBidQuantity,
                 styleId: StyleId.InRange,
                 dataTypeId: DataTypeId.Numeric,
                 subbed: false,
+                name: 'Best bid quantity',
             },
             CallOrPut: {
                 id: FieldId.CallOrPut,
                 styleId: StyleId.HasValueEquals,
                 dataTypeId: DataTypeId.Text,
                 subbed: false,
+                name: 'Call/Put',
             },
             Category: {
                 id: FieldId.Category,
                 styleId: StyleId.Overlaps,
                 dataTypeId: DataTypeId.Text,
                 subbed: false,
+                name: 'Category',
             },
             Cfi: {
                 id: FieldId.Cfi,
                 styleId: StyleId.Equals,
                 dataTypeId: DataTypeId.Text,
                 subbed: false,
+                name: 'CFI',
             },
             Class: {
                 id: FieldId.Class,
                 styleId: StyleId.Equals,
                 dataTypeId: DataTypeId.Text,
                 subbed: false,
+                name: 'Class',
             },
             ClosePrice: {
                 id: FieldId.ClosePrice,
                 styleId: StyleId.InRange,
                 dataTypeId: DataTypeId.Numeric,
                 subbed: false,
+                name: 'Close price',
             },
             Code: {
                 id: FieldId.Code,
                 styleId: StyleId.Contains,
                 dataTypeId: DataTypeId.Text,
                 subbed: false,
+                name: 'Code',
             },
             ContractSize: {
                 id: FieldId.ContractSize,
                 styleId: StyleId.InRange,
                 dataTypeId: DataTypeId.Numeric,
                 subbed: false,
+                name: 'Contract size',
             },
             Currency: {
                 id: FieldId.Currency,
                 styleId: StyleId.Overlaps,
                 dataTypeId: DataTypeId.Text,
                 subbed: false,
+                name: 'Currency',
             },
             Data: {
                 id: FieldId.Data,
                 styleId: StyleId.Equals,
                 dataTypeId: DataTypeId.Text,
                 subbed: false,
+                name: 'Data',
             },
             DateSubbed: {
                 id: FieldId.DateSubbed,
                 styleId: StyleId.InRange,
                 dataTypeId: DataTypeId.Date,
                 subbed: true,
+                name: 'Date-Subbed',
             },
             Exchange: {
                 id: FieldId.Exchange,
                 styleId: StyleId.Overlaps,
                 dataTypeId: DataTypeId.Text,
                 subbed: false,
+                name: 'Exchange',
             },
             ExerciseType: {
                 id: FieldId.ExerciseType,
                 styleId: StyleId.HasValueEquals,
                 dataTypeId: DataTypeId.Text,
                 subbed: false,
+                name: 'Exercise type',
             },
             ExpiryDate: {
                 id: FieldId.ExpiryDate,
                 styleId: StyleId.InRange,
                 dataTypeId: DataTypeId.Date,
                 subbed: false,
+                name: 'Expiry date',
             },
             HighPrice: {
                 id: FieldId.HighPrice,
                 styleId: StyleId.InRange,
                 dataTypeId: DataTypeId.Numeric,
                 subbed: false,
+                name: 'High price',
             },
             Is: { // Dummy field which allows IsNode to be treated like a field
                 id: FieldId.Is,
                 styleId: StyleId.Equals,
                 dataTypeId: DataTypeId.Boolean,
                 subbed: false,
+                name: 'Is',
             },
             LastPrice: {
                 id: FieldId.LastPrice,
                 styleId: StyleId.InRange,
                 dataTypeId: DataTypeId.Numeric,
                 subbed: false,
+                name: 'Last price',
             },
             Leg: {
                 id: FieldId.Leg,
                 styleId: StyleId.Equals,
                 dataTypeId: DataTypeId.Text,
                 subbed: false,
+                name: 'Leg',
             },
             LotSize: {
                 id: FieldId.LotSize,
                 styleId: StyleId.InRange,
                 dataTypeId: DataTypeId.Numeric,
                 subbed: false,
+                name: 'Lot size',
             },
             LowPrice: {
                 id: FieldId.LowPrice,
                 styleId: StyleId.InRange,
                 dataTypeId: DataTypeId.Numeric,
                 subbed: false,
+                name: 'Low price',
             },
             Market: {
                 id: FieldId.Market,
                 styleId: StyleId.Overlaps,
                 dataTypeId: DataTypeId.Text,
                 subbed: false,
+                name: 'Market',
             },
             MarketBoard: {
                 id: FieldId.MarketBoard,
                 styleId: StyleId.Overlaps,
                 dataTypeId: DataTypeId.Text,
                 subbed: false,
+                name: 'Market board',
             },
             Name: {
                 id: FieldId.Name,
                 styleId: StyleId.Contains,
                 dataTypeId: DataTypeId.Text,
                 subbed: false,
+                name: 'Name',
             },
             OpenInterest: {
                 id: FieldId.OpenInterest,
                 styleId: StyleId.InRange,
                 dataTypeId: DataTypeId.Numeric,
                 subbed: false,
+                name: 'Open interest',
             },
             OpenPrice: {
                 id: FieldId.OpenPrice,
                 styleId: StyleId.InRange,
                 dataTypeId: DataTypeId.Numeric,
                 subbed: false,
+                name: 'Open price',
             },
             PriceSubbed: {
                 id: FieldId.PriceSubbed,
                 styleId: StyleId.InRange,
                 dataTypeId: DataTypeId.Numeric,
                 subbed: true,
+                name: 'Price-Subbed',
             },
             PreviousClose: {
                 id: FieldId.PreviousClose,
                 styleId: StyleId.InRange,
                 dataTypeId: DataTypeId.Numeric,
                 subbed: false,
+                name: 'Previous close',
             },
             QuotationBasis: {
                 id: FieldId.QuotationBasis,
                 styleId: StyleId.Overlaps,
                 dataTypeId: DataTypeId.Text,
                 subbed: false,
+                name: 'Quotation basis',
             },
             Remainder: {
                 id: FieldId.Remainder,
                 styleId: StyleId.InRange,
                 dataTypeId: DataTypeId.Numeric,
                 subbed: false,
+                name: 'Remainder',
             },
             ShareIssue: {
                 id: FieldId.ShareIssue,
                 styleId: StyleId.InRange,
                 dataTypeId: DataTypeId.Numeric,
                 subbed: false,
+                name: 'Share issue',
             },
             TradingStateName: {
                 id: FieldId.TradingStateName,
                 styleId: StyleId.Overlaps,
                 dataTypeId: DataTypeId.Text,
                 subbed: false,
+                name: 'Trading state name',
             },
             TradingStateAllows: {
                 id: FieldId.TradingStateAllows,
                 styleId: StyleId.Equals,
                 dataTypeId: DataTypeId.Text,
                 subbed: false,
+                name: 'Trading state allows',
             },
             StatusNote: {
                 id: FieldId.StatusNote,
                 styleId: StyleId.Overlaps,
                 dataTypeId: DataTypeId.Text,
                 subbed: false,
+                name: 'Status note',
             },
             StrikePrice: {
                 id: FieldId.StrikePrice,
                 styleId: StyleId.InRange,
                 dataTypeId: DataTypeId.Numeric,
                 subbed: false,
+                name: 'Strike price',
             },
             Trades: {
                 id: FieldId.Trades,
                 styleId: StyleId.InRange,
                 dataTypeId: DataTypeId.Numeric,
                 subbed: false,
+                name: 'Trades',
             },
             TradingMarket: {
                 id: FieldId.TradingMarket,
                 styleId: StyleId.Overlaps,
                 dataTypeId: DataTypeId.Text,
                 subbed: false,
+                name: 'Trading market',
             },
             ValueTraded: {
                 id: FieldId.ValueTraded,
                 styleId: StyleId.InRange,
                 dataTypeId: DataTypeId.Numeric,
                 subbed: false,
+                name: 'Value traded',
             },
             Volume: {
                 id: FieldId.Volume,
                 styleId: StyleId.InRange,
                 dataTypeId: DataTypeId.Numeric,
                 subbed: false,
+                name: 'Volume',
             },
             Vwap: {
                 id: FieldId.Vwap,
                 styleId: StyleId.InRange,
                 dataTypeId: DataTypeId.Numeric,
                 subbed: false,
+                name: 'VWAP',
             },
         } as const;
 
@@ -1094,8 +1147,12 @@ export namespace ScanFormula {
             return infos[id].dataTypeId;
         }
 
-        export function idToSubbed(id: Id) {
+        export function idIsSubbed(id: Id): id is SubbedFieldId {
             return infos[id].subbed;
+        }
+
+        export function idToName(id: Id) {
+            return infos[id].name;
         }
     }
 
@@ -1209,8 +1266,118 @@ export namespace ScanFormula {
         Last,
     }
 
+    export namespace PriceSubField {
+        export type Id = PriceSubFieldId;
+
+        interface Info {
+            readonly id: Id;
+            readonly name: string;
+        }
+
+        type InfosObject = { [id in keyof typeof PriceSubFieldId]: Info };
+        const infosObject: InfosObject = {
+            Last: {
+                id: PriceSubFieldId.Last,
+                name: 'Last',
+            }
+        }
+
+        const infos = Object.values(infosObject);
+        export const idCount = infos.length;
+
+        export function initialise() {
+            for (let i = 0; i < idCount; i++) {
+                const info = infos[i];
+                // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+                if (info.id !== i as PriceSubFieldId) {
+                    throw new EnumInfoOutOfOrderError('ScanFormula.PriceSubFieldId', i, infos[i].name);
+                }
+            }
+        }
+
+        export function idToName(id: Id) {
+            return infos[id].name;
+        }
+
+        export function tryNameToId(name: string): PriceSubFieldId | undefined {
+            for (let i = 0; i < idCount; i++) {
+                const info = infos[i];
+                if (info.name === name) {
+                    return info.id;
+                }
+            }
+            return undefined;
+        }
+
+        export function tryIgnoreCaseNameToId(name: string): PriceSubFieldId | undefined {
+            const upperCaseName = name.toUpperCase();
+            for (let i = 0; i < idCount; i++) {
+                const info = infos[i];
+                if (info.name.toUpperCase() === upperCaseName) {
+                    return info.id;
+                }
+            }
+            return undefined;
+        }
+    }
+
     export const enum DateSubFieldId {
         Dividend,
+    }
+
+    export namespace DateSubField {
+        export type Id = DateSubFieldId;
+
+        interface Info {
+            readonly id: Id;
+            readonly name: string;
+        }
+
+        type InfosObject = { [id in keyof typeof DateSubFieldId]: Info };
+        const infosObject: InfosObject = {
+            Dividend: {
+                id: DateSubFieldId.Dividend,
+                name: 'Last',
+            }
+        }
+
+        const infos = Object.values(infosObject);
+        export const idCount = infos.length;
+
+        export function initialise() {
+            for (let i = 0; i < idCount; i++) {
+                const info = infos[i];
+                // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+                if (info.id !== i as DateSubFieldId) {
+                    throw new EnumInfoOutOfOrderError('ScanFormula.DateSubFieldId', i, infos[i].name);
+                }
+            }
+        }
+
+        export function idToName(id: Id) {
+            return infos[id].name;
+        }
+
+        export function tryNameToId(name: string): DateSubFieldId | undefined {
+            for (let i = 0; i < idCount; i++) {
+                const info = infos[i];
+                if (info.name === name) {
+                    return info.id;
+                }
+            }
+            return undefined;
+        }
+
+        export function tryIgnoreCaseNameToId(name: string): DateSubFieldId | undefined {
+            const upperCaseName = name.toUpperCase();
+            for (let i = 0; i < idCount; i++) {
+                const info = infos[i];
+                if (info.name.toUpperCase() === upperCaseName) {
+                    return info.id;
+                }
+            }
+            return undefined;
+        }
     }
 
     export const enum AltCodeSubFieldId {
@@ -1224,6 +1391,89 @@ export namespace ScanFormula {
         Uid,
     }
 
+    export namespace AltCodeSubField {
+        export type Id = AltCodeSubFieldId;
+
+        interface Info {
+            readonly id: Id;
+            readonly name: string;
+        }
+
+        type InfosObject = { [id in keyof typeof AltCodeSubFieldId]: Info };
+        const infosObject: InfosObject = {
+            Ticker: {
+                id: AltCodeSubFieldId.Ticker,
+                name: 'Ticker',
+            },
+            Isin: {
+                id: AltCodeSubFieldId.Isin,
+                name: 'ISIN',
+            },
+            Base: {
+                id: AltCodeSubFieldId.Base,
+                name: 'Base',
+            },
+            Gics: {
+                id: AltCodeSubFieldId.Gics,
+                name: 'GICS',
+            },
+            Ric: {
+                id: AltCodeSubFieldId.Ric,
+                name: 'RIC',
+            },
+            Short: {
+                id: AltCodeSubFieldId.Short,
+                name: 'Short',
+            },
+            Long: {
+                id: AltCodeSubFieldId.Long,
+                name: 'Long',
+            },
+            Uid: {
+                id: AltCodeSubFieldId.Uid,
+                name: 'UID',
+            },
+        }
+
+        const infos = Object.values(infosObject);
+        export const idCount = infos.length;
+
+        export function initialise() {
+            for (let i = 0; i < idCount; i++) {
+                const info = infos[i];
+                // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+                if (info.id !== i as AltCodeSubFieldId) {
+                    throw new EnumInfoOutOfOrderError('ScanFormula.AltCodeSubFieldId', i, infos[i].name);
+                }
+            }
+        }
+
+        export function idToName(id: Id) {
+            return infos[id].name;
+        }
+
+        export function tryNameToId(name: string): AltCodeSubFieldId | undefined {
+            for (let i = 0; i < idCount; i++) {
+                const info = infos[i];
+                if (info.name === name) {
+                    return info.id;
+                }
+            }
+            return undefined;
+        }
+
+        export function tryIgnoreCaseNameToId(name: string): AltCodeSubFieldId | undefined {
+            const upperCaseName = name.toUpperCase();
+            for (let i = 0; i < idCount; i++) {
+                const info = infos[i];
+                if (info.name.toUpperCase() === upperCaseName) {
+                    return info.id;
+                }
+            }
+            return undefined;
+        }
+    }
+
     export const enum AttributeSubFieldId {
         Category,
         Class,
@@ -1235,6 +1485,89 @@ export namespace ScanFormula {
         SubSector,
     }
 
+    export namespace AttributeSubField {
+        export type Id = AttributeSubFieldId;
+
+        interface Info {
+            readonly id: Id;
+            readonly name: string;
+        }
+
+        type InfosObject = { [id in keyof typeof AttributeSubFieldId]: Info };
+        const infosObject: InfosObject = {
+            Category: {
+                id: AttributeSubFieldId.Category,
+                name: 'Category',
+            },
+            Class: {
+                id: AttributeSubFieldId.Class,
+                name: 'Class',
+            },
+            Delivery: {
+                id: AttributeSubFieldId.Delivery,
+                name: 'Delivery',
+            },
+            MaxRss: {
+                id: AttributeSubFieldId.MaxRss,
+                name: 'MaxRss',
+            },
+            Sector: {
+                id: AttributeSubFieldId.Sector,
+                name: 'Sector',
+            },
+            Short: {
+                id: AttributeSubFieldId.Short,
+                name: 'Short',
+            },
+            ShortSuspended: {
+                id: AttributeSubFieldId.ShortSuspended,
+                name: 'Short suspended',
+            },
+            SubSector: {
+                id: AttributeSubFieldId.SubSector,
+                name: 'Sub-sector',
+            },
+        }
+
+        const infos = Object.values(infosObject);
+        export const idCount = infos.length;
+
+        export function initialise() {
+            for (let i = 0; i < idCount; i++) {
+                const info = infos[i];
+                // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+                if (info.id !== i as AttributeSubFieldId) {
+                    throw new EnumInfoOutOfOrderError('ScanFormula.AttributeSubFieldId', i, infos[i].name);
+                }
+            }
+        }
+
+        export function idToName(id: Id) {
+            return infos[id].name;
+        }
+
+        export function tryNameToId(name: string): AttributeSubFieldId | undefined {
+            for (let i = 0; i < idCount; i++) {
+                const info = infos[i];
+                if (info.name === name) {
+                    return info.id;
+                }
+            }
+            return undefined;
+        }
+
+        export function tryIgnoreCaseNameToId(name: string): AttributeSubFieldId | undefined {
+            const upperCaseName = name.toUpperCase();
+            for (let i = 0; i < idCount; i++) {
+                const info = infos[i];
+                if (info.name.toUpperCase() === upperCaseName) {
+                    return info.id;
+                }
+            }
+            return undefined;
+        }
+    }
+
     export type TextContainsSubFieldId =
         FieldId.AltCodeSubbed |
         FieldId.AttributeSubbed;
@@ -1243,5 +1576,9 @@ export namespace ScanFormula {
 export namespace ScanFormulaModule {
     export function initialiseStatic() {
         ScanFormula.Field.initialise();
+        ScanFormula.PriceSubField.initialise();
+        ScanFormula.DateSubField.initialise();
+        ScanFormula.AltCodeSubField.initialise();
+        ScanFormula.AttributeSubField.initialise();
     }
 }

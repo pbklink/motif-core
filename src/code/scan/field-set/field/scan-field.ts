@@ -8,6 +8,8 @@ import { CurrencyId, ExchangeId, MarketBoardId, MarketId } from '../../../adi/ad
 import { AssertInternalError, Integer, Result, SourceTzOffsetDateTime, UnreachableCaseError } from '../../../sys/sys-internal-api';
 import { ScanFormula } from '../../formula/scan-formula';
 import {
+    BaseNumericScanFieldCondition,
+    BaseTextScanFieldCondition,
     CurrencyOverlapsScanFieldCondition,
     DateScanFieldCondition,
     ExchangeOverlapsScanFieldCondition,
@@ -90,27 +92,27 @@ export namespace ScanField {
     }
 
     export interface ConditionFactory {
-        createNumericComparisonWithHasValue(field: ScanField, operatorId: NumericComparisonScanFieldCondition.OperatorId): Result<NumericComparisonScanFieldCondition>;
-        createNumericComparisonWithValue(field: ScanField, operatorId: NumericComparisonScanFieldCondition.OperatorId, value: number): Result<NumericComparisonScanFieldCondition>;
-        createNumericComparisonWithRange(field: ScanField, operatorId: NumericComparisonScanFieldCondition.OperatorId, min: number | undefined, max: number | undefined): Result<NumericComparisonScanFieldCondition>;
-        createNumericWithHasValue(field: ScanField, operatorId: NumericScanFieldCondition.OperatorId): Result<NumericScanFieldCondition>;
-        createNumericWithValue(field: ScanField, operatorId: NumericScanFieldCondition.OperatorId, value: number): Result<NumericScanFieldCondition>;
-        createNumericWithRange(field: ScanField, operatorId: NumericScanFieldCondition.OperatorId, min: number | undefined, max: number | undefined): Result<NumericScanFieldCondition>;
-        createDateWithHasValue(field: ScanField, operatorId: DateScanFieldCondition.OperatorId): Result<DateScanFieldCondition>;
-        createDateWithEquals(field: ScanField, operatorId: DateScanFieldCondition.OperatorId, value: SourceTzOffsetDateTime): Result<DateScanFieldCondition>;
-        createDateWithRange(field: ScanField, operatorId: DateScanFieldCondition.OperatorId, min: SourceTzOffsetDateTime | undefined, max: SourceTzOffsetDateTime | undefined): Result<DateScanFieldCondition>;
-        createTextEquals(field: ScanField, operatorId: TextEqualsScanFieldCondition.OperatorId, value: string): Result<TextEqualsScanFieldCondition>;
-        createTextContains(field: ScanField, operatorId: TextContainsScanFieldCondition.OperatorId, value: string, asId: ScanFormula.TextContainsAsId, ignoreCase: boolean): Result<TextContainsScanFieldCondition>;
-        createTextHasValueEqualsWithHasValue(field: ScanField, operatorId: TextHasValueEqualsScanFieldCondition.OperatorId): Result<TextHasValueEqualsScanFieldCondition>;
-        createTextHasValueEqualsWithValue(field: ScanField, operatorId: TextHasValueEqualsScanFieldCondition.OperatorId, value: string): Result<TextHasValueEqualsScanFieldCondition>;
-        createTextHasValueContainsWithHasValue(field: ScanField, operatorId: TextHasValueContainsScanFieldCondition.OperatorId): Result<TextHasValueContainsScanFieldCondition>;
-        createTextHasValueContainsWithContains(field: ScanField, operatorId: TextHasValueContainsScanFieldCondition.OperatorId, value: string, asId: ScanFormula.TextContainsAsId, ignoreCase: boolean): Result<TextHasValueContainsScanFieldCondition>;
-        createStringOverlaps(field: ScanField, operatorId: OverlapsScanFieldCondition.OperatorId, values: readonly string[]): Result<StringOverlapsScanFieldCondition>;
-        createCurrencyOverlaps(field: ScanField, operatorId: OverlapsScanFieldCondition.OperatorId, values: readonly CurrencyId[]): Result<CurrencyOverlapsScanFieldCondition>;
-        createExchangeOverlaps(field: ScanField, operatorId: OverlapsScanFieldCondition.OperatorId, values: readonly ExchangeId[]): Result<ExchangeOverlapsScanFieldCondition>;
-        createMarketOverlaps(field: ScanField, operatorId: OverlapsScanFieldCondition.OperatorId, values: readonly MarketId[]): Result<MarketOverlapsScanFieldCondition>;
-        createMarketBoardOverlaps(field: ScanField, operatorId: OverlapsScanFieldCondition.OperatorId, values: readonly MarketBoardId[]): Result<MarketBoardOverlapsScanFieldCondition>;
-        createIs(field: ScanField, operatorId: IsScanFieldCondition.OperatorId, categoryId: ScanFormula.IsNode.CategoryId): Result<IsScanFieldCondition>;
+        createNumericComparisonWithHasValue(field: ScanField, operatorId: BaseNumericScanFieldCondition.HasValueOperands.OperatorId): Result<NumericComparisonScanFieldCondition>;
+        createNumericComparisonWithValue(field: ScanField, operatorId: BaseNumericScanFieldCondition.ValueOperands.OperatorId, value: number): Result<NumericComparisonScanFieldCondition>;
+        createNumericComparisonWithRange(field: ScanField, operatorId: BaseNumericScanFieldCondition.RangeOperands.OperatorId, min: number | undefined, max: number | undefined): Result<NumericComparisonScanFieldCondition>;
+        createNumericWithHasValue(field: ScanField, operatorId: BaseNumericScanFieldCondition.HasValueOperands.OperatorId): Result<NumericScanFieldCondition>;
+        createNumericWithValue(field: ScanField, operatorId: NumericScanFieldCondition.ValueOperands.OperatorId, value: number): Result<NumericScanFieldCondition>;
+        createNumericWithRange(field: ScanField, operatorId: BaseNumericScanFieldCondition.RangeOperands.OperatorId, min: number | undefined, max: number | undefined): Result<NumericScanFieldCondition>;
+        createDateWithHasValue(field: ScanField, operatorId: DateScanFieldCondition.HasValueOperands.OperatorId): Result<DateScanFieldCondition>;
+        createDateWithEquals(field: ScanField, operatorId: DateScanFieldCondition.ValueOperands.OperatorId, value: SourceTzOffsetDateTime): Result<DateScanFieldCondition>;
+        createDateWithRange(field: ScanField, operatorId: DateScanFieldCondition.RangeOperands.OperatorId, min: SourceTzOffsetDateTime | undefined, max: SourceTzOffsetDateTime | undefined): Result<DateScanFieldCondition>;
+        createTextEquals(field: ScanField, operatorId: TextEqualsScanFieldCondition.Operands.OperatorId, value: string): Result<TextEqualsScanFieldCondition>;
+        createTextContains(field: ScanField, operatorId: TextContainsScanFieldCondition.Operands.OperatorId, value: string, asId: ScanFormula.TextContainsAsId, ignoreCase: boolean): Result<TextContainsScanFieldCondition>;
+        createTextHasValueEqualsWithHasValue(field: ScanField, operatorId: BaseTextScanFieldCondition.HasValueOperands.OperatorId): Result<TextHasValueEqualsScanFieldCondition>;
+        createTextHasValueEqualsWithValue(field: ScanField, operatorId: BaseTextScanFieldCondition.ValueOperands.OperatorId, value: string): Result<TextHasValueEqualsScanFieldCondition>;
+        createTextHasValueContainsWithHasValue(field: ScanField, operatorId: BaseTextScanFieldCondition.HasValueOperands.OperatorId): Result<TextHasValueContainsScanFieldCondition>;
+        createTextHasValueContainsWithContains(field: ScanField, operatorId: BaseTextScanFieldCondition.ContainsOperands.OperatorId, value: string, asId: ScanFormula.TextContainsAsId, ignoreCase: boolean): Result<TextHasValueContainsScanFieldCondition>;
+        createStringOverlaps(field: ScanField, operatorId: OverlapsScanFieldCondition.Operands.OperatorId, values: readonly string[]): Result<StringOverlapsScanFieldCondition>;
+        createCurrencyOverlaps(field: ScanField, operatorId: OverlapsScanFieldCondition.Operands.OperatorId, values: readonly CurrencyId[]): Result<CurrencyOverlapsScanFieldCondition>;
+        createExchangeOverlaps(field: ScanField, operatorId: OverlapsScanFieldCondition.Operands.OperatorId, values: readonly ExchangeId[]): Result<ExchangeOverlapsScanFieldCondition>;
+        createMarketOverlaps(field: ScanField, operatorId: OverlapsScanFieldCondition.Operands.OperatorId, values: readonly MarketId[]): Result<MarketOverlapsScanFieldCondition>;
+        createMarketBoardOverlaps(field: ScanField, operatorId: OverlapsScanFieldCondition.Operands.OperatorId, values: readonly MarketBoardId[]): Result<MarketBoardOverlapsScanFieldCondition>;
+        createIs(field: ScanField, operatorId: IsScanFieldCondition.Operands.OperatorId, categoryId: ScanFormula.IsNode.CategoryId): Result<IsScanFieldCondition>;
     }
 
     export function isEqual(left: ScanField, right: ScanField) {
@@ -214,10 +216,13 @@ export namespace ScanField {
     }
 }
 
-export interface NumericInRangeScanField extends ScanField {
+export interface NotSubbedScanField extends ScanField {
+    readonly subFieldId: undefined;
+}
+
+export interface NumericInRangeScanField extends NotSubbedScanField {
     readonly typeId: ScanField.TypeId.NumericInRange;
     readonly fieldId: ScanFormula.NumericRangeFieldId;
-    readonly subFieldId: undefined;
     readonly conditionTypeId: ScanFieldCondition.TypeId.NumericComparison;
     readonly conditions: ScanField.TypedConditions<NumericComparisonScanFieldCondition>;
 }
@@ -258,10 +263,9 @@ export namespace PriceSubbedScanField {
     }
 }
 
-export interface DateInRangeScanField extends ScanField {
+export interface DateInRangeScanField extends NotSubbedScanField {
     readonly typeId: ScanField.TypeId.DateInRange;
     readonly fieldId: ScanFormula.DateRangeFieldId,
-    readonly subFieldId: undefined;
     readonly conditionTypeId: ScanFieldCondition.TypeId.Date;
     readonly conditions: ScanField.TypedConditions<DateScanFieldCondition>;
 }
@@ -298,10 +302,9 @@ export namespace DateSubbedScanField {
     }
 }
 
-export interface TextContainsScanField extends ScanField {
+export interface TextContainsScanField extends NotSubbedScanField {
     readonly typeId: ScanField.TypeId.TextContains;
     readonly fieldId: ScanFormula.TextContainsFieldId,
-    readonly subFieldId: undefined;
     readonly conditionTypeId: ScanFieldCondition.TypeId.TextContains;
     readonly conditions: ScanField.TypedConditions<TextContainsScanFieldCondition>;
 }
@@ -358,10 +361,9 @@ export namespace AttributeSubbedScanField {
     }
 }
 
-export interface TextEqualsScanField extends ScanField {
+export interface TextEqualsScanField extends NotSubbedScanField {
     readonly typeId: ScanField.TypeId.TextEquals;
     readonly fieldId: ScanFormula.TextEqualsFieldId;
-    readonly subFieldId: undefined;
     readonly conditionTypeId: ScanFieldCondition.TypeId.TextEquals;
     readonly conditions: ScanField.TypedConditions<TextEqualsScanFieldCondition>;
 }
@@ -378,10 +380,9 @@ export namespace TextEqualsScanField {
     }
 }
 
-export interface TextHasValueEqualsScanField extends ScanField {
+export interface TextHasValueEqualsScanField extends NotSubbedScanField {
     readonly typeId: ScanField.TypeId.TextHasValueEquals;
     readonly fieldId: ScanFormula.TextHasValueEqualsFieldId;
-    readonly subFieldId: undefined;
     readonly conditionTypeId: ScanFieldCondition.TypeId.TextHasValueEquals;
     readonly conditions: ScanField.TypedConditions<TextHasValueEqualsScanFieldCondition>;
 }
@@ -398,10 +399,9 @@ export namespace TextHasValueEqualsScanField {
     }
 }
 
-export interface StringOverlapsScanField extends ScanField {
+export interface StringOverlapsScanField extends NotSubbedScanField {
     readonly typeId: ScanField.TypeId.StringOverlaps;
     readonly fieldId: ScanFormula.StringOverlapsFieldId;
-    readonly subFieldId: undefined;
     readonly conditionTypeId: ScanFieldCondition.TypeId.StringOverlaps;
     readonly conditions: ScanField.TypedConditions<StringOverlapsScanFieldCondition>;
 }
@@ -418,10 +418,9 @@ export namespace StringOverlapsScanField {
     }
 }
 
-export interface CurrencyOverlapsScanField extends ScanField {
+export interface CurrencyOverlapsScanField extends NotSubbedScanField {
     readonly typeId: ScanField.TypeId.CurrencyOverlaps;
     readonly fieldId: ScanFormula.FieldId.Currency;
-    readonly subFieldId: undefined;
     readonly conditionTypeId: ScanFieldCondition.TypeId.CurrencyOverlaps;
     readonly conditions: ScanField.TypedConditions<CurrencyOverlapsScanFieldCondition>;
 }
@@ -438,10 +437,9 @@ export namespace CurrencyOverlapsScanField {
     }
 }
 
-export interface ExchangeOverlapsScanField extends ScanField {
+export interface ExchangeOverlapsScanField extends NotSubbedScanField {
     readonly typeId: ScanField.TypeId.ExchangeOverlaps;
     readonly fieldId: ScanFormula.FieldId.Exchange;
-    readonly subFieldId: undefined;
     readonly conditionTypeId: ScanFieldCondition.TypeId.ExchangeOverlaps;
     readonly conditions: ScanField.TypedConditions<ExchangeOverlapsScanFieldCondition>;
 }
@@ -458,10 +456,9 @@ export namespace ExchangeOverlapsScanField {
     }
 }
 
-export interface MarketOverlapsScanField extends ScanField {
+export interface MarketOverlapsScanField extends NotSubbedScanField {
     readonly typeId: ScanField.TypeId.MarketOverlaps;
     readonly fieldId: ScanFormula.MarketOverlapsFieldId;
-    readonly subFieldId: undefined;
     readonly conditionTypeId: ScanFieldCondition.TypeId.MarketOverlaps;
     readonly conditions: ScanField.TypedConditions<MarketOverlapsScanFieldCondition>;
 }
@@ -478,10 +475,9 @@ export namespace MarketOverlapsScanField {
     }
 }
 
-export interface MarketBoardOverlapsScanField extends ScanField {
+export interface MarketBoardOverlapsScanField extends NotSubbedScanField {
     readonly typeId: ScanField.TypeId.MarketBoardOverlaps;
     readonly fieldId: ScanFormula.FieldId.MarketBoard;
-    readonly subFieldId: undefined;
     readonly conditionTypeId: ScanFieldCondition.TypeId.MarketBoardOverlaps;
     readonly conditions: ScanField.TypedConditions<MarketBoardOverlapsScanFieldCondition>;
 }
@@ -498,10 +494,9 @@ export namespace MarketBoardOverlapsScanField {
     }
 }
 
-export interface IsScanField extends ScanField {
+export interface IsScanField extends NotSubbedScanField {
     readonly typeId: ScanField.TypeId.Is;
     readonly fieldId: ScanFormula.FieldId.Is;
-    readonly subFieldId: undefined;
     readonly conditionTypeId: ScanFieldCondition.TypeId.Is;
     readonly conditions: ScanField.TypedConditions<IsScanFieldCondition>;
 }

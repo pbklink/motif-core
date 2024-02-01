@@ -732,7 +732,7 @@ export namespace ScanFormulaZenithEncoding {
             } else {
                 const fieldId = Field.tryToId(param as ZenithEncodedScanFormula.FieldTupleNodeType);
                 if (fieldId !== undefined) {
-                    if (ScanFormula.Field.idToSubbed(fieldId)) {
+                    if (ScanFormula.Field.idIsSubbed(fieldId)) {
                         return createDecodeErrorResult(ErrorId.FieldBooleanParamCannotBeSubbedField, `${param}`);
                     } else {
                         const styleId = ScanFormula.Field.idToStyleId(fieldId);
@@ -819,7 +819,7 @@ export namespace ScanFormulaZenithEncoding {
         node: ZenithEncodedScanFormula.RangeMatchingTupleNode,
         fieldId: ScanFormula.FieldId,
     ): Result<ScanFormula.FieldBooleanNode, DecodeError> {
-        const subbed = ScanFormula.Field.idToSubbed(fieldId);
+        const subbed = ScanFormula.Field.idIsSubbed(fieldId);
         const nodeCount = node.length;
 
         let paramCount: Integer;
@@ -838,7 +838,7 @@ export namespace ScanFormulaZenithEncoding {
         switch (paramCount) {
             case 0: {
                 if (subbed) {
-                    return tryDecodeSubbedFieldHasValueNode(fieldId as ScanFormula.SubbedFieldId, node[1]);
+                    return tryDecodeSubbedFieldHasValueNode(fieldId, node[1]);
                 } else {
                     return new Ok(createFieldHasValueNode(fieldId as ScanFormula.NumericRangeFieldId));
                 }
@@ -956,7 +956,7 @@ export namespace ScanFormulaZenithEncoding {
         node: ZenithEncodedScanFormula.MatchingTupleNode,
         fieldId: ScanFormula.FieldId,
     ): Result<ScanFormula.FieldBooleanNode, DecodeError> {
-        const subbed = ScanFormula.Field.idToSubbed(fieldId);
+        const subbed = ScanFormula.Field.idIsSubbed(fieldId);
         const nodeCount = node.length;
 
         let paramCount: Integer;
@@ -979,7 +979,7 @@ export namespace ScanFormulaZenithEncoding {
             switch (paramCount) {
                 case 0: {
                     if (subbed) {
-                        return tryDecodeSubbedFieldHasValueNode(fieldId as ScanFormula.SubbedFieldId, node[1]);
+                        return tryDecodeSubbedFieldHasValueNode(fieldId, node[1]);
                     } else {
                         return createDecodeErrorResult(ErrorId.TextFieldMustHaveAtLeastOneParameter, '');
                     }

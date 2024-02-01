@@ -815,7 +815,7 @@ export namespace StandAloneScanFieldSet {
     export class ConditionFactory implements ScanField.ConditionFactory {
         createNumericComparisonWithHasValue(
             _field: ScanField,
-            operatorId: NumericComparisonScanFieldCondition.OperatorId,
+            operatorId: BaseNumericScanFieldCondition.HasValueOperands.OperatorId,
         ): Result<NumericComparisonScanFieldCondition> {
             const operands: BaseNumericScanFieldCondition.HasValueOperands = {
                 typeId: BaseNumericScanFieldCondition.Operands.TypeId.HasValue,
@@ -832,7 +832,7 @@ export namespace StandAloneScanFieldSet {
 
         createNumericComparisonWithValue(
             _field: ScanField,
-            operatorId: NumericComparisonScanFieldCondition.OperatorId,
+            operatorId: BaseNumericScanFieldCondition.ValueOperands.OperatorId,
             value: number,
         ): Result<NumericComparisonScanFieldCondition> {
             const operands: BaseNumericScanFieldCondition.ValueOperands = {
@@ -851,7 +851,7 @@ export namespace StandAloneScanFieldSet {
 
         createNumericComparisonWithRange(
             _field: ScanField,
-            operatorId: NumericComparisonScanFieldCondition.OperatorId,
+            operatorId: BaseNumericScanFieldCondition.RangeOperands.OperatorId,
             min: number | undefined,
             max: number | undefined,
         ): Result<NumericComparisonScanFieldCondition> {
@@ -872,7 +872,7 @@ export namespace StandAloneScanFieldSet {
 
         createNumericWithHasValue(
             _field: ScanField,
-            operatorId: NumericScanFieldCondition.OperatorId,
+            operatorId: BaseNumericScanFieldCondition.HasValueOperands.OperatorId,
         ): Result<NumericScanFieldCondition> {
             const operands: BaseNumericScanFieldCondition.HasValueOperands = {
                 typeId: BaseNumericScanFieldCondition.Operands.TypeId.HasValue,
@@ -889,7 +889,7 @@ export namespace StandAloneScanFieldSet {
 
         createNumericWithValue(
             _field: ScanField,
-            operatorId: NumericScanFieldCondition.OperatorId,
+            operatorId: NumericScanFieldCondition.ValueOperands.OperatorId,
             value: number,
         ): Result<NumericScanFieldCondition> {
             const operands: BaseNumericScanFieldCondition.ValueOperands = {
@@ -908,7 +908,7 @@ export namespace StandAloneScanFieldSet {
 
         createNumericWithRange(
             _field: ScanField,
-            operatorId: NumericScanFieldCondition.OperatorId,
+            operatorId: BaseNumericScanFieldCondition.RangeOperands.OperatorId,
             min: number | undefined,
             max: number | undefined,
         ): Result<NumericScanFieldCondition> {
@@ -929,7 +929,7 @@ export namespace StandAloneScanFieldSet {
 
         createDateWithHasValue(
             _field: ScanField,
-            operatorId: DateScanFieldCondition.OperatorId,
+            operatorId: DateScanFieldCondition.HasValueOperands.OperatorId,
         ): Result<DateScanFieldCondition> {
             const operands: DateScanFieldCondition.HasValueOperands = {
                 typeId: DateScanFieldCondition.Operands.TypeId.HasValue,
@@ -946,7 +946,7 @@ export namespace StandAloneScanFieldSet {
 
         createDateWithEquals(
             _field: ScanField,
-            operatorId: DateScanFieldCondition.OperatorId,
+            operatorId: DateScanFieldCondition.ValueOperands.OperatorId,
             value: SourceTzOffsetDateTime,
         ): Result<DateScanFieldCondition> {
             const operands: DateScanFieldCondition.ValueOperands = {
@@ -965,7 +965,7 @@ export namespace StandAloneScanFieldSet {
 
         createDateWithRange(
             _field: ScanField,
-            operatorId: DateScanFieldCondition.OperatorId,
+            operatorId: DateScanFieldCondition.RangeOperands.OperatorId,
             min: SourceTzOffsetDateTime | undefined,
             max: SourceTzOffsetDateTime | undefined,
         ): Result<DateScanFieldCondition> {
@@ -986,7 +986,7 @@ export namespace StandAloneScanFieldSet {
 
         createTextEquals(
             _field: ScanField,
-            operatorId: TextEqualsScanFieldCondition.OperatorId,
+            operatorId: TextEqualsScanFieldCondition.Operands.OperatorId,
             value: string,
         ): Result<TextEqualsScanFieldCondition> {
             const operands: BaseTextScanFieldCondition.ValueOperands = {
@@ -1005,7 +1005,7 @@ export namespace StandAloneScanFieldSet {
 
         createTextContains(
             _field: ScanField,
-            operatorId: TextContainsScanFieldCondition.OperatorId,
+            operatorId: TextContainsScanFieldCondition.Operands.OperatorId,
             value: string,
             asId: ScanFormula.TextContainsAsId,
             ignoreCase: boolean,
@@ -1030,7 +1030,7 @@ export namespace StandAloneScanFieldSet {
 
         createTextHasValueEqualsWithHasValue(
             _field: ScanField,
-            operatorId: TextHasValueEqualsScanFieldCondition.OperatorId,
+            operatorId: BaseTextScanFieldCondition.HasValueOperands.OperatorId,
         ): Result<TextHasValueEqualsScanFieldCondition> {
             const operands: BaseTextScanFieldCondition.HasValueOperands = {
                 typeId: BaseTextScanFieldCondition.Operands.TypeId.HasValue,
@@ -1047,7 +1047,7 @@ export namespace StandAloneScanFieldSet {
 
         createTextHasValueEqualsWithValue(
             _field: ScanField,
-            operatorId: TextHasValueEqualsScanFieldCondition.OperatorId,
+            operatorId: BaseTextScanFieldCondition.ValueOperands.OperatorId,
             value: string,
         ): Result<TextHasValueEqualsScanFieldCondition> {
             const operands: BaseTextScanFieldCondition.ValueOperands = {
@@ -1066,7 +1066,7 @@ export namespace StandAloneScanFieldSet {
 
         createTextHasValueContainsWithHasValue(
             _field: ScanField,
-            operatorId: TextHasValueContainsScanFieldCondition.OperatorId,
+            operatorId: BaseTextScanFieldCondition.HasValueOperands.OperatorId,
         ): Result<TextHasValueContainsScanFieldCondition> {
             const operands: BaseTextScanFieldCondition.HasValueOperands = {
                 typeId: BaseTextScanFieldCondition.Operands.TypeId.HasValue,
@@ -1083,7 +1083,7 @@ export namespace StandAloneScanFieldSet {
 
         createTextHasValueContainsWithContains(
             _field: ScanField,
-            operatorId: TextHasValueContainsScanFieldCondition.OperatorId,
+            operatorId: BaseTextScanFieldCondition.ContainsOperands.OperatorId,
             value: string,
             asId: ScanFormula.TextContainsAsId,
             ignoreCase: boolean,
@@ -1108,7 +1108,7 @@ export namespace StandAloneScanFieldSet {
 
         createStringOverlaps(
             _field: ScanField,
-            operatorId: OverlapsScanFieldCondition.OperatorId,
+            operatorId: OverlapsScanFieldCondition.Operands.OperatorId,
             values: readonly string[],
         ): Result<StringOverlapsScanFieldCondition> {
             const condition: StringOverlapsScanFieldCondition = {
@@ -1124,7 +1124,7 @@ export namespace StandAloneScanFieldSet {
 
         createCurrencyOverlaps(
             _field: ScanField,
-            operatorId: OverlapsScanFieldCondition.OperatorId,
+            operatorId: OverlapsScanFieldCondition.Operands.OperatorId,
             values: readonly CurrencyId[],
         ): Result<CurrencyOverlapsScanFieldCondition> {
             const condition: CurrencyOverlapsScanFieldCondition = {
@@ -1140,7 +1140,7 @@ export namespace StandAloneScanFieldSet {
 
         createExchangeOverlaps(
             _field: ScanField,
-            operatorId: OverlapsScanFieldCondition.OperatorId,
+            operatorId: OverlapsScanFieldCondition.Operands.OperatorId,
             values: readonly ExchangeId[],
         ): Result<ExchangeOverlapsScanFieldCondition> {
             const condition: ExchangeOverlapsScanFieldCondition = {
@@ -1156,7 +1156,7 @@ export namespace StandAloneScanFieldSet {
 
         createMarketOverlaps(
             _field: ScanField,
-            operatorId: OverlapsScanFieldCondition.OperatorId,
+            operatorId: OverlapsScanFieldCondition.Operands.OperatorId,
             values: readonly MarketId[],
         ): Result<MarketOverlapsScanFieldCondition> {
             const condition: MarketOverlapsScanFieldCondition = {
@@ -1172,7 +1172,7 @@ export namespace StandAloneScanFieldSet {
 
         createMarketBoardOverlaps(
             _field: ScanField,
-            operatorId: OverlapsScanFieldCondition.OperatorId,
+            operatorId: OverlapsScanFieldCondition.Operands.OperatorId,
             values: readonly MarketBoardId[],
         ): Result<MarketBoardOverlapsScanFieldCondition> {
             const condition: MarketBoardOverlapsScanFieldCondition = {
@@ -1188,7 +1188,7 @@ export namespace StandAloneScanFieldSet {
 
         createIs(
             _field: ScanField,
-            operatorId: IsScanFieldCondition.OperatorId,
+            operatorId: IsScanFieldCondition.Operands.OperatorId,
             categoryId: ScanFormula.IsNode.CategoryId,
         ): Result<IsScanFieldCondition> {
             const condition: IsScanFieldCondition = {
