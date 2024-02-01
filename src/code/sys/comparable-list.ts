@@ -10,16 +10,16 @@ import { moveElementInArray, moveElementsInArray } from './utils';
 import { BinarySearchResult, CompareFtn, rangedAnyBinarySearch, rangedEarliestBinarySearch, rangedLatestBinarySearch, rangedQuickSort } from './utils-search';
 
 /** @public */
-export class ComparableList<T> {
+export class ComparableList<out T extends U, in U = T> {
     readonly items = new Array<T>(); // Caution, length of this array is NOT count.  It can have extra capacity
 
     capacityIncSize: Integer | undefined;
 
-    protected _compareItemsFtn: CompareFtn<T>;
+    protected _compareItemsFtn: CompareFtn<U>;
 
     private _count: Integer = 0;
 
-    constructor(compareItemsFtn?: CompareFtn<T>) {
+    constructor(compareItemsFtn?: CompareFtn<U>) {
         if (compareItemsFtn !== undefined) {
             this._compareItemsFtn = compareItemsFtn;
         }
@@ -32,8 +32,8 @@ export class ComparableList<T> {
     get count(): Integer { return this._count; }
     set count(value: Integer) { this.setCount(value); }
 
-    clone(): ComparableList<T> {
-        const result = new ComparableList(this._compareItemsFtn);
+    clone(): ComparableList<T, U> {
+        const result = new ComparableList<T, U>(this._compareItemsFtn);
         result.assign(this);
         return result;
     }
@@ -318,7 +318,7 @@ export class ComparableList<T> {
         this.growCheck(this._count + growth);
     }
 
-    protected assign(other: ComparableList<T>) {
+    protected assign(other: ComparableList<T, U>) {
         this.clear();
         this.addSubRange(other.items, 0, other.count);
     }
