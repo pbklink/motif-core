@@ -27,10 +27,7 @@ import {
     TextHasValueEqualsScanFieldCondition
 } from './condition/internal-api';
 
-export interface ScanField {
-    readonly typeId: ScanField.TypeId;
-    readonly fieldId: ScanFormula.FieldId;
-    readonly subFieldId: Integer | undefined;
+export interface ScanField extends ScanField.Definition {
     readonly conditionTypeId: ScanFieldCondition.TypeId;
     readonly conditions: ScanField.Conditions;
 
@@ -54,6 +51,12 @@ export namespace ScanField {
         MarketOverlaps,
         MarketBoardOverlaps,
         Is,
+    }
+
+    export interface Definition {
+        readonly typeId: TypeId;
+        readonly fieldId: ScanFormula.FieldId;
+        readonly subFieldId: Integer | undefined;
     }
 
     // Implementable by ComparableList

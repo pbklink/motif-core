@@ -24911,19 +24911,13 @@ export namespace ScanEditorModule {
 // Warning: (ae-missing-release-tag) "ScanField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface ScanField {
+export interface ScanField extends ScanField.Definition {
     // (undocumented)
     readonly conditions: ScanField.Conditions;
     // (undocumented)
     conditionsOperationId: ScanField.BooleanOperationId;
     // (undocumented)
     readonly conditionTypeId: ScanFieldCondition.TypeId;
-    // (undocumented)
-    readonly fieldId: ScanFormula.FieldId;
-    // (undocumented)
-    readonly subFieldId: Integer | undefined;
-    // (undocumented)
-    readonly typeId: ScanField.TypeId;
 }
 
 // @public (undocumented)
@@ -25014,6 +25008,15 @@ export namespace ScanField {
         getAt(index: Integer): ScanFieldCondition;
         // (undocumented)
         setAt(index: Integer, value: ScanFieldCondition): void;
+    }
+    // (undocumented)
+    export interface Definition {
+        // (undocumented)
+        readonly fieldId: ScanFormula.FieldId;
+        // (undocumented)
+        readonly subFieldId: Integer | undefined;
+        // (undocumented)
+        readonly typeId: TypeId;
     }
     // (undocumented)
     export function isAnyConditionEqualTo(field: ScanField, condition: ScanFieldCondition): boolean;
@@ -26147,6 +26150,8 @@ export namespace ScanFormula {
         // (undocumented)
         value: string;
     }
+    const // (undocumented)
+    maxSubFieldIdCount = 100000;
     // (undocumented)
     export abstract class TextFieldNode extends FieldBooleanNode {
         // (undocumented)

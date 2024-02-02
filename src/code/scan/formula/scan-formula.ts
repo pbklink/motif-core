@@ -1262,6 +1262,8 @@ export namespace ScanFormula {
         FieldId.AttributeSubbed
     >;
 
+    export const maxSubFieldIdCount = 100000; // Make sure number of subfields in each subfield type does not exceed this
+
     export const enum PriceSubFieldId {
         Last,
     }
