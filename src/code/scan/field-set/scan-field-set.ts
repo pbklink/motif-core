@@ -10,7 +10,7 @@ import { ScanFieldSetLoadError, ScanFieldSetLoadErrorTypeId } from './common/int
 import {
     AltCodeSubbedScanField,
     AttributeSubbedScanField,
-    BaseNumericScanFieldCondition,
+    NumericComparisonScanFieldCondition,
     CurrencyOverlapsScanField,
     DateInRangeScanField,
     DateSubbedScanField,
@@ -624,7 +624,7 @@ export namespace ScanFieldSet {
         fieldSet: ScanFieldSet,
         node: ScanFormula.NumericComparisonBooleanNode,
         fieldOperationId: ScanField.BooleanOperationId,
-        conditionOperatorId: BaseNumericScanFieldCondition.ValueOperands.OperatorId,
+        conditionOperatorId: NumericComparisonScanFieldCondition.ValueOperands.OperatorId,
     ): boolean {
         let fieldId: ScanFormula.FieldId;
         let value: number;

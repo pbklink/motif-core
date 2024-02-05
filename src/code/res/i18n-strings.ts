@@ -2141,6 +2141,27 @@ export const enum StringId {
     UserAlert_RestartReason_UserAction,
     UserAlert_PleaseWaitSavingChanges,
     UserAlert_ChangesSavedOkToLeaveOrRestorePage,
+    ScanFormulaIsNodeCategoryCaption_Index,
+    ScanFormulaIsNodeCategoryTitle_Index,
+    ScanFieldConditionOperatorDisplay_HasValue,
+    ScanFieldConditionOperatorDisplay_NotHasValue,
+    ScanFieldConditionOperatorDisplay_Equals,
+    ScanFieldConditionOperatorDisplay_NotEquals,
+    ScanFieldConditionOperatorDisplay_GreaterThan,
+    ScanFieldConditionOperatorDisplay_GreaterThanOrEqual,
+    ScanFieldConditionOperatorDisplay_LessThan,
+    ScanFieldConditionOperatorDisplay_LessThanOrEqual,
+    ScanFieldConditionOperatorDisplay_InRange,
+    ScanFieldConditionOperatorDisplay_NotInRange,
+    ScanFieldConditionOperatorDisplay_Contains,
+    ScanFieldConditionOperatorDisplay_NotContains,
+    ScanFieldConditionOperatorDisplay_Overlaps,
+    ScanFieldConditionOperatorDisplay_NotOverlaps,
+    ScanFieldConditionOperatorDisplay_Is,
+    ScanFieldConditionOperatorDisplay_NotIs,
+    ScanFieldConditionOperatorDisplay_OrEqual,
+    ScanFieldConditionOperandsEditorCaption_RemoveMe,
+    ScanFieldConditionOperandsEditorTitle_RemoveMe,
     ConditionSetScanFormulaViewNgComponentCaption_SetOperation,
     ConditionSetScanFormulaViewNgComponentTitle_SetOperation,
     ConditionSetScanFormulaViewNgComponentTitle_Exclude,
@@ -12875,12 +12896,116 @@ export namespace I18nStrings {
                 en: 'Please wait - saving changes.',
             }
         },
+        ScanFormulaIsNodeCategoryCaption_Index: {
+            id: StringId.ScanFormulaIsNodeCategoryCaption_Index, translations: {
+                en: 'Index',
+            }
+        },
+        ScanFormulaIsNodeCategoryTitle_Index: {
+            id: StringId.ScanFormulaIsNodeCategoryTitle_Index, translations: {
+                en: 'Symbol is an Index',
+            }
+        },
         UserAlert_ChangesSavedOkToLeaveOrRestorePage: {
             id: StringId.UserAlert_ChangesSavedOkToLeaveOrRestorePage, translations: {
                 en: 'Changes saved! Ok to leave or restore page.',
             }
         },
-
+        ScanFieldConditionOperatorDisplay_HasValue: {
+            id: StringId.ScanFieldConditionOperatorDisplay_HasValue, translations: {
+                en: 'Has value',
+            }
+        },
+        ScanFieldConditionOperatorDisplay_NotHasValue: {
+            id: StringId.ScanFieldConditionOperatorDisplay_NotHasValue, translations: {
+                en: 'Not has value',
+            }
+        },
+        ScanFieldConditionOperatorDisplay_Equals: {
+            id: StringId.ScanFieldConditionOperatorDisplay_Equals, translations: {
+                en: 'Equals',
+            }
+        },
+        ScanFieldConditionOperatorDisplay_NotEquals: {
+            id: StringId.ScanFieldConditionOperatorDisplay_NotEquals, translations: {
+                en: 'Not equals',
+            }
+        },
+        ScanFieldConditionOperatorDisplay_GreaterThan: {
+            id: StringId.ScanFieldConditionOperatorDisplay_GreaterThan, translations: {
+                en: 'Greater than',
+            }
+        },
+        ScanFieldConditionOperatorDisplay_GreaterThanOrEqual: {
+            id: StringId.ScanFieldConditionOperatorDisplay_GreaterThanOrEqual, translations: {
+                en: 'Greater than or equal',
+            }
+        },
+        ScanFieldConditionOperatorDisplay_LessThan: {
+            id: StringId.ScanFieldConditionOperatorDisplay_LessThan, translations: {
+                en: 'Less than',
+            }
+        },
+        ScanFieldConditionOperatorDisplay_LessThanOrEqual: {
+            id: StringId.ScanFieldConditionOperatorDisplay_LessThanOrEqual, translations: {
+                en: 'Less than or equal',
+            }
+        },
+        ScanFieldConditionOperatorDisplay_InRange: {
+            id: StringId.ScanFieldConditionOperatorDisplay_InRange, translations: {
+                en: 'In range',
+            }
+        },
+        ScanFieldConditionOperatorDisplay_NotInRange: {
+            id: StringId.ScanFieldConditionOperatorDisplay_NotInRange, translations: {
+                en: 'Not in range',
+            }
+        },
+        ScanFieldConditionOperatorDisplay_Contains: {
+            id: StringId.ScanFieldConditionOperatorDisplay_Contains, translations: {
+                en: 'Contains',
+            }
+        },
+        ScanFieldConditionOperatorDisplay_NotContains: {
+            id: StringId.ScanFieldConditionOperatorDisplay_NotContains, translations: {
+                en: 'Not contains',
+            }
+        },
+        ScanFieldConditionOperatorDisplay_Overlaps: {
+            id: StringId.ScanFieldConditionOperatorDisplay_Overlaps, translations: {
+                en: 'Overlaps',
+            }
+        },
+        ScanFieldConditionOperatorDisplay_NotOverlaps: {
+            id: StringId.ScanFieldConditionOperatorDisplay_NotOverlaps, translations: {
+                en: 'Not overlaps',
+            }
+        },
+        ScanFieldConditionOperatorDisplay_Is: {
+            id: StringId.ScanFieldConditionOperatorDisplay_Is, translations: {
+                en: 'Is',
+            }
+        },
+        ScanFieldConditionOperatorDisplay_NotIs: {
+            id: StringId.ScanFieldConditionOperatorDisplay_NotIs, translations: {
+                en: 'Not is',
+            }
+        },
+        ScanFieldConditionOperatorDisplay_OrEqual: {
+            id: StringId.ScanFieldConditionOperatorDisplay_OrEqual, translations: {
+                en: 'or equal',
+            }
+        },
+        ScanFieldConditionOperandsEditorCaption_RemoveMe: {
+            id: StringId.ScanFieldConditionOperandsEditorCaption_RemoveMe, translations: {
+                en: 'Remove condition',
+            }
+        },
+        ScanFieldConditionOperandsEditorTitle_RemoveMe: {
+            id: StringId.ScanFieldConditionOperandsEditorTitle_RemoveMe, translations: {
+                en: 'Remove condition from field',
+            }
+        },
         ConditionSetScanFormulaViewNgComponentCaption_SetOperation: {
             id: StringId.ConditionSetScanFormulaViewNgComponentCaption_SetOperation, translations: {
                 en: 'Set operation',

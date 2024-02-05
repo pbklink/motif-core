@@ -5,6 +5,7 @@
  */
 
 import { CurrencyId, ExchangeId, MarketBoardId, MarketId } from '../../adi/adi-internal-api';
+import { StringId, Strings } from '../../res/res-internal-api';
 import { EnumInfoOutOfOrderError, PickEnum, SourceTzOffsetDateTime } from '../../sys/sys-internal-api';
 
 export namespace ScanFormula {
@@ -259,6 +260,54 @@ export namespace ScanFormula {
     export namespace IsNode {
         export const enum CategoryId {
             Index,
+        }
+
+        export namespace Category {
+            export type Id = CategoryId;
+
+            interface Info {
+                readonly id: CategoryId;
+                readonly captionId: StringId;
+                readonly titleId: StringId;
+            }
+
+            type InfosObject = { [id in keyof typeof CategoryId]: Info };
+            const infosObject: InfosObject = {
+                Index: { id: CategoryId.Index,
+                    captionId: StringId.ScanFormulaIsNodeCategoryCaption_Index,
+                    titleId: StringId.ScanFormulaIsNodeCategoryTitle_Index,
+                }
+            }
+
+            const infos = Object.values(infosObject);
+            export const idCount = infos.length;
+            export const allIds: readonly CategoryId[] = infos.map((info) => info.id);
+
+            export function initialise() {
+                for (let i = 0; i < idCount; i++) {
+                    const info = infos[i];
+                    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+                    if (info.id !== i as Id) {
+                        throw new EnumInfoOutOfOrderError('ScanFormula.IsNode.CategoryId', i, Strings[info.captionId]);
+                    }
+                }
+            }
+
+            export function idToCaptionId(id: Id) {
+                return infos[id].captionId;
+            }
+
+            export function idToCaption(id: Id) {
+                return Strings[idToCaptionId(id)];
+            }
+
+            export function idToTitleId(id: Id) {
+                return infos[id].titleId;
+            }
+
+            export function idToTitle(id: Id) {
+                return Strings[idToTitleId(id)];
+            }
         }
     }
 
@@ -1582,5 +1631,6 @@ export namespace ScanFormulaModule {
         ScanFormula.DateSubField.initialise();
         ScanFormula.AltCodeSubField.initialise();
         ScanFormula.AttributeSubField.initialise();
+        ScanFormula.IsNode.Category.initialise();
     }
 }

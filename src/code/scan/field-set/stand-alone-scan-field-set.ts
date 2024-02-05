@@ -491,6 +491,7 @@ export class StandAloneScanFieldSet implements ScanFieldSet {
             typeId: ScanFieldCondition.TypeId.StringOverlaps,
             operatorId: condition.operatorId,
             operands: {
+                typeId: ScanFieldCondition.Operands.TypeId.TextEnum,
                 values: values.slice(),
             }
         };
@@ -503,6 +504,7 @@ export class StandAloneScanFieldSet implements ScanFieldSet {
             typeId: ScanFieldCondition.TypeId.CurrencyOverlaps,
             operatorId: condition.operatorId,
             operands: {
+                typeId: ScanFieldCondition.Operands.TypeId.CurrencyEnum,
                 values: values.slice(),
             }
         };
@@ -515,6 +517,7 @@ export class StandAloneScanFieldSet implements ScanFieldSet {
             typeId: ScanFieldCondition.TypeId.ExchangeOverlaps,
             operatorId: condition.operatorId,
             operands: {
+                typeId: ScanFieldCondition.Operands.TypeId.ExchangeEnum,
                 values: values.slice(),
             }
         };
@@ -527,6 +530,7 @@ export class StandAloneScanFieldSet implements ScanFieldSet {
             typeId: ScanFieldCondition.TypeId.MarketOverlaps,
             operatorId: condition.operatorId,
             operands: {
+                typeId: ScanFieldCondition.Operands.TypeId.MarketEnum,
                 values: values.slice(),
             }
         };
@@ -539,6 +543,7 @@ export class StandAloneScanFieldSet implements ScanFieldSet {
             typeId: ScanFieldCondition.TypeId.MarketBoardOverlaps,
             operatorId: condition.operatorId,
             operands: {
+                typeId: ScanFieldCondition.Operands.TypeId.MarketBoardEnum,
                 values: values.slice(),
             }
         };
@@ -551,6 +556,7 @@ export class StandAloneScanFieldSet implements ScanFieldSet {
             typeId: ScanFieldCondition.TypeId.Is,
             operatorId: condition.operatorId,
             operands: {
+                typeId: ScanFieldCondition.Operands.TypeId.CategoryValue,
                 categoryId,
             }
         };
@@ -558,22 +564,23 @@ export class StandAloneScanFieldSet implements ScanFieldSet {
 
     private cloneBaseNumericScanFieldConditionOperands(operands: BaseNumericScanFieldCondition.Operands): BaseNumericScanFieldCondition.Operands {
         switch (operands.typeId) {
-            case BaseNumericScanFieldCondition.Operands.TypeId.HasValue: {
+            case ScanFieldCondition.Operands.TypeId.HasValue: {
                 return {
-                    typeId: BaseNumericScanFieldCondition.Operands.TypeId.HasValue,
+                    typeId: ScanFieldCondition.Operands.TypeId.HasValue,
                 };
             }
-            case BaseNumericScanFieldCondition.Operands.TypeId.Value: {
+            case ScanFieldCondition.Operands.TypeId.NumericComparisonValue:
+            case ScanFieldCondition.Operands.TypeId.NumericValue: {
                 const clonedValueOperands: BaseNumericScanFieldCondition.ValueOperands = {
-                    typeId: BaseNumericScanFieldCondition.Operands.TypeId.Value,
+                    typeId: operands.typeId,
                     value: (operands as BaseNumericScanFieldCondition.ValueOperands).value,
                 };
                 return clonedValueOperands;
             }
-            case BaseNumericScanFieldCondition.Operands.TypeId.Range: {
+            case ScanFieldCondition.Operands.TypeId.NumericRange: {
                 const rangeOperands = operands as BaseNumericScanFieldCondition.RangeOperands;
                 const clonedRangeOperands: BaseNumericScanFieldCondition.RangeOperands = {
-                    typeId: BaseNumericScanFieldCondition.Operands.TypeId.Range,
+                    typeId: ScanFieldCondition.Operands.TypeId.NumericRange,
                     min: rangeOperands.min,
                     max: rangeOperands.max,
                 };
@@ -586,22 +593,22 @@ export class StandAloneScanFieldSet implements ScanFieldSet {
 
     private cloneDateScanFieldConditionOperands(operands: DateScanFieldCondition.Operands): DateScanFieldCondition.Operands {
         switch (operands.typeId) {
-            case DateScanFieldCondition.Operands.TypeId.HasValue: {
+            case ScanFieldCondition.Operands.TypeId.HasValue: {
                 return {
-                    typeId: DateScanFieldCondition.Operands.TypeId.HasValue,
+                    typeId: ScanFieldCondition.Operands.TypeId.HasValue,
                 };
             }
-            case DateScanFieldCondition.Operands.TypeId.Value: {
+            case ScanFieldCondition.Operands.TypeId.DateValue: {
                 const clonedValueOperands: DateScanFieldCondition.ValueOperands = {
-                    typeId: DateScanFieldCondition.Operands.TypeId.Value,
+                    typeId: ScanFieldCondition.Operands.TypeId.DateValue,
                     value: (operands as DateScanFieldCondition.ValueOperands).value,
                 };
                 return clonedValueOperands;
             }
-            case DateScanFieldCondition.Operands.TypeId.Range: {
+            case ScanFieldCondition.Operands.TypeId.DateRange: {
                 const rangeOperands = operands as DateScanFieldCondition.RangeOperands;
                 const clonedRangeOperands: DateScanFieldCondition.RangeOperands = {
-                    typeId: DateScanFieldCondition.Operands.TypeId.Range,
+                    typeId: ScanFieldCondition.Operands.TypeId.DateRange,
                     min: rangeOperands.min,
                     max: rangeOperands.max,
                 };
@@ -614,23 +621,23 @@ export class StandAloneScanFieldSet implements ScanFieldSet {
 
     private cloneBaseTextScanFieldConditionOperands(operands: BaseTextScanFieldCondition.Operands): BaseTextScanFieldCondition.Operands {
         switch (operands.typeId) {
-            case BaseTextScanFieldCondition.Operands.TypeId.HasValue: {
+            case ScanFieldCondition.Operands.TypeId.HasValue: {
                 return {
-                    typeId: BaseTextScanFieldCondition.Operands.TypeId.HasValue,
+                    typeId: ScanFieldCondition.Operands.TypeId.HasValue,
                 };
             }
-            case BaseTextScanFieldCondition.Operands.TypeId.Value: {
+            case ScanFieldCondition.Operands.TypeId.TextValue: {
                 const clonedValueOperands: BaseTextScanFieldCondition.ValueOperands = {
-                    typeId: BaseTextScanFieldCondition.Operands.TypeId.Value,
+                    typeId: ScanFieldCondition.Operands.TypeId.TextValue,
                     value: (operands as BaseTextScanFieldCondition.ValueOperands).value,
                 };
                 return clonedValueOperands;
             }
-            case BaseTextScanFieldCondition.Operands.TypeId.Contains: {
+            case ScanFieldCondition.Operands.TypeId.TextContains: {
                 const containsOperands = operands as BaseTextScanFieldCondition.ContainsOperands;
                 const contains = containsOperands.contains;
                 const clonedRangeOperands: BaseTextScanFieldCondition.ContainsOperands = {
-                    typeId: BaseTextScanFieldCondition.Operands.TypeId.Contains,
+                    typeId: ScanFieldCondition.Operands.TypeId.TextContains,
                     contains: {
                         ...contains
                     },
@@ -818,7 +825,7 @@ export namespace StandAloneScanFieldSet {
             operatorId: BaseNumericScanFieldCondition.HasValueOperands.OperatorId,
         ): Result<NumericComparisonScanFieldCondition> {
             const operands: BaseNumericScanFieldCondition.HasValueOperands = {
-                typeId: BaseNumericScanFieldCondition.Operands.TypeId.HasValue,
+                typeId: ScanFieldCondition.Operands.TypeId.HasValue,
             };
 
             const condition: NumericComparisonScanFieldCondition = {
@@ -832,11 +839,11 @@ export namespace StandAloneScanFieldSet {
 
         createNumericComparisonWithValue(
             _field: ScanField,
-            operatorId: BaseNumericScanFieldCondition.ValueOperands.OperatorId,
+            operatorId: NumericComparisonScanFieldCondition.ValueOperands.OperatorId,
             value: number,
         ): Result<NumericComparisonScanFieldCondition> {
-            const operands: BaseNumericScanFieldCondition.ValueOperands = {
-                typeId: BaseNumericScanFieldCondition.Operands.TypeId.Value,
+            const operands: NumericComparisonScanFieldCondition.ValueOperands = {
+                typeId: ScanFieldCondition.Operands.TypeId.NumericComparisonValue,
                 value,
             };
 
@@ -856,7 +863,7 @@ export namespace StandAloneScanFieldSet {
             max: number | undefined,
         ): Result<NumericComparisonScanFieldCondition> {
             const operands: BaseNumericScanFieldCondition.RangeOperands = {
-                typeId: BaseNumericScanFieldCondition.Operands.TypeId.Range,
+                typeId: ScanFieldCondition.Operands.TypeId.NumericRange,
                 min,
                 max,
             };
@@ -875,7 +882,7 @@ export namespace StandAloneScanFieldSet {
             operatorId: BaseNumericScanFieldCondition.HasValueOperands.OperatorId,
         ): Result<NumericScanFieldCondition> {
             const operands: BaseNumericScanFieldCondition.HasValueOperands = {
-                typeId: BaseNumericScanFieldCondition.Operands.TypeId.HasValue,
+                typeId: ScanFieldCondition.Operands.TypeId.HasValue,
             };
 
             const condition: NumericScanFieldCondition = {
@@ -892,8 +899,8 @@ export namespace StandAloneScanFieldSet {
             operatorId: NumericScanFieldCondition.ValueOperands.OperatorId,
             value: number,
         ): Result<NumericScanFieldCondition> {
-            const operands: BaseNumericScanFieldCondition.ValueOperands = {
-                typeId: BaseNumericScanFieldCondition.Operands.TypeId.Value,
+            const operands: NumericScanFieldCondition.ValueOperands = {
+                typeId: ScanFieldCondition.Operands.TypeId.NumericValue,
                 value,
             };
 
@@ -913,7 +920,7 @@ export namespace StandAloneScanFieldSet {
             max: number | undefined,
         ): Result<NumericScanFieldCondition> {
             const operands: BaseNumericScanFieldCondition.RangeOperands = {
-                typeId: BaseNumericScanFieldCondition.Operands.TypeId.Range,
+                typeId: ScanFieldCondition.Operands.TypeId.NumericRange,
                 min,
                 max,
             };
@@ -932,7 +939,7 @@ export namespace StandAloneScanFieldSet {
             operatorId: DateScanFieldCondition.HasValueOperands.OperatorId,
         ): Result<DateScanFieldCondition> {
             const operands: DateScanFieldCondition.HasValueOperands = {
-                typeId: DateScanFieldCondition.Operands.TypeId.HasValue,
+                typeId: ScanFieldCondition.Operands.TypeId.HasValue,
             };
 
             const condition: DateScanFieldCondition = {
@@ -950,7 +957,7 @@ export namespace StandAloneScanFieldSet {
             value: SourceTzOffsetDateTime,
         ): Result<DateScanFieldCondition> {
             const operands: DateScanFieldCondition.ValueOperands = {
-                typeId: DateScanFieldCondition.Operands.TypeId.Value,
+                typeId: ScanFieldCondition.Operands.TypeId.DateValue,
                 value,
             };
 
@@ -970,7 +977,7 @@ export namespace StandAloneScanFieldSet {
             max: SourceTzOffsetDateTime | undefined,
         ): Result<DateScanFieldCondition> {
             const operands: DateScanFieldCondition.RangeOperands = {
-                typeId: DateScanFieldCondition.Operands.TypeId.Range,
+                typeId: ScanFieldCondition.Operands.TypeId.DateRange,
                 min,
                 max,
             };
@@ -990,7 +997,7 @@ export namespace StandAloneScanFieldSet {
             value: string,
         ): Result<TextEqualsScanFieldCondition> {
             const operands: BaseTextScanFieldCondition.ValueOperands = {
-                typeId: BaseTextScanFieldCondition.Operands.TypeId.Value,
+                typeId: ScanFieldCondition.Operands.TypeId.TextValue,
                 value,
             };
 
@@ -1011,7 +1018,7 @@ export namespace StandAloneScanFieldSet {
             ignoreCase: boolean,
         ): Result<TextContainsScanFieldCondition> {
             const operands: BaseTextScanFieldCondition.ContainsOperands = {
-                typeId: BaseTextScanFieldCondition.Operands.TypeId.Contains,
+                typeId: ScanFieldCondition.Operands.TypeId.TextContains,
                 contains: {
                     value,
                     asId,
@@ -1033,7 +1040,7 @@ export namespace StandAloneScanFieldSet {
             operatorId: BaseTextScanFieldCondition.HasValueOperands.OperatorId,
         ): Result<TextHasValueEqualsScanFieldCondition> {
             const operands: BaseTextScanFieldCondition.HasValueOperands = {
-                typeId: BaseTextScanFieldCondition.Operands.TypeId.HasValue,
+                typeId: ScanFieldCondition.Operands.TypeId.HasValue,
             };
 
             const condition: TextHasValueEqualsScanFieldCondition = {
@@ -1051,7 +1058,7 @@ export namespace StandAloneScanFieldSet {
             value: string,
         ): Result<TextHasValueEqualsScanFieldCondition> {
             const operands: BaseTextScanFieldCondition.ValueOperands = {
-                typeId: BaseTextScanFieldCondition.Operands.TypeId.Value,
+                typeId: ScanFieldCondition.Operands.TypeId.TextValue,
                 value,
             };
 
@@ -1069,7 +1076,7 @@ export namespace StandAloneScanFieldSet {
             operatorId: BaseTextScanFieldCondition.HasValueOperands.OperatorId,
         ): Result<TextHasValueContainsScanFieldCondition> {
             const operands: BaseTextScanFieldCondition.HasValueOperands = {
-                typeId: BaseTextScanFieldCondition.Operands.TypeId.HasValue,
+                typeId: ScanFieldCondition.Operands.TypeId.HasValue,
             };
 
             const condition: TextHasValueContainsScanFieldCondition = {
@@ -1089,7 +1096,7 @@ export namespace StandAloneScanFieldSet {
             ignoreCase: boolean,
         ): Result<TextHasValueContainsScanFieldCondition> {
             const operands: BaseTextScanFieldCondition.ContainsOperands = {
-                typeId: BaseTextScanFieldCondition.Operands.TypeId.Contains,
+                typeId: ScanFieldCondition.Operands.TypeId.TextContains,
                 contains: {
                     value,
                     asId,
@@ -1115,6 +1122,7 @@ export namespace StandAloneScanFieldSet {
                 typeId: ScanFieldCondition.TypeId.StringOverlaps,
                 operatorId,
                 operands: {
+                    typeId: ScanFieldCondition.Operands.TypeId.TextEnum,
                     values: values.slice(),
                 }
             };
@@ -1131,6 +1139,7 @@ export namespace StandAloneScanFieldSet {
                 typeId: ScanFieldCondition.TypeId.CurrencyOverlaps,
                 operatorId,
                 operands: {
+                    typeId: ScanFieldCondition.Operands.TypeId.CurrencyEnum,
                     values: values.slice(),
                 }
             };
@@ -1147,6 +1156,7 @@ export namespace StandAloneScanFieldSet {
                 typeId: ScanFieldCondition.TypeId.ExchangeOverlaps,
                 operatorId,
                 operands: {
+                    typeId: ScanFieldCondition.Operands.TypeId.ExchangeEnum,
                     values: values.slice(),
                 }
             };
@@ -1163,6 +1173,7 @@ export namespace StandAloneScanFieldSet {
                 typeId: ScanFieldCondition.TypeId.MarketOverlaps,
                 operatorId,
                 operands: {
+                    typeId: ScanFieldCondition.Operands.TypeId.MarketEnum,
                     values: values.slice(),
                 }
             };
@@ -1179,6 +1190,7 @@ export namespace StandAloneScanFieldSet {
                 typeId: ScanFieldCondition.TypeId.MarketBoardOverlaps,
                 operatorId,
                 operands: {
+                    typeId: ScanFieldCondition.Operands.TypeId.MarketBoardEnum,
                     values: values.slice(),
                 }
             };
@@ -1195,6 +1207,7 @@ export namespace StandAloneScanFieldSet {
                 typeId: ScanFieldCondition.TypeId.Is,
                 operatorId,
                 operands: {
+                    typeId: ScanFieldCondition.Operands.TypeId.CategoryValue,
                     categoryId,
                 }
             }

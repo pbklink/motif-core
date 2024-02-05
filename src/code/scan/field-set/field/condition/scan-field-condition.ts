@@ -5,7 +5,8 @@
  */
 
 import { CurrencyId, ExchangeId, MarketBoardId, MarketId } from '../../../../adi/adi-internal-api';
-import { AssertInternalError, Integer, PickEnum, SourceTzOffsetDateTime, UnreachableCaseError, isArrayEqualUniquely } from '../../../../sys/sys-internal-api';
+import { StringId, Strings } from '../../../../res/res-internal-api';
+import { AssertInternalError, EnumInfoOutOfOrderError, Integer, PickEnum, SourceTzOffsetDateTime, UnreachableCaseError, isArrayEqualUniquely } from '../../../../sys/sys-internal-api';
 import { ScanFormula } from '../../../formula/internal-api';
 
 export interface ScanFieldCondition {
@@ -30,6 +31,29 @@ export namespace ScanFieldCondition {
         Is,
     }
 
+    export interface Operands {
+        readonly typeId: Operands.TypeId;
+    }
+
+    export namespace Operands {
+        // eslint-disable-next-line @typescript-eslint/no-shadow
+        export const enum TypeId {
+            HasValue,
+            NumericComparisonValue,
+            NumericValue,
+            DateValue,
+            NumericRange,
+            DateRange,
+            TextValue,
+            TextContains,
+            TextEnum,
+            CurrencyEnum,
+            ExchangeEnum,
+            MarketEnum,
+            MarketBoardEnum,
+            CategoryValue,
+        }
+    }
 
     export const enum OperatorId {
         HasValue,
@@ -51,6 +75,167 @@ export namespace ScanFieldCondition {
     }
 
     export namespace Operator {
+        export type Id = OperatorId;
+
+        interface Info {
+            readonly id: Id;
+            readonly affirmativeId: Id;
+            readonly code: string;
+            readonly displayId: StringId;
+            readonly multiLineDisplayId: readonly StringId[] | undefined;
+        }
+
+        type InfosObject = { [id in keyof typeof OperatorId]: Info };
+        const infosObject: InfosObject = {
+            HasValue: { id: OperatorId.HasValue,
+                affirmativeId: OperatorId.HasValue,
+                code: 'has',
+                displayId: StringId.ScanFieldConditionOperatorDisplay_HasValue,
+                multiLineDisplayId: undefined,
+            },
+            NotHasValue: { id: OperatorId.NotHasValue,
+                affirmativeId: OperatorId.HasValue,
+                code: '!has',
+                displayId: StringId.ScanFieldConditionOperatorDisplay_NotHasValue,
+                multiLineDisplayId: undefined,
+            },
+            Equals: { id: OperatorId.Equals,
+                affirmativeId: OperatorId.Equals,
+                code: '=',
+                displayId: StringId.ScanFieldConditionOperatorDisplay_Equals,
+                multiLineDisplayId: undefined,
+            },
+            NotEquals: { id: OperatorId.NotEquals,
+                affirmativeId: OperatorId.Equals,
+                code: '!=',
+                displayId: StringId.ScanFieldConditionOperatorDisplay_NotEquals,
+                multiLineDisplayId: undefined,
+            },
+            GreaterThan: { id: OperatorId.GreaterThan,
+                affirmativeId: OperatorId.GreaterThan,
+                code: '>',
+                displayId: StringId.ScanFieldConditionOperatorDisplay_GreaterThan,
+                multiLineDisplayId: undefined,
+            },
+            GreaterThanOrEqual: { id: OperatorId.GreaterThanOrEqual,
+                affirmativeId: OperatorId.GreaterThanOrEqual,
+                code: '>=',
+                displayId: StringId.ScanFieldConditionOperatorDisplay_GreaterThanOrEqual,
+                multiLineDisplayId: [StringId.ScanFieldConditionOperatorDisplay_GreaterThan, StringId.ScanFieldConditionOperatorDisplay_OrEqual],
+            },
+            LessThan: { id: OperatorId.LessThan,
+                affirmativeId: OperatorId.LessThan,
+                code: '<',
+                displayId: StringId.ScanFieldConditionOperatorDisplay_LessThan,
+                multiLineDisplayId: undefined,
+            },
+            LessThanOrEqual: { id: OperatorId.LessThanOrEqual,
+                affirmativeId: OperatorId.LessThanOrEqual,
+                code: '<=',
+                displayId: StringId.ScanFieldConditionOperatorDisplay_LessThanOrEqual,
+                multiLineDisplayId: [StringId.ScanFieldConditionOperatorDisplay_LessThanOrEqual, StringId.ScanFieldConditionOperatorDisplay_OrEqual],
+            },
+            InRange: { id: OperatorId.InRange,
+                affirmativeId: OperatorId.InRange,
+                code: 'ir',
+                displayId: StringId.ScanFieldConditionOperatorDisplay_InRange,
+                multiLineDisplayId: undefined,
+            },
+            NotInRange: { id: OperatorId.NotInRange,
+                affirmativeId: OperatorId.InRange,
+                code: '!ir',
+                displayId: StringId.ScanFieldConditionOperatorDisplay_NotInRange,
+                multiLineDisplayId: undefined,
+            },
+            Contains: { id: OperatorId.Contains,
+                affirmativeId: OperatorId.Contains,
+                code: 'ctn',
+                displayId: StringId.ScanFieldConditionOperatorDisplay_Contains,
+                multiLineDisplayId: undefined,
+            },
+            NotContains: { id: OperatorId.NotContains,
+                affirmativeId: OperatorId.Contains,
+                code: '!ctn',
+                displayId: StringId.ScanFieldConditionOperatorDisplay_NotContains,
+                multiLineDisplayId: undefined,
+            },
+            Overlaps: { id: OperatorId.Overlaps,
+                affirmativeId: OperatorId.Overlaps,
+                code: 'ovl',
+                displayId: StringId.ScanFieldConditionOperatorDisplay_Overlaps,
+                multiLineDisplayId: undefined,
+            },
+            NotOverlaps: { id: OperatorId.NotOverlaps,
+                affirmativeId: OperatorId.Overlaps,
+                code: '!ovl',
+                displayId: StringId.ScanFieldConditionOperatorDisplay_NotOverlaps,
+                multiLineDisplayId: undefined,
+            },
+            Is: { id: OperatorId.Is,
+                affirmativeId: OperatorId.Is,
+                code: 'is',
+                displayId: StringId.ScanFieldConditionOperatorDisplay_Is,
+                multiLineDisplayId: undefined,
+            },
+            NotIs: { id: OperatorId.NotIs,
+                affirmativeId: OperatorId.Is,
+                code: '!is',
+                displayId: StringId.ScanFieldConditionOperatorDisplay_NotIs,
+                multiLineDisplayId: undefined,
+            },
+        };
+
+        const infos = Object.values(infosObject);
+        export const idCount = infos.length;
+
+        export function initialise() {
+            for (let i = 0; i < idCount; i++) {
+                const info = infos[i];
+                if (info.id !== i as Id) {
+                    throw new EnumInfoOutOfOrderError('ScanFieldCondition.OperatorId', i, info.code);
+                }
+            }
+        }
+
+        export function idToAffirmativeId(id: Id) {
+            return infos[id].affirmativeId;
+        }
+
+        export function idToCode(id: Id) {
+            return infos[id].code;
+        }
+
+        export function idToDisplayId(id: Id) {
+            return infos[id].displayId;
+        }
+
+        export function idToDisplay(id: Id) {
+            return Strings[idToDisplayId(id)];
+        }
+
+        export function idToMultiLineDisplayId(id: Id) {
+            return infos[id].multiLineDisplayId;
+        }
+
+        export function idToMultiLineDisplay(id: Id): readonly string[] {
+            const displayIdArray = idToMultiLineDisplayId(id);
+            if (displayIdArray === undefined) {
+                return [idToDisplay(id)];
+            } else {
+                return displayIdArray.map((displayId) => Strings[displayId]);
+            }
+        }
+
+        export function idToAffirmativeDisplay(id: Id) {
+            const affirmativeId = idToAffirmativeId(id);
+            return idToDisplay(affirmativeId);
+        }
+
+        export function idToAffirmativeMultiLineDisplay(id: Id) {
+            const affirmativeId = idToAffirmativeId(id);
+            return idToMultiLineDisplay(affirmativeId);
+        }
+
         export function hasValueIsNot(value: OperatorId.HasValue | OperatorId.NotHasValue): value is OperatorId.NotHasValue {
             return value === OperatorId.NotHasValue;
         }
@@ -117,7 +302,6 @@ export namespace ScanFieldCondition {
             }
         }
     }
-
 
     export function createFormulaNode(
         fieldId: ScanFormula.FieldId,
@@ -965,7 +1149,6 @@ export namespace ScanFieldCondition {
         return createFormulaNodeForOverlapsValues(ScanFormula.MarketBoardFieldOverlapsNode, fieldId, values, not);
     }
 
-
     function createFormulaNodeForOverlapsValues<FieldId extends ScanFormula.TextOverlapFieldId, DataType> (
         overlapsNodeConstructor: new() => ScanFormula.TypedOverlapsFieldNode<DataType>,
         fieldId: FieldId,
@@ -1001,7 +1184,6 @@ export namespace ScanFieldCondition {
 
 export interface BaseNumericScanFieldCondition extends ScanFieldCondition {
     readonly typeId: ScanFieldCondition.TypeId.Numeric | ScanFieldCondition.TypeId.NumericComparison;
-    readonly operatorId: BaseNumericScanFieldCondition.Operands.OperatorId;
     readonly operands: BaseNumericScanFieldCondition.Operands;
 }
 
@@ -1077,21 +1259,21 @@ export namespace BaseNumericScanFieldCondition {
     // }
 
 
-    export interface Operands {
+    export interface Operands extends ScanFieldCondition.Operands {
         readonly typeId: Operands.TypeId;
     }
 
     export namespace Operands {
-        export const enum TypeId {
-            HasValue,
-            Value,
-            Range,
-        }
-        export type OperatorId = HasValueOperands.OperatorId | ValueOperands.OperatorId | RangeOperands.OperatorId;
+        export type TypeId = PickEnum<ScanFieldCondition.Operands.TypeId,
+            ScanFieldCondition.Operands.TypeId.HasValue |
+            ScanFieldCondition.Operands.TypeId.NumericValue |
+            ScanFieldCondition.Operands.TypeId.NumericComparisonValue |
+            ScanFieldCondition.Operands.TypeId.NumericRange
+        >;
     }
 
     export interface HasValueOperands extends Operands {
-        readonly typeId: Operands.TypeId.HasValue;
+        readonly typeId: ScanFieldCondition.Operands.TypeId.HasValue;
     }
 
     export namespace HasValueOperands {
@@ -1099,36 +1281,31 @@ export namespace BaseNumericScanFieldCondition {
             ScanFieldCondition.OperatorId.HasValue |
             ScanFieldCondition.OperatorId.NotHasValue
         >;
+        export const supportedOperatorIds: readonly OperatorId[] = [
+            ScanFieldCondition.OperatorId.HasValue,
+            ScanFieldCondition.OperatorId.NotHasValue,
+        ];
 
         // eslint-disable-next-line @typescript-eslint/no-shadow
         export function is(operands: Operands): operands is HasValueOperands {
-            return operands.typeId === Operands.TypeId.HasValue;
+            return operands.typeId === ScanFieldCondition.Operands.TypeId.HasValue;
         }
     }
 
     export interface ValueOperands extends Operands {
-        readonly typeId: Operands.TypeId.Value;
+        readonly typeId: ScanFieldCondition.Operands.TypeId.NumericValue | ScanFieldCondition.Operands.TypeId.NumericComparisonValue;
         value: number;
     }
 
     export namespace ValueOperands {
-        export type OperatorId = PickEnum<ScanFieldCondition.OperatorId,
-            ScanFieldCondition.OperatorId.Equals |
-            ScanFieldCondition.OperatorId.NotEquals |
-            ScanFieldCondition.OperatorId.GreaterThan |
-            ScanFieldCondition.OperatorId.GreaterThanOrEqual |
-            ScanFieldCondition.OperatorId.LessThan |
-            ScanFieldCondition.OperatorId.LessThanOrEqual
-        >;
-
         // eslint-disable-next-line @typescript-eslint/no-shadow
         export function is(operands: Operands): operands is ValueOperands {
-            return operands.typeId === Operands.TypeId.Value;
+            return operands.typeId === ScanFieldCondition.Operands.TypeId.NumericValue || operands.typeId === ScanFieldCondition.Operands.TypeId.NumericComparisonValue;
         }
     }
 
     export interface RangeOperands extends Operands {
-        readonly typeId: Operands.TypeId.Range;
+        readonly typeId: ScanFieldCondition.Operands.TypeId.NumericRange;
         min: number | undefined;
         max: number | undefined;
     }
@@ -1138,10 +1315,14 @@ export namespace BaseNumericScanFieldCondition {
             ScanFieldCondition.OperatorId.InRange |
             ScanFieldCondition.OperatorId.NotInRange
         >;
+        export const supportedOperatorIds: readonly OperatorId[] = [
+            ScanFieldCondition.OperatorId.InRange,
+            ScanFieldCondition.OperatorId.NotInRange
+        ];
 
         // eslint-disable-next-line @typescript-eslint/no-shadow
         export function is(operands: Operands): operands is RangeOperands {
-            return operands.typeId === Operands.TypeId.Range;
+            return operands.typeId === ScanFieldCondition.Operands.TypeId.NumericRange;
         }
     }
 
@@ -1158,13 +1339,15 @@ export namespace BaseNumericScanFieldCondition {
                     return false;
                 } else {
                     switch (leftOperands.typeId) {
-                        case Operands.TypeId.HasValue: return true;
-                        case Operands.TypeId.Value: {
+                        case ScanFieldCondition.Operands.TypeId.HasValue:
+                            return true;
+                        case ScanFieldCondition.Operands.TypeId.NumericValue:
+                        case ScanFieldCondition.Operands.TypeId.NumericComparisonValue: {
                             const leftValue = (leftOperands as ValueOperands).value;
                             const rightValue = (rightOperands as ValueOperands).value;
                             return leftValue === rightValue;
                         }
-                        case Operands.TypeId.Range: {
+                        case ScanFieldCondition.Operands.TypeId.NumericRange: {
                             const leftInRangeOperands = leftOperands as RangeOperands;
                             const rightInRangeOperands = rightOperands as RangeOperands;
                             return leftInRangeOperands.min === rightInRangeOperands.min && leftInRangeOperands.max === rightInRangeOperands.max;
@@ -1180,37 +1363,36 @@ export namespace BaseNumericScanFieldCondition {
 
 export interface NumericScanFieldCondition extends BaseNumericScanFieldCondition {
     readonly typeId: ScanFieldCondition.TypeId.Numeric;
-    readonly operatorId: NumericScanFieldCondition.Operands.OperatorId;
+    readonly operatorId: NumericScanFieldCondition.OperatorId;
 }
 
 export namespace NumericScanFieldCondition {
-    // export type OperatorId = PickEnum<ScanFieldCondition.OperatorId,
-    //     ScanFieldCondition.OperatorId.HasValue |
-    //     ScanFieldCondition.OperatorId.NotHasValue |
-    //     ScanFieldCondition.OperatorId.Equals |
-    //     ScanFieldCondition.OperatorId.NotEquals |
-    //     ScanFieldCondition.OperatorId.InRange |
-    //     ScanFieldCondition.OperatorId.NotInRange
-    // >;
+    export type OperatorId = Operands.OperatorId;
 
-    // export const supportedOperatorIds: readonly OperatorId[] = [
-    //     ScanFieldCondition.OperatorId.HasValue,
-    //     ScanFieldCondition.OperatorId.NotHasValue,
-    //     ScanFieldCondition.OperatorId.Equals,
-    //     ScanFieldCondition.OperatorId.NotEquals,
-    //     ScanFieldCondition.OperatorId.InRange,
-    //     ScanFieldCondition.OperatorId.NotInRange
-    // ];
-
-    export namespace Operands {
-        export type OperatorId = BaseNumericScanFieldCondition.HasValueOperands.OperatorId | ValueOperands.OperatorId | BaseNumericScanFieldCondition.RangeOperands.OperatorId;
+    export interface ValueOperands extends BaseNumericScanFieldCondition.ValueOperands {
+        readonly typeId: ScanFieldCondition.Operands.TypeId.NumericValue;
     }
 
     export namespace ValueOperands {
+        // eslint-disable-next-line @typescript-eslint/no-shadow
         export type OperatorId = PickEnum<ScanFieldCondition.OperatorId,
             ScanFieldCondition.OperatorId.Equals |
             ScanFieldCondition.OperatorId.NotEquals
         >;
+        export const supportedOperatorIds: readonly OperatorId[] = [
+            ScanFieldCondition.OperatorId.Equals,
+            ScanFieldCondition.OperatorId.NotEquals,
+        ];
+    }
+
+    export namespace Operands {
+        // eslint-disable-next-line @typescript-eslint/no-shadow
+        export type OperatorId = BaseNumericScanFieldCondition.HasValueOperands.OperatorId | ValueOperands.OperatorId | BaseNumericScanFieldCondition.RangeOperands.OperatorId;
+        export const supportedOperatorIds: readonly OperatorId[] = [
+            ...BaseNumericScanFieldCondition.HasValueOperands.supportedOperatorIds,
+            ...ValueOperands.supportedOperatorIds,
+            ...BaseNumericScanFieldCondition.RangeOperands.supportedOperatorIds,
+        ];
     }
 
     export function is(condition: ScanFieldCondition): condition is NumericScanFieldCondition {
@@ -1224,38 +1406,48 @@ export namespace NumericScanFieldCondition {
 
 export interface NumericComparisonScanFieldCondition extends BaseNumericScanFieldCondition {
     readonly typeId: ScanFieldCondition.TypeId.NumericComparison;
-    readonly operatorId: BaseNumericScanFieldCondition.Operands.OperatorId;
+    readonly operatorId: NumericComparisonScanFieldCondition.OperatorId;
 }
 
 export namespace NumericComparisonScanFieldCondition {
-    // export type OperatorId = PickEnum<ScanFieldCondition.OperatorId,
-    //     ScanFieldCondition.OperatorId.HasValue |
-    //     ScanFieldCondition.OperatorId.NotHasValue |
-    //     ScanFieldCondition.OperatorId.Equals |
-    //     ScanFieldCondition.OperatorId.NotEquals |
-    //     ScanFieldCondition.OperatorId.GreaterThan |
-    //     ScanFieldCondition.OperatorId.GreaterThanOrEqual |
-    //     ScanFieldCondition.OperatorId.LessThan |
-    //     ScanFieldCondition.OperatorId.LessThanOrEqual |
-    //     ScanFieldCondition.OperatorId.InRange |
-    //     ScanFieldCondition.OperatorId.NotInRange
-    // >;
+    export type OperatorId = Operands.OperatorId;
 
-    // export const supportedOperatorIds: readonly OperatorId[] = [
-    //     ScanFieldCondition.OperatorId.HasValue,
-    //     ScanFieldCondition.OperatorId.NotHasValue,
-    //     ScanFieldCondition.OperatorId.Equals,
-    //     ScanFieldCondition.OperatorId.NotEquals,
-    //     ScanFieldCondition.OperatorId.GreaterThan,
-    //     ScanFieldCondition.OperatorId.GreaterThanOrEqual,
-    //     ScanFieldCondition.OperatorId.LessThan,
-    //     ScanFieldCondition.OperatorId.LessThanOrEqual,
-    //     ScanFieldCondition.OperatorId.InRange,
-    //     ScanFieldCondition.OperatorId.NotInRange
-    // ];
+    export interface ValueOperands extends BaseNumericScanFieldCondition.ValueOperands {
+        readonly typeId: ScanFieldCondition.Operands.TypeId.NumericComparisonValue;
+    }
+
+    export namespace ValueOperands {
+        // eslint-disable-next-line @typescript-eslint/no-shadow
+        export type OperatorId = PickEnum<ScanFieldCondition.OperatorId,
+            ScanFieldCondition.OperatorId.Equals |
+            ScanFieldCondition.OperatorId.NotEquals |
+            ScanFieldCondition.OperatorId.GreaterThan |
+            ScanFieldCondition.OperatorId.GreaterThanOrEqual |
+            ScanFieldCondition.OperatorId.LessThan |
+            ScanFieldCondition.OperatorId.LessThanOrEqual
+        >;
+        export const supportedOperatorIds: readonly OperatorId[] = [
+            ScanFieldCondition.OperatorId.Equals,
+            ScanFieldCondition.OperatorId.NotEquals,
+            ScanFieldCondition.OperatorId.GreaterThan,
+            ScanFieldCondition.OperatorId.GreaterThanOrEqual,
+            ScanFieldCondition.OperatorId.LessThan,
+            ScanFieldCondition.OperatorId.LessThanOrEqual,
+        ];
+    }
 
     export namespace Operands {
-        export type OperatorId = BaseNumericScanFieldCondition.Operands.OperatorId;
+        // eslint-disable-next-line @typescript-eslint/no-shadow
+        export type OperatorId =
+            BaseNumericScanFieldCondition.HasValueOperands.OperatorId |
+            ValueOperands.OperatorId |
+            BaseNumericScanFieldCondition.RangeOperands.OperatorId;
+
+        export const supportedOperatorIds: readonly OperatorId[] = [
+            ...BaseNumericScanFieldCondition.HasValueOperands.supportedOperatorIds,
+            ...ValueOperands.supportedOperatorIds,
+            ...BaseNumericScanFieldCondition.RangeOperands.supportedOperatorIds,
+        ];
     }
 
     export function is(condition: ScanFieldCondition): condition is NumericComparisonScanFieldCondition {
@@ -1269,29 +1461,12 @@ export namespace NumericComparisonScanFieldCondition {
 
 export interface DateScanFieldCondition extends ScanFieldCondition {
     readonly typeId: ScanFieldCondition.TypeId.Date;
-    readonly operatorId: DateScanFieldCondition.Operands.OperatorId;
+    readonly operatorId: DateScanFieldCondition.OperatorId;
     readonly operands: DateScanFieldCondition.Operands;
 }
 
 export namespace DateScanFieldCondition {
-    // export type OperatorId = PickEnum<ScanFieldCondition.OperatorId,
-    //     ScanFieldCondition.OperatorId.HasValue |
-    //     ScanFieldCondition.OperatorId.NotHasValue |
-    //     ScanFieldCondition.OperatorId.Equals |
-    //     ScanFieldCondition.OperatorId.NotEquals |
-    //     ScanFieldCondition.OperatorId.InRange |
-    //     ScanFieldCondition.OperatorId.NotInRange
-    // >;
-
-    // export const supportedOperatorIds: readonly OperatorId[] = [
-    //     ScanFieldCondition.OperatorId.HasValue,
-    //     ScanFieldCondition.OperatorId.NotHasValue,
-    //     ScanFieldCondition.OperatorId.Equals,
-    //     ScanFieldCondition.OperatorId.NotEquals,
-    //     ScanFieldCondition.OperatorId.InRange,
-    //     ScanFieldCondition.OperatorId.NotInRange
-    // ];
-
+    export type OperatorId = Operands.OperatorId;
     // export namespace Operator {
     //     export type Id = OperatorId;
 
@@ -1349,68 +1524,92 @@ export namespace DateScanFieldCondition {
     //     }
     // }
 
-    export interface Operands {
+    export interface Operands extends ScanFieldCondition.Operands {
         readonly typeId: Operands.TypeId;
     }
 
     export namespace Operands {
-        export const enum TypeId {
-            HasValue,
-            Value,
-            Range,
-        }
+        export type TypeId = PickEnum<ScanFieldCondition.Operands.TypeId,
+            ScanFieldCondition.Operands.TypeId.HasValue |
+            ScanFieldCondition.Operands.TypeId.DateValue |
+            ScanFieldCondition.Operands.TypeId.DateRange
+        >;
+        // eslint-disable-next-line @typescript-eslint/no-shadow
         export type OperatorId = HasValueOperands.OperatorId | ValueOperands.OperatorId | RangeOperands.OperatorId;
     }
 
     export interface HasValueOperands extends Operands {
-        readonly typeId: Operands.TypeId.HasValue;
+        readonly typeId: ScanFieldCondition.Operands.TypeId.HasValue;
     }
 
     export namespace HasValueOperands {
+        // eslint-disable-next-line @typescript-eslint/no-shadow
         export type OperatorId = PickEnum<ScanFieldCondition.OperatorId,
             ScanFieldCondition.OperatorId.HasValue |
             ScanFieldCondition.OperatorId.NotHasValue
         >;
+        export const supportedOperatorIds: readonly OperatorId[] = [
+            ScanFieldCondition.OperatorId.HasValue,
+            ScanFieldCondition.OperatorId.NotHasValue,
+        ];
 
         // eslint-disable-next-line @typescript-eslint/no-shadow
         export function is(operands: Operands): operands is HasValueOperands {
-            return operands.typeId === Operands.TypeId.HasValue;
+            return operands.typeId === ScanFieldCondition.Operands.TypeId.HasValue;
         }
     }
 
     export interface ValueOperands extends Operands {
-        readonly typeId: Operands.TypeId.Value;
+        readonly typeId: ScanFieldCondition.Operands.TypeId.DateValue;
         value: SourceTzOffsetDateTime;
     }
 
     export namespace ValueOperands {
+        // eslint-disable-next-line @typescript-eslint/no-shadow
         export type OperatorId = PickEnum<ScanFieldCondition.OperatorId,
             ScanFieldCondition.OperatorId.Equals |
             ScanFieldCondition.OperatorId.NotEquals
         >;
+        export const supportedOperatorIds: readonly OperatorId[] = [
+            ScanFieldCondition.OperatorId.Equals,
+            ScanFieldCondition.OperatorId.NotEquals,
+        ];
 
         // eslint-disable-next-line @typescript-eslint/no-shadow
         export function is(operands: Operands): operands is ValueOperands {
-            return operands.typeId === Operands.TypeId.Value;
+            return operands.typeId === ScanFieldCondition.Operands.TypeId.DateValue;
         }
     }
 
     export interface RangeOperands extends Operands {
-        readonly typeId: Operands.TypeId.Range;
+        readonly typeId: ScanFieldCondition.Operands.TypeId.DateRange;
         min: SourceTzOffsetDateTime | undefined;
         max: SourceTzOffsetDateTime | undefined;
     }
 
     export namespace RangeOperands {
+        // eslint-disable-next-line @typescript-eslint/no-shadow
         export type OperatorId = PickEnum<ScanFieldCondition.OperatorId,
             ScanFieldCondition.OperatorId.InRange |
             ScanFieldCondition.OperatorId.NotInRange
         >;
+        export const supportedOperatorIds: readonly OperatorId[] = [
+            ScanFieldCondition.OperatorId.InRange,
+            ScanFieldCondition.OperatorId.NotInRange
+        ];
 
         // eslint-disable-next-line @typescript-eslint/no-shadow
         export function is(operands: Operands): operands is RangeOperands {
-            return operands.typeId === Operands.TypeId.Range;
+            return operands.typeId === ScanFieldCondition.Operands.TypeId.DateRange;
         }
+    }
+
+    export namespace Operands {
+        export const supportedOperatorIds: readonly OperatorId[] = [
+            ...HasValueOperands.supportedOperatorIds,
+            ...ValueOperands.supportedOperatorIds,
+            ...RangeOperands.supportedOperatorIds,
+        ];
     }
 
     export function is(condition: ScanFieldCondition): condition is DateScanFieldCondition {
@@ -1430,13 +1629,13 @@ export namespace DateScanFieldCondition {
                     return false;
                 } else {
                     switch (leftOperands.typeId) {
-                        case Operands.TypeId.HasValue: return true;
-                        case Operands.TypeId.Value: {
+                        case ScanFieldCondition.Operands.TypeId.HasValue: return true;
+                        case ScanFieldCondition.Operands.TypeId.DateValue: {
                             const leftValue = (leftOperands as ValueOperands).value;
                             const rightValue = (rightOperands as ValueOperands).value;
                             return SourceTzOffsetDateTime.isEqual(leftValue, rightValue);
                         }
-                        case Operands.TypeId.Range: {
+                        case ScanFieldCondition.Operands.TypeId.DateRange: {
                             const leftInRangeOperands = leftOperands as RangeOperands;
                             const rightInRangeOperands = rightOperands as RangeOperands;
                             return (
@@ -1455,7 +1654,6 @@ export namespace DateScanFieldCondition {
 }
 
 export interface BaseTextScanFieldCondition extends ScanFieldCondition {
-    readonly operatorId: BaseTextScanFieldCondition.Operands.OperatorId;
     readonly operands: BaseTextScanFieldCondition.Operands;
 }
 
@@ -1539,21 +1737,20 @@ export namespace BaseTextScanFieldCondition {
         }
     }
 
-    export interface Operands {
+    export interface Operands extends ScanFieldCondition.Operands {
         readonly typeId: Operands.TypeId;
     }
 
     export namespace Operands {
-        export const enum TypeId {
-            HasValue,
-            Value,
-            Contains,
-        }
-        export type OperatorId = HasValueOperands.OperatorId | ValueOperands.OperatorId | ContainsOperands.OperatorId;
+        export type TypeId = PickEnum<ScanFieldCondition.Operands.TypeId,
+            ScanFieldCondition.Operands.TypeId.HasValue |
+            ScanFieldCondition.Operands.TypeId.TextValue |
+            ScanFieldCondition.Operands.TypeId.TextContains
+        >;
     }
 
     export interface HasValueOperands extends Operands {
-        readonly typeId: Operands.TypeId.HasValue;
+        readonly typeId: ScanFieldCondition.Operands.TypeId.HasValue;
     }
 
     export namespace HasValueOperands {
@@ -1561,15 +1758,19 @@ export namespace BaseTextScanFieldCondition {
             ScanFieldCondition.OperatorId.HasValue |
             ScanFieldCondition.OperatorId.NotHasValue
         >;
+        export const supportedOperatorIds: readonly OperatorId[] = [
+            ScanFieldCondition.OperatorId.HasValue,
+            ScanFieldCondition.OperatorId.NotHasValue,
+        ];
 
         // eslint-disable-next-line @typescript-eslint/no-shadow
         export function is(operands: Operands): operands is HasValueOperands {
-            return operands.typeId === Operands.TypeId.HasValue;
+            return operands.typeId === ScanFieldCondition.Operands.TypeId.HasValue;
         }
     }
 
     export interface ValueOperands extends Operands {
-        readonly typeId: Operands.TypeId.Value;
+        readonly typeId: ScanFieldCondition.Operands.TypeId.TextValue;
         value: string;
     }
 
@@ -1578,15 +1779,19 @@ export namespace BaseTextScanFieldCondition {
             ScanFieldCondition.OperatorId.Equals |
             ScanFieldCondition.OperatorId.NotEquals
         >;
+        export const supportedOperatorIds: readonly OperatorId[] = [
+            ScanFieldCondition.OperatorId.Equals,
+            ScanFieldCondition.OperatorId.NotEquals,
+        ];
 
         // eslint-disable-next-line @typescript-eslint/no-shadow
         export function is(operands: Operands): operands is ValueOperands {
-            return operands.typeId === Operands.TypeId.Value;
+            return operands.typeId === ScanFieldCondition.Operands.TypeId.TextValue;
         }
     }
 
     export interface ContainsOperands extends Operands {
-        readonly typeId: Operands.TypeId.Contains;
+        readonly typeId: ScanFieldCondition.Operands.TypeId.TextContains;
         contains: ContainsOperand;
     }
 
@@ -1595,10 +1800,14 @@ export namespace BaseTextScanFieldCondition {
             ScanFieldCondition.OperatorId.Contains |
             ScanFieldCondition.OperatorId.NotContains
         >;
+        export const supportedOperatorIds: readonly OperatorId[] = [
+            ScanFieldCondition.OperatorId.Contains,
+            ScanFieldCondition.OperatorId.NotContains,
+        ];
 
         // eslint-disable-next-line @typescript-eslint/no-shadow
         export function is(operands: Operands): operands is ContainsOperands {
-            return operands.typeId === Operands.TypeId.Contains;
+            return operands.typeId === ScanFieldCondition.Operands.TypeId.TextContains;
         }
     }
 
@@ -1615,13 +1824,13 @@ export namespace BaseTextScanFieldCondition {
                     return false;
                 } else {
                     switch (leftOperands.typeId) {
-                        case Operands.TypeId.HasValue: return true;
-                        case Operands.TypeId.Value: {
+                        case ScanFieldCondition.Operands.TypeId.HasValue: return true;
+                        case ScanFieldCondition.Operands.TypeId.TextValue: {
                             const leftValue = (leftOperands as ValueOperands).value;
                             const rightValue = (rightOperands as ValueOperands).value;
                             return leftValue === rightValue;
                         }
-                        case Operands.TypeId.Contains: {
+                        case ScanFieldCondition.Operands.TypeId.TextContains: {
                             const leftContainsOperands = leftOperands as ContainsOperands;
                             const rightContainsOperands = rightOperands as ContainsOperands;
                             return ContainsOperand.isEqual(leftContainsOperands.contains, rightContainsOperands.contains);
@@ -1637,10 +1846,11 @@ export namespace BaseTextScanFieldCondition {
 
 export interface TextEqualsScanFieldCondition extends BaseTextScanFieldCondition {
     readonly typeId: ScanFieldCondition.TypeId.TextEquals;
-    readonly operatorId: TextEqualsScanFieldCondition.Operands.OperatorId;
+    readonly operatorId: TextEqualsScanFieldCondition.OperatorId;
 }
 
 export namespace TextEqualsScanFieldCondition {
+    export type OperatorId = Operands.OperatorId;
     // export type OperatorId = PickEnum<ScanFieldCondition.OperatorId,
     //     ScanFieldCondition.OperatorId.Equals |
     //     ScanFieldCondition.OperatorId.NotEquals
@@ -1652,8 +1862,10 @@ export namespace TextEqualsScanFieldCondition {
     // ];
 
     export namespace Operands {
-        export type TypeId = BaseTextScanFieldCondition.Operands.TypeId.Value;
+        export type TypeId = ScanFieldCondition.Operands.TypeId.TextValue;
+        // eslint-disable-next-line @typescript-eslint/no-shadow
         export type OperatorId = BaseTextScanFieldCondition.ValueOperands.OperatorId;
+        export const supportedOperatorIds: readonly OperatorId[] = BaseTextScanFieldCondition.ValueOperands.supportedOperatorIds;
     }
 
     export function is(condition: ScanFieldCondition): condition is TextEqualsScanFieldCondition {
@@ -1675,10 +1887,11 @@ export namespace TextEqualsScanFieldCondition {
 
 export interface TextContainsScanFieldCondition extends BaseTextScanFieldCondition {
     readonly typeId: ScanFieldCondition.TypeId.TextContains,
-    readonly operatorId: TextContainsScanFieldCondition.Operands.OperatorId;
+    readonly operatorId: TextContainsScanFieldCondition.OperatorId;
 }
 
 export namespace TextContainsScanFieldCondition {
+    export type OperatorId = Operands.OperatorId;
     // export type OperatorId = PickEnum<ScanFieldCondition.OperatorId,
     //     ScanFieldCondition.OperatorId.Contains |
     //     ScanFieldCondition.OperatorId.NotContains
@@ -1690,8 +1903,10 @@ export namespace TextContainsScanFieldCondition {
     // ];
 
     export namespace Operands {
-        export type TypeId = BaseTextScanFieldCondition.Operands.TypeId.Contains;
+        export type TypeId = ScanFieldCondition.Operands.TypeId.TextContains;
+        // eslint-disable-next-line @typescript-eslint/no-shadow
         export type OperatorId = BaseTextScanFieldCondition.ContainsOperands.OperatorId;
+        export const supportedOperatorIds: readonly OperatorId[] = BaseTextScanFieldCondition.ContainsOperands.supportedOperatorIds;
     }
 
     export function is(condition: ScanFieldCondition): condition is TextContainsScanFieldCondition {
@@ -1705,10 +1920,11 @@ export namespace TextContainsScanFieldCondition {
 
 export interface TextHasValueEqualsScanFieldCondition extends BaseTextScanFieldCondition {
     readonly typeId: ScanFieldCondition.TypeId.TextHasValueEquals;
-    readonly operatorId: TextHasValueEqualsScanFieldCondition.Operands.OperatorId;
+    readonly operatorId: TextHasValueEqualsScanFieldCondition.OperatorId;
 }
 
 export namespace TextHasValueEqualsScanFieldCondition {
+    export type OperatorId = Operands.OperatorId;
     // export type OperatorId = PickEnum<ScanFieldCondition.OperatorId,
     //     ScanFieldCondition.OperatorId.HasValue |
     //     ScanFieldCondition.OperatorId.NotHasValue |
@@ -1724,11 +1940,16 @@ export namespace TextHasValueEqualsScanFieldCondition {
     // ];
 
     export namespace Operands {
-        export type TypeId = PickEnum<BaseTextScanFieldCondition.Operands.TypeId,
-            BaseTextScanFieldCondition.Operands.TypeId.HasValue |
-            BaseTextScanFieldCondition.Operands.TypeId.Value
+        export type TypeId = PickEnum<ScanFieldCondition.Operands.TypeId,
+            ScanFieldCondition.Operands.TypeId.HasValue |
+            ScanFieldCondition.Operands.TypeId.TextValue
         >;
+        // eslint-disable-next-line @typescript-eslint/no-shadow
         export type OperatorId = BaseTextScanFieldCondition.HasValueOperands.OperatorId | BaseTextScanFieldCondition.ValueOperands.OperatorId;
+        export const supportedOperatorIds: readonly OperatorId[] = [
+            ...BaseTextScanFieldCondition.HasValueOperands.supportedOperatorIds,
+            ...BaseTextScanFieldCondition.ValueOperands.supportedOperatorIds
+        ];
     }
 
     export function is(condition: ScanFieldCondition): condition is TextHasValueEqualsScanFieldCondition {
@@ -1750,10 +1971,11 @@ export namespace TextHasValueEqualsScanFieldCondition {
 
 export interface TextHasValueContainsScanFieldCondition extends BaseTextScanFieldCondition {
     readonly typeId: ScanFieldCondition.TypeId.TextHasValueContains,
-    readonly operatorId: TextHasValueContainsScanFieldCondition.Operands.OperatorId;
+    readonly operatorId: TextHasValueContainsScanFieldCondition.OperatorId;
 }
 
 export namespace TextHasValueContainsScanFieldCondition {
+    export type OperatorId = Operands.OperatorId;
     // export type OperatorId = PickEnum<ScanFieldCondition.OperatorId,
     //     ScanFieldCondition.OperatorId.HasValue |
     //     ScanFieldCondition.OperatorId.NotHasValue |
@@ -1770,10 +1992,15 @@ export namespace TextHasValueContainsScanFieldCondition {
 
     export namespace Operands {
         export type TypeId = PickEnum<BaseTextScanFieldCondition.Operands.TypeId,
-            BaseTextScanFieldCondition.Operands.TypeId.HasValue |
-            BaseTextScanFieldCondition.Operands.TypeId.Contains
+            ScanFieldCondition.Operands.TypeId.HasValue |
+            ScanFieldCondition.Operands.TypeId.TextContains
         >;
+        // eslint-disable-next-line @typescript-eslint/no-shadow
         export type OperatorId = BaseTextScanFieldCondition.HasValueOperands.OperatorId | BaseTextScanFieldCondition.ContainsOperands.OperatorId;
+        export const supportedOperatorIds: readonly OperatorId[] = [
+            ...BaseTextScanFieldCondition.HasValueOperands.supportedOperatorIds,
+            ...BaseTextScanFieldCondition.ContainsOperands.supportedOperatorIds
+        ];
     }
 
     export function is(condition: ScanFieldCondition): condition is TextHasValueContainsScanFieldCondition {
@@ -1794,15 +2021,21 @@ export namespace TextHasValueContainsScanFieldCondition {
 }
 
 export interface OverlapsScanFieldCondition extends ScanFieldCondition {
-    readonly operatorId: OverlapsScanFieldCondition.Operands.OperatorId;
+    readonly operatorId: OverlapsScanFieldCondition.OperatorId;
 }
 
 export namespace OverlapsScanFieldCondition {
+    export type OperatorId = Operands.OperatorId;
     export namespace Operands {
+        // eslint-disable-next-line @typescript-eslint/no-shadow
         export type OperatorId = PickEnum<ScanFieldCondition.OperatorId,
             ScanFieldCondition.OperatorId.Overlaps |
             ScanFieldCondition.OperatorId.NotOverlaps
         >;
+        export const supportedOperatorIds: readonly OperatorId[] = [
+            ScanFieldCondition.OperatorId.Overlaps,
+            ScanFieldCondition.OperatorId.NotOverlaps
+        ];
     }
 
     export function isEqual(left: OverlapsScanFieldCondition, right: OverlapsScanFieldCondition): boolean {
@@ -1820,7 +2053,8 @@ export interface StringOverlapsScanFieldCondition extends OverlapsScanFieldCondi
 }
 
 export namespace StringOverlapsScanFieldCondition {
-    export interface Operands {
+    export interface Operands extends ScanFieldCondition.Operands {
+        typeId: ScanFieldCondition.Operands.TypeId.TextEnum,
         values: string[];
     }
 
@@ -1843,7 +2077,8 @@ export interface MarketBoardOverlapsScanFieldCondition extends OverlapsScanField
 }
 
 export namespace MarketBoardOverlapsScanFieldCondition {
-    export interface Operands {
+    export interface Operands extends ScanFieldCondition.Operands {
+        typeId: ScanFieldCondition.Operands.TypeId.MarketBoardEnum,
         values: MarketBoardId[];
     }
 
@@ -1866,7 +2101,8 @@ export interface CurrencyOverlapsScanFieldCondition extends OverlapsScanFieldCon
 }
 
 export namespace CurrencyOverlapsScanFieldCondition {
-    export interface Operands {
+    export interface Operands extends ScanFieldCondition.Operands {
+        typeId: ScanFieldCondition.Operands.TypeId.CurrencyEnum,
         values: CurrencyId[];
     }
 
@@ -1889,7 +2125,8 @@ export interface ExchangeOverlapsScanFieldCondition extends OverlapsScanFieldCon
 }
 
 export namespace ExchangeOverlapsScanFieldCondition {
-    export interface Operands {
+    export interface Operands extends ScanFieldCondition.Operands {
+        typeId: ScanFieldCondition.Operands.TypeId.ExchangeEnum,
         values: ExchangeId[];
     }
 
@@ -1912,7 +2149,8 @@ export interface MarketOverlapsScanFieldCondition extends OverlapsScanFieldCondi
 }
 
 export namespace MarketOverlapsScanFieldCondition {
-    export interface Operands {
+    export interface Operands extends ScanFieldCondition.Operands {
+        typeId: ScanFieldCondition.Operands.TypeId.MarketEnum,
         values: MarketId[];
     }
 
@@ -1931,20 +2169,28 @@ export namespace MarketOverlapsScanFieldCondition {
 
 export interface IsScanFieldCondition extends ScanFieldCondition {
     readonly typeId: ScanFieldCondition.TypeId.Is;
-    readonly operatorId: IsScanFieldCondition.Operands.OperatorId;
+    readonly operatorId: IsScanFieldCondition.OperatorId;
     readonly operands: IsScanFieldCondition.Operands;
 }
 
 export namespace IsScanFieldCondition {
-    export interface Operands {
+    export type OperatorId = Operands.OperatorId;
+    export interface Operands extends ScanFieldCondition.Operands {
+        typeId: ScanFieldCondition.Operands.TypeId.CategoryValue,
         categoryId: ScanFormula.IsNode.CategoryId;
     }
 
     export namespace Operands {
+        // eslint-disable-next-line @typescript-eslint/no-shadow
         export type OperatorId = PickEnum<ScanFieldCondition.OperatorId,
             ScanFieldCondition.OperatorId.Is |
             ScanFieldCondition.OperatorId.NotIs
         >;
+        // eslint-disable-next-line @typescript-eslint/no-shadow
+        export const supportedOperatorIds: readonly OperatorId[] = [
+            ScanFieldCondition.OperatorId.Is,
+            ScanFieldCondition.OperatorId.NotIs
+        ];
     }
 
     export function is(condition: ScanFieldCondition): condition is IsScanFieldCondition {
@@ -1960,5 +2206,11 @@ export namespace IsScanFieldCondition {
             // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
             left.operands.categoryId === right.operands.categoryId
         );
+    }
+}
+
+export namespace ScanFieldConditionModule {
+    export function initialiseStatic() {
+        ScanFieldCondition.Operator.initialise();
     }
 }
