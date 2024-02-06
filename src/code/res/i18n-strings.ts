@@ -60,6 +60,7 @@ export const enum StringId {
     Open,
     Close,
     Create,
+    Add,
     Delete,
     Deleting,
     Deleted,
@@ -2143,25 +2144,63 @@ export const enum StringId {
     UserAlert_ChangesSavedOkToLeaveOrRestorePage,
     ScanFormulaIsNodeCategoryCaption_Index,
     ScanFormulaIsNodeCategoryTitle_Index,
+    ScanField_BooleanOperationDisplay_All,
+    ScanField_BooleanOperationDescription_All,
+    ScanField_BooleanOperationDisplay_Any,
+    ScanField_BooleanOperationDescription_Any,
+    ScanField_BooleanOperationDisplay_Xor,
+    ScanField_BooleanOperationDescription_Xor,
+    ScanFieldEditor_FieldName,
+    ScanFieldEditor_RequiresDisplay,
+    ScanFieldEditor_RequiresDescription,
+    ScanFieldEditor_DeleteMeDisplay,
+    ScanFieldEditor_DeleteMeDescription,
+    ScanFieldEditor_Conditions,
+    ScanFieldEditor_AddConditionDisplay,
+    ScanFieldEditor_AddConditionDescription,
+    ScanFieldEditor_OneOrMoreConditionsInvalid,
+    ScanFieldEditor_XorRequiresExactly2Conditions,
     ScanFieldConditionOperatorDisplay_HasValue,
+    ScanFieldConditionOperatorDescription_HasValue,
     ScanFieldConditionOperatorDisplay_NotHasValue,
+    ScanFieldConditionOperatorDescription_NotHasValue,
     ScanFieldConditionOperatorDisplay_Equals,
+    ScanFieldConditionOperatorDescription_Equals,
     ScanFieldConditionOperatorDisplay_NotEquals,
+    ScanFieldConditionOperatorDescription_NotEquals,
     ScanFieldConditionOperatorDisplay_GreaterThan,
+    ScanFieldConditionOperatorDescription_GreaterThan,
     ScanFieldConditionOperatorDisplay_GreaterThanOrEqual,
+    ScanFieldConditionOperatorDescription_GreaterThanOrEqual,
     ScanFieldConditionOperatorDisplay_LessThan,
+    ScanFieldConditionOperatorDescription_LessThan,
     ScanFieldConditionOperatorDisplay_LessThanOrEqual,
+    ScanFieldConditionOperatorDescription_LessThanOrEqual,
     ScanFieldConditionOperatorDisplay_InRange,
+    ScanFieldConditionOperatorDescription_InRange,
     ScanFieldConditionOperatorDisplay_NotInRange,
+    ScanFieldConditionOperatorDescription_NotInRange,
     ScanFieldConditionOperatorDisplay_Contains,
+    ScanFieldConditionOperatorDescription_Contains,
     ScanFieldConditionOperatorDisplay_NotContains,
+    ScanFieldConditionOperatorDescription_NotContains,
     ScanFieldConditionOperatorDisplay_Overlaps,
+    ScanFieldConditionOperatorDescription_Overlaps,
     ScanFieldConditionOperatorDisplay_NotOverlaps,
+    ScanFieldConditionOperatorDescription_NotOverlaps,
     ScanFieldConditionOperatorDisplay_Is,
+    ScanFieldConditionOperatorDescription_Is,
     ScanFieldConditionOperatorDisplay_NotIs,
+    ScanFieldConditionOperatorDescription_NotIs,
     ScanFieldConditionOperatorDisplay_OrEqual,
     ScanFieldConditionOperandsEditorCaption_RemoveMe,
     ScanFieldConditionOperandsEditorTitle_RemoveMe,
+    ScanFieldConditionOperandsEditor_NotIsCategory,
+    ScanFieldConditionOperandsEditor_NotEqualsValue,
+    ScanFieldConditionOperandsEditor_NotInRange,
+    ScanFieldConditionOperandsEditor_NotOverlaps,
+    ScanFieldConditionOperandsEditor_NotHasValue,
+    ScanFieldConditionOperandsEditor_NotContainsValue,
     ConditionSetScanFormulaViewNgComponentCaption_SetOperation,
     ConditionSetScanFormulaViewNgComponentTitle_SetOperation,
     ConditionSetScanFormulaViewNgComponentTitle_Exclude,
@@ -2492,6 +2531,11 @@ export namespace I18nStrings {
         Create: {
             id: StringId.Create, translations: {
                 en: 'Create',
+            }
+        },
+        Add: {
+            id: StringId.Add, translations: {
+                en: 'Add',
             }
         },
         Delete: {
@@ -12896,6 +12940,11 @@ export namespace I18nStrings {
                 en: 'Please wait - saving changes.',
             }
         },
+        UserAlert_ChangesSavedOkToLeaveOrRestorePage: {
+            id: StringId.UserAlert_ChangesSavedOkToLeaveOrRestorePage, translations: {
+                en: 'Changes saved! Ok to leave or restore page.',
+            }
+        },
         ScanFormulaIsNodeCategoryCaption_Index: {
             id: StringId.ScanFormulaIsNodeCategoryCaption_Index, translations: {
                 en: 'Index',
@@ -12906,9 +12955,84 @@ export namespace I18nStrings {
                 en: 'Symbol is an Index',
             }
         },
-        UserAlert_ChangesSavedOkToLeaveOrRestorePage: {
-            id: StringId.UserAlert_ChangesSavedOkToLeaveOrRestorePage, translations: {
-                en: 'Changes saved! Ok to leave or restore page.',
+        ScanField_BooleanOperationDisplay_All: {
+            id: StringId.ScanField_BooleanOperationDisplay_All, translations: {
+                en: 'All',
+            }
+        },
+        ScanField_BooleanOperationDescription_All: {
+            id: StringId.ScanField_BooleanOperationDescription_All, translations: {
+                en: 'All conditions must be met',
+            }
+        },
+        ScanField_BooleanOperationDisplay_Any: {
+            id: StringId.ScanField_BooleanOperationDisplay_Any, translations: {
+                en: 'Any',
+            }
+        },
+        ScanField_BooleanOperationDescription_Any: {
+            id: StringId.ScanField_BooleanOperationDescription_Any, translations: {
+                en: 'One or more conditions must be met',
+            }
+        },
+        ScanField_BooleanOperationDisplay_Xor: {
+            id: StringId.ScanField_BooleanOperationDisplay_Xor, translations: {
+                en: 'Only 1 of 2',
+            }
+        },
+        ScanField_BooleanOperationDescription_Xor: {
+            id: StringId.ScanField_BooleanOperationDescription_Xor, translations: {
+                en: 'One of two conditions must be met',
+            }
+        },
+        ScanFieldEditor_FieldName: {
+            id: StringId.ScanFieldEditor_FieldName, translations: {
+                en: 'Field name',
+            }
+        },
+        ScanFieldEditor_RequiresDisplay: {
+            id: StringId.ScanFieldEditor_RequiresDisplay, translations: {
+                en: 'Requires',
+            }
+        },
+        ScanFieldEditor_RequiresDescription: {
+            id: StringId.ScanFieldEditor_RequiresDescription, translations: {
+                en: 'The number of conditions which must be met',
+            }
+        },
+        ScanFieldEditor_DeleteMeDisplay: {
+            id: StringId.ScanFieldEditor_DeleteMeDisplay, translations: {
+                en: 'Delete',
+            }
+        },
+        ScanFieldEditor_DeleteMeDescription: {
+            id: StringId.ScanFieldEditor_DeleteMeDescription, translations: {
+                en: 'Delete this field',
+            }
+        },
+        ScanFieldEditor_Conditions: {
+            id: StringId.ScanFieldEditor_Conditions, translations: {
+                en: 'Conditions',
+            }
+        },
+        ScanFieldEditor_AddConditionDisplay: {
+            id: StringId.ScanFieldEditor_AddConditionDisplay, translations: {
+                en: 'Add Condition',
+            }
+        },
+        ScanFieldEditor_AddConditionDescription: {
+            id: StringId.ScanFieldEditor_AddConditionDescription, translations: {
+                en: 'Select a condition to be added',
+            }
+        },
+        ScanFieldEditor_OneOrMoreConditionsInvalid: {
+            id: StringId.ScanFieldEditor_OneOrMoreConditionsInvalid, translations: {
+                en: 'One or more conditions are invalid',
+            }
+        },
+        ScanFieldEditor_XorRequiresExactly2Conditions: {
+            id: StringId.ScanFieldEditor_XorRequiresExactly2Conditions, translations: {
+                en: 'Exactly 2 conditions are required',
             }
         },
         ScanFieldConditionOperatorDisplay_HasValue: {
@@ -12916,9 +13040,19 @@ export namespace I18nStrings {
                 en: 'Has value',
             }
         },
+        ScanFieldConditionOperatorDescription_HasValue: {
+            id: StringId.ScanFieldConditionOperatorDescription_HasValue, translations: {
+                en: 'Is the field\'s value set',
+            }
+        },
         ScanFieldConditionOperatorDisplay_NotHasValue: {
             id: StringId.ScanFieldConditionOperatorDisplay_NotHasValue, translations: {
                 en: 'Not has value',
+            }
+        },
+        ScanFieldConditionOperatorDescription_NotHasValue: {
+            id: StringId.ScanFieldConditionOperatorDescription_NotHasValue, translations: {
+                en: 'Is the field\'s value not set',
             }
         },
         ScanFieldConditionOperatorDisplay_Equals: {
@@ -12926,9 +13060,19 @@ export namespace I18nStrings {
                 en: 'Equals',
             }
         },
+        ScanFieldConditionOperatorDescription_Equals: {
+            id: StringId.ScanFieldConditionOperatorDescription_Equals, translations: {
+                en: 'Is the field\'s value equal',
+            }
+        },
         ScanFieldConditionOperatorDisplay_NotEquals: {
             id: StringId.ScanFieldConditionOperatorDisplay_NotEquals, translations: {
                 en: 'Not equals',
+            }
+        },
+        ScanFieldConditionOperatorDescription_NotEquals: {
+            id: StringId.ScanFieldConditionOperatorDescription_NotEquals, translations: {
+                en: 'Is the field\'s value not equal',
             }
         },
         ScanFieldConditionOperatorDisplay_GreaterThan: {
@@ -12936,9 +13080,19 @@ export namespace I18nStrings {
                 en: 'Greater than',
             }
         },
+        ScanFieldConditionOperatorDescription_GreaterThan: {
+            id: StringId.ScanFieldConditionOperatorDescription_GreaterThan, translations: {
+                en: 'Is the field\'s value greater than',
+            }
+        },
         ScanFieldConditionOperatorDisplay_GreaterThanOrEqual: {
             id: StringId.ScanFieldConditionOperatorDisplay_GreaterThanOrEqual, translations: {
                 en: 'Greater than or equal',
+            }
+        },
+        ScanFieldConditionOperatorDescription_GreaterThanOrEqual: {
+            id: StringId.ScanFieldConditionOperatorDescription_GreaterThanOrEqual, translations: {
+                en: 'Is the field\'s value greater than or equal',
             }
         },
         ScanFieldConditionOperatorDisplay_LessThan: {
@@ -12946,9 +13100,19 @@ export namespace I18nStrings {
                 en: 'Less than',
             }
         },
+        ScanFieldConditionOperatorDescription_LessThan: {
+            id: StringId.ScanFieldConditionOperatorDescription_LessThan, translations: {
+                en: 'Is the field\'s value less than',
+            }
+        },
         ScanFieldConditionOperatorDisplay_LessThanOrEqual: {
             id: StringId.ScanFieldConditionOperatorDisplay_LessThanOrEqual, translations: {
                 en: 'Less than or equal',
+            }
+        },
+        ScanFieldConditionOperatorDescription_LessThanOrEqual: {
+            id: StringId.ScanFieldConditionOperatorDescription_LessThanOrEqual, translations: {
+                en: 'Is the field\'s value less than or equal',
             }
         },
         ScanFieldConditionOperatorDisplay_InRange: {
@@ -12956,9 +13120,19 @@ export namespace I18nStrings {
                 en: 'In range',
             }
         },
+        ScanFieldConditionOperatorDescription_InRange: {
+            id: StringId.ScanFieldConditionOperatorDescription_InRange, translations: {
+                en: 'Is the field\'s value in the range',
+            }
+        },
         ScanFieldConditionOperatorDisplay_NotInRange: {
             id: StringId.ScanFieldConditionOperatorDisplay_NotInRange, translations: {
                 en: 'Not in range',
+            }
+        },
+        ScanFieldConditionOperatorDescription_NotInRange: {
+            id: StringId.ScanFieldConditionOperatorDescription_NotInRange, translations: {
+                en: 'Is the field\'s value outside the range',
             }
         },
         ScanFieldConditionOperatorDisplay_Contains: {
@@ -12966,9 +13140,19 @@ export namespace I18nStrings {
                 en: 'Contains',
             }
         },
+        ScanFieldConditionOperatorDescription_Contains: {
+            id: StringId.ScanFieldConditionOperatorDescription_Contains, translations: {
+                en: 'Does the field\'s value contain',
+            }
+        },
         ScanFieldConditionOperatorDisplay_NotContains: {
             id: StringId.ScanFieldConditionOperatorDisplay_NotContains, translations: {
                 en: 'Not contains',
+            }
+        },
+        ScanFieldConditionOperatorDescription_NotContains: {
+            id: StringId.ScanFieldConditionOperatorDescription_NotContains, translations: {
+                en: 'Does the field\'s value not contain',
             }
         },
         ScanFieldConditionOperatorDisplay_Overlaps: {
@@ -12976,9 +13160,19 @@ export namespace I18nStrings {
                 en: 'Overlaps',
             }
         },
+        ScanFieldConditionOperatorDescription_Overlaps: {
+            id: StringId.ScanFieldConditionOperatorDescription_Overlaps, translations: {
+                en: 'Are any of the field\'s value included in the specified set of values',
+            }
+        },
         ScanFieldConditionOperatorDisplay_NotOverlaps: {
             id: StringId.ScanFieldConditionOperatorDisplay_NotOverlaps, translations: {
                 en: 'Not overlaps',
+            }
+        },
+        ScanFieldConditionOperatorDescription_NotOverlaps: {
+            id: StringId.ScanFieldConditionOperatorDescription_NotOverlaps, translations: {
+                en: 'Are none of the field\'s value included in the specified set of values',
             }
         },
         ScanFieldConditionOperatorDisplay_Is: {
@@ -12986,9 +13180,19 @@ export namespace I18nStrings {
                 en: 'Is',
             }
         },
+        ScanFieldConditionOperatorDescription_Is: {
+            id: StringId.ScanFieldConditionOperatorDescription_Is, translations: {
+                en: 'Is the symbol included in the specified category',
+            }
+        },
         ScanFieldConditionOperatorDisplay_NotIs: {
             id: StringId.ScanFieldConditionOperatorDisplay_NotIs, translations: {
                 en: 'Not is',
+            }
+        },
+        ScanFieldConditionOperatorDescription_NotIs: {
+            id: StringId.ScanFieldConditionOperatorDescription_NotIs, translations: {
+                en: 'Is the symbol not included in the specified category',
             }
         },
         ScanFieldConditionOperatorDisplay_OrEqual: {
@@ -13004,6 +13208,36 @@ export namespace I18nStrings {
         ScanFieldConditionOperandsEditorTitle_RemoveMe: {
             id: StringId.ScanFieldConditionOperandsEditorTitle_RemoveMe, translations: {
                 en: 'Remove condition from field',
+            }
+        },
+        ScanFieldConditionOperandsEditor_NotIsCategory: {
+            id: StringId.ScanFieldConditionOperandsEditor_NotIsCategory, translations: {
+                en: 'Not is category',
+            }
+        },
+        ScanFieldConditionOperandsEditor_NotEqualsValue: {
+            id: StringId.ScanFieldConditionOperandsEditor_NotEqualsValue, translations: {
+                en: 'Not equals value',
+            }
+        },
+        ScanFieldConditionOperandsEditor_NotInRange: {
+            id: StringId.ScanFieldConditionOperandsEditor_NotInRange, translations: {
+                en: 'Not in range',
+            }
+        },
+        ScanFieldConditionOperandsEditor_NotOverlaps: {
+            id: StringId.ScanFieldConditionOperandsEditor_NotOverlaps, translations: {
+                en: 'Not overlaps',
+            }
+        },
+        ScanFieldConditionOperandsEditor_NotHasValue: {
+            id: StringId.ScanFieldConditionOperandsEditor_NotHasValue, translations: {
+                en: 'Not has value',
+            }
+        },
+        ScanFieldConditionOperandsEditor_NotContainsValue: {
+            id: StringId.ScanFieldConditionOperandsEditor_NotContainsValue, translations: {
+                en: 'Not contains value',
             }
         },
         ConditionSetScanFormulaViewNgComponentCaption_SetOperation: {

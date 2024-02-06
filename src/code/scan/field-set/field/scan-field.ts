@@ -5,7 +5,8 @@
  */
 
 import { CurrencyId, ExchangeId, MarketBoardId, MarketId } from '../../../adi/adi-internal-api';
-import { AssertInternalError, Integer, Result, SourceTzOffsetDateTime, UnreachableCaseError } from '../../../sys/sys-internal-api';
+import { StringId, Strings } from '../../../res/res-internal-api';
+import { AssertInternalError, EnumInfoOutOfOrderError, Integer, Result, SourceTzOffsetDateTime, UnreachableCaseError } from '../../../sys/sys-internal-api';
 import { ScanFormula } from '../../formula/scan-formula';
 import {
     BaseNumericScanFieldCondition,
@@ -83,14 +84,67 @@ export namespace ScanField {
     }
 
     export namespace BooleanOperation {
+        export type Id = BooleanOperationId;
+
         export const defaultId = BooleanOperationId.And;
 
-        export function getAllIds() {
-            return [
-                BooleanOperationId.Or,
-                BooleanOperationId.And,
-                BooleanOperationId.Xor,
-            ];
+        interface Info {
+            readonly id: Id;
+            readonly displayId: StringId;
+            readonly descriptionId: StringId;
+        }
+
+        type InfosObject = { [id in keyof typeof BooleanOperationId]: Info };
+        const infosObject: InfosObject = {
+            And: {
+                id: BooleanOperationId.And,
+                displayId: StringId.ScanField_BooleanOperationDisplay_All,
+                descriptionId: StringId.ScanField_BooleanOperationDescription_All,
+            },
+            Or: {
+                id: BooleanOperationId.Or,
+                displayId: StringId.ScanField_BooleanOperationDisplay_Any,
+                descriptionId: StringId.ScanField_BooleanOperationDescription_Any,
+            },
+            Xor: {
+                id: BooleanOperationId.And,
+                displayId: StringId.ScanField_BooleanOperationDisplay_Xor,
+                descriptionId: StringId.ScanField_BooleanOperationDescription_Xor,
+            },
+        } as const;
+
+        const infos = Object.values(infosObject);
+        export const idCount = infos.length;
+        export const allIds = generateAllIds();
+
+        function generateAllIds(): readonly BooleanOperationId[] {
+            const result = new Array<BooleanOperationId>(idCount);
+            for (let i = 0; i < idCount; i++) {
+                const info = infos[i];
+                const id = info.id;
+                if (id !== i as BooleanOperationId) {
+                    throw new EnumInfoOutOfOrderError('ScanField.BooleanOperation.Id', i, Strings[info.displayId]);
+                } else {
+                    result[i] = id;
+                }
+            }
+            return result;
+        }
+
+        export function idToDisplayId(id: Id) {
+            return infos[id].displayId;
+        }
+
+        export function idToDisplay(id: Id) {
+            return Strings[idToDisplayId(id)];
+        }
+
+        export function idToDescriptionId(id: Id) {
+            return infos[id].displayId;
+        }
+
+        export function idToDescription(id: Id) {
+            return Strings[idToDescriptionId(id)];
         }
     }
 

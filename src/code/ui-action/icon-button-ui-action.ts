@@ -110,6 +110,7 @@ export namespace IconButtonUiAction {
         EnlargeToTopLeft,
         Dot,
         Exclamation,
+        Delete,
     }
 
     export type IconPushEventHandler = (this: void, iconId: IconButtonUiAction.IconId | undefined) => void;
