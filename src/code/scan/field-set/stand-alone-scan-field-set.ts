@@ -48,13 +48,24 @@ import { ScanFieldSet } from './scan-field-set';
 export class StandAloneScanFieldSet implements ScanFieldSet {
     readonly fieldFactory = new StandAloneScanFieldSet.FieldFactory();
     readonly conditionFactory = new StandAloneScanFieldSet.ConditionFactory();
+    readonly valid = true;
 
     readonly fields = new ComparableList<ScanField>();
 
-    loadError: ScanFieldSetLoadError | undefined;
+    private _loadError: ScanFieldSetLoadError | undefined;
+
+    get loadError() { return this._loadError; }
+
+    beginLoad() {
+        this._loadError = undefined;
+    }
+
+    endLoad(error: ScanFieldSetLoadError | undefined) {
+        this._loadError = error;
+    }
 
     assign(value: ScanFieldSet): void {
-        this.loadError = value.loadError;
+        this._loadError = value.loadError;
         this.fields.clear();
 
         const valueFields = value.fields;

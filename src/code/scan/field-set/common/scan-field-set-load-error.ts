@@ -40,4 +40,16 @@ export namespace ScanFieldSetLoadError {
         };
         return new Err(error);
     }
+
+    export function isUndefinableEqual(left: ScanFieldSetLoadError | undefined, right: ScanFieldSetLoadError | undefined): boolean {
+        if (left === undefined) {
+            return right === undefined;
+        } else {
+            return right === undefined ? false : isEqual(left, right);
+        }
+    }
+
+    export function isEqual(left: ScanFieldSetLoadError, right: ScanFieldSetLoadError): boolean {
+        return left.typeId === right.typeId && left.extra === right.extra;
+    }
 }

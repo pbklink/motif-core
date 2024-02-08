@@ -24768,7 +24768,7 @@ export class ScanEditor {
     // (undocumented)
     get scan(): Scan | undefined;
     // (undocumented)
-    setCriteria(value: ScanFormula.BooleanNode, sourceId: ScanEditor.SourceId | undefined, modifier: ScanEditor.Modifier | undefined): void;
+    setCriteriaAsBooleanNode(value: ScanFormula.BooleanNode, modifier?: ScanEditor.Modifier): void;
     // (undocumented)
     setCriteriaAsConditionSet(value: ScanConditionSet, modifier?: ScanEditor.Modifier): void;
     // (undocumented)
@@ -24946,13 +24946,15 @@ export namespace ScanEditor {
     // (undocumented)
     export const enum SourceId {
         // (undocumented)
-        ConditionSet = 1,
+        BooleanNode = 0,
         // (undocumented)
-        FieldSet = 2,
+        ConditionSet = 2,
         // (undocumented)
-        Formula = 0,
+        FieldSet = 3,
         // (undocumented)
-        Zenith = 3
+        Formula = 1,
+        // (undocumented)
+        ZenithText = 4
     }
     // (undocumented)
     export type StateChangeEventHandler = (this: void) => void;
@@ -25344,13 +25346,19 @@ export namespace ScanFieldConditionModule {
 // @public (undocumented)
 export interface ScanFieldSet {
     // (undocumented)
+    beginLoad: () => void;
+    // (undocumented)
     readonly conditionFactory: ScanField.ConditionFactory;
+    // (undocumented)
+    endLoad: (loadError: ScanFieldSetLoadError | undefined) => void;
     // (undocumented)
     readonly fieldFactory: ScanFieldSet.FieldFactory;
     // (undocumented)
     readonly fields: ScanFieldSet.Fields;
     // (undocumented)
-    loadError: ScanFieldSetLoadError | undefined;
+    readonly loadError: ScanFieldSetLoadError | undefined;
+    // (undocumented)
+    readonly valid: boolean;
 }
 
 // @public (undocumented)
@@ -25426,6 +25434,10 @@ export interface ScanFieldSetLoadError {
 export namespace ScanFieldSetLoadError {
     // (undocumented)
     export function createErr<T>(typeId: ScanFieldSetLoadErrorTypeId, extra?: string): Result<T, ScanFieldSetLoadError>;
+    // (undocumented)
+    export function isEqual(left: ScanFieldSetLoadError, right: ScanFieldSetLoadError): boolean;
+    // (undocumented)
+    export function isUndefinableEqual(left: ScanFieldSetLoadError | undefined, right: ScanFieldSetLoadError | undefined): boolean;
 }
 
 // Warning: (ae-missing-release-tag) "ScanFieldSetLoadErrorTypeId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -28789,13 +28801,19 @@ export class StandAloneScanFieldSet implements ScanFieldSet {
     // (undocumented)
     assign(value: ScanFieldSet): void;
     // (undocumented)
+    beginLoad(): void;
+    // (undocumented)
     readonly conditionFactory: StandAloneScanFieldSet.ConditionFactory;
+    // (undocumented)
+    endLoad(error: ScanFieldSetLoadError | undefined): void;
     // (undocumented)
     readonly fieldFactory: StandAloneScanFieldSet.FieldFactory;
     // (undocumented)
     readonly fields: ComparableList<ScanField, ScanField>;
     // (undocumented)
-    loadError: ScanFieldSetLoadError | undefined;
+    get loadError(): ScanFieldSetLoadError | undefined;
+    // (undocumented)
+    readonly valid = true;
 }
 
 // @public (undocumented)
