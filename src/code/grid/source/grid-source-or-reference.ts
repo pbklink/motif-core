@@ -6,7 +6,7 @@
 
 import { AssertInternalError, Err, ErrorCode, Guid, LockOpenListItem, Ok, Result } from '../../sys/sys-internal-api';
 import { ReferenceableGridLayoutsService } from '../layout/grid-layout-internal-api';
-import { TableRecordSourceFactoryService } from '../table/grid-table-internal-api';
+import { TableFieldSourceDefinitionRegistryService, TableRecordSourceFactoryService } from '../table/internal-api';
 import { GridRowOrderDefinition, GridSourceDefinition, GridSourceOrReferenceDefinition } from './definition/grid-source-definition-internal-api';
 import { GridSource } from './grid-source';
 import { ReferenceableGridSource } from './referenceable-grid-source';
@@ -22,6 +22,7 @@ export class GridSourceOrReference {
 
     constructor(
         private readonly _referenceableGridLayoutsService: ReferenceableGridLayoutsService,
+        private readonly _tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
         private readonly _tableRecordSourceFactoryService: TableRecordSourceFactoryService,
         private readonly _referenceableGridSourcesService: ReferenceableGridSourcesService,
         definition: GridSourceOrReferenceDefinition
@@ -57,6 +58,7 @@ export class GridSourceOrReference {
         if (this._gridSourceDefinition !== undefined) {
             const gridSource = new GridSource(
                 this._referenceableGridLayoutsService,
+                this._tableFieldSourceDefinitionRegistryService,
                 this._tableRecordSourceFactoryService,
                 this._gridSourceDefinition
             );

@@ -31,7 +31,7 @@ import {
 } from "../field-source/grid-table-field-source-internal-api";
 import { CallPutTableRecordDefinition, TableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
 import { TableRecord } from '../record/grid-table-record-internal-api';
-import { CallPutTableValueSource, SecurityDataItemTableValueSource } from '../value-source/grid-table-value-source-internal-api';
+import { CallPutTableValueSource, SecurityDataItemTableValueSource } from '../value-source/internal-api';
 import { CallPutFromUnderlyingTableRecordSourceDefinition } from './definition/call-put-from-underlying-table-record-source-definition';
 import { TableRecordSourceDefinitionFactoryService } from './definition/grid-table-record-source-definition-internal-api';
 import { SingleDataItemTableRecordSource } from './single-data-item-table-record-source';

@@ -9,7 +9,7 @@ import { GridLayoutOrReferenceDefinition } from '../../layout/grid-layout-intern
 import {
     TableRecordSourceDefinition,
     TableRecordSourceDefinitionFactoryService
-} from "../../table/record-source/grid-table-record-source-internal-api";
+} from "../../table/record-source/internal-api";
 import { GridRowOrderDefinition } from './grid-row-order-definition';
 import { GridSourceDefinition } from './grid-source-definition';
 

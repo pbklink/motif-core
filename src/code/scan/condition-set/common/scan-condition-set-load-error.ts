@@ -1,7 +1,11 @@
 export const enum ScanConditionSetLoadErrorTypeId {
     // ConditionSet
-    ConditionsNodeTypeNotSupported,
+    XorSetOperationNotSupported,
+    UnexpectedConditionSetOperandTypeId,
+    UnexpectedFieldSetOperandTypeId,
     ConditionNodeTypeIsNotSupported,
+    XorFieldBooleanOperationNotSupported,
+    FieldDoesNotHaveRequiredBooleanOperationId,
     // Conditions
     NotOfAllNotSupported,
     NotOfNoneNotSupported,

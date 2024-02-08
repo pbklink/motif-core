@@ -16,6 +16,7 @@ import {
     UsableListChangeTypeId
 } from "../sys/sys-internal-api";
 import { ScanConditionSet } from './condition-set/internal-api';
+import { ScanFieldSet } from './field-set/internal-api';
 import { Scan } from './scan';
 import { ScanEditor } from './scan-editor';
 import { ScanList } from './scan-list';
@@ -52,7 +53,8 @@ export class ScansService {
 
     openNewScanEditor(
         opener: LockOpenListItem.Opener,
-        emptyScanConditionSet: ScanConditionSet,
+        emptyScanFieldSet?: ScanFieldSet,
+        emptyScanConditionSet?: ScanConditionSet,
         errorEventer?: ScanEditor.ErrorEventer,
     ): ScanEditor {
         return new ScanEditor(
@@ -60,6 +62,7 @@ export class ScansService {
             this._symbolsService,
             undefined,
             opener,
+            emptyScanFieldSet,
             emptyScanConditionSet,
             (createdScanId) => this.getOrWaitForScan(createdScanId),
             errorEventer,
@@ -69,11 +72,14 @@ export class ScansService {
     async tryOpenScanEditor(
         scanId: string | undefined,
         opener: LockOpenListItem.Opener,
-        newScanConditionSetCallback: (this: void) => ScanConditionSet,
+        newScanFieldSetCallback?: (this: void) => ScanFieldSet | undefined,
+        newScanConditionSetCallback?: (this: void) => ScanConditionSet | undefined,
         errorEventer?: ScanEditor.ErrorEventer,
     ): Promise<Result<ScanEditor | undefined>> {
         if (scanId === undefined) {
-            return new Ok(this.openNewScanEditor(opener, newScanConditionSetCallback()));
+            const emptyScanFieldSet = newScanFieldSetCallback === undefined ? undefined : newScanFieldSetCallback();
+            const emptyScanConditionSet = newScanConditionSetCallback === undefined ? undefined : newScanConditionSetCallback();
+            return new Ok(this.openNewScanEditor(opener, emptyScanFieldSet, emptyScanConditionSet));
         } else {
             const lockResult = await this.scanList.tryLockItemByKey(scanId, opener);
             if (lockResult.isErr()) {
@@ -86,12 +92,15 @@ export class ScansService {
                     this.scanList.openLockedItem(scan, opener)
                     let openedEditor = this._openedScanEditors.get(scan);
                     if (openedEditor === undefined) {
+                        const emptyScanFieldSet = newScanFieldSetCallback === undefined ? undefined : newScanFieldSetCallback();
+                        const emptyScanConditionSet = newScanConditionSetCallback === undefined ? undefined : newScanConditionSetCallback();
                         openedEditor = new ScanEditor(
                             this._adiService,
                             this._symbolsService,
                             scan,
                             opener,
-                            newScanConditionSetCallback(),
+                            emptyScanFieldSet,
+                            emptyScanConditionSet,
                             (createdScanId) => this.getOrWaitForScan(createdScanId),
                             errorEventer,
                         );

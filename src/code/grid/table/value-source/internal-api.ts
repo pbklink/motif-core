@@ -22,6 +22,7 @@ export * from './ranked-lit-ivem-id-list-directory-item-table-value-source';
 export * from './ranked-lit-ivem-id-table-value-source';
 export * from './scan-table-value-source';
 export * from './security-data-item-table-value-source';
+export * from './table-value-source';
 export * from './top-shareholder-table-value-source';
 export * from './undefined-table-value-source';
 

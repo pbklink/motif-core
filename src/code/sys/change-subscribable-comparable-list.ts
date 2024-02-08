@@ -10,11 +10,11 @@ import { RecordList } from './record-list';
 import { Integer, } from './types';
 import { UsableListChangeType, UsableListChangeTypeId } from './usable-list-change-type';
 
-export class ChangeSubscribableComparableList<T> extends ComparableList<T> implements RecordList<T> {
+export class ChangeSubscribableComparableList<out T extends U, in U = T> extends ComparableList<T, U> implements RecordList<T> {
     private _listChangeMultiEvent = new MultiEvent<RecordList.ListChangeEventHandler>();
 
-    override clone(): ChangeSubscribableComparableList<T> {
-        const result = new ChangeSubscribableComparableList(this._compareItemsFtn);
+    override clone(): ChangeSubscribableComparableList<T, U> {
+        const result = new ChangeSubscribableComparableList<T, U>(this._compareItemsFtn);
         result.assign(this);
         return result;
     }
@@ -30,6 +30,12 @@ export class ChangeSubscribableComparableList<T> extends ComparableList<T> imple
         const result = super.add(value);
         this.notifyListChange(UsableListChangeTypeId.Insert, firstAddIndex, 1);
         return result;
+    }
+
+    override addUndefinedRange(undefinedValueCount: Integer) {
+        const firstAddIndex = this.count;
+        super.addUndefinedRange(undefinedValueCount);
+        this.notifyListChange(UsableListChangeTypeId.Insert, firstAddIndex, undefinedValueCount);
     }
 
     override addRange(values: readonly T[]) {

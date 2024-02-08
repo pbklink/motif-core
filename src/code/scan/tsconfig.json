@@ -14,6 +14,7 @@
 , "condition-set/scan-condition-set.ts", "formula/scan-formula.ts", "formula/scan-formula-zenith-encoding.ts"  ],
   "references": [
     { "path": "./condition-set/tsconfig.json" },
+    { "path": "./field-set/tsconfig.json" },
     { "path": "./formula/tsconfig.json" },
     { "path": "../services/tsconfig.json" },
     { "path": "../adi/tsconfig.json" },

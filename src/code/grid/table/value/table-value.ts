@@ -183,6 +183,12 @@ export class VisibleTableValue extends BooleanTableValue {
         this.renderValueTypeId = RenderValue.TypeId.Visible;
     }
 }
+export class ValidTableValue extends BooleanTableValue {
+    constructor() {
+        super();
+        this.renderValueTypeId = RenderValue.TypeId.Valid;
+    }
+}
 
 export abstract class EnumTableValue extends GenericTableValue<Integer> {
     protected renderValueTypeId: RenderValue.TypeId;
@@ -207,6 +213,12 @@ export class ExerciseTypeIdTableValue extends EnumTableValue {
     constructor() {
         super();
         this.renderValueTypeId = RenderValue.TypeId.ExerciseTypeId;
+    }
+}
+export class ScanFieldBooleanOperationIdTableValue extends EnumTableValue {
+    constructor() {
+        super();
+        this.renderValueTypeId = RenderValue.TypeId.ScanFieldBooleanOperationId;
     }
 }
 

@@ -7,7 +7,7 @@
 import { AssertInternalError } from '../../../sys/internal-error';
 import { JsonElement } from '../../../sys/json-element';
 import { GridSortDefinition } from '../../layout/definition/grid-layout-definition-internal-api';
-import { TableRecordDefinition } from '../../table/grid-table-internal-api';
+import { TableRecordDefinition } from '../../table/internal-api';
 
 /* @public */
 export class GridRowOrderDefinition {

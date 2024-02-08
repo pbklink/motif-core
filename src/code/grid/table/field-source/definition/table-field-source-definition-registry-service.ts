@@ -5,7 +5,7 @@
  */
 
 import { CallOrPutId } from '../../../../adi/adi-internal-api';
-import { UnreachableCaseError } from '../../../../sys/sys-internal-api';
+import { AssertInternalError, CommaText, Err, ErrorCode, Ok, Result, UnreachableCaseError } from '../../../../sys/sys-internal-api';
 import { GridLayoutDefinition } from '../../../layout/grid-layout-internal-api';
 import { BalancesTableFieldSourceDefinition } from './balances-table-field-source-definition';
 import { BrokerageAccountTableFieldSourceDefinition } from './brokerage-account-table-field-source-definition';
@@ -29,7 +29,8 @@ import { TableFieldSourceDefinition } from './table-field-source-definition';
 import { TopShareholderTableFieldSourceDefinition } from './top-shareholder-table-field-source-definition';
 
 export class TableFieldSourceDefinitionRegistryService {
-    private readonly _cache = new Map<TableFieldSourceDefinition.TypeId, TableFieldSourceDefinition>();
+    private readonly _definitionsByTypeId = new Map<TableFieldSourceDefinition.TypeId, TableFieldSourceDefinition>();
+    private readonly _definitionsByName = new Map<string, TableFieldSourceDefinition>();
 
     get feed() {
         return this.get(TableFieldSourceDefinition.TypeId.Feed) as FeedTableFieldSourceDefinition;
@@ -92,27 +93,55 @@ export class TableFieldSourceDefinitionRegistryService {
         return this.get(TableFieldSourceDefinition.TypeId.GridField) as GridFieldTableFieldSourceDefinition;
     }
 
-    get(typeId: TableFieldSourceDefinition.TypeId): TableFieldSourceDefinition {
-        let result = this._cache.get(typeId);
-        if (result !== undefined) {
-            return result;
-        } else {
-            result = this.createDefinition(typeId);
-            this._cache.set(typeId, result);
-            return result;
-        }
+    register(definition: TableFieldSourceDefinition) {
+        this._definitionsByTypeId.set(definition.typeId, definition);
+        this._definitionsByName.set(definition.name, definition);
     }
 
-    createLayoutDefinition(fieldIds: TableFieldSourceDefinitionRegistryService.FieldId[]): GridLayoutDefinition {
+    get(typeId: TableFieldSourceDefinition.TypeId): TableFieldSourceDefinition {
+        let definition = this._definitionsByTypeId.get(typeId);
+        if (definition === undefined) {
+            definition = this.createDefinition(typeId); // In future, throw assertion here
+            this._definitionsByTypeId.set(typeId, definition);
+        }
+        return definition;
+    }
+
+    createLayoutDefinition(fieldIds: TableFieldSourceDefinition.FieldId[]): GridLayoutDefinition {
         const count = fieldIds.length;
         const fieldNames = new Array<string>(count);
         for (let i = 0; i < count; i++) {
             const fieldId = fieldIds[i];
-            const fieldName = this.getFieldNameOfFieldId(fieldId);
+            const fieldName = this.get(fieldId.sourceTypeId).getFieldNameById(fieldId.id);
             fieldNames[i] = fieldName;
         }
 
         return GridLayoutDefinition.createFromFieldNames(fieldNames);
+    }
+
+    decodeCommaTextFieldName(value: string): Result<TableFieldSourceDefinition.FieldName> {
+        const commaTextResult = CommaText.tryToStringArray(value, true);
+        if (commaTextResult.isErr()) {
+            return commaTextResult.createOuter(commaTextResult.error);
+        } else {
+            const strArray = commaTextResult.value;
+            if (strArray.length !== 2) {
+                return new Err(ErrorCode.TableFieldSourceDefinition_DecodeCommaTextFieldNameNot2Elements);
+            } else {
+                const sourceName = strArray[0];
+                const sourceId = TableFieldSourceDefinition.Type.tryNameToId(sourceName); // in future, get this from name to definition map
+                if (sourceId === undefined) {
+                    return new Err(ErrorCode.TableFieldSourceDefinition_DecodeCommaTextFieldNameUnknownSourceId);
+                } else {
+                    const decodedFieldName: TableFieldSourceDefinition.FieldName = {
+                        sourceTypeId: sourceId,
+                        sourcelessName: strArray[1],
+                    }
+
+                    return new Ok(decodedFieldName);
+                }
+            }
+        }
     }
 
     private createDefinition(typeId: TableFieldSourceDefinition.TypeId): TableFieldSourceDefinition {
@@ -157,83 +186,11 @@ export class TableFieldSourceDefinitionRegistryService {
                 return new RankedLitIvemIdListDirectoryItemTableFieldSourceDefinition();
             case TableFieldSourceDefinition.TypeId.GridField:
                 return new GridFieldTableFieldSourceDefinition();
+            case TableFieldSourceDefinition.TypeId.ScanFieldEditorFrame:
+                throw new AssertInternalError('TFSDRSCDSFEF25051', 'outside');
 
             default:
-                throw new UnreachableCaseError('TFSDRCD25051', typeId);
+                throw new UnreachableCaseError('TFSDRCDD25051', typeId);
         }
     }
-
-    private getFieldNameOfFieldId(fieldId: TableFieldSourceDefinitionRegistryService.FieldId) {
-        const sourceTypeId = fieldId.sourceTypeId;
-        switch (sourceTypeId) {
-            case TableFieldSourceDefinition.TypeId.Feed:
-                return this.feed.getFieldNameById(fieldId.id);
-            case TableFieldSourceDefinition.TypeId.LitIvemId:
-                return this.litIvemId.getFieldNameById(fieldId.id);
-            case TableFieldSourceDefinition.TypeId.RankedLitIvemId:
-                return this.rankedLitIvemId.getFieldNameById(fieldId.id);
-            case TableFieldSourceDefinition.TypeId.LitIvemBaseDetail:
-                return this.litIvemBaseDetail.getFieldNameById(fieldId.id);
-            case TableFieldSourceDefinition.TypeId.LitIvemExtendedDetail:
-                return this.litIvemExtendedDetail.getFieldNameById(fieldId.id);
-            case TableFieldSourceDefinition.TypeId.LitIvemAlternateCodes:
-                return this.litIvemAlternateCodes.getFieldNameById(fieldId.id);
-            case TableFieldSourceDefinition.TypeId.MyxLitIvemAttributes:
-                return this.myxLitIvemAttributes.getFieldNameById(fieldId.id);
-            case TableFieldSourceDefinition.TypeId.EditableGridLayoutDefinitionColumn:
-                return this.editableGridLayoutDefinitionColumn.getFieldNameById(fieldId.id);
-            case TableFieldSourceDefinition.TypeId.SecurityDataItem:
-                return this.securityDataItem.getFieldNameById(fieldId.id);
-            case TableFieldSourceDefinition.TypeId.BrokerageAccounts:
-                return this.brokerageAccounts.getFieldNameById(fieldId.id);
-            case TableFieldSourceDefinition.TypeId.OrdersDataItem:
-                return this.ordersDataItem.getFieldNameById(fieldId.id);
-            case TableFieldSourceDefinition.TypeId.HoldingsDataItem:
-                return this.holdingsDataItem.getFieldNameById(fieldId.id);
-            case TableFieldSourceDefinition.TypeId.BalancesDataItem:
-                return this.balances.getFieldNameById(fieldId.id);
-            case TableFieldSourceDefinition.TypeId.CallPut:
-                return this.callPut.getFieldNameById(fieldId.id);
-            case TableFieldSourceDefinition.TypeId.CallSecurityDataItem:
-                return this.callSecurityDataItem.getFieldNameById(fieldId.id);
-            case TableFieldSourceDefinition.TypeId.PutSecurityDataItem:
-                return this.putSecurityDataItem.getFieldNameById(fieldId.id);
-            case TableFieldSourceDefinition.TypeId.TopShareholdersDataItem:
-                return this.topShareholdersDataItem.getFieldNameById(fieldId.id);
-            case TableFieldSourceDefinition.TypeId.Scan:
-                return this.scan.getFieldNameById(fieldId.id);
-            case TableFieldSourceDefinition.TypeId.RankedLitIvemIdListDirectoryItem:
-                return this.rankedLitIvemIdListDirectoryItem.getFieldNameById(fieldId.id);
-            case TableFieldSourceDefinition.TypeId.GridField:
-                return this.gridField.getFieldNameById(fieldId.id);
-
-            default:
-                throw new UnreachableCaseError('TFSDRSGF25051', sourceTypeId);
-        }
-    }
-}
-
-export namespace TableFieldSourceDefinitionRegistryService {
-    export type FieldId =
-        FeedTableFieldSourceDefinition.FieldId |
-        LitIvemIdTableFieldSourceDefinition.FieldId |
-        RankedLitIvemIdTableFieldSourceDefinition.FieldId |
-        LitIvemBaseDetailTableFieldSourceDefinition.FieldId |
-        LitIvemExtendedDetailTableFieldSourceDefinition.FieldId |
-        LitIvemAlternateCodesTableFieldSourceDefinition.FieldId |
-        MyxLitIvemAttributesTableFieldSourceDefinition.FieldId |
-        EditableGridLayoutDefinitionColumnTableFieldSourceDefinition.FieldId |
-        SecurityDataItemTableFieldSourceDefinition.FieldId |
-        BrokerageAccountTableFieldSourceDefinition.FieldId |
-        OrderTableFieldSourceDefinition.FieldId |
-        HoldingTableFieldSourceDefinition.FieldId |
-        BalancesTableFieldSourceDefinition.FieldId |
-        CallPutTableFieldSourceDefinition.FieldId |
-        CallPutSecurityDataItemTableFieldSourceDefinition.CallFieldId |
-        CallPutSecurityDataItemTableFieldSourceDefinition.PutFieldId |
-        TopShareholderTableFieldSourceDefinition.FieldId |
-        ScanTableFieldSourceDefinition.FieldId |
-        RankedLitIvemIdListDirectoryItemTableFieldSourceDefinition.FieldId |
-        GridFieldTableFieldSourceDefinition.FieldId;
-
 }

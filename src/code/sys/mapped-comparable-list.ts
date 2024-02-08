@@ -7,18 +7,18 @@
 import { ChangeSubscribableComparableList } from './change-subscribable-comparable-list';
 import { ErrorCode } from './error-code';
 import { DuplicateError } from './external-error';
-import { UnreachableCaseError } from './internal-error';
+import { AssertInternalError, UnreachableCaseError } from './internal-error';
 import { Integer, MapKey, Mappable } from './types';
 
 /** @public */
-export class MappedComparableList<T extends Mappable> extends ChangeSubscribableComparableList<T> {
+export class MappedComparableList<out T extends (Mappable & U), in U = T> extends ChangeSubscribableComparableList<T, U> {
     onDuplicate = MappedComparableList.OnDuplicate.Error;
     duplicateErrorText = '';
 
     private _map = new Map<MapKey, T>();
 
-    override clone(): MappedComparableList<T> {
-        const result = new MappedComparableList(this._compareItemsFtn);
+    override clone(): MappedComparableList<T, U> {
+        const result = new MappedComparableList<T, U>(this._compareItemsFtn);
         result.assign(this);
         return result;
     }
@@ -43,6 +43,10 @@ export class MappedComparableList<T extends Mappable> extends ChangeSubscribable
         } else {
             return -1;
         }
+    }
+
+    override addUndefinedRange(undefinedValueCount: Integer) {
+        throw new AssertInternalError('MCLAUR34123', undefinedValueCount.toString());
     }
 
     override addRange(values: readonly T[]) {

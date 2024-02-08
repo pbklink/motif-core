@@ -28,6 +28,8 @@ export abstract class TableFieldSourceDefinition extends GridFieldSourceDefiniti
         const idx = this.fieldDefinitions.findIndex((definition) => definition.name.toUpperCase() === upperName);
         return idx >= 0 ? idx : undefined;
     }
+
+    abstract getFieldNameById(id: number): string;
 }
 
 export namespace TableFieldSourceDefinition {
@@ -52,6 +54,7 @@ export namespace TableFieldSourceDefinition {
         Scan,
         RankedLitIvemIdListDirectoryItem,
         GridField,
+        ScanFieldEditorFrame, // outside
         /*LitIvemId_News,
         IvemId_Holding,
         CashItem_Holding,
@@ -61,6 +64,8 @@ export namespace TableFieldSourceDefinition {
         CallPut_SecurityDataItem,
         IvemId_CustomHolding,*/
     }
+
+    export type TableFieldValueConstructors = [field: TableField.Constructor, value: TableValue.Constructor];
 
     export namespace Type {
         export type Id = TypeId;
@@ -85,6 +90,7 @@ export namespace TableFieldSourceDefinition {
         export const scanName = 'Scn';
         export const rankedLitIvemIdListDirectoryItemName = 'RllDI';
         export const gridFieldName = 'Gf';
+        export const ScanFieldEditorFrame = 'Sfef';
 
         interface Info {
             readonly id: Id;
@@ -113,11 +119,11 @@ export namespace TableFieldSourceDefinition {
             Scan: { id: TypeId.Scan, name: scanName },
             RankedLitIvemIdListDirectoryItem: { id: TypeId.RankedLitIvemIdListDirectoryItem, name: rankedLitIvemIdListDirectoryItemName },
             GridField: { id: TypeId.GridField, name: gridFieldName },
+            ScanFieldEditorFrame: { id: TypeId.ScanFieldEditorFrame, name: ScanFieldEditorFrame },
         };
 
-        export const idCount = Object.keys(infoObject).length;
-
         const infos: Info[] = Object.values(infoObject);
+        export const idCount = infos.length;
 
         export function idToName(id: TypeId): string {
             return infos[id].name;
@@ -156,38 +162,13 @@ export namespace TableFieldSourceDefinition {
         Type.initialiseSource();
     }
 
-    export interface DecodedFieldName {
-        readonly sourceTypeId: Type.Id;
+    export interface FieldName {
+        readonly sourceTypeId: TypeId;
         readonly sourcelessName: string;
     }
 
-    export function decodeCommaTextFieldName(value: string): Result<DecodedFieldName> {
-        const commaTextResult = CommaText.tryToStringArray(value, true);
-        if (commaTextResult.isErr()) {
-            return commaTextResult.createOuter(commaTextResult.error);
-        } else {
-            const strArray = commaTextResult.value;
-            if (strArray.length !== 2) {
-                return new Err(ErrorCode.TableFieldSourceDefinition_DecodeCommaTextFieldNameNot2Elements);
-            } else {
-                const sourceName = strArray[0];
-                const sourceId = Type.tryNameToId(sourceName);
-                if (sourceId === undefined) {
-                    return new Err(ErrorCode.TableFieldSourceDefinition_DecodeCommaTextFieldNameUnknownSourceId);
-                } else {
-                    const decodedFieldName: DecodedFieldName = {
-                        sourceTypeId: sourceId,
-                        sourcelessName: strArray[1],
-                    }
-
-                    return new Ok(decodedFieldName);
-                }
-            }
-        }
-    }
-
     export interface FieldId {
-        sourceTypeId: TableFieldSourceDefinition.TypeId;
+        sourceTypeId: TypeId;
         id: number;
     }
 }

@@ -12,7 +12,7 @@ import {
     ReferenceableGridLayout,
     ReferenceableGridLayoutsService
 } from "../layout/grid-layout-internal-api";
-import { Table, TableFieldSourceDefinition, TableRecordSource, TableRecordSourceDefinition, TableRecordSourceFactoryService } from '../table/grid-table-internal-api';
+import { Table, TableFieldSourceDefinition, TableFieldSourceDefinitionRegistryService, TableRecordSource, TableRecordSourceDefinition, TableRecordSourceFactoryService } from '../table/internal-api';
 import { GridRowOrderDefinition, GridSourceDefinition } from './definition/grid-source-definition-internal-api';
 
 /** @public */
@@ -38,6 +38,7 @@ export class GridSource implements LockOpenListItem<GridSource>, IndexedRecord {
 
     constructor(
         private readonly _referenceableGridLayoutsService: ReferenceableGridLayoutsService,
+        private readonly _tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
         private readonly _tableRecordSourceFactoryService: TableRecordSourceFactoryService,
         definition: GridSourceDefinition,
         id?: Guid,
@@ -152,7 +153,7 @@ export class GridSource implements LockOpenListItem<GridSource>, IndexedRecord {
             if (this._table === undefined) {
                 throw new AssertInternalError('GSOGLDLT23008')
             } else {
-                const tableFieldSourceDefinitionTypeIds = GridSource.getTableFieldSourceDefinitionTypeIdsFromLayout(layout);
+                const tableFieldSourceDefinitionTypeIds = this.getTableFieldSourceDefinitionTypeIdsFromLayout(layout);
                 this._table.setActiveFieldSources(tableFieldSourceDefinitionTypeIds, true);
                 this.notifyGridLayoutSet();
                 return new Ok(undefined);
@@ -255,7 +256,7 @@ export class GridSource implements LockOpenListItem<GridSource>, IndexedRecord {
         if (this._lockedTableRecordSource === undefined || this._lockedGridLayout === undefined) {
             throw new AssertInternalError('GSOLT23008');
         } else {
-            const tableFieldSourceDefinitionTypeIds = GridSource.getTableFieldSourceDefinitionTypeIdsFromLayout(this._lockedGridLayout);
+            const tableFieldSourceDefinitionTypeIds = this.getTableFieldSourceDefinitionTypeIdsFromLayout(this._lockedGridLayout);
             this._table = new Table(this._lockedTableRecordSource, tableFieldSourceDefinitionTypeIds);
             this._table.open(opener);
         }
@@ -296,22 +297,13 @@ export class GridSource implements LockOpenListItem<GridSource>, IndexedRecord {
             this._lockedGridLayout.closeLocked(opener);
         }
     }
-}
 
-export namespace GridSource {
-    export type GridLayoutSetEventHandler = (this: void) => void;
-
-    export interface LockedGridLayouts {
-        readonly gridLayout: GridLayout;
-        readonly referenceableGridLayout: ReferenceableGridLayout | undefined;
-    }
-
-    export function getTableFieldSourceDefinitionTypeIdsFromLayout(layout: GridLayout) {
+    private getTableFieldSourceDefinitionTypeIdsFromLayout(layout: GridLayout) {
         const columns = layout.columns;
         const typeIds = new Array<TableFieldSourceDefinition.TypeId>();
         for (const column of columns) {
             const fieldName = column.fieldName;
-            const decodeResult = TableFieldSourceDefinition.decodeCommaTextFieldName(fieldName);
+            const decodeResult = this._tableFieldSourceDefinitionRegistryService.decodeCommaTextFieldName(fieldName);
             if (decodeResult.isOk()) {
                 const typeId = decodeResult.value.sourceTypeId;
                 if (!typeIds.includes(typeId)) {
@@ -320,5 +312,14 @@ export namespace GridSource {
             }
         }
         return typeIds;
+    }
+}
+
+export namespace GridSource {
+    export type GridLayoutSetEventHandler = (this: void) => void;
+
+    export interface LockedGridLayouts {
+        readonly gridLayout: GridLayout;
+        readonly referenceableGridLayout: ReferenceableGridLayout | undefined;
     }
 }

@@ -14,7 +14,7 @@ export interface BinarySearchResult {
 }
 
 /** @public */
-export type CompareFtn<T> = (this: void, left: T, right: T) => ComparisonResult;
+export type CompareFtn<in T> = (this: void, left: T, right: T) => ComparisonResult;
 
 /** Finds any matching index.  Use if index values are unique
  * @public

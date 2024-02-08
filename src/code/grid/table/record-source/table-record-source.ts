@@ -24,8 +24,8 @@ import { TableRecordSourceDefinition, TableRecordSourceDefinitionFactoryService 
 
 /** @public */
 export abstract class TableRecordSource extends CorrectnessBadness {
-    private readonly _gridFieldCustomHeadingsService: GridFieldCustomHeadingsService;
-    private readonly _tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService;
+    protected readonly _gridFieldCustomHeadingsService: GridFieldCustomHeadingsService;
+    protected readonly _tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService;
 
     private _activeFieldSources: readonly TableFieldSource[] = [];
     private _fields: readonly TableField[] = [];

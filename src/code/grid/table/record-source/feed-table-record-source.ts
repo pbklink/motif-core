@@ -12,7 +12,7 @@ import {
 } from "../field-source/grid-table-field-source-internal-api";
 import { FeedTableRecordDefinition, TableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
 import { TableRecord } from '../record/grid-table-record-internal-api';
-import { FeedTableValueSource } from '../value-source/grid-table-value-source-internal-api';
+import { FeedTableValueSource } from '../value-source/internal-api';
 import { FeedTableRecordSourceDefinition } from './definition/feed-table-record-source-definition';
 import { TableRecordSourceDefinitionFactoryService } from './definition/grid-table-record-source-definition-internal-api';
 import { SingleDataItemRecordTableRecordSource } from './single-data-item-record-table-record-source';

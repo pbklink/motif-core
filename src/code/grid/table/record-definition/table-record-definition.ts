@@ -29,6 +29,7 @@ export namespace TableRecordDefinition {
         Scan,
         RankedLitIvemIdListDirectoryItem,
         GridField,
+        ScanFieldEditorFrame, // Outside
     }
 
     export namespace Type {
@@ -109,6 +110,10 @@ export namespace TableRecordDefinition {
             GridField: {
                 id: TableRecordDefinition.TypeId.GridField,
                 name: 'GridField',
+            },
+            ScanFieldEditorFrame: {  // Outside
+                id: TableRecordDefinition.TypeId.ScanFieldEditorFrame,
+                name: 'ScanFieldEditorFrame',
             },
         };
 

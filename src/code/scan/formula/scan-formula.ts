@@ -4,6 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
+import { CurrencyId, ExchangeId, MarketBoardId, MarketId } from '../../adi/adi-internal-api';
+import { StringId, Strings } from '../../res/res-internal-api';
 import { EnumInfoOutOfOrderError, PickEnum, SourceTzOffsetDateTime } from '../../sys/sys-internal-api';
 
 export namespace ScanFormula {
@@ -46,12 +48,17 @@ export namespace ScanFormula {
 
         // Field
         FieldHasValue,
-        BooleanFieldEquals,
+        // BooleanFieldEquals,
         NumericFieldEquals,
         NumericFieldInRange,
         DateFieldEquals,
         DateFieldInRange,
-        TextFieldIncludes,
+        StringFieldOverlaps,
+        CurrencyFieldOverlaps,
+        ExchangeFieldOverlaps,
+        MarketFieldOverlaps,
+        MarketBoardFieldOverlaps,
+        TextFieldEquals,
         TextFieldContains,
         PriceSubFieldHasValue,
         PriceSubFieldEquals,
@@ -79,12 +86,17 @@ export namespace ScanFormula {
         NodeTypeId.None |
         NodeTypeId.Is |
         NodeTypeId.FieldHasValue |
-        NodeTypeId.BooleanFieldEquals |
+        // NodeTypeId.BooleanFieldEquals |
         NodeTypeId.NumericFieldEquals |
         NodeTypeId.NumericFieldInRange |
         NodeTypeId.DateFieldEquals |
         NodeTypeId.DateFieldInRange |
-        NodeTypeId.TextFieldIncludes |
+        NodeTypeId.StringFieldOverlaps |
+        NodeTypeId.CurrencyFieldOverlaps |
+        NodeTypeId.ExchangeFieldOverlaps |
+        NodeTypeId.MarketFieldOverlaps |
+        NodeTypeId.MarketBoardFieldOverlaps |
+        NodeTypeId.TextFieldEquals |
         NodeTypeId.TextFieldContains |
         NodeTypeId.PriceSubFieldHasValue |
         NodeTypeId.PriceSubFieldEquals |
@@ -146,15 +158,34 @@ export namespace ScanFormula {
         rightOperand: NumericNode | number;
     }
 
+    export namespace NumericComparisonBooleanNode {
+        export function isOperandNumericFieldValueGet(operand: NumericNode | number): operand is NumericFieldValueGetNode {
+            return typeof operand === 'object' && operand.typeId === NodeTypeId.NumericFieldValueGet;
+        }
+
+        export function isOperandValue(operand: NumericNode | number): operand is number {
+            return typeof operand === 'number';
+        }
+    }
+
     export abstract class MultiOperandBooleanNode extends BooleanNode {
         operands: BooleanNode[];
     }
 
     export class NoneNode extends ZeroOperandBooleanNode {
-        declare readonly typeId: NodeTypeId.None;
+        declare readonly typeId: NoneNode.TypeId;
 
         constructor() {
-            super(NodeTypeId.None);
+            super(NoneNode.typeId);
+        }
+    }
+
+    export namespace NoneNode {
+        export type TypeId = NodeTypeId.None;
+        export const typeId: TypeId = NodeTypeId.None;
+
+        export function is(node: ScanFormula.Node): node is NoneNode {
+            return node.typeId === typeId;
         }
     }
 
@@ -202,6 +233,12 @@ export namespace ScanFormula {
         }
     }
 
+    export namespace AndNode {
+        export function is(node: Node): node is AndNode {
+            return node.typeId === NodeTypeId.And;
+        }
+    }
+
     export class OrNode extends MultiOperandBooleanNode {
         declare readonly typeId: NodeTypeId.Or;
 
@@ -213,10 +250,9 @@ export namespace ScanFormula {
     export class IsNode extends BooleanNode {
         declare readonly typeId: NodeTypeId.Is;
 
-        categoryId: IsNode.CategoryId;
         trueFalse: boolean;
 
-        constructor() {
+        constructor(readonly categoryId: IsNode.CategoryId) {
             super(NodeTypeId.Is);
         }
     }
@@ -224,6 +260,54 @@ export namespace ScanFormula {
     export namespace IsNode {
         export const enum CategoryId {
             Index,
+        }
+
+        export namespace Category {
+            export type Id = CategoryId;
+
+            interface Info {
+                readonly id: CategoryId;
+                readonly captionId: StringId;
+                readonly titleId: StringId;
+            }
+
+            type InfosObject = { [id in keyof typeof CategoryId]: Info };
+            const infosObject: InfosObject = {
+                Index: { id: CategoryId.Index,
+                    captionId: StringId.ScanFormulaIsNodeCategoryCaption_Index,
+                    titleId: StringId.ScanFormulaIsNodeCategoryTitle_Index,
+                }
+            }
+
+            const infos = Object.values(infosObject);
+            export const idCount = infos.length;
+            export const allIds: readonly CategoryId[] = infos.map((info) => info.id);
+
+            export function initialise() {
+                for (let i = 0; i < idCount; i++) {
+                    const info = infos[i];
+                    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+                    if (info.id !== i as Id) {
+                        throw new EnumInfoOutOfOrderError('ScanFormula.IsNode.CategoryId', i, Strings[info.captionId]);
+                    }
+                }
+            }
+
+            export function idToCaptionId(id: Id) {
+                return infos[id].captionId;
+            }
+
+            export function idToCaption(id: Id) {
+                return Strings[idToCaptionId(id)];
+            }
+
+            export function idToTitleId(id: Id) {
+                return infos[id].titleId;
+            }
+
+            export function idToTitle(id: Id) {
+                return Strings[idToTitleId(id)];
+            }
         }
     }
 
@@ -233,32 +317,33 @@ export namespace ScanFormula {
 
     export class FieldHasValueNode extends FieldBooleanNode {
         declare readonly typeId: NodeTypeId.FieldHasValue;
+        declare fieldId: ScanFormula.NumericRangeFieldId | ScanFormula.TextHasValueEqualsFieldId | ScanFormula.DateRangeFieldId;
 
         constructor() {
             super(NodeTypeId.FieldHasValue);
         }
     }
 
-    export abstract class BooleanFieldNode extends FieldBooleanNode {
-        declare fieldId: BooleanFieldId;
-    }
+    // export abstract class BooleanFieldNode extends FieldBooleanNode {
+    //     declare fieldId: BooleanFieldId;
+    // }
 
-    export class BooleanFieldEqualsNode extends BooleanFieldNode {
-        declare readonly typeId: NodeTypeId.BooleanFieldEquals;
-        target: boolean; // | BooleanNode;
+    // export class BooleanFieldEqualsNode extends BooleanFieldNode {
+    //     declare readonly typeId: NodeTypeId.BooleanFieldEquals;
+    //     value: boolean; // | BooleanNode;
 
-        constructor() {
-            super(NodeTypeId.BooleanFieldEquals);
-        }
-    }
+    //     constructor() {
+    //         super(NodeTypeId.BooleanFieldEquals);
+    //     }
+    // }
 
     export abstract class NumericFieldNode extends FieldBooleanNode {
-        declare fieldId: NumericFieldId;
+        declare fieldId: NumericRangeFieldId;
     }
 
     export class NumericFieldEqualsNode extends NumericFieldNode {
         declare readonly typeId: NodeTypeId.NumericFieldEquals;
-        target: number; // | NumericNode;
+        value: number; // | NumericNode;
 
         constructor() {
             super(NodeTypeId.NumericFieldEquals);
@@ -276,12 +361,12 @@ export namespace ScanFormula {
     }
 
     export abstract class DateFieldNode extends FieldBooleanNode {
-        declare fieldId: DateFieldId;
+        declare fieldId: DateRangeFieldId;
     }
 
     export class DateFieldEqualsNode extends DateFieldNode {
         declare readonly typeId: NodeTypeId.DateFieldEquals;
-        target: SourceTzOffsetDateTime;
+        value: SourceTzOffsetDateTime;
 
         constructor() {
             super(NodeTypeId.DateFieldEquals);
@@ -298,21 +383,76 @@ export namespace ScanFormula {
         }
     }
 
-    export abstract class TextFieldNode extends FieldBooleanNode {
-        declare fieldId: TextFieldId;
+    export abstract class OverlapsFieldNode extends FieldBooleanNode {
+        declare fieldId: TextOverlapFieldId;
     }
 
-    export class TextFieldIncludesNode extends TextFieldNode {
-        declare readonly typeId: NodeTypeId.TextFieldIncludes;
-        values: string[];
+    export abstract class TypedOverlapsFieldNode<T> extends OverlapsFieldNode {
+        values: T[];
+    }
+
+    export abstract class BaseStringFieldOverlapsNode extends TypedOverlapsFieldNode<string> {
+    }
+
+    export class StringFieldOverlapsNode extends BaseStringFieldOverlapsNode {
+        declare readonly typeId: NodeTypeId.StringFieldOverlaps;
 
         constructor() {
-            super(NodeTypeId.TextFieldIncludes);
+            super(NodeTypeId.StringFieldOverlaps);
+        }
+    }
+
+    export class CurrencyFieldOverlapsNode extends TypedOverlapsFieldNode<CurrencyId> {
+        declare readonly typeId: NodeTypeId.CurrencyFieldOverlaps;
+
+        constructor() {
+            super(NodeTypeId.CurrencyFieldOverlaps);
+        }
+    }
+
+    export class ExchangeFieldOverlapsNode extends TypedOverlapsFieldNode<ExchangeId> {
+        declare readonly typeId: NodeTypeId.ExchangeFieldOverlaps;
+
+        constructor() {
+            super(NodeTypeId.ExchangeFieldOverlaps);
+        }
+    }
+
+    export class MarketFieldOverlapsNode extends TypedOverlapsFieldNode<MarketId> {
+        declare readonly typeId: NodeTypeId.MarketFieldOverlaps;
+
+        constructor() {
+            super(NodeTypeId.MarketFieldOverlaps);
+        }
+    }
+
+    export class MarketBoardFieldOverlapsNode extends TypedOverlapsFieldNode<MarketBoardId> {
+        declare readonly typeId: NodeTypeId.MarketBoardFieldOverlaps;
+
+        constructor() {
+            super(NodeTypeId.MarketBoardFieldOverlaps);
+        }
+    }
+
+    export abstract class TextFieldNode extends FieldBooleanNode {
+        declare fieldId: TextContainsFieldId | TextSingleFieldId;
+    }
+
+    export class TextFieldEqualsNode extends TextFieldNode {
+        declare readonly typeId: NodeTypeId.TextFieldEquals;
+        declare fieldId: TextEqualsFieldId;
+
+        value: string;
+
+        constructor() {
+            super(NodeTypeId.TextFieldEquals);
         }
     }
 
     export class TextFieldContainsNode extends TextFieldNode {
         declare readonly typeId: NodeTypeId.TextFieldContains;
+        declare fieldId: TextContainsFieldId;
+
         value: string;
         asId: TextContainsAsId;
         ignoreCase: boolean;
@@ -327,7 +467,7 @@ export namespace ScanFormula {
         subFieldId: SubFieldId;
     }
 
-    export abstract class PriceSubFieldNode extends SubFieldNode<FieldId.Price, PriceSubFieldId> {
+    export abstract class PriceSubFieldNode extends SubFieldNode<FieldId.PriceSubbed, PriceSubFieldId> {
     }
 
     export class PriceSubFieldHasValueNode extends PriceSubFieldNode {
@@ -340,7 +480,7 @@ export namespace ScanFormula {
 
     export class PriceSubFieldEqualsNode extends PriceSubFieldNode {
         declare readonly typeId: NodeTypeId.PriceSubFieldEquals;
-        target: number; // | NumericNode;
+        value: number; // | NumericNode;
 
         constructor() {
             super(NodeTypeId.PriceSubFieldEquals);
@@ -358,7 +498,7 @@ export namespace ScanFormula {
     }
 
     // There is only one Subbed field which works with date fields.
-    export abstract class DateSubFieldNode extends SubFieldNode<FieldId.Date, DateSubFieldId> {
+    export abstract class DateSubFieldNode extends SubFieldNode<FieldId.DateSubbed, DateSubFieldId> {
     }
 
     export class DateSubFieldHasValueNode extends DateSubFieldNode {
@@ -371,7 +511,7 @@ export namespace ScanFormula {
 
     export class DateSubFieldEqualsNode extends DateSubFieldNode {
         declare readonly typeId: NodeTypeId.DateSubFieldEquals;
-        target: SourceTzOffsetDateTime;
+        value: SourceTzOffsetDateTime;
 
         constructor() {
             super(NodeTypeId.DateSubFieldEquals);
@@ -388,7 +528,7 @@ export namespace ScanFormula {
         }
     }
 
-    export abstract class AltCodeSubFieldNode extends SubFieldNode<FieldId.AltCode, AltCodeSubFieldId> {
+    export abstract class AltCodeSubFieldNode extends SubFieldNode<FieldId.AltCodeSubbed, AltCodeSubFieldId> {
     }
 
     export class AltCodeSubFieldHasValueNode extends AltCodeSubFieldNode {
@@ -410,7 +550,7 @@ export namespace ScanFormula {
         }
     }
 
-    export abstract class AttributeSubFieldNode extends SubFieldNode<FieldId.Attribute, AttributeSubFieldId> {
+    export abstract class AttributeSubFieldNode extends SubFieldNode<FieldId.AttributeSubbed, AttributeSubFieldId> {
     }
 
     export class AttributeSubFieldHasValueNode extends AttributeSubFieldNode {
@@ -569,7 +709,7 @@ export namespace ScanFormula {
 
     export class NumericFieldValueGetNode extends NumericNode {
         declare readonly typeId: NodeTypeId.NumericFieldValueGet;
-        fieldId: NumericFieldId;
+        fieldId: NumericRangeFieldId;
 
         constructor() {
             super(NodeTypeId.NumericFieldValueGet);
@@ -612,363 +752,428 @@ export namespace ScanFormula {
     }
 
     export const enum FieldId {
-        AltCode, // Text, Subbed
-        Attribute, // Text, Subbed
-        Auction, // Numeric
-        AuctionLast, // Numeric
-        AuctionQuantity, // Numeric
-        BestAskCount, // Numeric
-        BestAskPrice, // Numeric
-        BestAskQuantity, // Numeric
-        BestBidCount, // Numeric
-        BestBidPrice, // Numeric
-        BestBidQuantity, // Numeric
-        Board, // Text, Multiple
-        CallOrPut, // Text, Single, Exists
-        Category, // Text, Multiple
-        Cfi, // Text, Single
-        Class, // Text, Single
-        ClosePrice, // Numeric
-        Code, // Text
-        ContractSize, // Numeric
-        Currency, // Text, Multiple
-        Data, // Text, Single
-        Date, // Date, Subbed
-        Exchange, // Text, Multiple
-        ExerciseType, // Text, Single, Exists
-        ExpiryDate, // Date
-        HighPrice, // Numeric
-        IsIndex, // Boolean, Single, Default
-        LastPrice, // Numeric
-        Leg, // Text, Single
-        LotSize, // Numeric
-        LowPrice, // Numeric
-        Market, // Text, Multiple
-        Name, // Text
-        OpenInterest, // Numeric
-        OpenPrice, // Numeric
-        Price, // Numeric, Subbed
-        PreviousClose, // Numeric
-        QuotationBasis, // Text, Multiple
-        Remainder, // Numeric
-        ShareIssue, // Numeric
-        State, // Text, Multiple
-        StateAllows, // Text, Single
-        StatusNote, // Text, Multiple
-        StrikePrice, // Numeric
-        Trades, // Numeric
-        TradingMarket, // Text, Multiple
-        ValueTraded, // Numeric
-        Volume, // Numeric
-        Vwap, // Numeric
+        AltCodeSubbed,
+        AttributeSubbed,
+        Auction,
+        AuctionLast,
+        AuctionQuantity,
+        BestAskCount,
+        BestAskPrice,
+        BestAskQuantity,
+        BestBidCount,
+        BestBidPrice,
+        BestBidQuantity,
+        CallOrPut,
+        Category, // Corresponds to Symbol.Categories
+        Cfi,
+        Class,
+        ClosePrice,
+        Code,
+        ContractSize,
+        Currency,
+        Data,
+        DateSubbed,
+        Exchange,
+        ExerciseType,
+        ExpiryDate,
+        HighPrice,
+        Is, // Dummy field that allows IsNode to be treated as a field
+        LastPrice,
+        Leg,
+        LotSize,
+        LowPrice,
+        Market,
+        MarketBoard,
+        Name,
+        OpenInterest,
+        OpenPrice,
+        PriceSubbed,
+        PreviousClose,
+        QuotationBasis,
+        Remainder,
+        ShareIssue,
+        TradingStateName, // Corresponds to TradingState.name  Each market supports a fixed number of trading states.  They are available at Market.tradingStates. These are fetched when Motif Core is started.
+        TradingStateAllows,  // Corresponds to TradingState.AllowId
+        StatusNote,
+        StrikePrice,
+        Trades,
+        TradingMarket,
+        ValueTraded,
+        Volume,
+        Vwap,
     }
 
     export namespace Field {
         export type Id = FieldId;
 
+        export const enum StyleId {
+            InRange, // Range and Named Range
+            Overlaps, // Multiple
+            Equals, // Single but not Single Exists
+            HasValueEquals, // Single Exists
+            Contains, // Text and Named Text
+        }
+
+        export const enum DataTypeId {
+            Numeric,
+            Date,
+            Text,
+            Boolean,
+        }
+
         interface Info {
             readonly id: Id;
-            readonly dataTypeId: FieldDataTypeId;
-            readonly subbed: boolean;
-            readonly multiple: boolean;
+            readonly styleId: StyleId;
+            readonly dataTypeId: DataTypeId;
+            readonly subbed: boolean; // Named
+            readonly name: string;
         }
 
         type InfosObject = { [id in keyof typeof FieldId]: Info };
 
         const infosObject: InfosObject = {
-            AltCode: {
-                id: FieldId.AltCode,
-                dataTypeId: FieldDataTypeId.Text,
+            AltCodeSubbed: {
+                id: FieldId.AltCodeSubbed,
+                styleId: StyleId.Contains,
+                dataTypeId: DataTypeId.Text,
                 subbed: true,
-                multiple: false,
+                name: 'AltCode-Subbed',
             },
-            Attribute: {
-                id: FieldId.Attribute,
-                dataTypeId: FieldDataTypeId.Text,
+            AttributeSubbed: {
+                id: FieldId.AttributeSubbed,
+                styleId: StyleId.Contains,
+                dataTypeId: DataTypeId.Text,
                 subbed: true,
-                multiple: false,
+                name: 'Attribute-Subbed',
             },
             Auction: {
                 id: FieldId.Auction,
-                dataTypeId: FieldDataTypeId.Numeric,
+                styleId: StyleId.InRange,
+                dataTypeId: DataTypeId.Numeric,
                 subbed: false,
-                multiple: false,
+                name: 'Auction',
             },
             AuctionLast: {
                 id: FieldId.AuctionLast,
-                dataTypeId: FieldDataTypeId.Numeric,
+                styleId: StyleId.InRange,
+                dataTypeId: DataTypeId.Numeric,
                 subbed: false,
-                multiple: false,
+                name: 'Auction: Last',
             },
             AuctionQuantity: {
                 id: FieldId.AuctionQuantity,
-                dataTypeId: FieldDataTypeId.Numeric,
+                styleId: StyleId.InRange,
+                dataTypeId: DataTypeId.Numeric,
                 subbed: false,
-                multiple: false,
+                name: 'Auction: Quantity',
             },
             BestAskCount: {
                 id: FieldId.BestAskCount,
-                dataTypeId: FieldDataTypeId.Numeric,
+                styleId: StyleId.InRange,
+                dataTypeId: DataTypeId.Numeric,
                 subbed: false,
-                multiple: false,
+                name: 'Best ask count',
             },
             BestAskPrice: {
                 id: FieldId.BestAskPrice,
-                dataTypeId: FieldDataTypeId.Numeric,
+                styleId: StyleId.InRange,
+                dataTypeId: DataTypeId.Numeric,
                 subbed: false,
-                multiple: false,
+                name: 'Best ask price',
             },
             BestAskQuantity: {
                 id: FieldId.BestAskQuantity,
-                dataTypeId: FieldDataTypeId.Numeric,
+                styleId: StyleId.InRange,
+                dataTypeId: DataTypeId.Numeric,
                 subbed: false,
-                multiple: false,
+                name: 'Best ask quantity',
             },
             BestBidCount: {
                 id: FieldId.BestBidCount,
-                dataTypeId: FieldDataTypeId.Numeric,
+                styleId: StyleId.InRange,
+                dataTypeId: DataTypeId.Numeric,
                 subbed: false,
-                multiple: false,
+                name: 'Best bid count',
             },
             BestBidPrice: {
                 id: FieldId.BestBidPrice,
-                dataTypeId: FieldDataTypeId.Numeric,
+                styleId: StyleId.InRange,
+                dataTypeId: DataTypeId.Numeric,
                 subbed: false,
-                multiple: false,
+                name: 'Best bid price',
             },
             BestBidQuantity: {
                 id: FieldId.BestBidQuantity,
-                dataTypeId: FieldDataTypeId.Numeric,
+                styleId: StyleId.InRange,
+                dataTypeId: DataTypeId.Numeric,
                 subbed: false,
-                multiple: false,
-            },
-            Board: {
-                id: FieldId.Board,
-                dataTypeId: FieldDataTypeId.Text,
-                subbed: false,
-                multiple: true,
+                name: 'Best bid quantity',
             },
             CallOrPut: {
                 id: FieldId.CallOrPut,
-                dataTypeId: FieldDataTypeId.Text,
+                styleId: StyleId.HasValueEquals,
+                dataTypeId: DataTypeId.Text,
                 subbed: false,
-                multiple: false,
+                name: 'Call/Put',
             },
             Category: {
                 id: FieldId.Category,
-                dataTypeId: FieldDataTypeId.Text,
+                styleId: StyleId.Overlaps,
+                dataTypeId: DataTypeId.Text,
                 subbed: false,
-                multiple: true,
+                name: 'Category',
             },
             Cfi: {
                 id: FieldId.Cfi,
-                dataTypeId: FieldDataTypeId.Text,
+                styleId: StyleId.Equals,
+                dataTypeId: DataTypeId.Text,
                 subbed: false,
-                multiple: false,
+                name: 'CFI',
             },
             Class: {
                 id: FieldId.Class,
-                dataTypeId: FieldDataTypeId.Text,
+                styleId: StyleId.Equals,
+                dataTypeId: DataTypeId.Text,
                 subbed: false,
-                multiple: false,
+                name: 'Class',
             },
             ClosePrice: {
                 id: FieldId.ClosePrice,
-                dataTypeId: FieldDataTypeId.Numeric,
+                styleId: StyleId.InRange,
+                dataTypeId: DataTypeId.Numeric,
                 subbed: false,
-                multiple: false,
+                name: 'Close price',
             },
             Code: {
                 id: FieldId.Code,
-                dataTypeId: FieldDataTypeId.Text,
+                styleId: StyleId.Contains,
+                dataTypeId: DataTypeId.Text,
                 subbed: false,
-                multiple: false,
+                name: 'Code',
             },
             ContractSize: {
                 id: FieldId.ContractSize,
-                dataTypeId: FieldDataTypeId.Numeric,
+                styleId: StyleId.InRange,
+                dataTypeId: DataTypeId.Numeric,
                 subbed: false,
-                multiple: false,
+                name: 'Contract size',
             },
             Currency: {
                 id: FieldId.Currency,
-                dataTypeId: FieldDataTypeId.Text,
+                styleId: StyleId.Overlaps,
+                dataTypeId: DataTypeId.Text,
                 subbed: false,
-                multiple: true,
+                name: 'Currency',
             },
             Data: {
                 id: FieldId.Data,
-                dataTypeId: FieldDataTypeId.Text,
+                styleId: StyleId.Equals,
+                dataTypeId: DataTypeId.Text,
                 subbed: false,
-                multiple: false,
+                name: 'Data',
             },
-            Date: {
-                id: FieldId.Date,
-                dataTypeId: FieldDataTypeId.Date,
+            DateSubbed: {
+                id: FieldId.DateSubbed,
+                styleId: StyleId.InRange,
+                dataTypeId: DataTypeId.Date,
                 subbed: true,
-                multiple: false,
+                name: 'Date-Subbed',
             },
             Exchange: {
                 id: FieldId.Exchange,
-                dataTypeId: FieldDataTypeId.Text,
+                styleId: StyleId.Overlaps,
+                dataTypeId: DataTypeId.Text,
                 subbed: false,
-                multiple: true,
+                name: 'Exchange',
             },
             ExerciseType: {
                 id: FieldId.ExerciseType,
-                dataTypeId: FieldDataTypeId.Text,
+                styleId: StyleId.HasValueEquals,
+                dataTypeId: DataTypeId.Text,
                 subbed: false,
-                multiple: false,
+                name: 'Exercise type',
             },
             ExpiryDate: {
                 id: FieldId.ExpiryDate,
-                dataTypeId: FieldDataTypeId.Date,
+                styleId: StyleId.InRange,
+                dataTypeId: DataTypeId.Date,
                 subbed: false,
-                multiple: false,
+                name: 'Expiry date',
             },
             HighPrice: {
                 id: FieldId.HighPrice,
-                dataTypeId: FieldDataTypeId.Numeric,
+                styleId: StyleId.InRange,
+                dataTypeId: DataTypeId.Numeric,
                 subbed: false,
-                multiple: false,
+                name: 'High price',
             },
-            IsIndex: {
-                id: FieldId.IsIndex,
-                dataTypeId: FieldDataTypeId.Boolean,
+            Is: { // Dummy field which allows IsNode to be treated like a field
+                id: FieldId.Is,
+                styleId: StyleId.Equals,
+                dataTypeId: DataTypeId.Boolean,
                 subbed: false,
-                multiple: false,
+                name: 'Is',
             },
             LastPrice: {
                 id: FieldId.LastPrice,
-                dataTypeId: FieldDataTypeId.Numeric,
+                styleId: StyleId.InRange,
+                dataTypeId: DataTypeId.Numeric,
                 subbed: false,
-                multiple: false,
+                name: 'Last price',
             },
             Leg: {
                 id: FieldId.Leg,
-                dataTypeId: FieldDataTypeId.Text,
+                styleId: StyleId.Equals,
+                dataTypeId: DataTypeId.Text,
                 subbed: false,
-                multiple: false,
+                name: 'Leg',
             },
             LotSize: {
                 id: FieldId.LotSize,
-                dataTypeId: FieldDataTypeId.Numeric,
+                styleId: StyleId.InRange,
+                dataTypeId: DataTypeId.Numeric,
                 subbed: false,
-                multiple: false,
+                name: 'Lot size',
             },
             LowPrice: {
                 id: FieldId.LowPrice,
-                dataTypeId: FieldDataTypeId.Numeric,
+                styleId: StyleId.InRange,
+                dataTypeId: DataTypeId.Numeric,
                 subbed: false,
-                multiple: false,
+                name: 'Low price',
             },
             Market: {
                 id: FieldId.Market,
-                dataTypeId: FieldDataTypeId.Text,
+                styleId: StyleId.Overlaps,
+                dataTypeId: DataTypeId.Text,
                 subbed: false,
-                multiple: true,
+                name: 'Market',
+            },
+            MarketBoard: {
+                id: FieldId.MarketBoard,
+                styleId: StyleId.Overlaps,
+                dataTypeId: DataTypeId.Text,
+                subbed: false,
+                name: 'Market board',
             },
             Name: {
                 id: FieldId.Name,
-                dataTypeId: FieldDataTypeId.Text,
+                styleId: StyleId.Contains,
+                dataTypeId: DataTypeId.Text,
                 subbed: false,
-                multiple: false,
+                name: 'Name',
             },
             OpenInterest: {
                 id: FieldId.OpenInterest,
-                dataTypeId: FieldDataTypeId.Numeric,
+                styleId: StyleId.InRange,
+                dataTypeId: DataTypeId.Numeric,
                 subbed: false,
-                multiple: false,
+                name: 'Open interest',
             },
             OpenPrice: {
                 id: FieldId.OpenPrice,
-                dataTypeId: FieldDataTypeId.Numeric,
+                styleId: StyleId.InRange,
+                dataTypeId: DataTypeId.Numeric,
                 subbed: false,
-                multiple: false,
+                name: 'Open price',
             },
-            Price: {
-                id: FieldId.Price,
-                dataTypeId: FieldDataTypeId.Numeric,
+            PriceSubbed: {
+                id: FieldId.PriceSubbed,
+                styleId: StyleId.InRange,
+                dataTypeId: DataTypeId.Numeric,
                 subbed: true,
-                multiple: false,
+                name: 'Price-Subbed',
             },
             PreviousClose: {
                 id: FieldId.PreviousClose,
-                dataTypeId: FieldDataTypeId.Numeric,
+                styleId: StyleId.InRange,
+                dataTypeId: DataTypeId.Numeric,
                 subbed: false,
-                multiple: false,
+                name: 'Previous close',
             },
             QuotationBasis: {
                 id: FieldId.QuotationBasis,
-                dataTypeId: FieldDataTypeId.Text,
+                styleId: StyleId.Overlaps,
+                dataTypeId: DataTypeId.Text,
                 subbed: false,
-                multiple: true,
+                name: 'Quotation basis',
             },
             Remainder: {
                 id: FieldId.Remainder,
-                dataTypeId: FieldDataTypeId.Numeric,
+                styleId: StyleId.InRange,
+                dataTypeId: DataTypeId.Numeric,
                 subbed: false,
-                multiple: false,
+                name: 'Remainder',
             },
             ShareIssue: {
                 id: FieldId.ShareIssue,
-                dataTypeId: FieldDataTypeId.Numeric,
+                styleId: StyleId.InRange,
+                dataTypeId: DataTypeId.Numeric,
                 subbed: false,
-                multiple: false,
+                name: 'Share issue',
             },
-            State: {
-                id: FieldId.State,
-                dataTypeId: FieldDataTypeId.Text,
+            TradingStateName: {
+                id: FieldId.TradingStateName,
+                styleId: StyleId.Overlaps,
+                dataTypeId: DataTypeId.Text,
                 subbed: false,
-                multiple: true,
+                name: 'Trading state name',
             },
-            StateAllows: {
-                id: FieldId.StateAllows,
-                dataTypeId: FieldDataTypeId.Text,
+            TradingStateAllows: {
+                id: FieldId.TradingStateAllows,
+                styleId: StyleId.Equals,
+                dataTypeId: DataTypeId.Text,
                 subbed: false,
-                multiple: false,
+                name: 'Trading state allows',
             },
             StatusNote: {
                 id: FieldId.StatusNote,
-                dataTypeId: FieldDataTypeId.Text,
+                styleId: StyleId.Overlaps,
+                dataTypeId: DataTypeId.Text,
                 subbed: false,
-                multiple: true,
+                name: 'Status note',
             },
             StrikePrice: {
                 id: FieldId.StrikePrice,
-                dataTypeId: FieldDataTypeId.Numeric,
+                styleId: StyleId.InRange,
+                dataTypeId: DataTypeId.Numeric,
                 subbed: false,
-                multiple: false,
+                name: 'Strike price',
             },
             Trades: {
                 id: FieldId.Trades,
-                dataTypeId: FieldDataTypeId.Numeric,
+                styleId: StyleId.InRange,
+                dataTypeId: DataTypeId.Numeric,
                 subbed: false,
-                multiple: false,
+                name: 'Trades',
             },
             TradingMarket: {
                 id: FieldId.TradingMarket,
-                dataTypeId: FieldDataTypeId.Text,
+                styleId: StyleId.Overlaps,
+                dataTypeId: DataTypeId.Text,
                 subbed: false,
-                multiple: true,
+                name: 'Trading market',
             },
             ValueTraded: {
                 id: FieldId.ValueTraded,
-                dataTypeId: FieldDataTypeId.Numeric,
+                styleId: StyleId.InRange,
+                dataTypeId: DataTypeId.Numeric,
                 subbed: false,
-                multiple: false,
+                name: 'Value traded',
             },
             Volume: {
                 id: FieldId.Volume,
-                dataTypeId: FieldDataTypeId.Numeric,
+                styleId: StyleId.InRange,
+                dataTypeId: DataTypeId.Numeric,
                 subbed: false,
-                multiple: false,
+                name: 'Volume',
             },
             Vwap: {
                 id: FieldId.Vwap,
-                dataTypeId: FieldDataTypeId.Numeric,
+                styleId: StyleId.InRange,
+                dataTypeId: DataTypeId.Numeric,
                 subbed: false,
-                multiple: false,
+                name: 'VWAP',
             },
         } as const;
 
@@ -983,24 +1188,24 @@ export namespace ScanFormula {
             }
         }
 
+        export function idToStyleId(id: Id) {
+            return infos[id].styleId;
+        }
+
         export function idToDataTypeId(id: Id) {
             return infos[id].dataTypeId;
         }
 
-        export function isSubbed(id: Id) {
+        export function idIsSubbed(id: Id): id is SubbedFieldId {
             return infos[id].subbed;
         }
 
-        export function isMultiple(id: Id) {
-            return infos[id].multiple;
+        export function idToName(id: Id) {
+            return infos[id].name;
         }
     }
 
-    export type BooleanFieldId = PickEnum<FieldId,
-        FieldId.IsIndex
-    >;
-
-    export type NumericFieldId = PickEnum<FieldId,
+    export type NumericRangeFieldId = PickEnum<FieldId,
         FieldId.Auction |
         FieldId.AuctionLast |
         FieldId.AuctionQuantity |
@@ -1028,51 +1233,202 @@ export namespace ScanFormula {
         FieldId.Vwap
     >;
 
-    export type SubbedFieldId = PickEnum<FieldId,
-        FieldId.Price |
-        FieldId.Date |
-        FieldId.AltCode |
-        FieldId.Attribute
-    >;
-
-    export type DateFieldId = PickEnum<FieldId,
+    export type DateRangeFieldId = PickEnum<FieldId,
         FieldId.ExpiryDate
     >;
 
-    export type TextFieldId = PickEnum<FieldId,
-        FieldId.Board |
-        FieldId.CallOrPut |
-        FieldId.Category |
+    export type TextContainsFieldId = PickEnum<FieldId,
+        FieldId.Code |
+        FieldId.Name
+    >;
+
+    export type TextSingleFieldId = PickEnum<FieldId,
+        // Equals (Single but not Single Exists)
         FieldId.Cfi |
         FieldId.Class |
-        FieldId.Code |
-        FieldId.Currency |
         FieldId.Data |
-        FieldId.Exchange |
-        FieldId.ExerciseType |
         FieldId.Leg |
+        FieldId.TradingStateAllows |
+        // HasValueEquals (Single Exists)
+        FieldId.CallOrPut |
+        FieldId.ExerciseType
+    >;
+
+    export type TextEqualsFieldId = PickEnum<FieldId, // Single but not Single Exists
+        FieldId.Cfi |
+        FieldId.Class |
+        FieldId.Data |
+        FieldId.Leg |
+        FieldId.TradingStateAllows
+    >;
+
+    export type TextHasValueEqualsFieldId = PickEnum<FieldId, // Single Exists
+        FieldId.CallOrPut |
+        FieldId.ExerciseType
+    >;
+
+    export type TextOverlapFieldId = PickEnum<FieldId,
+        FieldId.Category |
+        FieldId.Currency |
+        FieldId.Exchange |
         FieldId.Market |
-        FieldId.Name |
+        FieldId.MarketBoard |
         FieldId.QuotationBasis |
-        FieldId.State |
-        FieldId.StateAllows |
+        FieldId.TradingStateName |
         FieldId.StatusNote |
         FieldId.TradingMarket
     >;
 
-    export const enum FieldDataTypeId {
-        Numeric,
-        Date,
-        Text,
-        Boolean,
-    }
+    export type StringOverlapsFieldId = PickEnum<FieldId,
+        FieldId.Category |
+        FieldId.QuotationBasis |
+        FieldId.TradingStateName |
+        FieldId.StatusNote
+    >;
+
+    export type MarketOverlapsFieldId = PickEnum<FieldId,
+        FieldId.Market |
+        FieldId.TradingMarket
+    >;
+
+    export type SubbedFieldId = PickEnum<FieldId,
+        FieldId.PriceSubbed |
+        FieldId.DateSubbed |
+        FieldId.AltCodeSubbed |
+        FieldId.AttributeSubbed
+    >;
+
+    export type NumericRangeSubbedFieldId = PickEnum<FieldId,
+        FieldId.PriceSubbed
+    >;
+
+    export type DateRangeSubbedFieldId = PickEnum<FieldId,
+        FieldId.DateSubbed
+    >;
+
+    export type TextContainsSubbedFieldId = PickEnum<FieldId,
+        FieldId.AltCodeSubbed |
+        FieldId.AttributeSubbed
+    >;
+
+    export const maxSubFieldIdCount = 100000; // Make sure number of subfields in each subfield type does not exceed this
 
     export const enum PriceSubFieldId {
         Last,
     }
 
+    export namespace PriceSubField {
+        export type Id = PriceSubFieldId;
+
+        interface Info {
+            readonly id: Id;
+            readonly name: string;
+        }
+
+        type InfosObject = { [id in keyof typeof PriceSubFieldId]: Info };
+        const infosObject: InfosObject = {
+            Last: {
+                id: PriceSubFieldId.Last,
+                name: 'Last',
+            }
+        }
+
+        const infos = Object.values(infosObject);
+        export const idCount = infos.length;
+
+        export function initialise() {
+            for (let i = 0; i < idCount; i++) {
+                const info = infos[i];
+                // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+                if (info.id !== i as PriceSubFieldId) {
+                    throw new EnumInfoOutOfOrderError('ScanFormula.PriceSubFieldId', i, infos[i].name);
+                }
+            }
+        }
+
+        export function idToName(id: Id) {
+            return infos[id].name;
+        }
+
+        export function tryNameToId(name: string): PriceSubFieldId | undefined {
+            for (let i = 0; i < idCount; i++) {
+                const info = infos[i];
+                if (info.name === name) {
+                    return info.id;
+                }
+            }
+            return undefined;
+        }
+
+        export function tryIgnoreCaseNameToId(name: string): PriceSubFieldId | undefined {
+            const upperCaseName = name.toUpperCase();
+            for (let i = 0; i < idCount; i++) {
+                const info = infos[i];
+                if (info.name.toUpperCase() === upperCaseName) {
+                    return info.id;
+                }
+            }
+            return undefined;
+        }
+    }
+
     export const enum DateSubFieldId {
         Dividend,
+    }
+
+    export namespace DateSubField {
+        export type Id = DateSubFieldId;
+
+        interface Info {
+            readonly id: Id;
+            readonly name: string;
+        }
+
+        type InfosObject = { [id in keyof typeof DateSubFieldId]: Info };
+        const infosObject: InfosObject = {
+            Dividend: {
+                id: DateSubFieldId.Dividend,
+                name: 'Last',
+            }
+        }
+
+        const infos = Object.values(infosObject);
+        export const idCount = infos.length;
+
+        export function initialise() {
+            for (let i = 0; i < idCount; i++) {
+                const info = infos[i];
+                // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+                if (info.id !== i as DateSubFieldId) {
+                    throw new EnumInfoOutOfOrderError('ScanFormula.DateSubFieldId', i, infos[i].name);
+                }
+            }
+        }
+
+        export function idToName(id: Id) {
+            return infos[id].name;
+        }
+
+        export function tryNameToId(name: string): DateSubFieldId | undefined {
+            for (let i = 0; i < idCount; i++) {
+                const info = infos[i];
+                if (info.name === name) {
+                    return info.id;
+                }
+            }
+            return undefined;
+        }
+
+        export function tryIgnoreCaseNameToId(name: string): DateSubFieldId | undefined {
+            const upperCaseName = name.toUpperCase();
+            for (let i = 0; i < idCount; i++) {
+                const info = infos[i];
+                if (info.name.toUpperCase() === upperCaseName) {
+                    return info.id;
+                }
+            }
+            return undefined;
+        }
     }
 
     export const enum AltCodeSubFieldId {
@@ -1086,6 +1442,89 @@ export namespace ScanFormula {
         Uid,
     }
 
+    export namespace AltCodeSubField {
+        export type Id = AltCodeSubFieldId;
+
+        interface Info {
+            readonly id: Id;
+            readonly name: string;
+        }
+
+        type InfosObject = { [id in keyof typeof AltCodeSubFieldId]: Info };
+        const infosObject: InfosObject = {
+            Ticker: {
+                id: AltCodeSubFieldId.Ticker,
+                name: 'Ticker',
+            },
+            Isin: {
+                id: AltCodeSubFieldId.Isin,
+                name: 'ISIN',
+            },
+            Base: {
+                id: AltCodeSubFieldId.Base,
+                name: 'Base',
+            },
+            Gics: {
+                id: AltCodeSubFieldId.Gics,
+                name: 'GICS',
+            },
+            Ric: {
+                id: AltCodeSubFieldId.Ric,
+                name: 'RIC',
+            },
+            Short: {
+                id: AltCodeSubFieldId.Short,
+                name: 'Short',
+            },
+            Long: {
+                id: AltCodeSubFieldId.Long,
+                name: 'Long',
+            },
+            Uid: {
+                id: AltCodeSubFieldId.Uid,
+                name: 'UID',
+            },
+        }
+
+        const infos = Object.values(infosObject);
+        export const idCount = infos.length;
+
+        export function initialise() {
+            for (let i = 0; i < idCount; i++) {
+                const info = infos[i];
+                // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+                if (info.id !== i as AltCodeSubFieldId) {
+                    throw new EnumInfoOutOfOrderError('ScanFormula.AltCodeSubFieldId', i, infos[i].name);
+                }
+            }
+        }
+
+        export function idToName(id: Id) {
+            return infos[id].name;
+        }
+
+        export function tryNameToId(name: string): AltCodeSubFieldId | undefined {
+            for (let i = 0; i < idCount; i++) {
+                const info = infos[i];
+                if (info.name === name) {
+                    return info.id;
+                }
+            }
+            return undefined;
+        }
+
+        export function tryIgnoreCaseNameToId(name: string): AltCodeSubFieldId | undefined {
+            const upperCaseName = name.toUpperCase();
+            for (let i = 0; i < idCount; i++) {
+                const info = infos[i];
+                if (info.name.toUpperCase() === upperCaseName) {
+                    return info.id;
+                }
+            }
+            return undefined;
+        }
+    }
+
     export const enum AttributeSubFieldId {
         Category,
         Class,
@@ -1095,5 +1534,103 @@ export namespace ScanFormula {
         Short,
         ShortSuspended,
         SubSector,
+    }
+
+    export namespace AttributeSubField {
+        export type Id = AttributeSubFieldId;
+
+        interface Info {
+            readonly id: Id;
+            readonly name: string;
+        }
+
+        type InfosObject = { [id in keyof typeof AttributeSubFieldId]: Info };
+        const infosObject: InfosObject = {
+            Category: {
+                id: AttributeSubFieldId.Category,
+                name: 'Category',
+            },
+            Class: {
+                id: AttributeSubFieldId.Class,
+                name: 'Class',
+            },
+            Delivery: {
+                id: AttributeSubFieldId.Delivery,
+                name: 'Delivery',
+            },
+            MaxRss: {
+                id: AttributeSubFieldId.MaxRss,
+                name: 'MaxRss',
+            },
+            Sector: {
+                id: AttributeSubFieldId.Sector,
+                name: 'Sector',
+            },
+            Short: {
+                id: AttributeSubFieldId.Short,
+                name: 'Short',
+            },
+            ShortSuspended: {
+                id: AttributeSubFieldId.ShortSuspended,
+                name: 'Short suspended',
+            },
+            SubSector: {
+                id: AttributeSubFieldId.SubSector,
+                name: 'Sub-sector',
+            },
+        }
+
+        const infos = Object.values(infosObject);
+        export const idCount = infos.length;
+
+        export function initialise() {
+            for (let i = 0; i < idCount; i++) {
+                const info = infos[i];
+                // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+                if (info.id !== i as AttributeSubFieldId) {
+                    throw new EnumInfoOutOfOrderError('ScanFormula.AttributeSubFieldId', i, infos[i].name);
+                }
+            }
+        }
+
+        export function idToName(id: Id) {
+            return infos[id].name;
+        }
+
+        export function tryNameToId(name: string): AttributeSubFieldId | undefined {
+            for (let i = 0; i < idCount; i++) {
+                const info = infos[i];
+                if (info.name === name) {
+                    return info.id;
+                }
+            }
+            return undefined;
+        }
+
+        export function tryIgnoreCaseNameToId(name: string): AttributeSubFieldId | undefined {
+            const upperCaseName = name.toUpperCase();
+            for (let i = 0; i < idCount; i++) {
+                const info = infos[i];
+                if (info.name.toUpperCase() === upperCaseName) {
+                    return info.id;
+                }
+            }
+            return undefined;
+        }
+    }
+
+    export type TextContainsSubFieldId =
+        FieldId.AltCodeSubbed |
+        FieldId.AttributeSubbed;
+}
+
+export namespace ScanFormulaModule {
+    export function initialiseStatic() {
+        ScanFormula.Field.initialise();
+        ScanFormula.PriceSubField.initialise();
+        ScanFormula.DateSubField.initialise();
+        ScanFormula.AltCodeSubField.initialise();
+        ScanFormula.AttributeSubField.initialise();
+        ScanFormula.IsNode.Category.initialise();
     }
 }

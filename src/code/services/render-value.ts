@@ -83,6 +83,7 @@ export namespace RenderValue {
         TrueFalse,
         Enabled,
         Readonly,
+        Valid,
         Modified,
         IsIndex,
         Visible,
@@ -128,6 +129,7 @@ export namespace RenderValue {
         ScanStatusId,
         ScanCriteriaTypeId,
         ScanTargetTypeId,
+        ScanFieldBooleanOperationId,
 
         // Array
         StringArray,
@@ -458,6 +460,12 @@ export class EnabledRenderValue extends BooleanRenderValue {
 export class ReadonlyRenderValue extends BooleanRenderValue {
     constructor(data: boolean | undefined) {
         super(data, RenderValue.TypeId.Readonly);
+    }
+}
+
+export class ValidRenderValue extends BooleanRenderValue {
+    constructor(data: boolean | undefined) {
+        super(data, RenderValue.TypeId.Valid);
     }
 }
 

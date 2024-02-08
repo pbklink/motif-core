@@ -13,7 +13,7 @@ import {
 } from "../field-source/grid-table-field-source-internal-api";
 import { LitIvemIdTableRecordDefinition, TableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
 import { TableRecord } from '../record/grid-table-record-internal-api';
-import { LitIvemBaseDetailTableValueSource, LitIvemIdTableValueSource, SecurityDataItemTableValueSource } from '../value-source/grid-table-value-source-internal-api';
+import { LitIvemBaseDetailTableValueSource, LitIvemIdTableValueSource, SecurityDataItemTableValueSource } from '../value-source/internal-api';
 import { BadnessListTableRecordSource } from './badness-comparable-list-table-record-source';
 import { LitIvemIdComparableListTableRecordSourceDefinition, TableRecordSourceDefinitionFactoryService } from './definition/grid-table-record-source-definition-internal-api';
 import { PromisedLitIvemBaseDetail } from './promised-lit-ivem-base-detail';

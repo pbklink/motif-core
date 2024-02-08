@@ -6,7 +6,7 @@
 
 import { TableFieldSourceStaticInitialise } from './field-source/grid-table-field-source-internal-api';
 import { GridTableRecordDefinitionStaticInitialise } from './record-definition/grid-table-record-definition-internal-api';
-import { TableRecordSourceStaticInitialise } from './record-source/grid-table-record-source-internal-api';
+import { TableRecordSourceStaticInitialise } from './record-source/internal-api';
 
 /** @internal */
 export namespace TableStaticInitialise {

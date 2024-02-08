@@ -60,6 +60,7 @@ export const enum StringId {
     Open,
     Close,
     Create,
+    Add,
     Delete,
     Deleting,
     Deleted,
@@ -113,6 +114,7 @@ export const enum StringId {
     NoErrors,
     Editing,
     Modified,
+    Valid,
     Invalid,
     InvalidIntegerString,
     UnsupportedValue,
@@ -260,6 +262,9 @@ export const enum StringId {
     CreateScan,
     UpdateScan,
     DeleteScan,
+    AddField,
+    AddAttributeField,
+    AddAltCodeField,
     Layout_InvalidJson,
     Layout_SerialisationFormatNotDefinedLoadingDefault,
     Layout_SerialisationFormatIncompatibleLoadingDefault,
@@ -1925,9 +1930,11 @@ export const enum StringId {
     BannerAdvert_SimilarTitle,
     BannerAdvert_NotInterestedTitle,
     ScanFormulaZenithEncodingError_InvalidJson,
+    ScanFormulaZenithEncodingError_ErrorCode,
     ScanFormulaZenithEncodingError_BooleanTupleNodeIsNotAnArray,
     ScanFormulaZenithEncodingError_BooleanTupleNodeArrayIsZeroLength,
     ScanFormulaZenithEncodingError_BooleanTupleNodeTypeIsNotString,
+    ScanFormulaZenithEncodingError_UnknownField,
     ScanFormulaZenithEncodingError_SingleOperandLogicalBooleanDoesNotHaveOneOperand,
     ScanFormulaZenithEncodingError_LeftRightOperandLogicalBooleanDoesNotHaveTwoOperands,
     ScanFormulaZenithEncodingError_MultiOperandLogicalBooleanMissingOperands,
@@ -1938,6 +1945,7 @@ export const enum StringId {
     ScanFormulaZenithEncodingError_NumericParameterIsNotNumberOrComparableFieldOrArray,
     ScanFormulaZenithEncodingError_UnexpectedBooleanParamType,
     ScanFormulaZenithEncodingError_UnknownFieldBooleanParam,
+    ScanFormulaZenithEncodingError_FieldBooleanParamCannotBeSubbedField,
     ScanFormulaZenithEncodingError_SubFieldIsNotString,
     ScanFormulaZenithEncodingError_PriceSubFieldHasValueSubFieldIsUnknown,
     ScanFormulaZenithEncodingError_DateSubFieldHasValueSubFieldIsUnknown,
@@ -1948,29 +1956,25 @@ export const enum StringId {
     ScanFormulaZenithEncodingError_RangeMaxIsDefinedButNotNumber,
     ScanFormulaZenithEncodingError_RangeMinAndMaxAreBothUndefined,
     ScanFormulaZenithEncodingError_DateFieldEqualsTargetIsNotString,
+    ScanFormulaZenithEncodingError_TextSubFieldIsMissing,
     ScanFormulaZenithEncodingError_TextFieldContainsValueIsNotString,
     ScanFormulaZenithEncodingError_TextFieldContainsAsIsNotString,
     ScanFormulaZenithEncodingError_TextFieldContainsAsHasInvalidFormat,
     ScanFormulaZenithEncodingError_TextFieldContainsAsIsNotBoolean,
-    ScanFormulaZenithEncodingError_BooleanFieldEqualsTargetIsNotBoolean,
+    ScanFormulaZenithEncodingError_SingleFieldMustHaveOneParameter,
     ScanFormulaZenithEncodingError_PriceSubFieldEqualsSubFieldIsUnknown,
     ScanFormulaZenithEncodingError_DateSubFieldEqualsSubFieldIsUnknown,
     ScanFormulaZenithEncodingError_DateSubFieldEqualsTargetIsNotString,
     ScanFormulaZenithEncodingError_AltCodeSubFieldContainsSubFieldIsUnknown,
     ScanFormulaZenithEncodingError_AttributeSubFieldContainsSubFieldIsUnknown,
     ScanFormulaZenithEncodingError_TargetHasInvalidDateFormat,
+    ScanFormulaZenithEncodingError_RangeSubFieldIsMissing,
     ScanFormulaZenithEncodingError_RangeMinIsDefinedButNotString,
     ScanFormulaZenithEncodingError_RangeMinHasInvalidDateFormat,
     ScanFormulaZenithEncodingError_RangeMaxIsDefinedButNotString,
     ScanFormulaZenithEncodingError_RangeMaxHasInvalidDateFormat,
     ScanFormulaZenithEncodingError_NamedParametersCannotBeNull,
-    ScanFormulaZenithEncodingError_FirstParameterCannotBeObjectOrNull,
-    ScanFormulaZenithEncodingError_SecondParameterCannotBeObjectOrNull,
-    ScanFormulaZenithEncodingError_BooleanFieldCanOnlyHaveOneParameter,
-    ScanFormulaZenithEncodingError_OnlySubFieldOrTextFieldNodesCanHave3Parameters,
-    ScanFormulaZenithEncodingError_OnlySubFieldNodeCanHave4Parameters,
-    ScanFormulaZenithEncodingError_OnlyTextSubFieldContainsNodeCanHave4Parameters,
-    ScanFormulaZenithEncodingError_FieldBooleanTupleNodeHasTooManyParameters,
+    ScanFormulaZenithEncodingError_RangeFieldBooleanTupleNodeHasTooManyParameters,
     ScanFormulaZenithEncodingError_IsBooleanTupleNodeParameterIsNotBoolean,
     ScanFormulaZenithEncodingError_IsBooleanTupleNodeHasTooManyParameters,
     ScanFormulaZenithEncodingError_NumericTupleNodeIsZeroLength,
@@ -1981,6 +1985,15 @@ export const enum StringId {
     ScanFormulaZenithEncodingError_UnknownBooleanTupleNodeType,
     ScanFormulaZenithEncodingError_UnknownNumericTupleNodeType,
     ScanFormulaZenithEncodingError_UnknownNumericField,
+    ScanFormulaZenithEncodingError_FieldBooleanParamMustBeRangeOrExistsSingle,
+    ScanFormulaZenithEncodingError_NumericRangeFirstParameterMustBeNumberOrNamed,
+    ScanFormulaZenithEncodingError_DateRangeFirstParameterMustBeStringOrNamed,
+    ScanFormulaZenithEncodingError_TextFieldMustHaveAtLeastOneParameter,
+    ScanFormulaZenithEncodingError_TextRangeSecondParameterMustBeStringOrNamed,
+    ScanFormulaZenithEncodingError_ExistsSingleFieldMustNotHaveMoreThan1Parameter,
+    ScanFormulaZenithEncodingError_SingleFieldParameterIsNotString,
+    ScanFormulaZenithEncodingError_TextFieldBooleanTupleNodeHasTooManyParameters,
+    ScanFormulaZenithEncodingError_UnknownCurrency,
     ScanFormulaZenithEncodingError_IfTupleNodeRequiresAtLeast4Parameters,
     ScanFormulaZenithEncodingError_IfTupleNodeRequiresAnEvenNumberOfParameters,
     ScanSyncStatusDisplay_Saving, // remove when Watchmaker no longer references
@@ -2133,6 +2146,73 @@ export const enum StringId {
     UserAlert_RestartReason_UserAction,
     UserAlert_PleaseWaitSavingChanges,
     UserAlert_ChangesSavedOkToLeaveOrRestorePage,
+    ScanFormulaIsNodeCategoryCaption_Index,
+    ScanFormulaIsNodeCategoryTitle_Index,
+    ScanField_BooleanOperationDisplay_All,
+    ScanField_BooleanOperationDescription_All,
+    ScanField_BooleanOperationDisplay_Any,
+    ScanField_BooleanOperationDescription_Any,
+    ScanField_BooleanOperationDisplay_Xor,
+    ScanField_BooleanOperationDescription_Xor,
+    ScanFieldEditor_FieldName,
+    ScanFieldEditor_RequiresDisplay,
+    ScanFieldEditor_RequiresDescription,
+    ScanFieldEditor_DeleteMeDisplay,
+    ScanFieldEditor_DeleteMeDescription,
+    ScanFieldEditor_Conditions,
+    ScanFieldEditor_AddConditionDisplay,
+    ScanFieldEditor_AddConditionDescription,
+    ScanFieldEditor_OneOrMoreConditionsInvalid,
+    ScanFieldEditor_XorRequiresExactly2Conditions,
+    ScanFieldSetEditor_AddAField,
+    ScanFieldSetEditor_AddAnAttributeBasedField,
+    ScanFieldSetEditor_AddAnAltCodeBasedField,
+    ScanFieldEditorFrameFieldHeading_Name,
+    ScanFieldEditorFrameFieldHeading_Valid,
+    ScanFieldEditorFrameFieldHeading_ErrorText,
+    ScanFieldEditorFrameFieldHeading_ConditionsOperationId,
+    ScanFieldEditorFrameFieldHeading_ConditionCount,
+    ScanFieldConditionOperatorDisplay_HasValue,
+    ScanFieldConditionOperatorDescription_HasValue,
+    ScanFieldConditionOperatorDisplay_NotHasValue,
+    ScanFieldConditionOperatorDescription_NotHasValue,
+    ScanFieldConditionOperatorDisplay_Equals,
+    ScanFieldConditionOperatorDescription_Equals,
+    ScanFieldConditionOperatorDisplay_NotEquals,
+    ScanFieldConditionOperatorDescription_NotEquals,
+    ScanFieldConditionOperatorDisplay_GreaterThan,
+    ScanFieldConditionOperatorDescription_GreaterThan,
+    ScanFieldConditionOperatorDisplay_GreaterThanOrEqual,
+    ScanFieldConditionOperatorDescription_GreaterThanOrEqual,
+    ScanFieldConditionOperatorDisplay_LessThan,
+    ScanFieldConditionOperatorDescription_LessThan,
+    ScanFieldConditionOperatorDisplay_LessThanOrEqual,
+    ScanFieldConditionOperatorDescription_LessThanOrEqual,
+    ScanFieldConditionOperatorDisplay_InRange,
+    ScanFieldConditionOperatorDescription_InRange,
+    ScanFieldConditionOperatorDisplay_NotInRange,
+    ScanFieldConditionOperatorDescription_NotInRange,
+    ScanFieldConditionOperatorDisplay_Contains,
+    ScanFieldConditionOperatorDescription_Contains,
+    ScanFieldConditionOperatorDisplay_NotContains,
+    ScanFieldConditionOperatorDescription_NotContains,
+    ScanFieldConditionOperatorDisplay_Overlaps,
+    ScanFieldConditionOperatorDescription_Overlaps,
+    ScanFieldConditionOperatorDisplay_NotOverlaps,
+    ScanFieldConditionOperatorDescription_NotOverlaps,
+    ScanFieldConditionOperatorDisplay_Is,
+    ScanFieldConditionOperatorDescription_Is,
+    ScanFieldConditionOperatorDisplay_NotIs,
+    ScanFieldConditionOperatorDescription_NotIs,
+    ScanFieldConditionOperatorDisplay_OrEqual,
+    ScanFieldConditionOperandsEditorCaption_RemoveMe,
+    ScanFieldConditionOperandsEditorTitle_RemoveMe,
+    ScanFieldConditionOperandsEditor_NotIsCategory,
+    ScanFieldConditionOperandsEditor_NotEqualsValue,
+    ScanFieldConditionOperandsEditor_NotInRange,
+    ScanFieldConditionOperandsEditor_NotOverlaps,
+    ScanFieldConditionOperandsEditor_NotHasValue,
+    ScanFieldConditionOperandsEditor_NotContainsValue,
     ConditionSetScanFormulaViewNgComponentCaption_SetOperation,
     ConditionSetScanFormulaViewNgComponentTitle_SetOperation,
     ConditionSetScanFormulaViewNgComponentTitle_Exclude,
@@ -2465,6 +2545,11 @@ export namespace I18nStrings {
                 en: 'Create',
             }
         },
+        Add: {
+            id: StringId.Add, translations: {
+                en: 'Add',
+            }
+        },
         Delete: {
             id: StringId.Delete, translations: {
                 en: 'Delete',
@@ -2724,6 +2809,11 @@ export namespace I18nStrings {
         Modified: {
             id: StringId.Modified, translations: {
                 en: 'Modified',
+            }
+        },
+        Valid: {
+            id: StringId.Valid, translations: {
+                en: 'Valid',
             }
         },
         Invalid: {
@@ -3459,6 +3549,22 @@ export namespace I18nStrings {
         DeleteScan: {
             id: StringId.DeleteScan, translations: {
                 en: 'Delete Scan',
+            }
+        },
+
+        AddField: {
+            id: StringId.AddField, translations: {
+                en: 'Add field',
+            }
+        },
+        AddAttributeField: {
+            id: StringId.AddAttributeField, translations: {
+                en: 'Add attr field',
+            }
+        },
+        AddAltCodeField: {
+            id: StringId.AddAltCodeField, translations: {
+                en: 'Add code field',
             }
         },
         Layout_InvalidJson: {
@@ -11789,6 +11895,11 @@ export namespace I18nStrings {
                 en: 'Invalid JSON',
             }
         },
+        ScanFormulaZenithEncodingError_ErrorCode: {
+            id: StringId.ScanFormulaZenithEncodingError_ErrorCode, translations: {
+                en: 'Error Code',
+            }
+        },
         ScanFormulaZenithEncodingError_BooleanTupleNodeIsNotAnArray: {
             id: StringId.ScanFormulaZenithEncodingError_BooleanTupleNodeIsNotAnArray, translations: {
                 en: 'Boolean tuple node is not an array',
@@ -11802,6 +11913,11 @@ export namespace I18nStrings {
         ScanFormulaZenithEncodingError_BooleanTupleNodeTypeIsNotString: {
             id: StringId.ScanFormulaZenithEncodingError_BooleanTupleNodeTypeIsNotString, translations: {
                 en: 'Boolean tuple node type is not string',
+            }
+        },
+        ScanFormulaZenithEncodingError_UnknownField: {
+            id: StringId.ScanFormulaZenithEncodingError_UnknownField, translations: {
+                en: 'Unknown field',
             }
         },
         ScanFormulaZenithEncodingError_SingleOperandLogicalBooleanDoesNotHaveOneOperand: {
@@ -11854,6 +11970,11 @@ export namespace I18nStrings {
                 en: 'Unknown field boolean parameter',
             }
         },
+        ScanFormulaZenithEncodingError_FieldBooleanParamCannotBeSubbedField: {
+            id: StringId.ScanFormulaZenithEncodingError_FieldBooleanParamCannotBeSubbedField, translations: {
+                en: 'Field boolean parameter cannot be subbed field',
+            }
+        },
         ScanFormulaZenithEncodingError_SubFieldIsNotString: {
             id: StringId.ScanFormulaZenithEncodingError_SubFieldIsNotString, translations: {
                 en: 'Sub-field is not string',
@@ -11904,6 +12025,11 @@ export namespace I18nStrings {
                 en: 'Date field equals target is not a string',
             }
         },
+        ScanFormulaZenithEncodingError_TextSubFieldIsMissing: {
+            id: StringId.ScanFormulaZenithEncodingError_DateFieldEqualsTargetIsNotString, translations: {
+                en: 'Text sub field is missing',
+            }
+        },
         ScanFormulaZenithEncodingError_TextFieldContainsValueIsNotString: {
             id: StringId.ScanFormulaZenithEncodingError_TextFieldContainsValueIsNotString, translations: {
                 en: 'Text field contains value is not a string',
@@ -11924,9 +12050,9 @@ export namespace I18nStrings {
                 en: 'Text field contains as is not a boolean',
             }
         },
-        ScanFormulaZenithEncodingError_BooleanFieldEqualsTargetIsNotBoolean: {
-            id: StringId.ScanFormulaZenithEncodingError_BooleanFieldEqualsTargetIsNotBoolean, translations: {
-                en: 'Boolean field equals target is not a boolean',
+        ScanFormulaZenithEncodingError_SingleFieldMustHaveOneParameter: {
+            id: StringId.ScanFormulaZenithEncodingError_SingleFieldMustHaveOneParameter, translations: {
+                en: 'Single field must have one parameter',
             }
         },
         ScanFormulaZenithEncodingError_PriceSubFieldEqualsSubFieldIsUnknown: {
@@ -11959,6 +12085,11 @@ export namespace I18nStrings {
                 en: 'Target has invalid date format',
             }
         },
+        ScanFormulaZenithEncodingError_RangeSubFieldIsMissing: {
+            id: StringId.ScanFormulaZenithEncodingError_RangeSubFieldIsMissing, translations: {
+                en: 'Range sub field is missing',
+            }
+        },
         ScanFormulaZenithEncodingError_RangeMinIsDefinedButNotString: {
             id: StringId.ScanFormulaZenithEncodingError_RangeMinIsDefinedButNotString, translations: {
                 en: 'Range minimum is defined but not a string',
@@ -11984,39 +12115,9 @@ export namespace I18nStrings {
                 en: 'Named parameters cannot be null',
             }
         },
-        ScanFormulaZenithEncodingError_FirstParameterCannotBeObjectOrNull: {
-            id: StringId.ScanFormulaZenithEncodingError_FirstParameterCannotBeObjectOrNull, translations: {
-                en: 'First parameter cannot be an object or null',
-            }
-        },
-        ScanFormulaZenithEncodingError_SecondParameterCannotBeObjectOrNull: {
-            id: StringId.ScanFormulaZenithEncodingError_SecondParameterCannotBeObjectOrNull, translations: {
-                en: 'Second parameter cannot be an object or null',
-            }
-        },
-        ScanFormulaZenithEncodingError_BooleanFieldCanOnlyHaveOneParameter: {
-            id: StringId.ScanFormulaZenithEncodingError_BooleanFieldCanOnlyHaveOneParameter, translations: {
-                en: 'Boolean field can only have one parameter',
-            }
-        },
-        ScanFormulaZenithEncodingError_OnlySubFieldOrTextFieldNodesCanHave3Parameters: {
-            id: StringId.ScanFormulaZenithEncodingError_OnlySubFieldOrTextFieldNodesCanHave3Parameters, translations: {
-                en: 'Only sub-field or text field Nodes can have 3 parameters',
-            }
-        },
-        ScanFormulaZenithEncodingError_OnlySubFieldNodeCanHave4Parameters: {
-            id: StringId.ScanFormulaZenithEncodingError_OnlySubFieldNodeCanHave4Parameters, translations: {
-                en: 'Only sub-field nodes can have 4 parameters',
-            }
-        },
-        ScanFormulaZenithEncodingError_OnlyTextSubFieldContainsNodeCanHave4Parameters: {
-            id: StringId.ScanFormulaZenithEncodingError_OnlyTextSubFieldContainsNodeCanHave4Parameters, translations: {
-                en: 'Only text sub-field contains node can have 4 parameters',
-            }
-        },
-        ScanFormulaZenithEncodingError_FieldBooleanTupleNodeHasTooManyParameters: {
-            id: StringId.ScanFormulaZenithEncodingError_FieldBooleanTupleNodeHasTooManyParameters, translations: {
-                en: 'Field tuple node has too many parameters',
+        ScanFormulaZenithEncodingError_RangeFieldBooleanTupleNodeHasTooManyParameters: {
+            id: StringId.ScanFormulaZenithEncodingError_RangeFieldBooleanTupleNodeHasTooManyParameters, translations: {
+                en: 'Range field boolean tuple node has too many parameters',
             }
         },
         ScanFormulaZenithEncodingError_IsBooleanTupleNodeParameterIsNotBoolean: {
@@ -12069,6 +12170,52 @@ export namespace I18nStrings {
                 en: 'Unknown numeric field',
             }
         },
+        ScanFormulaZenithEncodingError_FieldBooleanParamMustBeRangeOrExistsSingle:{
+            id: StringId.ScanFormulaZenithEncodingError_FieldBooleanParamMustBeRangeOrExistsSingle, translations: {
+                en: 'Field boolean parameter must be range or \'exists single\'',
+            }
+        },
+        ScanFormulaZenithEncodingError_NumericRangeFirstParameterMustBeNumberOrNamed:{
+            id: StringId.ScanFormulaZenithEncodingError_NumericRangeFirstParameterMustBeNumberOrNamed, translations: {
+                en: 'Numeric range first parameter must be number or named',
+            }
+        },
+        ScanFormulaZenithEncodingError_DateRangeFirstParameterMustBeStringOrNamed:{
+            id: StringId.ScanFormulaZenithEncodingError_DateRangeFirstParameterMustBeStringOrNamed, translations: {
+                en: 'Date range first parameter must be string or named',
+            }
+        },
+        ScanFormulaZenithEncodingError_TextFieldMustHaveAtLeastOneParameter:{
+            id: StringId.ScanFormulaZenithEncodingError_TextFieldMustHaveAtLeastOneParameter, translations: {
+                en: 'Text field must have at least one parameter',
+            }
+        },
+        ScanFormulaZenithEncodingError_TextRangeSecondParameterMustBeStringOrNamed:{
+            id: StringId.ScanFormulaZenithEncodingError_TextRangeSecondParameterMustBeStringOrNamed, translations: {
+                en: 'Text range second parameter must be string or named',
+            }
+        },
+        ScanFormulaZenithEncodingError_ExistsSingleFieldMustNotHaveMoreThan1Parameter:{
+            id: StringId.ScanFormulaZenithEncodingError_ExistsSingleFieldMustNotHaveMoreThan1Parameter, translations: {
+                en: '\'Exists single\' field must not have more than 1 parameter',
+            }
+        },
+        ScanFormulaZenithEncodingError_SingleFieldParameterIsNotString:{
+            id: StringId.ScanFormulaZenithEncodingError_SingleFieldParameterIsNotString, translations: {
+                en: 'Single field parameter is not string',
+            }
+        },
+        ScanFormulaZenithEncodingError_TextFieldBooleanTupleNodeHasTooManyParameters:{
+            id: StringId.ScanFormulaZenithEncodingError_TextFieldBooleanTupleNodeHasTooManyParameters, translations: {
+                en: 'Text field boolean tuple node has too many parameters',
+            }
+        },
+        ScanFormulaZenithEncodingError_UnknownCurrency:{
+            id: StringId.ScanFormulaZenithEncodingError_UnknownCurrency, translations: {
+                en: 'Unknown currency',
+            }
+        },
+
         ScanFormulaZenithEncodingError_IfTupleNodeRequiresAtLeast4Parameters: {
             id: StringId.ScanFormulaZenithEncodingError_IfTupleNodeRequiresAtLeast4Parameters, translations: {
                 en: 'If tuple node requires at least 4 parameters',
@@ -12831,7 +12978,341 @@ export namespace I18nStrings {
                 en: 'Changes saved! Ok to leave or restore page.',
             }
         },
-
+        ScanFormulaIsNodeCategoryCaption_Index: {
+            id: StringId.ScanFormulaIsNodeCategoryCaption_Index, translations: {
+                en: 'Index',
+            }
+        },
+        ScanFormulaIsNodeCategoryTitle_Index: {
+            id: StringId.ScanFormulaIsNodeCategoryTitle_Index, translations: {
+                en: 'Symbol is an Index',
+            }
+        },
+        ScanField_BooleanOperationDisplay_All: {
+            id: StringId.ScanField_BooleanOperationDisplay_All, translations: {
+                en: 'All',
+            }
+        },
+        ScanField_BooleanOperationDescription_All: {
+            id: StringId.ScanField_BooleanOperationDescription_All, translations: {
+                en: 'All conditions must be met',
+            }
+        },
+        ScanField_BooleanOperationDisplay_Any: {
+            id: StringId.ScanField_BooleanOperationDisplay_Any, translations: {
+                en: 'Any',
+            }
+        },
+        ScanField_BooleanOperationDescription_Any: {
+            id: StringId.ScanField_BooleanOperationDescription_Any, translations: {
+                en: 'One or more conditions must be met',
+            }
+        },
+        ScanField_BooleanOperationDisplay_Xor: {
+            id: StringId.ScanField_BooleanOperationDisplay_Xor, translations: {
+                en: 'Only 1 of 2',
+            }
+        },
+        ScanField_BooleanOperationDescription_Xor: {
+            id: StringId.ScanField_BooleanOperationDescription_Xor, translations: {
+                en: 'One of two conditions must be met',
+            }
+        },
+        ScanFieldEditor_FieldName: {
+            id: StringId.ScanFieldEditor_FieldName, translations: {
+                en: 'Field name',
+            }
+        },
+        ScanFieldEditor_RequiresDisplay: {
+            id: StringId.ScanFieldEditor_RequiresDisplay, translations: {
+                en: 'Requires',
+            }
+        },
+        ScanFieldEditor_RequiresDescription: {
+            id: StringId.ScanFieldEditor_RequiresDescription, translations: {
+                en: 'The number of conditions which must be met',
+            }
+        },
+        ScanFieldEditor_DeleteMeDisplay: {
+            id: StringId.ScanFieldEditor_DeleteMeDisplay, translations: {
+                en: 'Delete',
+            }
+        },
+        ScanFieldEditor_DeleteMeDescription: {
+            id: StringId.ScanFieldEditor_DeleteMeDescription, translations: {
+                en: 'Delete this field',
+            }
+        },
+        ScanFieldEditor_Conditions: {
+            id: StringId.ScanFieldEditor_Conditions, translations: {
+                en: 'Conditions',
+            }
+        },
+        ScanFieldEditor_AddConditionDisplay: {
+            id: StringId.ScanFieldEditor_AddConditionDisplay, translations: {
+                en: 'Add Condition',
+            }
+        },
+        ScanFieldEditor_AddConditionDescription: {
+            id: StringId.ScanFieldEditor_AddConditionDescription, translations: {
+                en: 'Select a condition to be added',
+            }
+        },
+        ScanFieldEditor_OneOrMoreConditionsInvalid: {
+            id: StringId.ScanFieldEditor_OneOrMoreConditionsInvalid, translations: {
+                en: 'One or more conditions are invalid',
+            }
+        },
+        ScanFieldEditor_XorRequiresExactly2Conditions: {
+            id: StringId.ScanFieldEditor_XorRequiresExactly2Conditions, translations: {
+                en: 'Exactly 2 conditions are required',
+            }
+        },
+        ScanFieldSetEditor_AddAField: {
+            id: StringId.ScanFieldSetEditor_AddAField, translations: {
+                en: 'Add a field to scan',
+            }
+        },
+        ScanFieldSetEditor_AddAnAttributeBasedField: {
+            id: StringId.ScanFieldSetEditor_AddAnAttributeBasedField, translations: {
+                en: 'Add an attribute based field to scan',
+            }
+        },
+        ScanFieldSetEditor_AddAnAltCodeBasedField: {
+            id: StringId.ScanFieldSetEditor_AddAnAltCodeBasedField, translations: {
+                en: 'Add an \'AltCode\' based field to scan',
+            }
+        },
+        ScanFieldEditorFrameFieldHeading_Name: {
+            id: StringId.ScanFieldEditorFrameFieldHeading_Name, translations: {
+                en: 'Name',
+            }
+        },
+        ScanFieldEditorFrameFieldHeading_Valid: {
+            id: StringId.ScanFieldEditorFrameFieldHeading_Valid, translations: {
+                en: 'Valid',
+            }
+        },
+        ScanFieldEditorFrameFieldHeading_ErrorText: {
+            id: StringId.ScanFieldEditorFrameFieldHeading_ErrorText, translations: {
+                en: 'ErrorText',
+            }
+        },
+        ScanFieldEditorFrameFieldHeading_ConditionsOperationId: {
+            id: StringId.ScanFieldEditorFrameFieldHeading_ConditionsOperationId, translations: {
+                en: 'Requires condition',
+            }
+        },
+        ScanFieldEditorFrameFieldHeading_ConditionCount: {
+            id: StringId.ScanFieldEditorFrameFieldHeading_ConditionCount, translations: {
+                en: 'Condition count',
+            }
+        },
+        ScanFieldConditionOperatorDisplay_HasValue: {
+            id: StringId.ScanFieldConditionOperatorDisplay_HasValue, translations: {
+                en: 'Has value',
+            }
+        },
+        ScanFieldConditionOperatorDescription_HasValue: {
+            id: StringId.ScanFieldConditionOperatorDescription_HasValue, translations: {
+                en: 'Is the field\'s value set',
+            }
+        },
+        ScanFieldConditionOperatorDisplay_NotHasValue: {
+            id: StringId.ScanFieldConditionOperatorDisplay_NotHasValue, translations: {
+                en: 'Not has value',
+            }
+        },
+        ScanFieldConditionOperatorDescription_NotHasValue: {
+            id: StringId.ScanFieldConditionOperatorDescription_NotHasValue, translations: {
+                en: 'Is the field\'s value not set',
+            }
+        },
+        ScanFieldConditionOperatorDisplay_Equals: {
+            id: StringId.ScanFieldConditionOperatorDisplay_Equals, translations: {
+                en: 'Equals',
+            }
+        },
+        ScanFieldConditionOperatorDescription_Equals: {
+            id: StringId.ScanFieldConditionOperatorDescription_Equals, translations: {
+                en: 'Is the field\'s value equal',
+            }
+        },
+        ScanFieldConditionOperatorDisplay_NotEquals: {
+            id: StringId.ScanFieldConditionOperatorDisplay_NotEquals, translations: {
+                en: 'Not equals',
+            }
+        },
+        ScanFieldConditionOperatorDescription_NotEquals: {
+            id: StringId.ScanFieldConditionOperatorDescription_NotEquals, translations: {
+                en: 'Is the field\'s value not equal',
+            }
+        },
+        ScanFieldConditionOperatorDisplay_GreaterThan: {
+            id: StringId.ScanFieldConditionOperatorDisplay_GreaterThan, translations: {
+                en: 'Greater than',
+            }
+        },
+        ScanFieldConditionOperatorDescription_GreaterThan: {
+            id: StringId.ScanFieldConditionOperatorDescription_GreaterThan, translations: {
+                en: 'Is the field\'s value greater than',
+            }
+        },
+        ScanFieldConditionOperatorDisplay_GreaterThanOrEqual: {
+            id: StringId.ScanFieldConditionOperatorDisplay_GreaterThanOrEqual, translations: {
+                en: 'Greater than or equal',
+            }
+        },
+        ScanFieldConditionOperatorDescription_GreaterThanOrEqual: {
+            id: StringId.ScanFieldConditionOperatorDescription_GreaterThanOrEqual, translations: {
+                en: 'Is the field\'s value greater than or equal',
+            }
+        },
+        ScanFieldConditionOperatorDisplay_LessThan: {
+            id: StringId.ScanFieldConditionOperatorDisplay_LessThan, translations: {
+                en: 'Less than',
+            }
+        },
+        ScanFieldConditionOperatorDescription_LessThan: {
+            id: StringId.ScanFieldConditionOperatorDescription_LessThan, translations: {
+                en: 'Is the field\'s value less than',
+            }
+        },
+        ScanFieldConditionOperatorDisplay_LessThanOrEqual: {
+            id: StringId.ScanFieldConditionOperatorDisplay_LessThanOrEqual, translations: {
+                en: 'Less than or equal',
+            }
+        },
+        ScanFieldConditionOperatorDescription_LessThanOrEqual: {
+            id: StringId.ScanFieldConditionOperatorDescription_LessThanOrEqual, translations: {
+                en: 'Is the field\'s value less than or equal',
+            }
+        },
+        ScanFieldConditionOperatorDisplay_InRange: {
+            id: StringId.ScanFieldConditionOperatorDisplay_InRange, translations: {
+                en: 'In range',
+            }
+        },
+        ScanFieldConditionOperatorDescription_InRange: {
+            id: StringId.ScanFieldConditionOperatorDescription_InRange, translations: {
+                en: 'Is the field\'s value in the range',
+            }
+        },
+        ScanFieldConditionOperatorDisplay_NotInRange: {
+            id: StringId.ScanFieldConditionOperatorDisplay_NotInRange, translations: {
+                en: 'Not in range',
+            }
+        },
+        ScanFieldConditionOperatorDescription_NotInRange: {
+            id: StringId.ScanFieldConditionOperatorDescription_NotInRange, translations: {
+                en: 'Is the field\'s value outside the range',
+            }
+        },
+        ScanFieldConditionOperatorDisplay_Contains: {
+            id: StringId.ScanFieldConditionOperatorDisplay_Contains, translations: {
+                en: 'Contains',
+            }
+        },
+        ScanFieldConditionOperatorDescription_Contains: {
+            id: StringId.ScanFieldConditionOperatorDescription_Contains, translations: {
+                en: 'Does the field\'s value contain',
+            }
+        },
+        ScanFieldConditionOperatorDisplay_NotContains: {
+            id: StringId.ScanFieldConditionOperatorDisplay_NotContains, translations: {
+                en: 'Not contains',
+            }
+        },
+        ScanFieldConditionOperatorDescription_NotContains: {
+            id: StringId.ScanFieldConditionOperatorDescription_NotContains, translations: {
+                en: 'Does the field\'s value not contain',
+            }
+        },
+        ScanFieldConditionOperatorDisplay_Overlaps: {
+            id: StringId.ScanFieldConditionOperatorDisplay_Overlaps, translations: {
+                en: 'Overlaps',
+            }
+        },
+        ScanFieldConditionOperatorDescription_Overlaps: {
+            id: StringId.ScanFieldConditionOperatorDescription_Overlaps, translations: {
+                en: 'Are any of the field\'s value included in the specified set of values',
+            }
+        },
+        ScanFieldConditionOperatorDisplay_NotOverlaps: {
+            id: StringId.ScanFieldConditionOperatorDisplay_NotOverlaps, translations: {
+                en: 'Not overlaps',
+            }
+        },
+        ScanFieldConditionOperatorDescription_NotOverlaps: {
+            id: StringId.ScanFieldConditionOperatorDescription_NotOverlaps, translations: {
+                en: 'Are none of the field\'s value included in the specified set of values',
+            }
+        },
+        ScanFieldConditionOperatorDisplay_Is: {
+            id: StringId.ScanFieldConditionOperatorDisplay_Is, translations: {
+                en: 'Is',
+            }
+        },
+        ScanFieldConditionOperatorDescription_Is: {
+            id: StringId.ScanFieldConditionOperatorDescription_Is, translations: {
+                en: 'Is the symbol included in the specified category',
+            }
+        },
+        ScanFieldConditionOperatorDisplay_NotIs: {
+            id: StringId.ScanFieldConditionOperatorDisplay_NotIs, translations: {
+                en: 'Not is',
+            }
+        },
+        ScanFieldConditionOperatorDescription_NotIs: {
+            id: StringId.ScanFieldConditionOperatorDescription_NotIs, translations: {
+                en: 'Is the symbol not included in the specified category',
+            }
+        },
+        ScanFieldConditionOperatorDisplay_OrEqual: {
+            id: StringId.ScanFieldConditionOperatorDisplay_OrEqual, translations: {
+                en: 'or equal',
+            }
+        },
+        ScanFieldConditionOperandsEditorCaption_RemoveMe: {
+            id: StringId.ScanFieldConditionOperandsEditorCaption_RemoveMe, translations: {
+                en: 'Remove condition',
+            }
+        },
+        ScanFieldConditionOperandsEditorTitle_RemoveMe: {
+            id: StringId.ScanFieldConditionOperandsEditorTitle_RemoveMe, translations: {
+                en: 'Remove condition from field',
+            }
+        },
+        ScanFieldConditionOperandsEditor_NotIsCategory: {
+            id: StringId.ScanFieldConditionOperandsEditor_NotIsCategory, translations: {
+                en: 'Not is category',
+            }
+        },
+        ScanFieldConditionOperandsEditor_NotEqualsValue: {
+            id: StringId.ScanFieldConditionOperandsEditor_NotEqualsValue, translations: {
+                en: 'Not equals value',
+            }
+        },
+        ScanFieldConditionOperandsEditor_NotInRange: {
+            id: StringId.ScanFieldConditionOperandsEditor_NotInRange, translations: {
+                en: 'Not in range',
+            }
+        },
+        ScanFieldConditionOperandsEditor_NotOverlaps: {
+            id: StringId.ScanFieldConditionOperandsEditor_NotOverlaps, translations: {
+                en: 'Not overlaps',
+            }
+        },
+        ScanFieldConditionOperandsEditor_NotHasValue: {
+            id: StringId.ScanFieldConditionOperandsEditor_NotHasValue, translations: {
+                en: 'Not has value',
+            }
+        },
+        ScanFieldConditionOperandsEditor_NotContainsValue: {
+            id: StringId.ScanFieldConditionOperandsEditor_NotContainsValue, translations: {
+                en: 'Not contains value',
+            }
+        },
         ConditionSetScanFormulaViewNgComponentCaption_SetOperation: {
             id: StringId.ConditionSetScanFormulaViewNgComponentCaption_SetOperation, translations: {
                 en: 'Set operation',

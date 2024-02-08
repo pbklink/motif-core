@@ -5,7 +5,7 @@
  */
 
 import { GridFieldStaticInitialise } from './field/grid-field-internal-api';
-import { TableStaticInitialise } from './table/grid-table-internal-api';
+import { TableStaticInitialise } from './table/internal-api';
 
 /** @internal */
 export namespace GridStaticInitialise {

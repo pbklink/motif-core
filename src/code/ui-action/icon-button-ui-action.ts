@@ -109,6 +109,8 @@ export namespace IconButtonUiAction {
         RemoveSelectedFromList,
         EnlargeToTopLeft,
         Dot,
+        Exclamation,
+        Delete,
     }
 
     export type IconPushEventHandler = (this: void, iconId: IconButtonUiAction.IconId | undefined) => void;

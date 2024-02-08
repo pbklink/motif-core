@@ -6,7 +6,7 @@
 
 import { IndexedRecord, LockOpenListItem } from '../../sys/sys-internal-api';
 import { ReferenceableGridLayoutsService } from '../layout/grid-layout-internal-api';
-import { TableRecordSourceFactoryService } from '../table/grid-table-internal-api';
+import { TableFieldSourceDefinitionRegistryService, TableRecordSourceFactoryService } from '../table/internal-api';
 import { GridRowOrderDefinition, ReferenceableGridSourceDefinition } from './definition/grid-source-definition-internal-api';
 import { GridSource } from './grid-source';
 
@@ -16,12 +16,13 @@ export class ReferenceableGridSource extends GridSource implements LockOpenListI
 
     constructor(
         referenceableGridLayoutsService: ReferenceableGridLayoutsService,
+        tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
         tableRecordSourceFactoryService: TableRecordSourceFactoryService,
         lockedDefinition: ReferenceableGridSourceDefinition,
         index: number,
     ) {
         const id = lockedDefinition.id;
-        super(referenceableGridLayoutsService, tableRecordSourceFactoryService, lockedDefinition, id, id);
+        super(referenceableGridLayoutsService, tableFieldSourceDefinitionRegistryService, tableRecordSourceFactoryService, lockedDefinition, id, id);
 
         this.name = lockedDefinition.name;
         this.upperCaseName = this.name.toUpperCase();

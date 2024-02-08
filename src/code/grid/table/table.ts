@@ -18,7 +18,7 @@ import { TableFieldSourceDefinition } from './field-source/grid-table-field-sour
 import { TableField } from './field/grid-table-field-internal-api';
 // import { TableFieldAndStateArrays } from './field/grid-table-field-internal-api';
 import { TableRecordDefinition } from './record-definition/grid-table-record-definition-internal-api';
-import { TableRecordSource } from './record-source/grid-table-record-source-internal-api';
+import { TableRecordSource } from './record-source/internal-api';
 import { TableRecord } from './record/grid-table-record-internal-api';
 
 export class Table extends CorrectnessBadness {

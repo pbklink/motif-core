@@ -6,7 +6,7 @@
 
 import { AssertInternalError, Err, ErrorCode, Guid, JsonElement, Ok, Result } from '../../../sys/sys-internal-api';
 import { GridLayoutOrReferenceDefinition } from '../../layout/grid-layout-internal-api';
-import { TableRecordSourceDefinitionFactoryService } from '../../table/grid-table-internal-api';
+import { TableRecordSourceDefinitionFactoryService } from '../../table/internal-api';
 import { GridSourceDefinition } from './grid-source-definition';
 
 /** @public */
