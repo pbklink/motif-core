@@ -4,6 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
+export * from './badness-comparable-list-table-record-source';
 export * from './balances-table-record-source';
 export * from './brokerage-account-group-table-record-source';
 export * from './brokerage-account-table-record-source';

@@ -112,7 +112,7 @@ export namespace ScanTableFieldSourceDefinition {
             },
             {
                 id: Scan.FieldId.StatusId,
-                tableFieldValueConstructors: [BooleanCorrectnessTableField, ScanStatusIdCorrectnessTableValue],
+                tableFieldValueConstructors: [EnumCorrectnessTableField, ScanStatusIdCorrectnessTableValue],
             },
             {
                 id: Scan.FieldId.Name,

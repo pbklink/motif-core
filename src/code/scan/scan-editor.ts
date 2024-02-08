@@ -171,10 +171,12 @@ export class ScanEditor {
     get maxMatchCount() { return this._maxMatchCount; } // Will be undefined while waiting for first Scan Detail
     get criteria() { return this._criteria; } // Will be undefined while waiting for first Scan Detail
     get criteriaAsFormula() { return this._criteriaAsFormula; } // Will be undefined while waiting for first Scan Detail
+    get criteriaAsConditionSet()  { return this._criteriaAsConditionSet; }
+    get criteriaAsFieldSet()  { return this._criteriaAsFieldSet; }
     get criteriaAsZenithText() { return this._criteriaAsZenithText; } // Will be undefined while waiting for first Scan Detail;
 
     get criteriaAsZenithEncoded() { // Will be undefined while waiting for first Scan Detail
-        const criteria = this.criteria;
+        const criteria = this._criteria;
         if (criteria === undefined) {
             return undefined;
         } else {
@@ -1247,27 +1249,23 @@ export class ScanEditor {
         this.setLifeCycleState(newStateId);
     }
 
-    private generateCriteriaAsFormula(value: ScanFormula.BooleanNode) {
-        return '';
-    }
-
-    private createZenithCriteriaText(value: ScanFormula.BooleanNode) {
-        const zenithCriteria = this.createZenithEncodedCriteria(value);
-        return JSON.stringify(zenithCriteria);
-    }
+    // private createZenithCriteriaText(value: ScanFormula.BooleanNode) {
+    //     const zenithCriteria = this.createZenithEncodedCriteria(value);
+    //     return JSON.stringify(zenithCriteria);
+    // }
 
     private createZenithEncodedCriteria(value: ScanFormula.BooleanNode) {
         return ScanFormulaZenithEncoding.encodeBoolean(value);
     }
 
-    private generateRankAsFormula(value: ScanFormula.NumericNode) {
-        return '';
-    }
+    // private generateRankAsFormula(value: ScanFormula.NumericNode) {
+    //     return '';
+    // }
 
-    private createZenithRankText(value: ScanFormula.NumericNode) {
-        const zenithRank = this.createZenithEncodedRank(value);
-        return JSON.stringify(zenithRank);
-    }
+    // private createZenithRankText(value: ScanFormula.NumericNode) {
+    //     const zenithRank = this.createZenithEncodedRank(value);
+    //     return JSON.stringify(zenithRank);
+    // }
 
     private createZenithEncodedRank(value: ScanFormula.NumericNode) {
         const zenithRank = ScanFormulaZenithEncoding.encodeNumeric(value);

@@ -6,7 +6,7 @@
 
 import { JsonElement, LockOpenList, mSecsPerSec, SysTick } from '../../sys/sys-internal-api';
 import { ReferenceableGridLayoutsService } from '../layout/grid-layout-internal-api';
-import { TableRecordSourceFactoryService } from '../table/grid-table-internal-api';
+import { TableFieldSourceDefinitionRegistryService, TableRecordSourceFactoryService } from '../table/internal-api';
 import { ReferenceableGridSourceDefinition } from './definition/grid-source-definition-internal-api';
 import { ReferenceableGridSource } from './referenceable-grid-source';
 
@@ -18,6 +18,7 @@ export class ReferenceableGridSourcesService extends LockOpenList<ReferenceableG
 
     constructor(
         private readonly _referenceableGridLayoutsService: ReferenceableGridLayoutsService,
+        private readonly _tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
         private readonly _tableRecordSourceFactoryService: TableRecordSourceFactoryService,
     ) {
         super();
@@ -69,7 +70,13 @@ export class ReferenceableGridSourcesService extends LockOpenList<ReferenceableG
 
     private createReferenceableGridSource(definition: ReferenceableGridSourceDefinition) {
         const index = this.count;
-        const result = new ReferenceableGridSource(this._referenceableGridLayoutsService, this._tableRecordSourceFactoryService, definition, index);
+        const result = new ReferenceableGridSource(
+            this._referenceableGridLayoutsService,
+            this._tableFieldSourceDefinitionRegistryService,
+            this._tableRecordSourceFactoryService,
+            definition,
+            index
+        );
         return result;
     }
 

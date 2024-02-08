@@ -7,7 +7,7 @@
 import { ChangeSubscribableComparableList } from './change-subscribable-comparable-list';
 import { ErrorCode } from './error-code';
 import { DuplicateError } from './external-error';
-import { UnreachableCaseError } from './internal-error';
+import { AssertInternalError, UnreachableCaseError } from './internal-error';
 import { Integer, MapKey, Mappable } from './types';
 
 /** @public */
@@ -43,6 +43,10 @@ export class MappedComparableList<out T extends (Mappable & U), in U = T> extend
         } else {
             return -1;
         }
+    }
+
+    override addUndefinedRange(undefinedValueCount: Integer) {
+        throw new AssertInternalError('MCLAUR34123', undefinedValueCount.toString());
     }
 
     override addRange(values: readonly T[]) {

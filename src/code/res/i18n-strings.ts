@@ -114,6 +114,7 @@ export const enum StringId {
     NoErrors,
     Editing,
     Modified,
+    Valid,
     Invalid,
     InvalidIntegerString,
     UnsupportedValue,
@@ -261,6 +262,9 @@ export const enum StringId {
     CreateScan,
     UpdateScan,
     DeleteScan,
+    AddField,
+    AddAttributeField,
+    AddAltCodeField,
     Layout_InvalidJson,
     Layout_SerialisationFormatNotDefinedLoadingDefault,
     Layout_SerialisationFormatIncompatibleLoadingDefault,
@@ -2160,6 +2164,14 @@ export const enum StringId {
     ScanFieldEditor_AddConditionDescription,
     ScanFieldEditor_OneOrMoreConditionsInvalid,
     ScanFieldEditor_XorRequiresExactly2Conditions,
+    ScanFieldSetEditor_AddAField,
+    ScanFieldSetEditor_AddAnAttributeBasedField,
+    ScanFieldSetEditor_AddAnAltCodeBasedField,
+    ScanFieldEditorFrameFieldHeading_Name,
+    ScanFieldEditorFrameFieldHeading_Valid,
+    ScanFieldEditorFrameFieldHeading_ErrorText,
+    ScanFieldEditorFrameFieldHeading_ConditionsOperationId,
+    ScanFieldEditorFrameFieldHeading_ConditionCount,
     ScanFieldConditionOperatorDisplay_HasValue,
     ScanFieldConditionOperatorDescription_HasValue,
     ScanFieldConditionOperatorDisplay_NotHasValue,
@@ -2797,6 +2809,11 @@ export namespace I18nStrings {
         Modified: {
             id: StringId.Modified, translations: {
                 en: 'Modified',
+            }
+        },
+        Valid: {
+            id: StringId.Valid, translations: {
+                en: 'Valid',
             }
         },
         Invalid: {
@@ -3532,6 +3549,22 @@ export namespace I18nStrings {
         DeleteScan: {
             id: StringId.DeleteScan, translations: {
                 en: 'Delete Scan',
+            }
+        },
+
+        AddField: {
+            id: StringId.AddField, translations: {
+                en: 'Add field',
+            }
+        },
+        AddAttributeField: {
+            id: StringId.AddAttributeField, translations: {
+                en: 'Add attr field',
+            }
+        },
+        AddAltCodeField: {
+            id: StringId.AddAltCodeField, translations: {
+                en: 'Add code field',
             }
         },
         Layout_InvalidJson: {
@@ -13033,6 +13066,46 @@ export namespace I18nStrings {
         ScanFieldEditor_XorRequiresExactly2Conditions: {
             id: StringId.ScanFieldEditor_XorRequiresExactly2Conditions, translations: {
                 en: 'Exactly 2 conditions are required',
+            }
+        },
+        ScanFieldSetEditor_AddAField: {
+            id: StringId.ScanFieldSetEditor_AddAField, translations: {
+                en: 'Add a field to scan',
+            }
+        },
+        ScanFieldSetEditor_AddAnAttributeBasedField: {
+            id: StringId.ScanFieldSetEditor_AddAnAttributeBasedField, translations: {
+                en: 'Add an attribute based field to scan',
+            }
+        },
+        ScanFieldSetEditor_AddAnAltCodeBasedField: {
+            id: StringId.ScanFieldSetEditor_AddAnAltCodeBasedField, translations: {
+                en: 'Add an \'AltCode\' based field to scan',
+            }
+        },
+        ScanFieldEditorFrameFieldHeading_Name: {
+            id: StringId.ScanFieldEditorFrameFieldHeading_Name, translations: {
+                en: 'Name',
+            }
+        },
+        ScanFieldEditorFrameFieldHeading_Valid: {
+            id: StringId.ScanFieldEditorFrameFieldHeading_Valid, translations: {
+                en: 'Valid',
+            }
+        },
+        ScanFieldEditorFrameFieldHeading_ErrorText: {
+            id: StringId.ScanFieldEditorFrameFieldHeading_ErrorText, translations: {
+                en: 'ErrorText',
+            }
+        },
+        ScanFieldEditorFrameFieldHeading_ConditionsOperationId: {
+            id: StringId.ScanFieldEditorFrameFieldHeading_ConditionsOperationId, translations: {
+                en: 'Requires condition',
+            }
+        },
+        ScanFieldEditorFrameFieldHeading_ConditionCount: {
+            id: StringId.ScanFieldEditorFrameFieldHeading_ConditionCount, translations: {
+                en: 'Condition count',
             }
         },
         ScanFieldConditionOperatorDisplay_HasValue: {

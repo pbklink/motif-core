@@ -48,7 +48,7 @@ export class ComparableList<out T extends U, in U = T> {
         this.items[index] = value;
     }
 
-    toArray(): readonly T[] {
+    toArray(): T[] {
         return this.items.slice(0, this.count);
     }
 
@@ -57,6 +57,15 @@ export class ComparableList<out T extends U, in U = T> {
         this.growCheck(idx + 1);
         this.items[idx] = value;
         return this._count++;
+    }
+
+    addUndefinedRange(undefinedValueCount: Integer) {
+        const items = this.items;
+        const newCount = this._count + undefinedValueCount;
+        if (newCount > items.length) {
+            items.length = newCount;
+        }
+        this._count = newCount;
     }
 
     addRange(values: readonly T[]) {
@@ -253,7 +262,8 @@ export class ComparableList<out T extends U, in U = T> {
     }
 
     clear() {
-        this.setCapacity(0);
+        this._count = 0;
+        this.items.length = 0;
     }
 
     contains(value: T) {
@@ -343,7 +353,11 @@ export class ComparableList<out T extends U, in U = T> {
     private setCapacity(value: Integer) {
         this.items.length = value;
         if (value < this._count) {
-            this._count = value;
+            if (value === 0) {
+                this.clear();
+            } else {
+                this.removeRange(value, this._count - value);
+            }
         }
     }
 
@@ -351,10 +365,13 @@ export class ComparableList<out T extends U, in U = T> {
         if (value < 0) {
             throw new AssertInternalError('CLSC9034121833', `${value}`);
         } else {
-            if (value > this.capacity) {
-                this.setCapacity(value);
+            if (value > this._count) {
+                this.addUndefinedRange(value - this._count);
+            } else {
+                if (value < this._count) {
+                    this.removeRange(value, this._count - value);
+                }
             }
-            this._count = value;
         }
     }
 

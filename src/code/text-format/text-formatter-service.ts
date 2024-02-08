@@ -63,7 +63,7 @@ import {
     TrailingStopLossOrderConditionTypeId
 } from "../adi/adi-internal-api";
 import { StringId, Strings } from '../res/res-internal-api';
-import { Scan } from '../scan/internal-api';
+import { Scan, ScanField } from '../scan/internal-api';
 import {
     BigIntRenderValue,
     BooleanRenderValue,
@@ -151,6 +151,10 @@ export class TextFormatterService {
 
     formatReadonlyBoolean(value: boolean): string {
         return value ? Strings[StringId.Readonly] : '';
+    }
+
+    formatValidBoolean(value: boolean): string {
+        return value ? Strings[StringId.Valid] : '';
     }
 
     formatModifiedBoolean(value: boolean): string {
@@ -415,6 +419,9 @@ export class TextFormatterService {
     formatScanTargetTypeId(value: ScanTargetTypeId) {
         return ScanTargetType.idToDisplay(value);
     }
+    formatScanFieldBooleanOperationId(value: ScanField.BooleanOperationId) {
+        return ScanField.BooleanOperation.idToDisplay(value);
+    }
 
     formatStringArrayAsCommaText(value: readonly string[]) {
         return CommaText.fromStringArray(value);
@@ -618,6 +625,8 @@ export class TextFormatterService {
                 return this.formatEnabledBoolean((renderValue as BooleanRenderValue).definedData);
             case RenderValue.TypeId.Readonly:
                 return this.formatReadonlyBoolean((renderValue as BooleanRenderValue).definedData);
+            case RenderValue.TypeId.Valid:
+                return this.formatValidBoolean((renderValue as BooleanRenderValue).definedData);
             case RenderValue.TypeId.Modified:
                 return this.formatModifiedBoolean((renderValue as BooleanRenderValue).definedData);
             case RenderValue.TypeId.IsIndex:
@@ -696,6 +705,8 @@ export class TextFormatterService {
                 return this.formatScanCriteriaTypeId((renderValue as EnumRenderValue).definedData);
             case RenderValue.TypeId.ScanTargetTypeId:
                 return this.formatScanTargetTypeId((renderValue as EnumRenderValue).definedData);
+            case RenderValue.TypeId.ScanFieldBooleanOperationId:
+                return this.formatScanFieldBooleanOperationId((renderValue as EnumRenderValue).definedData);
             case RenderValue.TypeId.StringArray:
                 return this.formatStringArrayAsCommaText((renderValue as StringArrayRenderValue).definedData);
             case RenderValue.TypeId.IntegerArray:

@@ -15,7 +15,7 @@ import {
     TableFieldSourceDefinitionRegistryService,
     TableRecordSourceDefinitionFactoryService,
     TableRecordSourceFactoryService
-} from "./grid/grid-internal-api";
+} from "./grid/internal-api";
 import { KeyboardService } from "./keyboard/keyboard-internal-api";
 import {
     RankedLitIvemIdListDefinitionFactoryService,
@@ -103,6 +103,7 @@ export class CoreService {
         );
         this.referenceableGridSourcesService = new ReferenceableGridSourcesService(
             this.referenceableGridLayoutsService,
+            this.tableFieldSourceDefinitionRegistryService,
             this.tableRecordSourceFactoryService,
         );
         this.cellPainterFactoryService = new CellPainterFactoryService(

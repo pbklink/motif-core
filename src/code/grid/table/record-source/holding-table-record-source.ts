@@ -22,7 +22,7 @@ import {
 } from '../field-source/definition/grid-table-field-source-definition-internal-api';
 import { HoldingTableRecordDefinition, TableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
 import { TableRecord } from '../record/grid-table-record-internal-api';
-import { BrokerageAccountTableValueSource, HoldingTableValueSource, SecurityDataItemTableValueSource } from '../value-source/grid-table-value-source-internal-api';
+import { BrokerageAccountTableValueSource, HoldingTableValueSource, SecurityDataItemTableValueSource } from '../value-source/internal-api';
 import {
     BrokerageAccountGroupTableRecordSource
 } from './brokerage-account-group-table-record-source';

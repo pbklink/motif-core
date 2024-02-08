@@ -12,10 +12,10 @@ import { CorrectnessList } from './correctness-list';
 import { MultiEvent } from './multi-event';
 import { CompareFtn } from './utils-search';
 
-export class BadnessComparableList<T> extends ChangeSubscribableComparableList<T> implements CorrectnessList<T>,  BadnessList<T> {
+export class BadnessComparableList<out T extends U, in U = T> extends ChangeSubscribableComparableList<T, U> implements CorrectnessList<T>,  BadnessList<T> {
     private readonly _correctnessBadness = new CorrectnessBadness();
 
-    constructor(compareItemsFtn?: CompareFtn<T>, badness = Badness.notBad) {
+    constructor(compareItemsFtn?: CompareFtn<U>, badness = Badness.notBad) {
         super(compareItemsFtn);
         this._correctnessBadness.setBadness(badness);
     }
@@ -24,8 +24,8 @@ export class BadnessComparableList<T> extends ChangeSubscribableComparableList<T
     get badness() { return this._correctnessBadness.badness; }
     get correctnessId() { return this._correctnessBadness.correctnessId; }
 
-    override clone(): BadnessComparableList<T> {
-        const result = new BadnessComparableList(this._compareItemsFtn);
+    override clone(): BadnessComparableList<T, U> {
+        const result = new BadnessComparableList<T, U>(this._compareItemsFtn);
         result.assign(this);
         return result;
     }
@@ -58,7 +58,7 @@ export class BadnessComparableList<T> extends ChangeSubscribableComparableList<T
         this._correctnessBadness.unsubscribeCorrectnessChangedEvent(subscriptionId);
     }
 
-    protected override assign(other: BadnessComparableList<T>) {
+    protected override assign(other: BadnessComparableList<T, U>) {
         this._correctnessBadness.setBadness(other.badness);
         super.assign(other);
     }

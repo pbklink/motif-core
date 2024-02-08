@@ -10,7 +10,7 @@ export * from './command/command-internal-api';
 export * from './core-service';
 export * from './core-static-initialise';
 export * from './extension/extension-internal-api';
-export * from './grid/grid-internal-api';
+export * from './grid/internal-api';
 export * from './keyboard/keyboard-internal-api';
 export * from './publisher/publisher-internal-api';
 export * from './ranked-lit-ivem-id-list/ranked-lit-ivem-id-list-internal-api';

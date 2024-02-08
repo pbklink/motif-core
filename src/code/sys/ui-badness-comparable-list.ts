@@ -10,13 +10,13 @@ import { RecordList } from './record-list';
 import { Integer, } from './types';
 import { UsableListChangeTypeId } from './usable-list-change-type';
 
-export class UiBadnessComparableList<T> extends BadnessComparableList<T> implements RecordList<T> {
+export class UiBadnessComparableList<out T extends U, in U = T> extends BadnessComparableList<T, U> implements RecordList<T> {
     private _uiListChangeMultiEvent = new MultiEvent<RecordList.UiListChangeEventHandler>();
     private _afterListChangedMultiEvent = new MultiEvent<UiBadnessComparableList.AfterListChangedEventHandler>();
     private _uiChanging = false;
 
-    override clone(): UiBadnessComparableList<T> {
-        const result = new UiBadnessComparableList(this._compareItemsFtn);
+    override clone(): UiBadnessComparableList<T, U> {
+        const result = new UiBadnessComparableList<T, U>(this._compareItemsFtn);
         result.assign(this);
         return result;
     }
@@ -32,6 +32,12 @@ export class UiBadnessComparableList<T> extends BadnessComparableList<T> impleme
         const result = this.add(value);
         this._uiChanging = false;
         return result;
+    }
+
+    uiAddUndefinedRange(undefinedValueCount: Integer, ui = true) {
+        this._uiChanging = ui;
+        this.addUndefinedRange(undefinedValueCount);
+        this._uiChanging = false;
     }
 
     uiAddRange(values: readonly T[], ui = true) {
@@ -115,6 +121,11 @@ export class UiBadnessComparableList<T> extends BadnessComparableList<T> impleme
         const result = super.add(value);
         this.notifyAfterListChanged();
         return result;
+    }
+
+    override addUndefinedRange(undefinedValueCount: Integer) {
+        super.addUndefinedRange(undefinedValueCount);
+        this.notifyAfterListChanged();
     }
 
     override addRange(values: readonly T[]) {

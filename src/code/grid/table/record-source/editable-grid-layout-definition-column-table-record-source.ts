@@ -12,7 +12,7 @@ import {
 import { TableField } from '../field/grid-table-field-internal-api';
 import { EditableGridLayoutDefinitionColumn, EditableGridLayoutDefinitionColumnTableRecordDefinition, TableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
 import { TableRecord } from '../record/grid-table-record-internal-api';
-import { EditableGridLayoutDefinitionColumnTableValueSource } from '../value-source/grid-table-value-source-internal-api';
+import { EditableGridLayoutDefinitionColumnTableValueSource } from '../value-source/internal-api';
 import {
     EditableGridLayoutDefinitionColumnList,
     EditableGridLayoutDefinitionColumnTableRecordSourceDefinition,

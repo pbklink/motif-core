@@ -15,7 +15,7 @@ import {
     TableRecordDefinition
 } from "../record-definition/grid-table-record-definition-internal-api";
 import { TableRecord } from '../record/grid-table-record-internal-api';
-import { BrokerageAccountTableValueSource, FeedTableValueSource } from '../value-source/grid-table-value-source-internal-api';
+import { BrokerageAccountTableValueSource, FeedTableValueSource } from '../value-source/internal-api';
 import { BrokerageAccountTableRecordSourceDefinition } from './definition/brokerage-account-table-record-source-definition';
 import { TableRecordSourceDefinitionFactoryService } from './definition/grid-table-record-source-definition-internal-api';
 import { SingleDataItemRecordTableRecordSource } from './single-data-item-record-table-record-source';

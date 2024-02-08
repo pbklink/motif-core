@@ -34,7 +34,7 @@ import {
     LitIvemBaseDetailTableValueSource,
     LitIvemExtendedDetailTableValueSource,
     MyxLitIvemAttributesTableValueSource
-} from "../value-source/grid-table-value-source-internal-api";
+} from "../value-source/internal-api";
 import { TableRecordSourceDefinitionFactoryService } from './definition/grid-table-record-source-definition-internal-api';
 import {
     LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition

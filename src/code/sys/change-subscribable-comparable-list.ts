@@ -32,6 +32,12 @@ export class ChangeSubscribableComparableList<out T extends U, in U = T> extends
         return result;
     }
 
+    override addUndefinedRange(undefinedValueCount: Integer) {
+        const firstAddIndex = this.count;
+        super.addUndefinedRange(undefinedValueCount);
+        this.notifyListChange(UsableListChangeTypeId.Insert, firstAddIndex, undefinedValueCount);
+    }
+
     override addRange(values: readonly T[]) {
         const firstAddIndex = this.count;
         super.addRange(values);
