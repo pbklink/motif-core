@@ -5,7 +5,7 @@
  */
 
 import { LitIvemId } from '../../../../adi/adi-internal-api';
-import { Err, ErrorCode, JsonElement, Ok, PickEnum, Result, UiBadnessComparableList } from '../../../../sys/sys-internal-api';
+import { Err, ErrorCode, JsonElement, Ok, PickEnum, Result, UiComparableList } from '../../../../sys/sys-internal-api';
 import { GridFieldCustomHeadingsService } from '../../../field/grid-field-internal-api';
 import { GridLayoutDefinition } from '../../../layout/grid-layout-internal-api';
 import {
@@ -20,12 +20,12 @@ import { TableRecordSourceDefinition } from './table-record-source-definition';
 
 /** @public */
 export class LitIvemIdComparableListTableRecordSourceDefinition extends BadnessListTableRecordSourceDefinition<LitIvemId> {
-    declare list: UiBadnessComparableList<LitIvemId>;
+    declare list: UiComparableList<LitIvemId>;
 
     constructor(
         customHeadingsService: GridFieldCustomHeadingsService,
         tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
-        list: UiBadnessComparableList<LitIvemId>,
+        list: UiComparableList<LitIvemId>,
     ) {
         super(
             customHeadingsService,
@@ -84,7 +84,7 @@ export namespace LitIvemIdComparableListTableRecordSourceDefinition {
         export const list = 'list';
     }
 
-    export function tryCreateListFromElement(element: JsonElement): Result<UiBadnessComparableList<LitIvemId>> {
+    export function tryCreateListFromElement(element: JsonElement): Result<UiComparableList<LitIvemId>> {
         const elementArrayResult = element.tryGetElementArray(JsonName.list);
         if (elementArrayResult.isErr()) {
             const error = elementArrayResult.error;
@@ -99,7 +99,7 @@ export namespace LitIvemIdComparableListTableRecordSourceDefinition {
                 return litIvemIdsResult.createOuter(ErrorCode.LitIvemIdComparableListTableRecordSourceDefinition_JsonLitIvemIdArrayIsInvalid);
             } else {
                 const litIvemIds = litIvemIdsResult.value;
-                const list = new UiBadnessComparableList<LitIvemId>();
+                const list = new UiComparableList<LitIvemId>();
                 list.addRange(litIvemIds);
                 return new Ok(list);
             }
