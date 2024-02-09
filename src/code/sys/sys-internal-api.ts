@@ -37,6 +37,7 @@ export * from './lock-open-list-item';
 export * from './lock-open-manager';
 export * from './logger';
 export * from './mapped-comparable-list';
+export * from './modifier-comparable-list';
 export * from './modifier-key';
 export * from './multi-event';
 export * from './record-list';

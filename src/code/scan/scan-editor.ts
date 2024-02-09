@@ -43,15 +43,38 @@ import { ScanFormula } from './formula/scan-formula';
 import { ScanFormulaZenithEncoding } from './formula/scan-formula-zenith-encoding';
 import { Scan } from './scan';
 
-export class ScanEditor {
-    readonly readonly: boolean;
+// eslint-disable-next-line @typescript-eslint/no-extraneous-class
+export abstract class OpenableScanEditor {
+    private readonly _openers = new Array<LockOpenListItem.Locker>();
 
+    constructor(opener: LockOpenListItem.Opener) {
+        this._openers.push(opener);
+    }
+
+    get openCount() { return this._openers.length; }
+    abstract get scan(): Scan | undefined;
+
+    addOpener(opener: LockOpenListItem.Opener) {
+        this._openers.push(opener);
+    }
+
+    removeOpener(opener: LockOpenListItem.Opener) {
+        const index = this._openers.indexOf(opener);
+        if (index < 0) {
+            throw new AssertInternalError('SERO40988', this.scan === undefined ? '' : this.scan.id);
+        } else {
+            this._openers.splice(index, 1);
+        }
+    }
+}
+
+export class ScanEditor<Modifier = void> extends OpenableScanEditor {
+    readonly readonly: boolean; // put here so ESLint does not complain
     private _finalised = false;
 
     private _scan: Scan | undefined;
     private _scanValuesChangedSubscriptionId: MultiEvent.SubscriptionId;
 
-    private readonly _openers = new Array<LockOpenListItem.Locker>();
     private _beginFieldChangesCount = 0;
     private _changedFieldIds = new Array<ScanEditor.FieldId>();
     private _fieldChangeNotifying = false;
@@ -92,8 +115,8 @@ export class ScanEditor {
     private _rankSourceId: ScanEditor.SourceId | undefined;
     private _rankSourceValid = true;
 
-    private _modifier: ScanEditor.Modifier | undefined;
-    private _fieldChangesMultiEvent = new MultiEvent<ScanEditor.FieldChangesEventHandler>();
+    private _modifier: Modifier | undefined;
+    private _fieldChangesMultiEvent = new MultiEvent<ScanEditor.FieldChangesEventHandler<Modifier>>();
     private _lifeCycleStateChangeMultiEvent = new MultiEvent<ScanEditor.StateChangeEventHandler>();
     private _modifiedStateChangeMultiEvent = new MultiEvent<ScanEditor.StateChangeEventHandler>();
 
@@ -107,7 +130,7 @@ export class ScanEditor {
         private readonly _getOrWaitForScanEventer: ScanEditor.GetOrWaitForScanEventer,
         private readonly _errorEventer: ScanEditor.ErrorEventer | undefined,
     ) {
-        this._openers.push(opener);
+        super(opener);
         this._criteriaAsFieldSet = emptyScanFieldSet;
         this._criteriaAsConditionSet = emptyScanConditionSet;
 
@@ -130,8 +153,7 @@ export class ScanEditor {
         this.setLifeCycleState(lifeCycleStateId);
     }
 
-    get scan() { return this._scan; }
-    get openCount() { return this._openers.length; }
+    override get scan() { return this._scan; }
 
     get lifeCycleStateId() { return this._lifeCycleStateId; }
     get saving() { return this._lifeCycleStateId === ScanEditor.LifeCycleStateId.Creating || this._lifeCycleStateId === ScanEditor.LifeCycleStateId.Updating; }
@@ -222,7 +244,7 @@ export class ScanEditor {
         this._finalised = true;
     }
 
-    beginFieldChanges(modifier: ScanEditor.Modifier | undefined) {
+    beginFieldChanges(modifier: Modifier | undefined) {
         if (modifier !== undefined) {
             if (this._beginFieldChangesCount === 0) {
                 this._modifier = modifier;
@@ -351,7 +373,7 @@ export class ScanEditor {
         }
     }
 
-    setCriteriaAsBooleanNode(value: ScanFormula.BooleanNode, modifier?: ScanEditor.Modifier) {
+    setCriteriaAsBooleanNode(value: ScanFormula.BooleanNode, modifier?: Modifier) {
         this.beginFieldChanges(modifier);
         this._criteriaSourceId = ScanEditor.SourceId.BooleanNode;
         this.setCriteria(value, ScanEditor.SourceId.BooleanNode, modifier);
@@ -359,7 +381,7 @@ export class ScanEditor {
         this.endFieldChanges();
     }
 
-    setCriteriaAsZenithText(value: string, modifier?: ScanEditor.Modifier, strict = true): ScanEditor.SetAsZenithTextResult | undefined {
+    setCriteriaAsZenithText(value: string, modifier?: Modifier, strict = true): ScanEditor.SetAsZenithTextResult | undefined {
         if (value === this._criteriaAsZenithText) {
             return undefined;
         } else {
@@ -408,7 +430,7 @@ export class ScanEditor {
         }
     }
 
-    setCriteriaAsConditionSet(value: ScanConditionSet, modifier?: ScanEditor.Modifier) {
+    setCriteriaAsConditionSet(value: ScanConditionSet, modifier?: Modifier) {
         this.beginFieldChanges(modifier);
         this._criteriaAsConditionSet = value;
         this._criteriaSourceId = ScanEditor.SourceId.ConditionSet;
@@ -420,12 +442,12 @@ export class ScanEditor {
         this.endFieldChanges();
     }
 
-    setCriteriaAsFieldSet(value: ScanFieldSet, modifier?: ScanEditor.Modifier) {
+    setCriteriaAsFieldSet(value: ScanFieldSet, modifier?: Modifier) {
         this._criteriaAsFieldSet = value;
         this.flagCriteriaAsFieldSetChanged(modifier);
     }
 
-    flagCriteriaAsFieldSetChanged(modifier?: ScanEditor.Modifier) {
+    flagCriteriaAsFieldSetChanged(modifier?: Modifier) {
         const criteriaAsFieldSet = this._criteriaAsFieldSet;
         if (criteriaAsFieldSet === undefined) {
             throw new AssertInternalError('SEFCAFSC22209');
@@ -475,7 +497,7 @@ export class ScanEditor {
         }
     }
 
-    setRankAsZenithText(value: string, modifier?: ScanEditor.Modifier, strict = true): ScanEditor.SetAsZenithTextResult | undefined {
+    setRankAsZenithText(value: string, modifier?: Modifier, strict = true): ScanEditor.SetAsZenithTextResult | undefined {
         if (value === this._rankAsZenithText) {
             return undefined;
         } else {
@@ -530,19 +552,6 @@ export class ScanEditor {
             this.endFieldChanges();
 
             return result;
-        }
-    }
-
-    addOpener(opener: LockOpenListItem.Opener) {
-        this._openers.push(opener);
-    }
-
-    removeOpener(opener: LockOpenListItem.Opener) {
-        const index = this._openers.indexOf(opener);
-        if (index < 0) {
-            throw new AssertInternalError('SERO40988', this._scan === undefined ? '' : this._scan.id);
-        } else {
-            this._openers.splice(index, 1);
         }
     }
 
@@ -867,7 +876,7 @@ export class ScanEditor {
         this._modifiedStateChangeMultiEvent.unsubscribe(subscriptionId);
     }
 
-    subscribeFieldChangesEvents(handler: ScanEditor.FieldChangesEventHandler) {
+    subscribeFieldChangesEvents(handler: ScanEditor.FieldChangesEventHandler<Modifier>) {
         return this._fieldChangesMultiEvent.subscribe(handler);
     }
 
@@ -1143,7 +1152,7 @@ export class ScanEditor {
         this.setRank(rank, undefined);
     }
 
-    private setCriteria(value: ScanFormula.BooleanNode, sourceId: ScanEditor.SourceId | undefined, modifier: ScanEditor.Modifier | undefined) {
+    private setCriteria(value: ScanFormula.BooleanNode, sourceId: ScanEditor.SourceId | undefined, modifier: Modifier | undefined) {
         this.beginFieldChanges(modifier)
         this._criteria = value;
         this.addFieldChange(ScanEditor.FieldId.Criteria);
@@ -1354,14 +1363,14 @@ export namespace ScanEditor {
     export const DefaultRank: ScanFormula.NumericPosNode | undefined = undefined; // { typeId: ScanFormula.NodeTypeId.NumericPos, operand: 0 } ;
 
     export type StateChangeEventHandler = (this: void) => void;
-    export type FieldChangesEventHandler = (this: void, changedFieldIds: readonly FieldId[], changer: Modifier | undefined) => void;
+    export type FieldChangesEventHandler<Modifier> = (this: void, changedFieldIds: readonly FieldId[], changer: Modifier | undefined) => void;
     export type GetOrWaitForScanEventer = (this: void, scanId: string) => Promise<Scan>; // returns ScanId
     export type ErrorEventer = (this: void, errorText: string) => void;
 
-    export interface Modifier {
-        readonly typeName: string;
-        readonly typeInstanceId: string;
-    }
+    // export interface Modifier {
+    //     readonly typeName: string;
+    //     readonly typeInstanceId: string;
+    // }
 
     export const enum FieldId {
         Id,

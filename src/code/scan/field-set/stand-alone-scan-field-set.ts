@@ -50,7 +50,7 @@ export class StandAloneScanFieldSet implements ScanFieldSet {
     readonly conditionFactory = new StandAloneScanFieldSet.ConditionFactory();
     readonly valid = true;
 
-    readonly fields = new ComparableList<ScanField>();
+    readonly fields = new ComparableList<ScanField<void>>();
 
     private _loadError: ScanFieldSetLoadError | undefined;
 
@@ -561,16 +561,7 @@ export class StandAloneScanFieldSet implements ScanFieldSet {
     }
 
     private cloneIsScanFieldCondition(condition: IsScanFieldCondition): IsScanFieldCondition {
-        const operands = condition.operands;
-        const categoryId = operands.categoryId;
-        return {
-            typeId: ScanFieldCondition.TypeId.Is,
-            operatorId: condition.operatorId,
-            operands: {
-                typeId: ScanFieldCondition.Operands.TypeId.CategoryValue,
-                categoryId,
-            }
-        };
+        return condition;
     }
 
     private cloneBaseNumericScanFieldConditionOperands(operands: BaseNumericScanFieldCondition.Operands): BaseNumericScanFieldCondition.Operands {
@@ -1214,16 +1205,7 @@ export namespace StandAloneScanFieldSet {
             operatorId: IsScanFieldCondition.Operands.OperatorId,
             categoryId: ScanFormula.IsNode.CategoryId,
         ): Result<IsScanFieldCondition> {
-            const condition: IsScanFieldCondition = {
-                typeId: ScanFieldCondition.TypeId.Is,
-                operatorId,
-                operands: {
-                    typeId: ScanFieldCondition.Operands.TypeId.CategoryValue,
-                    categoryId,
-                }
-            }
-
-            return new Ok(condition);
+            throw new Error();
         }
     }
 }

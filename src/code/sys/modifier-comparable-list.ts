@@ -6,12 +6,11 @@
 
 import { BadnessComparableList } from './badness-comparable-list';
 import { MultiEvent } from './multi-event';
-import { RecordList } from './record-list';
 import { Integer } from './types';
 import { UsableListChangeTypeId } from './usable-list-change-type';
 import { CompareFtn } from './utils-search';
 
-export class ModifierComparableList<out T extends U, Modifier = void, in U = T> extends BadnessComparableList<T, U> implements RecordList<T> {
+export class ModifierComparableList<out T extends U, Modifier = void, in U = T> extends BadnessComparableList<T, U> {
     private _modifierListChangeMultiEvent = new MultiEvent<ModifierComparableList.ListChangeEventHandler<Modifier>>();
     private _afterListChangedMultiEvent = new MultiEvent<ModifierComparableList.AfterListChangedEventHandler<Modifier>>();
     private _modifier: Modifier;

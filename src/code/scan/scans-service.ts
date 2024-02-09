@@ -18,7 +18,7 @@ import {
 import { ScanConditionSet } from './condition-set/internal-api';
 import { ScanFieldSet } from './field-set/internal-api';
 import { Scan } from './scan';
-import { ScanEditor } from './scan-editor';
+import { OpenableScanEditor, ScanEditor } from './scan-editor';
 import { ScanList } from './scan-list';
 
 /** @public */
@@ -27,7 +27,7 @@ export class ScansService {
 
     private _scanWaiters = new Array<ScansService.ScanWaiter>();
 
-    private _openedScanEditors = new Map<Scan, ScanEditor>();
+    private _openedScanEditors = new Map<Scan, OpenableScanEditor>();
 
     private _scanListChangeSubscriptionId: MultiEvent.SubscriptionId;
 
@@ -51,13 +51,13 @@ export class ScansService {
         this.scanList.finalise();
     }
 
-    openNewScanEditor(
+    openNewScanEditor<Modifier = void>(
         opener: LockOpenListItem.Opener,
         emptyScanFieldSet?: ScanFieldSet,
         emptyScanConditionSet?: ScanConditionSet,
         errorEventer?: ScanEditor.ErrorEventer,
-    ): ScanEditor {
-        return new ScanEditor(
+    ): ScanEditor<Modifier> {
+        return new ScanEditor<Modifier>(
             this._adiService,
             this._symbolsService,
             undefined,
@@ -69,13 +69,13 @@ export class ScansService {
         );
     }
 
-    async tryOpenScanEditor(
+    async tryOpenScanEditor<Modifier = void>(
         scanId: string | undefined,
         opener: LockOpenListItem.Opener,
         newScanFieldSetCallback?: (this: void) => ScanFieldSet | undefined,
         newScanConditionSetCallback?: (this: void) => ScanConditionSet | undefined,
         errorEventer?: ScanEditor.ErrorEventer,
-    ): Promise<Result<ScanEditor | undefined>> {
+    ): Promise<Result<ScanEditor<Modifier> | undefined>> {
         if (scanId === undefined) {
             const emptyScanFieldSet = newScanFieldSetCallback === undefined ? undefined : newScanFieldSetCallback();
             const emptyScanConditionSet = newScanConditionSetCallback === undefined ? undefined : newScanConditionSetCallback();
@@ -94,7 +94,7 @@ export class ScansService {
                     if (openedEditor === undefined) {
                         const emptyScanFieldSet = newScanFieldSetCallback === undefined ? undefined : newScanFieldSetCallback();
                         const emptyScanConditionSet = newScanConditionSetCallback === undefined ? undefined : newScanConditionSetCallback();
-                        openedEditor = new ScanEditor(
+                        openedEditor = new ScanEditor<Modifier>(
                             this._adiService,
                             this._symbolsService,
                             scan,
@@ -107,13 +107,13 @@ export class ScansService {
                         this._openedScanEditors.set(scan, openedEditor);
                     }
                     openedEditor.addOpener(opener);
-                    return new Ok(openedEditor);
+                    return new Ok(openedEditor as ScanEditor<Modifier>);
                 }
             }
         }
     }
 
-    closeScanEditor(scanEditor: ScanEditor, opener: LockOpenListItem.Opener) {
+    closeScanEditor<Modifier = void>(scanEditor: ScanEditor<Modifier>, opener: LockOpenListItem.Opener) {
         const scan = scanEditor.scan;
         if (scan !== undefined) {
             scanEditor.removeOpener(opener);
