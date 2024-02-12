@@ -19,28 +19,30 @@ import { AllowedGridField, GridField, GridFieldCustomHeadingsService } from '../
 import { GridLayoutDefinition } from '../../../layout/grid-layout-internal-api';
 import {
     TableFieldSourceDefinition,
-    TableFieldSourceDefinitionRegistryService
+    TableFieldSourceDefinitionCachedFactoryService
 } from "../../field-source/grid-table-field-source-internal-api";
 
 export abstract class TableRecordSourceDefinition {
     constructor(
         private readonly _customHeadingsService: GridFieldCustomHeadingsService,
-        readonly fieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
+        readonly tableFieldSourceDefinitionCachedFactoryService: TableFieldSourceDefinitionCachedFactoryService,
         readonly typeId: TableRecordSourceDefinition.TypeId,
         readonly allowedFieldSourceDefinitionTypeIds: TableFieldSourceDefinition.TypeId[],
     ) {
     }
 
     createAllowedFields(): readonly AllowedGridField[] {
+        const tableFieldSourceDefinitionCachedFactoryService = this.tableFieldSourceDefinitionCachedFactoryService;
+        const customHeadingsService = this._customHeadingsService;
         let result: AllowedGridField[] = [];
         for (const allowedFieldSourceDefinitionTypeId of this.allowedFieldSourceDefinitionTypeIds) {
-            const fieldSourceDefinition = this.fieldSourceDefinitionRegistryService.get(allowedFieldSourceDefinitionTypeId);
+            const fieldSourceDefinition = tableFieldSourceDefinitionCachedFactoryService.get(allowedFieldSourceDefinitionTypeId);
             const fieldCount = fieldSourceDefinition.fieldCount;
             const fieldDefinitions = fieldSourceDefinition.fieldDefinitions;
             const sourceAllowedFields = new Array<AllowedGridField>(fieldCount);
             for (let i = 0; i < fieldCount; i++) {
                 const fieldDefinition = fieldDefinitions[i];
-                const heading = GridField.generateHeading(this._customHeadingsService, fieldDefinition);
+                const heading = GridField.generateHeading(customHeadingsService, fieldDefinition);
 
                 sourceAllowedFields[i] = new AllowedGridField(
                     fieldDefinition,
@@ -51,6 +53,21 @@ export abstract class TableRecordSourceDefinition {
         }
         return result;
     }
+
+    // createLayoutDefinition(fieldIds: TableFieldSourceDefinition.FieldId[]): GridLayoutDefinition {
+    //     const fieldSourceDefinitionRegistryService = this.fieldSourceDefinitionRegistryService;
+    //     const count = fieldIds.length;
+    //     const fieldNames = new Array<string>(count);
+    //     for (let i = 0; i < count; i++) {
+    //         const fieldId = fieldIds[i];
+    //         const fieldSourceDefinition = fieldSourceDefinitionRegistryService.get(fieldId.sourceTypeId);
+    //         const fieldName = fieldSourceDefinition.getFieldNameById(fieldId.id);
+    //         fieldNames[i] = fieldName;
+    //     }
+
+    //     return GridLayoutDefinition.createFromFieldNames(fieldNames);
+    // }
+
 
     saveToJson(element: JsonElement) { // virtual;
         element.setString(TableRecordSourceDefinition.jsonTag_TypeId, TableRecordSourceDefinition.Type.idToJson(this.typeId));
@@ -91,6 +108,7 @@ export namespace TableRecordSourceDefinition {
         // eslint-disable-next-line @typescript-eslint/no-shadow
         GridField,
         ScanTest,
+        ScanFieldEditorFrame,
     }
 
     export interface AddArrayResult {
@@ -261,10 +279,16 @@ export namespace TableRecordSourceDefinition {
                 display: StringId.TableRecordDefinitionList_ListTypeDisplay_ScanTest,
                 abbr: StringId.TableRecordDefinitionList_ListTypeAbbr_ScanTest
             },
+            ScanFieldEditorFrame: {
+                id: TableRecordSourceDefinition.TypeId.ScanFieldEditorFrame,
+                name: 'ScanFieldEditorFrame',
+                display: StringId.TableRecordDefinitionList_ListTypeDisplay_ScanFieldEditorFrame,
+                abbr: StringId.TableRecordDefinitionList_ListTypeAbbr_ScanFieldEditorFrame
+            },
         };
 
         const infos = Object.values(infoObjects);
-        export const count = infos.length;
+        export const idCount = infos.length;
 
         export function idToName(id: Id): string {
             return infos[id].name;

@@ -1182,7 +1182,7 @@ export namespace ScanFormula {
 
         export function initialise() {
             for (let id = 0; id < idCount; id++) {
-                if (id as FieldId !== infosObject[id].id) {
+                if (id as FieldId !== infos[id].id) {
                     throw new EnumInfoOutOfOrderError('ScanCriteria.Field', id, `${id}`);
                 }
             }

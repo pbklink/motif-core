@@ -24,6 +24,7 @@ export * from './ranked-lit-ivem-id-table-field-source-definition';
 export * from './scan-table-field-source-definition';
 export * from './security-data-item-table-field-source-definition';
 export * from './table-field-source-definition';
+export * from './table-field-source-definition-factory';
 export * from './table-field-source-definition-registry-service';
 export * from './table-field-source-definition-static-initialise';
 export * from './top-shareholder-table-field-source-definition';

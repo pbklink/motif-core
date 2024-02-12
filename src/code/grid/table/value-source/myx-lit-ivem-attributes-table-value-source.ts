@@ -6,7 +6,7 @@
 
 import { MyxLitIvemAttributes, SearchSymbolsLitIvemFullDetail, SymbolsDataItem } from '../../../adi/adi-internal-api';
 import { Integer, MultiEvent, UnreachableCaseError } from '../../../sys/sys-internal-api';
-import { MyxLitIvemAttributesTableFieldSourceDefinition } from '../field-source/definition/grid-table-field-source-definition-internal-api';
+import { MyxLitIvemAttributesTableFieldSourceDefinition } from '../field-source/definition/internal-api';
 import {
     CorrectnessTableValue,
     DeliveryBasisIdMyxLitIvemAttributeCorrectnessTableValue,

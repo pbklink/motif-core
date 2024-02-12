@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { TableFieldSourceDefinitionStaticInitialise } from './definition/grid-table-field-source-definition-internal-api';
+import { TableFieldSourceDefinitionStaticInitialise } from './definition/internal-api';
 
 /** @internal */
 export namespace TableFieldSourceStaticInitialise {

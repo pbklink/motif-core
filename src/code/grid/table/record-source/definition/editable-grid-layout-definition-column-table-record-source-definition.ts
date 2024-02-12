@@ -7,7 +7,7 @@
 import { PickEnum } from '../../../../sys/sys-internal-api';
 import { GridFieldCustomHeadingsService } from '../../../field/grid-field-internal-api';
 import { GridLayoutDefinition } from '../../../layout/grid-layout-internal-api';
-import { TableFieldSourceDefinition, TableFieldSourceDefinitionRegistryService } from '../../field-source/grid-table-field-source-internal-api';
+import { TableFieldSourceDefinition, TableFieldSourceDefinitionCachedFactoryService } from '../../field-source/grid-table-field-source-internal-api';
 import { EditableGridLayoutDefinitionColumn } from '../../record-definition/grid-table-record-definition-internal-api';
 import { EditableGridLayoutDefinitionColumnList } from './editable-grid-layout-definition-column-list';
 import { TableRecordSourceDefinition } from './table-record-source-definition';
@@ -16,12 +16,12 @@ import { TableRecordSourceDefinition } from './table-record-source-definition';
 export class EditableGridLayoutDefinitionColumnTableRecordSourceDefinition extends TableRecordSourceDefinition {
     constructor(
         customHeadingsService: GridFieldCustomHeadingsService,
-        tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
+        tableFieldSourceDefinitionCachedFactoryService: TableFieldSourceDefinitionCachedFactoryService,
         readonly list: EditableGridLayoutDefinitionColumnList,
     ) {
         super(
             customHeadingsService,
-            tableFieldSourceDefinitionRegistryService,
+            tableFieldSourceDefinitionCachedFactoryService,
             TableRecordSourceDefinition.TypeId.EditableGridLayoutDefinitionColumn,
             EditableGridLayoutDefinitionColumnTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
         );
@@ -30,7 +30,7 @@ export class EditableGridLayoutDefinitionColumnTableRecordSourceDefinition exten
     // no override for saveToJson()
 
     override createDefaultLayoutDefinition() {
-        const fieldSourceDefinition = this.fieldSourceDefinitionRegistryService.editableGridLayoutDefinitionColumn;
+        const fieldSourceDefinition = this.tableFieldSourceDefinitionCachedFactoryService.editableGridLayoutDefinitionColumn;
 
         const fieldNames = new Array<string>();
 

@@ -171,4 +171,30 @@ export namespace TableFieldSourceDefinition {
         sourceTypeId: TypeId;
         id: number;
     }
+
+    export function decodeCommaTextFieldName(value: string): Result<FieldName> {
+        const commaTextResult = CommaText.tryToStringArray(value, true);
+        if (commaTextResult.isErr()) {
+            return commaTextResult.createOuter(commaTextResult.error);
+        } else {
+            const strArray = commaTextResult.value;
+            if (strArray.length !== 2) {
+                return new Err(ErrorCode.TableFieldSourceDefinition_DecodeCommaTextFieldNameNot2Elements);
+            } else {
+                const sourceName = strArray[0];
+                const sourceId = Type.tryNameToId(sourceName);
+                if (sourceId === undefined) {
+                    return new Err(ErrorCode.TableFieldSourceDefinition_DecodeCommaTextFieldNameUnknownSourceId);
+                } else {
+                    const decodedFieldName: FieldName = {
+                        sourceTypeId: sourceId,
+                        sourcelessName: strArray[1],
+                    }
+
+                    return new Ok(decodedFieldName);
+                }
+            }
+        }
+    }
+
 }

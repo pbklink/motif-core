@@ -6,7 +6,7 @@
 
 import { Order } from '../../../adi/adi-internal-api';
 import { Integer, MultiEvent, UnreachableCaseError } from '../../../sys/sys-internal-api';
-import { OrderTableFieldSourceDefinition } from '../field-source/definition/grid-table-field-source-definition-internal-api';
+import { OrderTableFieldSourceDefinition } from '../field-source/definition/internal-api';
 import {
     BooleanCorrectnessTableValue,
     CorrectnessTableValue,

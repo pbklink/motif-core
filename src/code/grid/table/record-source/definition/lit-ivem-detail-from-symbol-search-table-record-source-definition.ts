@@ -14,7 +14,7 @@ import {
     LitIvemExtendedDetailTableFieldSourceDefinition,
     MyxLitIvemAttributesTableFieldSourceDefinition,
     TableFieldSourceDefinition,
-    TableFieldSourceDefinitionRegistryService
+    TableFieldSourceDefinitionCachedFactoryService
 } from '../../field-source/grid-table-field-source-internal-api';
 import { TableRecordSourceDefinition } from './table-record-source-definition';
 
@@ -24,12 +24,12 @@ export class LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition extends T
 
     constructor(
         customHeadingsService: GridFieldCustomHeadingsService,
-        tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
+        tableFieldSourceDefinitionCachedFactoryService: TableFieldSourceDefinitionCachedFactoryService,
         readonly dataDefinition: SearchSymbolsDataDefinition
     ) {
         super(
             customHeadingsService,
-            tableFieldSourceDefinitionRegistryService,
+            tableFieldSourceDefinitionCachedFactoryService,
             TableRecordSourceDefinition.TypeId.LitIvemDetailsFromSearchSymbols,
             LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
         );
@@ -134,7 +134,7 @@ export class LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition extends T
     }
 
     private addLitIvemBaseDetailToDefaultGridLayout(fieldNames: string[]) {
-        const fieldSourceDefinition = this.fieldSourceDefinitionRegistryService.litIvemBaseDetail;
+        const fieldSourceDefinition = this.tableFieldSourceDefinitionCachedFactoryService.litIvemBaseDetail;
 
         fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(LitIvemBaseDetail.Field.Id.Id));
         fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(LitIvemBaseDetail.Field.Id.Name));
@@ -145,7 +145,7 @@ export class LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition extends T
     }
 
     private addLitIvemExtendedDetailFieldDefinitionSource(fieldNames: string[]) {
-        const fieldSourceDefinition = this.fieldSourceDefinitionRegistryService.litIvemExtendedDetail;
+        const fieldSourceDefinition = this.tableFieldSourceDefinitionCachedFactoryService.litIvemExtendedDetail;
 
         fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(SearchSymbolsLitIvemFullDetail.ExtendedField.Id.IsIndex));
         fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(SearchSymbolsLitIvemFullDetail.ExtendedField.Id.Categories));
@@ -158,7 +158,7 @@ export class LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition extends T
     }
 
     private addMyxLitIvemAttributesFieldDefinitionSource(fieldNames: string[]) {
-        const fieldSourceDefinition = this.fieldSourceDefinitionRegistryService.myxLitIvemAttributes;
+        const fieldSourceDefinition = this.tableFieldSourceDefinitionCachedFactoryService.myxLitIvemAttributes;
 
         fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(MyxLitIvemAttributes.Field.Id.MarketClassification));
         fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(MyxLitIvemAttributes.Field.Id.Category));
@@ -167,7 +167,7 @@ export class LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition extends T
     }
 
     private addLitIvemAlternateCodesFieldDefinitionSource(fieldNames: string[]) {
-        const fieldSourceDefinition = this.fieldSourceDefinitionRegistryService.litIvemAlternateCodes;
+        const fieldSourceDefinition = this.tableFieldSourceDefinitionCachedFactoryService.litIvemAlternateCodes;
 
         fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(LitIvemAlternateCodes.Field.Id.Ticker));
         fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(LitIvemAlternateCodes.Field.Id.Isin));
@@ -219,7 +219,7 @@ export namespace LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition {
     }
 
     export function createLayoutDefinition(
-        fieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
+        fieldSourceDefinitionRegistryService: TableFieldSourceDefinitionCachedFactoryService,
         fieldIds: FieldId[],
     ): GridLayoutDefinition {
         return fieldSourceDefinitionRegistryService.createLayoutDefinition(fieldIds);

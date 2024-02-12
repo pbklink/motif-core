@@ -9,26 +9,26 @@ import { RankedLitIvemIdListDirectoryItem } from '../../../../services/services-
 import { PickEnum } from '../../../../sys/sys-internal-api';
 import { GridFieldCustomHeadingsService } from '../../../field/grid-field-internal-api';
 import { GridLayoutDefinition } from '../../../layout/grid-layout-internal-api';
-import { TableFieldSourceDefinition, TableFieldSourceDefinitionRegistryService } from '../../field-source/grid-table-field-source-internal-api';
+import { TableFieldSourceDefinition, TableFieldSourceDefinitionCachedFactoryService } from '../../field-source/grid-table-field-source-internal-api';
 import { TableRecordSourceDefinition } from './table-record-source-definition';
 
 /** @public */
 export class RankedLitIvemIdListDirectoryItemTableRecordSourceDefinition extends TableRecordSourceDefinition {
     constructor(
         customHeadingsService: GridFieldCustomHeadingsService,
-        tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
+        tableFieldSourceDefinitionCachedFactoryService: TableFieldSourceDefinitionCachedFactoryService,
         readonly listDirectory: RankedLitIvemIdListDirectory,
     ) {
         super(
             customHeadingsService,
-            tableFieldSourceDefinitionRegistryService,
+            tableFieldSourceDefinitionCachedFactoryService,
             TableRecordSourceDefinition.TypeId.RankedLitIvemIdListDirectoryItem,
             RankedLitIvemIdListDirectoryItemTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
         );
     }
 
     override createDefaultLayoutDefinition() {
-        const rankedLitIvemIdListDirectoryItemFieldSourceDefinition = this.fieldSourceDefinitionRegistryService.rankedLitIvemIdListDirectoryItem;
+        const rankedLitIvemIdListDirectoryItemFieldSourceDefinition = this.tableFieldSourceDefinitionCachedFactoryService.rankedLitIvemIdListDirectoryItem;
 
         const fieldNames = new Array<string>();
 

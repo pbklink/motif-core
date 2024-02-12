@@ -6,7 +6,7 @@
 
 import { TopShareholder, TopShareholdersDataItem } from '../../../adi/adi-internal-api';
 import { Integer, UnreachableCaseError } from '../../../sys/sys-internal-api';
-import { TopShareholderTableFieldSourceDefinition } from '../field-source/definition/grid-table-field-source-definition-internal-api';
+import { TopShareholderTableFieldSourceDefinition } from '../field-source/definition/internal-api';
 import {
     CorrectnessTableValue,
     IntegerCorrectnessTableValue,

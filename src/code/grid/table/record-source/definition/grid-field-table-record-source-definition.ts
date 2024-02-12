@@ -7,19 +7,19 @@
 import { PickEnum } from '../../../../sys/sys-internal-api';
 import { GridField, GridFieldCustomHeadingsService } from '../../../field/grid-field-internal-api';
 import { GridLayoutDefinition } from '../../../layout/grid-layout-internal-api';
-import { TableFieldSourceDefinition, TableFieldSourceDefinitionRegistryService } from '../../field-source/grid-table-field-source-internal-api';
+import { TableFieldSourceDefinition, TableFieldSourceDefinitionCachedFactoryService } from '../../field-source/grid-table-field-source-internal-api';
 import { TableRecordSourceDefinition } from './table-record-source-definition';
 
 /** @public */
 export class GridFieldTableRecordSourceDefinition extends TableRecordSourceDefinition {
     constructor(
         customHeadingsService: GridFieldCustomHeadingsService,
-        tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
+        tableFieldSourceDefinitionCachedFactoryService: TableFieldSourceDefinitionCachedFactoryService,
         private readonly _gridFieldArray: GridField[],
     ) {
         super(
             customHeadingsService,
-            tableFieldSourceDefinitionRegistryService,
+            tableFieldSourceDefinitionCachedFactoryService,
             TableRecordSourceDefinition.TypeId.GridField,
             GridFieldTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
         );
@@ -28,7 +28,7 @@ export class GridFieldTableRecordSourceDefinition extends TableRecordSourceDefin
     get gridFieldArray() { return this._gridFieldArray; }
 
     override createDefaultLayoutDefinition() {
-        const gridFieldFieldSourceDefinition = this.fieldSourceDefinitionRegistryService.gridField;
+        const gridFieldFieldSourceDefinition = this.tableFieldSourceDefinitionCachedFactoryService.gridField;
 
         const fieldNames = new Array<string>();
 

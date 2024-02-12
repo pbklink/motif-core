@@ -19,7 +19,7 @@ import { Integer, LockOpenListItem, UnreachableCaseError } from '../../../sys/sy
 import { TextFormatterService } from '../../../text-format/text-format-internal-api';
 import {
     TableFieldSourceDefinition
-} from '../field-source/definition/grid-table-field-source-definition-internal-api';
+} from '../field-source/definition/internal-api';
 import { HoldingTableRecordDefinition, TableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
 import { TableRecord } from '../record/grid-table-record-internal-api';
 import { BrokerageAccountTableValueSource, HoldingTableValueSource, SecurityDataItemTableValueSource } from '../value-source/internal-api';

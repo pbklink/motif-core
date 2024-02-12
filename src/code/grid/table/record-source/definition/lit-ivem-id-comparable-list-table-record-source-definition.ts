@@ -13,7 +13,7 @@ import {
     LitIvemIdTableFieldSourceDefinition,
     SecurityDataItemTableFieldSourceDefinition,
     TableFieldSourceDefinition,
-    TableFieldSourceDefinitionRegistryService
+    TableFieldSourceDefinitionCachedFactoryService
 } from "../../field-source/grid-table-field-source-internal-api";
 import { BadnessListTableRecordSourceDefinition } from './badness-list-table-record-source-definition';
 import { TableRecordSourceDefinition } from './table-record-source-definition';
@@ -24,12 +24,12 @@ export class LitIvemIdComparableListTableRecordSourceDefinition extends BadnessL
 
     constructor(
         customHeadingsService: GridFieldCustomHeadingsService,
-        tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
+        tableFieldSourceDefinitionCachedFactoryService: TableFieldSourceDefinitionCachedFactoryService,
         list: UiComparableList<LitIvemId>,
     ) {
         super(
             customHeadingsService,
-            tableFieldSourceDefinitionRegistryService,
+            tableFieldSourceDefinitionCachedFactoryService,
             TableRecordSourceDefinition.TypeId.LitIvemIdComparableList,
             LitIvemIdComparableListTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
             list,
@@ -43,7 +43,7 @@ export class LitIvemIdComparableListTableRecordSourceDefinition extends BadnessL
     }
 
     override createDefaultLayoutDefinition(): GridLayoutDefinition {
-        const litIvemIdFieldSourceDefinition = this.fieldSourceDefinitionRegistryService.litIvemId;
+        const litIvemIdFieldSourceDefinition = this.tableFieldSourceDefinitionCachedFactoryService.litIvemId;
 
         const fieldNames = new Array<string>();
 
@@ -108,7 +108,7 @@ export namespace LitIvemIdComparableListTableRecordSourceDefinition {
 
     export function tryCreateDefinition(
         customHeadingsService: GridFieldCustomHeadingsService,
-        tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
+        tableFieldSourceDefinitionCachedFactoryService: TableFieldSourceDefinitionCachedFactoryService,
         element: JsonElement,
     ): Result<LitIvemIdComparableListTableRecordSourceDefinition> {
         const listCreateResult = tryCreateListFromElement(element);
@@ -117,13 +117,13 @@ export namespace LitIvemIdComparableListTableRecordSourceDefinition {
             return listCreateResult.createOuter(errorCode);
         } else {
             const list = listCreateResult.value;
-            const definition = new LitIvemIdComparableListTableRecordSourceDefinition(customHeadingsService, tableFieldSourceDefinitionRegistryService, list);
+            const definition = new LitIvemIdComparableListTableRecordSourceDefinition(customHeadingsService, tableFieldSourceDefinitionCachedFactoryService, list);
             return new Ok(definition);
         }
     }
 
     export function createLayoutDefinition(
-        fieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
+        fieldSourceDefinitionRegistryService: TableFieldSourceDefinitionCachedFactoryService,
         fieldIds: FieldId[],
     ): GridLayoutDefinition {
         return fieldSourceDefinitionRegistryService.createLayoutDefinition(fieldIds);

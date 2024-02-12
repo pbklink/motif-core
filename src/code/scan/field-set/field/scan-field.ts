@@ -107,7 +107,7 @@ export namespace ScanField {
                 descriptionId: StringId.ScanField_BooleanOperationDescription_Any,
             },
             Xor: {
-                id: BooleanOperationId.And,
+                id: BooleanOperationId.Xor,
                 displayId: StringId.ScanField_BooleanOperationDisplay_Xor,
                 descriptionId: StringId.ScanField_BooleanOperationDescription_Xor,
             },

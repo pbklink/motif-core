@@ -6,7 +6,7 @@
 
 import { LitIvemId } from '../../../adi/adi-internal-api';
 import { Integer, UnreachableCaseError } from '../../../sys/sys-internal-api';
-import { LitIvemIdTableFieldSourceDefinition } from '../field-source/definition/grid-table-field-source-definition-internal-api';
+import { LitIvemIdTableFieldSourceDefinition } from '../field-source/definition/internal-api';
 import { DataEnvironmentIdTableValue, LitIvemIdTableValue, MarketIdTableValue, StringTableValue, TableValue } from '../value/grid-table-value-internal-api';
 import { TableValueSource } from './table-value-source';
 

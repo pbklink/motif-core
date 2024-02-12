@@ -427,6 +427,8 @@ export const enum StringId {
     TableRecordDefinitionList_ListTypeAbbr_GridField,
     TableRecordDefinitionList_ListTypeDisplay_ScanTest,
     TableRecordDefinitionList_ListTypeAbbr_ScanTest,
+    TableRecordDefinitionList_ListTypeDisplay_ScanFieldEditorFrame,
+    TableRecordDefinitionList_ListTypeAbbr_ScanFieldEditorFrame,
     ExchangeAbbreviatedDisplay_Asx,
     ExchangeFullDisplay_Asx,
     ExchangeAbbreviatedDisplay_Cxa,
@@ -2010,6 +2012,8 @@ export const enum StringId {
     ScanCriteriaTypeDisplay_PriceLessThanValue,
     ScanCriteriaTypeDisplay_TodayPriceIncreaseGreaterThanPercentage,
     ScanCriteriaTypeDisplay_TodayPriceDecreaseGreaterThanPercentage,
+    ScanCriteriaViewDisplay_FieldSet,
+    ScanCriteriaViewDescription_FieldSet,
     ScanCriteriaViewDisplay_ConditionSet,
     ScanCriteriaViewDescription_ConditionSet,
     ScanCriteriaViewDisplay_Zenith,
@@ -2240,6 +2244,11 @@ export const enum StringId {
     ConditionSetScanFormulaViewNgComponent_ConditionKindTitle_All,
     ConditionSetScanFormulaViewNgComponent_ConditionKindCaption_None,
     ConditionSetScanFormulaViewNgComponent_ConditionKindTitle_None,
+    CategoryValueScanFieldConditionOperandsCaption_Category,
+    CategoryValueScanFieldConditionOperandsTitle_Category,
+    CurrencyEnumScanFieldConditionOperandsCaption_Values,
+    CurrencyEnumScanFieldConditionOperandsTitle_Values,
+
 }
 
 /** @public */
@@ -4375,6 +4384,16 @@ export namespace I18nStrings {
         TableRecordDefinitionList_ListTypeAbbr_ScanTest: {
             id: StringId.TableRecordDefinitionList_ListTypeAbbr_ScanTest, translations: {
                 en: 'ST',
+            }
+        },
+        TableRecordDefinitionList_ListTypeDisplay_ScanFieldEditorFrame: {
+            id: StringId.TableRecordDefinitionList_ListTypeDisplay_ScanFieldEditorFrame, translations: {
+                en: 'Scan Field Editor Fame',
+            }
+        },
+        TableRecordDefinitionList_ListTypeAbbr_ScanFieldEditorFrame: {
+            id: StringId.TableRecordDefinitionList_ListTypeAbbr_ScanFieldEditorFrame, translations: {
+                en: 'SFEF',
             }
         },
         ExchangeAbbreviatedDisplay_Asx: {
@@ -12026,7 +12045,7 @@ export namespace I18nStrings {
             }
         },
         ScanFormulaZenithEncodingError_TextSubFieldIsMissing: {
-            id: StringId.ScanFormulaZenithEncodingError_DateFieldEqualsTargetIsNotString, translations: {
+            id: StringId.ScanFormulaZenithEncodingError_TextSubFieldIsMissing, translations: {
                 en: 'Text sub field is missing',
             }
         },
@@ -12296,9 +12315,19 @@ export namespace I18nStrings {
                 en: 'Today price decrease > percentage',
             }
         },
+        ScanCriteriaViewDisplay_FieldSet: {
+            id: StringId.ScanCriteriaViewDisplay_FieldSet, translations: {
+                en: 'Fields',
+            }
+        },
+        ScanCriteriaViewDescription_FieldSet: {
+            id: StringId.ScanCriteriaViewDescription_FieldSet, translations: {
+                en: 'View/edit scan criteria fields',
+            }
+        },
         ScanCriteriaViewDisplay_ConditionSet: {
             id: StringId.ScanCriteriaViewDisplay_ConditionSet, translations: {
-                en: 'Condition set',
+                en: 'Conditions',
             }
         },
         ScanCriteriaViewDescription_ConditionSet: {
@@ -13448,7 +13477,26 @@ export namespace I18nStrings {
                 en: 'No securities',
             }
         },
-
+        CategoryValueScanFieldConditionOperandsCaption_Category: {
+            id: StringId.CategoryValueScanFieldConditionOperandsCaption_Category, translations: {
+                en: 'Category',
+            }
+        },
+        CategoryValueScanFieldConditionOperandsTitle_Category: {
+            id: StringId.CategoryValueScanFieldConditionOperandsTitle_Category, translations: {
+                en: 'Specify a category in which security is included',
+            }
+        },
+        CurrencyEnumScanFieldConditionOperandsCaption_Values: {
+            id: StringId.CurrencyEnumScanFieldConditionOperandsCaption_Values, translations: {
+                en: 'Currencies',
+            }
+        },
+        CurrencyEnumScanFieldConditionOperandsTitle_Values: {
+            id: StringId.CurrencyEnumScanFieldConditionOperandsTitle_Values, translations: {
+                en: 'Specify one or more currencies',
+            }
+        },
     } as const;
 
     const recs: readonly Rec[] = Object.values(recsObject);

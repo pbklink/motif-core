@@ -8,7 +8,7 @@ import { Account, BrokerageAccountGroup, Holding } from '../../../../adi/adi-int
 import { PickEnum } from '../../../../sys/sys-internal-api';
 import { GridFieldCustomHeadingsService } from '../../../field/grid-field-internal-api';
 import { GridLayoutDefinition } from '../../../layout/grid-layout-internal-api';
-import { TableFieldSourceDefinition, TableFieldSourceDefinitionRegistryService } from '../../field-source/grid-table-field-source-internal-api';
+import { TableFieldSourceDefinition, TableFieldSourceDefinitionCachedFactoryService } from '../../field-source/grid-table-field-source-internal-api';
 import { BrokerageAccountGroupTableRecordSourceDefinition } from './brokerage-account-group-table-record-source-definition';
 import { TableRecordSourceDefinition } from './table-record-source-definition';
 
@@ -16,12 +16,12 @@ import { TableRecordSourceDefinition } from './table-record-source-definition';
 export class HoldingTableRecordSourceDefinition extends BrokerageAccountGroupTableRecordSourceDefinition {
     constructor(
         customHeadingsService: GridFieldCustomHeadingsService,
-        tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
+        tableFieldSourceDefinitionCachedFactoryService: TableFieldSourceDefinitionCachedFactoryService,
         brokerageAccountGroup: BrokerageAccountGroup
     ) {
         super(
             customHeadingsService,
-            tableFieldSourceDefinitionRegistryService,
+            tableFieldSourceDefinitionCachedFactoryService,
             TableRecordSourceDefinition.TypeId.Holding,
             HoldingTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
             brokerageAccountGroup
@@ -29,8 +29,8 @@ export class HoldingTableRecordSourceDefinition extends BrokerageAccountGroupTab
     }
 
     override createDefaultLayoutDefinition() {
-        const holdingsDataItemFieldSourceDefinition = this.fieldSourceDefinitionRegistryService.holdingsDataItem;
-        const brokerageAccountFieldSourceDefinition = this.fieldSourceDefinitionRegistryService.brokerageAccounts;
+        const holdingsDataItemFieldSourceDefinition = this.tableFieldSourceDefinitionCachedFactoryService.holdingsDataItem;
+        const brokerageAccountFieldSourceDefinition = this.tableFieldSourceDefinitionCachedFactoryService.brokerageAccounts;
 
         const fieldNames = new Array<string>();
 
