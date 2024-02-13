@@ -489,11 +489,11 @@ export const enum StringId {
     FeedDisplay_Market_MyxBuyIn,
     FeedDisplay_Market_Calastone,
     FeedDisplay_Market_AsxCxa,
-    FeedDisplay_Market_PtxNormal,
-    FeedDisplay_Market_FnsxNormal,
-    FeedDisplay_Market_FpsxNormal,
-    FeedDisplay_Market_CfxNormal,
-    FeedDisplay_Market_DaxNormal,
+    FeedDisplay_Market_PtxMain,
+    FeedDisplay_Market_FnsxMain,
+    FeedDisplay_Market_FpsxMain,
+    FeedDisplay_Market_CfxMain,
+    FeedDisplay_Market_DaxMain,
     FeedDisplay_News_Asx,
     FeedDisplay_News_Nsx,
     FeedDisplay_News_Nzx,
@@ -534,11 +534,11 @@ export const enum StringId {
     MarketDisplay_PtxDemo,
     MarketDisplay_AsxCxa,
     MarketDisplay_AsxCxaDemo,
-    MarketDisplay_PtxNormal,
-    MarketDisplay_FnsxNormal,
-    MarketDisplay_FpsxNormal,
-    MarketDisplay_CfxNormal,
-    MarketDisplay_DaxNormal,
+    MarketDisplay_PtxMain,
+    MarketDisplay_FnsxMain,
+    MarketDisplay_FpsxMain,
+    MarketDisplay_CfxMain,
+    MarketDisplay_DaxMain,
     IvemClass_Unknown,
     IvemClass_Market,
     IvemClass_ManagedFund,
@@ -603,11 +603,11 @@ export const enum StringId {
     MarketBoardIdDisplay_MyxIndex,
     MarketBoardIdDisplay_MyxBuyIn,
     MarketBoardIdDisplay_MyxOddLot,
-    MarketBoardIdDisplay_PtxNormal,
-    MarketBoardIdDisplay_FnsxNormal,
-    MarketBoardIdDisplay_FpsxNormal,
-    MarketBoardIdDisplay_CfxNormal,
-    MarketBoardIdDisplay_DaxNormal,
+    MarketBoardIdDisplay_PtxMain,
+    MarketBoardIdDisplay_FnsxMain,
+    MarketBoardIdDisplay_FpsxMain,
+    MarketBoardIdDisplay_CfxMain,
+    MarketBoardIdDisplay_DaxMain,
     CallOrPutDisplay_Call,
     CallOrPutDisplay_Put,
     PublisherSubscriptionDataTypeDisplay_Asset,
@@ -4701,29 +4701,29 @@ export namespace I18nStrings {
                 en: 'AsxCxa',
             }
         },
-        FeedDisplay_Market_PtxNormal: {
-            id: StringId.FeedDisplay_Market_PtxNormal, translations: {
-                en: 'PTX Normal',
+        FeedDisplay_Market_PtxMain: {
+            id: StringId.FeedDisplay_Market_PtxMain, translations: {
+                en: 'PTX Main',
             }
         },
-        FeedDisplay_Market_FnsxNormal: {
-            id: StringId.FeedDisplay_Market_FnsxNormal, translations: {
-                en: 'FNSX Normal',
+        FeedDisplay_Market_FnsxMain: {
+            id: StringId.FeedDisplay_Market_FnsxMain, translations: {
+                en: 'FNSX Main',
             }
         },
-        FeedDisplay_Market_FpsxNormal: {
-            id: StringId.FeedDisplay_Market_FpsxNormal, translations: {
-                en: 'FPSX Normal',
+        FeedDisplay_Market_FpsxMain: {
+            id: StringId.FeedDisplay_Market_FpsxMain, translations: {
+                en: 'FPSX Main',
             }
         },
-        FeedDisplay_Market_CfxNormal: {
-            id: StringId.FeedDisplay_Market_CfxNormal, translations: {
-                en: 'CFX Normal',
+        FeedDisplay_Market_CfxMain: {
+            id: StringId.FeedDisplay_Market_CfxMain, translations: {
+                en: 'CFX Main',
             }
         },
-        FeedDisplay_Market_DaxNormal: {
-            id: StringId.FeedDisplay_Market_DaxNormal, translations: {
-                en: 'DAX Normal',
+        FeedDisplay_Market_DaxMain: {
+            id: StringId.FeedDisplay_Market_DaxMain, translations: {
+                en: 'DAX Main',
             }
         },
         FeedDisplay_News_Asx: {
@@ -4926,29 +4926,29 @@ export namespace I18nStrings {
                 en: 'AsxCxaDemo',
             }
         },
-        MarketDisplay_PtxNormal: {
-            id: StringId.MarketDisplay_PtxNormal, translations: {
-                en: 'PTX Normal',
+        MarketDisplay_PtxMain: {
+            id: StringId.MarketDisplay_PtxMain, translations: {
+                en: 'PTX Main',
             }
         },
-        MarketDisplay_FnsxNormal: {
-            id: StringId.MarketDisplay_FnsxNormal, translations: {
-                en: 'FNSX Normal',
+        MarketDisplay_FnsxMain: {
+            id: StringId.MarketDisplay_FnsxMain, translations: {
+                en: 'FNSX Main',
             }
         },
-        MarketDisplay_FpsxNormal: {
-            id: StringId.MarketDisplay_FpsxNormal, translations: {
-                en: 'FPSX Normal',
+        MarketDisplay_FpsxMain: {
+            id: StringId.MarketDisplay_FpsxMain, translations: {
+                en: 'FPSX Main',
             }
         },
-        MarketDisplay_CfxNormal: {
-            id: StringId.MarketDisplay_CfxNormal, translations: {
-                en: 'CFX Normal',
+        MarketDisplay_CfxMain: {
+            id: StringId.MarketDisplay_CfxMain, translations: {
+                en: 'CFX Main',
             }
         },
-        MarketDisplay_DaxNormal: {
-            id: StringId.MarketDisplay_DaxNormal, translations: {
-                en: 'DAX Normal',
+        MarketDisplay_DaxMain: {
+            id: StringId.MarketDisplay_DaxMain, translations: {
+                en: 'DAX Main',
             }
         },
         IvemClass_Unknown: {
@@ -5271,29 +5271,29 @@ export namespace I18nStrings {
                 en: 'MYX Odd Lot',
             }
         },
-        MarketBoardIdDisplay_PtxNormal: {
-            id: StringId.MarketBoardIdDisplay_PtxNormal, translations: {
-                en: 'PTX Normal',
+        MarketBoardIdDisplay_PtxMain: {
+            id: StringId.MarketBoardIdDisplay_PtxMain, translations: {
+                en: 'PTX Main',
             }
         },
-        MarketBoardIdDisplay_FnsxNormal: {
-            id: StringId.MarketBoardIdDisplay_FnsxNormal, translations: {
-                en: 'FNSX Normal',
+        MarketBoardIdDisplay_FnsxMain: {
+            id: StringId.MarketBoardIdDisplay_FnsxMain, translations: {
+                en: 'FNSX Main',
             }
         },
-        MarketBoardIdDisplay_FpsxNormal: {
-            id: StringId.MarketBoardIdDisplay_FpsxNormal, translations: {
-                en: 'FPSX Normal',
+        MarketBoardIdDisplay_FpsxMain: {
+            id: StringId.MarketBoardIdDisplay_FpsxMain, translations: {
+                en: 'FPSX Main',
             }
         },
-        MarketBoardIdDisplay_CfxNormal: {
-            id: StringId.MarketBoardIdDisplay_CfxNormal, translations: {
-                en: 'CFX Normal',
+        MarketBoardIdDisplay_CfxMain: {
+            id: StringId.MarketBoardIdDisplay_CfxMain, translations: {
+                en: 'CFX Main',
             }
         },
-        MarketBoardIdDisplay_DaxNormal: {
-            id: StringId.MarketBoardIdDisplay_DaxNormal, translations: {
-                en: 'DAX Normal',
+        MarketBoardIdDisplay_DaxMain: {
+            id: StringId.MarketBoardIdDisplay_DaxMain, translations: {
+                en: 'DAX Main',
             }
         },
         CallOrPutDisplay_Call: {

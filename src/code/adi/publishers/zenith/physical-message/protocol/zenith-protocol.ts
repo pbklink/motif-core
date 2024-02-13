@@ -1185,11 +1185,11 @@ export namespace ZenithProtocol {
         MyxNormalMarket = 'NM',
         MyxDirectBusinessTransactionMarket = 'DB',
         MyxIndexMarket = 'IN',
-        PtxNormalMarket = 'PTX',
-        FnsxNormalMarket = 'FNSX',
-        FpsxNormalMarket = 'FPSX',
-        CfxNormalMarket = 'CFMX',
-        DaxNormalMarket = 'DAXM',
+        PtxMainMarket = 'PTX',
+        FnsxMainMarket = 'FNSX',
+        FpsxMainMarket = 'FPSX',
+        CfxMainMarket = 'CFMX',
+        DaxMainMarket = 'DAXM',
     }
 
     export const enum Side {

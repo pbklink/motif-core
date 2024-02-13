@@ -10001,7 +10001,7 @@ export const enum FeedId {
     // (undocumented)
     Market_Calastone = 28,
     // (undocumented)
-    Market_CfxNormal = 33,
+    Market_CfxMain = 33,
     // (undocumented)
     Market_ChixAustFarPoint = 14,
     // (undocumented)
@@ -10013,11 +10013,11 @@ export const enum FeedId {
     // (undocumented)
     Market_ChixAustNearPoint = 16,
     // (undocumented)
-    Market_DaxNormal = 34,
+    Market_DaxMain = 34,
     // (undocumented)
-    Market_FnsxNormal = 31,
+    Market_FnsxMain = 31,
     // (undocumented)
-    Market_FpsxNormal = 32,
+    Market_FpsxMain = 32,
     // (undocumented)
     Market_MyxBuyIn = 27,
     // (undocumented)
@@ -10035,7 +10035,7 @@ export const enum FeedId {
     // (undocumented)
     Market_Nzx = 22,
     // (undocumented)
-    Market_PtxNormal = 30,
+    Market_PtxMain = 30,
     // (undocumented)
     Market_SimVenture = 18,
     // (undocumented)
@@ -16475,7 +16475,7 @@ export const enum MarketBoardId {
     // (undocumented)
     AsxVolumeMatch = 26,
     // (undocumented)
-    CfxNormal = 65,
+    CfxMain = 65,
     // (undocumented)
     ChixAustFarPoint = 27,
     // (undocumented)
@@ -16487,11 +16487,11 @@ export const enum MarketBoardId {
     // (undocumented)
     ChixAustNearPoint = 31,
     // (undocumented)
-    DaxNormal = 66,
+    DaxMain = 66,
     // (undocumented)
-    FnsxNormal = 63,
+    FnsxMain = 63,
     // (undocumented)
-    FpsxNormal = 64,
+    FpsxMain = 64,
     // (undocumented)
     MyxBuyInMarket = 60,
     // (undocumented)
@@ -16547,7 +16547,7 @@ export const enum MarketBoardId {
     // (undocumented)
     NzxSpec = 44,
     // (undocumented)
-    PtxNormal = 62,
+    PtxMain = 62,
     // (undocumented)
     SimVenture = 40,
     // (undocumented)
@@ -16660,7 +16660,7 @@ export const enum MarketId {
     // (undocumented)
     Calastone = 19,
     // (undocumented)
-    CfxNormal = 24,
+    CfxMain = 24,
     // (undocumented)
     ChixAustFarPoint = 6,
     // (undocumented)
@@ -16672,11 +16672,11 @@ export const enum MarketId {
     // (undocumented)
     ChixAustNearPoint = 8,
     // (undocumented)
-    DaxNormal = 25,
+    DaxMain = 25,
     // (undocumented)
-    FnsxNormal = 22,
+    FnsxMain = 22,
     // (undocumented)
-    FpsxNormal = 23,
+    FpsxMain = 23,
     // (undocumented)
     MyxBuyIn = 18,
     // (undocumented)
@@ -16692,7 +16692,7 @@ export const enum MarketId {
     // (undocumented)
     Nzx = 13,
     // (undocumented)
-    PtxNormal = 21,
+    PtxMain = 21,
     // (undocumented)
     SimVenture = 10,
     // (undocumented)
@@ -30174,7 +30174,7 @@ export const enum StringId {
     // (undocumented)
     FeedDisplay_Market_Calastone = 480,
     // (undocumented)
-    FeedDisplay_Market_CfxNormal = 485,
+    FeedDisplay_Market_CfxMain = 485,
     // (undocumented)
     FeedDisplay_Market_ChixAustFarPoint = 466,
     // (undocumented)
@@ -30186,11 +30186,11 @@ export const enum StringId {
     // (undocumented)
     FeedDisplay_Market_ChixAustNearPoint = 468,
     // (undocumented)
-    FeedDisplay_Market_DaxNormal = 486,
+    FeedDisplay_Market_DaxMain = 486,
     // (undocumented)
-    FeedDisplay_Market_FnsxNormal = 483,
+    FeedDisplay_Market_FnsxMain = 483,
     // (undocumented)
-    FeedDisplay_Market_FpsxNormal = 484,
+    FeedDisplay_Market_FpsxMain = 484,
     // (undocumented)
     FeedDisplay_Market_MyxBuyIn = 479,
     // (undocumented)
@@ -30208,7 +30208,7 @@ export const enum StringId {
     // (undocumented)
     FeedDisplay_Market_Nzx = 474,
     // (undocumented)
-    FeedDisplay_Market_PtxNormal = 482,
+    FeedDisplay_Market_PtxMain = 482,
     // (undocumented)
     FeedDisplay_Market_SimVenture = 470,
     // (undocumented)
@@ -30624,7 +30624,7 @@ export const enum StringId {
     // (undocumented)
     MarketBoardIdDisplay_AsxVolumeMatch = 560,
     // (undocumented)
-    MarketBoardIdDisplay_CfxNormal = 599,
+    MarketBoardIdDisplay_CfxMain = 599,
     // (undocumented)
     MarketBoardIdDisplay_ChixAustFarPoint = 561,
     // (undocumented)
@@ -30636,11 +30636,11 @@ export const enum StringId {
     // (undocumented)
     MarketBoardIdDisplay_ChixAustNearPoint = 565,
     // (undocumented)
-    MarketBoardIdDisplay_DaxNormal = 600,
+    MarketBoardIdDisplay_DaxMain = 600,
     // (undocumented)
-    MarketBoardIdDisplay_FnsxNormal = 597,
+    MarketBoardIdDisplay_FnsxMain = 597,
     // (undocumented)
-    MarketBoardIdDisplay_FpsxNormal = 598,
+    MarketBoardIdDisplay_FpsxMain = 598,
     // (undocumented)
     MarketBoardIdDisplay_MixedMarket = 535,
     // (undocumented)
@@ -30698,7 +30698,7 @@ export const enum StringId {
     // (undocumented)
     MarketBoardIdDisplay_NzxSpec = 578,
     // (undocumented)
-    MarketBoardIdDisplay_PtxNormal = 596,
+    MarketBoardIdDisplay_PtxMain = 596,
     // (undocumented)
     MarketBoardIdDisplay_SimVenture = 574,
     // (undocumented)
@@ -30730,7 +30730,7 @@ export const enum StringId {
     // (undocumented)
     MarketDisplay_Calastone = 523,
     // (undocumented)
-    MarketDisplay_CfxNormal = 530,
+    MarketDisplay_CfxMain = 530,
     // (undocumented)
     MarketDisplay_ChixAustFarPoint = 512,
     // (undocumented)
@@ -30744,11 +30744,11 @@ export const enum StringId {
     // (undocumented)
     MarketDisplay_ChixAustNearPoint = 514,
     // (undocumented)
-    MarketDisplay_DaxNormal = 531,
+    MarketDisplay_DaxMain = 531,
     // (undocumented)
-    MarketDisplay_FnsxNormal = 528,
+    MarketDisplay_FnsxMain = 528,
     // (undocumented)
-    MarketDisplay_FpsxNormal = 529,
+    MarketDisplay_FpsxMain = 529,
     // (undocumented)
     MarketDisplay_MixedMarket = 496,
     // (undocumented)
@@ -30774,7 +30774,7 @@ export const enum StringId {
     // (undocumented)
     MarketDisplay_PtxDemo = 524,
     // (undocumented)
-    MarketDisplay_PtxNormal = 527,
+    MarketDisplay_PtxMain = 527,
     // (undocumented)
     MarketDisplay_SimVenture = 516,
     // (undocumented)
@@ -41687,7 +41687,7 @@ export namespace ZenithProtocol {
         // (undocumented)
         AsxTradeMatchWarrants = "WAR",
         // (undocumented)
-        CfxNormalMarket = "CFMX",
+        CfxMainMarket = "CFMX",
         // (undocumented)
         ChixAustFarPoint = "FP",
         // (undocumented)
@@ -41699,11 +41699,11 @@ export namespace ZenithProtocol {
         // (undocumented)
         ChixAustNearPoint = "NP",
         // (undocumented)
-        DaxNormalMarket = "DAXM",
+        DaxMainMarket = "DAXM",
         // (undocumented)
-        FnsxNormalMarket = "FNSX",
+        FnsxMainMarket = "FNSX",
         // (undocumented)
-        FpsxNormalMarket = "FPSX",
+        FpsxMainMarket = "FPSX",
         // (undocumented)
         MyxDirectBusinessTransactionMarket = "DB",
         // (undocumented)
@@ -41753,7 +41753,7 @@ export namespace ZenithProtocol {
         // (undocumented)
         NzxSpec = "SPEC",
         // (undocumented)
-        PtxNormalMarket = "PTX",
+        PtxMainMarket = "PTX",
         // (undocumented)
         SouthPacificStockExchangeEquities = "EQY",
         // (undocumented)
