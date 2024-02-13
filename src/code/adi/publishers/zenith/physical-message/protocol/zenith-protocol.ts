@@ -143,6 +143,7 @@ export namespace ZenithProtocol {
         Fnsx = 'FNSX',
         Fpsx = 'FPSX',
         Cfx = 'CFMX',
+        Dax = 'DAXM',
         AsxCxa = 'ASX+CXA',
     }
 
@@ -1123,6 +1124,8 @@ export namespace ZenithProtocol {
         FpsxFpsx = '',
         // eslint-disable-next-line @typescript-eslint/no-duplicate-enum-values
         CfxCfx = '',
+        // eslint-disable-next-line @typescript-eslint/no-duplicate-enum-values
+        DaxDax = '',
     }
 
     export const enum Market2Node {
@@ -1182,10 +1185,11 @@ export namespace ZenithProtocol {
         MyxNormalMarket = 'NM',
         MyxDirectBusinessTransactionMarket = 'DB',
         MyxIndexMarket = 'IN',
-        Ptx = 'PTX',
-        Fnsx = 'FNSX',
-        Fpsx = 'FPSX',
-        Cfxt = 'CFMX',
+        PtxNormalMarket = 'PTX',
+        FnsxNormalMarket = 'FNSX',
+        FpsxNormalMarket = 'FPSX',
+        CfxNormalMarket = 'CFMX',
+        DaxNormalMarket = 'DAXM',
     }
 
     export const enum Side {

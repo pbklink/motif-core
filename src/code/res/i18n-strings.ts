@@ -447,6 +447,8 @@ export const enum StringId {
     ExchangeFullDisplay_Fpsx,
     ExchangeAbbreviatedDisplay_Cfx,
     ExchangeFullDisplay_Cfx,
+    ExchangeAbbreviatedDisplay_Dax,
+    ExchangeFullDisplay_Dax,
     ExchangeAbbreviatedDisplay_Myx,
     ExchangeFullDisplay_Myx,
     ExchangeAbbreviatedDisplay_AsxCxa,
@@ -487,10 +489,11 @@ export const enum StringId {
     FeedDisplay_Market_MyxBuyIn,
     FeedDisplay_Market_Calastone,
     FeedDisplay_Market_AsxCxa,
-    FeedDisplay_Market_Ptx,
-    FeedDisplay_Market_Fnsx,
-    FeedDisplay_Market_Fpsx,
-    FeedDisplay_Market_Cfxt,
+    FeedDisplay_Market_PtxNormal,
+    FeedDisplay_Market_FnsxNormal,
+    FeedDisplay_Market_FpsxNormal,
+    FeedDisplay_Market_CfxNormal,
+    FeedDisplay_Market_DaxNormal,
     FeedDisplay_News_Asx,
     FeedDisplay_News_Nsx,
     FeedDisplay_News_Nzx,
@@ -531,10 +534,11 @@ export const enum StringId {
     MarketDisplay_PtxDemo,
     MarketDisplay_AsxCxa,
     MarketDisplay_AsxCxaDemo,
-    MarketDisplay_Ptx,
-    MarketDisplay_Fnsx,
-    MarketDisplay_Fpsx,
-    MarketDisplay_Cfxt,
+    MarketDisplay_PtxNormal,
+    MarketDisplay_FnsxNormal,
+    MarketDisplay_FpsxNormal,
+    MarketDisplay_CfxNormal,
+    MarketDisplay_DaxNormal,
     IvemClass_Unknown,
     IvemClass_Market,
     IvemClass_ManagedFund,
@@ -599,10 +603,11 @@ export const enum StringId {
     MarketBoardIdDisplay_MyxIndex,
     MarketBoardIdDisplay_MyxBuyIn,
     MarketBoardIdDisplay_MyxOddLot,
-    MarketBoardIdDisplay_Ptx,
-    MarketBoardIdDisplay_Fnsx,
-    MarketBoardIdDisplay_Fpsx,
-    MarketBoardIdDisplay_Cfxt,
+    MarketBoardIdDisplay_PtxNormal,
+    MarketBoardIdDisplay_FnsxNormal,
+    MarketBoardIdDisplay_FpsxNormal,
+    MarketBoardIdDisplay_CfxNormal,
+    MarketBoardIdDisplay_DaxNormal,
     CallOrPutDisplay_Call,
     CallOrPutDisplay_Put,
     PublisherSubscriptionDataTypeDisplay_Asset,
@@ -2209,8 +2214,8 @@ export const enum StringId {
     ScanFieldConditionOperatorDisplay_NotIs,
     ScanFieldConditionOperatorDescription_NotIs,
     ScanFieldConditionOperatorDisplay_OrEqual,
-    ScanFieldConditionOperandsEditorCaption_RemoveMe,
-    ScanFieldConditionOperandsEditorTitle_RemoveMe,
+    ScanFieldConditionOperandsEditorCaption_DeleteMe,
+    ScanFieldConditionOperandsEditorTitle_DeleteMe,
     ScanFieldConditionOperandsEditor_NotIsCategory,
     ScanFieldConditionOperandsEditor_NotEqualsValue,
     ScanFieldConditionOperandsEditor_NotInRange,
@@ -4486,6 +4491,16 @@ export namespace I18nStrings {
                 en: 'CF Markets Stock Exchange',
             }
         },
+        ExchangeAbbreviatedDisplay_Dax: {
+            id: StringId.ExchangeAbbreviatedDisplay_Dax, translations: {
+                en: 'DAX',
+            }
+        },
+        ExchangeFullDisplay_Dax: {
+            id: StringId.ExchangeFullDisplay_Dax, translations: {
+                en: 'Derivatives Access Stock Exchange',
+            }
+        },
         ExchangeAbbreviatedDisplay_Myx: {
             id: StringId.ExchangeAbbreviatedDisplay_Myx, translations: {
                 en: 'MYX',
@@ -4686,24 +4701,29 @@ export namespace I18nStrings {
                 en: 'AsxCxa',
             }
         },
-        FeedDisplay_Market_Ptx: {
-            id: StringId.FeedDisplay_Market_Ptx, translations: {
-                en: 'PTX',
+        FeedDisplay_Market_PtxNormal: {
+            id: StringId.FeedDisplay_Market_PtxNormal, translations: {
+                en: 'PTX Normal',
             }
         },
-        FeedDisplay_Market_Fnsx: {
-            id: StringId.FeedDisplay_Market_Fnsx, translations: {
-                en: 'FNSX',
+        FeedDisplay_Market_FnsxNormal: {
+            id: StringId.FeedDisplay_Market_FnsxNormal, translations: {
+                en: 'FNSX Normal',
             }
         },
-        FeedDisplay_Market_Fpsx: {
-            id: StringId.FeedDisplay_Market_Fpsx, translations: {
-                en: 'FPSX',
+        FeedDisplay_Market_FpsxNormal: {
+            id: StringId.FeedDisplay_Market_FpsxNormal, translations: {
+                en: 'FPSX Normal',
             }
         },
-        FeedDisplay_Market_Cfxt: {
-            id: StringId.FeedDisplay_Market_Cfxt, translations: {
-                en: 'CFXT',
+        FeedDisplay_Market_CfxNormal: {
+            id: StringId.FeedDisplay_Market_CfxNormal, translations: {
+                en: 'CFX Normal',
+            }
+        },
+        FeedDisplay_Market_DaxNormal: {
+            id: StringId.FeedDisplay_Market_DaxNormal, translations: {
+                en: 'DAX Normal',
             }
         },
         FeedDisplay_News_Asx: {
@@ -4906,24 +4926,29 @@ export namespace I18nStrings {
                 en: 'AsxCxaDemo',
             }
         },
-        MarketDisplay_Ptx: {
-            id: StringId.MarketDisplay_Ptx, translations: {
-                en: 'PTX',
+        MarketDisplay_PtxNormal: {
+            id: StringId.MarketDisplay_PtxNormal, translations: {
+                en: 'PTX Normal',
             }
         },
-        MarketDisplay_Fnsx: {
-            id: StringId.MarketDisplay_Fnsx, translations: {
-                en: 'FNSX',
+        MarketDisplay_FnsxNormal: {
+            id: StringId.MarketDisplay_FnsxNormal, translations: {
+                en: 'FNSX Normal',
             }
         },
-        MarketDisplay_Fpsx: {
-            id: StringId.MarketDisplay_Fpsx, translations: {
-                en: 'FPSX',
+        MarketDisplay_FpsxNormal: {
+            id: StringId.MarketDisplay_FpsxNormal, translations: {
+                en: 'FPSX Normal',
             }
         },
-        MarketDisplay_Cfxt: {
-            id: StringId.MarketDisplay_Cfxt, translations: {
-                en: 'CFXT',
+        MarketDisplay_CfxNormal: {
+            id: StringId.MarketDisplay_CfxNormal, translations: {
+                en: 'CFX Normal',
+            }
+        },
+        MarketDisplay_DaxNormal: {
+            id: StringId.MarketDisplay_DaxNormal, translations: {
+                en: 'DAX Normal',
             }
         },
         IvemClass_Unknown: {
@@ -5246,24 +5271,29 @@ export namespace I18nStrings {
                 en: 'MYX Odd Lot',
             }
         },
-        MarketBoardIdDisplay_Ptx: {
-            id: StringId.MarketBoardIdDisplay_Ptx, translations: {
-                en: 'PTX',
+        MarketBoardIdDisplay_PtxNormal: {
+            id: StringId.MarketBoardIdDisplay_PtxNormal, translations: {
+                en: 'PTX Normal',
             }
         },
-        MarketBoardIdDisplay_Fnsx: {
-            id: StringId.MarketBoardIdDisplay_Fnsx, translations: {
-                en: 'FNSX',
+        MarketBoardIdDisplay_FnsxNormal: {
+            id: StringId.MarketBoardIdDisplay_FnsxNormal, translations: {
+                en: 'FNSX Normal',
             }
         },
-        MarketBoardIdDisplay_Fpsx: {
-            id: StringId.MarketBoardIdDisplay_Fpsx, translations: {
-                en: 'FPSX',
+        MarketBoardIdDisplay_FpsxNormal: {
+            id: StringId.MarketBoardIdDisplay_FpsxNormal, translations: {
+                en: 'FPSX Normal',
             }
         },
-        MarketBoardIdDisplay_Cfxt: {
-            id: StringId.MarketBoardIdDisplay_Cfxt, translations: {
-                en: 'CFXT',
+        MarketBoardIdDisplay_CfxNormal: {
+            id: StringId.MarketBoardIdDisplay_CfxNormal, translations: {
+                en: 'CFX Normal',
+            }
+        },
+        MarketBoardIdDisplay_DaxNormal: {
+            id: StringId.MarketBoardIdDisplay_DaxNormal, translations: {
+                en: 'DAX Normal',
             }
         },
         CallOrPutDisplay_Call: {
@@ -13302,14 +13332,14 @@ export namespace I18nStrings {
                 en: 'or equal',
             }
         },
-        ScanFieldConditionOperandsEditorCaption_RemoveMe: {
-            id: StringId.ScanFieldConditionOperandsEditorCaption_RemoveMe, translations: {
-                en: 'Remove condition',
+        ScanFieldConditionOperandsEditorCaption_DeleteMe: {
+            id: StringId.ScanFieldConditionOperandsEditorCaption_DeleteMe, translations: {
+                en: 'Delete',
             }
         },
-        ScanFieldConditionOperandsEditorTitle_RemoveMe: {
-            id: StringId.ScanFieldConditionOperandsEditorTitle_RemoveMe, translations: {
-                en: 'Remove condition from field',
+        ScanFieldConditionOperandsEditorTitle_DeleteMe: {
+            id: StringId.ScanFieldConditionOperandsEditorTitle_DeleteMe, translations: {
+                en: 'Delete this condition from field',
             }
         },
         ScanFieldConditionOperandsEditor_NotIsCategory: {

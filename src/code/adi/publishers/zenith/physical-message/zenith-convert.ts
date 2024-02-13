@@ -550,6 +550,7 @@ export namespace ZenithConvert {
                 case ZenithProtocol.Exchange.Fnsx: return ExchangeId.Fnsx;
                 case ZenithProtocol.Exchange.Fpsx: return ExchangeId.Fpsx;
                 case ZenithProtocol.Exchange.Cfx: return ExchangeId.Cfx;
+                case ZenithProtocol.Exchange.Dax: return ExchangeId.Dax;
                 case ZenithProtocol.Exchange.AsxCxa: return ExchangeId.AsxCxa;
                 default:
                     return undefined;
@@ -568,6 +569,7 @@ export namespace ZenithConvert {
                 case ExchangeId.Fnsx: return ZenithProtocol.Exchange.Fnsx;
                 case ExchangeId.Fpsx: return ZenithProtocol.Exchange.Fpsx;
                 case ExchangeId.Cfx: return ZenithProtocol.Exchange.Cfx;
+                case ExchangeId.Dax: return ZenithProtocol.Exchange.Dax;
                 case ExchangeId.AsxCxa: return ZenithProtocol.Exchange.AsxCxa;
                 default:
                     throw new UnreachableCaseError('ZCEFIR4481', value);
@@ -872,7 +874,7 @@ export namespace ZenithConvert {
                         case undefined: return defaultMarket;
                         case '':
                             switch (m2) {
-                                case ZenithProtocol.Market2Node.Ptx: return MarketId.Ptx;
+                                case ZenithProtocol.Market2Node.PtxNormalMarket: return MarketId.PtxNormal;
                                 default:
                                     throw new ZenithDataError(ErrorCode.ZCE38211102847, `m1: "${m1}" m2: "${m2 ?? '<undefined>'}"`);
                             }
@@ -888,7 +890,7 @@ export namespace ZenithConvert {
                         case undefined: return defaultMarket;
                         case '':
                             switch (m2) {
-                                case ZenithProtocol.Market2Node.Fnsx: return MarketId.Fnsx;
+                                case ZenithProtocol.Market2Node.FnsxNormalMarket: return MarketId.FnsxNormal;
                                 default:
                                     throw new ZenithDataError(ErrorCode.ZCEFN2M38211102847, `m1: "${m1}" m2: "${m2 ?? '<undefined>'}"`);
                             }
@@ -904,7 +906,7 @@ export namespace ZenithConvert {
                         case undefined: return defaultMarket;
                         case '':
                             switch (m2) {
-                                case ZenithProtocol.Market2Node.Fpsx: return MarketId.Fpsx;
+                                case ZenithProtocol.Market2Node.FpsxNormalMarket: return MarketId.FpsxNormal;
                                 default:
                                     throw new ZenithDataError(ErrorCode.ZCEFN2M38211102847, `m1: "${m1}" m2: "${m2 ?? '<undefined>'}"`);
                             }
@@ -920,11 +922,27 @@ export namespace ZenithConvert {
                         case undefined: return defaultMarket;
                         case '':
                             switch (m2) {
-                                case ZenithProtocol.Market2Node.Cfxt: return MarketId.Cfxt;
+                                case ZenithProtocol.Market2Node.CfxNormalMarket: return MarketId.CfxNormal;
                                 default:
                                     throw new ZenithDataError(ErrorCode.ZenithCalculateMarketId_CfxUnsupportedM2Node, `m1: "${m1}" m2: "${m2 ?? '<undefined>'}"`);
                             }
                         default: throw new ZenithDataError(ErrorCode.ZenithCalculateMarketId_CfxUnsupportedM1Node, `${m1}`);
+                    }
+                }
+
+                case ExchangeId.Dax: {
+                    if (!defined(defaultMarket)) {
+                        throw new ZenithDataError(ErrorCode.ZenithCalculateMarketId_DaxUndefinedDefault, '');
+                    }
+                    switch (m1) {
+                        case undefined: return defaultMarket;
+                        case '':
+                            switch (m2) {
+                                case ZenithProtocol.Market2Node.DaxNormalMarket: return MarketId.DaxNormal;
+                                default:
+                                    throw new ZenithDataError(ErrorCode.ZenithCalculateMarketId_DaxUnsupportedM2Node, `m1: "${m1}" m2: "${m2 ?? '<undefined>'}"`);
+                            }
+                        default: throw new ZenithDataError(ErrorCode.ZenithCalculateMarketId_DaxUnsupportedM1Node, `${m1}`);
                     }
                 }
 
@@ -957,10 +975,11 @@ export namespace ZenithConvert {
                     ZenithProtocol.Market2Node.MyxIndexMarket);
                 case MarketId.MyxOddLot: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market1Node.MyxOddLot);
                 case MarketId.MyxBuyIn: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market1Node.MyxBuyIn);
-                case MarketId.Ptx: return new ExchangeMarketBoard.M1M2();
-                case MarketId.Fnsx: return new ExchangeMarketBoard.M1M2();
-                case MarketId.Fpsx: return new ExchangeMarketBoard.M1M2();
-                case MarketId.Cfxt: return new ExchangeMarketBoard.M1M2();
+                case MarketId.PtxNormal: return new ExchangeMarketBoard.M1M2();
+                case MarketId.FnsxNormal: return new ExchangeMarketBoard.M1M2();
+                case MarketId.FpsxNormal: return new ExchangeMarketBoard.M1M2();
+                case MarketId.CfxNormal: return new ExchangeMarketBoard.M1M2();
+                case MarketId.DaxNormal: return new ExchangeMarketBoard.M1M2();
                 case MarketId.AsxCxa: return new ExchangeMarketBoard.M1M2();
                 case MarketId.Calastone: throw new NotImplementedError('ZCEMCMMN29998');
                 default: throw new UnreachableCaseError('ZCEMCMMU33997', marketId);
@@ -969,10 +988,11 @@ export namespace ZenithConvert {
 
         function calculateTradingM1M2(marketId: MarketId) {
             switch (marketId) {
-                case MarketId.Ptx: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market1Node.PtxPtx, ZenithProtocol.Market2Node.Ptx);
-                case MarketId.Fnsx: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market1Node.FnsxFnsx, ZenithProtocol.Market2Node.Fnsx);
-                case MarketId.Fpsx: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market1Node.FpsxFpsx, ZenithProtocol.Market2Node.Fpsx);
-                case MarketId.Cfxt: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market1Node.CfxCfx, ZenithProtocol.Market2Node.Cfxt);
+                case MarketId.PtxNormal: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market1Node.PtxPtx, ZenithProtocol.Market2Node.PtxNormalMarket);
+                case MarketId.FnsxNormal: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market1Node.FnsxFnsx, ZenithProtocol.Market2Node.FnsxNormalMarket);
+                case MarketId.FpsxNormal: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market1Node.FpsxFpsx, ZenithProtocol.Market2Node.FpsxNormalMarket);
+                case MarketId.CfxNormal: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market1Node.CfxCfx, ZenithProtocol.Market2Node.CfxNormalMarket);
+                case MarketId.DaxNormal: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market1Node.DaxDax, ZenithProtocol.Market2Node.DaxNormalMarket);
 
                 case MarketId.MyxNormal: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market1Node.MyxNormal, ZenithProtocol.Market2Node.MyxNormalMarket);
                 case MarketId.MyxDirectBusiness: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market1Node.MyxNormal,
@@ -1272,8 +1292,8 @@ export namespace ZenithConvert {
                     }
                 case ExchangeId.Ptx:
                     switch (m2) {
-                        case undefined: return MarketBoardId.Ptx;
-                        case ZenithProtocol.Market2Node.Ptx: return MarketBoardId.Ptx;
+                        case undefined: return MarketBoardId.PtxNormal;
+                        case ZenithProtocol.Market2Node.PtxNormalMarket: return MarketBoardId.PtxNormal;
                         default:
                             if (tryHarder) {
                                 throw new ZenithDataError(ErrorCode.ZCEMCMBP39394, `m1: "${m1 ?? '<undefined>'}" m2: "${m2}"`);
@@ -1283,8 +1303,8 @@ export namespace ZenithConvert {
                     }
                 case ExchangeId.Fnsx:
                     switch (m2) {
-                        case undefined: return MarketBoardId.Fnsx;
-                        case ZenithProtocol.Market2Node.Fnsx: return MarketBoardId.Fnsx;
+                        case undefined: return MarketBoardId.FnsxNormal;
+                        case ZenithProtocol.Market2Node.FnsxNormalMarket: return MarketBoardId.FnsxNormal;
                         default:
                             if (tryHarder) {
                                 throw new ZenithDataError(ErrorCode.ZCEMCMBFN39394, `m1: "${m1 ?? '<undefined>'}" m2: "${m2}"`);
@@ -1294,8 +1314,8 @@ export namespace ZenithConvert {
                     }
                 case ExchangeId.Fpsx:
                     switch (m2) {
-                        case undefined: return MarketBoardId.Fpsx;
-                        case ZenithProtocol.Market2Node.Fpsx: return MarketBoardId.Fpsx;
+                        case undefined: return MarketBoardId.FpsxNormal;
+                        case ZenithProtocol.Market2Node.FpsxNormalMarket: return MarketBoardId.FpsxNormal;
                         default:
                             if (tryHarder) {
                                 throw new ZenithDataError(ErrorCode.ZCEMCMBFN39394, `m1: "${m1 ?? '<undefined>'}" m2: "${m2}"`);
@@ -1305,11 +1325,22 @@ export namespace ZenithConvert {
                     }
                 case ExchangeId.Cfx:
                     switch (m2) {
-                        case undefined: return MarketBoardId.Cfxt;
-                        case ZenithProtocol.Market2Node.Cfxt: return MarketBoardId.Cfxt;
+                        case undefined: return MarketBoardId.CfxNormal;
+                        case ZenithProtocol.Market2Node.CfxNormalMarket: return MarketBoardId.CfxNormal;
                         default:
                             if (tryHarder) {
                                 throw new ZenithDataError(ErrorCode.ZenithCalculateMarketBoardId_UnsupportedCfxM2Node, `m1: "${m1 ?? '<undefined>'}" m2: "${m2}"`);
+                            } else {
+                                return undefined;
+                            }
+                    }
+                case ExchangeId.Dax:
+                    switch (m2) {
+                        case undefined: return MarketBoardId.DaxNormal;
+                        case ZenithProtocol.Market2Node.DaxNormalMarket: return MarketBoardId.DaxNormal;
+                        default:
+                            if (tryHarder) {
+                                throw new ZenithDataError(ErrorCode.ZenithCalculateMarketBoardId_UnsupportedDaxM2Node, `m1: "${m1 ?? '<undefined>'}" m2: "${m2}"`);
                             } else {
                                 return undefined;
                             }
@@ -1384,10 +1415,11 @@ export namespace ZenithConvert {
                 case MarketBoardId.MyxIndexMarket: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market1Node.MyxNormal, ZenithProtocol.Market2Node.MyxIndexMarket);
                 case MarketBoardId.MyxBuyInMarket: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market1Node.MyxBuyIn);
                 case MarketBoardId.MyxOddLotMarket: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market1Node.MyxOddLot);
-                case MarketBoardId.Ptx: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market2Node.Ptx);
-                case MarketBoardId.Fnsx: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market2Node.Fnsx);
-                case MarketBoardId.Fpsx: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market2Node.Fpsx);
-                case MarketBoardId.Cfxt: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market2Node.Cfxt);
+                case MarketBoardId.PtxNormal: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market2Node.PtxNormalMarket);
+                case MarketBoardId.FnsxNormal: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market2Node.FnsxNormalMarket);
+                case MarketBoardId.FpsxNormal: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market2Node.FpsxNormalMarket);
+                case MarketBoardId.CfxNormal: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market2Node.CfxNormalMarket);
+                case MarketBoardId.DaxNormal: return new ExchangeMarketBoard.M1M2(ZenithProtocol.Market2Node.DaxNormalMarket);
                 default:
                     throw new UnreachableCaseError('ZCEMBCMM30814', marketBoardId);
             }
