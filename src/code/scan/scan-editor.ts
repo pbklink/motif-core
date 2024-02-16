@@ -5,6 +5,7 @@
  */
 
 import {
+    ActiveFaultedStatusId,
     AdiService,
     CreateScanDataDefinition,
     DataItemIncubator,
@@ -12,7 +13,6 @@ import {
     ExchangeInfo,
     LitIvemId,
     MarketId,
-    ScanStatusId,
     ScanTargetTypeId,
     UpdateScanDataDefinition,
     UpdateScanDataItem,
@@ -163,15 +163,6 @@ export class ScanEditor<Modifier = void> extends OpenableScanEditor {
 
     get id() { return this._scan === undefined ? undefined : this._scan.id; } // If undefined, then not yet created
     get enabled() { return this._enabled; }
-    set enabled(value: boolean) {
-        if (value !== this._enabled) {
-            this.beginFieldChanges(undefined);
-            this._enabled = value;
-            this.addFieldChange(ScanEditor.FieldId.Enabled);
-            this.endFieldChanges();
-        }
-    }
-
     get name() { return this._name; }
     get description() { return this._description; }
     get symbolListEnabled() { return this._symbolListEnabled; }
@@ -222,7 +213,7 @@ export class ScanEditor<Modifier = void> extends OpenableScanEditor {
 
     get sourceValid() { return this._criteriaSourceValid && this._rankSourceValid; }
 
-    get statusId(): ScanStatusId | undefined { // Will be undefined while waiting for first Scan Detail
+    get statusId(): ActiveFaultedStatusId | undefined { // Will be undefined while waiting for first Scan Detail
         const scan = this._scan;
         if (scan === undefined) {
             return undefined;
@@ -299,6 +290,15 @@ export class ScanEditor<Modifier = void> extends OpenableScanEditor {
         this._modifiedScanFieldIds.length = 0;
         this._whileSavingModifiedScanFieldIds.length = 0;
         this.setModifiedState(ScanEditor.ModifiedStateId.Unmodified);
+    }
+
+    setEnabled(value: boolean) {
+        if (value !== this._enabled) {
+            this.beginFieldChanges(undefined);
+            this._enabled = value;
+            this.addFieldChange(ScanEditor.FieldId.Enabled);
+            this.endFieldChanges();
+        }
     }
 
     setName(value: string) {
@@ -648,7 +648,8 @@ export class ScanEditor<Modifier = void> extends OpenableScanEditor {
                     const rank = this._rank;
                     const zenithRank = rank === undefined ? undefined : this.createZenithEncodedRank(rank);
                     const definition = new CreateScanDataDefinition();
-                    definition.name = this._name;
+                    definition.enabled = this._enabled;
+                    definition.scanName = this._name;
                     definition.scanDescription = this._description;
                     definition.versionId = versionId;
                     definition.versionNumber = versionNumber;
@@ -749,6 +750,7 @@ export class ScanEditor<Modifier = void> extends OpenableScanEditor {
 
                         const definition = new UpdateScanDataDefinition();
                         definition.scanId = this._scan.id;
+                        definition.enabled = this._enabled;
                         definition.scanName = this._name;
                         definition.scanDescription = this._description;
                         definition.versionNumber = versionNumber;
@@ -1044,6 +1046,7 @@ export class ScanEditor<Modifier = void> extends OpenableScanEditor {
 
     private loadNewScan() {
         this.beginFieldChanges(undefined);
+        this.setEnabled(true);
         this.setName(Strings[StringId.New]);
         this.setDescription('');
         this.setSymbolListEnabled(ScanEditor.DefaultSymbolListEnabled);
@@ -1065,6 +1068,7 @@ export class ScanEditor<Modifier = void> extends OpenableScanEditor {
 
     private loadScan(scan: Scan, defaultIfError: boolean) {
         this.beginFieldChanges(undefined);
+        this.setEnabled(scan.statusId !== ActiveFaultedStatusId.Inactive);
         this.setName(scan.name);
         this.setDescription(scan.description ?? '');
         this.setSymbolListEnabled(scan.symbolListEnabled ?? ScanEditor.DefaultSymbolListEnabled);

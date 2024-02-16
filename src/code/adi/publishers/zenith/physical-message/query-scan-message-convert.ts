@@ -61,8 +61,8 @@ export namespace QueryScanMessageConvert {
                     const details = response.Details;
                     dataMessage.scanName = details.Name;
                     dataMessage.scanDescription = details.Description;
-                    const metaData = details.MetaData;
-                    if (metaData === undefined) {
+                    const metadata = details.Metadata;
+                    if (metadata === undefined) {
                         dataMessage.versionNumber = undefined;
                         dataMessage.versionId = undefined;
                         dataMessage.versioningInterrupted = false;
@@ -72,15 +72,15 @@ export namespace QueryScanMessageConvert {
                         dataMessage.zenithCriteriaSource = undefined;
                         dataMessage.zenithRankSource = undefined;
                     } else {
-                        const convertMetaData = ZenithNotifyConvert.ScanMetaType.to(metaData);
-                        dataMessage.versionNumber = convertMetaData.versionNumber;
-                        dataMessage.versionId = convertMetaData.versionId;
-                        dataMessage.versioningInterrupted = convertMetaData.versioningInterrupted;
-                        dataMessage.lastSavedTime = convertMetaData.lastSavedTime;
-                        dataMessage.lastEditSessionId = convertMetaData.lastEditSessionId;
-                        dataMessage.symbolListEnabled = convertMetaData.symbolListEnabled;
-                        dataMessage.zenithCriteriaSource = convertMetaData.zenithCriteriaSource;
-                        dataMessage.zenithRankSource = convertMetaData.zenithRankSource;
+                        const convertMetadata = ZenithNotifyConvert.ScanMetaType.to(metadata);
+                        dataMessage.versionNumber = convertMetadata.versionNumber;
+                        dataMessage.versionId = convertMetadata.versionId;
+                        dataMessage.versioningInterrupted = convertMetadata.versioningInterrupted;
+                        dataMessage.lastSavedTime = convertMetadata.lastSavedTime;
+                        dataMessage.lastEditSessionId = convertMetadata.lastEditSessionId;
+                        dataMessage.symbolListEnabled = convertMetadata.symbolListEnabled;
+                        dataMessage.zenithCriteriaSource = convertMetadata.zenithCriteriaSource;
+                        dataMessage.zenithRankSource = convertMetadata.zenithRankSource;
                     }
                     dataMessage.scanReadonly = !details.IsWritable
                     const parameters = response.Parameters;

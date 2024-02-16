@@ -5,11 +5,11 @@
  */
 
 import { DataMessage, DataMessageTypeId } from '../common/adi-common-internal-api';
-import { ScanPublishDataItem } from './scan-publish-data-item';
+import { NotificationChannelPublishDataItem } from './notification-channel-publish-data-item';
 
-export class DeleteScanDataItem extends ScanPublishDataItem {
+export class DeleteNotificationChannelDataItem extends NotificationChannelPublishDataItem {
     override processMessage(msg: DataMessage) {
-        if (msg.typeId !== DataMessageTypeId.DeleteScan) {
+        if (msg.typeId !== DataMessageTypeId.DeleteNotificationChannel) {
             super.processMessage(msg);
         } else {
             this.beginUpdate();

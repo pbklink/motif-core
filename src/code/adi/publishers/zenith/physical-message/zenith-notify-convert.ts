@@ -5,7 +5,8 @@
  */
 
 import { AssertInternalError, Guid, UnreachableCaseError, parseIntStrict } from '../../../../sys/sys-internal-api';
-import { LitIvemId, MarketId, ScanStatusId, ScanTargetTypeId } from '../../../common/adi-common-internal-api';
+import { LitIvemId, MarketId, ScanTargetTypeId } from '../../../common/adi-common-internal-api';
+import { ZenithProtocolCommon } from '../../../common/zenith-protocol/internal-api';
 import { ZenithProtocol } from './protocol/zenith-protocol';
 import { ZenithConvert } from './zenith-convert';
 
@@ -26,18 +27,6 @@ export namespace ZenithNotifyConvert {
                 case ScanTargetTypeId.Symbols: return ZenithProtocol.NotifyController.ScanType.MarketMonitor;
                 default:
                     throw new UnreachableCaseError('ZNCSTFI20008', value);
-            }
-        }
-    }
-
-    export namespace ScanStatus {
-        export function toId(value: ZenithProtocol.NotifyController.ScanStatus) {
-            switch (value) {
-                case ZenithProtocol.NotifyController.ScanStatus.Inactive: return ScanStatusId.Inactive;
-                case ZenithProtocol.NotifyController.ScanStatus.Active: return ScanStatusId.Active;
-                case ZenithProtocol.NotifyController.ScanStatus.Faulted: return ScanStatusId.Faulted;
-                default:
-                    throw new UnreachableCaseError('ZNCSSTI20008', value);
             }
         }
     }
@@ -99,7 +88,7 @@ export namespace ZenithNotifyConvert {
         }
     }
 
-    export interface ScanMetaData {
+    export interface ScanMetadata {
         readonly versionNumber: number | undefined;
         readonly versionId: string | undefined;
         readonly versioningInterrupted: boolean;
@@ -111,7 +100,7 @@ export namespace ZenithNotifyConvert {
     }
 
     export namespace ScanMetaType {
-        export function from(value: ScanMetaData): ZenithProtocol.NotifyController.MetaData {
+        export function from(value: ScanMetadata): ZenithProtocolCommon.UserMetadata {
             const versionNumber = value.versionNumber;
             if (versionNumber === undefined) {
                 throw new AssertInternalError('ZNCSMTFVN44498');
@@ -148,7 +137,7 @@ export namespace ZenithNotifyConvert {
             }
         }
 
-        export function to(value: ZenithProtocol.NotifyController.MetaData): ScanMetaData {
+        export function to(value: ZenithProtocolCommon.UserMetadata): ScanMetadata {
             // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
             const versionNumberAsString = value['versionNumber'];
             const versionNumber = versionNumberAsString === undefined ? undefined : parseIntStrict(versionNumberAsString);

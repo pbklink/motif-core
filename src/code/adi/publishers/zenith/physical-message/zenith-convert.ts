@@ -33,6 +33,7 @@ import {
     ZenithDataError,
 } from '../../../../sys/sys-internal-api';
 import {
+    ActiveFaultedStatusId,
     OrderRequestError as AdiOrderRequestError,
     OrderStatus as AdiOrderStatus,
     AdiPublisherRequest,
@@ -364,6 +365,18 @@ export namespace ZenithConvert {
                 case ZenithProtocol.MarketController.Trades.Affects.Vwap: return TradeAffectsId.Vwap;
                 default:
                     throw new UnreachableCaseError('ZCTATIU81398', value);
+            }
+        }
+    }
+
+    export namespace ActiveFaultedStatus {
+        export function toId(value: ZenithProtocol.ActiveFaultedStatus) {
+            switch (value) {
+                case ZenithProtocol.ActiveFaultedStatus.Inactive: return ActiveFaultedStatusId.Inactive;
+                case ZenithProtocol.ActiveFaultedStatus.Active: return ActiveFaultedStatusId.Active;
+                case ZenithProtocol.ActiveFaultedStatus.Faulted: return ActiveFaultedStatusId.Faulted;
+                default:
+                    throw new UnreachableCaseError('ZNSSTI20008', value);
             }
         }
     }

@@ -5,6 +5,7 @@
  */
 
 import {
+    ActiveFaultedStatusId,
     AdiService,
     DataItemIncubator,
     LitIvemId,
@@ -14,7 +15,6 @@ import {
     ScanDetail,
     ScanStatusedDescriptor,
     ScanStatusedDescriptorInterface,
-    ScanStatusId,
     ScanTargetTypeId,
     ZenithEncodedScanFormula
 } from '../adi/adi-internal-api';
@@ -28,15 +28,15 @@ import {
     FieldDataTypeId,
     Guid,
     Integer,
-    isUndefinableArrayEqualUniquely,
-    isUndefinableDateEqual,
-    isUndefinableStringNumberBooleanNestArrayEqual,
     LockOpenListItem,
     LockOpenManager,
     MapKey,
     MultiEvent, Ok, Result,
     UnreachableCaseError,
-    ValueRecentChangeTypeId
+    ValueRecentChangeTypeId,
+    isUndefinableArrayEqualUniquely,
+    isUndefinableDateEqual,
+    isUndefinableStringNumberBooleanNestArrayEqual
 } from "../sys/sys-internal-api";
 
 /** @public */
@@ -61,7 +61,7 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
     private _description: string | undefined;
     private _upperCaseDescription: string;
     private _readonly: boolean;
-    private _statusId: ScanStatusId;
+    private _statusId: ActiveFaultedStatusId;
     private _versionNumber: Integer | undefined;
     private _versionId: string | undefined;
     private _versioningInterrupted: boolean;

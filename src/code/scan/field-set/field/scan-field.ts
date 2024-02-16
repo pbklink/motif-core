@@ -238,6 +238,7 @@ export namespace ScanField {
                 case BooleanOperationId.Or:
                     if (orNode === undefined) {
                         orNode = new ScanFormula.OrNode();
+                        orNode.operands = [];
                         andedOredXorNodes.orNodes.push(orNode);
                     }
                     orNode.operands.push(node);

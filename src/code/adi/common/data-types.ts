@@ -455,6 +455,14 @@ export const enum DataMessageTypeId {
     ExecuteScan,
     ScanDescriptors,
     LitIvemIdMatches,
+    CreateNotificationChannel,
+    DeleteNotificationChannel,
+    UpdateNotificationChannel,
+    UpdateNotificationChannelEnabled,
+    QueryNotificationChannel,
+    QueryNotificationChannels,
+    QueryNotificationDistributionMethod,
+    QueryNotificationDistributionMethods,
     WatchmakerListRequestAcknowledge,
     CreateOrCopyWatchmakerList,
     WatchmakerListDescriptors,
@@ -502,6 +510,14 @@ export const enum DataChannelId {
     ScanDescriptors,
     LitIvemIdMatches,
     LitIvemIdCreateWatchmakerList,
+    CreateNotificationChannel,
+    DeleteNotificationChannel,
+    UpdateNotificationChannel,
+    UpdateNotificationChannelEnabled,
+    QueryNotificationChannel,
+    QueryNotificationChannels,
+    QueryNotificationDistributionMethod,
+    QueryNotificationDistributionMethods,
     UpdateWatchmakerList,
     CopyWatchmakerList,
     DeleteWatchmakerList,
@@ -1078,15 +1094,23 @@ export const enum PublisherSessionTerminatedReasonId {
     Other,
 }
 
-export const enum ScanStatusId {
-    Active,
-    Inactive,
-    Faulted,
+export const enum ActiveFaultedStatusId {
+    Active, // Enabled and not faulty
+    Inactive, // Disabled
+    Faulted, // Enabled and ok
 }
 
 export const enum ScanTargetTypeId {
     Markets,
     Symbols,
+}
+
+export const enum NotificationDistributionMethodId {
+    Email,
+    Sms,
+    WebPush,
+    ApplePush,
+    GooglePush,
 }
 
 export type DataItemId = Integer;
@@ -4652,168 +4676,167 @@ export namespace TradingEnvironment {
     }
 }
 
-export namespace DataMessageType {
-    export type Id = DataMessageTypeId;
-    export type IdArray = Id[];
+// export namespace DataMessageType {
+//     export type Id = DataMessageTypeId;
 
-    interface Info {
-        id: Id;
-    }
+//     interface Info {
+//         id: Id;
+//     }
 
-    type InfosObject = { [id in keyof typeof DataMessageTypeId]: Info };
+//     type InfosObject = { [id in keyof typeof DataMessageTypeId]: Info };
 
-    const infosObject: InfosObject = {
-        PublisherSubscription_Onlined: {
-            id: DataMessageTypeId.PublisherSubscription_Onlined,
-        },
-        PublisherSubscription_Offlining: {
-            id: DataMessageTypeId.PublisherSubscription_Offlining,
-        },
-        PublisherSubscription_Warning: {
-            id: DataMessageTypeId.PublisherSubscription_Warning,
-        },
-        PublisherSubscription_Error: {
-            id: DataMessageTypeId.PublisherSubscription_Error,
-        },
-        SuccessFail: {
-            id: DataMessageTypeId.SuccessFail,
-        },
-        Feeds: {
-            id: DataMessageTypeId.Feeds,
-        },
-        Markets: {
-            id: DataMessageTypeId.Markets,
-        },
-        TradingStates: {
-            id: DataMessageTypeId.TradingStates,
-        },
-        Depth: {
-            id: DataMessageTypeId.Depth,
-        },
-        DepthLevels: {
-            id: DataMessageTypeId.DepthLevels,
-        },
-        Security: {
-            id: DataMessageTypeId.Security,
-        },
-        Trades: {
-            id: DataMessageTypeId.Trades,
-        },
-        Symbols: {
-            id: DataMessageTypeId.Symbols,
-        },
-        Holdings: {
-            id: DataMessageTypeId.Holdings,
-        },
-        Balances: {
-            id: DataMessageTypeId.Balances,
-        },
-        TopShareholders: {
-            id: DataMessageTypeId.TopShareholders,
-        },
-        BrokerageAccounts: {
-            id: DataMessageTypeId.BrokerageAccounts,
-        },
-        Orders: {
-            id: DataMessageTypeId.Orders,
-        },
-        Transactions: {
-            id: DataMessageTypeId.Transactions,
-        },
-        OrderStatuses: {
-            id: DataMessageTypeId.OrderStatuses,
-        },
-        ZenithServerInfo: {
-            id: DataMessageTypeId.ZenithServerInfo,
-        },
-        Synchronised: {
-            id: DataMessageTypeId.Synchronised,
-        },
-        ChartHistory: {
-            id: DataMessageTypeId.ChartHistory,
-        },
-        ZenithPublisherStateChange: {
-            id: DataMessageTypeId.ZenithPublisherStateChange,
-        },
-        ZenithReconnect: {
-            id: DataMessageTypeId.ZenithReconnect,
-        },
-        ZenithPublisherOnlineChange: {
-            id: DataMessageTypeId.ZenithPublisherOnlineChange,
-        },
-        ZenithEndpointSelected: {
-            id: DataMessageTypeId.ZenithEndpointSelected,
-        },
-        ZenithCounter: {
-            id: DataMessageTypeId.ZenithCounter,
-        },
-        ZenithLog: {
-            id: DataMessageTypeId.ZenithLog,
-        },
-        ZenithSessionTerminated: {
-            id: DataMessageTypeId.ZenithSessionTerminated,
-        },
-        ZenithQueryConfigure: {
-            id: DataMessageTypeId.ZenithQueryConfigure,
-        },
-        PlaceOrderResponse: {
-            id: DataMessageTypeId.PlaceOrderResponse,
-        },
-        AmendOrderResponse: {
-            id: DataMessageTypeId.AmendOrderResponse,
-        },
-        CancelOrderResponse: {
-            id: DataMessageTypeId.CancelOrderResponse,
-        },
-        MoveOrderResponse: {
-            id: DataMessageTypeId.MoveOrderResponse,
-        },
-        CreateScan: {
-            id: DataMessageTypeId.CreateScan,
-        },
-        UpdateScan: {
-            id: DataMessageTypeId.UpdateScan,
-        },
-        DeleteScan: {
-            id: DataMessageTypeId.DeleteScan,
-        },
-        QueryScanDetail: {
-            id: DataMessageTypeId.QueryScanDetail,
-        },
-        ExecuteScan: {
-            id: DataMessageTypeId.ExecuteScan,
-        },
-        ScanDescriptors: {
-            id: DataMessageTypeId.ScanDescriptors,
-        },
-        LitIvemIdMatches: {
-            id: DataMessageTypeId.LitIvemIdMatches,
-        },
-        WatchmakerListRequestAcknowledge: {
-            id: DataMessageTypeId.WatchmakerListRequestAcknowledge,
-        },
-        CreateOrCopyWatchmakerList: {
-            id: DataMessageTypeId.CreateOrCopyWatchmakerList,
-        },
-        WatchmakerListDescriptors: {
-            id: DataMessageTypeId.WatchmakerListDescriptors,
-        },
-        WatchmakerListLitIvemIds: {
-            id: DataMessageTypeId.WatchmakerListLitIvemIds,
-        },
-    } as const;
+//     const infosObject: InfosObject = {
+//         PublisherSubscription_Onlined: {
+//             id: DataMessageTypeId.PublisherSubscription_Onlined,
+//         },
+//         PublisherSubscription_Offlining: {
+//             id: DataMessageTypeId.PublisherSubscription_Offlining,
+//         },
+//         PublisherSubscription_Warning: {
+//             id: DataMessageTypeId.PublisherSubscription_Warning,
+//         },
+//         PublisherSubscription_Error: {
+//             id: DataMessageTypeId.PublisherSubscription_Error,
+//         },
+//         SuccessFail: {
+//             id: DataMessageTypeId.SuccessFail,
+//         },
+//         Feeds: {
+//             id: DataMessageTypeId.Feeds,
+//         },
+//         Markets: {
+//             id: DataMessageTypeId.Markets,
+//         },
+//         TradingStates: {
+//             id: DataMessageTypeId.TradingStates,
+//         },
+//         Depth: {
+//             id: DataMessageTypeId.Depth,
+//         },
+//         DepthLevels: {
+//             id: DataMessageTypeId.DepthLevels,
+//         },
+//         Security: {
+//             id: DataMessageTypeId.Security,
+//         },
+//         Trades: {
+//             id: DataMessageTypeId.Trades,
+//         },
+//         Symbols: {
+//             id: DataMessageTypeId.Symbols,
+//         },
+//         Holdings: {
+//             id: DataMessageTypeId.Holdings,
+//         },
+//         Balances: {
+//             id: DataMessageTypeId.Balances,
+//         },
+//         TopShareholders: {
+//             id: DataMessageTypeId.TopShareholders,
+//         },
+//         BrokerageAccounts: {
+//             id: DataMessageTypeId.BrokerageAccounts,
+//         },
+//         Orders: {
+//             id: DataMessageTypeId.Orders,
+//         },
+//         Transactions: {
+//             id: DataMessageTypeId.Transactions,
+//         },
+//         OrderStatuses: {
+//             id: DataMessageTypeId.OrderStatuses,
+//         },
+//         ZenithServerInfo: {
+//             id: DataMessageTypeId.ZenithServerInfo,
+//         },
+//         Synchronised: {
+//             id: DataMessageTypeId.Synchronised,
+//         },
+//         ChartHistory: {
+//             id: DataMessageTypeId.ChartHistory,
+//         },
+//         ZenithPublisherStateChange: {
+//             id: DataMessageTypeId.ZenithPublisherStateChange,
+//         },
+//         ZenithReconnect: {
+//             id: DataMessageTypeId.ZenithReconnect,
+//         },
+//         ZenithPublisherOnlineChange: {
+//             id: DataMessageTypeId.ZenithPublisherOnlineChange,
+//         },
+//         ZenithEndpointSelected: {
+//             id: DataMessageTypeId.ZenithEndpointSelected,
+//         },
+//         ZenithCounter: {
+//             id: DataMessageTypeId.ZenithCounter,
+//         },
+//         ZenithLog: {
+//             id: DataMessageTypeId.ZenithLog,
+//         },
+//         ZenithSessionTerminated: {
+//             id: DataMessageTypeId.ZenithSessionTerminated,
+//         },
+//         ZenithQueryConfigure: {
+//             id: DataMessageTypeId.ZenithQueryConfigure,
+//         },
+//         PlaceOrderResponse: {
+//             id: DataMessageTypeId.PlaceOrderResponse,
+//         },
+//         AmendOrderResponse: {
+//             id: DataMessageTypeId.AmendOrderResponse,
+//         },
+//         CancelOrderResponse: {
+//             id: DataMessageTypeId.CancelOrderResponse,
+//         },
+//         MoveOrderResponse: {
+//             id: DataMessageTypeId.MoveOrderResponse,
+//         },
+//         CreateScan: {
+//             id: DataMessageTypeId.CreateScan,
+//         },
+//         UpdateScan: {
+//             id: DataMessageTypeId.UpdateScan,
+//         },
+//         DeleteScan: {
+//             id: DataMessageTypeId.DeleteScan,
+//         },
+//         QueryScanDetail: {
+//             id: DataMessageTypeId.QueryScanDetail,
+//         },
+//         ExecuteScan: {
+//             id: DataMessageTypeId.ExecuteScan,
+//         },
+//         ScanDescriptors: {
+//             id: DataMessageTypeId.ScanDescriptors,
+//         },
+//         LitIvemIdMatches: {
+//             id: DataMessageTypeId.LitIvemIdMatches,
+//         },
+//         WatchmakerListRequestAcknowledge: {
+//             id: DataMessageTypeId.WatchmakerListRequestAcknowledge,
+//         },
+//         CreateOrCopyWatchmakerList: {
+//             id: DataMessageTypeId.CreateOrCopyWatchmakerList,
+//         },
+//         WatchmakerListDescriptors: {
+//             id: DataMessageTypeId.WatchmakerListDescriptors,
+//         },
+//         WatchmakerListLitIvemIds: {
+//             id: DataMessageTypeId.WatchmakerListLitIvemIds,
+//         },
+//     } as const;
 
-    export const idCount = Object.keys(infosObject).length;
-    const infos = Object.values(infosObject);
+//     export const idCount = Object.keys(infosObject).length;
+//     const infos = Object.values(infosObject);
 
-    export function initialise() {
-        for (let id = 0; id < DataMessageType.idCount; id++) {
-            if (id as DataMessageTypeId !== infos[id].id) {
-                throw new EnumInfoOutOfOrderError('DataMessageTypeId', id, `${id}`);
-            }
-        }
-    }
-}
+//     export function initialise() {
+//         for (let id = 0; id < DataMessageType.idCount; id++) {
+//             if (id as DataMessageTypeId !== infos[id].id) {
+//                 throw new EnumInfoOutOfOrderError('DataMessageTypeId', id, `${id}`);
+//             }
+//         }
+//     }
+// }
 
 export namespace DataChannel {
     export type Id = DataChannelId;
@@ -5112,7 +5135,7 @@ export namespace DataChannel {
         },
         LitIvemIdMatches: {
             channel: DataChannelId.LitIvemIdMatches,
-            name: 'Matches',
+            name: 'LitIvemIdMatches',
             defaultActiveSubscriptionsLimit: 5000,
             defaultDeactivationDelay: 30 * mSecsPerSec,
             dependsOn: [DataChannelId.Feeds],
@@ -5120,6 +5143,62 @@ export namespace DataChannel {
         LitIvemIdCreateWatchmakerList: {
             channel: DataChannelId.LitIvemIdCreateWatchmakerList,
             name: 'LitIvemIdCreateWatchmakerList',
+            defaultActiveSubscriptionsLimit: 50,
+            defaultDeactivationDelay: 0,
+            dependsOn: [DataChannelId.Feeds],
+        },
+        CreateNotificationChannel: {
+            channel: DataChannelId.CreateNotificationChannel,
+            name: 'CreateNotificationChannel',
+            defaultActiveSubscriptionsLimit: 50,
+            defaultDeactivationDelay: 0,
+            dependsOn: [DataChannelId.Feeds],
+        },
+        DeleteNotificationChannel: {
+            channel: DataChannelId.DeleteNotificationChannel,
+            name: 'DeleteNotificationChannel',
+            defaultActiveSubscriptionsLimit: 50,
+            defaultDeactivationDelay: 0,
+            dependsOn: [DataChannelId.Feeds],
+        },
+        UpdateNotificationChannel: {
+            channel: DataChannelId.UpdateNotificationChannel,
+            name: 'UpdateNotificationChannel',
+            defaultActiveSubscriptionsLimit: 50,
+            defaultDeactivationDelay: 0,
+            dependsOn: [DataChannelId.Feeds],
+        },
+        UpdateNotificationChannelEnabled: {
+            channel: DataChannelId.UpdateNotificationChannelEnabled,
+            name: 'UpdateNotificationChannelEnabled',
+            defaultActiveSubscriptionsLimit: 50,
+            defaultDeactivationDelay: 0,
+            dependsOn: [DataChannelId.Feeds],
+        },
+        QueryNotificationChannel: {
+            channel: DataChannelId.QueryNotificationChannel,
+            name: 'QueryNotificationChannel',
+            defaultActiveSubscriptionsLimit: 50,
+            defaultDeactivationDelay: 0,
+            dependsOn: [DataChannelId.Feeds],
+        },
+        QueryNotificationChannels: {
+            channel: DataChannelId.QueryNotificationChannels,
+            name: 'QueryNotificationChannels',
+            defaultActiveSubscriptionsLimit: 50,
+            defaultDeactivationDelay: 0,
+            dependsOn: [DataChannelId.Feeds],
+        },
+        QueryNotificationDistributionMethod: {
+            channel: DataChannelId.QueryNotificationDistributionMethod,
+            name: 'QueryNotificationDistributionMethod',
+            defaultActiveSubscriptionsLimit: 50,
+            defaultDeactivationDelay: 0,
+            dependsOn: [DataChannelId.Feeds],
+        },
+        QueryNotificationDistributionMethods: {
+            channel: DataChannelId.QueryNotificationDistributionMethods,
+            name: 'QueryNotificationDistributionMethods',
             defaultActiveSubscriptionsLimit: 50,
             defaultDeactivationDelay: 0,
             dependsOn: [DataChannelId.Feeds],
@@ -7507,8 +7586,8 @@ export namespace OrderRequestErrorCode {
     }
 }
 
-export namespace ScanStatus {
-    export type Id = ScanStatusId;
+export namespace ActiveFaultedStatus {
+    export type Id = ActiveFaultedStatusId;
 
     interface Info {
         readonly id: Id;
@@ -7516,21 +7595,21 @@ export namespace ScanStatus {
         readonly displayId: StringId;
     }
 
-    type InfosObject = { [id in keyof typeof ScanStatusId]: Info };
+    type InfosObject = { [id in keyof typeof ActiveFaultedStatusId]: Info };
 
     const infosObject: InfosObject = {
         Active: {
-            id: ScanStatusId.Active,
+            id: ActiveFaultedStatusId.Active,
             name: 'Active',
             displayId: StringId.ScanStatusDisplay_Active,
         },
         Inactive: {
-            id: ScanStatusId.Inactive,
+            id: ActiveFaultedStatusId.Inactive,
             name: 'Inactive',
             displayId: StringId.ScanStatusDisplay_Inactive,
         },
         Faulted: {
-            id: ScanStatusId.Faulted,
+            id: ActiveFaultedStatusId.Faulted,
             name: 'Faulted',
             displayId: StringId.ScanStatusDisplay_Faulted,
         },
@@ -7541,7 +7620,7 @@ export namespace ScanStatus {
 
 
     export function initialise() {
-        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as ScanStatusId);
+        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as ActiveFaultedStatusId);
         if (outOfOrderIdx >= 0) {
             throw new EnumInfoOutOfOrderError('ScanStatusId', outOfOrderIdx, infos[outOfOrderIdx].name);
         }
@@ -7662,7 +7741,7 @@ export namespace DataTypesModule {
     export function initialiseStatic(): void {
         Currency.initialise();
         DataChannel.initialise();
-        DataMessageType.initialise();
+        // DataMessageType.initialise();
         MarketInfo.initialise();
         TBrokerageAccOrAggField.StaticConstructor();
         DataEnvironment.initialise();
@@ -7694,7 +7773,7 @@ export namespace DataTypesModule {
         SymbolField.initialise();
         ZenithPublisherState.initialise();
         ZenithPublisherReconnectReason.initialise();
-        ScanStatus.initialise();
+        ActiveFaultedStatus.initialise();
         ScanTargetType.initialise();
     }
 }

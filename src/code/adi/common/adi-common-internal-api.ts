@@ -19,6 +19,7 @@ export * from './lit-ivem-alternate-codes';
 export * from './lit-ivem-attributes';
 export * from './lit-ivem-id';
 export * from './myx-lit-ivem-attributes';
+export * from './notification-channel';
 export * from './order-details';
 export * from './order-route';
 export * from './order-status';

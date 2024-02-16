@@ -138,7 +138,9 @@ export namespace ScanConditionSet {
 
         const setOperandsCount = setOperands.length;
         if (setOperandsCount === 0) {
-            return new ScanFormula.AndNode();
+            const node = new ScanFormula.AndNode();
+            node.operands = [];
+            return node;
         } else {
             let conditionsBooleanNode: ScanFormula.BooleanNode;
             switch (conditionSet.setOperationId) {

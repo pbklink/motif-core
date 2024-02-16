@@ -7,7 +7,7 @@
 // export interface ScanDetails {
 //     name?: string;
 //     description?: string;
-//     metaData: ScanMetaData;
+//     metadata: ScanMetadata;
 // }
 
 // export interface ScanState extends ScanDetails {

@@ -22,6 +22,7 @@ import {
     IvemClassId,
     MarketId,
     MarketInfo,
+    NotificationDistributionMethodId,
     OrderId,
     OrderRequestFlagId,
     ScanTargetTypeId,
@@ -34,7 +35,7 @@ import { OrderDetails } from './order-details';
 import { OrderRoute } from './order-route';
 import { OrderTrigger } from './order-trigger';
 import { ScanNotification } from './scan-types';
-import { ZenithEncodedScanFormula } from './zenith-protocol/internal-api';
+import { ZenithEncodedScanFormula, ZenithProtocolCommon } from './zenith-protocol/internal-api';
 
 export abstract class DataDefinition {
     private static _lastConstructedId = 0;
@@ -1212,7 +1213,8 @@ export class MoveOrderRequestDataDefinition extends OrderRequestDataDefinition {
 }
 
 export class CreateScanDataDefinition extends FeedSubscriptionDataDefinition {
-    name: string;
+    enabled: boolean;
+    scanName: string;
     scanDescription?: string;
     versionNumber: Integer;
     versionId: Guid;
@@ -1261,6 +1263,7 @@ export class DeleteScanDataDefinition extends FeedSubscriptionDataDefinition {
 
 export class UpdateScanDataDefinition extends FeedSubscriptionDataDefinition {
     scanId: string;
+    enabled: boolean;
     scanName: string;
     scanDescription?: string;
     versionNumber: Integer;
@@ -1446,6 +1449,105 @@ export class LitIvemIdQueryMatchesDataDefinition extends QueryMatchesDataDefinit
 //         super(DataChannelId.LitIvemIdMatches);
 //     }
 // }
+
+export class CreateNotificationChannelDataDefinition extends FeedSubscriptionDataDefinition {
+    enabled: boolean;
+    notificationChannelName: string;
+    notificationChannelDescription?: string;
+    userMetadata: ZenithProtocolCommon.UserMetadata;
+    favourite: boolean;
+    distributionMethodId: NotificationDistributionMethodId;
+    settings: ZenithProtocolCommon.NotificationChannelSettings;
+
+    constructor() {
+        super(DataChannelId.CreateNotificationChannel);
+    }
+
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
+    get referencable() { return false; }
+}
+
+
+export class DeleteNotificationChannelDataDefinition extends FeedSubscriptionDataDefinition {
+    notificationChannelId: string;
+
+    constructor() {
+        super(DataChannelId.DeleteNotificationChannel);
+    }
+
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
+    get referencable(): boolean { return false; }
+}
+
+export class UpdateNotificationChannelDataDefinition extends FeedSubscriptionDataDefinition {
+    notificationChannelId: string;
+    enabled: boolean;
+    notificationChannelName: string;
+    notificationChannelDescription?: string;
+    userMetadata: ZenithProtocolCommon.UserMetadata;
+    favourite: boolean;
+    distributionMethodId: NotificationDistributionMethodId;
+    settings: ZenithProtocolCommon.NotificationChannelSettings;
+
+    constructor() {
+        super(DataChannelId.UpdateNotificationChannel);
+    }
+
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
+    get referencable(): boolean { return false; }
+}
+
+export class UpdateNotificationChannelEnabledDataDefinition extends FeedSubscriptionDataDefinition {
+    notificationChannelId: string;
+    enabled: boolean;
+
+    constructor() {
+        super(DataChannelId.UpdateNotificationChannelEnabled);
+    }
+
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
+    get referencable(): boolean { return false; }
+}
+
+export class QueryNotificationChannelDataDefinition extends FeedSubscriptionDataDefinition {
+    notificationChannelId: string;
+
+    constructor() {
+        super(DataChannelId.QueryNotificationChannel);
+    }
+
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
+    get referencable(): boolean { return false; }
+}
+
+export class QueryNotificationChannelsDataDefinition extends FeedSubscriptionDataDefinition {
+    constructor() {
+        super(DataChannelId.QueryNotificationChannels);
+    }
+
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
+    get referencable(): boolean { return false; }
+}
+
+export class QueryNotificationDistributionMethodDataDefinition extends FeedSubscriptionDataDefinition {
+    distributionMethodId: NotificationDistributionMethodId;
+
+    constructor() {
+        super(DataChannelId.QueryNotificationDistributionMethod);
+    }
+
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
+    get referencable(): boolean { return false; }
+}
+
+export class QueryNotificationDistributionMethodsDataDefinition extends FeedSubscriptionDataDefinition {
+    constructor() {
+        super(DataChannelId.QueryNotificationDistributionMethods);
+    }
+
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
+    get referencable(): boolean { return false; }
+}
 
 export abstract class WatchmakerDataDefinition extends FeedSubscriptionDataDefinition {
 }

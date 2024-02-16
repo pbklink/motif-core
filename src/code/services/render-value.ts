@@ -6,13 +6,15 @@
 
 import { Decimal } from 'decimal.js-light';
 import {
+    ActiveFaultedStatusId,
     DayTradesDataItem,
     HigherLowerId,
     IvemId,
     LitIvemId,
     MarketId,
     MovementId, OrderExtendedSideId, OrderSideId, OrderStatus,
-    RoutedIvemId, ScanStatusId, TradeAffectsId,
+    RoutedIvemId,
+    TradeAffectsId,
     TradeFlagId
 } from "../adi/adi-internal-api";
 import {
@@ -533,7 +535,7 @@ export class DayTradesDataItemRecordTypeIdRenderValue extends EnumRenderValue {
 }
 
 export class ScanStatusIdRenderValue extends EnumRenderValue {
-    constructor(data: ScanStatusId | undefined) {
+    constructor(data: ActiveFaultedStatusId | undefined) {
         super(data, RenderValue.TypeId.ScanStatusId);
     }
 }

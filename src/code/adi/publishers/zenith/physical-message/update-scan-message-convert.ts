@@ -21,7 +21,7 @@ export namespace UpdateScanMessageConvert {
     }
 
     export function createPublishMessage(definition: UpdateScanDataDefinition) {
-        const convertMetaData: ZenithNotifyConvert.ScanMetaData = {
+        const convertMetadata: ZenithNotifyConvert.ScanMetadata = {
             versionNumber: definition.versionNumber,
             versionId: definition.versionId,
             versioningInterrupted: definition.versioningInterrupted,
@@ -35,7 +35,7 @@ export namespace UpdateScanMessageConvert {
         const details: ZenithProtocol.NotifyController.ScanDescriptor = {
             Name: definition.scanName,
             Description: definition.scanDescription,
-            MetaData: ZenithNotifyConvert.ScanMetaType.from(convertMetaData),
+            Metadata: ZenithNotifyConvert.ScanMetaType.from(convertMetadata),
         }
 
         const parameters: ZenithProtocol.NotifyController.ScanParameters = {
@@ -55,6 +55,7 @@ export namespace UpdateScanMessageConvert {
                 ScanID: definition.scanId,
                 Details: details,
                 Parameters: parameters,
+                IsActive: definition.enabled ? true : undefined,
             }
         };
 

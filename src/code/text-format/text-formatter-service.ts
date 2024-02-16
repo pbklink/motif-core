@@ -6,6 +6,8 @@
 
 import { Decimal } from 'decimal.js-light';
 import {
+    ActiveFaultedStatus,
+    ActiveFaultedStatusId,
     CallOrPut,
     CallOrPutId,
     Currency,
@@ -50,7 +52,8 @@ import {
     OrderTypeId,
     PublisherSubscriptionDataType,
     PublisherSubscriptionDataTypeId,
-    RoutedIvemId, ScanStatus, ScanStatusId, ScanTargetType,
+    RoutedIvemId,
+    ScanTargetType,
     ScanTargetTypeId,
     TimeInForce,
     TimeInForceId,
@@ -410,8 +413,8 @@ export class TextFormatterService {
     formatDayTradesDataItemRecordTypeId(value: DayTradesDataItem.Record.TypeId) {
         return DayTradesDataItem.Record.Type.idToDisplay(value);
     }
-    formatScanStatusId(value: ScanStatusId) {
-        return ScanStatus.idToDisplay(value);
+    formatScanStatusId(value: ActiveFaultedStatusId) {
+        return ActiveFaultedStatus.idToDisplay(value);
     }
     formatScanCriteriaTypeId(value: Scan.CriterionId) {
         return Scan.CriteriaType.idToDisplay(value);

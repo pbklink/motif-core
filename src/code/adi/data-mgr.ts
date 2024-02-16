@@ -52,6 +52,7 @@ import { LatestTradingDayTradesDataItem } from './latest-trading-day-trades-data
 import { LowLevelTopShareholdersDataItem } from './low-level-top-shareholders-data-item';
 import { MarketsDataItem } from './markets-data-item';
 import { MoveOrderDataItem } from './move-order-data-item';
+import { CreateNotificationChannelDataItem, DeleteNotificationChannelDataItem, QueryNotificationChannelDataItem, QueryNotificationChannelsDataItem, QueryNotificationDistributionMethodDataItem, QueryNotificationDistributionMethodsDataItem, UpdateNotificationChannelDataItem, UpdateNotificationChannelEnabledDataItem } from './notification-channel/internal-api';
 import { PlaceOrderDataItem } from './place-order-data-item';
 import { ZenithPublisher } from './publishers/adi-publishers-internal-api';
 import { CreateScanDataItem } from './scan/create-scan-data-item';
@@ -417,6 +418,38 @@ export class DataMgr {
 
             case DataChannelId.LitIvemIdMatches:
                 dataItem = new LitIvemIdScanMatchesDataItem(dataDefinition);
+                break;
+
+            case DataChannelId.CreateNotificationChannel:
+                dataItem = new CreateNotificationChannelDataItem(dataDefinition);
+                break;
+
+            case DataChannelId.DeleteNotificationChannel:
+                dataItem = new DeleteNotificationChannelDataItem(dataDefinition);
+                break;
+
+            case DataChannelId.UpdateNotificationChannel:
+                dataItem = new UpdateNotificationChannelDataItem(dataDefinition);
+                break;
+
+            case DataChannelId.UpdateNotificationChannelEnabled:
+                dataItem = new UpdateNotificationChannelEnabledDataItem(dataDefinition);
+                break;
+
+            case DataChannelId.QueryNotificationChannel:
+                dataItem = new QueryNotificationChannelDataItem(dataDefinition);
+                break;
+
+            case DataChannelId.QueryNotificationChannels:
+                dataItem = new QueryNotificationChannelsDataItem(dataDefinition);
+                break;
+
+            case DataChannelId.QueryNotificationDistributionMethod:
+                dataItem = new QueryNotificationDistributionMethodDataItem(dataDefinition);
+                break;
+
+            case DataChannelId.QueryNotificationDistributionMethods:
+                dataItem = new QueryNotificationDistributionMethodsDataItem(dataDefinition);
                 break;
 
             case DataChannelId.LitIvemIdCreateWatchmakerList:

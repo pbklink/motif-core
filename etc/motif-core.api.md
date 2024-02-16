@@ -218,6 +218,34 @@ export namespace AccumulationIntervalHistorySequenceSeries {
     }
 }
 
+// Warning: (ae-missing-release-tag) "ActiveFaultedStatus" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export namespace ActiveFaultedStatus {
+    // (undocumented)
+    export type Id = ActiveFaultedStatusId;
+    const // (undocumented)
+    idCount: number;
+    // (undocumented)
+    export function idToDisplay(id: Id): string;
+    // (undocumented)
+    export function idToDisplayId(id: Id): StringId;
+    // (undocumented)
+    export function initialise(): void;
+}
+
+// Warning: (ae-missing-release-tag) "ActiveFaultedStatusId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export const enum ActiveFaultedStatusId {
+    // (undocumented)
+    Active = 0,
+    // (undocumented)
+    Faulted = 2,
+    // (undocumented)
+    Inactive = 1
+}
+
 // Warning: (ae-missing-release-tag) "AdaptedRevgrid" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "AdaptedRevgrid" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -5256,6 +5284,8 @@ export class CoreService {
     // (undocumented)
     readonly motifServicesService: MotifServicesService;
     // (undocumented)
+    readonly notificationChannelsService: NotificationChannelsService;
+    // (undocumented)
     readonly rankedLitIvemIdListDefinitionFactoryService: RankedLitIvemIdListDefinitionFactoryService;
     // (undocumented)
     readonly rankedLitIvemIdListFactoryService: RankedLitIvemIdListFactoryService;
@@ -5505,6 +5535,51 @@ export namespace CountAndXrefsRenderValue {
 // @public (undocumented)
 export function CreateEnumSet(enumArray: number[]): number;
 
+// Warning: (ae-missing-release-tag) "CreateNotificationChannelDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class CreateNotificationChannelDataDefinition extends FeedSubscriptionDataDefinition {
+    constructor();
+    // (undocumented)
+    distributionMethodId: NotificationDistributionMethodId;
+    // (undocumented)
+    enabled: boolean;
+    // (undocumented)
+    favourite: boolean;
+    // (undocumented)
+    notificationChannelDescription?: string;
+    // (undocumented)
+    notificationChannelName: string;
+    // (undocumented)
+    get referencable(): boolean;
+    // (undocumented)
+    settings: ZenithProtocolCommon.NotificationChannelSettings;
+    // (undocumented)
+    userMetadata: ZenithProtocolCommon.UserMetadata;
+}
+
+// Warning: (ae-forgotten-export) The symbol "NotificationChannelPublishDataItem" needs to be exported by the entry point public-api.d.ts
+// Warning: (ae-missing-release-tag) "CreateNotificationChannelDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class CreateNotificationChannelDataItem extends NotificationChannelPublishDataItem {
+    // (undocumented)
+    get notificationChannelId(): string;
+    // (undocumented)
+    processMessage(msg: DataMessage): void;
+}
+
+// Warning: (ae-missing-release-tag) "CreateNotificationChannelDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class CreateNotificationChannelDataMessage extends DataMessage {
+    constructor();
+    // (undocumented)
+    notificationChannelId: string;
+    // (undocumented)
+    static readonly typeId = DataMessageTypeId.CreateNotificationChannel;
+}
+
 // @public (undocumented)
 export function createNumberGroupCharRemoveRegex(groupChar: string | undefined): RegExp | undefined;
 
@@ -5528,19 +5603,21 @@ export function createRandomUrlSearch(): string;
 export class CreateScanDataDefinition extends FeedSubscriptionDataDefinition {
     constructor();
     // (undocumented)
+    enabled: boolean;
+    // (undocumented)
     lastEditSessionId: Guid;
     // (undocumented)
     lastSavedTime: Date;
     // (undocumented)
     maxMatchCount: Integer | undefined;
     // (undocumented)
-    name: string;
-    // (undocumented)
     notifications: readonly ScanNotification[] | undefined;
     // (undocumented)
     get referencable(): boolean;
     // (undocumented)
     scanDescription?: string;
+    // (undocumented)
+    scanName: string;
     // (undocumented)
     symbolListEnabled: boolean;
     // (undocumented)
@@ -5561,6 +5638,17 @@ export class CreateScanDataDefinition extends FeedSubscriptionDataDefinition {
     zenithRank: ZenithEncodedScanFormula.NumericTupleNode | undefined;
     // (undocumented)
     zenithRankSource: string | undefined;
+}
+
+// Warning: (ae-forgotten-export) The symbol "ScanPublishDataItem" needs to be exported by the entry point public-api.d.ts
+// Warning: (ae-missing-release-tag) "CreateScanDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class CreateScanDataItem extends ScanPublishDataItem {
+    // (undocumented)
+    processMessage(msg: DataMessage): void;
+    // (undocumented)
+    get scanId(): string;
 }
 
 // Warning: (ae-missing-release-tag) "CreateScanDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -5800,15 +5888,19 @@ export const enum DataChannelId {
     // (undocumented)
     ClassFeeds = 3,
     // (undocumented)
-    CopyWatchmakerList = 41,
+    CopyWatchmakerList = 49,
+    // (undocumented)
+    CreateNotificationChannel = 40,
     // (undocumented)
     CreateScan = 33,
     // (undocumented)
     DayTrades = 28,
     // (undocumented)
+    DeleteNotificationChannel = 41,
+    // (undocumented)
     DeleteScan = 35,
     // (undocumented)
-    DeleteWatchmakerList = 42,
+    DeleteWatchmakerList = 50,
     // (undocumented)
     Depth = 6,
     // (undocumented)
@@ -5818,21 +5910,21 @@ export const enum DataChannelId {
     // (undocumented)
     LatestTradingDayTrades = 9,
     // (undocumented)
-    LitIvemIdAddToWatchmakerList = 45,
+    LitIvemIdAddToWatchmakerList = 53,
     // (undocumented)
     LitIvemIdCreateWatchmakerList = 39,
     // (undocumented)
-    LitIvemIdInsertIntoWatchmakerList = 46,
+    LitIvemIdInsertIntoWatchmakerList = 54,
     // (undocumented)
     LitIvemIdMatches = 38,
     // (undocumented)
-    LitIvemIdWatchmakerListMembers = 44,
+    LitIvemIdWatchmakerListMembers = 52,
     // (undocumented)
     LowLevelTopShareholders = 17,
     // (undocumented)
     Markets = 5,
     // (undocumented)
-    MoveInWatchmakerList = 47,
+    MoveInWatchmakerList = 55,
     // (undocumented)
     MoveOrderRequest = 32,
     // (undocumented)
@@ -5843,6 +5935,14 @@ export const enum DataChannelId {
     OrderStatuses = 25,
     // (undocumented)
     PlaceOrderRequest = 29,
+    // (undocumented)
+    QueryNotificationChannel = 44,
+    // (undocumented)
+    QueryNotificationChannels = 45,
+    // (undocumented)
+    QueryNotificationDistributionMethod = 46,
+    // (undocumented)
+    QueryNotificationDistributionMethods = 47,
     // (undocumented)
     QueryScanDetail = 34,
     // (undocumented)
@@ -5858,11 +5958,15 @@ export const enum DataChannelId {
     // (undocumented)
     TradingStates = 4,
     // (undocumented)
+    UpdateNotificationChannel = 42,
+    // (undocumented)
+    UpdateNotificationChannelEnabled = 43,
+    // (undocumented)
     UpdateScan = 36,
     // (undocumented)
-    UpdateWatchmakerList = 40,
+    UpdateWatchmakerList = 48,
     // (undocumented)
-    WatchmakerListDescriptors = 43,
+    WatchmakerListDescriptors = 51,
     // (undocumented)
     ZenithExtConnection = 0,
     // (undocumented)
@@ -6204,8 +6308,6 @@ export abstract class DataMessage {
 
 // @public (undocumented)
 export namespace DataMessage {
-    const // (undocumented)
-    typeIdCount: number;
     // (undocumented)
     export function isErrorPublisherSubscriptionDataMessage(message: DataMessage): message is ErrorPublisherSubscriptionDataMessage;
 }
@@ -6218,20 +6320,6 @@ export class DataMessages extends ComparableList<DataMessage> {
     extractMessagesOrUndefined(): DataMessages | undefined;
     // (undocumented)
     take(msgs: DataMessages): void;
-}
-
-// Warning: (ae-missing-release-tag) "DataMessageType" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export namespace DataMessageType {
-    // (undocumented)
-    export type Id = DataMessageTypeId;
-    // (undocumented)
-    export type IdArray = Id[];
-    const // (undocumented)
-    idCount: number;
-    // (undocumented)
-    export function initialise(): void;
 }
 
 // Warning: (ae-missing-release-tag) "DataMessageTypeId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -6249,9 +6337,13 @@ export const enum DataMessageTypeId {
     // (undocumented)
     ChartHistory = 22,
     // (undocumented)
-    CreateOrCopyWatchmakerList = 43,
+    CreateNotificationChannel = 42,
+    // (undocumented)
+    CreateOrCopyWatchmakerList = 51,
     // (undocumented)
     CreateScan = 35,
+    // (undocumented)
+    DeleteNotificationChannel = 43,
     // (undocumented)
     DeleteScan = 37,
     // (undocumented)
@@ -6285,6 +6377,14 @@ export const enum DataMessageTypeId {
     // (undocumented)
     PublisherSubscription_Warning = 2,
     // (undocumented)
+    QueryNotificationChannel = 46,
+    // (undocumented)
+    QueryNotificationChannels = 47,
+    // (undocumented)
+    QueryNotificationDistributionMethod = 48,
+    // (undocumented)
+    QueryNotificationDistributionMethods = 49,
+    // (undocumented)
     QueryScanDetail = 38,
     // (undocumented)
     ScanDescriptors = 40,
@@ -6305,13 +6405,17 @@ export const enum DataMessageTypeId {
     // (undocumented)
     Transactions = 18,
     // (undocumented)
+    UpdateNotificationChannel = 44,
+    // (undocumented)
+    UpdateNotificationChannelEnabled = 45,
+    // (undocumented)
     UpdateScan = 36,
     // (undocumented)
-    WatchmakerListDescriptors = 44,
+    WatchmakerListDescriptors = 52,
     // (undocumented)
-    WatchmakerListLitIvemIds = 45,
+    WatchmakerListLitIvemIds = 53,
     // (undocumented)
-    WatchmakerListRequestAcknowledge = 42,
+    WatchmakerListRequestAcknowledge = 50,
     // (undocumented)
     ZenithCounter = 27,
     // (undocumented)
@@ -7148,6 +7252,34 @@ export function delay1Tick(ftn: () => void): NodeJS.Timeout;
 // @public (undocumented)
 export function delay2Ticks(ftn: () => void): void;
 
+// Warning: (ae-missing-release-tag) "DeleteNotificationChannelDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class DeleteNotificationChannelDataDefinition extends FeedSubscriptionDataDefinition {
+    constructor();
+    // (undocumented)
+    notificationChannelId: string;
+    // (undocumented)
+    get referencable(): boolean;
+}
+
+// Warning: (ae-missing-release-tag) "DeleteNotificationChannelDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class DeleteNotificationChannelDataItem extends NotificationChannelPublishDataItem {
+    // (undocumented)
+    processMessage(msg: DataMessage): void;
+}
+
+// Warning: (ae-missing-release-tag) "DeleteNotificationChannelDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class DeleteNotificationChannelDataMessage extends DataMessage {
+    constructor();
+    // (undocumented)
+    static readonly typeId = DataMessageTypeId.DeleteNotificationChannel;
+}
+
 // Warning: (ae-missing-release-tag) "DeleteScanDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -7157,6 +7289,14 @@ export class DeleteScanDataDefinition extends FeedSubscriptionDataDefinition {
     get referencable(): boolean;
     // (undocumented)
     scanId: string;
+}
+
+// Warning: (ae-missing-release-tag) "DeleteScanDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class DeleteScanDataItem extends ScanPublishDataItem {
+    // (undocumented)
+    processMessage(msg: DataMessage): void;
 }
 
 // Warning: (ae-missing-release-tag) "DeleteScanDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -9103,6 +9243,56 @@ export const enum ErrorCode {
     ZenithMessageConvert_AddToWatchmakerList_Action = "ZMCATWLA69114",
     // (undocumented)
     ZenithMessageConvert_AddToWatchmakerList_Topic = "ZMCATWLT69114",
+    // (undocumented)
+    ZenithMessageConvert_Channel_Create_Action = "ZMCCCA40711",
+    // (undocumented)
+    ZenithMessageConvert_Channel_Create_Controller = "ZMCCCC40711",
+    // (undocumented)
+    ZenithMessageConvert_Channel_Create_Topic = "ZMCCCT40711",
+    // (undocumented)
+    ZenithMessageConvert_Channel_Delete_Action = "ZMCCDA40711",
+    // (undocumented)
+    ZenithMessageConvert_Channel_Delete_Controller = "ZMCCDC40711",
+    // (undocumented)
+    ZenithMessageConvert_Channel_Delete_Topic = "ZMCCDT40711",
+    // (undocumented)
+    ZenithMessageConvert_Channel_QueryChannel_Action = "ZMCCQCA40711",
+    // (undocumented)
+    ZenithMessageConvert_Channel_QueryChannel_Controller = "ZMCCQCC40711",
+    // (undocumented)
+    ZenithMessageConvert_Channel_QueryChannel_Topic = "ZMCCQCT40711",
+    // (undocumented)
+    ZenithMessageConvert_Channel_QueryChannels_Action = "ZMCCQCSA40711",
+    // (undocumented)
+    ZenithMessageConvert_Channel_QueryChannels_Controller = "ZMCCQCSC40711",
+    // (undocumented)
+    ZenithMessageConvert_Channel_QueryChannels_Topic = "ZMCCQCST40711",
+    // (undocumented)
+    ZenithMessageConvert_Channel_QueryMethod_Action = "ZMCCQMA40711",
+    // (undocumented)
+    ZenithMessageConvert_Channel_QueryMethod_Controller = "ZMCCQMC40711",
+    // (undocumented)
+    ZenithMessageConvert_Channel_QueryMethod_Topic = "ZMCCQMT40711",
+    // (undocumented)
+    ZenithMessageConvert_Channel_QueryMethod_Type = "ZMCCQMTY40711",
+    // (undocumented)
+    ZenithMessageConvert_Channel_QueryMethods_Action = "ZMCCQMSA40711",
+    // (undocumented)
+    ZenithMessageConvert_Channel_QueryMethods_Controller = "ZMCCQMSC40711",
+    // (undocumented)
+    ZenithMessageConvert_Channel_QueryMethods_Topic = "ZMCCQMST40711",
+    // (undocumented)
+    ZenithMessageConvert_Channel_Update_Action = "ZMCCUA40711",
+    // (undocumented)
+    ZenithMessageConvert_Channel_Update_Controller = "ZMCCUC40711",
+    // (undocumented)
+    ZenithMessageConvert_Channel_Update_Topic = "ZMCCUT40711",
+    // (undocumented)
+    ZenithMessageConvert_Channel_UpdateEnabled_Action = "ZMCCUEA40711",
+    // (undocumented)
+    ZenithMessageConvert_Channel_UpdateEnabled_Controller = "ZMCCUEC40711",
+    // (undocumented)
+    ZenithMessageConvert_Channel_UpdateEnabled_Topic = "ZMCCUET40711",
     // (undocumented)
     ZenithMessageConvert_CopyWatchmakerList_Action = "ZMCCWLA69114",
     // (undocumented)
@@ -15654,7 +15844,6 @@ export class LitIvemIdRenderValue extends GenericRenderValue<LitIvemId> {
 // @public (undocumented)
 export type LitIvemIdScanMatch = ScanMatch<LitIvemId>;
 
-// Warning: (ae-forgotten-export) The symbol "ScanMatchesDataItem" needs to be exported by the entry point public-api.d.ts
 // Warning: (ae-missing-release-tag) "LitIvemIdScanMatchesDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "LitIvemIdScanMatchesDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -17913,6 +18102,79 @@ export interface NoneScanCondition extends ScanCondition {
 export namespace NoneScanCondition {
     // (undocumented)
     export function isEqual(_left: NoneScanCondition, _right: NoneScanCondition): boolean;
+}
+
+// Warning: (ae-missing-release-tag) "NotificationChannel" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface NotificationChannel {
+    // (undocumented)
+    channelDescription: string | undefined;
+    // (undocumented)
+    channelId: string;
+    // (undocumented)
+    channelName: string;
+    // (undocumented)
+    channelStatusId: ActiveFaultedStatusId;
+    // (undocumented)
+    distributionMethodId: NotificationDistributionMethodId;
+    // (undocumented)
+    enabled: boolean;
+    // (undocumented)
+    faulted: boolean;
+    // (undocumented)
+    favourite: boolean;
+    // (undocumented)
+    settings: ZenithProtocolCommon.NotificationChannelSettings | undefined;
+    // (undocumented)
+    userMetadata: ZenithProtocolCommon.UserMetadata;
+}
+
+// Warning: (ae-missing-release-tag) "NotificationChannelsService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "NotificationChannelsService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class NotificationChannelsService {
+    constructor();
+    // (undocumented)
+    readonly channelList: ModifierComparableList<NotificationChannel, Integer>;
+}
+
+// @public (undocumented)
+export namespace NotificationChannelsService {
+    // (undocumented)
+    export interface List {
+        // (undocumented)
+        add(channel: NotificationChannel): Integer;
+        // (undocumented)
+        capacity: Integer;
+        // (undocumented)
+        clear(): void;
+        // (undocumented)
+        readonly count: Integer;
+        // (undocumented)
+        getAt(index: Integer): NotificationChannel;
+        // (undocumented)
+        remove(channel: NotificationChannel): void;
+        // (undocumented)
+        removeAtIndex(idx: Integer): void;
+    }
+}
+
+// Warning: (ae-missing-release-tag) "NotificationDistributionMethodId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export const enum NotificationDistributionMethodId {
+    // (undocumented)
+    ApplePush = 3,
+    // (undocumented)
+    Email = 0,
+    // (undocumented)
+    GooglePush = 4,
+    // (undocumented)
+    Sms = 1,
+    // (undocumented)
+    WebPush = 2
 }
 
 // @public (undocumented)
@@ -21855,6 +22117,134 @@ export abstract class QueryMatchesDataDefinition extends FeedSubscriptionDataDef
     scanId: string;
 }
 
+// Warning: (ae-missing-release-tag) "QueryNotificationChannelDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class QueryNotificationChannelDataDefinition extends FeedSubscriptionDataDefinition {
+    constructor();
+    // (undocumented)
+    notificationChannelId: string;
+    // (undocumented)
+    get referencable(): boolean;
+}
+
+// Warning: (ae-missing-release-tag) "QueryNotificationChannelDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class QueryNotificationChannelDataItem extends NotificationChannelPublishDataItem {
+    // (undocumented)
+    get notificationChannelStateAndSettings(): SettingsedNotificationChannel;
+    // (undocumented)
+    processMessage(msg: DataMessage): void;
+}
+
+// Warning: (ae-missing-release-tag) "QueryNotificationChannelDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class QueryNotificationChannelDataMessage extends DataMessage {
+    constructor();
+    // (undocumented)
+    notificationChannel: SettingsedNotificationChannel;
+    // (undocumented)
+    static readonly typeId = DataMessageTypeId.QueryNotificationChannel;
+}
+
+// Warning: (ae-missing-release-tag) "QueryNotificationChannelsDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class QueryNotificationChannelsDataDefinition extends FeedSubscriptionDataDefinition {
+    constructor();
+    // (undocumented)
+    get referencable(): boolean;
+}
+
+// Warning: (ae-missing-release-tag) "QueryNotificationChannelsDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class QueryNotificationChannelsDataItem extends NotificationChannelPublishDataItem {
+    // (undocumented)
+    get notificationChannels(): readonly NotificationChannel[];
+    // (undocumented)
+    processMessage(msg: DataMessage): void;
+}
+
+// Warning: (ae-missing-release-tag) "QueryNotificationChannelsDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class QueryNotificationChannelsDataMessage extends DataMessage {
+    constructor();
+    // (undocumented)
+    notificationChannels: readonly NotificationChannel[];
+    // (undocumented)
+    static readonly typeId = DataMessageTypeId.QueryNotificationChannels;
+}
+
+// Warning: (ae-missing-release-tag) "QueryNotificationDistributionMethodDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class QueryNotificationDistributionMethodDataDefinition extends FeedSubscriptionDataDefinition {
+    constructor();
+    // (undocumented)
+    distributionMethodId: NotificationDistributionMethodId;
+    // (undocumented)
+    get referencable(): boolean;
+}
+
+// Warning: (ae-missing-release-tag) "QueryNotificationDistributionMethodDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class QueryNotificationDistributionMethodDataItem extends NotificationChannelPublishDataItem {
+    // (undocumented)
+    get metadata(): ZenithProtocolCommon.NotificationDistributionMethodMetadata;
+    // (undocumented)
+    get methodId(): NotificationDistributionMethodId;
+    // (undocumented)
+    processMessage(msg: DataMessage): void;
+}
+
+// Warning: (ae-missing-release-tag) "QueryNotificationDistributionMethodDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class QueryNotificationDistributionMethodDataMessage extends DataMessage {
+    constructor();
+    // (undocumented)
+    metadata: ZenithProtocolCommon.NotificationDistributionMethodMetadata;
+    // (undocumented)
+    methodId: NotificationDistributionMethodId;
+    // (undocumented)
+    static readonly typeId = DataMessageTypeId.QueryNotificationDistributionMethod;
+}
+
+// Warning: (ae-missing-release-tag) "QueryNotificationDistributionMethodsDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class QueryNotificationDistributionMethodsDataDefinition extends FeedSubscriptionDataDefinition {
+    constructor();
+    // (undocumented)
+    get referencable(): boolean;
+}
+
+// Warning: (ae-missing-release-tag) "QueryNotificationDistributionMethodsDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class QueryNotificationDistributionMethodsDataItem extends NotificationChannelPublishDataItem {
+    // (undocumented)
+    get methodIds(): readonly NotificationDistributionMethodId[];
+    // (undocumented)
+    processMessage(msg: DataMessage): void;
+}
+
+// Warning: (ae-missing-release-tag) "QueryNotificationDistributionMethodsDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class QueryNotificationDistributionMethodsDataMessage extends DataMessage {
+    constructor();
+    // (undocumented)
+    methodIds: readonly NotificationDistributionMethodId[];
+    // (undocumented)
+    static readonly typeId = DataMessageTypeId.QueryNotificationDistributionMethods;
+}
+
 // Warning: (ae-missing-release-tag) "QueryOrderAuditDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -21907,7 +22297,6 @@ export class QueryScanDetailDataDefinition extends FeedSubscriptionDataDefinitio
     scanId: string;
 }
 
-// Warning: (ae-forgotten-export) The symbol "ScanPublishDataItem" needs to be exported by the entry point public-api.d.ts
 // Warning: (ae-missing-release-tag) "QueryScanDetailDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -21940,7 +22329,7 @@ export class QueryScanDetailDataMessage extends DataMessage {
     // (undocumented)
     scanReadonly: boolean;
     // (undocumented)
-    scanStatusId: ScanStatusId;
+    scanStatusId: ActiveFaultedStatusId;
     // (undocumented)
     symbolListEnabled: boolean | undefined;
     // (undocumented)
@@ -24373,7 +24762,7 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
     // (undocumented)
     setTargetMarketIds(value: readonly MarketId[]): void;
     // (undocumented)
-    get statusId(): ScanStatusId;
+    get statusId(): ActiveFaultedStatusId;
     // (undocumented)
     subscribeCorrectnessChangedEvent(handler: Scan.CorrectnessChangedEventHandler): number;
     // (undocumented)
@@ -24846,7 +25235,6 @@ export class ScanEditor<Modifier = void> extends OpenableScanEditor {
     get description(): string;
     // (undocumented)
     get enabled(): boolean;
-    set enabled(value: boolean);
     // (undocumented)
     endFieldChanges(): void;
     // (undocumented)
@@ -24896,6 +25284,8 @@ export class ScanEditor<Modifier = void> extends OpenableScanEditor {
     // (undocumented)
     setDescription(value: string): void;
     // (undocumented)
+    setEnabled(value: boolean): void;
+    // (undocumented)
     setLastTargetTypeIdWasMulti(value: boolean): void;
     // (undocumented)
     setMaxMatchCount(value: Integer): void;
@@ -24918,7 +25308,7 @@ export class ScanEditor<Modifier = void> extends OpenableScanEditor {
     // (undocumented)
     get sourceValid(): boolean;
     // (undocumented)
-    get statusId(): ScanStatusId | undefined;
+    get statusId(): ActiveFaultedStatusId | undefined;
     // (undocumented)
     subscribeFieldChangesEvents(handler: ScanEditor.FieldChangesEventHandler<Modifier>): number;
     // (undocumented)
@@ -26796,6 +27186,71 @@ export namespace ScanMatch {
     }
 }
 
+// Warning: (ae-missing-release-tag) "ScanMatchesDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ScanMatchesDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export abstract class ScanMatchesDataItem<T> extends FeedSubscriptionDataItem {
+    constructor(definition: DataDefinition);
+    // (undocumented)
+    protected compareRankScore(left: ScanMatch<T>, right: ScanMatch<T>): number;
+    // (undocumented)
+    abstract createMatch(unrankedIndex: Integer, value: T, rankScore: number): ScanMatchesDataItem.Match<T>;
+    // (undocumented)
+    protected processChanges(changes: MatchesDataMessage.Change<T>[]): void;
+    // (undocumented)
+    protected processSubscriptionPreOnline(): void;
+    // (undocumented)
+    protected processUsableChanged(): void;
+    // (undocumented)
+    protected abstract rankUnrankedListAdd(addIndex: Integer, addCount: Integer): void;
+    // (undocumented)
+    protected abstract rankUnrankedListClear(): void;
+    // (undocumented)
+    protected abstract rankUnrankedListRemove(removeIndex: Integer): void;
+    // (undocumented)
+    subscribeListChangeEvent(handler: RecordList.ListChangeEventHandler): number;
+    // (undocumented)
+    readonly unrankedRecords: ScanMatchesDataItem.Match<T>[];
+    // (undocumented)
+    unsubscribeListChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+}
+
+// @public (undocumented)
+export namespace ScanMatchesDataItem {
+    // (undocumented)
+    export abstract class Match<T> implements ScanMatch<T> {
+        constructor(unrankedIndex: Integer, index: Integer, value: T, rankScore: number, updateRankScoreEventer: Match.UpdateRankScoreEventer<T>);
+        // (undocumented)
+        index: Integer;
+        // (undocumented)
+        protected notifyUpdated(changedFields: readonly Match.ChangeableField[]): void;
+        // (undocumented)
+        get rankScore(): number;
+        // (undocumented)
+        setRankScore(newRankScore: number): void;
+        // (undocumented)
+        setValue(newValue: T): void;
+        // (undocumented)
+        unrankedIndex: Integer;
+        // (undocumented)
+        abstract update(value: T, rankScore: number): void;
+        // (undocumented)
+        readonly updateRankScoreEventer: Match.UpdateRankScoreEventer<T>;
+        // (undocumented)
+        get value(): T;
+    }
+    // (undocumented)
+    export namespace Match {
+        // (undocumented)
+        export type ChangeableField = PickEnum<ScanMatch.FieldId, ScanMatch.FieldId.Value | ScanMatch.FieldId.RankScore>;
+        // (undocumented)
+        export type UpdatedEventer = (this: void, changedFields: readonly Match.ChangeableField[]) => void;
+        // (undocumented)
+        export type UpdateRankScoreEventer<T> = (this: void, thisMatch: Match<T>, newRankScore: number) => void;
+    }
+}
+
 // Warning: (ae-missing-release-tag) "ScanMatchRecord" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
@@ -26866,22 +27321,6 @@ export namespace ScanStaticInitialise {
     export function initialise(): void;
 }
 
-// Warning: (ae-missing-release-tag) "ScanStatus" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export namespace ScanStatus {
-    // (undocumented)
-    export type Id = ScanStatusId;
-    const // (undocumented)
-    idCount: number;
-    // (undocumented)
-    export function idToDisplay(id: Id): string;
-    // (undocumented)
-    export function idToDisplayId(id: Id): StringId;
-    // (undocumented)
-    export function initialise(): void;
-}
-
 // Warning: (ae-missing-release-tag) "ScanStatusedDescriptor" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "ScanStatusedDescriptor" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -26901,7 +27340,7 @@ export class ScanStatusedDescriptor implements ScanStatusedDescriptorInterface {
     // (undocumented)
     get readonly(): boolean;
     // (undocumented)
-    get statusId(): ScanStatusId;
+    get statusId(): ActiveFaultedStatusId;
     // (undocumented)
     subscribeUpdatedEvent(handler: ScanStatusedDescriptor.UpdatedEventHandler): number;
     // (undocumented)
@@ -26993,7 +27432,7 @@ export interface ScanStatusedDescriptorInterface {
     // (undocumented)
     readonly readonly: boolean;
     // (undocumented)
-    readonly statusId: ScanStatusId;
+    readonly statusId: ActiveFaultedStatusId;
     // (undocumented)
     readonly symbolListEnabled: boolean | undefined;
     // (undocumented)
@@ -27064,7 +27503,7 @@ export namespace ScanStatusedDescriptorsDataMessage {
         // (undocumented)
         scanName: string;
         // (undocumented)
-        scanStatusId: ScanStatusId;
+        scanStatusId: ActiveFaultedStatusId;
         // (undocumented)
         symbolListEnabled: boolean | undefined;
         // (undocumented)
@@ -27093,7 +27532,7 @@ export namespace ScanStatusedDescriptorsDataMessage {
         // (undocumented)
         scanName: string | undefined;
         // (undocumented)
-        scanStatusId: ScanStatusId | undefined;
+        scanStatusId: ActiveFaultedStatusId | undefined;
         // (undocumented)
         symbolListEnabled: boolean | undefined;
         // (undocumented)
@@ -27141,18 +27580,6 @@ export namespace ScanStatusedDescriptorsDataMessage {
     }
 }
 
-// Warning: (ae-missing-release-tag) "ScanStatusId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export const enum ScanStatusId {
-    // (undocumented)
-    Active = 0,
-    // (undocumented)
-    Faulted = 2,
-    // (undocumented)
-    Inactive = 1
-}
-
 // Warning: (ae-missing-release-tag) "ScanStatusIdCorrectnessTableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -27164,7 +27591,7 @@ export class ScanStatusIdCorrectnessTableValue extends EnumCorrectnessTableValue
 //
 // @public (undocumented)
 export class ScanStatusIdRenderValue extends EnumRenderValue {
-    constructor(data: ScanStatusId | undefined);
+    constructor(data: ActiveFaultedStatusId | undefined);
 }
 
 // @public (undocumented)
@@ -28269,6 +28696,14 @@ export const enum SessionStateId {
     Online = 2,
     // (undocumented)
     Starting = 1
+}
+
+// Warning: (ae-missing-release-tag) "SettingsedNotificationChannel" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface SettingsedNotificationChannel extends NotificationChannel {
+    // (undocumented)
+    settings: ZenithProtocolCommon.NotificationChannelSettings;
 }
 
 // Warning: (ae-missing-release-tag) "SettingsGroup" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -35867,7 +36302,7 @@ export class TextFormatterService {
     // (undocumented)
     formatScanFieldBooleanOperationId(value: ScanField.BooleanOperationId): string;
     // (undocumented)
-    formatScanStatusId(value: ScanStatusId): string;
+    formatScanStatusId(value: ActiveFaultedStatusId): string;
     // (undocumented)
     formatScanTargetTypeId(value: ScanTargetTypeId): string;
     // (undocumented)
@@ -38599,11 +39034,85 @@ export class UnreachableCaseError extends BaseInternalError {
     constructor(code: string, value: never, errorText?: string);
 }
 
+// Warning: (ae-missing-release-tag) "UpdateNotificationChannelDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class UpdateNotificationChannelDataDefinition extends FeedSubscriptionDataDefinition {
+    constructor();
+    // (undocumented)
+    distributionMethodId: NotificationDistributionMethodId;
+    // (undocumented)
+    enabled: boolean;
+    // (undocumented)
+    favourite: boolean;
+    // (undocumented)
+    notificationChannelDescription?: string;
+    // (undocumented)
+    notificationChannelId: string;
+    // (undocumented)
+    notificationChannelName: string;
+    // (undocumented)
+    get referencable(): boolean;
+    // (undocumented)
+    settings: ZenithProtocolCommon.NotificationChannelSettings;
+    // (undocumented)
+    userMetadata: ZenithProtocolCommon.UserMetadata;
+}
+
+// Warning: (ae-missing-release-tag) "UpdateNotificationChannelDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class UpdateNotificationChannelDataItem extends NotificationChannelPublishDataItem {
+    // (undocumented)
+    processMessage(msg: DataMessage): void;
+}
+
+// Warning: (ae-missing-release-tag) "UpdateNotificationChannelDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class UpdateNotificationChannelDataMessage extends DataMessage {
+    constructor();
+    // (undocumented)
+    static readonly typeId = DataMessageTypeId.UpdateNotificationChannel;
+}
+
+// Warning: (ae-missing-release-tag) "UpdateNotificationChannelEnabledDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class UpdateNotificationChannelEnabledDataDefinition extends FeedSubscriptionDataDefinition {
+    constructor();
+    // (undocumented)
+    enabled: boolean;
+    // (undocumented)
+    notificationChannelId: string;
+    // (undocumented)
+    get referencable(): boolean;
+}
+
+// Warning: (ae-missing-release-tag) "UpdateNotificationChannelEnabledDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class UpdateNotificationChannelEnabledDataItem extends NotificationChannelPublishDataItem {
+    // (undocumented)
+    processMessage(msg: DataMessage): void;
+}
+
+// Warning: (ae-missing-release-tag) "UpdateNotificationChannelEnabledDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class UpdateNotificationChannelEnabledDataMessage extends DataMessage {
+    constructor();
+    // (undocumented)
+    static readonly typeId = DataMessageTypeId.UpdateNotificationChannelEnabled;
+}
+
 // Warning: (ae-missing-release-tag) "UpdateScanDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class UpdateScanDataDefinition extends FeedSubscriptionDataDefinition {
     constructor();
+    // (undocumented)
+    enabled: boolean;
     // (undocumented)
     lastEditSessionId: Guid;
     // (undocumented)
@@ -39618,6 +40127,11 @@ export namespace ZenithConvert {
     export namespace Accounts {
         // (undocumented)
         export function toDataMessageAccount(accountState: ZenithProtocol.TradingController.Accounts.AccountState): BrokerageAccountsDataMessage.Account;
+    }
+    // (undocumented)
+    export namespace ActiveFaultedStatus {
+        // (undocumented)
+        export function toId(value: ZenithProtocol.ActiveFaultedStatus): ActiveFaultedStatusId;
     }
     // (undocumented)
     export namespace AuiChangeType {
@@ -41180,6 +41694,15 @@ export namespace ZenithProtocol {
         Update = "U"
     }
     // (undocumented)
+    export const enum ActiveFaultedStatus {
+        // (undocumented)
+        Active = "Active",
+        // (undocumented)
+        Faulted = "Faulted",
+        // (undocumented)
+        Inactive = "Inactive"
+    }
+    // (undocumented)
     export const enum AurcChangeType {
         // (undocumented)
         Add = "Add",
@@ -41285,13 +41808,6 @@ export namespace ZenithProtocol {
             Identify = "Identify"
         }
     }
-    // (undocumented)
-    export const enum CallOrPut {
-        // (undocumented)
-        Call = "Call",
-        // (undocumented)
-        Put = "Put"
-    }
     const // (undocumented)
     timeDayTerminatorChar = ".";
     const // (undocumented)
@@ -41316,6 +41832,238 @@ export namespace ZenithProtocol {
     environmentCloseChar = "]";
     const // (undocumented)
     commaTextSeparator = ",";
+    // (undocumented)
+    export const enum CallOrPut {
+        // (undocumented)
+        Call = "Call",
+        // (undocumented)
+        Put = "Put"
+    }
+    // (undocumented)
+    export namespace ChannelController {
+        // (undocumented)
+        export interface ChannelDescriptor {
+            // (undocumented)
+            readonly Description?: string;
+            // (undocumented)
+            readonly Metadata: Metadata;
+            // (undocumented)
+            readonly Name: string;
+        }
+        // (undocumented)
+        export type ChannelID = string;
+        // (undocumented)
+        export interface ChannelParameters {
+            // (undocumented)
+            readonly Settings: ZenithProtocolCommon.NotificationChannelSettings;
+            // (undocumented)
+            readonly Type: DistributionMethodType;
+        }
+        // (undocumented)
+        export interface ChannelState extends ChannelDescriptor {
+            // (undocumented)
+            readonly ID: ChannelID;
+            // (undocumented)
+            readonly Status: ActiveFaultedStatus;
+            // (undocumented)
+            readonly Type: DistributionMethodType;
+        }
+        // (undocumented)
+        export namespace CreateChannel {
+            // (undocumented)
+            export interface PublishMessageContainer extends RequestMessageContainer {
+                // (undocumented)
+                readonly Data: QueryRequest;
+            }
+            // (undocumented)
+            export type PublishPayload = Response;
+            // (undocumented)
+            export interface PublishPayloadMessageContainer extends ResponseUpdateMessageContainer {
+                // (undocumented)
+                readonly Data: PublishPayload | undefined;
+            }
+            // (undocumented)
+            export interface QueryRequest {
+                // (undocumented)
+                readonly Details: ChannelDescriptor;
+                // (undocumented)
+                readonly IsActive: boolean | undefined;
+                // (undocumented)
+                readonly Parameters: ChannelParameters;
+            }
+            // (undocumented)
+            export interface Response {
+                // (undocumented)
+                readonly ChannelID: ChannelID;
+            }
+        }
+        // (undocumented)
+        export namespace DeleteChannel {
+            // (undocumented)
+            export interface PublishMessageContainer extends RequestMessageContainer {
+                // (undocumented)
+                readonly Data: QueryRequest;
+            }
+            // (undocumented)
+            export interface QueryRequest {
+                // (undocumented)
+                readonly ChannelID: ChannelID;
+            }
+        }
+        // (undocumented)
+        export const enum DistributionMethodType {
+            // (undocumented)
+            Email = "Email",
+            // (undocumented)
+            PushApns = "Push.APNs",
+            // (undocumented)
+            PushFCM = "Push.FCM",
+            // (undocumented)
+            PushWeb = "Push.Web",
+            // (undocumented)
+            Sms = "SMS"
+        }
+        // (undocumented)
+        export type Metadata = Record<string, string | undefined>;
+        // (undocumented)
+        export namespace QueryChannel {
+            // (undocumented)
+            export interface PublishMessageContainer extends RequestMessageContainer {
+                // (undocumented)
+                readonly Data: QueryRequest;
+            }
+            // (undocumented)
+            export type PublishPayload = Response;
+            // (undocumented)
+            export interface PublishPayloadMessageContainer extends ResponseUpdateMessageContainer {
+                // (undocumented)
+                readonly Data: PublishPayload | undefined;
+            }
+            // (undocumented)
+            export interface QueryRequest {
+                // (undocumented)
+                readonly ChannelID: ChannelID;
+            }
+            // (undocumented)
+            export interface Response {
+                // (undocumented)
+                readonly ChannelID: ChannelID;
+                // (undocumented)
+                readonly Details: StatusedChannelDescriptor;
+                // (undocumented)
+                readonly Parameters: ChannelParameters;
+            }
+        }
+        // (undocumented)
+        export namespace QueryChannels {
+            // (undocumented)
+            export type PublishMessageContainer = RequestMessageContainer;
+            // (undocumented)
+            export type PublishPayload = readonly ChannelState[];
+            // (undocumented)
+            export interface PublishPayloadMessageContainer extends ResponseUpdateMessageContainer {
+                // (undocumented)
+                readonly Data: PublishPayload | undefined;
+            }
+        }
+        // (undocumented)
+        export namespace QueryMethod {
+            // (undocumented)
+            export interface PublishMessageContainer extends RequestMessageContainer {
+                // (undocumented)
+                readonly Data: QueryRequest;
+            }
+            // (undocumented)
+            export type PublishPayload = Response;
+            // (undocumented)
+            export interface PublishPayloadMessageContainer extends ResponseUpdateMessageContainer {
+                // (undocumented)
+                readonly Data: PublishPayload | undefined;
+            }
+            // (undocumented)
+            export interface QueryRequest {
+                // (undocumented)
+                readonly Type: DistributionMethodType;
+            }
+            // (undocumented)
+            export interface Response {
+                // (undocumented)
+                readonly Metadata: ZenithProtocolCommon.NotificationDistributionMethodMetadata;
+                // (undocumented)
+                readonly Type: DistributionMethodType;
+            }
+        }
+        // (undocumented)
+        export namespace QueryMethods {
+            // (undocumented)
+            export type Payload = readonly DistributionMethodType[];
+            // (undocumented)
+            export type PublishMessageContainer = RequestMessageContainer;
+            // (undocumented)
+            export interface PublishPayloadMessageContainer extends ResponseUpdateMessageContainer {
+                // (undocumented)
+                readonly Data: Payload | undefined;
+            }
+        }
+        // (undocumented)
+        export interface StatusedChannelDescriptor extends ChannelDescriptor {
+            // (undocumented)
+            readonly Status: ActiveFaultedStatus;
+        }
+        // (undocumented)
+        export const enum TopicName {
+            // (undocumented)
+            CreateChannel = "CreateChannel",
+            // (undocumented)
+            DeleteChannel = "DeleteChannel",
+            // (undocumented)
+            QueryChannel = "QueryChannel",
+            // (undocumented)
+            QueryChannels = "QueryChannels",
+            // (undocumented)
+            QueryMethod = "QueryMethod",
+            // (undocumented)
+            QueryMethods = "QueryMethods",
+            // (undocumented)
+            UpdateChannel = "UpdateChannel",
+            // (undocumented)
+            UpdateChannelStatus = "UpdateChannelStatus"
+        }
+        // (undocumented)
+        export namespace UpdateChannel {
+            // (undocumented)
+            export interface PublishMessageContainer extends RequestMessageContainer {
+                // (undocumented)
+                readonly Data: QueryRequest;
+            }
+            // (undocumented)
+            export interface QueryRequest {
+                // (undocumented)
+                readonly ChannelID: ChannelID;
+                // (undocumented)
+                readonly Details: ChannelDescriptor;
+                // (undocumented)
+                readonly IsActive: boolean | undefined;
+                // (undocumented)
+                readonly Parameters: ChannelParameters;
+            }
+        }
+        // (undocumented)
+        export namespace UpdateChannelStatus {
+            // (undocumented)
+            export interface PublishMessageContainer extends RequestMessageContainer {
+                // (undocumented)
+                readonly Data: QueryRequest;
+            }
+            // (undocumented)
+            export interface QueryRequest {
+                // (undocumented)
+                readonly ChannelID: ChannelID;
+                // (undocumented)
+                readonly IsActive: boolean | undefined;
+            }
+        }
+    }
     // (undocumented)
     export interface ClearIrrcChange<T> extends IrrcChange<T> {
         // (undocumented)
@@ -42551,6 +43299,8 @@ export namespace ZenithProtocol {
             // (undocumented)
             Auth = "Auth",
             // (undocumented)
+            Channel = "Channel",
+            // (undocumented)
             Fragments = "Fragments",
             // (undocumented)
             Market = "Market",
@@ -42614,12 +43364,14 @@ export namespace ZenithProtocol {
             // (undocumented)
             export interface PublishPayloadMessageContainer extends ResponseUpdateMessageContainer {
                 // (undocumented)
-                readonly Data: PublishPayload;
+                readonly Data: PublishPayload | undefined;
             }
             // (undocumented)
             export interface QueryRequest {
                 // (undocumented)
                 readonly Details: ScanDescriptor;
+                // (undocumented)
+                readonly IsActive?: boolean;
                 // (undocumented)
                 readonly Parameters: ScanParameters;
             }
@@ -42685,7 +43437,32 @@ export namespace ZenithProtocol {
             }
         }
         // (undocumented)
-        export type MetaData = Record<string, string | undefined>;
+        export type Metadata = Record<string, string | undefined>;
+        // (undocumented)
+        export interface Notification {
+            // (undocumented)
+            readonly ChannelID: string;
+            // (undocumented)
+            readonly CultureCode?: string;
+            // (undocumented)
+            readonly MimimumElapsed?: Time;
+            // (undocumented)
+            readonly MinimumStable?: Time;
+            // (undocumented)
+            readonly Settings?: Notification.SourceSettings;
+        }
+        // (undocumented)
+        export namespace Notification {
+            // (undocumented)
+            export interface SourceSettings {
+                // (undocumented)
+                readonly topic?: string;
+                // (undocumented)
+                readonly ttl: number;
+                // (undocumented)
+                readonly urgency?: Urgency;
+            }
+        }
         // (undocumented)
         export namespace QueryScan {
             // (undocumented)
@@ -42728,7 +43505,7 @@ export namespace ZenithProtocol {
             // (undocumented)
             readonly Description?: string;
             // (undocumented)
-            readonly MetaData?: MetaData;
+            readonly Metadata?: ZenithProtocolCommon.UserMetadata;
             // (undocumented)
             readonly Name: string;
         }
@@ -42737,7 +43514,7 @@ export namespace ZenithProtocol {
         // (undocumented)
         export interface ScanParameters extends ScanParametersWithoutNotifications {
             // (undocumented)
-            readonly Notifications?: [unknown];
+            readonly Notifications?: Notification[];
         }
         // (undocumented)
         export interface ScanParametersWithoutNotifications {
@@ -42773,29 +43550,20 @@ export namespace ZenithProtocol {
             // (undocumented)
             readonly IsWritable?: boolean;
             // (undocumented)
-            readonly MetaData?: MetaData;
+            readonly Metadata?: ZenithProtocolCommon.UserMetadata;
             // (undocumented)
             readonly Name?: string;
             // (undocumented)
-            readonly Status: ScanStatus;
+            readonly Status: ActiveFaultedStatus;
             // (undocumented)
             readonly Type: ScanType;
-        }
-        // (undocumented)
-        export const enum ScanStatus {
-            // (undocumented)
-            Active = "Active",
-            // (undocumented)
-            Faulted = "Faulted",
-            // (undocumented)
-            Inactive = "Inactive"
         }
         // (undocumented)
         export interface ScanStatusedDescriptor extends ScanDescriptor {
             // (undocumented)
             readonly IsWritable: boolean;
             // (undocumented)
-            readonly Status: ScanStatus;
+            readonly Status: ActiveFaultedStatus;
         }
         // (undocumented)
         export const enum ScanType {
@@ -42829,7 +43597,9 @@ export namespace ZenithProtocol {
             // (undocumented)
             Scans = "Scans",
             // (undocumented)
-            UpdateScan = "UpdateScan"
+            UpdateScan = "UpdateScan",
+            // (undocumented)
+            UpdateScanStatus = "UpdateScanStatus"
         }
         // (undocumented)
         export namespace UpdateScan {
@@ -42843,10 +43613,38 @@ export namespace ZenithProtocol {
                 // (undocumented)
                 readonly Details: ScanDescriptor;
                 // (undocumented)
+                readonly IsActive?: boolean;
+                // (undocumented)
                 readonly Parameters: ScanParameters;
                 // (undocumented)
                 readonly ScanID: ScanID;
             }
+        }
+        // (undocumented)
+        export namespace UpdateScanStatus {
+            // (undocumented)
+            export interface PublishMessageContainer extends RequestMessageContainer {
+                // (undocumented)
+                readonly Data: QueryRequest;
+            }
+            // (undocumented)
+            export interface QueryRequest {
+                // (undocumented)
+                readonly IsActive: boolean;
+                // (undocumented)
+                readonly ScanID: ScanID;
+            }
+        }
+        // (undocumented)
+        export const enum Urgency {
+            // (undocumented)
+            High = "High",
+            // (undocumented)
+            Low = "Low",
+            // (undocumented)
+            Normal = "Normal",
+            // (undocumented)
+            VeryLow = "VeryLow"
         }
     }
     // (undocumented)
@@ -44462,6 +45260,16 @@ export namespace ZenithProtocol {
 // @public
 export namespace ZenithProtocolCommon {
     // (undocumented)
+    export interface NotificationChannelSettings {
+    }
+    // (undocumented)
+    export interface NotificationDistributionMethodMetadata {
+        // (undocumented)
+        readonly applicationServerKey: string;
+        // (undocumented)
+        readonly userVisibleOnly: boolean;
+    }
+    // (undocumented)
     export namespace Symbol {
         // (undocumented)
         export const enum AlternateKey {
@@ -44521,6 +45329,27 @@ export namespace ZenithProtocolCommon {
             ShortSuspended = "ShortSuspended",
             // (undocumented)
             SubSector = "SubSector"
+        }
+    }
+    // (undocumented)
+    export type UserMetadata = Record<string, string | undefined>;
+    // (undocumented)
+    export interface WebNotificationChannelSettings extends NotificationChannelSettings {
+        // (undocumented)
+        readonly endpoint: string;
+        // (undocumented)
+        readonly expirationTime?: number;
+        // (undocumented)
+        readonly keys?: WebNotificationChannelSettings.PushKeys;
+    }
+    // (undocumented)
+    export namespace WebNotificationChannelSettings {
+        // (undocumented)
+        export interface PushKeys {
+            // (undocumented)
+            readonly auth: string;
+            // (undocumented)
+            readonly p256dh: string;
         }
     }
 }
