@@ -4,11 +4,10 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, ErrorCode, Logger, ZenithDataError } from '../../../../sys/sys-internal-api';
+import { AssertInternalError, ErrorCode, ZenithDataError } from '../../../../sys/sys-internal-api';
 import {
     AdiPublisherRequest,
     AdiPublisherSubscription,
-    ErrorPublisherSubscriptionDataMessage_DataError,
     NotificationDistributionMethodId,
     QueryNotificationDistributionMethodsDataDefinition,
     QueryNotificationDistributionMethodsDataMessage
@@ -53,23 +52,16 @@ export namespace QueryNotificationDistributionMethodsMessageConvert {
                     throw new ZenithDataError(ErrorCode.ZenithMessageConvert_Channel_QueryMethods_Topic, message.Topic);
                 } else {
                     const publishMsg = message as ZenithProtocol.ChannelController.QueryMethods.PublishPayloadMessageContainer;
+                    const dataMessage = new QueryNotificationDistributionMethodsDataMessage();
+                    dataMessage.dataItemId = subscription.dataItemId;
+                    dataMessage.dataItemRequestNr = subscription.dataItemRequestNr;
                     const data = publishMsg.Data;
                     if (data === undefined) {
-                        const errorText = 'Channel QueryMethods Zenith message missing Data';
-                        Logger.logDataError('QNDMMCPM4556', errorText);
-                        const errorMessage = new ErrorPublisherSubscriptionDataMessage_DataError(subscription.dataItemId,
-                            subscription.dataItemRequestNr,
-                            errorText,
-                            AdiPublisherSubscription.AllowedRetryTypeId.Never
-                        );
-                        return errorMessage;
+                        dataMessage.methodIds = [];
                     } else {
-                        const dataMessage = new QueryNotificationDistributionMethodsDataMessage();
-                        dataMessage.dataItemId = subscription.dataItemId;
-                        dataMessage.dataItemRequestNr = subscription.dataItemRequestNr;
                         dataMessage.methodIds = parsePublishPayload(data);
-                        return dataMessage;
                     }
+                    return dataMessage;
                 }
             }
         }

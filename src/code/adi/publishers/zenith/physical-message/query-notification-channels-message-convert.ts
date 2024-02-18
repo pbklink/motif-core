@@ -4,15 +4,14 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, ErrorCode, Logger, ZenithDataError } from '../../../../sys/sys-internal-api';
+import { AssertInternalError, ErrorCode, ZenithDataError } from '../../../../sys/sys-internal-api';
 import {
     ActiveFaultedStatusId,
     AdiPublisherRequest,
     AdiPublisherSubscription,
-    ErrorPublisherSubscriptionDataMessage_DataError,
     NotificationChannel,
     QueryNotificationChannelsDataDefinition,
-    QueryNotificationChannelsDataMessage,
+    QueryNotificationChannelsDataMessage
 } from "../../../common/adi-common-internal-api";
 import { ZenithProtocol } from './protocol/zenith-protocol';
 import { ZenithChannelConvert } from './zenith-channel-convert';
@@ -55,23 +54,16 @@ export namespace QueryNotificationChannelsMessageConvert {
                     throw new ZenithDataError(ErrorCode.ZenithMessageConvert_Channel_QueryChannels_Topic, message.Topic);
                 } else {
                     const publishMsg = message as ZenithProtocol.ChannelController.QueryChannels.PublishPayloadMessageContainer;
+                    const dataMessage = new QueryNotificationChannelsDataMessage();
+                    dataMessage.dataItemId = subscription.dataItemId;
+                    dataMessage.dataItemRequestNr = subscription.dataItemRequestNr;
                     const data = publishMsg.Data;
                     if (data === undefined) {
-                        const errorText = 'Channel QueryChannels Zenith message missing Data';
-                        Logger.logDataError('QNCSMCPM4556', errorText);
-                        const errorMessage = new ErrorPublisherSubscriptionDataMessage_DataError(subscription.dataItemId,
-                            subscription.dataItemRequestNr,
-                            errorText,
-                            AdiPublisherSubscription.AllowedRetryTypeId.Never
-                        );
-                        return errorMessage;
+                        dataMessage.notificationChannels = [];
                     } else {
-                        const dataMessage = new QueryNotificationChannelsDataMessage();
-                        dataMessage.dataItemId = subscription.dataItemId;
-                        dataMessage.dataItemRequestNr = subscription.dataItemRequestNr;
                         dataMessage.notificationChannels = parsePublishPayload(data);
-                        return dataMessage;
                     }
+                    return dataMessage;
                 }
             }
         }
