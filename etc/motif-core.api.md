@@ -1057,9 +1057,9 @@ export class AllTransactionsDataDefinition extends DataDefinition {
 // Warning: (ae-missing-release-tag) "AltCodeSubbedScanField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface AltCodeSubbedScanField<Modifier = void> extends ScanField<Modifier> {
+export interface AltCodeSubbedScanField extends ScanField {
     // (undocumented)
-    readonly conditions: ScanField.TypedConditions<TextHasValueContainsScanFieldCondition, Modifier>;
+    readonly conditions: ScanField.TypedConditions<TextHasValueContainsScanFieldCondition>;
     // (undocumented)
     readonly conditionTypeId: ScanFieldCondition.TypeId.TextHasValueContains;
     // (undocumented)
@@ -1073,7 +1073,7 @@ export interface AltCodeSubbedScanField<Modifier = void> extends ScanField<Modif
 // @public (undocumented)
 export namespace AltCodeSubbedScanField {
     // (undocumented)
-    export function isConditionEqual<Modifier>(left: AltCodeSubbedScanField<Modifier>, right: AltCodeSubbedScanField<Modifier>, index: Integer): boolean;
+    export function isConditionEqual(left: AltCodeSubbedScanField, right: AltCodeSubbedScanField, index: Integer): boolean;
 }
 
 // Warning: (ae-missing-release-tag) "AltCodeSubFieldContainsScanCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -1340,9 +1340,9 @@ export class AttributesDayTradesGridField extends DayTradesGridField {
 // Warning: (ae-missing-release-tag) "AttributeSubbedScanField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface AttributeSubbedScanField<Modifier = void> extends ScanField<Modifier> {
+export interface AttributeSubbedScanField extends ScanField {
     // (undocumented)
-    readonly conditions: ScanField.TypedConditions<TextHasValueContainsScanFieldCondition, Modifier>;
+    readonly conditions: ScanField.TypedConditions<TextHasValueContainsScanFieldCondition>;
     // (undocumented)
     readonly conditionTypeId: ScanFieldCondition.TypeId.TextHasValueContains;
     // (undocumented)
@@ -1356,7 +1356,7 @@ export interface AttributeSubbedScanField<Modifier = void> extends ScanField<Mod
 // @public (undocumented)
 export namespace AttributeSubbedScanField {
     // (undocumented)
-    export function isConditionEqual<Modifier>(left: AttributeSubbedScanField<Modifier>, right: AttributeSubbedScanField<Modifier>, index: Integer): boolean;
+    export function isConditionEqual(left: AttributeSubbedScanField, right: AttributeSubbedScanField, index: Integer): boolean;
 }
 
 // Warning: (ae-missing-release-tag) "AttributeSubFieldContainsScanCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -2241,9 +2241,9 @@ export abstract class BaseNumberTableValue extends GenericTableValue<number> {
 // Warning: (ae-missing-release-tag) "BaseNumericScanFieldCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface BaseNumericScanFieldCondition<Modifier> extends ScanFieldCondition<Modifier> {
+export interface BaseNumericScanFieldCondition extends ScanFieldCondition {
     // (undocumented)
-    readonly operands: BaseNumericScanFieldCondition.Operands<Modifier>;
+    readonly operands: BaseNumericScanFieldCondition.Operands;
     // (undocumented)
     readonly typeId: ScanFieldCondition.TypeId.Numeric | ScanFieldCondition.TypeId.NumericComparison;
 }
@@ -2251,23 +2251,23 @@ export interface BaseNumericScanFieldCondition<Modifier> extends ScanFieldCondit
 // @public (undocumented)
 export namespace BaseNumericScanFieldCondition {
     // (undocumented)
-    export interface HasValueOperands<Modifier = void> extends Operands<Modifier> {
+    export interface HasValueOperands extends Operands {
         // (undocumented)
         readonly typeId: ScanFieldCondition.Operands.TypeId.HasValue;
     }
     // (undocumented)
     export namespace HasValueOperands {
         // (undocumented)
-        export function is<Modifier>(operands: Operands<Modifier>): operands is HasValueOperands<Modifier>;
+        export function is(operands: Operands): operands is HasValueOperands;
         const // (undocumented)
         supportedOperatorIds: readonly OperatorId[];
         // (undocumented)
         export type OperatorId = PickEnum<ScanFieldCondition.OperatorId, ScanFieldCondition.OperatorId.HasValue | ScanFieldCondition.OperatorId.NotHasValue>;
     }
     // (undocumented)
-    export function isEqual<Modifier>(left: BaseNumericScanFieldCondition<Modifier>, right: BaseNumericScanFieldCondition<Modifier>): boolean;
+    export function isEqual(left: BaseNumericScanFieldCondition, right: BaseNumericScanFieldCondition): boolean;
     // (undocumented)
-    export interface Operands<Modifier = void> extends ScanFieldCondition.Operands<Modifier> {
+    export interface Operands extends ScanFieldCondition.Operands {
         // (undocumented)
         readonly typeId: Operands.TypeId;
     }
@@ -2277,7 +2277,7 @@ export namespace BaseNumericScanFieldCondition {
         export type TypeId = PickEnum<ScanFieldCondition.Operands.TypeId, ScanFieldCondition.Operands.TypeId.HasValue | ScanFieldCondition.Operands.TypeId.NumericValue | ScanFieldCondition.Operands.TypeId.NumericComparisonValue | ScanFieldCondition.Operands.TypeId.NumericRange>;
     }
     // (undocumented)
-    export interface RangeOperands<Modifier = void> extends Operands<Modifier> {
+    export interface RangeOperands extends Operands {
         // (undocumented)
         max: number | undefined;
         // (undocumented)
@@ -2288,14 +2288,14 @@ export namespace BaseNumericScanFieldCondition {
     // (undocumented)
     export namespace RangeOperands {
         // (undocumented)
-        export function is<Modifier>(operands: Operands<Modifier>): operands is RangeOperands<Modifier>;
+        export function is(operands: Operands): operands is RangeOperands;
         const // (undocumented)
         supportedOperatorIds: readonly OperatorId[];
         // (undocumented)
         export type OperatorId = PickEnum<ScanFieldCondition.OperatorId, ScanFieldCondition.OperatorId.InRange | ScanFieldCondition.OperatorId.NotInRange>;
     }
     // (undocumented)
-    export interface ValueOperands<Modifier = void> extends Operands<Modifier> {
+    export interface ValueOperands extends Operands {
         // (undocumented)
         readonly typeId: ScanFieldCondition.Operands.TypeId.NumericValue | ScanFieldCondition.Operands.TypeId.NumericComparisonValue;
         // (undocumented)
@@ -2304,7 +2304,7 @@ export namespace BaseNumericScanFieldCondition {
     // (undocumented)
     export namespace ValueOperands {
         // (undocumented)
-        export function is<Modifier>(operands: Operands<Modifier>): operands is ValueOperands<Modifier>;
+        export function is(operands: Operands): operands is ValueOperands;
     }
 }
 
@@ -2321,9 +2321,9 @@ export abstract class BaseSourceTzOffsetDateTimeCorrectnessTableValue extends Ge
 // Warning: (ae-missing-release-tag) "BaseTextScanFieldCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface BaseTextScanFieldCondition<Modifier = void> extends ScanFieldCondition<Modifier> {
+export interface BaseTextScanFieldCondition extends ScanFieldCondition {
     // (undocumented)
-    readonly operands: BaseTextScanFieldCondition.Operands<Modifier>;
+    readonly operands: BaseTextScanFieldCondition.Operands;
 }
 
 // @public (undocumented)
@@ -2343,7 +2343,7 @@ export namespace BaseTextScanFieldCondition {
         export function isEqual(left: ContainsOperand, right: ContainsOperand): boolean;
     }
     // (undocumented)
-    export interface ContainsOperands<Modifier = void> extends Operands<Modifier> {
+    export interface ContainsOperands extends Operands {
         // (undocumented)
         contains: ContainsOperand;
         // (undocumented)
@@ -2352,30 +2352,30 @@ export namespace BaseTextScanFieldCondition {
     // (undocumented)
     export namespace ContainsOperands {
         // (undocumented)
-        export function is<Modifier>(operands: Operands<Modifier>): operands is ContainsOperands<Modifier>;
+        export function is(operands: Operands): operands is ContainsOperands;
         const // (undocumented)
         supportedOperatorIds: readonly OperatorId[];
         // (undocumented)
         export type OperatorId = PickEnum<ScanFieldCondition.OperatorId, ScanFieldCondition.OperatorId.Contains | ScanFieldCondition.OperatorId.NotContains>;
     }
     // (undocumented)
-    export interface HasValueOperands<Modifier = void> extends Operands<Modifier> {
+    export interface HasValueOperands extends Operands {
         // (undocumented)
         readonly typeId: ScanFieldCondition.Operands.TypeId.HasValue;
     }
     // (undocumented)
     export namespace HasValueOperands {
         // (undocumented)
-        export function is<Modifier>(operands: Operands<Modifier>): operands is HasValueOperands<Modifier>;
+        export function is(operands: Operands): operands is HasValueOperands;
         const // (undocumented)
         supportedOperatorIds: readonly OperatorId[];
         // (undocumented)
         export type OperatorId = PickEnum<ScanFieldCondition.OperatorId, ScanFieldCondition.OperatorId.HasValue | ScanFieldCondition.OperatorId.NotHasValue>;
     }
     // (undocumented)
-    export function isEqual<Modifier>(left: BaseTextScanFieldCondition<Modifier>, right: BaseTextScanFieldCondition<Modifier>): boolean;
+    export function isEqual(left: BaseTextScanFieldCondition, right: BaseTextScanFieldCondition): boolean;
     // (undocumented)
-    export interface Operands<Modifier = void> extends ScanFieldCondition.Operands<Modifier> {
+    export interface Operands extends ScanFieldCondition.Operands {
         // (undocumented)
         readonly typeId: Operands.TypeId;
     }
@@ -2385,7 +2385,7 @@ export namespace BaseTextScanFieldCondition {
         export type TypeId = PickEnum<ScanFieldCondition.Operands.TypeId, ScanFieldCondition.Operands.TypeId.HasValue | ScanFieldCondition.Operands.TypeId.TextValue | ScanFieldCondition.Operands.TypeId.TextContains>;
     }
     // (undocumented)
-    export interface ValueOperands<Modifier = void> extends Operands<Modifier> {
+    export interface ValueOperands extends Operands {
         // (undocumented)
         readonly typeId: ScanFieldCondition.Operands.TypeId.TextValue;
         // (undocumented)
@@ -2394,7 +2394,7 @@ export namespace BaseTextScanFieldCondition {
     // (undocumented)
     export namespace ValueOperands {
         // (undocumented)
-        export function is<Modifier>(operands: Operands<Modifier>): operands is ValueOperands<Modifier>;
+        export function is(operands: Operands): operands is ValueOperands;
         const // (undocumented)
         supportedOperatorIds: readonly OperatorId[];
         // (undocumented)
@@ -5752,9 +5752,9 @@ export class CurrencyIdCorrectnessTableValue extends EnumCorrectnessTableValue {
 // Warning: (ae-missing-release-tag) "CurrencyOverlapsScanField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface CurrencyOverlapsScanField<Modifier = void> extends NotSubbedScanField<Modifier> {
+export interface CurrencyOverlapsScanField extends NotSubbedScanField {
     // (undocumented)
-    readonly conditions: ScanField.TypedConditions<CurrencyOverlapsScanFieldCondition, Modifier>;
+    readonly conditions: ScanField.TypedConditions<CurrencyOverlapsScanFieldCondition>;
     // (undocumented)
     readonly conditionTypeId: ScanFieldCondition.TypeId.CurrencyOverlaps;
     // (undocumented)
@@ -5766,16 +5766,16 @@ export interface CurrencyOverlapsScanField<Modifier = void> extends NotSubbedSca
 // @public (undocumented)
 export namespace CurrencyOverlapsScanField {
     // (undocumented)
-    export function isConditionEqual<Modifier>(left: CurrencyOverlapsScanField<Modifier>, right: CurrencyOverlapsScanField<Modifier>, index: Integer): boolean;
+    export function isConditionEqual(left: CurrencyOverlapsScanField, right: CurrencyOverlapsScanField, index: Integer): boolean;
 }
 
 // Warning: (ae-missing-release-tag) "CurrencyOverlapsScanFieldCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "CurrencyOverlapsScanFieldCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface CurrencyOverlapsScanFieldCondition<Modifier = void> extends OverlapsScanFieldCondition<Modifier> {
+export interface CurrencyOverlapsScanFieldCondition extends OverlapsScanFieldCondition {
     // (undocumented)
-    readonly operands: CurrencyOverlapsScanFieldCondition.Operands<Modifier>;
+    readonly operands: CurrencyOverlapsScanFieldCondition.Operands;
     // (undocumented)
     readonly typeId: ScanFieldCondition.TypeId.CurrencyOverlaps;
 }
@@ -5783,11 +5783,11 @@ export interface CurrencyOverlapsScanFieldCondition<Modifier = void> extends Ove
 // @public (undocumented)
 export namespace CurrencyOverlapsScanFieldCondition {
     // (undocumented)
-    export function is<Modifier>(condition: ScanFieldCondition<Modifier>): condition is CurrencyOverlapsScanFieldCondition<Modifier>;
+    export function is(condition: ScanFieldCondition): condition is CurrencyOverlapsScanFieldCondition;
     // (undocumented)
     export function isEqual(left: CurrencyOverlapsScanFieldCondition, right: CurrencyOverlapsScanFieldCondition): boolean;
     // (undocumented)
-    export interface Operands<Modifier = void> extends ScanFieldCondition.Operands<Modifier> {
+    export interface Operands extends ScanFieldCondition.Operands {
         // (undocumented)
         typeId: ScanFieldCondition.Operands.TypeId.CurrencyEnum;
         // (undocumented)
@@ -6577,9 +6577,9 @@ export interface DateFieldScanCondition extends FieldScanCondition {
 // Warning: (ae-missing-release-tag) "DateInRangeScanField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface DateInRangeScanField<Modifier = void> extends NotSubbedScanField<Modifier> {
+export interface DateInRangeScanField extends NotSubbedScanField {
     // (undocumented)
-    readonly conditions: ScanField.TypedConditions<DateScanFieldCondition, Modifier>;
+    readonly conditions: ScanField.TypedConditions<DateScanFieldCondition>;
     // (undocumented)
     readonly conditionTypeId: ScanFieldCondition.TypeId.Date;
     // (undocumented)
@@ -6591,7 +6591,7 @@ export interface DateInRangeScanField<Modifier = void> extends NotSubbedScanFiel
 // @public (undocumented)
 export namespace DateInRangeScanField {
     // (undocumented)
-    export function isConditionEqual<Modifier>(left: DateInRangeScanField<Modifier>, right: DateInRangeScanField<Modifier>, index: Integer): boolean;
+    export function isConditionEqual(left: DateInRangeScanField, right: DateInRangeScanField, index: Integer): boolean;
 }
 
 // @public (undocumented)
@@ -6608,9 +6608,9 @@ export class DateRenderValue extends GenericRenderValue<Date> {
 // Warning: (ae-missing-release-tag) "DateScanFieldCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface DateScanFieldCondition<Modifier = void> extends ScanFieldCondition<Modifier> {
+export interface DateScanFieldCondition extends ScanFieldCondition {
     // (undocumented)
-    readonly operands: DateScanFieldCondition.Operands<Modifier>;
+    readonly operands: DateScanFieldCondition.Operands;
     // (undocumented)
     readonly operatorId: DateScanFieldCondition.OperatorId;
     // (undocumented)
@@ -6620,25 +6620,25 @@ export interface DateScanFieldCondition<Modifier = void> extends ScanFieldCondit
 // @public (undocumented)
 export namespace DateScanFieldCondition {
     // (undocumented)
-    export interface HasValueOperands<Modifier = void> extends Operands<Modifier> {
+    export interface HasValueOperands extends Operands {
         // (undocumented)
         readonly typeId: ScanFieldCondition.Operands.TypeId.HasValue;
     }
     // (undocumented)
     export namespace HasValueOperands {
         // (undocumented)
-        export function is<Modifier>(operands: Operands<Modifier>): operands is HasValueOperands<Modifier>;
+        export function is(operands: Operands): operands is HasValueOperands;
         const // (undocumented)
         supportedOperatorIds: readonly OperatorId[];
         // (undocumented)
         export type OperatorId = PickEnum<ScanFieldCondition.OperatorId, ScanFieldCondition.OperatorId.HasValue | ScanFieldCondition.OperatorId.NotHasValue>;
     }
     // (undocumented)
-    export function is<Modifier>(condition: ScanFieldCondition<Modifier>): condition is DateScanFieldCondition<Modifier>;
+    export function is(condition: ScanFieldCondition): condition is DateScanFieldCondition;
     // (undocumented)
-    export function isEqual<Modifier>(left: DateScanFieldCondition<Modifier>, right: DateScanFieldCondition<Modifier>): boolean;
+    export function isEqual(left: DateScanFieldCondition, right: DateScanFieldCondition): boolean;
     // (undocumented)
-    export interface Operands<Modifier = void> extends ScanFieldCondition.Operands<Modifier> {
+    export interface Operands extends ScanFieldCondition.Operands {
         // (undocumented)
         readonly typeId: Operands.TypeId;
     }
@@ -6657,7 +6657,7 @@ export namespace DateScanFieldCondition {
     // (undocumented)
     export type OperatorId = Operands.OperatorId;
     // (undocumented)
-    export interface RangeOperands<Modifier = void> extends Operands<Modifier> {
+    export interface RangeOperands extends Operands {
         // (undocumented)
         max: SourceTzOffsetDateTime | undefined;
         // (undocumented)
@@ -6668,14 +6668,14 @@ export namespace DateScanFieldCondition {
     // (undocumented)
     export namespace RangeOperands {
         // (undocumented)
-        export function is<Modifier>(operands: Operands<Modifier>): operands is RangeOperands<Modifier>;
+        export function is(operands: Operands): operands is RangeOperands;
         const // (undocumented)
         supportedOperatorIds: readonly OperatorId[];
         // (undocumented)
         export type OperatorId = PickEnum<ScanFieldCondition.OperatorId, ScanFieldCondition.OperatorId.InRange | ScanFieldCondition.OperatorId.NotInRange>;
     }
     // (undocumented)
-    export interface ValueOperands<Modifier = void> extends Operands<Modifier> {
+    export interface ValueOperands extends Operands {
         // (undocumented)
         readonly typeId: ScanFieldCondition.Operands.TypeId.DateValue;
         // (undocumented)
@@ -6684,7 +6684,7 @@ export namespace DateScanFieldCondition {
     // (undocumented)
     export namespace ValueOperands {
         // (undocumented)
-        export function is<Modifier>(operands: Operands<Modifier>): operands is ValueOperands<Modifier>;
+        export function is(operands: Operands): operands is ValueOperands;
         const // (undocumented)
         supportedOperatorIds: readonly OperatorId[];
         // (undocumented)
@@ -6696,9 +6696,9 @@ export namespace DateScanFieldCondition {
 // Warning: (ae-missing-release-tag) "DateSubbedScanField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface DateSubbedScanField<Modifier = void> extends ScanField<Modifier> {
+export interface DateSubbedScanField extends ScanField {
     // (undocumented)
-    readonly conditions: ScanField.TypedConditions<DateScanFieldCondition, Modifier>;
+    readonly conditions: ScanField.TypedConditions<DateScanFieldCondition>;
     // (undocumented)
     readonly conditionTypeId: ScanFieldCondition.TypeId.Date;
     // (undocumented)
@@ -6712,7 +6712,7 @@ export interface DateSubbedScanField<Modifier = void> extends ScanField<Modifier
 // @public (undocumented)
 export namespace DateSubbedScanField {
     // (undocumented)
-    export function isConditionEqual<Modifier>(left: DateSubbedScanField<Modifier>, right: DateSubbedScanField<Modifier>, index: Integer): boolean;
+    export function isConditionEqual(left: DateSubbedScanField, right: DateSubbedScanField, index: Integer): boolean;
 }
 
 // Warning: (ae-missing-release-tag) "DateSubFieldEqualsScanCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -9650,9 +9650,9 @@ export namespace ExchangeInfo {
 // Warning: (ae-missing-release-tag) "ExchangeOverlapsScanField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface ExchangeOverlapsScanField<Modifier = void> extends NotSubbedScanField<Modifier> {
+export interface ExchangeOverlapsScanField extends NotSubbedScanField {
     // (undocumented)
-    readonly conditions: ScanField.TypedConditions<ExchangeOverlapsScanFieldCondition, Modifier>;
+    readonly conditions: ScanField.TypedConditions<ExchangeOverlapsScanFieldCondition>;
     // (undocumented)
     readonly conditionTypeId: ScanFieldCondition.TypeId.ExchangeOverlaps;
     // (undocumented)
@@ -9664,16 +9664,16 @@ export interface ExchangeOverlapsScanField<Modifier = void> extends NotSubbedSca
 // @public (undocumented)
 export namespace ExchangeOverlapsScanField {
     // (undocumented)
-    export function isConditionEqual<Modifier>(left: ExchangeOverlapsScanField<Modifier>, right: ExchangeOverlapsScanField<Modifier>, index: Integer): boolean;
+    export function isConditionEqual(left: ExchangeOverlapsScanField, right: ExchangeOverlapsScanField, index: Integer): boolean;
 }
 
 // Warning: (ae-missing-release-tag) "ExchangeOverlapsScanFieldCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "ExchangeOverlapsScanFieldCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface ExchangeOverlapsScanFieldCondition<Modifier = void> extends OverlapsScanFieldCondition<Modifier> {
+export interface ExchangeOverlapsScanFieldCondition extends OverlapsScanFieldCondition {
     // (undocumented)
-    readonly operands: ExchangeOverlapsScanFieldCondition.Operands<Modifier>;
+    readonly operands: ExchangeOverlapsScanFieldCondition.Operands;
     // (undocumented)
     readonly typeId: ScanFieldCondition.TypeId.ExchangeOverlaps;
 }
@@ -9681,11 +9681,11 @@ export interface ExchangeOverlapsScanFieldCondition<Modifier = void> extends Ove
 // @public (undocumented)
 export namespace ExchangeOverlapsScanFieldCondition {
     // (undocumented)
-    export function is<Modifier>(condition: ScanFieldCondition<Modifier>): condition is ExchangeOverlapsScanFieldCondition<Modifier>;
+    export function is(condition: ScanFieldCondition): condition is ExchangeOverlapsScanFieldCondition;
     // (undocumented)
     export function isEqual(left: ExchangeOverlapsScanFieldCondition, right: ExchangeOverlapsScanFieldCondition): boolean;
     // (undocumented)
-    export interface Operands<Modifier = void> extends ScanFieldCondition.Operands<Modifier> {
+    export interface Operands extends ScanFieldCondition.Operands {
         // (undocumented)
         typeId: ScanFieldCondition.Operands.TypeId.ExchangeEnum;
         // (undocumented)
@@ -13923,9 +13923,9 @@ export namespace IsScanCondition {
 // Warning: (ae-missing-release-tag) "IsScanField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface IsScanField<Modifier = void> extends NotSubbedScanField<Modifier> {
+export interface IsScanField extends NotSubbedScanField {
     // (undocumented)
-    readonly conditions: ScanField.TypedConditions<IsScanFieldCondition, Modifier>;
+    readonly conditions: ScanField.TypedConditions<IsScanFieldCondition>;
     // (undocumented)
     readonly conditionTypeId: ScanFieldCondition.TypeId.Is;
     // (undocumented)
@@ -13937,16 +13937,16 @@ export interface IsScanField<Modifier = void> extends NotSubbedScanField<Modifie
 // @public (undocumented)
 export namespace IsScanField {
     // (undocumented)
-    export function isConditionEqual<Modifier>(left: IsScanField<Modifier>, right: IsScanField<Modifier>, index: Integer): boolean;
+    export function isConditionEqual(left: IsScanField, right: IsScanField, index: Integer): boolean;
 }
 
 // Warning: (ae-missing-release-tag) "IsScanFieldCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "IsScanFieldCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface IsScanFieldCondition<Modifier = void> extends ScanFieldCondition<Modifier> {
+export interface IsScanFieldCondition extends ScanFieldCondition {
     // (undocumented)
-    readonly operands: IsScanFieldCondition.Operands<Modifier>;
+    readonly operands: IsScanFieldCondition.Operands;
     // (undocumented)
     readonly operatorId: IsScanFieldCondition.OperatorId;
     // (undocumented)
@@ -13956,11 +13956,11 @@ export interface IsScanFieldCondition<Modifier = void> extends ScanFieldConditio
 // @public (undocumented)
 export namespace IsScanFieldCondition {
     // (undocumented)
-    export function is<Modifier>(condition: ScanFieldCondition<Modifier>): condition is IsScanFieldCondition<Modifier>;
+    export function is(condition: ScanFieldCondition): condition is IsScanFieldCondition;
     // (undocumented)
-    export function isEqual<Modifier>(left: IsScanFieldCondition<Modifier>, right: IsScanFieldCondition<Modifier>): boolean;
+    export function isEqual(left: IsScanFieldCondition, right: IsScanFieldCondition): boolean;
     // (undocumented)
-    export interface Operands<Modifier = void> extends ScanFieldCondition.Operands<Modifier> {
+    export interface Operands extends ScanFieldCondition.Operands {
         // (undocumented)
         categoryId: ScanFormula.IsNode.CategoryId;
         // (undocumented)
@@ -16763,9 +16763,9 @@ export class MarketBoardIdCorrectnessTableValue extends EnumCorrectnessTableValu
 // Warning: (ae-missing-release-tag) "MarketBoardOverlapsScanField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface MarketBoardOverlapsScanField<Modifier = void> extends NotSubbedScanField<Modifier> {
+export interface MarketBoardOverlapsScanField extends NotSubbedScanField {
     // (undocumented)
-    readonly conditions: ScanField.TypedConditions<MarketBoardOverlapsScanFieldCondition, Modifier>;
+    readonly conditions: ScanField.TypedConditions<MarketBoardOverlapsScanFieldCondition>;
     // (undocumented)
     readonly conditionTypeId: ScanFieldCondition.TypeId.MarketBoardOverlaps;
     // (undocumented)
@@ -16777,16 +16777,16 @@ export interface MarketBoardOverlapsScanField<Modifier = void> extends NotSubbed
 // @public (undocumented)
 export namespace MarketBoardOverlapsScanField {
     // (undocumented)
-    export function isConditionEqual<Modifier>(left: MarketBoardOverlapsScanField<Modifier>, right: MarketBoardOverlapsScanField<Modifier>, index: Integer): boolean;
+    export function isConditionEqual(left: MarketBoardOverlapsScanField, right: MarketBoardOverlapsScanField, index: Integer): boolean;
 }
 
 // Warning: (ae-missing-release-tag) "MarketBoardOverlapsScanFieldCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "MarketBoardOverlapsScanFieldCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface MarketBoardOverlapsScanFieldCondition<Modifier = void> extends OverlapsScanFieldCondition<Modifier> {
+export interface MarketBoardOverlapsScanFieldCondition extends OverlapsScanFieldCondition {
     // (undocumented)
-    readonly operands: MarketBoardOverlapsScanFieldCondition.Operands<Modifier>;
+    readonly operands: MarketBoardOverlapsScanFieldCondition.Operands;
     // (undocumented)
     readonly typeId: ScanFieldCondition.TypeId.MarketBoardOverlaps;
 }
@@ -16794,11 +16794,11 @@ export interface MarketBoardOverlapsScanFieldCondition<Modifier = void> extends 
 // @public (undocumented)
 export namespace MarketBoardOverlapsScanFieldCondition {
     // (undocumented)
-    export function is<Modifier>(condition: ScanFieldCondition<Modifier>): condition is MarketBoardOverlapsScanFieldCondition<Modifier>;
+    export function is(condition: ScanFieldCondition): condition is MarketBoardOverlapsScanFieldCondition;
     // (undocumented)
     export function isEqual(left: MarketBoardOverlapsScanFieldCondition, right: MarketBoardOverlapsScanFieldCondition): boolean;
     // (undocumented)
-    export interface Operands<Modifier = void> extends ScanFieldCondition.Operands<Modifier> {
+    export interface Operands extends ScanFieldCondition.Operands {
         // (undocumented)
         typeId: ScanFieldCondition.Operands.TypeId.MarketBoardEnum;
         // (undocumented)
@@ -17096,9 +17096,9 @@ export namespace MarketOrderRoute {
 // Warning: (ae-missing-release-tag) "MarketOverlapsScanField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface MarketOverlapsScanField<Modifier = void> extends NotSubbedScanField<Modifier> {
+export interface MarketOverlapsScanField extends NotSubbedScanField {
     // (undocumented)
-    readonly conditions: ScanField.TypedConditions<MarketOverlapsScanFieldCondition, Modifier>;
+    readonly conditions: ScanField.TypedConditions<MarketOverlapsScanFieldCondition>;
     // (undocumented)
     readonly conditionTypeId: ScanFieldCondition.TypeId.MarketOverlaps;
     // (undocumented)
@@ -17110,16 +17110,16 @@ export interface MarketOverlapsScanField<Modifier = void> extends NotSubbedScanF
 // @public (undocumented)
 export namespace MarketOverlapsScanField {
     // (undocumented)
-    export function isConditionEqual<Modifier>(left: MarketOverlapsScanField<Modifier>, right: MarketOverlapsScanField<Modifier>, index: Integer): boolean;
+    export function isConditionEqual(left: MarketOverlapsScanField, right: MarketOverlapsScanField, index: Integer): boolean;
 }
 
 // Warning: (ae-missing-release-tag) "MarketOverlapsScanFieldCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "MarketOverlapsScanFieldCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface MarketOverlapsScanFieldCondition<Modifier = void> extends OverlapsScanFieldCondition<Modifier> {
+export interface MarketOverlapsScanFieldCondition extends OverlapsScanFieldCondition {
     // (undocumented)
-    readonly operands: MarketOverlapsScanFieldCondition.Operands<Modifier>;
+    readonly operands: MarketOverlapsScanFieldCondition.Operands;
     // (undocumented)
     readonly typeId: ScanFieldCondition.TypeId.MarketOverlaps;
 }
@@ -17127,11 +17127,11 @@ export interface MarketOverlapsScanFieldCondition<Modifier = void> extends Overl
 // @public (undocumented)
 export namespace MarketOverlapsScanFieldCondition {
     // (undocumented)
-    export function is<Modifier>(condition: ScanFieldCondition<Modifier>): condition is MarketOverlapsScanFieldCondition<Modifier>;
+    export function is(condition: ScanFieldCondition): condition is MarketOverlapsScanFieldCondition;
     // (undocumented)
     export function isEqual(left: MarketOverlapsScanFieldCondition, right: MarketOverlapsScanFieldCondition): boolean;
     // (undocumented)
-    export interface Operands<Modifier = void> extends ScanFieldCondition.Operands<Modifier> {
+    export interface Operands extends ScanFieldCondition.Operands {
         // (undocumented)
         typeId: ScanFieldCondition.Operands.TypeId.MarketEnum;
         // (undocumented)
@@ -18197,7 +18197,7 @@ export class NotImplementedError extends BaseInternalError {
 // Warning: (ae-missing-release-tag) "NotSubbedScanField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface NotSubbedScanField<Modifier = void> extends ScanField<Modifier> {
+export interface NotSubbedScanField extends ScanField {
     // (undocumented)
     readonly subFieldId: undefined;
 }
@@ -18560,7 +18560,7 @@ export namespace NumericComparisonScanCondition {
 // Warning: (ae-missing-release-tag) "NumericComparisonScanFieldCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface NumericComparisonScanFieldCondition<Modifier = void> extends BaseNumericScanFieldCondition<Modifier> {
+export interface NumericComparisonScanFieldCondition extends BaseNumericScanFieldCondition {
     // (undocumented)
     readonly operatorId: NumericComparisonScanFieldCondition.OperatorId;
     // (undocumented)
@@ -18570,7 +18570,7 @@ export interface NumericComparisonScanFieldCondition<Modifier = void> extends Ba
 // @public (undocumented)
 export namespace NumericComparisonScanFieldCondition {
     // (undocumented)
-    export function is<Modifier>(condition: ScanFieldCondition<Modifier>): condition is NumericComparisonScanFieldCondition<Modifier>;
+    export function is(condition: ScanFieldCondition): condition is NumericComparisonScanFieldCondition;
     // (undocumented)
     export function isEqual(left: NumericComparisonScanFieldCondition, right: NumericComparisonScanFieldCondition): boolean;
     // (undocumented)
@@ -18583,7 +18583,7 @@ export namespace NumericComparisonScanFieldCondition {
     // (undocumented)
     export type OperatorId = Operands.OperatorId;
     // (undocumented)
-    export interface ValueOperands<Modifier = void> extends BaseNumericScanFieldCondition.ValueOperands<Modifier> {
+    export interface ValueOperands extends BaseNumericScanFieldCondition.ValueOperands {
         // (undocumented)
         readonly typeId: ScanFieldCondition.Operands.TypeId.NumericComparisonValue;
     }
@@ -18644,9 +18644,9 @@ export interface NumericFieldScanCondition extends FieldScanCondition {
 // Warning: (ae-missing-release-tag) "NumericInRangeScanField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface NumericInRangeScanField<Modifier = void> extends NotSubbedScanField<Modifier> {
+export interface NumericInRangeScanField extends NotSubbedScanField {
     // (undocumented)
-    readonly conditions: ScanField.TypedConditions<NumericComparisonScanFieldCondition, Modifier>;
+    readonly conditions: ScanField.TypedConditions<NumericComparisonScanFieldCondition>;
     // (undocumented)
     readonly conditionTypeId: ScanFieldCondition.TypeId.NumericComparison;
     // (undocumented)
@@ -18658,16 +18658,16 @@ export interface NumericInRangeScanField<Modifier = void> extends NotSubbedScanF
 // @public (undocumented)
 export namespace NumericInRangeScanField {
     // (undocumented)
-    export function is<Modifier>(field: ScanField<Modifier>): field is NumericInRangeScanField<Modifier>;
+    export function is(field: ScanField): field is NumericInRangeScanField;
     // (undocumented)
-    export function isConditionEqual<Modifier>(left: NumericInRangeScanField<Modifier>, right: NumericInRangeScanField<Modifier>, index: Integer): boolean;
+    export function isConditionEqual(left: NumericInRangeScanField, right: NumericInRangeScanField, index: Integer): boolean;
 }
 
 // Warning: (ae-missing-release-tag) "NumericScanFieldCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "NumericScanFieldCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface NumericScanFieldCondition<Modifier = void> extends BaseNumericScanFieldCondition<Modifier> {
+export interface NumericScanFieldCondition extends BaseNumericScanFieldCondition {
     // (undocumented)
     readonly operatorId: NumericScanFieldCondition.OperatorId;
     // (undocumented)
@@ -18677,7 +18677,7 @@ export interface NumericScanFieldCondition<Modifier = void> extends BaseNumericS
 // @public (undocumented)
 export namespace NumericScanFieldCondition {
     // (undocumented)
-    export function is<Modifier>(condition: ScanFieldCondition<Modifier>): condition is NumericScanFieldCondition<Modifier>;
+    export function is(condition: ScanFieldCondition): condition is NumericScanFieldCondition;
     // (undocumented)
     export function isEqual(left: NumericScanFieldCondition, right: NumericScanFieldCondition): boolean;
     // (undocumented)
@@ -18690,7 +18690,7 @@ export namespace NumericScanFieldCondition {
     // (undocumented)
     export type OperatorId = Operands.OperatorId;
     // (undocumented)
-    export interface ValueOperands<Modifier = void> extends BaseNumericScanFieldCondition.ValueOperands<Modifier> {
+    export interface ValueOperands extends BaseNumericScanFieldCondition.ValueOperands {
         // (undocumented)
         readonly typeId: ScanFieldCondition.Operands.TypeId.NumericValue;
     }
@@ -21177,7 +21177,7 @@ export interface OverlapsFieldScanCondition extends FieldScanCondition {
 // Warning: (ae-missing-release-tag) "OverlapsScanFieldCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface OverlapsScanFieldCondition<Modifier = void> extends ScanFieldCondition<Modifier> {
+export interface OverlapsScanFieldCondition extends ScanFieldCondition {
     // (undocumented)
     readonly operatorId: OverlapsScanFieldCondition.OperatorId;
 }
@@ -21185,7 +21185,7 @@ export interface OverlapsScanFieldCondition<Modifier = void> extends ScanFieldCo
 // @public (undocumented)
 export namespace OverlapsScanFieldCondition {
     // (undocumented)
-    export function isEqual<Modifier>(left: OverlapsScanFieldCondition<Modifier>, right: OverlapsScanFieldCondition<Modifier>): boolean;
+    export function isEqual(left: OverlapsScanFieldCondition, right: OverlapsScanFieldCondition): boolean;
     // (undocumented)
     export namespace Operands {
         // (undocumented)
@@ -21614,9 +21614,9 @@ export namespace PriceStepperIncubator {
 // Warning: (ae-missing-release-tag) "PriceSubbedScanField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface PriceSubbedScanField<Modifier = void> extends ScanField<Modifier> {
+export interface PriceSubbedScanField extends ScanField {
     // (undocumented)
-    readonly conditions: ScanField.TypedConditions<NumericScanFieldCondition, Modifier>;
+    readonly conditions: ScanField.TypedConditions<NumericScanFieldCondition>;
     // (undocumented)
     readonly conditionTypeId: ScanFieldCondition.TypeId.Numeric;
     // (undocumented)
@@ -21630,7 +21630,7 @@ export interface PriceSubbedScanField<Modifier = void> extends ScanField<Modifie
 // @public (undocumented)
 export namespace PriceSubbedScanField {
     // (undocumented)
-    export function isConditionEqual<Modifier>(left: PriceSubbedScanField<Modifier>, right: PriceSubbedScanField<Modifier>, index: Integer): boolean;
+    export function isConditionEqual(left: PriceSubbedScanField, right: PriceSubbedScanField, index: Integer): boolean;
 }
 
 // Warning: (ae-missing-release-tag) "PriceSubFieldEqualsScanCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -25193,7 +25193,7 @@ export interface ScanDetail {
 // Warning: (ae-missing-release-tag) "ScanEditor" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class ScanEditor<Modifier = void> extends OpenableScanEditor {
+export class ScanEditor extends OpenableScanEditor {
     constructor(_adiService: AdiService, _symbolsService: SymbolsService, scan: Scan | undefined, opener: LockOpenListItem.Opener, emptyScanFieldSet: ScanFieldSet | undefined, emptyScanConditionSet: ScanConditionSet | undefined, _getOrWaitForScanEventer: ScanEditor.GetOrWaitForScanEventer, _errorEventer: ScanEditor.ErrorEventer | undefined);
     // (undocumented)
     apply(): void;
@@ -25204,7 +25204,7 @@ export class ScanEditor<Modifier = void> extends OpenableScanEditor {
     // (undocumented)
     asyncUpdateScan(): Promise<Result<void>>;
     // (undocumented)
-    beginFieldChanges(modifier: Modifier | undefined): void;
+    beginFieldChanges(modifier: ScanEditor.Modifier | undefined): void;
     // (undocumented)
     calculateTargets(targetTypeId: ScanTargetTypeId): readonly MarketId[] | readonly LitIvemId[];
     // (undocumented)
@@ -25220,7 +25220,7 @@ export class ScanEditor<Modifier = void> extends OpenableScanEditor {
     // (undocumented)
     get criteriaAsConditionSet(): ScanConditionSet | undefined;
     // (undocumented)
-    get criteriaAsFieldSet(): ScanFieldSet<void> | undefined;
+    get criteriaAsFieldSet(): ScanFieldSet | undefined;
     // (undocumented)
     get criteriaAsFormula(): string | undefined;
     // (undocumented)
@@ -25242,7 +25242,7 @@ export class ScanEditor<Modifier = void> extends OpenableScanEditor {
     // (undocumented)
     finalise(): void;
     // (undocumented)
-    flagCriteriaAsFieldSetChanged(modifier?: Modifier): void;
+    flagCriteriaAsFieldSetChanged(modifier?: ScanEditor.Modifier): void;
     // (undocumented)
     get id(): string | undefined;
     // (undocumented)
@@ -25274,13 +25274,13 @@ export class ScanEditor<Modifier = void> extends OpenableScanEditor {
     // (undocumented)
     get scan(): Scan | undefined;
     // (undocumented)
-    setCriteriaAsBooleanNode(value: ScanFormula.BooleanNode, modifier?: Modifier): void;
+    setCriteriaAsBooleanNode(value: ScanFormula.BooleanNode, modifier?: ScanEditor.Modifier): void;
     // (undocumented)
-    setCriteriaAsConditionSet(value: ScanConditionSet, modifier?: Modifier): void;
+    setCriteriaAsConditionSet(value: ScanConditionSet, modifier?: ScanEditor.Modifier): void;
     // (undocumented)
-    setCriteriaAsFieldSet(value: ScanFieldSet, modifier?: Modifier): void;
+    setCriteriaAsFieldSet(value: ScanFieldSet, modifier?: ScanEditor.Modifier): void;
     // (undocumented)
-    setCriteriaAsZenithText(value: string, modifier?: Modifier, strict?: boolean): ScanEditor.SetAsZenithTextResult | undefined;
+    setCriteriaAsZenithText(value: string, modifier?: ScanEditor.Modifier, strict?: boolean): ScanEditor.SetAsZenithTextResult | undefined;
     // (undocumented)
     setDescription(value: string): void;
     // (undocumented)
@@ -25294,7 +25294,7 @@ export class ScanEditor<Modifier = void> extends OpenableScanEditor {
     // (undocumented)
     setRank(value: ScanFormula.NumericNode | undefined, sourceId: ScanEditor.SourceId | undefined): void;
     // (undocumented)
-    setRankAsZenithText(value: string, modifier?: Modifier, strict?: boolean): ScanEditor.SetAsZenithTextResult | undefined;
+    setRankAsZenithText(value: string, modifier?: ScanEditor.Modifier, strict?: boolean): ScanEditor.SetAsZenithTextResult | undefined;
     // (undocumented)
     setSymbolListEnabled(value: boolean): void;
     // (undocumented)
@@ -25310,7 +25310,7 @@ export class ScanEditor<Modifier = void> extends OpenableScanEditor {
     // (undocumented)
     get statusId(): ActiveFaultedStatusId | undefined;
     // (undocumented)
-    subscribeFieldChangesEvents(handler: ScanEditor.FieldChangesEventHandler<Modifier>): number;
+    subscribeFieldChangesEvents(handler: ScanEditor.FieldChangesEventHandler): number;
     // (undocumented)
     subscribeLifeCycleStateChangeEvents(handler: ScanEditor.StateChangeEventHandler): number;
     // (undocumented)
@@ -25361,7 +25361,7 @@ export namespace ScanEditor {
         export function initialise(): void;
     }
     // (undocumented)
-    export type FieldChangesEventHandler<Modifier> = (this: void, changedFieldIds: readonly FieldId[], changer: Modifier | undefined) => void;
+    export type FieldChangesEventHandler = (this: void, changedFieldIds: readonly FieldId[], changer: Modifier | undefined) => void;
     // (undocumented)
     export const enum FieldId {
         // (undocumented)
@@ -25438,6 +25438,8 @@ export namespace ScanEditor {
         Unmodified = 0
     }
     // (undocumented)
+    export type Modifier = Integer;
+    // (undocumented)
     export interface SetAsZenithTextResult {
         // (undocumented)
         error: ScanFormulaZenithEncoding.DecodeError | undefined;
@@ -25482,7 +25484,7 @@ export namespace ScanEditorModule {
 // Warning: (ae-missing-release-tag) "ScanField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface ScanField<Modifier = void> extends ScanField.Definition<Modifier> {
+export interface ScanField extends ScanField.Definition {
     // (undocumented)
     readonly conditions: ScanField.Conditions;
     // (undocumented)
@@ -25494,7 +25496,7 @@ export interface ScanField<Modifier = void> extends ScanField.Definition<Modifie
 // @public (undocumented)
 export namespace ScanField {
     // (undocumented)
-    export function addAndedOredXorNodes<Modifier>(field: ScanField<Modifier>, andedOredXorNodes: AndedOredXorNodes): void;
+    export function addAndedOredXorNodes(field: ScanField, andedOredXorNodes: AndedOredXorNodes): void;
     // (undocumented)
     export interface AndedOredXorNodes {
         // (undocumented)
@@ -25533,54 +25535,54 @@ export namespace ScanField {
         Xor = 2
     }
     // (undocumented)
-    export interface ConditionFactory<Modifier = void> {
+    export interface ConditionFactory {
         // (undocumented)
-        createCurrencyOverlaps(field: ScanField<Modifier>, operatorId: OverlapsScanFieldCondition.Operands.OperatorId, values: readonly CurrencyId[]): Result<CurrencyOverlapsScanFieldCondition<Modifier>>;
+        createCurrencyOverlaps(field: ScanField, operatorId: OverlapsScanFieldCondition.Operands.OperatorId, values: readonly CurrencyId[]): Result<CurrencyOverlapsScanFieldCondition>;
         // (undocumented)
-        createDateWithEquals(field: ScanField<Modifier>, operatorId: DateScanFieldCondition.ValueOperands.OperatorId, value: SourceTzOffsetDateTime): Result<DateScanFieldCondition<Modifier>>;
+        createDateWithEquals(field: ScanField, operatorId: DateScanFieldCondition.ValueOperands.OperatorId, value: SourceTzOffsetDateTime): Result<DateScanFieldCondition>;
         // (undocumented)
-        createDateWithHasValue(field: ScanField<Modifier>, operatorId: DateScanFieldCondition.HasValueOperands.OperatorId): Result<DateScanFieldCondition<Modifier>>;
+        createDateWithHasValue(field: ScanField, operatorId: DateScanFieldCondition.HasValueOperands.OperatorId): Result<DateScanFieldCondition>;
         // (undocumented)
-        createDateWithRange(field: ScanField<Modifier>, operatorId: DateScanFieldCondition.RangeOperands.OperatorId, min: SourceTzOffsetDateTime | undefined, max: SourceTzOffsetDateTime | undefined): Result<DateScanFieldCondition<Modifier>>;
+        createDateWithRange(field: ScanField, operatorId: DateScanFieldCondition.RangeOperands.OperatorId, min: SourceTzOffsetDateTime | undefined, max: SourceTzOffsetDateTime | undefined): Result<DateScanFieldCondition>;
         // (undocumented)
-        createExchangeOverlaps(field: ScanField<Modifier>, operatorId: OverlapsScanFieldCondition.Operands.OperatorId, values: readonly ExchangeId[]): Result<ExchangeOverlapsScanFieldCondition<Modifier>>;
+        createExchangeOverlaps(field: ScanField, operatorId: OverlapsScanFieldCondition.Operands.OperatorId, values: readonly ExchangeId[]): Result<ExchangeOverlapsScanFieldCondition>;
         // (undocumented)
-        createIs(field: ScanField<Modifier>, operatorId: IsScanFieldCondition.Operands.OperatorId, categoryId: ScanFormula.IsNode.CategoryId): Result<IsScanFieldCondition<Modifier>>;
+        createIs(field: ScanField, operatorId: IsScanFieldCondition.Operands.OperatorId, categoryId: ScanFormula.IsNode.CategoryId): Result<IsScanFieldCondition>;
         // (undocumented)
-        createMarketBoardOverlaps(field: ScanField<Modifier>, operatorId: OverlapsScanFieldCondition.Operands.OperatorId, values: readonly MarketBoardId[]): Result<MarketBoardOverlapsScanFieldCondition<Modifier>>;
+        createMarketBoardOverlaps(field: ScanField, operatorId: OverlapsScanFieldCondition.Operands.OperatorId, values: readonly MarketBoardId[]): Result<MarketBoardOverlapsScanFieldCondition>;
         // (undocumented)
-        createMarketOverlaps(field: ScanField<Modifier>, operatorId: OverlapsScanFieldCondition.Operands.OperatorId, values: readonly MarketId[]): Result<MarketOverlapsScanFieldCondition<Modifier>>;
+        createMarketOverlaps(field: ScanField, operatorId: OverlapsScanFieldCondition.Operands.OperatorId, values: readonly MarketId[]): Result<MarketOverlapsScanFieldCondition>;
         // (undocumented)
-        createNumericComparisonWithHasValue(field: ScanField<Modifier>, operatorId: BaseNumericScanFieldCondition.HasValueOperands.OperatorId): Result<NumericComparisonScanFieldCondition<Modifier>>;
+        createNumericComparisonWithHasValue(field: ScanField, operatorId: BaseNumericScanFieldCondition.HasValueOperands.OperatorId): Result<NumericComparisonScanFieldCondition>;
         // (undocumented)
-        createNumericComparisonWithRange(field: ScanField<Modifier>, operatorId: BaseNumericScanFieldCondition.RangeOperands.OperatorId, min: number | undefined, max: number | undefined): Result<NumericComparisonScanFieldCondition<Modifier>>;
+        createNumericComparisonWithRange(field: ScanField, operatorId: BaseNumericScanFieldCondition.RangeOperands.OperatorId, min: number | undefined, max: number | undefined): Result<NumericComparisonScanFieldCondition>;
         // (undocumented)
-        createNumericComparisonWithValue(field: ScanField<Modifier>, operatorId: NumericComparisonScanFieldCondition.ValueOperands.OperatorId, value: number): Result<NumericComparisonScanFieldCondition<Modifier>>;
+        createNumericComparisonWithValue(field: ScanField, operatorId: NumericComparisonScanFieldCondition.ValueOperands.OperatorId, value: number): Result<NumericComparisonScanFieldCondition>;
         // (undocumented)
-        createNumericWithHasValue(field: ScanField<Modifier>, operatorId: BaseNumericScanFieldCondition.HasValueOperands.OperatorId): Result<NumericScanFieldCondition<Modifier>>;
+        createNumericWithHasValue(field: ScanField, operatorId: BaseNumericScanFieldCondition.HasValueOperands.OperatorId): Result<NumericScanFieldCondition>;
         // (undocumented)
-        createNumericWithRange(field: ScanField<Modifier>, operatorId: BaseNumericScanFieldCondition.RangeOperands.OperatorId, min: number | undefined, max: number | undefined): Result<NumericScanFieldCondition<Modifier>>;
+        createNumericWithRange(field: ScanField, operatorId: BaseNumericScanFieldCondition.RangeOperands.OperatorId, min: number | undefined, max: number | undefined): Result<NumericScanFieldCondition>;
         // (undocumented)
-        createNumericWithValue(field: ScanField<Modifier>, operatorId: NumericScanFieldCondition.ValueOperands.OperatorId, value: number): Result<NumericScanFieldCondition<Modifier>>;
+        createNumericWithValue(field: ScanField, operatorId: NumericScanFieldCondition.ValueOperands.OperatorId, value: number): Result<NumericScanFieldCondition>;
         // (undocumented)
-        createStringOverlaps(field: ScanField<Modifier>, operatorId: OverlapsScanFieldCondition.Operands.OperatorId, values: readonly string[]): Result<StringOverlapsScanFieldCondition<Modifier>>;
+        createStringOverlaps(field: ScanField, operatorId: OverlapsScanFieldCondition.Operands.OperatorId, values: readonly string[]): Result<StringOverlapsScanFieldCondition>;
         // (undocumented)
-        createTextContains(field: ScanField<Modifier>, operatorId: TextContainsScanFieldCondition.Operands.OperatorId, value: string, asId: ScanFormula.TextContainsAsId, ignoreCase: boolean): Result<TextContainsScanFieldCondition<Modifier>>;
+        createTextContains(field: ScanField, operatorId: TextContainsScanFieldCondition.Operands.OperatorId, value: string, asId: ScanFormula.TextContainsAsId, ignoreCase: boolean): Result<TextContainsScanFieldCondition>;
         // (undocumented)
-        createTextEquals(field: ScanField<Modifier>, operatorId: TextEqualsScanFieldCondition.Operands.OperatorId, value: string): Result<TextEqualsScanFieldCondition<Modifier>>;
+        createTextEquals(field: ScanField, operatorId: TextEqualsScanFieldCondition.Operands.OperatorId, value: string): Result<TextEqualsScanFieldCondition>;
         // (undocumented)
-        createTextHasValueContainsWithContains(field: ScanField<Modifier>, operatorId: BaseTextScanFieldCondition.ContainsOperands.OperatorId, value: string, asId: ScanFormula.TextContainsAsId, ignoreCase: boolean): Result<TextHasValueContainsScanFieldCondition<Modifier>>;
+        createTextHasValueContainsWithContains(field: ScanField, operatorId: BaseTextScanFieldCondition.ContainsOperands.OperatorId, value: string, asId: ScanFormula.TextContainsAsId, ignoreCase: boolean): Result<TextHasValueContainsScanFieldCondition>;
         // (undocumented)
-        createTextHasValueContainsWithHasValue(field: ScanField<Modifier>, operatorId: BaseTextScanFieldCondition.HasValueOperands.OperatorId): Result<TextHasValueContainsScanFieldCondition<Modifier>>;
+        createTextHasValueContainsWithHasValue(field: ScanField, operatorId: BaseTextScanFieldCondition.HasValueOperands.OperatorId): Result<TextHasValueContainsScanFieldCondition>;
         // (undocumented)
-        createTextHasValueEqualsWithHasValue(field: ScanField<Modifier>, operatorId: BaseTextScanFieldCondition.HasValueOperands.OperatorId): Result<TextHasValueEqualsScanFieldCondition<Modifier>>;
+        createTextHasValueEqualsWithHasValue(field: ScanField, operatorId: BaseTextScanFieldCondition.HasValueOperands.OperatorId): Result<TextHasValueEqualsScanFieldCondition>;
         // (undocumented)
-        createTextHasValueEqualsWithValue(field: ScanField<Modifier>, operatorId: BaseTextScanFieldCondition.ValueOperands.OperatorId, value: string): Result<TextHasValueEqualsScanFieldCondition<Modifier>>;
+        createTextHasValueEqualsWithValue(field: ScanField, operatorId: BaseTextScanFieldCondition.ValueOperands.OperatorId, value: string): Result<TextHasValueEqualsScanFieldCondition>;
     }
     // (undocumented)
-    export interface Conditions<Modifier = void> {
+    export interface Conditions {
         // (undocumented)
-        add(condition: ScanFieldCondition<Modifier>): Integer;
+        add(condition: ScanFieldCondition): Integer;
         // (undocumented)
         capacity: Integer;
         // (undocumented)
@@ -25588,12 +25590,12 @@ export namespace ScanField {
         // (undocumented)
         readonly count: Integer;
         // (undocumented)
-        getAt(index: Integer): ScanFieldCondition<Modifier>;
+        getAt(index: Integer): ScanFieldCondition;
         // (undocumented)
-        setAt(index: Integer, value: ScanFieldCondition<Modifier>): void;
+        setAt(index: Integer, value: ScanFieldCondition): void;
     }
     // (undocumented)
-    export interface Definition<IgnoredModifier> {
+    export interface Definition {
         // (undocumented)
         readonly fieldId: ScanFormula.FieldId;
         // (undocumented)
@@ -25602,11 +25604,11 @@ export namespace ScanField {
         readonly typeId: TypeId;
     }
     // (undocumented)
-    export function isAnyConditionEqualTo<Modifier>(field: ScanField<Modifier>, condition: ScanFieldCondition<Modifier>): boolean;
+    export function isAnyConditionEqualTo(field: ScanField, condition: ScanFieldCondition): boolean;
     // (undocumented)
-    export function isEqual<Modifier>(left: ScanField<Modifier>, right: ScanField<Modifier>): boolean;
+    export function isEqual(left: ScanField, right: ScanField): boolean;
     // (undocumented)
-    export interface TypedConditions<T extends ScanFieldCondition<Modifier>, Modifier = void> extends Conditions<Modifier> {
+    export interface TypedConditions<T extends ScanFieldCondition> extends Conditions {
         // (undocumented)
         add(condition: T): Integer;
         // (undocumented)
@@ -25670,9 +25672,9 @@ export interface ScanFieldCondition<IgnoredModifier = void> {
 // @public (undocumented)
 export namespace ScanFieldCondition {
     // (undocumented)
-    export function createFormulaNode<Modifier>(fieldId: ScanFormula.FieldId, subFieldId: Integer | undefined, condition: ScanFieldCondition<Modifier>): ScanFormula.BooleanNode;
+    export function createFormulaNode(fieldId: ScanFormula.FieldId, subFieldId: Integer | undefined, condition: ScanFieldCondition): ScanFormula.BooleanNode;
     // (undocumented)
-    export function isEqual<Modifier>(left: ScanFieldCondition<Modifier>, right: ScanFieldCondition<Modifier>): boolean;
+    export function isEqual(left: ScanFieldCondition, right: ScanFieldCondition): boolean;
     // (undocumented)
     export interface Operands<IgnoredModifier = void> {
         // (undocumented)
@@ -25801,7 +25803,7 @@ export namespace ScanFieldCondition {
         Overlaps = 12
     }
     // (undocumented)
-    export function typedIsEqual<Modifier>(left: ScanFieldCondition<Modifier>, right: ScanFieldCondition<Modifier>): boolean;
+    export function typedIsEqual(left: ScanFieldCondition, right: ScanFieldCondition): boolean;
     // (undocumented)
     export const enum TypeId {
         // (undocumented)
@@ -25845,17 +25847,17 @@ export namespace ScanFieldConditionModule {
 // Warning: (ae-missing-release-tag) "ScanFieldSet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface ScanFieldSet<Modifier = void> {
+export interface ScanFieldSet {
     // (undocumented)
     beginLoad: () => void;
     // (undocumented)
-    readonly conditionFactory: ScanField.ConditionFactory<Modifier>;
+    readonly conditionFactory: ScanField.ConditionFactory;
     // (undocumented)
     endLoad: (loadError: ScanFieldSetLoadError | undefined) => void;
     // (undocumented)
-    readonly fieldFactory: ScanFieldSet.FieldFactory<Modifier>;
+    readonly fieldFactory: ScanFieldSet.FieldFactory;
     // (undocumented)
-    readonly fields: ScanFieldSet.Fields<Modifier>;
+    readonly fields: ScanFieldSet.Fields;
     // (undocumented)
     readonly loadError: ScanFieldSetLoadError | undefined;
     // (undocumented)
@@ -25865,44 +25867,44 @@ export interface ScanFieldSet<Modifier = void> {
 // @public (undocumented)
 export namespace ScanFieldSet {
     // (undocumented)
-    export function createFormulaNode<Modifier>(fieldSet: ScanFieldSet<Modifier>): ScanFormula.BooleanNode;
+    export function createFormulaNode(fieldSet: ScanFieldSet): ScanFormula.BooleanNode;
     // (undocumented)
-    export interface FieldFactory<Modifier = void> {
+    export interface FieldFactory {
         // (undocumented)
-        createAltCodeSubbed(fieldSet: ScanFieldSet<Modifier>, subFieldId: ScanFormula.AltCodeSubFieldId): Result<AltCodeSubbedScanField<Modifier>>;
+        createAltCodeSubbed(fieldSet: ScanFieldSet, subFieldId: ScanFormula.AltCodeSubFieldId): Result<AltCodeSubbedScanField>;
         // (undocumented)
-        createAttributeSubbed(fieldSet: ScanFieldSet<Modifier>, subFieldId: ScanFormula.AttributeSubFieldId): Result<AttributeSubbedScanField<Modifier>>;
+        createAttributeSubbed(fieldSet: ScanFieldSet, subFieldId: ScanFormula.AttributeSubFieldId): Result<AttributeSubbedScanField>;
         // (undocumented)
-        createCurrencyOverlaps(fieldSet: ScanFieldSet<Modifier>, fieldId: ScanFormula.FieldId.Currency): Result<CurrencyOverlapsScanField<Modifier>>;
+        createCurrencyOverlaps(fieldSet: ScanFieldSet, fieldId: ScanFormula.FieldId.Currency): Result<CurrencyOverlapsScanField>;
         // (undocumented)
-        createDateInRange(fieldSet: ScanFieldSet<Modifier>, fieldId: ScanFormula.DateRangeFieldId): Result<DateInRangeScanField<Modifier>>;
+        createDateInRange(fieldSet: ScanFieldSet, fieldId: ScanFormula.DateRangeFieldId): Result<DateInRangeScanField>;
         // (undocumented)
-        createDateSubbed(fieldSet: ScanFieldSet<Modifier>, subFieldId: ScanFormula.DateSubFieldId): Result<DateSubbedScanField<Modifier>>;
+        createDateSubbed(fieldSet: ScanFieldSet, subFieldId: ScanFormula.DateSubFieldId): Result<DateSubbedScanField>;
         // (undocumented)
-        createExchangeOverlaps(fieldSet: ScanFieldSet<Modifier>, fieldId: ScanFormula.FieldId.Exchange): Result<ExchangeOverlapsScanField<Modifier>>;
+        createExchangeOverlaps(fieldSet: ScanFieldSet, fieldId: ScanFormula.FieldId.Exchange): Result<ExchangeOverlapsScanField>;
         // (undocumented)
-        createIs(fieldSet: ScanFieldSet<Modifier>, fieldId: ScanFormula.FieldId.Is): Result<IsScanField<Modifier>>;
+        createIs(fieldSet: ScanFieldSet, fieldId: ScanFormula.FieldId.Is): Result<IsScanField>;
         // (undocumented)
-        createMarketBoardOverlaps(fieldSet: ScanFieldSet<Modifier>, fieldId: ScanFormula.FieldId.MarketBoard): Result<MarketBoardOverlapsScanField<Modifier>>;
+        createMarketBoardOverlaps(fieldSet: ScanFieldSet, fieldId: ScanFormula.FieldId.MarketBoard): Result<MarketBoardOverlapsScanField>;
         // (undocumented)
-        createMarketOverlaps(fieldSet: ScanFieldSet<Modifier>, fieldId: ScanFormula.MarketOverlapsFieldId): Result<MarketOverlapsScanField<Modifier>>;
+        createMarketOverlaps(fieldSet: ScanFieldSet, fieldId: ScanFormula.MarketOverlapsFieldId): Result<MarketOverlapsScanField>;
         // (undocumented)
-        createNumericInRange(fieldSet: ScanFieldSet<Modifier>, fieldId: ScanFormula.NumericRangeFieldId): Result<NumericInRangeScanField<Modifier>>;
+        createNumericInRange(fieldSet: ScanFieldSet, fieldId: ScanFormula.NumericRangeFieldId): Result<NumericInRangeScanField>;
         // (undocumented)
-        createPriceSubbed(fieldSet: ScanFieldSet<Modifier>, subFieldId: ScanFormula.PriceSubFieldId): Result<PriceSubbedScanField<Modifier>>;
+        createPriceSubbed(fieldSet: ScanFieldSet, subFieldId: ScanFormula.PriceSubFieldId): Result<PriceSubbedScanField>;
         // (undocumented)
-        createStringOverlaps(fieldSet: ScanFieldSet<Modifier>, fieldId: ScanFormula.StringOverlapsFieldId): Result<StringOverlapsScanField<Modifier>>;
+        createStringOverlaps(fieldSet: ScanFieldSet, fieldId: ScanFormula.StringOverlapsFieldId): Result<StringOverlapsScanField>;
         // (undocumented)
-        createTextContains(fieldSet: ScanFieldSet<Modifier>, fieldId: ScanFormula.TextContainsFieldId): Result<TextContainsScanField<Modifier>>;
+        createTextContains(fieldSet: ScanFieldSet, fieldId: ScanFormula.TextContainsFieldId): Result<TextContainsScanField>;
         // (undocumented)
-        createTextEquals(fieldSet: ScanFieldSet<Modifier>, fieldId: ScanFormula.TextEqualsFieldId): Result<TextEqualsScanField<Modifier>>;
+        createTextEquals(fieldSet: ScanFieldSet, fieldId: ScanFormula.TextEqualsFieldId): Result<TextEqualsScanField>;
         // (undocumented)
-        createTextHasValueEquals(fieldSet: ScanFieldSet<Modifier>, fieldId: ScanFormula.TextHasValueEqualsFieldId): Result<TextHasValueEqualsScanField<Modifier>>;
+        createTextHasValueEquals(fieldSet: ScanFieldSet, fieldId: ScanFormula.TextHasValueEqualsFieldId): Result<TextHasValueEqualsScanField>;
     }
     // (undocumented)
-    export interface Fields<Modifier = void> {
+    export interface Fields {
         // (undocumented)
-        add(field: ScanField<Modifier>): Integer;
+        add(field: ScanField): Integer;
         // (undocumented)
         capacity: Integer;
         // (undocumented)
@@ -25910,14 +25912,14 @@ export namespace ScanFieldSet {
         // (undocumented)
         readonly count: Integer;
         // (undocumented)
-        getAt(index: Integer): ScanField<Modifier>;
+        getAt(index: Integer): ScanField;
         // (undocumented)
-        remove(field: ScanField<Modifier>): void;
+        remove(field: ScanField): void;
     }
     // (undocumented)
-    export function isEqual<Modifier>(left: ScanFieldSet<Modifier>, right: ScanFieldSet<Modifier>): boolean;
+    export function isEqual(left: ScanFieldSet, right: ScanFieldSet): boolean;
     // (undocumented)
-    export function tryLoadFromFormulaNode<Modifier>(fieldSet: ScanFieldSet<Modifier>, rootFormulaBooleanNode: ScanFormula.BooleanNode): boolean;
+    export function tryLoadFromFormulaNode(fieldSet: ScanFieldSet, rootFormulaBooleanNode: ScanFormula.BooleanNode): boolean;
 }
 
 // Warning: (ae-missing-release-tag) "ScanFieldSetLoadError" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -27281,17 +27283,17 @@ export interface ScanNotification {
 export class ScansService {
     constructor(_adiService: AdiService, _symbolsService: SymbolsService);
     // (undocumented)
-    closeScanEditor<Modifier = void>(scanEditor: ScanEditor<Modifier>, opener: LockOpenListItem.Opener): void;
+    closeScanEditor(scanEditor: ScanEditor, opener: LockOpenListItem.Opener): void;
     // (undocumented)
     finalise(): void;
     // (undocumented)
     initialise(): void;
     // (undocumented)
-    openNewScanEditor<Modifier = void>(opener: LockOpenListItem.Opener, emptyScanFieldSet?: ScanFieldSet, emptyScanConditionSet?: ScanConditionSet, errorEventer?: ScanEditor.ErrorEventer): ScanEditor<Modifier>;
+    openNewScanEditor(opener: LockOpenListItem.Opener, emptyScanFieldSet?: ScanFieldSet, emptyScanConditionSet?: ScanConditionSet, errorEventer?: ScanEditor.ErrorEventer): ScanEditor;
     // (undocumented)
     readonly scanList: ScanList;
     // (undocumented)
-    tryOpenScanEditor<Modifier = void>(scanId: string | undefined, opener: LockOpenListItem.Opener, newScanFieldSetCallback?: (this: void) => ScanFieldSet | undefined, newScanConditionSetCallback?: (this: void) => ScanConditionSet | undefined, errorEventer?: ScanEditor.ErrorEventer): Promise<Result<ScanEditor<Modifier> | undefined>>;
+    tryOpenScanEditor(scanId: string | undefined, opener: LockOpenListItem.Opener, newScanFieldSetCallback?: (this: void) => ScanFieldSet | undefined, newScanConditionSetCallback?: (this: void) => ScanConditionSet | undefined, errorEventer?: ScanEditor.ErrorEventer): Promise<Result<ScanEditor | undefined>>;
 }
 
 // @public (undocumented)
@@ -29355,7 +29357,7 @@ export class StandAloneScanFieldSet implements ScanFieldSet {
     // (undocumented)
     readonly fieldFactory: StandAloneScanFieldSet.FieldFactory;
     // (undocumented)
-    readonly fields: ComparableList<ScanField<void>, ScanField<void>>;
+    readonly fields: ComparableList<ScanField, ScanField>;
     // (undocumented)
     get loadError(): ScanFieldSetLoadError | undefined;
     // (undocumented)
@@ -34012,9 +34014,9 @@ export const enum StringId {
 // Warning: (ae-missing-release-tag) "StringOverlapsScanField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface StringOverlapsScanField<Modifier = void> extends NotSubbedScanField<Modifier> {
+export interface StringOverlapsScanField extends NotSubbedScanField {
     // (undocumented)
-    readonly conditions: ScanField.TypedConditions<StringOverlapsScanFieldCondition, Modifier>;
+    readonly conditions: ScanField.TypedConditions<StringOverlapsScanFieldCondition>;
     // (undocumented)
     readonly conditionTypeId: ScanFieldCondition.TypeId.StringOverlaps;
     // (undocumented)
@@ -34026,16 +34028,16 @@ export interface StringOverlapsScanField<Modifier = void> extends NotSubbedScanF
 // @public (undocumented)
 export namespace StringOverlapsScanField {
     // (undocumented)
-    export function isConditionEqual<Modifier>(left: StringOverlapsScanField<Modifier>, right: StringOverlapsScanField<Modifier>, index: Integer): boolean;
+    export function isConditionEqual(left: StringOverlapsScanField, right: StringOverlapsScanField, index: Integer): boolean;
 }
 
 // Warning: (ae-missing-release-tag) "StringOverlapsScanFieldCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "StringOverlapsScanFieldCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface StringOverlapsScanFieldCondition<Modifier = void> extends OverlapsScanFieldCondition<Modifier> {
+export interface StringOverlapsScanFieldCondition extends OverlapsScanFieldCondition {
     // (undocumented)
-    readonly operands: StringOverlapsScanFieldCondition.Operands<Modifier>;
+    readonly operands: StringOverlapsScanFieldCondition.Operands;
     // (undocumented)
     readonly typeId: ScanFieldCondition.TypeId.StringOverlaps;
 }
@@ -34043,11 +34045,11 @@ export interface StringOverlapsScanFieldCondition<Modifier = void> extends Overl
 // @public (undocumented)
 export namespace StringOverlapsScanFieldCondition {
     // (undocumented)
-    export function is<Modifier>(condition: ScanFieldCondition<Modifier>): condition is StringOverlapsScanFieldCondition<Modifier>;
+    export function is(condition: ScanFieldCondition): condition is StringOverlapsScanFieldCondition;
     // (undocumented)
     export function isEqual(left: StringOverlapsScanFieldCondition, right: StringOverlapsScanFieldCondition): boolean;
     // (undocumented)
-    export interface Operands<Modifier = void> extends ScanFieldCondition.Operands<Modifier> {
+    export interface Operands extends ScanFieldCondition.Operands {
         // (undocumented)
         typeId: ScanFieldCondition.Operands.TypeId.TextEnum;
         // (undocumented)
@@ -36034,9 +36036,9 @@ export function testRemoveFromArray<T>(array: T[], removeTest: ((element: T) => 
 // Warning: (ae-missing-release-tag) "TextContainsScanField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface TextContainsScanField<Modifier = void> extends NotSubbedScanField<Modifier> {
+export interface TextContainsScanField extends NotSubbedScanField {
     // (undocumented)
-    readonly conditions: ScanField.TypedConditions<TextContainsScanFieldCondition, Modifier>;
+    readonly conditions: ScanField.TypedConditions<TextContainsScanFieldCondition>;
     // (undocumented)
     readonly conditionTypeId: ScanFieldCondition.TypeId.TextContains;
     // (undocumented)
@@ -36048,14 +36050,14 @@ export interface TextContainsScanField<Modifier = void> extends NotSubbedScanFie
 // @public (undocumented)
 export namespace TextContainsScanField {
     // (undocumented)
-    export function isConditionEqual<Modifier>(left: TextContainsScanField<Modifier>, right: TextContainsScanField<Modifier>, index: Integer): boolean;
+    export function isConditionEqual(left: TextContainsScanField, right: TextContainsScanField, index: Integer): boolean;
 }
 
 // Warning: (ae-missing-release-tag) "TextContainsScanFieldCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "TextContainsScanFieldCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface TextContainsScanFieldCondition<Modifier = void> extends BaseTextScanFieldCondition<Modifier> {
+export interface TextContainsScanFieldCondition extends BaseTextScanFieldCondition {
     // (undocumented)
     readonly operatorId: TextContainsScanFieldCondition.OperatorId;
     // (undocumented)
@@ -36065,7 +36067,7 @@ export interface TextContainsScanFieldCondition<Modifier = void> extends BaseTex
 // @public (undocumented)
 export namespace TextContainsScanFieldCondition {
     // (undocumented)
-    export function is<Modifier>(condition: ScanFieldCondition<Modifier>): condition is TextContainsScanFieldCondition<Modifier>;
+    export function is(condition: ScanFieldCondition): condition is TextContainsScanFieldCondition;
     // (undocumented)
     export function isEqual(left: TextContainsScanFieldCondition, right: TextContainsScanFieldCondition): boolean;
     // (undocumented)
@@ -36085,9 +36087,9 @@ export namespace TextContainsScanFieldCondition {
 // Warning: (ae-missing-release-tag) "TextEqualsScanField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface TextEqualsScanField<Modifier = void> extends NotSubbedScanField<Modifier> {
+export interface TextEqualsScanField extends NotSubbedScanField {
     // (undocumented)
-    readonly conditions: ScanField.TypedConditions<TextEqualsScanFieldCondition, Modifier>;
+    readonly conditions: ScanField.TypedConditions<TextEqualsScanFieldCondition>;
     // (undocumented)
     readonly conditionTypeId: ScanFieldCondition.TypeId.TextEquals;
     // (undocumented)
@@ -36099,14 +36101,14 @@ export interface TextEqualsScanField<Modifier = void> extends NotSubbedScanField
 // @public (undocumented)
 export namespace TextEqualsScanField {
     // (undocumented)
-    export function isConditionEqual<Modifier>(left: TextEqualsScanField<Modifier>, right: TextEqualsScanField<Modifier>, index: Integer): boolean;
+    export function isConditionEqual(left: TextEqualsScanField, right: TextEqualsScanField, index: Integer): boolean;
 }
 
 // Warning: (ae-missing-release-tag) "TextEqualsScanFieldCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "TextEqualsScanFieldCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface TextEqualsScanFieldCondition<Modifier = void> extends BaseTextScanFieldCondition<Modifier> {
+export interface TextEqualsScanFieldCondition extends BaseTextScanFieldCondition {
     // (undocumented)
     readonly operatorId: TextEqualsScanFieldCondition.OperatorId;
     // (undocumented)
@@ -36116,7 +36118,7 @@ export interface TextEqualsScanFieldCondition<Modifier = void> extends BaseTextS
 // @public (undocumented)
 export namespace TextEqualsScanFieldCondition {
     // (undocumented)
-    export function is<Modifier>(condition: ScanFieldCondition<Modifier>): condition is TextEqualsScanFieldCondition<Modifier>;
+    export function is(condition: ScanFieldCondition): condition is TextEqualsScanFieldCondition;
     // (undocumented)
     export function isEqual(left: TextEqualsScanFieldCondition, right: TextEqualsScanFieldCondition): boolean;
     // (undocumented)
@@ -36359,7 +36361,7 @@ export namespace TextFormatterService {
 // Warning: (ae-missing-release-tag) "TextHasValueContainsScanFieldCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface TextHasValueContainsScanFieldCondition<Modifier = void> extends BaseTextScanFieldCondition<Modifier> {
+export interface TextHasValueContainsScanFieldCondition extends BaseTextScanFieldCondition {
     // (undocumented)
     readonly operatorId: TextHasValueContainsScanFieldCondition.OperatorId;
     // (undocumented)
@@ -36369,7 +36371,7 @@ export interface TextHasValueContainsScanFieldCondition<Modifier = void> extends
 // @public (undocumented)
 export namespace TextHasValueContainsScanFieldCondition {
     // (undocumented)
-    export function is<Modifier>(condition: ScanFieldCondition<Modifier>): condition is TextHasValueContainsScanFieldCondition<Modifier>;
+    export function is(condition: ScanFieldCondition): condition is TextHasValueContainsScanFieldCondition;
     // (undocumented)
     export function isEqual(left: TextHasValueContainsScanFieldCondition, right: TextHasValueContainsScanFieldCondition): boolean;
     // (undocumented)
@@ -36389,9 +36391,9 @@ export namespace TextHasValueContainsScanFieldCondition {
 // Warning: (ae-missing-release-tag) "TextHasValueEqualsScanField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface TextHasValueEqualsScanField<Modifier = void> extends NotSubbedScanField<Modifier> {
+export interface TextHasValueEqualsScanField extends NotSubbedScanField {
     // (undocumented)
-    readonly conditions: ScanField.TypedConditions<TextHasValueEqualsScanFieldCondition, Modifier>;
+    readonly conditions: ScanField.TypedConditions<TextHasValueEqualsScanFieldCondition>;
     // (undocumented)
     readonly conditionTypeId: ScanFieldCondition.TypeId.TextHasValueEquals;
     // (undocumented)
@@ -36403,14 +36405,14 @@ export interface TextHasValueEqualsScanField<Modifier = void> extends NotSubbedS
 // @public (undocumented)
 export namespace TextHasValueEqualsScanField {
     // (undocumented)
-    export function isConditionEqual<Modifier>(left: TextHasValueEqualsScanField<Modifier>, right: TextHasValueEqualsScanField<Modifier>, index: Integer): boolean;
+    export function isConditionEqual(left: TextHasValueEqualsScanField, right: TextHasValueEqualsScanField, index: Integer): boolean;
 }
 
 // Warning: (ae-missing-release-tag) "TextHasValueEqualsScanFieldCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "TextHasValueEqualsScanFieldCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface TextHasValueEqualsScanFieldCondition<Modifier = void> extends BaseTextScanFieldCondition<Modifier> {
+export interface TextHasValueEqualsScanFieldCondition extends BaseTextScanFieldCondition {
     // (undocumented)
     readonly operatorId: TextHasValueEqualsScanFieldCondition.OperatorId;
     // (undocumented)
@@ -36420,7 +36422,7 @@ export interface TextHasValueEqualsScanFieldCondition<Modifier = void> extends B
 // @public (undocumented)
 export namespace TextHasValueEqualsScanFieldCondition {
     // (undocumented)
-    export function is<Modifier>(condition: ScanFieldCondition<Modifier>): condition is TextHasValueEqualsScanFieldCondition<Modifier>;
+    export function is(condition: ScanFieldCondition): condition is TextHasValueEqualsScanFieldCondition;
     // (undocumented)
     export function isEqual(left: TextHasValueEqualsScanFieldCondition, right: TextHasValueEqualsScanFieldCondition): boolean;
     // (undocumented)

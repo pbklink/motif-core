@@ -50,7 +50,7 @@ export class StandAloneScanFieldSet implements ScanFieldSet {
     readonly conditionFactory = new StandAloneScanFieldSet.ConditionFactory();
     readonly valid = true;
 
-    readonly fields = new ComparableList<ScanField<void>>();
+    readonly fields = new ComparableList<ScanField>();
 
     private _loadError: ScanFieldSetLoadError | undefined;
 

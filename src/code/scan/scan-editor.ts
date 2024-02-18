@@ -68,7 +68,7 @@ export abstract class OpenableScanEditor {
     }
 }
 
-export class ScanEditor<Modifier = void> extends OpenableScanEditor {
+export class ScanEditor extends OpenableScanEditor {
     readonly readonly: boolean; // put here so ESLint does not complain
     private _finalised = false;
 
@@ -115,8 +115,8 @@ export class ScanEditor<Modifier = void> extends OpenableScanEditor {
     private _rankSourceId: ScanEditor.SourceId | undefined;
     private _rankSourceValid = true;
 
-    private _modifier: Modifier | undefined;
-    private _fieldChangesMultiEvent = new MultiEvent<ScanEditor.FieldChangesEventHandler<Modifier>>();
+    private _modifier: ScanEditor.Modifier | undefined;
+    private _fieldChangesMultiEvent = new MultiEvent<ScanEditor.FieldChangesEventHandler>();
     private _lifeCycleStateChangeMultiEvent = new MultiEvent<ScanEditor.StateChangeEventHandler>();
     private _modifiedStateChangeMultiEvent = new MultiEvent<ScanEditor.StateChangeEventHandler>();
 
@@ -235,7 +235,7 @@ export class ScanEditor<Modifier = void> extends OpenableScanEditor {
         this._finalised = true;
     }
 
-    beginFieldChanges(modifier: Modifier | undefined) {
+    beginFieldChanges(modifier: ScanEditor.Modifier | undefined) {
         if (modifier !== undefined) {
             if (this._beginFieldChangesCount === 0) {
                 this._modifier = modifier;
@@ -373,7 +373,7 @@ export class ScanEditor<Modifier = void> extends OpenableScanEditor {
         }
     }
 
-    setCriteriaAsBooleanNode(value: ScanFormula.BooleanNode, modifier?: Modifier) {
+    setCriteriaAsBooleanNode(value: ScanFormula.BooleanNode, modifier?: ScanEditor.Modifier) {
         this.beginFieldChanges(modifier);
         this._criteriaSourceId = ScanEditor.SourceId.BooleanNode;
         this.setCriteria(value, ScanEditor.SourceId.BooleanNode, modifier);
@@ -381,7 +381,7 @@ export class ScanEditor<Modifier = void> extends OpenableScanEditor {
         this.endFieldChanges();
     }
 
-    setCriteriaAsZenithText(value: string, modifier?: Modifier, strict = true): ScanEditor.SetAsZenithTextResult | undefined {
+    setCriteriaAsZenithText(value: string, modifier?: ScanEditor.Modifier, strict = true): ScanEditor.SetAsZenithTextResult | undefined {
         if (value === this._criteriaAsZenithText) {
             return undefined;
         } else {
@@ -430,7 +430,7 @@ export class ScanEditor<Modifier = void> extends OpenableScanEditor {
         }
     }
 
-    setCriteriaAsConditionSet(value: ScanConditionSet, modifier?: Modifier) {
+    setCriteriaAsConditionSet(value: ScanConditionSet, modifier?: ScanEditor.Modifier) {
         this.beginFieldChanges(modifier);
         this._criteriaAsConditionSet = value;
         this._criteriaSourceId = ScanEditor.SourceId.ConditionSet;
@@ -442,12 +442,12 @@ export class ScanEditor<Modifier = void> extends OpenableScanEditor {
         this.endFieldChanges();
     }
 
-    setCriteriaAsFieldSet(value: ScanFieldSet, modifier?: Modifier) {
+    setCriteriaAsFieldSet(value: ScanFieldSet, modifier?: ScanEditor.Modifier) {
         this._criteriaAsFieldSet = value;
         this.flagCriteriaAsFieldSetChanged(modifier);
     }
 
-    flagCriteriaAsFieldSetChanged(modifier?: Modifier) {
+    flagCriteriaAsFieldSetChanged(modifier?: ScanEditor.Modifier) {
         const criteriaAsFieldSet = this._criteriaAsFieldSet;
         if (criteriaAsFieldSet === undefined) {
             throw new AssertInternalError('SEFCAFSC22209');
@@ -497,7 +497,7 @@ export class ScanEditor<Modifier = void> extends OpenableScanEditor {
         }
     }
 
-    setRankAsZenithText(value: string, modifier?: Modifier, strict = true): ScanEditor.SetAsZenithTextResult | undefined {
+    setRankAsZenithText(value: string, modifier?: ScanEditor.Modifier, strict = true): ScanEditor.SetAsZenithTextResult | undefined {
         if (value === this._rankAsZenithText) {
             return undefined;
         } else {
@@ -878,7 +878,7 @@ export class ScanEditor<Modifier = void> extends OpenableScanEditor {
         this._modifiedStateChangeMultiEvent.unsubscribe(subscriptionId);
     }
 
-    subscribeFieldChangesEvents(handler: ScanEditor.FieldChangesEventHandler<Modifier>) {
+    subscribeFieldChangesEvents(handler: ScanEditor.FieldChangesEventHandler) {
         return this._fieldChangesMultiEvent.subscribe(handler);
     }
 
@@ -1156,7 +1156,7 @@ export class ScanEditor<Modifier = void> extends OpenableScanEditor {
         this.setRank(rank, undefined);
     }
 
-    private setCriteria(value: ScanFormula.BooleanNode, sourceId: ScanEditor.SourceId | undefined, modifier: Modifier | undefined) {
+    private setCriteria(value: ScanFormula.BooleanNode, sourceId: ScanEditor.SourceId | undefined, modifier: ScanEditor.Modifier | undefined) {
         this.beginFieldChanges(modifier)
         this._criteria = value;
         this.addFieldChange(ScanEditor.FieldId.Criteria);
@@ -1366,8 +1366,10 @@ export namespace ScanEditor {
     export const DefaultCriteria: ScanFormula.BooleanNode = { typeId: ScanFormula.NodeTypeId.None };
     export const DefaultRank: ScanFormula.NumericPosNode | undefined = undefined; // { typeId: ScanFormula.NodeTypeId.NumericPos, operand: 0 } ;
 
+    export type Modifier = Integer;
+
     export type StateChangeEventHandler = (this: void) => void;
-    export type FieldChangesEventHandler<Modifier> = (this: void, changedFieldIds: readonly FieldId[], changer: Modifier | undefined) => void;
+    export type FieldChangesEventHandler = (this: void, changedFieldIds: readonly FieldId[], changer: Modifier | undefined) => void;
     export type GetOrWaitForScanEventer = (this: void, scanId: string) => Promise<Scan>; // returns ScanId
     export type ErrorEventer = (this: void, errorText: string) => void;
 

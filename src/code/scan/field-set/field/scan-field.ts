@@ -28,7 +28,7 @@ import {
     TextHasValueEqualsScanFieldCondition
 } from './condition/internal-api';
 
-export interface ScanField<Modifier = void> extends ScanField.Definition<Modifier> {
+export interface ScanField extends ScanField.Definition {
     readonly conditionTypeId: ScanFieldCondition.TypeId;
     readonly conditions: ScanField.Conditions;
 
@@ -54,24 +54,24 @@ export namespace ScanField {
         Is,
     }
 
-    export interface Definition<IgnoredModifier> {
+    export interface Definition {
         readonly typeId: TypeId;
         readonly fieldId: ScanFormula.FieldId;
         readonly subFieldId: Integer | undefined;
     }
 
     // Implementable by ComparableList
-    export interface Conditions<Modifier = void> {
+    export interface Conditions {
         readonly count: Integer;
         capacity: Integer;
 
-        getAt(index: Integer): ScanFieldCondition<Modifier>;
-        setAt(index: Integer, value: ScanFieldCondition<Modifier>): void;
+        getAt(index: Integer): ScanFieldCondition;
+        setAt(index: Integer, value: ScanFieldCondition): void;
         clear(): void;
-        add(condition: ScanFieldCondition<Modifier>): Integer;
+        add(condition: ScanFieldCondition): Integer;
     }
 
-    export interface TypedConditions<T extends ScanFieldCondition<Modifier>, Modifier = void> extends Conditions<Modifier> {
+    export interface TypedConditions<T extends ScanFieldCondition> extends Conditions {
         getAt(index: Integer): T;
         setAt(index: Integer, value: T): void;
         add(condition: T): Integer;
@@ -148,31 +148,31 @@ export namespace ScanField {
         }
     }
 
-    export interface ConditionFactory<Modifier = void> {
-        createNumericComparisonWithHasValue(field: ScanField<Modifier>, operatorId: BaseNumericScanFieldCondition.HasValueOperands.OperatorId): Result<NumericComparisonScanFieldCondition<Modifier>>;
-        createNumericComparisonWithValue(field: ScanField<Modifier>, operatorId: NumericComparisonScanFieldCondition.ValueOperands.OperatorId, value: number): Result<NumericComparisonScanFieldCondition<Modifier>>;
-        createNumericComparisonWithRange(field: ScanField<Modifier>, operatorId: BaseNumericScanFieldCondition.RangeOperands.OperatorId, min: number | undefined, max: number | undefined): Result<NumericComparisonScanFieldCondition<Modifier>>;
-        createNumericWithHasValue(field: ScanField<Modifier>, operatorId: BaseNumericScanFieldCondition.HasValueOperands.OperatorId): Result<NumericScanFieldCondition<Modifier>>;
-        createNumericWithValue(field: ScanField<Modifier>, operatorId: NumericScanFieldCondition.ValueOperands.OperatorId, value: number): Result<NumericScanFieldCondition<Modifier>>;
-        createNumericWithRange(field: ScanField<Modifier>, operatorId: BaseNumericScanFieldCondition.RangeOperands.OperatorId, min: number | undefined, max: number | undefined): Result<NumericScanFieldCondition<Modifier>>;
-        createDateWithHasValue(field: ScanField<Modifier>, operatorId: DateScanFieldCondition.HasValueOperands.OperatorId): Result<DateScanFieldCondition<Modifier>>;
-        createDateWithEquals(field: ScanField<Modifier>, operatorId: DateScanFieldCondition.ValueOperands.OperatorId, value: SourceTzOffsetDateTime): Result<DateScanFieldCondition<Modifier>>;
-        createDateWithRange(field: ScanField<Modifier>, operatorId: DateScanFieldCondition.RangeOperands.OperatorId, min: SourceTzOffsetDateTime | undefined, max: SourceTzOffsetDateTime | undefined): Result<DateScanFieldCondition<Modifier>>;
-        createTextEquals(field: ScanField<Modifier>, operatorId: TextEqualsScanFieldCondition.Operands.OperatorId, value: string): Result<TextEqualsScanFieldCondition<Modifier>>;
-        createTextContains(field: ScanField<Modifier>, operatorId: TextContainsScanFieldCondition.Operands.OperatorId, value: string, asId: ScanFormula.TextContainsAsId, ignoreCase: boolean): Result<TextContainsScanFieldCondition<Modifier>>;
-        createTextHasValueEqualsWithHasValue(field: ScanField<Modifier>, operatorId: BaseTextScanFieldCondition.HasValueOperands.OperatorId): Result<TextHasValueEqualsScanFieldCondition<Modifier>>;
-        createTextHasValueEqualsWithValue(field: ScanField<Modifier>, operatorId: BaseTextScanFieldCondition.ValueOperands.OperatorId, value: string): Result<TextHasValueEqualsScanFieldCondition<Modifier>>;
-        createTextHasValueContainsWithHasValue(field: ScanField<Modifier>, operatorId: BaseTextScanFieldCondition.HasValueOperands.OperatorId): Result<TextHasValueContainsScanFieldCondition<Modifier>>;
-        createTextHasValueContainsWithContains(field: ScanField<Modifier>, operatorId: BaseTextScanFieldCondition.ContainsOperands.OperatorId, value: string, asId: ScanFormula.TextContainsAsId, ignoreCase: boolean): Result<TextHasValueContainsScanFieldCondition<Modifier>>;
-        createStringOverlaps(field: ScanField<Modifier>, operatorId: OverlapsScanFieldCondition.Operands.OperatorId, values: readonly string[]): Result<StringOverlapsScanFieldCondition<Modifier>>;
-        createCurrencyOverlaps(field: ScanField<Modifier>, operatorId: OverlapsScanFieldCondition.Operands.OperatorId, values: readonly CurrencyId[]): Result<CurrencyOverlapsScanFieldCondition<Modifier>>;
-        createExchangeOverlaps(field: ScanField<Modifier>, operatorId: OverlapsScanFieldCondition.Operands.OperatorId, values: readonly ExchangeId[]): Result<ExchangeOverlapsScanFieldCondition<Modifier>>;
-        createMarketOverlaps(field: ScanField<Modifier>, operatorId: OverlapsScanFieldCondition.Operands.OperatorId, values: readonly MarketId[]): Result<MarketOverlapsScanFieldCondition<Modifier>>;
-        createMarketBoardOverlaps(field: ScanField<Modifier>, operatorId: OverlapsScanFieldCondition.Operands.OperatorId, values: readonly MarketBoardId[]): Result<MarketBoardOverlapsScanFieldCondition<Modifier>>;
-        createIs(field: ScanField<Modifier>, operatorId: IsScanFieldCondition.Operands.OperatorId, categoryId: ScanFormula.IsNode.CategoryId): Result<IsScanFieldCondition<Modifier>>;
+    export interface ConditionFactory {
+        createNumericComparisonWithHasValue(field: ScanField, operatorId: BaseNumericScanFieldCondition.HasValueOperands.OperatorId): Result<NumericComparisonScanFieldCondition>;
+        createNumericComparisonWithValue(field: ScanField, operatorId: NumericComparisonScanFieldCondition.ValueOperands.OperatorId, value: number): Result<NumericComparisonScanFieldCondition>;
+        createNumericComparisonWithRange(field: ScanField, operatorId: BaseNumericScanFieldCondition.RangeOperands.OperatorId, min: number | undefined, max: number | undefined): Result<NumericComparisonScanFieldCondition>;
+        createNumericWithHasValue(field: ScanField, operatorId: BaseNumericScanFieldCondition.HasValueOperands.OperatorId): Result<NumericScanFieldCondition>;
+        createNumericWithValue(field: ScanField, operatorId: NumericScanFieldCondition.ValueOperands.OperatorId, value: number): Result<NumericScanFieldCondition>;
+        createNumericWithRange(field: ScanField, operatorId: BaseNumericScanFieldCondition.RangeOperands.OperatorId, min: number | undefined, max: number | undefined): Result<NumericScanFieldCondition>;
+        createDateWithHasValue(field: ScanField, operatorId: DateScanFieldCondition.HasValueOperands.OperatorId): Result<DateScanFieldCondition>;
+        createDateWithEquals(field: ScanField, operatorId: DateScanFieldCondition.ValueOperands.OperatorId, value: SourceTzOffsetDateTime): Result<DateScanFieldCondition>;
+        createDateWithRange(field: ScanField, operatorId: DateScanFieldCondition.RangeOperands.OperatorId, min: SourceTzOffsetDateTime | undefined, max: SourceTzOffsetDateTime | undefined): Result<DateScanFieldCondition>;
+        createTextEquals(field: ScanField, operatorId: TextEqualsScanFieldCondition.Operands.OperatorId, value: string): Result<TextEqualsScanFieldCondition>;
+        createTextContains(field: ScanField, operatorId: TextContainsScanFieldCondition.Operands.OperatorId, value: string, asId: ScanFormula.TextContainsAsId, ignoreCase: boolean): Result<TextContainsScanFieldCondition>;
+        createTextHasValueEqualsWithHasValue(field: ScanField, operatorId: BaseTextScanFieldCondition.HasValueOperands.OperatorId): Result<TextHasValueEqualsScanFieldCondition>;
+        createTextHasValueEqualsWithValue(field: ScanField, operatorId: BaseTextScanFieldCondition.ValueOperands.OperatorId, value: string): Result<TextHasValueEqualsScanFieldCondition>;
+        createTextHasValueContainsWithHasValue(field: ScanField, operatorId: BaseTextScanFieldCondition.HasValueOperands.OperatorId): Result<TextHasValueContainsScanFieldCondition>;
+        createTextHasValueContainsWithContains(field: ScanField, operatorId: BaseTextScanFieldCondition.ContainsOperands.OperatorId, value: string, asId: ScanFormula.TextContainsAsId, ignoreCase: boolean): Result<TextHasValueContainsScanFieldCondition>;
+        createStringOverlaps(field: ScanField, operatorId: OverlapsScanFieldCondition.Operands.OperatorId, values: readonly string[]): Result<StringOverlapsScanFieldCondition>;
+        createCurrencyOverlaps(field: ScanField, operatorId: OverlapsScanFieldCondition.Operands.OperatorId, values: readonly CurrencyId[]): Result<CurrencyOverlapsScanFieldCondition>;
+        createExchangeOverlaps(field: ScanField, operatorId: OverlapsScanFieldCondition.Operands.OperatorId, values: readonly ExchangeId[]): Result<ExchangeOverlapsScanFieldCondition>;
+        createMarketOverlaps(field: ScanField, operatorId: OverlapsScanFieldCondition.Operands.OperatorId, values: readonly MarketId[]): Result<MarketOverlapsScanFieldCondition>;
+        createMarketBoardOverlaps(field: ScanField, operatorId: OverlapsScanFieldCondition.Operands.OperatorId, values: readonly MarketBoardId[]): Result<MarketBoardOverlapsScanFieldCondition>;
+        createIs(field: ScanField, operatorId: IsScanFieldCondition.Operands.OperatorId, categoryId: ScanFormula.IsNode.CategoryId): Result<IsScanFieldCondition>;
     }
 
-    export function isEqual<Modifier>(left: ScanField<Modifier>, right: ScanField<Modifier>) {
+    export function isEqual(left: ScanField, right: ScanField) {
         if (left.typeId !== right.typeId) {
             return false; // This will only occur if a Field is not set up correctly
         } else {
@@ -200,7 +200,7 @@ export namespace ScanField {
         }
     }
 
-    export function isAnyConditionEqualTo<Modifier>(field: ScanField<Modifier>, condition: ScanFieldCondition<Modifier>) {
+    export function isAnyConditionEqualTo(field: ScanField, condition: ScanFieldCondition) {
         if (field.conditionTypeId !== condition.typeId) {
             return false;
         } else {
@@ -222,7 +222,7 @@ export namespace ScanField {
         xorNodes: ScanFormula.XorNode[];
     }
 
-    export function addAndedOredXorNodes<Modifier>(field: ScanField<Modifier>, andedOredXorNodes: AndedOredXorNodes) {
+    export function addAndedOredXorNodes(field: ScanField, andedOredXorNodes: AndedOredXorNodes) {
         const conditionsOperationId = field.conditionsOperationId;
         const conditions = field.conditions;
         const conditionCount = conditions.count;
@@ -274,23 +274,23 @@ export namespace ScanField {
     }
 }
 
-export interface NotSubbedScanField<Modifier = void> extends ScanField<Modifier> {
+export interface NotSubbedScanField extends ScanField {
     readonly subFieldId: undefined;
 }
 
-export interface NumericInRangeScanField<Modifier = void> extends NotSubbedScanField<Modifier> {
+export interface NumericInRangeScanField extends NotSubbedScanField {
     readonly typeId: ScanField.TypeId.NumericInRange;
     readonly fieldId: ScanFormula.NumericRangeFieldId;
     readonly conditionTypeId: ScanFieldCondition.TypeId.NumericComparison;
-    readonly conditions: ScanField.TypedConditions<NumericComparisonScanFieldCondition, Modifier>;
+    readonly conditions: ScanField.TypedConditions<NumericComparisonScanFieldCondition>;
 }
 
 export namespace NumericInRangeScanField {
-    export function is<Modifier>(field: ScanField<Modifier>): field is NumericInRangeScanField<Modifier> {
+    export function is(field: ScanField): field is NumericInRangeScanField {
         return field.typeId === ScanField.TypeId.NumericInRange;
     }
 
-    export function isConditionEqual<Modifier>(left: NumericInRangeScanField<Modifier>, right: NumericInRangeScanField<Modifier>, index: Integer): boolean {
+    export function isConditionEqual(left: NumericInRangeScanField, right: NumericInRangeScanField, index: Integer): boolean {
         const leftCondition = left.conditions.getAt(index);
         const rightCondition = right.conditions.getAt(index);
         if (!NumericComparisonScanFieldCondition.is(leftCondition) || !NumericComparisonScanFieldCondition.is(rightCondition)) {
@@ -301,16 +301,16 @@ export namespace NumericInRangeScanField {
     }
 }
 
-export interface PriceSubbedScanField<Modifier = void> extends ScanField<Modifier> {
+export interface PriceSubbedScanField extends ScanField {
     readonly typeId: ScanField.TypeId.PriceSubbed;
     readonly fieldId: ScanFormula.FieldId.PriceSubbed,
     readonly subFieldId: ScanFormula.PriceSubFieldId;
     readonly conditionTypeId: ScanFieldCondition.TypeId.Numeric;
-    readonly conditions: ScanField.TypedConditions<NumericScanFieldCondition, Modifier>;
+    readonly conditions: ScanField.TypedConditions<NumericScanFieldCondition>;
 }
 
 export namespace PriceSubbedScanField {
-    export function isConditionEqual<Modifier>(left: PriceSubbedScanField<Modifier>, right: PriceSubbedScanField<Modifier>, index: Integer): boolean {
+    export function isConditionEqual(left: PriceSubbedScanField, right: PriceSubbedScanField, index: Integer): boolean {
         const leftCondition = left.conditions.getAt(index);
         const rightCondition = right.conditions.getAt(index);
         if (!NumericScanFieldCondition.is(leftCondition) || !NumericScanFieldCondition.is(rightCondition)) {
@@ -321,15 +321,15 @@ export namespace PriceSubbedScanField {
     }
 }
 
-export interface DateInRangeScanField<Modifier = void> extends NotSubbedScanField<Modifier> {
+export interface DateInRangeScanField extends NotSubbedScanField {
     readonly typeId: ScanField.TypeId.DateInRange;
     readonly fieldId: ScanFormula.DateRangeFieldId,
     readonly conditionTypeId: ScanFieldCondition.TypeId.Date;
-    readonly conditions: ScanField.TypedConditions<DateScanFieldCondition, Modifier>;
+    readonly conditions: ScanField.TypedConditions<DateScanFieldCondition>;
 }
 
 export namespace DateInRangeScanField {
-    export function isConditionEqual<Modifier>(left: DateInRangeScanField<Modifier>, right: DateInRangeScanField<Modifier>, index: Integer): boolean {
+    export function isConditionEqual(left: DateInRangeScanField, right: DateInRangeScanField, index: Integer): boolean {
         const leftCondition = left.conditions.getAt(index);
         const rightCondition = right.conditions.getAt(index);
         if (!DateScanFieldCondition.is(leftCondition) || !DateScanFieldCondition.is(rightCondition)) {
@@ -340,16 +340,16 @@ export namespace DateInRangeScanField {
     }
 }
 
-export interface DateSubbedScanField<Modifier = void> extends ScanField<Modifier> {
+export interface DateSubbedScanField extends ScanField {
     readonly typeId: ScanField.TypeId.DateSubbed;
     readonly fieldId: ScanFormula.FieldId.DateSubbed;
     readonly subFieldId: ScanFormula.DateSubFieldId;
     readonly conditionTypeId: ScanFieldCondition.TypeId.Date;
-    readonly conditions: ScanField.TypedConditions<DateScanFieldCondition, Modifier>;
+    readonly conditions: ScanField.TypedConditions<DateScanFieldCondition>;
 }
 
 export namespace DateSubbedScanField {
-    export function isConditionEqual<Modifier>(left: DateSubbedScanField<Modifier>, right: DateSubbedScanField<Modifier>, index: Integer): boolean {
+    export function isConditionEqual(left: DateSubbedScanField, right: DateSubbedScanField, index: Integer): boolean {
         const leftCondition = left.conditions.getAt(index);
         const rightCondition = right.conditions.getAt(index);
         if (!DateScanFieldCondition.is(leftCondition) || !DateScanFieldCondition.is(rightCondition)) {
@@ -360,15 +360,15 @@ export namespace DateSubbedScanField {
     }
 }
 
-export interface TextContainsScanField<Modifier = void> extends NotSubbedScanField<Modifier> {
+export interface TextContainsScanField extends NotSubbedScanField {
     readonly typeId: ScanField.TypeId.TextContains;
     readonly fieldId: ScanFormula.TextContainsFieldId,
     readonly conditionTypeId: ScanFieldCondition.TypeId.TextContains;
-    readonly conditions: ScanField.TypedConditions<TextContainsScanFieldCondition, Modifier>;
+    readonly conditions: ScanField.TypedConditions<TextContainsScanFieldCondition>;
 }
 
 export namespace TextContainsScanField {
-    export function isConditionEqual<Modifier>(left: TextContainsScanField<Modifier>, right: TextContainsScanField<Modifier>, index: Integer): boolean {
+    export function isConditionEqual(left: TextContainsScanField, right: TextContainsScanField, index: Integer): boolean {
         const leftCondition = left.conditions.getAt(index);
         const rightCondition = right.conditions.getAt(index);
         if (!TextContainsScanFieldCondition.is(leftCondition) || !TextContainsScanFieldCondition.is(rightCondition)) {
@@ -379,16 +379,16 @@ export namespace TextContainsScanField {
     }
 }
 
-export interface AltCodeSubbedScanField<Modifier = void> extends ScanField<Modifier> {
+export interface AltCodeSubbedScanField extends ScanField {
     readonly typeId: ScanField.TypeId.AltCodeSubbed;
     readonly fieldId: ScanFormula.FieldId.AltCodeSubbed,
     readonly subFieldId: ScanFormula.AltCodeSubFieldId;
     readonly conditionTypeId: ScanFieldCondition.TypeId.TextHasValueContains;
-    readonly conditions: ScanField.TypedConditions<TextHasValueContainsScanFieldCondition, Modifier>;
+    readonly conditions: ScanField.TypedConditions<TextHasValueContainsScanFieldCondition>;
 }
 
 export namespace AltCodeSubbedScanField {
-    export function isConditionEqual<Modifier>(left: AltCodeSubbedScanField<Modifier>, right: AltCodeSubbedScanField<Modifier>, index: Integer): boolean {
+    export function isConditionEqual(left: AltCodeSubbedScanField, right: AltCodeSubbedScanField, index: Integer): boolean {
         const leftCondition = left.conditions.getAt(index);
         const rightCondition = right.conditions.getAt(index);
         if (!TextHasValueContainsScanFieldCondition.is(leftCondition) || !TextHasValueContainsScanFieldCondition.is(rightCondition)) {
@@ -399,16 +399,16 @@ export namespace AltCodeSubbedScanField {
     }
 }
 
-export interface AttributeSubbedScanField<Modifier = void> extends ScanField<Modifier> {
+export interface AttributeSubbedScanField extends ScanField {
     readonly typeId: ScanField.TypeId.AttributeSubbed;
     readonly fieldId: ScanFormula.FieldId.AttributeSubbed,
     readonly subFieldId: ScanFormula.AttributeSubFieldId;
     readonly conditionTypeId: ScanFieldCondition.TypeId.TextHasValueContains;
-    readonly conditions: ScanField.TypedConditions<TextHasValueContainsScanFieldCondition, Modifier>;
+    readonly conditions: ScanField.TypedConditions<TextHasValueContainsScanFieldCondition>;
 }
 
 export namespace AttributeSubbedScanField {
-    export function isConditionEqual<Modifier>(left: AttributeSubbedScanField<Modifier>, right: AttributeSubbedScanField<Modifier>, index: Integer): boolean {
+    export function isConditionEqual(left: AttributeSubbedScanField, right: AttributeSubbedScanField, index: Integer): boolean {
         const leftCondition = left.conditions.getAt(index);
         const rightCondition = right.conditions.getAt(index);
         if (!TextHasValueContainsScanFieldCondition.is(leftCondition) || !TextHasValueContainsScanFieldCondition.is(rightCondition)) {
@@ -419,15 +419,15 @@ export namespace AttributeSubbedScanField {
     }
 }
 
-export interface TextEqualsScanField<Modifier = void> extends NotSubbedScanField<Modifier> {
+export interface TextEqualsScanField extends NotSubbedScanField {
     readonly typeId: ScanField.TypeId.TextEquals;
     readonly fieldId: ScanFormula.TextEqualsFieldId;
     readonly conditionTypeId: ScanFieldCondition.TypeId.TextEquals;
-    readonly conditions: ScanField.TypedConditions<TextEqualsScanFieldCondition, Modifier>;
+    readonly conditions: ScanField.TypedConditions<TextEqualsScanFieldCondition>;
 }
 
 export namespace TextEqualsScanField {
-    export function isConditionEqual<Modifier>(left: TextEqualsScanField<Modifier>, right: TextEqualsScanField<Modifier>, index: Integer): boolean {
+    export function isConditionEqual(left: TextEqualsScanField, right: TextEqualsScanField, index: Integer): boolean {
         const leftCondition = left.conditions.getAt(index);
         const rightCondition = right.conditions.getAt(index);
         if (!TextEqualsScanFieldCondition.is(leftCondition) || !TextEqualsScanFieldCondition.is(rightCondition)) {
@@ -438,15 +438,15 @@ export namespace TextEqualsScanField {
     }
 }
 
-export interface TextHasValueEqualsScanField<Modifier = void> extends NotSubbedScanField<Modifier> {
+export interface TextHasValueEqualsScanField extends NotSubbedScanField {
     readonly typeId: ScanField.TypeId.TextHasValueEquals;
     readonly fieldId: ScanFormula.TextHasValueEqualsFieldId;
     readonly conditionTypeId: ScanFieldCondition.TypeId.TextHasValueEquals;
-    readonly conditions: ScanField.TypedConditions<TextHasValueEqualsScanFieldCondition, Modifier>;
+    readonly conditions: ScanField.TypedConditions<TextHasValueEqualsScanFieldCondition>;
 }
 
 export namespace TextHasValueEqualsScanField {
-    export function isConditionEqual<Modifier>(left: TextHasValueEqualsScanField<Modifier>, right: TextHasValueEqualsScanField<Modifier>, index: Integer): boolean {
+    export function isConditionEqual(left: TextHasValueEqualsScanField, right: TextHasValueEqualsScanField, index: Integer): boolean {
         const leftCondition = left.conditions.getAt(index);
         const rightCondition = right.conditions.getAt(index);
         if (!TextHasValueEqualsScanFieldCondition.is(leftCondition) || !TextHasValueEqualsScanFieldCondition.is(rightCondition)) {
@@ -457,15 +457,15 @@ export namespace TextHasValueEqualsScanField {
     }
 }
 
-export interface StringOverlapsScanField<Modifier = void> extends NotSubbedScanField<Modifier> {
+export interface StringOverlapsScanField extends NotSubbedScanField {
     readonly typeId: ScanField.TypeId.StringOverlaps;
     readonly fieldId: ScanFormula.StringOverlapsFieldId;
     readonly conditionTypeId: ScanFieldCondition.TypeId.StringOverlaps;
-    readonly conditions: ScanField.TypedConditions<StringOverlapsScanFieldCondition, Modifier>;
+    readonly conditions: ScanField.TypedConditions<StringOverlapsScanFieldCondition>;
 }
 
 export namespace StringOverlapsScanField {
-    export function isConditionEqual<Modifier>(left: StringOverlapsScanField<Modifier>, right: StringOverlapsScanField<Modifier>, index: Integer): boolean {
+    export function isConditionEqual(left: StringOverlapsScanField, right: StringOverlapsScanField, index: Integer): boolean {
         const leftCondition = left.conditions.getAt(index);
         const rightCondition = right.conditions.getAt(index);
         if (!StringOverlapsScanFieldCondition.is(leftCondition) || !StringOverlapsScanFieldCondition.is(rightCondition)) {
@@ -476,15 +476,15 @@ export namespace StringOverlapsScanField {
     }
 }
 
-export interface CurrencyOverlapsScanField<Modifier = void> extends NotSubbedScanField<Modifier> {
+export interface CurrencyOverlapsScanField extends NotSubbedScanField {
     readonly typeId: ScanField.TypeId.CurrencyOverlaps;
     readonly fieldId: ScanFormula.FieldId.Currency;
     readonly conditionTypeId: ScanFieldCondition.TypeId.CurrencyOverlaps;
-    readonly conditions: ScanField.TypedConditions<CurrencyOverlapsScanFieldCondition, Modifier>;
+    readonly conditions: ScanField.TypedConditions<CurrencyOverlapsScanFieldCondition>;
 }
 
 export namespace CurrencyOverlapsScanField {
-    export function isConditionEqual<Modifier>(left: CurrencyOverlapsScanField<Modifier>, right: CurrencyOverlapsScanField<Modifier>, index: Integer): boolean {
+    export function isConditionEqual(left: CurrencyOverlapsScanField, right: CurrencyOverlapsScanField, index: Integer): boolean {
         const leftCondition = left.conditions.getAt(index);
         const rightCondition = right.conditions.getAt(index);
         if (!CurrencyOverlapsScanFieldCondition.is(leftCondition) || !CurrencyOverlapsScanFieldCondition.is(rightCondition)) {
@@ -495,15 +495,15 @@ export namespace CurrencyOverlapsScanField {
     }
 }
 
-export interface ExchangeOverlapsScanField<Modifier = void> extends NotSubbedScanField<Modifier> {
+export interface ExchangeOverlapsScanField extends NotSubbedScanField {
     readonly typeId: ScanField.TypeId.ExchangeOverlaps;
     readonly fieldId: ScanFormula.FieldId.Exchange;
     readonly conditionTypeId: ScanFieldCondition.TypeId.ExchangeOverlaps;
-    readonly conditions: ScanField.TypedConditions<ExchangeOverlapsScanFieldCondition, Modifier>;
+    readonly conditions: ScanField.TypedConditions<ExchangeOverlapsScanFieldCondition>;
 }
 
 export namespace ExchangeOverlapsScanField {
-    export function isConditionEqual<Modifier>(left: ExchangeOverlapsScanField<Modifier>, right: ExchangeOverlapsScanField<Modifier>, index: Integer): boolean {
+    export function isConditionEqual(left: ExchangeOverlapsScanField, right: ExchangeOverlapsScanField, index: Integer): boolean {
         const leftCondition = left.conditions.getAt(index);
         const rightCondition = right.conditions.getAt(index);
         if (!ExchangeOverlapsScanFieldCondition.is(leftCondition) || !ExchangeOverlapsScanFieldCondition.is(rightCondition)) {
@@ -514,15 +514,15 @@ export namespace ExchangeOverlapsScanField {
     }
 }
 
-export interface MarketOverlapsScanField<Modifier = void> extends NotSubbedScanField<Modifier> {
+export interface MarketOverlapsScanField extends NotSubbedScanField {
     readonly typeId: ScanField.TypeId.MarketOverlaps;
     readonly fieldId: ScanFormula.MarketOverlapsFieldId;
     readonly conditionTypeId: ScanFieldCondition.TypeId.MarketOverlaps;
-    readonly conditions: ScanField.TypedConditions<MarketOverlapsScanFieldCondition, Modifier>;
+    readonly conditions: ScanField.TypedConditions<MarketOverlapsScanFieldCondition>;
 }
 
 export namespace MarketOverlapsScanField {
-    export function isConditionEqual<Modifier>(left: MarketOverlapsScanField<Modifier>, right: MarketOverlapsScanField<Modifier>, index: Integer): boolean {
+    export function isConditionEqual(left: MarketOverlapsScanField, right: MarketOverlapsScanField, index: Integer): boolean {
         const leftCondition = left.conditions.getAt(index);
         const rightCondition = right.conditions.getAt(index);
         if (!MarketOverlapsScanFieldCondition.is(leftCondition) || !MarketOverlapsScanFieldCondition.is(rightCondition)) {
@@ -533,15 +533,15 @@ export namespace MarketOverlapsScanField {
     }
 }
 
-export interface MarketBoardOverlapsScanField<Modifier = void> extends NotSubbedScanField<Modifier> {
+export interface MarketBoardOverlapsScanField extends NotSubbedScanField {
     readonly typeId: ScanField.TypeId.MarketBoardOverlaps;
     readonly fieldId: ScanFormula.FieldId.MarketBoard;
     readonly conditionTypeId: ScanFieldCondition.TypeId.MarketBoardOverlaps;
-    readonly conditions: ScanField.TypedConditions<MarketBoardOverlapsScanFieldCondition, Modifier>;
+    readonly conditions: ScanField.TypedConditions<MarketBoardOverlapsScanFieldCondition>;
 }
 
 export namespace MarketBoardOverlapsScanField {
-    export function isConditionEqual<Modifier>(left: MarketBoardOverlapsScanField<Modifier>, right: MarketBoardOverlapsScanField<Modifier>, index: Integer): boolean {
+    export function isConditionEqual(left: MarketBoardOverlapsScanField, right: MarketBoardOverlapsScanField, index: Integer): boolean {
         const leftCondition = left.conditions.getAt(index);
         const rightCondition = right.conditions.getAt(index);
         if (!MarketBoardOverlapsScanFieldCondition.is(leftCondition) || !MarketBoardOverlapsScanFieldCondition.is(rightCondition)) {
@@ -552,15 +552,15 @@ export namespace MarketBoardOverlapsScanField {
     }
 }
 
-export interface IsScanField<Modifier = void> extends NotSubbedScanField<Modifier> {
+export interface IsScanField extends NotSubbedScanField {
     readonly typeId: ScanField.TypeId.Is;
     readonly fieldId: ScanFormula.FieldId.Is;
     readonly conditionTypeId: ScanFieldCondition.TypeId.Is;
-    readonly conditions: ScanField.TypedConditions<IsScanFieldCondition, Modifier>;
+    readonly conditions: ScanField.TypedConditions<IsScanFieldCondition>;
 }
 
 export namespace IsScanField {
-    export function isConditionEqual<Modifier>(left: IsScanField<Modifier>, right: IsScanField<Modifier>, index: Integer): boolean {
+    export function isConditionEqual(left: IsScanField, right: IsScanField, index: Integer): boolean {
         const leftCondition = left.conditions.getAt(index);
         const rightCondition = right.conditions.getAt(index);
         if (!IsScanFieldCondition.is(leftCondition) || !IsScanFieldCondition.is(rightCondition)) {

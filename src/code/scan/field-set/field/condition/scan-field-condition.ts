@@ -300,11 +300,11 @@ export namespace ScanFieldCondition {
         }
     }
 
-    export function isEqual<Modifier>(left: ScanFieldCondition<Modifier>, right: ScanFieldCondition<Modifier>) {
+    export function isEqual(left: ScanFieldCondition, right: ScanFieldCondition) {
         return left.typeId === right.typeId;
     }
 
-    export function typedIsEqual<Modifier>(left: ScanFieldCondition<Modifier>, right: ScanFieldCondition<Modifier>) {
+    export function typedIsEqual(left: ScanFieldCondition, right: ScanFieldCondition) {
         if (left.typeId !== right.typeId) {
             return false;
         } else {
@@ -328,10 +328,10 @@ export namespace ScanFieldCondition {
         }
     }
 
-    export function createFormulaNode<Modifier>(
+    export function createFormulaNode(
         fieldId: ScanFormula.FieldId,
         subFieldId: Integer | undefined,
-        condition: ScanFieldCondition<Modifier>
+        condition: ScanFieldCondition
     ): ScanFormula.BooleanNode {
         switch (condition.typeId) {
             case ScanFieldCondition.TypeId.Numeric:
@@ -1192,7 +1192,7 @@ export namespace ScanFieldCondition {
         }
     }
 
-    function createFormulaNodeForIs<Modifier>(condition: IsScanFieldCondition<Modifier>) {
+    function createFormulaNodeForIs(condition: IsScanFieldCondition) {
         const isNode = new ScanFormula.IsNode(condition.operands.categoryId);
         switch (condition.operatorId) {
             case ScanFieldCondition.OperatorId.Is: return isNode;
@@ -1207,9 +1207,9 @@ export namespace ScanFieldCondition {
     }
 }
 
-export interface BaseNumericScanFieldCondition<Modifier> extends ScanFieldCondition<Modifier> {
+export interface BaseNumericScanFieldCondition extends ScanFieldCondition {
     readonly typeId: ScanFieldCondition.TypeId.Numeric | ScanFieldCondition.TypeId.NumericComparison;
-    readonly operands: BaseNumericScanFieldCondition.Operands<Modifier>;
+    readonly operands: BaseNumericScanFieldCondition.Operands;
 }
 
 export namespace BaseNumericScanFieldCondition {
@@ -1284,7 +1284,7 @@ export namespace BaseNumericScanFieldCondition {
     // }
 
 
-    export interface Operands<Modifier = void> extends ScanFieldCondition.Operands<Modifier> {
+    export interface Operands extends ScanFieldCondition.Operands {
         readonly typeId: Operands.TypeId;
     }
 
@@ -1297,7 +1297,7 @@ export namespace BaseNumericScanFieldCondition {
         >;
     }
 
-    export interface HasValueOperands<Modifier = void> extends Operands<Modifier> {
+    export interface HasValueOperands extends Operands {
         readonly typeId: ScanFieldCondition.Operands.TypeId.HasValue;
     }
 
@@ -1312,24 +1312,24 @@ export namespace BaseNumericScanFieldCondition {
         ];
 
         // eslint-disable-next-line @typescript-eslint/no-shadow
-        export function is<Modifier>(operands: Operands<Modifier>): operands is HasValueOperands<Modifier> {
+        export function is(operands: Operands): operands is HasValueOperands {
             return operands.typeId === ScanFieldCondition.Operands.TypeId.HasValue;
         }
     }
 
-    export interface ValueOperands<Modifier = void> extends Operands<Modifier> {
+    export interface ValueOperands extends Operands {
         readonly typeId: ScanFieldCondition.Operands.TypeId.NumericValue | ScanFieldCondition.Operands.TypeId.NumericComparisonValue;
         value: number;
     }
 
     export namespace ValueOperands {
         // eslint-disable-next-line @typescript-eslint/no-shadow
-        export function is<Modifier>(operands: Operands<Modifier>): operands is ValueOperands<Modifier> {
+        export function is(operands: Operands): operands is ValueOperands {
             return operands.typeId === ScanFieldCondition.Operands.TypeId.NumericValue || operands.typeId === ScanFieldCondition.Operands.TypeId.NumericComparisonValue;
         }
     }
 
-    export interface RangeOperands<Modifier = void> extends Operands<Modifier> {
+    export interface RangeOperands extends Operands {
         readonly typeId: ScanFieldCondition.Operands.TypeId.NumericRange;
         min: number | undefined;
         max: number | undefined;
@@ -1346,12 +1346,12 @@ export namespace BaseNumericScanFieldCondition {
         ];
 
         // eslint-disable-next-line @typescript-eslint/no-shadow
-        export function is<Modifier>(operands: Operands<Modifier>): operands is RangeOperands<Modifier> {
+        export function is(operands: Operands): operands is RangeOperands {
             return operands.typeId === ScanFieldCondition.Operands.TypeId.NumericRange;
         }
     }
 
-    export function isEqual<Modifier>(left: BaseNumericScanFieldCondition<Modifier>, right: BaseNumericScanFieldCondition<Modifier>): boolean {
+    export function isEqual(left: BaseNumericScanFieldCondition, right: BaseNumericScanFieldCondition): boolean {
         if (!ScanFieldCondition.isEqual(left, right)) {
             return false;
         } else {
@@ -1368,13 +1368,13 @@ export namespace BaseNumericScanFieldCondition {
                             return true;
                         case ScanFieldCondition.Operands.TypeId.NumericValue:
                         case ScanFieldCondition.Operands.TypeId.NumericComparisonValue: {
-                            const leftValue = (leftOperands as ValueOperands<Modifier>).value;
-                            const rightValue = (rightOperands as ValueOperands<Modifier>).value;
+                            const leftValue = (leftOperands as ValueOperands).value;
+                            const rightValue = (rightOperands as ValueOperands).value;
                             return leftValue === rightValue;
                         }
                         case ScanFieldCondition.Operands.TypeId.NumericRange: {
-                            const leftInRangeOperands = leftOperands as RangeOperands<Modifier>;
-                            const rightInRangeOperands = rightOperands as RangeOperands<Modifier>;
+                            const leftInRangeOperands = leftOperands as RangeOperands;
+                            const rightInRangeOperands = rightOperands as RangeOperands;
                             return leftInRangeOperands.min === rightInRangeOperands.min && leftInRangeOperands.max === rightInRangeOperands.max;
                         }
                         default:
@@ -1386,7 +1386,7 @@ export namespace BaseNumericScanFieldCondition {
     }
 }
 
-export interface NumericScanFieldCondition<Modifier = void> extends BaseNumericScanFieldCondition<Modifier> {
+export interface NumericScanFieldCondition extends BaseNumericScanFieldCondition {
     readonly typeId: ScanFieldCondition.TypeId.Numeric;
     readonly operatorId: NumericScanFieldCondition.OperatorId;
 }
@@ -1394,7 +1394,7 @@ export interface NumericScanFieldCondition<Modifier = void> extends BaseNumericS
 export namespace NumericScanFieldCondition {
     export type OperatorId = Operands.OperatorId;
 
-    export interface ValueOperands<Modifier = void> extends BaseNumericScanFieldCondition.ValueOperands<Modifier> {
+    export interface ValueOperands extends BaseNumericScanFieldCondition.ValueOperands {
         readonly typeId: ScanFieldCondition.Operands.TypeId.NumericValue;
     }
 
@@ -1420,7 +1420,7 @@ export namespace NumericScanFieldCondition {
         ];
     }
 
-    export function is<Modifier>(condition: ScanFieldCondition<Modifier>): condition is NumericScanFieldCondition<Modifier> {
+    export function is(condition: ScanFieldCondition): condition is NumericScanFieldCondition {
         return condition.typeId === ScanFieldCondition.TypeId.Numeric;
     }
 
@@ -1429,7 +1429,7 @@ export namespace NumericScanFieldCondition {
     }
 }
 
-export interface NumericComparisonScanFieldCondition<Modifier = void> extends BaseNumericScanFieldCondition<Modifier> {
+export interface NumericComparisonScanFieldCondition extends BaseNumericScanFieldCondition {
     readonly typeId: ScanFieldCondition.TypeId.NumericComparison;
     readonly operatorId: NumericComparisonScanFieldCondition.OperatorId;
 }
@@ -1437,7 +1437,7 @@ export interface NumericComparisonScanFieldCondition<Modifier = void> extends Ba
 export namespace NumericComparisonScanFieldCondition {
     export type OperatorId = Operands.OperatorId;
 
-    export interface ValueOperands<Modifier = void> extends BaseNumericScanFieldCondition.ValueOperands<Modifier> {
+    export interface ValueOperands extends BaseNumericScanFieldCondition.ValueOperands {
         readonly typeId: ScanFieldCondition.Operands.TypeId.NumericComparisonValue;
     }
 
@@ -1475,7 +1475,7 @@ export namespace NumericComparisonScanFieldCondition {
         ];
     }
 
-    export function is<Modifier>(condition: ScanFieldCondition<Modifier>): condition is NumericComparisonScanFieldCondition<Modifier> {
+    export function is(condition: ScanFieldCondition): condition is NumericComparisonScanFieldCondition {
         return condition.typeId === ScanFieldCondition.TypeId.NumericComparison;
     }
 
@@ -1484,10 +1484,10 @@ export namespace NumericComparisonScanFieldCondition {
     }
 }
 
-export interface DateScanFieldCondition<Modifier = void> extends ScanFieldCondition<Modifier> {
+export interface DateScanFieldCondition extends ScanFieldCondition {
     readonly typeId: ScanFieldCondition.TypeId.Date;
     readonly operatorId: DateScanFieldCondition.OperatorId;
-    readonly operands: DateScanFieldCondition.Operands<Modifier>;
+    readonly operands: DateScanFieldCondition.Operands;
 }
 
 export namespace DateScanFieldCondition {
@@ -1549,7 +1549,7 @@ export namespace DateScanFieldCondition {
     //     }
     // }
 
-    export interface Operands<Modifier = void> extends ScanFieldCondition.Operands<Modifier> {
+    export interface Operands extends ScanFieldCondition.Operands {
         readonly typeId: Operands.TypeId;
     }
 
@@ -1563,7 +1563,7 @@ export namespace DateScanFieldCondition {
         export type OperatorId = HasValueOperands.OperatorId | ValueOperands.OperatorId | RangeOperands.OperatorId;
     }
 
-    export interface HasValueOperands<Modifier = void> extends Operands<Modifier> {
+    export interface HasValueOperands extends Operands {
         readonly typeId: ScanFieldCondition.Operands.TypeId.HasValue;
     }
 
@@ -1579,12 +1579,12 @@ export namespace DateScanFieldCondition {
         ];
 
         // eslint-disable-next-line @typescript-eslint/no-shadow
-        export function is<Modifier>(operands: Operands<Modifier>): operands is HasValueOperands<Modifier> {
+        export function is(operands: Operands): operands is HasValueOperands {
             return operands.typeId === ScanFieldCondition.Operands.TypeId.HasValue;
         }
     }
 
-    export interface ValueOperands<Modifier = void> extends Operands<Modifier> {
+    export interface ValueOperands extends Operands {
         readonly typeId: ScanFieldCondition.Operands.TypeId.DateValue;
         value: SourceTzOffsetDateTime;
     }
@@ -1601,12 +1601,12 @@ export namespace DateScanFieldCondition {
         ];
 
         // eslint-disable-next-line @typescript-eslint/no-shadow
-        export function is<Modifier>(operands: Operands<Modifier>): operands is ValueOperands<Modifier> {
+        export function is(operands: Operands): operands is ValueOperands {
             return operands.typeId === ScanFieldCondition.Operands.TypeId.DateValue;
         }
     }
 
-    export interface RangeOperands<Modifier = void> extends Operands<Modifier> {
+    export interface RangeOperands extends Operands {
         readonly typeId: ScanFieldCondition.Operands.TypeId.DateRange;
         min: SourceTzOffsetDateTime | undefined;
         max: SourceTzOffsetDateTime | undefined;
@@ -1624,7 +1624,7 @@ export namespace DateScanFieldCondition {
         ];
 
         // eslint-disable-next-line @typescript-eslint/no-shadow
-        export function is<Modifier>(operands: Operands<Modifier>): operands is RangeOperands<Modifier> {
+        export function is(operands: Operands): operands is RangeOperands {
             return operands.typeId === ScanFieldCondition.Operands.TypeId.DateRange;
         }
     }
@@ -1637,11 +1637,11 @@ export namespace DateScanFieldCondition {
         ];
     }
 
-    export function is<Modifier>(condition: ScanFieldCondition<Modifier>): condition is DateScanFieldCondition<Modifier> {
+    export function is(condition: ScanFieldCondition): condition is DateScanFieldCondition {
         return condition.typeId === ScanFieldCondition.TypeId.Date;
     }
 
-    export function isEqual<Modifier>(left: DateScanFieldCondition<Modifier>, right: DateScanFieldCondition<Modifier>): boolean {
+    export function isEqual(left: DateScanFieldCondition, right: DateScanFieldCondition): boolean {
         if (!ScanFieldCondition.isEqual(left, right)) {
             return false;
         } else {
@@ -1656,13 +1656,13 @@ export namespace DateScanFieldCondition {
                     switch (leftOperands.typeId) {
                         case ScanFieldCondition.Operands.TypeId.HasValue: return true;
                         case ScanFieldCondition.Operands.TypeId.DateValue: {
-                            const leftValue = (leftOperands as ValueOperands<Modifier>).value;
-                            const rightValue = (rightOperands as ValueOperands<Modifier>).value;
+                            const leftValue = (leftOperands as ValueOperands).value;
+                            const rightValue = (rightOperands as ValueOperands).value;
                             return SourceTzOffsetDateTime.isEqual(leftValue, rightValue);
                         }
                         case ScanFieldCondition.Operands.TypeId.DateRange: {
-                            const leftInRangeOperands = leftOperands as RangeOperands<Modifier>;
-                            const rightInRangeOperands = rightOperands as RangeOperands<Modifier>;
+                            const leftInRangeOperands = leftOperands as RangeOperands;
+                            const rightInRangeOperands = rightOperands as RangeOperands;
                             return (
                                 SourceTzOffsetDateTime.isUndefinableEqual(leftInRangeOperands.min, rightInRangeOperands.min)
                                 &&
@@ -1678,8 +1678,8 @@ export namespace DateScanFieldCondition {
     }
 }
 
-export interface BaseTextScanFieldCondition<Modifier = void> extends ScanFieldCondition<Modifier> {
-    readonly operands: BaseTextScanFieldCondition.Operands<Modifier>;
+export interface BaseTextScanFieldCondition extends ScanFieldCondition {
+    readonly operands: BaseTextScanFieldCondition.Operands;
 }
 
 export namespace BaseTextScanFieldCondition {
@@ -1762,7 +1762,7 @@ export namespace BaseTextScanFieldCondition {
         }
     }
 
-    export interface Operands<Modifier = void> extends ScanFieldCondition.Operands<Modifier> {
+    export interface Operands extends ScanFieldCondition.Operands {
         readonly typeId: Operands.TypeId;
     }
 
@@ -1774,7 +1774,7 @@ export namespace BaseTextScanFieldCondition {
         >;
     }
 
-    export interface HasValueOperands<Modifier = void> extends Operands<Modifier> {
+    export interface HasValueOperands extends Operands {
         readonly typeId: ScanFieldCondition.Operands.TypeId.HasValue;
     }
 
@@ -1789,12 +1789,12 @@ export namespace BaseTextScanFieldCondition {
         ];
 
         // eslint-disable-next-line @typescript-eslint/no-shadow
-        export function is<Modifier>(operands: Operands<Modifier>): operands is HasValueOperands<Modifier> {
+        export function is(operands: Operands): operands is HasValueOperands {
             return operands.typeId === ScanFieldCondition.Operands.TypeId.HasValue;
         }
     }
 
-    export interface ValueOperands<Modifier = void> extends Operands<Modifier> {
+    export interface ValueOperands extends Operands {
         readonly typeId: ScanFieldCondition.Operands.TypeId.TextValue;
         value: string;
     }
@@ -1810,12 +1810,12 @@ export namespace BaseTextScanFieldCondition {
         ];
 
         // eslint-disable-next-line @typescript-eslint/no-shadow
-        export function is<Modifier>(operands: Operands<Modifier>): operands is ValueOperands<Modifier> {
+        export function is(operands: Operands): operands is ValueOperands {
             return operands.typeId === ScanFieldCondition.Operands.TypeId.TextValue;
         }
     }
 
-    export interface ContainsOperands<Modifier = void> extends Operands<Modifier> {
+    export interface ContainsOperands extends Operands {
         readonly typeId: ScanFieldCondition.Operands.TypeId.TextContains;
         contains: ContainsOperand;
     }
@@ -1831,12 +1831,12 @@ export namespace BaseTextScanFieldCondition {
         ];
 
         // eslint-disable-next-line @typescript-eslint/no-shadow
-        export function is<Modifier>(operands: Operands<Modifier>): operands is ContainsOperands<Modifier> {
+        export function is(operands: Operands): operands is ContainsOperands {
             return operands.typeId === ScanFieldCondition.Operands.TypeId.TextContains;
         }
     }
 
-    export function isEqual<Modifier>(left: BaseTextScanFieldCondition<Modifier>, right: BaseTextScanFieldCondition<Modifier>): boolean {
+    export function isEqual(left: BaseTextScanFieldCondition, right: BaseTextScanFieldCondition): boolean {
         if (!ScanFieldCondition.isEqual(left, right)) {
             return false;
         } else {
@@ -1851,13 +1851,13 @@ export namespace BaseTextScanFieldCondition {
                     switch (leftOperands.typeId) {
                         case ScanFieldCondition.Operands.TypeId.HasValue: return true;
                         case ScanFieldCondition.Operands.TypeId.TextValue: {
-                            const leftValue = (leftOperands as ValueOperands<Modifier>).value;
-                            const rightValue = (rightOperands as ValueOperands<Modifier>).value;
+                            const leftValue = (leftOperands as ValueOperands).value;
+                            const rightValue = (rightOperands as ValueOperands).value;
                             return leftValue === rightValue;
                         }
                         case ScanFieldCondition.Operands.TypeId.TextContains: {
-                            const leftContainsOperands = leftOperands as ContainsOperands<Modifier>;
-                            const rightContainsOperands = rightOperands as ContainsOperands<Modifier>;
+                            const leftContainsOperands = leftOperands as ContainsOperands;
+                            const rightContainsOperands = rightOperands as ContainsOperands;
                             return ContainsOperand.isEqual(leftContainsOperands.contains, rightContainsOperands.contains);
                         }
                         default:
@@ -1869,7 +1869,7 @@ export namespace BaseTextScanFieldCondition {
     }
 }
 
-export interface TextEqualsScanFieldCondition<Modifier = void> extends BaseTextScanFieldCondition<Modifier> {
+export interface TextEqualsScanFieldCondition extends BaseTextScanFieldCondition {
     readonly typeId: ScanFieldCondition.TypeId.TextEquals;
     readonly operatorId: TextEqualsScanFieldCondition.OperatorId;
 }
@@ -1893,7 +1893,7 @@ export namespace TextEqualsScanFieldCondition {
         export const supportedOperatorIds: readonly OperatorId[] = BaseTextScanFieldCondition.ValueOperands.supportedOperatorIds;
     }
 
-    export function is<Modifier>(condition: ScanFieldCondition<Modifier>): condition is TextEqualsScanFieldCondition<Modifier> {
+    export function is(condition: ScanFieldCondition): condition is TextEqualsScanFieldCondition {
         return condition.typeId === ScanFieldCondition.TypeId.TextEquals;
     }
 
@@ -1910,7 +1910,7 @@ export namespace TextEqualsScanFieldCondition {
     }
 }
 
-export interface TextContainsScanFieldCondition<Modifier = void> extends BaseTextScanFieldCondition<Modifier> {
+export interface TextContainsScanFieldCondition extends BaseTextScanFieldCondition {
     readonly typeId: ScanFieldCondition.TypeId.TextContains,
     readonly operatorId: TextContainsScanFieldCondition.OperatorId;
 }
@@ -1934,7 +1934,7 @@ export namespace TextContainsScanFieldCondition {
         export const supportedOperatorIds: readonly OperatorId[] = BaseTextScanFieldCondition.ContainsOperands.supportedOperatorIds;
     }
 
-    export function is<Modifier>(condition: ScanFieldCondition<Modifier>): condition is TextContainsScanFieldCondition<Modifier> {
+    export function is(condition: ScanFieldCondition): condition is TextContainsScanFieldCondition {
         return condition.typeId === ScanFieldCondition.TypeId.TextContains;
     }
 
@@ -1943,7 +1943,7 @@ export namespace TextContainsScanFieldCondition {
     }
 }
 
-export interface TextHasValueEqualsScanFieldCondition<Modifier = void> extends BaseTextScanFieldCondition<Modifier> {
+export interface TextHasValueEqualsScanFieldCondition extends BaseTextScanFieldCondition {
     readonly typeId: ScanFieldCondition.TypeId.TextHasValueEquals;
     readonly operatorId: TextHasValueEqualsScanFieldCondition.OperatorId;
 }
@@ -1977,7 +1977,7 @@ export namespace TextHasValueEqualsScanFieldCondition {
         ];
     }
 
-    export function is<Modifier>(condition: ScanFieldCondition<Modifier>): condition is TextHasValueEqualsScanFieldCondition<Modifier> {
+    export function is(condition: ScanFieldCondition): condition is TextHasValueEqualsScanFieldCondition {
         return condition.typeId === ScanFieldCondition.TypeId.TextHasValueEquals;
     }
 
@@ -1994,7 +1994,7 @@ export namespace TextHasValueEqualsScanFieldCondition {
     }
 }
 
-export interface TextHasValueContainsScanFieldCondition<Modifier = void> extends BaseTextScanFieldCondition<Modifier> {
+export interface TextHasValueContainsScanFieldCondition extends BaseTextScanFieldCondition {
     readonly typeId: ScanFieldCondition.TypeId.TextHasValueContains,
     readonly operatorId: TextHasValueContainsScanFieldCondition.OperatorId;
 }
@@ -2028,7 +2028,7 @@ export namespace TextHasValueContainsScanFieldCondition {
         ];
     }
 
-    export function is<Modifier>(condition: ScanFieldCondition<Modifier>): condition is TextHasValueContainsScanFieldCondition<Modifier> {
+    export function is(condition: ScanFieldCondition): condition is TextHasValueContainsScanFieldCondition {
         return condition.typeId === ScanFieldCondition.TypeId.TextContains;
     }
 
@@ -2045,7 +2045,7 @@ export namespace TextHasValueContainsScanFieldCondition {
     }
 }
 
-export interface OverlapsScanFieldCondition<Modifier = void> extends ScanFieldCondition<Modifier> {
+export interface OverlapsScanFieldCondition extends ScanFieldCondition {
     readonly operatorId: OverlapsScanFieldCondition.OperatorId;
 }
 
@@ -2063,7 +2063,7 @@ export namespace OverlapsScanFieldCondition {
         ];
     }
 
-    export function isEqual<Modifier>(left: OverlapsScanFieldCondition<Modifier>, right: OverlapsScanFieldCondition<Modifier>): boolean {
+    export function isEqual(left: OverlapsScanFieldCondition, right: OverlapsScanFieldCondition): boolean {
         return (
             ScanFieldCondition.isEqual(left, right)
             &&
@@ -2072,18 +2072,18 @@ export namespace OverlapsScanFieldCondition {
     }
 }
 
-export interface StringOverlapsScanFieldCondition<Modifier = void> extends OverlapsScanFieldCondition<Modifier> {
+export interface StringOverlapsScanFieldCondition extends OverlapsScanFieldCondition {
     readonly typeId: ScanFieldCondition.TypeId.StringOverlaps;
-    readonly operands: StringOverlapsScanFieldCondition.Operands<Modifier>;
+    readonly operands: StringOverlapsScanFieldCondition.Operands;
 }
 
 export namespace StringOverlapsScanFieldCondition {
-    export interface Operands<Modifier = void> extends ScanFieldCondition.Operands<Modifier> {
+    export interface Operands extends ScanFieldCondition.Operands {
         typeId: ScanFieldCondition.Operands.TypeId.TextEnum,
         values: string[];
     }
 
-    export function is<Modifier>(condition: ScanFieldCondition<Modifier>): condition is StringOverlapsScanFieldCondition<Modifier> {
+    export function is(condition: ScanFieldCondition): condition is StringOverlapsScanFieldCondition {
         return condition.typeId === ScanFieldCondition.TypeId.StringOverlaps;
     }
 
@@ -2096,18 +2096,18 @@ export namespace StringOverlapsScanFieldCondition {
     }
 }
 
-export interface MarketBoardOverlapsScanFieldCondition<Modifier = void> extends OverlapsScanFieldCondition<Modifier> {
+export interface MarketBoardOverlapsScanFieldCondition extends OverlapsScanFieldCondition {
     readonly typeId: ScanFieldCondition.TypeId.MarketBoardOverlaps;
-    readonly operands: MarketBoardOverlapsScanFieldCondition.Operands<Modifier>;
+    readonly operands: MarketBoardOverlapsScanFieldCondition.Operands;
 }
 
 export namespace MarketBoardOverlapsScanFieldCondition {
-    export interface Operands<Modifier = void> extends ScanFieldCondition.Operands<Modifier> {
+    export interface Operands extends ScanFieldCondition.Operands {
         typeId: ScanFieldCondition.Operands.TypeId.MarketBoardEnum,
         values: MarketBoardId[];
     }
 
-    export function is<Modifier>(condition: ScanFieldCondition<Modifier>): condition is MarketBoardOverlapsScanFieldCondition<Modifier> {
+    export function is(condition: ScanFieldCondition): condition is MarketBoardOverlapsScanFieldCondition {
         return condition.typeId === ScanFieldCondition.TypeId.MarketBoardOverlaps;
     }
 
@@ -2120,18 +2120,18 @@ export namespace MarketBoardOverlapsScanFieldCondition {
     }
 }
 
-export interface CurrencyOverlapsScanFieldCondition<Modifier = void> extends OverlapsScanFieldCondition<Modifier> {
+export interface CurrencyOverlapsScanFieldCondition extends OverlapsScanFieldCondition {
     readonly typeId: ScanFieldCondition.TypeId.CurrencyOverlaps;
-    readonly operands: CurrencyOverlapsScanFieldCondition.Operands<Modifier>;
+    readonly operands: CurrencyOverlapsScanFieldCondition.Operands;
 }
 
 export namespace CurrencyOverlapsScanFieldCondition {
-    export interface Operands<Modifier = void> extends ScanFieldCondition.Operands<Modifier> {
+    export interface Operands extends ScanFieldCondition.Operands {
         typeId: ScanFieldCondition.Operands.TypeId.CurrencyEnum,
         values: CurrencyId[];
     }
 
-    export function is<Modifier>(condition: ScanFieldCondition<Modifier>): condition is CurrencyOverlapsScanFieldCondition<Modifier> {
+    export function is(condition: ScanFieldCondition): condition is CurrencyOverlapsScanFieldCondition {
         return condition.typeId === ScanFieldCondition.TypeId.CurrencyOverlaps;
     }
 
@@ -2144,18 +2144,18 @@ export namespace CurrencyOverlapsScanFieldCondition {
     }
 }
 
-export interface ExchangeOverlapsScanFieldCondition<Modifier = void> extends OverlapsScanFieldCondition<Modifier> {
+export interface ExchangeOverlapsScanFieldCondition extends OverlapsScanFieldCondition {
     readonly typeId: ScanFieldCondition.TypeId.ExchangeOverlaps;
-    readonly operands: ExchangeOverlapsScanFieldCondition.Operands<Modifier>;
+    readonly operands: ExchangeOverlapsScanFieldCondition.Operands;
 }
 
 export namespace ExchangeOverlapsScanFieldCondition {
-    export interface Operands<Modifier = void> extends ScanFieldCondition.Operands<Modifier> {
+    export interface Operands extends ScanFieldCondition.Operands {
         typeId: ScanFieldCondition.Operands.TypeId.ExchangeEnum,
         values: ExchangeId[];
     }
 
-    export function is<Modifier>(condition: ScanFieldCondition<Modifier>): condition is ExchangeOverlapsScanFieldCondition<Modifier> {
+    export function is(condition: ScanFieldCondition): condition is ExchangeOverlapsScanFieldCondition {
         return condition.typeId === ScanFieldCondition.TypeId.ExchangeOverlaps;
     }
 
@@ -2168,18 +2168,18 @@ export namespace ExchangeOverlapsScanFieldCondition {
     }
 }
 
-export interface MarketOverlapsScanFieldCondition<Modifier = void> extends OverlapsScanFieldCondition<Modifier> {
+export interface MarketOverlapsScanFieldCondition extends OverlapsScanFieldCondition {
     readonly typeId: ScanFieldCondition.TypeId.MarketOverlaps;
-    readonly operands: MarketOverlapsScanFieldCondition.Operands<Modifier>;
+    readonly operands: MarketOverlapsScanFieldCondition.Operands;
 }
 
 export namespace MarketOverlapsScanFieldCondition {
-    export interface Operands<Modifier = void> extends ScanFieldCondition.Operands<Modifier> {
+    export interface Operands extends ScanFieldCondition.Operands {
         typeId: ScanFieldCondition.Operands.TypeId.MarketEnum,
         values: MarketId[];
     }
 
-    export function is<Modifier>(condition: ScanFieldCondition<Modifier>): condition is MarketOverlapsScanFieldCondition<Modifier> {
+    export function is(condition: ScanFieldCondition): condition is MarketOverlapsScanFieldCondition {
         return condition.typeId === ScanFieldCondition.TypeId.MarketOverlaps;
     }
 
@@ -2192,15 +2192,15 @@ export namespace MarketOverlapsScanFieldCondition {
     }
 }
 
-export interface IsScanFieldCondition<Modifier = void> extends ScanFieldCondition<Modifier> {
+export interface IsScanFieldCondition extends ScanFieldCondition {
     readonly typeId: ScanFieldCondition.TypeId.Is;
     readonly operatorId: IsScanFieldCondition.OperatorId;
-    readonly operands: IsScanFieldCondition.Operands<Modifier>;
+    readonly operands: IsScanFieldCondition.Operands;
 }
 
 export namespace IsScanFieldCondition {
     export type OperatorId = Operands.OperatorId;
-    export interface Operands<Modifier = void> extends ScanFieldCondition.Operands<Modifier> {
+    export interface Operands extends ScanFieldCondition.Operands {
         typeId: ScanFieldCondition.Operands.TypeId.CategoryValue,
         categoryId: ScanFormula.IsNode.CategoryId;
     }
@@ -2218,11 +2218,11 @@ export namespace IsScanFieldCondition {
         ];
     }
 
-    export function is<Modifier>(condition: ScanFieldCondition<Modifier>): condition is IsScanFieldCondition<Modifier> {
+    export function is(condition: ScanFieldCondition): condition is IsScanFieldCondition {
         return condition.typeId === ScanFieldCondition.TypeId.Is;
     }
 
-    export function isEqual<Modifier>(left: IsScanFieldCondition<Modifier>, right: IsScanFieldCondition<Modifier>): boolean {
+    export function isEqual(left: IsScanFieldCondition, right: IsScanFieldCondition): boolean {
         return (
             ScanFieldCondition.isEqual(left, right)
             &&

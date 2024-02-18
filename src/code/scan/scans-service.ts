@@ -51,13 +51,13 @@ export class ScansService {
         this.scanList.finalise();
     }
 
-    openNewScanEditor<Modifier = void>(
+    openNewScanEditor(
         opener: LockOpenListItem.Opener,
         emptyScanFieldSet?: ScanFieldSet,
         emptyScanConditionSet?: ScanConditionSet,
         errorEventer?: ScanEditor.ErrorEventer,
-    ): ScanEditor<Modifier> {
-        return new ScanEditor<Modifier>(
+    ): ScanEditor {
+        return new ScanEditor(
             this._adiService,
             this._symbolsService,
             undefined,
@@ -69,13 +69,13 @@ export class ScansService {
         );
     }
 
-    async tryOpenScanEditor<Modifier = void>(
+    async tryOpenScanEditor(
         scanId: string | undefined,
         opener: LockOpenListItem.Opener,
         newScanFieldSetCallback?: (this: void) => ScanFieldSet | undefined,
         newScanConditionSetCallback?: (this: void) => ScanConditionSet | undefined,
         errorEventer?: ScanEditor.ErrorEventer,
-    ): Promise<Result<ScanEditor<Modifier> | undefined>> {
+    ): Promise<Result<ScanEditor | undefined>> {
         if (scanId === undefined) {
             const emptyScanFieldSet = newScanFieldSetCallback === undefined ? undefined : newScanFieldSetCallback();
             const emptyScanConditionSet = newScanConditionSetCallback === undefined ? undefined : newScanConditionSetCallback();
@@ -94,7 +94,7 @@ export class ScansService {
                     if (openedEditor === undefined) {
                         const emptyScanFieldSet = newScanFieldSetCallback === undefined ? undefined : newScanFieldSetCallback();
                         const emptyScanConditionSet = newScanConditionSetCallback === undefined ? undefined : newScanConditionSetCallback();
-                        openedEditor = new ScanEditor<Modifier>(
+                        openedEditor = new ScanEditor(
                             this._adiService,
                             this._symbolsService,
                             scan,
@@ -107,13 +107,13 @@ export class ScansService {
                         this._openedScanEditors.set(scan, openedEditor);
                     }
                     openedEditor.addOpener(opener);
-                    return new Ok(openedEditor as ScanEditor<Modifier>);
+                    return new Ok(openedEditor as ScanEditor);
                 }
             }
         }
     }
 
-    closeScanEditor<Modifier = void>(scanEditor: ScanEditor<Modifier>, opener: LockOpenListItem.Opener) {
+    closeScanEditor(scanEditor: ScanEditor, opener: LockOpenListItem.Opener) {
         const scan = scanEditor.scan;
         if (scan !== undefined) {
             scanEditor.removeOpener(opener);
