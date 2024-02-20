@@ -13,6 +13,7 @@ export namespace ZenithChannelConvert {
     export namespace DistributionMethodType {
         export function toId(value: ZenithProtocol.ChannelController.DistributionMethodType): NotificationDistributionMethodId {
             switch (value) {
+                case ZenithProtocol.ChannelController.DistributionMethodType.Debug: return NotificationDistributionMethodId.Debug;
                 case ZenithProtocol.ChannelController.DistributionMethodType.Email: return NotificationDistributionMethodId.Email;
                 case ZenithProtocol.ChannelController.DistributionMethodType.Sms: return NotificationDistributionMethodId.Sms;
                 case ZenithProtocol.ChannelController.DistributionMethodType.PushWeb: return NotificationDistributionMethodId.WebPush;
@@ -25,6 +26,7 @@ export namespace ZenithChannelConvert {
 
         export function fromId(value: NotificationDistributionMethodId): ZenithProtocol.ChannelController.DistributionMethodType {
             switch (value) {
+                case NotificationDistributionMethodId.Debug: return ZenithProtocol.ChannelController.DistributionMethodType.Debug;
                 case NotificationDistributionMethodId.Email: return ZenithProtocol.ChannelController.DistributionMethodType.Email;
                 case NotificationDistributionMethodId.Sms: return ZenithProtocol.ChannelController.DistributionMethodType.Sms;
                 case NotificationDistributionMethodId.WebPush: return ZenithProtocol.ChannelController.DistributionMethodType.PushWeb;

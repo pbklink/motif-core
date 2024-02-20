@@ -18,6 +18,7 @@ import {
     TableRecordSourceFactory
 } from "./grid/internal-api";
 import { KeyboardService } from "./keyboard/keyboard-internal-api";
+import { NotificationChannelsService } from './notification-channel/internal-api';
 import {
     RankedLitIvemIdListDefinitionFactoryService,
     RankedLitIvemIdListFactoryService,
@@ -28,7 +29,6 @@ import {
     CapabilitiesService,
     IdleService,
     MotifServicesService,
-    NotificationChannelsService,
     SettingsService,
     SymbolDetailCacheService,
     SymbolsService
@@ -76,7 +76,7 @@ export class CoreService {
         this.symbolsService = new SymbolsService(this.settingsService, this.adiService);
         this.symbolDetailCacheService = new SymbolDetailCacheService(this.adiService.dataMgr, this.symbolsService);
         this.watchmakerService = new WatchmakerService(this.adiService);
-        this.notificationChannelsService = new NotificationChannelsService();
+        this.notificationChannelsService = new NotificationChannelsService(this.adiService);
         this.scansService = new ScansService(this.adiService, this.symbolsService);
         this.rankedLitIvemIdListDefinitionFactoryService = new RankedLitIvemIdListDefinitionFactoryService();
         this.rankedLitIvemIdListFactoryService = new RankedLitIvemIdListFactoryService(

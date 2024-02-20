@@ -1106,6 +1106,7 @@ export const enum ScanTargetTypeId {
 }
 
 export const enum NotificationDistributionMethodId {
+    Debug,
     Email,
     Sms,
     WebPush,

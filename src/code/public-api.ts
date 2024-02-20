@@ -12,6 +12,7 @@ export * from './core-static-initialise';
 export * from './extension/extension-internal-api';
 export * from './grid/internal-api';
 export * from './keyboard/keyboard-internal-api';
+export * from './notification-channel/internal-api';
 export * from './publisher/publisher-internal-api';
 export * from './ranked-lit-ivem-id-list/ranked-lit-ivem-id-list-internal-api';
 export * from './res/res-internal-api';

@@ -2281,11 +2281,12 @@ export namespace ZenithProtocol {
         }
 
         export const enum DistributionMethodType {
-            PushApns = "Push.APNs", // Apple Push Notification Service
-            Email = "Email",
-            PushFCM = "Push.FCM", // Google Firebase Cloud Messaging
-            Sms = "SMS",
-            PushWeb = "Push.Web",
+            Debug = 'Debug',
+            PushApns = 'Push.APNs', // Apple Push Notification Service
+            Email = 'Email',
+            PushFCM = 'Push.FCM', // Google Firebase Cloud Messaging
+            Sms = 'SMS',
+            PushWeb = 'Push.Web',
         }
 
         export type ChannelID = string;
