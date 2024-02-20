@@ -8,6 +8,7 @@ import { AssertInternalError, ErrorCode, ZenithDataError } from '../../../../sys
 import {
     AdiPublisherRequest,
     AdiPublisherSubscription,
+    ErrorPublisherSubscriptionDataMessage_PublishRequestError,
     UpdateNotificationChannelEnabledDataDefinition,
     UpdateNotificationChannelEnabledDataMessage
 } from "../../../common/adi-common-internal-api";
@@ -54,10 +55,14 @@ export namespace UpdateNotificationChannelEnabledMessageConvert {
                 if (message.Topic as ZenithProtocol.ChannelController.TopicName !== ZenithProtocol.ChannelController.TopicName.UpdateChannelStatus) {
                     throw new ZenithDataError(ErrorCode.ZenithMessageConvert_Channel_UpdateEnabled_Topic, message.Topic);
                 } else {
-                    const dataMessage = new UpdateNotificationChannelEnabledDataMessage();
-                    dataMessage.dataItemId = subscription.dataItemId;
-                    dataMessage.dataItemRequestNr = subscription.dataItemRequestNr;
-                    return dataMessage;
+                    if (subscription.errorWarningCount > 0) {
+                        return ErrorPublisherSubscriptionDataMessage_PublishRequestError.createFromAdiPublisherSubscription(subscription);
+                    } else {
+                        const dataMessage = new UpdateNotificationChannelEnabledDataMessage();
+                        dataMessage.dataItemId = subscription.dataItemId;
+                        dataMessage.dataItemRequestNr = subscription.dataItemRequestNr;
+                        return dataMessage;
+                    }
                 }
             }
         }

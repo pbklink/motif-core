@@ -6,7 +6,11 @@
 
 import { AssertInternalError, ErrorCode, ZenithDataError } from '../../../../sys/sys-internal-api';
 import {
-    AdiPublisherRequest, AdiPublisherSubscription, DeleteScanDataDefinition, DeleteScanDataMessage
+    AdiPublisherRequest,
+    AdiPublisherSubscription,
+    DeleteScanDataDefinition,
+    DeleteScanDataMessage,
+    ErrorPublisherSubscriptionDataMessage_PublishRequestError,
 } from '../../../common/adi-common-internal-api';
 import { ZenithProtocol } from './protocol/zenith-protocol';
 import { ZenithConvert } from './zenith-convert';
@@ -47,11 +51,15 @@ export namespace DeleteScanMessageConvert {
                 if (message.Topic as ZenithProtocol.NotifyController.TopicName !== ZenithProtocol.NotifyController.TopicName.DeleteScan) {
                     throw new ZenithDataError(ErrorCode.ZenithMessageConvert_DeleteScan_Topic, message.Topic);
                 } else {
-                    const dataMessage = new DeleteScanDataMessage();
-                    dataMessage.dataItemId = subscription.dataItemId;
-                    dataMessage.dataItemRequestNr = subscription.dataItemRequestNr;
+                    if (subscription.errorWarningCount > 0) {
+                        return ErrorPublisherSubscriptionDataMessage_PublishRequestError.createFromAdiPublisherSubscription(subscription);
+                    } else {
+                        const dataMessage = new DeleteScanDataMessage();
+                        dataMessage.dataItemId = subscription.dataItemId;
+                        dataMessage.dataItemRequestNr = subscription.dataItemRequestNr;
 
-                    return dataMessage;
+                        return dataMessage;
+                    }
                 }
             }
         }

@@ -1398,6 +1398,22 @@ export class ErrorPublisherSubscriptionDataMessage_PublishRequestError extends E
     }
 }
 
+export namespace ErrorPublisherSubscriptionDataMessage_PublishRequestError {
+    export function createFromAdiPublisherSubscription(subscription: AdiPublisherSubscription, allowedRetryTypeId?: AdiPublisherSubscription.AllowedRetryTypeId) {
+        const errorText = AdiPublisherSubscription.generatePublishErrorText(subscription);
+        if (allowedRetryTypeId === undefined) {
+            allowedRetryTypeId = AdiPublisherSubscription.generateAllowedRetryTypeId(subscription);
+        }
+        const errorMessage = new ErrorPublisherSubscriptionDataMessage_PublishRequestError(
+            subscription.dataItemId,
+            subscription.dataItemRequestNr,
+            errorText,
+            allowedRetryTypeId,
+        );
+        return errorMessage;
+    }
+}
+
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export class ErrorPublisherSubscriptionDataMessage_SubRequestError extends ErrorPublisherSubscriptionDataMessage {
     constructor(dataItemId: DataItemId, dataItemRequestNr: Integer, errorText: string,

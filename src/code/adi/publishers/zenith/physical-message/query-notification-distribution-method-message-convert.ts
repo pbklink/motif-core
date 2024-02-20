@@ -4,11 +4,10 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, ErrorCode, Logger, ZenithDataError } from '../../../../sys/sys-internal-api';
+import { AssertInternalError, ErrorCode, ZenithDataError } from '../../../../sys/sys-internal-api';
 import {
     AdiPublisherRequest,
     AdiPublisherSubscription,
-    ErrorPublisherSubscriptionDataMessage_DataError,
     ErrorPublisherSubscriptionDataMessage_PublishRequestError,
     QueryNotificationDistributionMethodDataDefinition,
     QueryNotificationDistributionMethodDataMessage
@@ -58,16 +57,8 @@ export namespace QueryNotificationDistributionMethodMessageConvert {
                 } else {
                     const publishMsg = message as ZenithProtocol.ChannelController.QueryMethod.PublishPayloadMessageContainer;
                     const data = publishMsg.Data;
-                    if (data === undefined) {
-                        const errorText = AdiPublisherSubscription.generatePublishErrorText(subscription);
-                        const delayRetryAllowedSpecified = AdiPublisherSubscription.generateAllowedRetryTypeId(subscription);
-                        const errorMessage = new ErrorPublisherSubscriptionDataMessage_PublishRequestError(
-                            subscription.dataItemId,
-                            subscription.dataItemRequestNr,
-                            errorText,
-                            delayRetryAllowedSpecified,
-                        );
-                        return errorMessage;
+                    if (data === undefined || subscription.errorWarningCount > 0) {
+                        return ErrorPublisherSubscriptionDataMessage_PublishRequestError.createFromAdiPublisherSubscription(subscription);
                     } else {
                         const dataMessage = new QueryNotificationDistributionMethodDataMessage();
                         const type = data.Type;

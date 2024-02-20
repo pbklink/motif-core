@@ -4,13 +4,13 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, ErrorCode, Logger, ZenithDataError } from '../../../../sys/sys-internal-api';
+import { AssertInternalError, ErrorCode, ZenithDataError } from '../../../../sys/sys-internal-api';
 import {
     AdiPublisherRequest,
     AdiPublisherSubscription,
     CreateNotificationChannelDataDefinition,
     CreateNotificationChannelDataMessage,
-    ErrorPublisherSubscriptionDataMessage_DataError
+    ErrorPublisherSubscriptionDataMessage_PublishRequestError
 } from "../../../common/adi-common-internal-api";
 import { ZenithProtocol } from './protocol/zenith-protocol';
 import { ZenithChannelConvert } from './zenith-channel-convert';
@@ -70,15 +70,8 @@ export namespace CreateNotificationChannelMessageConvert {
                 } else {
                     const responseMsg = message as ZenithProtocol.ChannelController.CreateChannel.PublishPayloadMessageContainer;
                     const responseData = responseMsg.Data;
-                    if (responseData === undefined) {
-                        const errorText = 'CreateChannel Zenith message missing Data';
-                        Logger.logDataError('CSMCPM4556', errorText);
-                        const errorMessage = new ErrorPublisherSubscriptionDataMessage_DataError(subscription.dataItemId,
-                            subscription.dataItemRequestNr,
-                            errorText,
-                            AdiPublisherSubscription.AllowedRetryTypeId.Never
-                        );
-                        return errorMessage;
+                    if (responseData === undefined || subscription.errorWarningCount > 0) {
+                        return ErrorPublisherSubscriptionDataMessage_PublishRequestError.createFromAdiPublisherSubscription(subscription);
                     } else {
                         const dataMessage = new CreateNotificationChannelDataMessage();
                         dataMessage.dataItemId = subscription.dataItemId;

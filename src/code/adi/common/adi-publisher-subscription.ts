@@ -20,7 +20,7 @@ export interface AdiPublisherSubscription {
     activeMessageMapKey: MapKey | undefined;
     beenSentAtLeastOnce: boolean; // used in conjunction with resendAllowed Safeguard to prevent resend of some subscriptions
     unsubscribeRequired: boolean;
-    errorWarningCount: Integer;
+    errorWarningCount: Integer; // If errors received prior to final response in a publish request, then at least a partial error occurred.  (In most cases return an error to DataItem)
     errorsWarnings: string[] | undefined;
     delayRetryAllowedSpecified: boolean;
     limitedSpecified: boolean;

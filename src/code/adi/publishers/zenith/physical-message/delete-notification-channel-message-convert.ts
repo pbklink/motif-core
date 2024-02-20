@@ -9,7 +9,8 @@ import {
     AdiPublisherRequest,
     AdiPublisherSubscription,
     DeleteNotificationChannelDataDefinition,
-    DeleteNotificationChannelDataMessage
+    DeleteNotificationChannelDataMessage,
+    ErrorPublisherSubscriptionDataMessage_PublishRequestError
 } from "../../../common/adi-common-internal-api";
 import { ZenithProtocol } from './protocol/zenith-protocol';
 import { ZenithConvert } from './zenith-convert';
@@ -53,10 +54,14 @@ export namespace DeleteNotificationChannelMessageConvert {
                 if (message.Topic as ZenithProtocol.ChannelController.TopicName !== ZenithProtocol.ChannelController.TopicName.DeleteChannel) {
                     throw new ZenithDataError(ErrorCode.ZenithMessageConvert_Channel_Delete_Topic, message.Topic);
                 } else {
-                    const dataMessage = new DeleteNotificationChannelDataMessage();
-                    dataMessage.dataItemId = subscription.dataItemId;
-                    dataMessage.dataItemRequestNr = subscription.dataItemRequestNr;
-                    return dataMessage;
+                    if (subscription.errorWarningCount > 0) {
+                        return ErrorPublisherSubscriptionDataMessage_PublishRequestError.createFromAdiPublisherSubscription(subscription);
+                    } else {
+                        const dataMessage = new DeleteNotificationChannelDataMessage();
+                        dataMessage.dataItemId = subscription.dataItemId;
+                        dataMessage.dataItemRequestNr = subscription.dataItemRequestNr;
+                        return dataMessage;
+                    }
                 }
             }
         }

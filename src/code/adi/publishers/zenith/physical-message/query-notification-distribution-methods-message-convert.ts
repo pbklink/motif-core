@@ -54,16 +54,8 @@ export namespace QueryNotificationDistributionMethodsMessageConvert {
                 } else {
                     const publishMsg = message as ZenithProtocol.ChannelController.QueryMethods.PublishPayloadMessageContainer;
                     const data = publishMsg.Data;
-                    if (data === undefined) {
-                        const errorText = AdiPublisherSubscription.generatePublishErrorText(subscription);
-                        const delayRetryAllowedSpecified = AdiPublisherSubscription.generateAllowedRetryTypeId(subscription);
-                        const errorMessage = new ErrorPublisherSubscriptionDataMessage_PublishRequestError(
-                            subscription.dataItemId,
-                            subscription.dataItemRequestNr,
-                            errorText,
-                            delayRetryAllowedSpecified,
-                        );
-                        return errorMessage;
+                    if (data === undefined || subscription.errorWarningCount > 0) {
+                        return ErrorPublisherSubscriptionDataMessage_PublishRequestError.createFromAdiPublisherSubscription(subscription);
                     } else {
                         const dataMessage = new QueryNotificationDistributionMethodsDataMessage();
                         dataMessage.dataItemId = subscription.dataItemId;

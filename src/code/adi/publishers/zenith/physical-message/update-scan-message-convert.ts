@@ -5,7 +5,7 @@
  */
 
 import { AssertInternalError, ErrorCode, ZenithDataError } from '../../../../sys/sys-internal-api';
-import { AdiPublisherRequest, AdiPublisherSubscription, UpdateScanDataDefinition, UpdateScanDataMessage } from '../../../common/adi-common-internal-api';
+import { AdiPublisherRequest, AdiPublisherSubscription, ErrorPublisherSubscriptionDataMessage_PublishRequestError, UpdateScanDataDefinition, UpdateScanDataMessage } from '../../../common/adi-common-internal-api';
 import { ZenithProtocol } from './protocol/zenith-protocol';
 import { ZenithConvert } from './zenith-convert';
 import { ZenithNotifyConvert } from './zenith-notify-convert';
@@ -74,11 +74,15 @@ export namespace UpdateScanMessageConvert {
                 if (message.Topic as ZenithProtocol.NotifyController.TopicName !== ZenithProtocol.NotifyController.TopicName.UpdateScan) {
                     throw new ZenithDataError(ErrorCode.ZenithMessageConvert_UpdateScan_Topic, message.Topic);
                 } else {
-                    const dataMessage = new UpdateScanDataMessage();
-                    dataMessage.dataItemId = subscription.dataItemId;
-                    dataMessage.dataItemRequestNr = subscription.dataItemRequestNr;
+                    if (subscription.errorWarningCount > 0) {
+                        return ErrorPublisherSubscriptionDataMessage_PublishRequestError.createFromAdiPublisherSubscription(subscription);
+                    } else {
+                        const dataMessage = new UpdateScanDataMessage();
+                        dataMessage.dataItemId = subscription.dataItemId;
+                        dataMessage.dataItemRequestNr = subscription.dataItemRequestNr;
 
-                    return dataMessage;
+                        return dataMessage;
+                    }
                 }
             }
         }

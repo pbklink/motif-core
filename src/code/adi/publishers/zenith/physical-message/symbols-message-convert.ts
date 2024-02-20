@@ -17,6 +17,7 @@ import {
     AdiPublisherRequest,
     AdiPublisherSubscription,
     AurcChangeTypeId,
+    ErrorPublisherSubscriptionDataMessage_PublishRequestError,
     ExchangeId,
     ExchangeInfo,
     IvemId,
@@ -278,9 +279,6 @@ export namespace SymbolsMessageConvert {
         if (message.Controller !== ZenithProtocol.MessageContainer.Controller.Market) {
             throw new ZenithDataError(ErrorCode.SMCPMC588329999199, message.Controller);
         } else {
-            const dataMessage = new SymbolsDataMessage();
-            dataMessage.dataItemId = subscription.dataItemId;
-            dataMessage.dataItemRequestNr = subscription.dataItemRequestNr;
             if (actionId !== ZenithConvert.MessageContainer.Action.Id.Publish) {
                 throw new ZenithDataError(ErrorCode.SMCPMD558382000, actionId.toString(10));
             } else {
@@ -289,13 +287,27 @@ export namespace SymbolsMessageConvert {
                 } else {
                     const publishMsg = message as ZenithProtocol.MarketController.SearchSymbols.PublishPayloadMessageContainer;
                     const data = publishMsg.Data;
-                    if (data !== undefined) {
-                        dataMessage.changes = parsePublishPayload(data);
+                    if (data === undefined || data === null) {
+                        if (data === undefined && subscription.errorWarningCount === 0) {
+                            return createDataMessage(subscription, []);
+                        } else {
+                            return ErrorPublisherSubscriptionDataMessage_PublishRequestError.createFromAdiPublisherSubscription(subscription, AdiPublisherSubscription.AllowedRetryTypeId.Never);
+                        }
+                    } else {
+                        const changes = parsePublishPayload(data);
+                        return createDataMessage(subscription, changes);
                     }
-                    return dataMessage;
                 }
             }
         }
+    }
+
+    function createDataMessage(subscription: AdiPublisherSubscription, changes: SymbolsDataMessage.Change[]) {
+        const dataMessage = new SymbolsDataMessage();
+        dataMessage.dataItemId = subscription.dataItemId;
+        dataMessage.dataItemRequestNr = subscription.dataItemRequestNr;
+        dataMessage.changes = changes;
+        return dataMessage;
     }
 
     function parsePublishPayload(symbols: ZenithProtocol.MarketController.SearchSymbols.Detail[] | null) {

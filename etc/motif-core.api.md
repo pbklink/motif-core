@@ -9488,10 +9488,17 @@ export class ErrorPublisherSubscriptionDataMessage_Offlined extends ErrorPublish
 }
 
 // Warning: (ae-missing-release-tag) "ErrorPublisherSubscriptionDataMessage_PublishRequestError" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ErrorPublisherSubscriptionDataMessage_PublishRequestError" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ErrorPublisherSubscriptionDataMessage_PublishRequestError extends ErrorPublisherSubscriptionDataMessage {
     constructor(dataItemId: DataItemId, dataItemRequestNr: Integer, errorText: string, allowedRetryTypeId: AdiPublisherSubscription.AllowedRetryTypeId);
+}
+
+// @public (undocumented)
+export namespace ErrorPublisherSubscriptionDataMessage_PublishRequestError {
+    // (undocumented)
+    export function createFromAdiPublisherSubscription(subscription: AdiPublisherSubscription, allowedRetryTypeId?: AdiPublisherSubscription.AllowedRetryTypeId): ErrorPublisherSubscriptionDataMessage_PublishRequestError;
 }
 
 // Warning: (ae-missing-release-tag) "ErrorPublisherSubscriptionDataMessage_RequestTimeout" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
