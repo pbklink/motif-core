@@ -281,6 +281,39 @@ export class ComparableList<out T extends U, in U = T> {
         return -1;
     }
 
+    has(predicate: (value: T, index: Integer) => boolean) {
+        const count = this._count;
+        for (let i = 0; i < count; i++) {
+            const value = this.items[i];
+            if (predicate(value, i)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    find(predicate: (value: T, index: Integer) => boolean) {
+        const count = this._count;
+        for (let i = 0; i < count; i++) {
+            const value = this.items[i];
+            if (predicate(value, i)) {
+                return value;
+            }
+        }
+        return undefined;
+    }
+
+    findIndex(predicate: (value: T, index: Integer) => boolean) {
+        const count = this._count;
+        for (let i = 0; i < count; i++) {
+            const value = this.items[i];
+            if (predicate(value, i)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
     compareItems(left: T, right: T): ComparisonResult {
         return this._compareItemsFtn(left, right);
     }
