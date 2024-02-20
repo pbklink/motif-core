@@ -93,6 +93,10 @@ export abstract class AdiPublisherSubscriptionManager {
                 unsubscribeRequired: false,
                 beenSentAtLeastOnce: false,
                 activeMessageMapKey: '',
+                errorWarningCount: 0,
+                errorsWarnings: undefined,
+                delayRetryAllowedSpecified: false,
+                limitedSpecified: false,
             };
             this._subscriptionByDataItemIdMap.set(subscription.dataItemId, subscription);
 

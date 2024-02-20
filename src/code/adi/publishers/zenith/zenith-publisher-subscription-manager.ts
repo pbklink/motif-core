@@ -152,25 +152,42 @@ export class ZenithPublisherSubscriptionManager extends AdiPublisherSubscription
         return msg.Controller + '+' + msg.Topic;
     }
 
-    private calculateErrorSubscription(msg: ZenithProtocol.ResponseUpdateMessageContainer) {
-        let subscription: AdiPublisherSubscription | undefined;
+    private calculateErrorSubscription(msg: ZenithProtocol.ResponseUpdateMessageContainer): ZenithPublisherSubscriptionManager.ErrorSubscription | undefined {
         const transactionId = msg.TransactionID;
         if (transactionId === undefined) {
             // must be sub
             const subMsgMapKey = this.calculateSubMessageMapKey(msg);
-            subscription = this.subscriptionByMessageMap.get(subMsgMapKey);
+            const subscription = this.subscriptionByMessageMap.get(subMsgMapKey);
+            if (subscription !== undefined) {
+                return {
+                    subscription,
+                    errorTypeId: AdiPublisherSubscription.ErrorTypeId.SubRequestError,
+                };
+            }
         } else {
             // assume publish
             const publishMsgMapKey = this.calculatePublishMessageMapKey(msg);
-            subscription = this.subscriptionByMessageMap.get(publishMsgMapKey);
-            if (subscription === undefined) {
+            let subscription = this.subscriptionByMessageMap.get(publishMsgMapKey);
+            if (subscription !== undefined) {
+                return {
+                    subscription,
+                    errorTypeId: AdiPublisherSubscription.ErrorTypeId.PublishRequestError,
+                };
+            } else {
                 // try sub
                 const subMsgMapKey = this.calculateSubMessageMapKey(msg);
                 subscription = this.subscriptionByMessageMap.get(subMsgMapKey);
+
+                if (subscription !== undefined) {
+                    return {
+                        subscription,
+                        errorTypeId: AdiPublisherSubscription.ErrorTypeId.SubRequestError,
+                    };
+                }
             }
         }
 
-        return subscription;
+        return undefined;
     }
 
     private processPhysicalMessage(message: ZenithProtocol.PhysicalMessage): DataMessage[] {
@@ -197,23 +214,15 @@ export class ZenithPublisherSubscriptionManager extends AdiPublisherSubscription
                     if (subscription === undefined) {
                         return []; // was previously unsubscribed with unsubscribeDataItem()
                     } else {
-                        const data = parsedMessage.Data;
-                        const error = this.checkGetResponseUpdateMessageError(data, AdiPublisherSubscription.ErrorTypeId.PublishRequestError);
-                        if (error !== undefined) {
-                            const errorDataMessage = this.createSubscriptionErrorDataMessage(subscription, parsedMessage, error);
-                            this.processErrorMessage(errorDataMessage, subscription);
-                            return [errorDataMessage];
+                        const dataMessage = ZenithMessageConvert.createDataMessage(subscription, parsedMessage, actionId);
+                        if (DataMessage.isErrorPublisherSubscriptionDataMessage(dataMessage)) {
+                            // probably data error
+                            this.processErrorMessage(dataMessage, subscription);
+                            return [dataMessage];
                         } else {
-                            const dataMessage = ZenithMessageConvert.createDataMessage(subscription, parsedMessage, actionId);
-                            if (DataMessage.isErrorPublisherSubscriptionDataMessage(dataMessage)) {
-                                // probably data error
-                                this.processErrorMessage(dataMessage, subscription);
-                                return [dataMessage];
-                            } else {
-                                this.deleteSubscription(subscription, true); // remove from manager as will not need after this
-                                const syncDataMessage = this.createSynchronisedDataMessage(subscription, true);
-                                return [dataMessage, syncDataMessage];
-                            }
+                            this.deleteSubscription(subscription, true); // remove from manager as will not need after this
+                            const syncDataMessage = this.createSynchronisedDataMessage(subscription, true);
+                            return [dataMessage, syncDataMessage];
                         }
                     }
                 }
@@ -235,7 +244,7 @@ export class ZenithPublisherSubscriptionManager extends AdiPublisherSubscription
                             }
                         } else {
                             const data = parsedMessage.Data;
-                            const error = this.checkGetResponseUpdateMessageError(data, AdiPublisherSubscription.ErrorTypeId.SubRequestError);
+                            const error = this.checkUserNotAuthorisedError(data);
                             if (error !== undefined) {
                                 // Is error message
                                 const errorDataMessage = this.createSubscriptionErrorDataMessage(subscription, parsedMessage, error);
@@ -268,8 +277,7 @@ export class ZenithPublisherSubscriptionManager extends AdiPublisherSubscription
                         } else {
                             // data does not in exist (eg. the symbol was deleted) or you don't have access, or similar
 
-                            let error = this.checkGetResponseUpdateMessageError(parsedMessage.Data,
-                                AdiPublisherSubscription.ErrorTypeId.UserNotAuthorised);
+                            let error = this.checkUserNotAuthorisedError(parsedMessage.Data);
                             if (error === undefined) {
                                 // Unexpected. Use default UserNotAuthorised error
                                 error = {
@@ -298,14 +306,67 @@ export class ZenithPublisherSubscriptionManager extends AdiPublisherSubscription
                         // already unsubscribed
                         return [];
                     } else {
-                        let errorTexts = this.checkGetResponseUpdateMessageErrorTexts(parsedMessage.Data);
-                        if (errorTexts === undefined) {
-                            // If no texts, get default texts for Server Warnings
-                            errorTexts = [Strings[StringId.BadnessReasonId_PublisherServerWarning]];
+                        switch (errorSubscription.errorTypeId) {
+                            case AdiPublisherSubscription.ErrorTypeId.PublishRequestError: {
+                                const subscription = errorSubscription.subscription;
+
+                                let delayRetryAllowedSpecified = false;
+                                let limitedSpecified = false;
+
+                                const texts = this.checkGetResponseUpdateMessageErrorTexts(parsedMessage.Data);
+                                if (texts !== undefined) {
+                                    for (let i = 0; i < texts.length; i++) {
+                                        const text = texts[i];
+                                        switch (text) {
+                                            case ZenithProtocol.ResponseUpdateMessageContainer.Error.Code.Retry:
+                                                delayRetryAllowedSpecified = true;
+                                                break;
+                                            case ZenithProtocol.ResponseUpdateMessageContainer.Error.Code.Limited:
+                                                limitedSpecified = true;
+                                                break;
+                                        }
+                                    }
+
+                                    if (subscription.errorsWarnings === undefined) {
+                                        subscription.errorsWarnings = texts;
+                                    } else {
+                                        subscription.errorsWarnings.push(...texts);
+                                    }
+                                }
+
+                                subscription.errorWarningCount++;
+                                if (delayRetryAllowedSpecified) {
+                                    subscription.delayRetryAllowedSpecified = true;
+                                }
+                                if (limitedSpecified) {
+                                    subscription.limitedSpecified = true;
+                                }
+
+                                return [];
+                            }
+
+                            case AdiPublisherSubscription.ErrorTypeId.SubRequestError: {
+                                this.notifyServerWarning();
+
+                                let texts = this.checkGetResponseUpdateMessageErrorTexts(parsedMessage.Data);
+
+                                if (texts === undefined) {
+                                    texts = [Strings[StringId.BadnessReasonId_PublisherServerWarning]];
+                                }
+
+                                const subscription = errorSubscription.subscription;
+                                subscription.errorWarningCount++;
+
+                                const errorDataMessage = this.createSubscriptionWarningDataMessage(
+                                    subscription,
+                                    parsedMessage,
+                                    texts,
+                                );
+                                return [errorDataMessage];
+                            }
+                            default:
+                                throw new UnreachableCaseError('ZPSMPPME45455', errorSubscription.errorTypeId);
                         }
-                        this.notifyServerWarning();
-                        const errorDataMessage = this.createSubscriptionWarningDataMessage(errorSubscription, parsedMessage, errorTexts);
-                        return [errorDataMessage];
                     }
                 }
 
@@ -328,50 +389,49 @@ export class ZenithPublisherSubscriptionManager extends AdiPublisherSubscription
         }
     }
 
-    private checkGetResponseUpdateMessageError(data: ZenithProtocol.ResponseUpdateMessageContainer.Data,
-        actionErrorTypeId: AdiPublisherSubscription.ErrorTypeId
-    ) {
+    private checkUserNotAuthorisedError(data: ZenithProtocol.ResponseUpdateMessageContainer.Data) {
         if (data === undefined || data === null) {
-            if (actionErrorTypeId === AdiPublisherSubscription.ErrorTypeId.PublishRequestError) {
-                return undefined; // for publish responses, data can be undefined or null
-            } else {
-                const error: ZenithPublisherSubscriptionManager.ResponseUpdateMessageError = {
-                    texts: [],
-                    errorTypeId: AdiPublisherSubscription.ErrorTypeId.UserNotAuthorised,
-                    delayRetryAllowedSpecified: false,
-                    limitedSpecified: false,
-                };
-                return error;
-            }
-
+            const error: ZenithPublisherSubscriptionManager.ResponseUpdateMessageError = {
+                texts: [],
+                errorTypeId: AdiPublisherSubscription.ErrorTypeId.UserNotAuthorised,
+                delayRetryAllowedSpecified: false,
+                limitedSpecified: false,
+            };
+            return error;
         } else {
-            const texts = this.checkGetResponseUpdateMessageErrorTexts(data);
+            return undefined;
+        }
+    }
 
-            if (texts === undefined) {
-                return undefined;
-            } else {
-                let delayRetryAllowedSpecified = false;
-                let limitedSpecified = false;
-                for (let i = 0; i < texts.length; i++) {
-                    const text = texts[i];
-                    switch (text) {
-                        case ZenithProtocol.ResponseUpdateMessageContainer.Error.Code.Retry:
-                            delayRetryAllowedSpecified = true;
-                            break;
-                        case ZenithProtocol.ResponseUpdateMessageContainer.Error.Code.Limited:
-                            limitedSpecified = true;
-                            break;
-                    }
-                }
-                const error: ZenithPublisherSubscriptionManager.ResponseUpdateMessageError = {
-                    texts,
-                    errorTypeId: actionErrorTypeId,
-                    delayRetryAllowedSpecified,
-                    limitedSpecified,
-                };
-                return error;
+    private createResponseUpdateMessageError(data: ZenithProtocol.ResponseUpdateMessageContainer.Data, actionErrorTypeId: AdiPublisherSubscription.ErrorTypeId) {
+        let texts = this.checkGetResponseUpdateMessageErrorTexts(data);
+
+        if (texts === undefined) {
+            texts = [Strings[StringId.BadnessReasonId_PublisherServerWarning]];
+        }
+
+        let delayRetryAllowedSpecified = false;
+        let limitedSpecified = false;
+        for (let i = 0; i < texts.length; i++) {
+            const text = texts[i];
+            switch (text) {
+                case ZenithProtocol.ResponseUpdateMessageContainer.Error.Code.Retry:
+                    delayRetryAllowedSpecified = true;
+                    break;
+                case ZenithProtocol.ResponseUpdateMessageContainer.Error.Code.Limited:
+                    limitedSpecified = true;
+                    break;
             }
         }
+
+        const error: ZenithPublisherSubscriptionManager.ResponseUpdateMessageError = {
+            texts,
+            errorTypeId: actionErrorTypeId,
+            delayRetryAllowedSpecified,
+            limitedSpecified,
+        };
+
+        return error;
     }
 
     private checkGetResponseUpdateMessageErrorTexts(data: ZenithProtocol.ResponseUpdateMessageContainer.Data) {
@@ -505,5 +565,10 @@ export namespace ZenithPublisherSubscriptionManager {
         readonly errorTypeId: AdiPublisherSubscription.ErrorTypeId;
         readonly delayRetryAllowedSpecified: boolean;
         readonly limitedSpecified: boolean;
+    }
+
+    export interface ErrorSubscription {
+        readonly errorTypeId: AdiPublisherSubscription.ErrorTypeId.PublishRequestError | AdiPublisherSubscription.ErrorTypeId.SubRequestError;
+        readonly subscription: AdiPublisherSubscription;
     }
 }

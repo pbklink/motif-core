@@ -9,6 +9,7 @@ import {
     AdiPublisherRequest,
     AdiPublisherSubscription,
     ErrorPublisherSubscriptionDataMessage_DataError,
+    ErrorPublisherSubscriptionDataMessage_PublishRequestError,
     QueryNotificationDistributionMethodDataDefinition,
     QueryNotificationDistributionMethodDataMessage
 } from "../../../common/adi-common-internal-api";
@@ -58,12 +59,13 @@ export namespace QueryNotificationDistributionMethodMessageConvert {
                     const publishMsg = message as ZenithProtocol.ChannelController.QueryMethod.PublishPayloadMessageContainer;
                     const data = publishMsg.Data;
                     if (data === undefined) {
-                        const errorText = 'Channel QueryMethod Zenith message missing Data';
-                        Logger.logDataError('QNDMMCPM4556', errorText);
-                        const errorMessage = new ErrorPublisherSubscriptionDataMessage_DataError(subscription.dataItemId,
+                        const errorText = AdiPublisherSubscription.generatePublishErrorText(subscription);
+                        const delayRetryAllowedSpecified = AdiPublisherSubscription.generateAllowedRetryTypeId(subscription);
+                        const errorMessage = new ErrorPublisherSubscriptionDataMessage_PublishRequestError(
+                            subscription.dataItemId,
                             subscription.dataItemRequestNr,
                             errorText,
-                            AdiPublisherSubscription.AllowedRetryTypeId.Never
+                            delayRetryAllowedSpecified,
                         );
                         return errorMessage;
                     } else {

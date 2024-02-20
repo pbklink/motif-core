@@ -4,12 +4,12 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, ErrorCode, Logger, ZenithDataError } from '../../../../sys/sys-internal-api';
+import { AssertInternalError, ErrorCode, ZenithDataError } from '../../../../sys/sys-internal-api';
 import {
     ActiveFaultedStatusId,
     AdiPublisherRequest,
     AdiPublisherSubscription,
-    ErrorPublisherSubscriptionDataMessage_DataError,
+    ErrorPublisherSubscriptionDataMessage_PublishRequestError,
     QueryNotificationChannelDataDefinition,
     QueryNotificationChannelDataMessage,
     SettingsedNotificationChannel
@@ -60,12 +60,13 @@ export namespace QueryNotificationChannelMessageConvert {
                     const publishMsg = message as ZenithProtocol.ChannelController.QueryChannel.PublishPayloadMessageContainer;
                     const data = publishMsg.Data;
                     if (data === undefined) {
-                        const errorText = 'Channel QueryChannel Zenith message missing Data';
-                        Logger.logDataError('QNCMCPM4556', errorText);
-                        const errorMessage = new ErrorPublisherSubscriptionDataMessage_DataError(subscription.dataItemId,
+                        const errorText = AdiPublisherSubscription.generatePublishErrorText(subscription);
+                        const delayRetryAllowedSpecified = AdiPublisherSubscription.generateAllowedRetryTypeId(subscription);
+                        const errorMessage = new ErrorPublisherSubscriptionDataMessage_PublishRequestError(
+                            subscription.dataItemId,
                             subscription.dataItemRequestNr,
                             errorText,
-                            AdiPublisherSubscription.AllowedRetryTypeId.Never
+                            delayRetryAllowedSpecified,
                         );
                         return errorMessage;
                     } else {

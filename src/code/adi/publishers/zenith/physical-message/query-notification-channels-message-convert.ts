@@ -9,6 +9,7 @@ import {
     ActiveFaultedStatusId,
     AdiPublisherRequest,
     AdiPublisherSubscription,
+    ErrorPublisherSubscriptionDataMessage_PublishRequestError,
     NotificationChannel,
     QueryNotificationChannelsDataDefinition,
     QueryNotificationChannelsDataMessage
@@ -54,16 +55,24 @@ export namespace QueryNotificationChannelsMessageConvert {
                     throw new ZenithDataError(ErrorCode.ZenithMessageConvert_Channel_QueryChannels_Topic, message.Topic);
                 } else {
                     const publishMsg = message as ZenithProtocol.ChannelController.QueryChannels.PublishPayloadMessageContainer;
-                    const dataMessage = new QueryNotificationChannelsDataMessage();
-                    dataMessage.dataItemId = subscription.dataItemId;
-                    dataMessage.dataItemRequestNr = subscription.dataItemRequestNr;
                     const data = publishMsg.Data;
                     if (data === undefined) {
-                        dataMessage.notificationChannels = [];
+                        const errorText = AdiPublisherSubscription.generatePublishErrorText(subscription);
+                        const delayRetryAllowedSpecified = AdiPublisherSubscription.generateAllowedRetryTypeId(subscription);
+                        const errorMessage = new ErrorPublisherSubscriptionDataMessage_PublishRequestError(
+                            subscription.dataItemId,
+                            subscription.dataItemRequestNr,
+                            errorText,
+                            delayRetryAllowedSpecified,
+                        );
+                        return errorMessage;
                     } else {
+                        const dataMessage = new QueryNotificationChannelsDataMessage();
+                        dataMessage.dataItemId = subscription.dataItemId;
+                        dataMessage.dataItemRequestNr = subscription.dataItemRequestNr;
                         dataMessage.notificationChannels = parsePublishPayload(data);
+                        return dataMessage;
                     }
-                    return dataMessage;
                 }
             }
         }

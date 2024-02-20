@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { MapKey, UnreachableCaseError } from '../../sys/sys-internal-api';
+import { CommaText, Integer, MapKey, UnreachableCaseError } from '../../sys/sys-internal-api';
 import { PublisherSubscriptionDataDefinition } from './data-definition';
 
 export interface AdiPublisherSubscription {
@@ -20,6 +20,10 @@ export interface AdiPublisherSubscription {
     activeMessageMapKey: MapKey | undefined;
     beenSentAtLeastOnce: boolean; // used in conjunction with resendAllowed Safeguard to prevent resend of some subscriptions
     unsubscribeRequired: boolean;
+    errorWarningCount: Integer;
+    errorsWarnings: string[] | undefined;
+    delayRetryAllowedSpecified: boolean;
+    limitedSpecified: boolean;
 }
 
 export namespace AdiPublisherSubscription {
@@ -74,5 +78,23 @@ export namespace AdiPublisherSubscription {
         PublishRequestError,
         SubRequestError,
         DataError,
+    }
+
+    export function generatePublishErrorText(subscription: AdiPublisherSubscription) {
+        const errorsWarnings = subscription.errorsWarnings;
+        if (errorsWarnings !== undefined) {
+            return CommaText.fromStringArray(errorsWarnings);
+        } else {
+            const errorCount = subscription.errorWarningCount;
+            switch (errorCount) {
+                case 0: return 'No server reported errors';
+                case 1: return '1 server reported error';
+                default: return `${errorCount} server reported errors`;
+            }
+        }
+    }
+
+    export function generateAllowedRetryTypeId(subscription: AdiPublisherSubscription) {
+        return subscription.delayRetryAllowedSpecified ? AdiPublisherSubscription.AllowedRetryTypeId.Delay : AdiPublisherSubscription.AllowedRetryTypeId.Never;
     }
 }
