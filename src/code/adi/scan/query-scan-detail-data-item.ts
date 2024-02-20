@@ -35,6 +35,7 @@ export class QueryScanDetailDataItem extends ScanPublishDataItem {
             description: msg.scanDescription,
             readonly: msg.scanReadonly,
             statusId: msg.scanStatusId,
+            enabled: msg.enabled,
             versionNumber: msg.versionNumber,
             versionId: msg.versionId,
             versioningInterrupted: msg.versioningInterrupted,

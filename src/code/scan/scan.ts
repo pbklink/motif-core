@@ -62,6 +62,7 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
     private _upperCaseDescription: string;
     private _readonly: boolean;
     private _statusId: ActiveFaultedStatusId;
+    private _enabled: boolean;
     private _versionNumber: Integer | undefined;
     private _versionId: string | undefined;
     private _versioningInterrupted: boolean;
@@ -95,13 +96,13 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
     private _directoryItemChangedMultiEvent = new MultiEvent<RankedLitIvemIdListDirectoryItem.ChangedEventHandler>();
 
     constructor(
-        private readonly _adiService: AdiService,
+        adiService: AdiService,
         private readonly _descriptor: ScanStatusedDescriptor,
         private _listCorrectnessId: CorrectnessId,
         private readonly _requireUnwantDetailOnLastCloseEventer: Scan.RequireUnwantDetailOnLastCloseEventer,
         private readonly _deletedAndUnlockedEventer: Scan.DeletedAndUnlockedEventer,
     ) {
-        this._queryScanDetailDataItemIncubator = new DataItemIncubator<QueryScanDetailDataItem>(this._adiService);
+        this._queryScanDetailDataItemIncubator = new DataItemIncubator<QueryScanDetailDataItem>(adiService);
         this._lockOpenManager = new LockOpenManager<Scan>(
             () => this.tryProcessFirstLock(),
             () => { this.processLastUnlock(); },
@@ -169,6 +170,7 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
     get lastEditSessionId() { return this._lastEditSessionId; }
     get readonly() { return this._readonly; }
     get statusId() { return this._statusId; }
+    get enabled() { return this._enabled; }
     get targetTypeId() { return this._targetTypeId; }
     get targetMarketIds() { return this._targetMarketIds; }
     get targetLitIvemIds() { return this._targetLitIvemIds; }
@@ -329,6 +331,18 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
                         this._statusId = statusId;
                         const valueChange: Scan.ValueChange = {
                             fieldId: Scan.FieldId.StatusId,
+                            recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                        };
+                        this._valueChanges.push(valueChange);
+                    }
+                    break;
+                }
+                case ScanStatusedDescriptor.FieldId.Enabled: {
+                    const enabled = descriptor.enabled;
+                    if (enabled !== this._enabled) {
+                        this._enabled = enabled;
+                        const valueChange: Scan.ValueChange = {
+                            fieldId: Scan.FieldId.Enabled,
                             recentChangeTypeId: ValueRecentChangeTypeId.Update,
                         };
                         this._valueChanges.push(valueChange);
@@ -734,6 +748,7 @@ export namespace Scan {
         Readonly,
         Index,
         StatusId,
+        Enabled,
         Name,
         Description,
         TargetTypeId,
@@ -758,6 +773,7 @@ export namespace Scan {
             FieldId.Readonly,
             FieldId.Index,
             FieldId.StatusId,
+            FieldId.Enabled,
             FieldId.Name,
             FieldId.Description,
             FieldId.TargetTypeId,
@@ -811,6 +827,13 @@ export namespace Scan {
                 name: 'StatusId',
                 dataTypeId: FieldDataTypeId.Enumeration,
                 headingId: StringId.ScanFieldHeading_StatusId,
+                directoryItemFieldId: undefined,
+            },
+            Enabled: {
+                id: FieldId.Enabled,
+                name: 'Enabled',
+                dataTypeId: FieldDataTypeId.Boolean,
+                headingId: StringId.ScanFieldHeading_Enabled,
                 directoryItemFieldId: undefined,
             },
             Name: {

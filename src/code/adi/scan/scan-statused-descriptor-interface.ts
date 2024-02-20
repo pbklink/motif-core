@@ -13,6 +13,7 @@ export interface ScanStatusedDescriptorInterface {
     readonly description: string | undefined;
     readonly readonly: boolean;
     readonly statusId: ActiveFaultedStatusId;
+    readonly enabled: boolean;
     readonly versionNumber: Integer | undefined;
     readonly versionId: Guid | undefined;
     readonly versioningInterrupted: boolean;

@@ -792,6 +792,7 @@ export class QueryScanDetailDataMessage extends DataMessage {
     scanDescription: string | undefined;
     scanReadonly: boolean;
     scanStatusId: ActiveFaultedStatusId;
+    enabled: boolean;
     versionNumber: Integer | undefined;
     versionId: Guid | undefined;
     versioningInterrupted: boolean;
@@ -843,6 +844,7 @@ export namespace ScanStatusedDescriptorsDataMessage {
         scanDescription: string | undefined;
         readonly: boolean | undefined;
         scanStatusId: ActiveFaultedStatusId | undefined;
+        enabled: boolean | undefined;
         versionNumber: Integer | undefined;
         versionId: Guid | undefined;
         versioningInterrupted: boolean;
@@ -860,6 +862,7 @@ export namespace ScanStatusedDescriptorsDataMessage {
         scanDescription: string | undefined;
         readonly: boolean;
         scanStatusId: ActiveFaultedStatusId;
+        enabled: boolean;
         versionId: string | undefined;
         versioningInterrupted: boolean;
         lastSavedTime: Date | undefined;

@@ -125,6 +125,10 @@ export class ScanTableValueSource extends CorrectnessTableValueSource<Scan> {
                 (value as ScanStatusIdCorrectnessTableValue).data = this._scan.statusId;
                 break;
             }
+            case Scan.FieldId.Enabled: {
+                (value as EnabledCorrectnessTableValue).data = this._scan.enabled;
+                break;
+            }
             case Scan.FieldId.Name: {
                 (value as StringCorrectnessTableValue).data = this._scan.name;
                 break;

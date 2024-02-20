@@ -24,6 +24,7 @@ export class ScanStatusedDescriptor implements ScanStatusedDescriptorInterface {
     private _description: string | undefined;
     private _readonly: boolean;
     private _statusId: ActiveFaultedStatusId;
+    private _enabled: boolean;
     private _versionNumber: Integer | undefined;
     private _versionId: Guid | undefined;
     private _versioningInterrupted: boolean;
@@ -41,6 +42,7 @@ export class ScanStatusedDescriptor implements ScanStatusedDescriptorInterface {
         this._description = change.scanDescription;
         this._readonly = change.readonly;
         this._statusId = change.scanStatusId;
+        this._enabled = change.enabled;
         this._versionNumber = change.versionNumber;
         this._versionId = change.versionId;
         this._versioningInterrupted = change.versioningInterrupted;
@@ -55,6 +57,7 @@ export class ScanStatusedDescriptor implements ScanStatusedDescriptorInterface {
     get description() { return this._description; }
     get readonly() { return this._readonly; }
     get statusId() { return this._statusId; }
+    get enabled() { return this._enabled; }
     get versionNumber() { return this._versionNumber; }
     get versionId() { return this._versionId; }
     get versioningInterrupted() { return this._versioningInterrupted; }
@@ -94,6 +97,12 @@ export class ScanStatusedDescriptor implements ScanStatusedDescriptorInterface {
         if (newStatusId !== undefined && newStatusId !== this._statusId) {
             this._statusId = newStatusId;
             changedFieldIds[changedCount++] = ScanStatusedDescriptor.FieldId.StatusId;
+        }
+
+        const newEnabled = change.enabled;
+        if (newEnabled !== undefined && newEnabled !== this._enabled) {
+            this._enabled = newEnabled;
+            changedFieldIds[changedCount++] = ScanStatusedDescriptor.FieldId.Enabled;
         }
 
         const newVersionNumber = change.versionNumber;
@@ -178,6 +187,7 @@ export namespace ScanStatusedDescriptor {
         Description,
         Readonly,
         StatusId,
+        Enabled,
         Version,
         LastSavedTime,
         LastEditSessionId,
@@ -193,6 +203,7 @@ export namespace ScanStatusedDescriptor {
             FieldId.Description,
             FieldId.Readonly,
             FieldId.StatusId,
+            FieldId.Enabled,
             FieldId.Version,
             FieldId.LastSavedTime,
             FieldId.LastEditSessionId,
@@ -230,6 +241,10 @@ export namespace ScanStatusedDescriptor {
             StatusId: {
                 id: FieldId.StatusId,
                 name: 'StatusId',
+            },
+            Enabled: {
+                id: FieldId.Enabled,
+                name: 'Enabled',
             },
             Version: {
                 id: FieldId.Version,

@@ -2103,6 +2103,7 @@ export const enum StringId {
     ScanFieldHeading_Readonly,
     ScanFieldHeading_Index,
     ScanFieldHeading_StatusId,
+    ScanFieldHeading_Enabled,
     ScanFieldHeading_Name,
     ScanFieldHeading_Description,
     ScanFieldHeading_TargetTypeId,
@@ -12775,6 +12776,11 @@ export namespace I18nStrings {
         ScanFieldHeading_StatusId: {
             id: StringId.ScanFieldHeading_StatusId, translations: {
                 en: 'Status',
+            }
+        },
+        ScanFieldHeading_Enabled: {
+            id: StringId.ScanFieldHeading_Enabled, translations: {
+                en: 'Enabled',
             }
         },
         ScanFieldHeading_Name: {

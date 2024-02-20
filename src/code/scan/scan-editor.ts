@@ -86,7 +86,7 @@ export class ScanEditor extends OpenableScanEditor {
     private readonly _whileSavingModifiedScanFieldIds = new Array<Scan.FieldId>();
     private _whileSavingModifiedStateId = ScanEditor.ModifiedStateId.Unmodified;
 
-    private _enabled = true;
+    private _enabled: boolean;
     private _name: string;
     private _description: string;
     private _symbolListEnabled: boolean;
@@ -376,7 +376,7 @@ export class ScanEditor extends OpenableScanEditor {
     setCriteriaAsBooleanNode(value: ScanFormula.BooleanNode, modifier?: ScanEditor.Modifier) {
         this.beginFieldChanges(modifier);
         this._criteriaSourceId = ScanEditor.SourceId.BooleanNode;
-        this.setCriteria(value, ScanEditor.SourceId.BooleanNode, modifier);
+        this.setCriteria(value, ScanEditor.SourceId.BooleanNode);
         this._criteriaSourceValid = true;
         this.endFieldChanges();
     }
@@ -412,7 +412,7 @@ export class ScanEditor extends OpenableScanEditor {
                 const decodeResult = ScanFormulaZenithEncoding.tryDecodeBoolean(zenithCriteria, strict);
                 if (decodeResult.isOk()) {
                     const decodedBoolean = decodeResult.value;
-                    this.setCriteria(decodedBoolean.node, ScanEditor.SourceId.ZenithText, modifier);
+                    this.setCriteria(decodedBoolean.node, ScanEditor.SourceId.ZenithText);
                     this._criteriaSourceValid = true;
                     result = {
                         progress: decodedBoolean.progress,
@@ -437,7 +437,7 @@ export class ScanEditor extends OpenableScanEditor {
         this.addFieldChange(ScanEditor.FieldId.CriteriaAsConditionSet);
 
         const criteria = ScanConditionSet.createFormulaNode(value);
-        this.setCriteria(criteria, ScanEditor.SourceId.ConditionSet, modifier);
+        this.setCriteria(criteria, ScanEditor.SourceId.ConditionSet);
         this._criteriaSourceValid = true;
         this.endFieldChanges();
     }
@@ -458,7 +458,7 @@ export class ScanEditor extends OpenableScanEditor {
 
             if (criteriaAsFieldSet.valid) {
                 const criteria = ScanFieldSet.createFormulaNode(criteriaAsFieldSet);
-                this.setCriteria(criteria, ScanEditor.SourceId.FieldSet, modifier);
+                this.setCriteria(criteria, ScanEditor.SourceId.FieldSet);
                 this._criteriaSourceValid = true;
             } else {
                 this._criteriaSourceValid = false;
@@ -915,6 +915,11 @@ export class ScanEditor extends OpenableScanEditor {
                 case Scan.FieldId.StatusId:
                     this.addFieldChange(ScanEditor.FieldId.StatusId);
                     break;
+                case Scan.FieldId.Enabled:
+                    if (scan.enabled !== this._enabled && !fieldConflict) {
+                        this.setEnabled(scan.enabled);
+                    }
+                    break;
                 case Scan.FieldId.Name: {
                     if (scan.name !== this._name && !fieldConflict) {
                         this.setName(scan.name);
@@ -1056,7 +1061,7 @@ export class ScanEditor extends OpenableScanEditor {
         this.setTargetMarketIds([defaultMarketId]);
         this.setTargetTypeId(ScanTargetTypeId.Markets);
         this.setMaxMatchCount(10);
-        this.setCriteria(ScanEditor.DefaultCriteria, undefined, undefined);
+        this.setCriteria(ScanEditor.DefaultCriteria, undefined);
         this.updateCriteriaSourceValid(true);
         this.setRank(ScanEditor.DefaultRank, undefined);
         this._versionNumber = 0;
@@ -1068,7 +1073,7 @@ export class ScanEditor extends OpenableScanEditor {
 
     private loadScan(scan: Scan, defaultIfError: boolean) {
         this.beginFieldChanges(undefined);
-        this.setEnabled(scan.statusId !== ActiveFaultedStatusId.Inactive);
+        this.setEnabled(scan.enabled);
         this.setName(scan.name);
         this.setDescription(scan.description ?? '');
         this.setSymbolListEnabled(scan.symbolListEnabled ?? ScanEditor.DefaultSymbolListEnabled);
@@ -1125,8 +1130,10 @@ export class ScanEditor extends OpenableScanEditor {
         }
 
         if (criteria !== undefined) {
-            this.setCriteria(criteria, undefined, undefined);
+            this.beginFieldChanges(undefined);
+            this.setCriteria(criteria, undefined);
             this.updateCriteriaSourceValid(true);
+            this.endFieldChanges();
         }
     }
 
@@ -1156,8 +1163,8 @@ export class ScanEditor extends OpenableScanEditor {
         this.setRank(rank, undefined);
     }
 
-    private setCriteria(value: ScanFormula.BooleanNode, sourceId: ScanEditor.SourceId | undefined, modifier: ScanEditor.Modifier | undefined) {
-        this.beginFieldChanges(modifier)
+    private setCriteria(value: ScanFormula.BooleanNode, sourceId: ScanEditor.SourceId | undefined) {
+        this.beginFieldChanges(undefined)
         this._criteria = value;
         this.addFieldChange(ScanEditor.FieldId.Criteria);
 
@@ -1381,8 +1388,8 @@ export namespace ScanEditor {
     export const enum FieldId {
         Id,
         Readonly,
-        Enabled,
         StatusId,
+        Enabled,
         Name,
         Description,
         SymbolListEnabled,
@@ -1420,11 +1427,11 @@ export namespace ScanEditor {
             Readonly: { fieldId: FieldId.Readonly,
                 scanFieldId: Scan.FieldId.Readonly,
             },
-            Enabled: { fieldId: FieldId.Enabled,
-                scanFieldId: undefined,
-            },
             StatusId: { fieldId: FieldId.StatusId,
                 scanFieldId: Scan.FieldId.StatusId,
+            },
+            Enabled: { fieldId: FieldId.Enabled,
+                scanFieldId: Scan.FieldId.Enabled,
             },
             Name: { fieldId: FieldId.Name,
                 scanFieldId: Scan.FieldId.Name,

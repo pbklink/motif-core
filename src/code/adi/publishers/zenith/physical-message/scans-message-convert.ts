@@ -8,6 +8,7 @@ import {
     AssertInternalError, ErrorCode, UnreachableCaseError, ZenithDataError
 } from '../../../../sys/sys-internal-api';
 import {
+    ActiveFaultedStatusId,
     AdiPublisherRequest,
     AdiPublisherSubscription,
     AurcChangeTypeId,
@@ -125,6 +126,7 @@ export namespace ScansMessageConvert {
                     zenithRankSource: metadata === undefined ? undefined : metadata.zenithRankSource,
                     readonly: !scan.IsWritable,
                     scanStatusId,
+                    enabled: scanStatusId !== ActiveFaultedStatusId.Inactive,
                 };
                 return change;
             }

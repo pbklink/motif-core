@@ -6,6 +6,7 @@
 
 import { AssertInternalError, ErrorCode, UnreachableCaseError, ZenithDataError } from '../../../../sys/sys-internal-api';
 import {
+    ActiveFaultedStatusId,
     AdiPublisherRequest,
     AdiPublisherSubscription,
     QueryScanDetailDataDefinition,
@@ -83,6 +84,9 @@ export namespace QueryScanMessageConvert {
                         dataMessage.zenithRankSource = convertMetadata.zenithRankSource;
                     }
                     dataMessage.scanReadonly = !details.IsWritable
+                    const scanStatusId = ZenithConvert.ActiveFaultedStatus.toId(details.Status);
+                    dataMessage.scanStatusId = scanStatusId
+                    dataMessage.enabled = scanStatusId !== ActiveFaultedStatusId.Inactive;
                     const parameters = response.Parameters;
                     dataMessage.targetTypeId = ZenithNotifyConvert.ScanType.toId(parameters.Type);
                     switch (dataMessage.targetTypeId) {

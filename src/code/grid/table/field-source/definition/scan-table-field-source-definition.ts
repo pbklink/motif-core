@@ -115,6 +115,10 @@ export namespace ScanTableFieldSourceDefinition {
                 tableFieldValueConstructors: [EnumCorrectnessTableField, ScanStatusIdCorrectnessTableValue],
             },
             {
+                id: Scan.FieldId.Enabled,
+                tableFieldValueConstructors: [BooleanCorrectnessTableField, EnabledCorrectnessTableValue],
+            },
+            {
                 id: Scan.FieldId.Name,
                 tableFieldValueConstructors: [StringCorrectnessTableField, StringCorrectnessTableValue],
             },
