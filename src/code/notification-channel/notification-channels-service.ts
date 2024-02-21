@@ -27,7 +27,7 @@ export class NotificationChannelsService {
     }
 
     initialise() {
-        this.refreshSupportedDistributionMethodIds();
+        // this.refreshSupportedDistributionMethodIds();
     }
 
     finalise() {
@@ -37,7 +37,7 @@ export class NotificationChannelsService {
     }
 
     getSupportedDistributionMethodIds(refresh: boolean): Promise<readonly NotificationDistributionMethodId[] | undefined> {
-        if (this._supportedDistributionMethodIdsIncubator !== undefined && !refresh && !this._supportedDistributionMethodIdsIncubator.incubating) {
+        if (!refresh && !this._supportedDistributionMethodIdsIncubator.incubating) {
             return Promise.resolve(this._supportedDistributionMethodIds);
         } else {
             const promise = new Promise<readonly NotificationDistributionMethodId[] | undefined>((resolve) => {
@@ -84,10 +84,6 @@ export class NotificationChannelsService {
 
     // }
 
-    // refresh(): Promise<void> {
-
-    // }
-
     // refreshChannel(channelId: string): Promise<NotificationChannelStateAndSettings> {
 
     // }
@@ -115,7 +111,7 @@ export class NotificationChannelsService {
                         if (dataItem.error) {
                             Logger.logDataError('NCSRSDMI43071', '', undefined, '');
                         } else {
-                            const queryNotificationDistributionMethodsDataItem = dataItem as QueryNotificationDistributionMethodsDataItem;
+                            const queryNotificationDistributionMethodsDataItem = dataItem;
                             this._supportedDistributionMethodIds = queryNotificationDistributionMethodsDataItem.methodIds;
                         }
                         this._getSupportedDistributionMethodIdsResolves.forEach((resolve) => resolve(this._supportedDistributionMethodIds));

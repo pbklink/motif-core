@@ -12595,13 +12595,17 @@ export namespace IconButtonUiAction {
         // (undocumented)
         Delete = 53,
         // (undocumented)
-        DeleteSymbol = 18,
+        DeleteSelectedItem = 18,
         // (undocumented)
         Desaturate = 27,
+        // (undocumented)
+        Detach = 54,
         // (undocumented)
         Details = 41,
         // (undocumented)
         Dot = 51,
+        // (undocumented)
+        Dropdown = 55,
         // (undocumented)
         EnlargeToTopLeft = 50,
         // (undocumented)
