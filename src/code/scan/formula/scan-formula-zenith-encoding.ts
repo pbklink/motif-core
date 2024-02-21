@@ -186,7 +186,7 @@ export namespace ScanFormulaZenithEncoding {
     }
 
     function encodeSingleOperandBooleanNode(type: typeof ZenithEncodedScanFormula.NotTupleNodeType, node: ScanFormula.SingleOperandBooleanNode): ZenithEncodedScanFormula.LogicalTupleNode {
-        const param = encodeBooleanNode(node);
+        const param = encodeBooleanNode(node.operand);
         return [type, param];
     }
 
