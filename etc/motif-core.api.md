@@ -5704,10 +5704,14 @@ export namespace Currency {
     nullCurrencyId = CurrencyId.Aud;
     const // (undocumented)
     idCount: number;
+    const // (undocumented)
+    allIds: readonly CurrencyId[];
     // (undocumented)
     export type Id = CurrencyId;
     // (undocumented)
-    export function idToCode(id: Id): StringId;
+    export function idToCode(id: Id): string;
+    // (undocumented)
+    export function idToCodeId(id: Id): StringId;
     // (undocumented)
     export function idToDisplay(id: Id): string;
     // (undocumented)
@@ -5716,8 +5720,6 @@ export namespace Currency {
     export function idToJsonValue(id: Id): string;
     // (undocumented)
     export function idToName(id: Id): string;
-    // (undocumented)
-    export function initialise(): void;
     // (undocumented)
     export function tryCodeToId(code: string): CurrencyId | undefined;
     // (undocumented)
@@ -12575,109 +12577,109 @@ export namespace IconButtonUiAction {
         // (undocumented)
         Blankest = 0,
         // (undocumented)
-        Brighten = 24,
+        Brighten = 23,
         // (undocumented)
         BuyOrderPad = 7,
         // (undocumented)
         CancelOrderPad = 10,
         // (undocumented)
-        CancelSearch = 33,
+        CancelSearch = 32,
         // (undocumented)
-        CollapseVertically = 45,
+        Close = 55,
         // (undocumented)
-        Complement = 25,
+        CollapseVertically = 44,
         // (undocumented)
-        CopyColor = 29,
+        Complement = 24,
+        // (undocumented)
+        CopyColor = 28,
         // (undocumented)
         CopyToClipboard = 5,
         // (undocumented)
-        Darken = 23,
+        Darken = 22,
         // (undocumented)
-        Delete = 53,
+        Delete = 52,
         // (undocumented)
-        DeleteSelectedItem = 18,
+        Desaturate = 26,
         // (undocumented)
-        Desaturate = 27,
+        Detach = 53,
         // (undocumented)
-        Detach = 54,
+        Details = 40,
         // (undocumented)
-        Details = 41,
+        Dot = 50,
         // (undocumented)
-        Dot = 51,
+        Dropdown = 54,
         // (undocumented)
-        Dropdown = 55,
+        EnlargeToTopLeft = 49,
         // (undocumented)
-        EnlargeToTopLeft = 50,
-        // (undocumented)
-        Exclamation = 52,
+        Exclamation = 51,
         // (undocumented)
         Execute = 6,
         // (undocumented)
-        ExpandVertically = 43,
+        ExpandVertically = 42,
         // (undocumented)
         Filter = 16,
         // (undocumented)
-        Historical = 39,
+        Historical = 38,
         // (undocumented)
-        HistoricalCompare = 40,
+        HistoricalCompare = 39,
         // (undocumented)
-        InsertIntoListFromLeft = 47,
+        InsertIntoListFromLeft = 46,
         // (undocumented)
-        Lighten = 22,
+        Lighten = 21,
         // (undocumented)
-        MarkAll = 46,
+        MarkAll = 45,
         // (undocumented)
-        MoveDown = 36,
+        MoveDown = 35,
         // (undocumented)
         MoveOrderPad = 11,
         // (undocumented)
-        MoveToBottom = 37,
+        MoveToBottom = 36,
         // (undocumented)
-        MoveToTop = 35,
+        MoveToTop = 34,
         // (undocumented)
-        MoveUp = 34,
+        MoveUp = 33,
         // (undocumented)
-        NewWatchlist = 19,
+        NewWatchlist = 18,
         // (undocumented)
-        NotHistorical = 38,
+        NotHistorical = 37,
         // (undocumented)
-        OpenWatchlist = 20,
+        OpenWatchlist = 19,
         // (undocumented)
         PrimaryDitemFrame = 1,
         // (undocumented)
-        RemoveFromListToLeft = 48,
+        RemoveFromListToLeft = 47,
         // (undocumented)
-        RemoveSelectedFromList = 49,
+        RemoveSelectedFromList = 48,
         // (undocumented)
-        RestoreVertically = 44,
+        RestoreVertically = 43,
         // (undocumented)
-        ReturnCancel = 31,
+        ReturnCancel = 30,
         // (undocumented)
-        ReturnOk = 30,
+        ReturnOk = 29,
         // (undocumented)
         RollDown = 15,
         // (undocumented)
         RollUp = 14,
         // (undocumented)
-        Saturate = 26,
+        Saturate = 25,
         // (undocumented)
         Save = 17,
         // (undocumented)
-        SaveWatchlist = 21,
+        SaveWatchlist = 20,
         // (undocumented)
-        SearchNext = 32,
+        SearchNext = 31,
         // (undocumented)
         SelectColumns = 12,
         // (undocumented)
         SellOrderPad = 8,
         // (undocumented)
-        SpinColor = 28,
+        SpinColor = 27,
         // (undocumented)
         SubWindowReturn = 4,
         // (undocumented)
         SymbolLink = 2,
         // (undocumented)
-        ToggleSearchTermNotExchangedMarketProcessed = 42
+        ToggleSearchTermNotExchangedMarketProcessed = 41
     }
     // (undocumented)
     export type IconPushEventHandler = (this: void, iconId: IconButtonUiAction.IconId | undefined) => void;

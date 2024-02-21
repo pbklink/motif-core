@@ -1227,18 +1227,30 @@ export namespace Currency {
         },
     } as const;
 
-    export const idCount = Object.keys(infosObject).length;
     const infos = Object.values(infosObject);
+    export const idCount = infos.length;
+    export const allIds: readonly CurrencyId[] = generateAllIds();
 
-    export function initialise() {
-        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as CurrencyId);
-        if (outOfOrderIdx >= 0) {
-            throw new EnumInfoOutOfOrderError('TCurrency', outOfOrderIdx, Strings[infos[outOfOrderIdx].codeId]);
+    function generateAllIds(): readonly CurrencyId[] {
+        const result = new Array<CurrencyId>(idCount);
+        for (let i = 0; i < idCount; i++) {
+            const info = infos[i];
+            const id = info.id;
+            if (id !== i as CurrencyId) {
+                throw new EnumInfoOutOfOrderError('CurrencyId', i, Strings[info.codeId]);
+            } else {
+                result[i] = id;
+            }
         }
+        return result;
+    }
+
+    export function idToCodeId(id: Id) {
+        return infos[id].codeId;
     }
 
     export function idToCode(id: Id) {
-        return infos[id].codeId;
+        return Strings[idToCodeId(id)];
     }
 
     export function tryCodeToId(code: string) {
@@ -7740,7 +7752,6 @@ export function CreateEnumSet(enumArray: number[]) {
 
 export namespace DataTypesModule {
     export function initialiseStatic(): void {
-        Currency.initialise();
         DataChannel.initialise();
         // DataMessageType.initialise();
         MarketInfo.initialise();
