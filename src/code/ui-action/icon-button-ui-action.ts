@@ -75,7 +75,7 @@ export namespace IconButtonUiAction {
         RollDown,
         Filter,
         Save,
-        DeleteSymbol,
+        DeleteSelectedItem,
         NewWatchlist,
         OpenWatchlist,
         SaveWatchlist,
@@ -111,6 +111,8 @@ export namespace IconButtonUiAction {
         Dot,
         Exclamation,
         Delete,
+        Detach,
+        Dropdown,
     }
 
     export type IconPushEventHandler = (this: void, iconId: IconButtonUiAction.IconId | undefined) => void;
