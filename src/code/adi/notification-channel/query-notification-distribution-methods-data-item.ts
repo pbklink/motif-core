@@ -13,7 +13,7 @@ export class QueryNotificationDistributionMethodsDataItem extends NotificationCh
     get methodIds() { return this._methodIds; }
 
     override processMessage(msg: DataMessage) {
-        if (msg.typeId !== DataMessageTypeId.QueryNotificationChannel) {
+        if (msg.typeId !== DataMessageTypeId.QueryNotificationDistributionMethods) {
             super.processMessage(msg);
         } else {
             this.beginUpdate();

@@ -15,7 +15,7 @@ export class QueryNotificationDistributionMethodDataItem extends NotificationCha
     get metadata() { return this._metadata; }
 
     override processMessage(msg: DataMessage) {
-        if (msg.typeId !== DataMessageTypeId.QueryNotificationChannel) {
+        if (msg.typeId !== DataMessageTypeId.QueryNotificationDistributionMethod) {
             super.processMessage(msg);
         } else {
             this.beginUpdate();
