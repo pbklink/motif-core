@@ -2252,8 +2252,16 @@ export const enum StringId {
     ConditionSetScanFormulaViewNgComponent_ConditionKindTitle_None,
     CategoryValueScanFieldConditionOperandsCaption_Category,
     CategoryValueScanFieldConditionOperandsTitle_Category,
-    CurrencyEnumScanFieldConditionOperandsCaption_Values,
-    CurrencyEnumScanFieldConditionOperandsTitle_Values,
+    CurrencyOverlapsScanFieldConditionOperandsCaption_Values,
+    CurrencyOverlapsScanFieldConditionOperandsTitle_Values,
+    ExchangeOverlapsScanFieldConditionOperandsCaption_Values,
+    ExchangeOverlapsScanFieldConditionOperandsTitle_Values,
+    MarketOverlapsScanFieldConditionOperandsCaption_Values,
+    MarketOverlapsScanFieldConditionOperandsTitle_Values,
+    MarketBoardOverlapsScanFieldConditionOperandsCaption_Values,
+    MarketBoardOverlapsScanFieldConditionOperandsTitle_Values,
+    StringOverlapsScanFieldConditionOperandsCaption_Values,
+    StringOverlapsScanFieldConditionOperandsTitle_Values,
 
 }
 
@@ -13523,14 +13531,54 @@ export namespace I18nStrings {
                 en: 'Specify a category in which security is included',
             }
         },
-        CurrencyEnumScanFieldConditionOperandsCaption_Values: {
-            id: StringId.CurrencyEnumScanFieldConditionOperandsCaption_Values, translations: {
+        CurrencyOverlapsScanFieldConditionOperandsCaption_Values: {
+            id: StringId.CurrencyOverlapsScanFieldConditionOperandsCaption_Values, translations: {
                 en: 'Currencies',
             }
         },
-        CurrencyEnumScanFieldConditionOperandsTitle_Values: {
-            id: StringId.CurrencyEnumScanFieldConditionOperandsTitle_Values, translations: {
+        CurrencyOverlapsScanFieldConditionOperandsTitle_Values: {
+            id: StringId.CurrencyOverlapsScanFieldConditionOperandsTitle_Values, translations: {
                 en: 'Specify one or more currencies',
+            }
+        },
+        ExchangeOverlapsScanFieldConditionOperandsCaption_Values: {
+            id: StringId.ExchangeOverlapsScanFieldConditionOperandsCaption_Values, translations: {
+                en: 'Exchanges',
+            }
+        },
+        ExchangeOverlapsScanFieldConditionOperandsTitle_Values: {
+            id: StringId.ExchangeOverlapsScanFieldConditionOperandsTitle_Values, translations: {
+                en: 'Specify one or more exchanges',
+            }
+        },
+        MarketOverlapsScanFieldConditionOperandsCaption_Values: {
+            id: StringId.MarketOverlapsScanFieldConditionOperandsCaption_Values, translations: {
+                en: 'Markets',
+            }
+        },
+        MarketOverlapsScanFieldConditionOperandsTitle_Values: {
+            id: StringId.MarketOverlapsScanFieldConditionOperandsTitle_Values, translations: {
+                en: 'Specify one or more markets',
+            }
+        },
+        MarketBoardOverlapsScanFieldConditionOperandsCaption_Values: {
+            id: StringId.MarketBoardOverlapsScanFieldConditionOperandsCaption_Values, translations: {
+                en: 'Market boards',
+            }
+        },
+        MarketBoardOverlapsScanFieldConditionOperandsTitle_Values: {
+            id: StringId.MarketBoardOverlapsScanFieldConditionOperandsTitle_Values, translations: {
+                en: 'Specify one or more market boards',
+            }
+        },
+        StringOverlapsScanFieldConditionOperandsCaption_Values: {
+            id: StringId.StringOverlapsScanFieldConditionOperandsCaption_Values, translations: {
+                en: 'Values',
+            }
+        },
+        StringOverlapsScanFieldConditionOperandsTitle_Values: {
+            id: StringId.StringOverlapsScanFieldConditionOperandsTitle_Values, translations: {
+                en: 'Specify one or more values',
             }
         },
     } as const;

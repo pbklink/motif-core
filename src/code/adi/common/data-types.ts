@@ -2331,14 +2331,21 @@ export namespace MarketBoard {
         },
     };
 
-    export const idCount = Object.keys(infosObject).length;
     const infos = Object.values(infosObject);
+    export const idCount = infos.length;
+    export let allIds: readonly MarketBoardId[];
 
     export function initialise() {
-        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as MarketBoardId);
-        if (outOfOrderIdx >= 0) {
-            throw new EnumInfoOutOfOrderError('MarketBoardId', outOfOrderIdx, Strings[infos[outOfOrderIdx].displayId]);
+        const initAllIds = new Array<MarketBoardId>(idCount);
+        for (let i = 0; i < idCount; i++) {
+            const info = infos[i];
+            if (info.id !== i as MarketBoardId) {
+                throw new EnumInfoOutOfOrderError('MarketBoardId', i, Strings[infos[i].displayId]);
+            } else {
+                initAllIds[i] = info.id;
+            }
         }
+        allIds = initAllIds;
     }
 
     export function idToDisplayId(id: Id) {
@@ -3986,6 +3993,7 @@ export namespace MarketInfo {
 
     const infos = Object.values(infosObject);
     export const idCount = infos.length;
+    export let allIds: readonly MarketId[];
 
     class ConstructInfo {
         id: Id;
@@ -4014,10 +4022,14 @@ export namespace MarketInfo {
         const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as MarketId);
         if (outOfOrderIdx >= 0) {
             throw new EnumInfoOutOfOrderError('TMarketId', outOfOrderIdx, infos[outOfOrderIdx].jsonValue);
-        }
-
-        for (let i = 0; i < idCount; i++) {
-            constructInfos[i] = new ConstructInfo(infos[i]);
+        } else {
+            const initAllIds = new Array<MarketId>(idCount);
+            for (let i = 0; i < idCount; i++) {
+                const info = infos[i];
+                initAllIds[i] = info.id;
+                constructInfos[i] = new ConstructInfo(info);
+            }
+            allIds = initAllIds;
         }
     }
 
@@ -4351,6 +4363,7 @@ export namespace ExchangeInfo {
 
     const infos: readonly Info[] = Object.values(infosObject);
     export const idCount = infos.length;
+    export let allIds: readonly ExchangeId[];
 
     interface ConstructInfo {
         localMarkets: MarketId[];
@@ -4360,10 +4373,13 @@ export namespace ExchangeInfo {
     const constructInfos = new Array<ConstructInfo>(idCount);
 
     export function initialise() {
+        const initAllIds = new Array<ExchangeId>(idCount);
+
         for (let id = 0; id < idCount; id++) {
             if (infos[id].id !== id as ExchangeId) {
                 throw new EnumInfoOutOfOrderError('ExchangeId', id, Strings[infos[id].abbreviatedDisplayId]);
             } else {
+                initAllIds[id] = id;
                 const localMarkets = calculateLocalMarkets(id);
 
                 const constructInfo: ConstructInfo = {
@@ -4374,6 +4390,7 @@ export namespace ExchangeInfo {
                 constructInfos[id] = constructInfo;
             }
         }
+        allIds = initAllIds;
     }
 
     function calculateLocalMarkets(id: ExchangeId) {
