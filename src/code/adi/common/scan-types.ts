@@ -4,6 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
+import { NotificationChannel } from "./notification-channel";
+
 // export interface ScanDetails {
 //     name?: string;
 //     description?: string;
@@ -15,6 +17,10 @@
 //     isWritable?: boolean;
 // }
 
-export interface ScanNotification {
+export interface ScanNotificationParameters {
     channelId: string;
+    cultureCode: string | undefined;
+    minimumStable: number | undefined; // milli seconds
+    minimumElapsed: number | undefined; // milli seconds
+    channelSourceSettings: NotificationChannel.SourceSettings | undefined;
 }

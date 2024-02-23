@@ -2093,22 +2093,6 @@ export namespace ZenithProtocol {
         export type TargetMarket = string;
         export type Target = readonly TargetSymbol[] | readonly TargetMarket[];
 
-        export interface Notification { // Notification Parameters
-            readonly ChannelID: string;
-            readonly CultureCode?: string;
-            readonly MinimumStable?: Time;
-            readonly MimimumElapsed?: Time;
-            readonly Settings?: Notification.SourceSettings;
-        }
-
-        export namespace Notification {
-            export interface SourceSettings {
-                readonly ttl: number;
-                readonly urgency?: Urgency;
-                readonly topic?: string;
-            }
-        }
-
         export interface ScanParametersWithoutNotifications {
             readonly Type: ScanType;
             readonly Criteria: ZenithEncodedScanFormula.BooleanTupleNode;
@@ -2118,7 +2102,25 @@ export namespace ZenithProtocol {
         }
 
         export interface ScanParameters extends ScanParametersWithoutNotifications {
-            readonly Notifications?: Notification[];
+            readonly Notifications?: ScanParameters.Notification[];
+        }
+
+        export namespace ScanParameters {
+            export interface Notification {
+                readonly ChannelID: string;
+                readonly CultureCode?: string;
+                readonly MinimumStable?: Time;
+                readonly MinimumElapsed?: Time;
+                readonly Settings?: Notification.SourceSettings;
+            }
+    
+            export namespace Notification {
+                export interface SourceSettings {
+                    readonly ttl: number;
+                    readonly urgency?: Urgency;
+                    readonly topic?: string;
+                }
+            }    
         }
 
         export interface ScanChange {

@@ -161,6 +161,11 @@ export namespace ZenithConvert {
 
     export namespace Time {
         // [days.]hours:minutes[:seconds[.fractional seconds]]
+        export function fromTimeSpan(value: number) {
+            const days = value / mSecsPerDay;
+            const intDays = Math.floor(days);
+            const daysRemainder = value - (intDays * mSecsPerDay);
+        }
 
         export function toTimeSpan(value: ZenithProtocol.Time) {
             let stateId = StateId.DaysOrHours;

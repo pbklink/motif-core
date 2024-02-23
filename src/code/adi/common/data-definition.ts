@@ -34,7 +34,7 @@ import { LitIvemId } from './lit-ivem-id';
 import { OrderDetails } from './order-details';
 import { OrderRoute } from './order-route';
 import { OrderTrigger } from './order-trigger';
-import { ScanNotification } from './scan-types';
+import { ScanNotificationParameters } from './scan-types';
 import { ZenithEncodedScanFormula, ZenithProtocolCommon } from './zenith-protocol/internal-api';
 
 export abstract class DataDefinition {
@@ -1229,7 +1229,7 @@ export class CreateScanDataDefinition extends FeedSubscriptionDataDefinition {
     maxMatchCount: Integer | undefined;
     zenithCriteria: ZenithEncodedScanFormula.BooleanTupleNode;
     zenithRank: ZenithEncodedScanFormula.NumericTupleNode | undefined;
-    notifications: readonly ScanNotification[] | undefined;
+    notifications: readonly ScanNotificationParameters[] | undefined;
 
     constructor() {
         super(DataChannelId.CreateScan);
@@ -1279,7 +1279,7 @@ export class UpdateScanDataDefinition extends FeedSubscriptionDataDefinition {
     targetTypeId: ScanTargetTypeId;
     targets: readonly MarketId[] | readonly LitIvemId[];
     maxMatchCount: Integer | undefined;
-    notifications: readonly ScanNotification[] | undefined;
+    notifications: readonly ScanNotificationParameters[] | undefined;
 
     constructor() {
         super(DataChannelId.UpdateScan);

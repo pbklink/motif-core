@@ -5,7 +5,7 @@
  */
 
 import { AssertInternalError, Guid, UnreachableCaseError, parseIntStrict } from '../../../../sys/sys-internal-api';
-import { LitIvemId, MarketId, ScanTargetTypeId } from '../../../common/adi-common-internal-api';
+import { LitIvemId, MarketId, ScanNotificationParameters, ScanTargetTypeId } from '../../../common/adi-common-internal-api';
 import { ZenithProtocolCommon } from '../../../common/zenith-protocol/internal-api';
 import { ZenithProtocol } from './protocol/zenith-protocol';
 import { ZenithConvert } from './zenith-convert';
@@ -85,6 +85,30 @@ export namespace ZenithNotifyConvert {
                 default:
                     throw new UnreachableCaseError('ZNCTFITU53339', typeId);
             }
+        }
+    }
+
+    export namespace NotificationParameters {
+        export function from(value: ScanNotificationParameters[]): ZenithProtocol.NotifyController.ScanParameters.Notification[] {
+            const count = value.length;
+            const result = new Array<ZenithProtocol.NotifyController.ScanParameters.Notification>(count);
+            for (let i = 0; i < count; i++) {
+                const valueElement = value[i];
+                const valueMinimumElapsed = valueElement.minimumElapsed;
+                const valueMinimumStable = valueElement.minimumStable;
+                const minimumElapsed = valueMinimumElapsed === undefined ? undefined : ZenithConvert.Time.fromTimeSpan(valueMinimumElapsed);
+                const minimumStable = valueMinimumStable === undefined ? undefined : ZenithConvert.Time.fromTimeSpan(valueMinimumStable);
+                const resultElement: ZenithProtocol.NotifyController.ScanParameters.Notification = {
+                    ChannelID: valueElement.channelId,
+                    CultureCode: valueElement.cultureCode,
+                    MinimumElapsed: minimumElapsed,
+                    MinimumStable: minimumStable,
+                    Settings: 
+                }
+            }
+        }
+
+        export function to(value: ZenithProtocol.NotifyController.ScanParameters.Notification[]): ScanNotificationParameters[] {
         }
     }
 
