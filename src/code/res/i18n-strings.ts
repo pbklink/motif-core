@@ -2262,7 +2262,16 @@ export const enum StringId {
     MarketBoardOverlapsScanFieldConditionOperandsTitle_Values,
     StringOverlapsScanFieldConditionOperandsCaption_Values,
     StringOverlapsScanFieldConditionOperandsTitle_Values,
-
+    ValueScanFieldConditionOperandsCaption_Value,
+    NumericValueScanFieldConditionOperandsTitle_Value,
+    DateValueScanFieldConditionOperandsTitle_Value,
+    TextValueScanFieldConditionOperandsTitle_Value,
+    RangeScanFieldConditionOperandsCaption_Min,
+    RangeScanFieldConditionOperandsCaption_Max,
+    NumericRangeValueScanFieldConditionOperandsTitle_Min,
+    NumericRangeValueScanFieldConditionOperandsTitle_Max,
+    DateRangeValueScanFieldConditionOperandsTitle_Min,
+    DateRangeValueScanFieldConditionOperandsTitle_Max,
 }
 
 /** @public */
@@ -13579,6 +13588,56 @@ export namespace I18nStrings {
         StringOverlapsScanFieldConditionOperandsTitle_Values: {
             id: StringId.StringOverlapsScanFieldConditionOperandsTitle_Values, translations: {
                 en: 'Specify one or more values',
+            }
+        },
+        ValueScanFieldConditionOperandsCaption_Value : {
+            id: StringId.ValueScanFieldConditionOperandsCaption_Value, translations: {
+                en: 'Value',
+            }
+        },
+        NumericValueScanFieldConditionOperandsTitle_Value : {
+            id: StringId.NumericValueScanFieldConditionOperandsTitle_Value, translations: {
+                en: 'Specify a numeric value',
+            }
+        },
+        DateValueScanFieldConditionOperandsTitle_Value : {
+            id: StringId.DateValueScanFieldConditionOperandsTitle_Value, translations: {
+                en: 'Specify a date value',
+            }
+        },
+        TextValueScanFieldConditionOperandsTitle_Value : {
+            id: StringId.TextValueScanFieldConditionOperandsTitle_Value, translations: {
+                en: 'Specify a text value',
+            }
+        },
+        RangeScanFieldConditionOperandsCaption_Min : {
+            id: StringId.RangeScanFieldConditionOperandsCaption_Min, translations: {
+                en: 'Min',
+            }
+        },
+        RangeScanFieldConditionOperandsCaption_Max : {
+            id: StringId.RangeScanFieldConditionOperandsCaption_Max, translations: {
+                en: 'Max',
+            }
+        },
+        NumericRangeValueScanFieldConditionOperandsTitle_Min : {
+            id: StringId.NumericRangeValueScanFieldConditionOperandsTitle_Min, translations: {
+                en: 'Specify a numeric minimum or clear to specify no minimum',
+            }
+        },
+        NumericRangeValueScanFieldConditionOperandsTitle_Max : {
+            id: StringId.NumericRangeValueScanFieldConditionOperandsTitle_Max, translations: {
+                en: 'Specify a numeric maximum or clear to specify no maximum',
+            }
+        },
+        DateRangeValueScanFieldConditionOperandsTitle_Min : {
+            id: StringId.DateRangeValueScanFieldConditionOperandsTitle_Min, translations: {
+                en: 'Specify a date minimum or clear to specify no minimum',
+            }
+        },
+        DateRangeValueScanFieldConditionOperandsTitle_Max : {
+            id: StringId.DateRangeValueScanFieldConditionOperandsTitle_Max, translations: {
+                en: 'Specify a date maximum or clear to specify no maximum',
             }
         },
     } as const;
