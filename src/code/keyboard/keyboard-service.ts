@@ -9,7 +9,7 @@ import { Command } from '../command/command';
 import { extStrings } from '../res/ext-strings';
 import { ExtensionOrInternalError } from '../sys/external-error';
 import { compareInteger, ErrorCode, Integer, ModifierKey, SysTick } from '../sys/sys-internal-api';
-import { UiAction } from '../ui-action/ui-action-internal-api';
+import { UiAction } from '../ui-action/internal-api';
 import { KeyboardShortcutRegistry } from './keyboard-shortcut-registry';
 
 /** @public */

@@ -7,10 +7,10 @@
 import { MarketId, MarketInfo } from '../adi/adi-internal-api';
 import { SymbolsService } from '../services/services-internal-api';
 import { Integer, MultiEvent } from '../sys/sys-internal-api';
-import { ArrayUiAction } from './array-ui-action';
-import { EnumArrayUiAction } from './enum-array-ui-action';
+import { EnumExplicitElementsArrayUiAction } from './enum-explicit-elements-array-ui-action';
+import { TypedExplicitElementsArrayUiAction } from './typed-explicit-elements-array-ui-action';
 
-export class AllowedMarketsEnumArrayUiAction extends EnumArrayUiAction {
+export class AllowedMarketsExplicitElementsArrayUiAction extends EnumExplicitElementsArrayUiAction {
     private _allowedMarketIdsChangedSubscriptionId: MultiEvent.SubscriptionId;
 
     constructor(private _symbolsService: SymbolsService, valueRequired: boolean | undefined = true) {
@@ -29,7 +29,7 @@ export class AllowedMarketsEnumArrayUiAction extends EnumArrayUiAction {
     getElementProperties(element: Integer) {
         const marketIds = this._symbolsService.allowedMarketIds;
         if (marketIds.includes(element)) {
-            return this.createEnumArrayUiActionElementProperties(element);
+            return this.createElementProperties(element);
         } else {
             return undefined;
         }
@@ -38,10 +38,10 @@ export class AllowedMarketsEnumArrayUiAction extends EnumArrayUiAction {
     getElementPropertiesArray() {
         const marketIds = this._symbolsService.allowedMarketIds;
         const count = marketIds.length;
-        const result = new Array<ArrayUiAction.ElementProperties<MarketId>>(count);
+        const result = new Array<TypedExplicitElementsArrayUiAction.ElementProperties<MarketId>>(count);
         for (let i = 0; i < count; i++) {
             const marketId = marketIds[i];
-            result[i] = this.createEnumArrayUiActionElementProperties(marketId);
+            result[i] = this.createElementProperties(marketId);
         }
         return result;
     }
@@ -50,8 +50,8 @@ export class AllowedMarketsEnumArrayUiAction extends EnumArrayUiAction {
         this.notifyElementsPush(undefined);
     }
 
-    private createEnumArrayUiActionElementProperties(marketId: MarketId) {
-        const result: ArrayUiAction.ElementProperties<MarketId> = {
+    private createElementProperties(marketId: MarketId) {
+        const result: TypedExplicitElementsArrayUiAction.ElementProperties<MarketId> = {
             element: marketId,
             caption: this._symbolsService.getMarketGlobalCode(marketId),
             title: MarketInfo.idToDisplay(marketId),

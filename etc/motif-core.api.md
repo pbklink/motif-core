@@ -968,19 +968,6 @@ export class AllOrdersDataItem extends AllBrokerageAccountRecordsDataItem<Order>
     protected createRecordsDataDefinition(): BrokerageAccountOrdersDataDefinition;
 }
 
-// Warning: (ae-missing-release-tag) "AllowedExchangesEnumArrayUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class AllowedExchangesEnumArrayUiAction extends EnumArrayUiAction {
-    constructor(_symbolsService: SymbolsService, valueRequired?: boolean | undefined);
-    // (undocumented)
-    finalise(): void;
-    // (undocumented)
-    getElementProperties(element: Integer): ArrayUiAction.ElementProperties<ExchangeId> | undefined;
-    // (undocumented)
-    getElementPropertiesArray(): ArrayUiAction.ElementProperties<ExchangeId>[];
-}
-
 // Warning: (ae-missing-release-tag) "AllowedExchangesEnumUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -992,6 +979,19 @@ export class AllowedExchangesEnumUiAction extends EnumUiAction {
     getElementProperties(element: Integer): EnumUiAction.ElementProperties | undefined;
     // (undocumented)
     getElementPropertiesArray(): EnumUiAction.ElementProperties[];
+}
+
+// Warning: (ae-missing-release-tag) "AllowedExchangesExplicitElementsArrayUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class AllowedExchangesExplicitElementsArrayUiAction extends EnumExplicitElementsArrayUiAction {
+    constructor(_symbolsService: SymbolsService, valueRequired?: boolean | undefined);
+    // (undocumented)
+    finalise(): void;
+    // (undocumented)
+    getElementProperties(element: Integer): TypedExplicitElementsArrayUiAction.ElementProperties<ExchangeId> | undefined;
+    // (undocumented)
+    getElementPropertiesArray(): TypedExplicitElementsArrayUiAction.ElementProperties<ExchangeId>[];
 }
 
 // Warning: (ae-missing-release-tag) "AllowedFieldsGridLayoutDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -1013,19 +1013,6 @@ export class AllowedGridField extends GridField {
     getViewValue(record: IndexedRecord): RenderValue;
 }
 
-// Warning: (ae-missing-release-tag) "AllowedMarketsEnumArrayUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class AllowedMarketsEnumArrayUiAction extends EnumArrayUiAction {
-    constructor(_symbolsService: SymbolsService, valueRequired?: boolean | undefined);
-    // (undocumented)
-    finalise(): void;
-    // (undocumented)
-    getElementProperties(element: Integer): ArrayUiAction.ElementProperties<MarketId> | undefined;
-    // (undocumented)
-    getElementPropertiesArray(): ArrayUiAction.ElementProperties<MarketId>[];
-}
-
 // Warning: (ae-missing-release-tag) "AllowedMarketsEnumUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -1037,6 +1024,19 @@ export class AllowedMarketsEnumUiAction extends EnumUiAction {
     getElementProperties(element: Integer): EnumUiAction.ElementProperties | undefined;
     // (undocumented)
     getElementPropertiesArray(): EnumUiAction.ElementProperties[];
+}
+
+// Warning: (ae-missing-release-tag) "AllowedMarketsExplicitElementsArrayUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class AllowedMarketsExplicitElementsArrayUiAction extends EnumExplicitElementsArrayUiAction {
+    constructor(_symbolsService: SymbolsService, valueRequired?: boolean | undefined);
+    // (undocumented)
+    finalise(): void;
+    // (undocumented)
+    getElementProperties(element: Integer): TypedExplicitElementsArrayUiAction.ElementProperties<MarketId> | undefined;
+    // (undocumented)
+    getElementPropertiesArray(): TypedExplicitElementsArrayUiAction.ElementProperties<MarketId>[];
 }
 
 // Warning: (ae-missing-release-tag) "AllScanCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -1223,75 +1223,6 @@ export namespace AppStorageService {
         // (undocumented)
         MotifServices = 1
     }
-}
-
-// Warning: (ae-missing-release-tag) "ArrayUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "ArrayUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export abstract class ArrayUiAction<T> extends UiAction {
-    // (undocumented)
-    commitValue(value: readonly T[] | undefined, typeId: UiAction.CommitTypeId): void;
-    // (undocumented)
-    get definedValue(): readonly T[];
-    // (undocumented)
-    get filter(): readonly T[] | undefined;
-    // (undocumented)
-    abstract getElementProperties(element: T): ArrayUiAction.ElementProperties<T> | undefined;
-    // (undocumented)
-    abstract getElementPropertiesArray(): ArrayUiAction.ElementProperties<T>[];
-    // (undocumented)
-    protected notifyElementPush(element: T, caption: string, title: string): void;
-    // (undocumented)
-    protected notifyElementsPush(filter: T[] | undefined | null): void;
-    // (undocumented)
-    pushFilter(value: readonly T[] | undefined): void;
-    // (undocumented)
-    pushValue(value: readonly T[] | undefined): void;
-    // (undocumented)
-    protected repushValue(newEdited: boolean): void;
-    // (undocumented)
-    subscribePushEvents(handlersInterface: ArrayUiAction.PushEventHandlersInterface<T>): number;
-    // (undocumented)
-    unsubscribePushEvents(subscriptionId: MultiEvent.SubscriptionId): void;
-    // (undocumented)
-    get value(): readonly T[] | undefined;
-    // (undocumented)
-    get valueUndefined(): boolean;
-}
-
-// @public (undocumented)
-export namespace ArrayUiAction {
-    const // (undocumented)
-    undefinedArray: never[];
-    // (undocumented)
-    export interface ElementProperties<T> {
-        // (undocumented)
-        caption: string;
-        // (undocumented)
-        element: T;
-        // (undocumented)
-        title: string;
-    }
-    // (undocumented)
-    export type ElementPushEventHandler<T> = (this: void, element: T, caption: string, title: string) => void;
-    // (undocumented)
-    export type ElementsPushEventHandler = (this: void) => void;
-    // (undocumented)
-    export type FilterPushEventHandler<T> = (this: void, value: readonly T[] | undefined) => void;
-    // (undocumented)
-    export interface PushEventHandlersInterface<T> extends UiAction.PushEventHandlersInterface {
-        // (undocumented)
-        element?: ElementPushEventHandler<T>;
-        // (undocumented)
-        elements?: ElementsPushEventHandler;
-        // (undocumented)
-        filter?: FilterPushEventHandler<T>;
-        // (undocumented)
-        value?: ValuePushEventHandler<T>;
-    }
-    // (undocumented)
-    export type ValuePushEventHandler<T> = (this: void, value: readonly T[] | undefined, edited: boolean) => void;
 }
 
 // @public (undocumented)
@@ -8287,12 +8218,6 @@ export class EnabledRenderValue extends BooleanRenderValue {
     constructor(data: boolean | undefined);
 }
 
-// Warning: (ae-missing-release-tag) "EnumArrayUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export abstract class EnumArrayUiAction extends ArrayUiAction<Integer> {
-}
-
 // Warning: (ae-missing-release-tag) "EnumCorrectnessTableField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -8311,9 +8236,19 @@ export abstract class EnumCorrectnessTableValue extends GenericCorrectnessTableV
     protected renderValueTypeId: RenderValue.TypeId;
 }
 
+// Warning: (ae-missing-release-tag) "EnumExplicitElementsArrayUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export abstract class EnumExplicitElementsArrayUiAction extends TypedExplicitElementsArrayUiAction<Integer> {
+}
+
 // @public (undocumented)
 export class EnumInfoOutOfOrderError extends BaseInternalError {
     constructor(enumName: string, outOfOrderInfoElementIndex: number, infoDescription: string);
+}
+
+// @public (undocumented)
+export class EnumMappedExplicitElementsArrayUiAction extends TypedMappedExplicitElementsArrayUiAction<Integer> {
 }
 
 // Warning: (ae-missing-release-tag) "EnumRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -9594,6 +9529,8 @@ export namespace ExchangeInfo {
     export function idToAbbreviatedDisplay(id: Id): string;
     const // (undocumented)
     idCount: number;
+    let // (undocumented)
+    allIds: readonly ExchangeId[];
     // (undocumented)
     export function idToAbbreviatedDisplayId(id: Id): StringId;
     // (undocumented)
@@ -9849,24 +9786,6 @@ export class ExerciseTypeIdCorrectnessTableValue extends EnumCorrectnessTableVal
 // @public (undocumented)
 export class ExerciseTypeIdTableValue extends EnumTableValue {
     constructor();
-}
-
-// @public (undocumented)
-export class ExplicitElementsArrayUiAction<T> extends ArrayUiAction<T> {
-    // (undocumented)
-    get elementPropertiesMap(): Map<T, ArrayUiAction.ElementProperties<T>>;
-    // (undocumented)
-    getElementProperties(element: T): ArrayUiAction.ElementProperties<T> | undefined;
-    // (undocumented)
-    getElementPropertiesArray(): ArrayUiAction.ElementProperties<T>[];
-    // (undocumented)
-    pushElement(element: T, caption: string, title: string): void;
-    // (undocumented)
-    pushElements(elementPropertiesArray: ArrayUiAction.ElementProperties<T>[], filter?: T[] | undefined | null): void;
-}
-
-// @public (undocumented)
-export class ExplicitElementsEnumArrayUiAction extends ExplicitElementsArrayUiAction<Integer> {
 }
 
 // Warning: (ae-missing-release-tag) "ExplicitElementsEnumUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -16601,6 +16520,8 @@ export namespace MarketBoard {
     export function compareId(left: Id, right: Id): ComparisonResult;
     const // (undocumented)
     idCount: number;
+    let // (undocumented)
+    allIds: readonly MarketBoardId[];
     // (undocumented)
     export type Id = MarketBoardId;
     // (undocumented)
@@ -16974,6 +16895,8 @@ export namespace MarketInfo {
     nullId = MarketId.AsxBookBuild;
     const // (undocumented)
     idCount: number;
+    let // (undocumented)
+    allIds: readonly MarketId[];
     // (undocumented)
     export function compareId(Left: Id, Right: Id): number;
     // (undocumented)
@@ -29536,6 +29459,12 @@ export class StringArrayRenderValue extends GenericRenderValue<readonly string[]
     constructor(data: readonly string[] | undefined);
 }
 
+// Warning: (ae-missing-release-tag) "StringArrayUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class StringArrayUiAction extends TypedArrayUiAction<string> {
+}
+
 // @public (undocumented)
 export class StringBuilder {
     constructor(initialCapacity?: Integer);
@@ -30268,9 +30197,9 @@ export const enum StringId {
     // (undocumented)
     CurrencyCode_Usd = 610,
     // (undocumented)
-    CurrencyEnumScanFieldConditionOperandsCaption_Values = 2244,
+    CurrencyOverlapsScanFieldConditionOperandsCaption_Values = 2244,
     // (undocumented)
-    CurrencyEnumScanFieldConditionOperandsTitle_Values = 2245,
+    CurrencyOverlapsScanFieldConditionOperandsTitle_Values = 2245,
     // (undocumented)
     CurrencySymbol_Aud = 609,
     // (undocumented)
@@ -30295,6 +30224,12 @@ export const enum StringId {
     DataEnvironmentDisplay_Sample = 449,
     // (undocumented)
     DataExternalError = 15,
+    // (undocumented)
+    DateRangeValueScanFieldConditionOperandsTitle_Max = 2263,
+    // (undocumented)
+    DateRangeValueScanFieldConditionOperandsTitle_Min = 2262,
+    // (undocumented)
+    DateValueScanFieldConditionOperandsTitle_Value = 2256,
     // (undocumented)
     DayTradesDataItemRecordTypeIdDisplay_Cancelled = 1804,
     // (undocumented)
@@ -30553,6 +30488,10 @@ export const enum StringId {
     ExchangeFullDisplay_Nzx = 429,
     // (undocumented)
     ExchangeFullDisplay_Ptx = 433,
+    // (undocumented)
+    ExchangeOverlapsScanFieldConditionOperandsCaption_Values = 2246,
+    // (undocumented)
+    ExchangeOverlapsScanFieldConditionOperandsTitle_Values = 2247,
     // (undocumented)
     Exclude = 50,
     // (undocumented)
@@ -31210,6 +31149,10 @@ export const enum StringId {
     // (undocumented)
     MarketBoardIdDisplay_SouthPacificStockExchangeRestricted = 576,
     // (undocumented)
+    MarketBoardOverlapsScanFieldConditionOperandsCaption_Values = 2250,
+    // (undocumented)
+    MarketBoardOverlapsScanFieldConditionOperandsTitle_Values = 2251,
+    // (undocumented)
     MarketCodeNotFoundInRic = 142,
     // (undocumented)
     MarketDisplay_AsxBookBuild = 502,
@@ -31317,6 +31260,10 @@ export const enum StringId {
     MarketFieldHeading_TradingDate = 836,
     // (undocumented)
     MarketFieldHeading_TradingMarkets = 846,
+    // (undocumented)
+    MarketOverlapsScanFieldConditionOperandsCaption_Values = 2248,
+    // (undocumented)
+    MarketOverlapsScanFieldConditionOperandsTitle_Values = 2249,
     // (undocumented)
     Markets = 169,
     // (undocumented)
@@ -31475,6 +31422,12 @@ export const enum StringId {
     NotReadable = 160,
     // (undocumented)
     NotString = 113,
+    // (undocumented)
+    NumericRangeValueScanFieldConditionOperandsTitle_Max = 2261,
+    // (undocumented)
+    NumericRangeValueScanFieldConditionOperandsTitle_Min = 2260,
+    // (undocumented)
+    NumericValueScanFieldConditionOperandsTitle_Value = 2255,
     // (undocumented)
     Of = 178,
     // (undocumented)
@@ -32467,6 +32420,10 @@ export const enum StringId {
     QuestionMark = 199,
     // (undocumented)
     RangeError = 28,
+    // (undocumented)
+    RangeScanFieldConditionOperandsCaption_Max = 2259,
+    // (undocumented)
+    RangeScanFieldConditionOperandsCaption_Min = 2258,
     // (undocumented)
     Rank = 208,
     // (undocumented)
@@ -33490,6 +33447,10 @@ export const enum StringId {
     // (undocumented)
     SourceTzOffsetDateTimeTimezoneModeDisplay_Utc = 1769,
     // (undocumented)
+    StringOverlapsScanFieldConditionOperandsCaption_Values = 2252,
+    // (undocumented)
+    StringOverlapsScanFieldConditionOperandsTitle_Values = 2253,
+    // (undocumented)
     SubscribabilityExtentDisplay_All = 742,
     // (undocumented)
     SubscribabilityExtentDisplay_None = 740,
@@ -33716,6 +33677,8 @@ export const enum StringId {
     // (undocumented)
     Test = 63,
     // (undocumented)
+    TextValueScanFieldConditionOperandsTitle_Value = 2257,
+    // (undocumented)
     TimeInForceDisplay_AllOrNone = 773,
     // (undocumented)
     TimeInForceDisplay_AtTheClose = 776,
@@ -33933,6 +33896,8 @@ export const enum StringId {
     ValueNotFound = 30,
     // (undocumented)
     ValueRequired = 136,
+    // (undocumented)
+    ValueScanFieldConditionOperandsCaption_Value = 2254,
     // (undocumented)
     Version = 90,
     // (undocumented)
@@ -38632,6 +38597,93 @@ export const enum TTMyxSectorId {
 export namespace TTradeRecordType {
 }
 
+// Warning: (ae-missing-release-tag) "TypedArrayUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TypedArrayUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export abstract class TypedArrayUiAction<T> extends UiAction {
+    // (undocumented)
+    commitValue(value: readonly T[] | undefined, typeId: UiAction.CommitTypeId): void;
+    // (undocumented)
+    get definedValue(): readonly T[];
+    // (undocumented)
+    pushValue(value: readonly T[] | undefined): void;
+    // (undocumented)
+    protected repushValue(newEdited: boolean): void;
+    // (undocumented)
+    subscribePushEvents(handlersInterface: TypedArrayUiAction.PushEventHandlersInterface<T>): number;
+    // (undocumented)
+    unsubscribePushEvents(subscriptionId: MultiEvent.SubscriptionId): void;
+    // (undocumented)
+    get value(): readonly T[] | undefined;
+    // (undocumented)
+    get valueUndefined(): boolean;
+}
+
+// @public (undocumented)
+export namespace TypedArrayUiAction {
+    const // (undocumented)
+    undefinedArray: never[];
+    // (undocumented)
+    export interface PushEventHandlersInterface<T> extends UiAction.PushEventHandlersInterface {
+        // (undocumented)
+        value?: ValuePushEventHandler<T>;
+    }
+    // (undocumented)
+    export type ValuePushEventHandler<T> = (this: void, value: readonly T[] | undefined, edited: boolean) => void;
+}
+
+// Warning: (ae-missing-release-tag) "TypedExplicitElementsArrayUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TypedExplicitElementsArrayUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export abstract class TypedExplicitElementsArrayUiAction<T> extends TypedArrayUiAction<T> {
+    // (undocumented)
+    get filter(): readonly T[] | undefined;
+    // (undocumented)
+    abstract getElementProperties(element: T): TypedExplicitElementsArrayUiAction.ElementProperties<T> | undefined;
+    // (undocumented)
+    abstract getElementPropertiesArray(): TypedExplicitElementsArrayUiAction.ElementProperties<T>[];
+    // (undocumented)
+    protected notifyElementPush(element: T, caption: string, title: string): void;
+    // (undocumented)
+    protected notifyElementsPush(filter: T[] | undefined | null): void;
+    // (undocumented)
+    pushFilter(value: readonly T[] | undefined): void;
+    // (undocumented)
+    subscribePushEvents(handlersInterface: TypedExplicitElementsArrayUiAction.PushEventHandlersInterface<T>): number;
+    // (undocumented)
+    unsubscribePushEvents(subscriptionId: MultiEvent.SubscriptionId): void;
+}
+
+// @public (undocumented)
+export namespace TypedExplicitElementsArrayUiAction {
+    // (undocumented)
+    export interface ElementProperties<T> {
+        // (undocumented)
+        caption: string;
+        // (undocumented)
+        element: T;
+        // (undocumented)
+        title: string;
+    }
+    // (undocumented)
+    export type ElementPushEventHandler<T> = (this: void, element: T, caption: string, title: string) => void;
+    // (undocumented)
+    export type ElementsPushEventHandler = (this: void) => void;
+    // (undocumented)
+    export type FilterPushEventHandler<T> = (this: void, value: readonly T[] | undefined) => void;
+    // (undocumented)
+    export interface PushEventHandlersInterface<T> extends TypedArrayUiAction.PushEventHandlersInterface<T> {
+        // (undocumented)
+        element?: ElementPushEventHandler<T>;
+        // (undocumented)
+        elements?: ElementsPushEventHandler;
+        // (undocumented)
+        filter?: FilterPushEventHandler<T>;
+    }
+}
+
 // Warning: (ae-missing-release-tag) "TypedKeyValueArraySettingsGroup" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "TypedKeyValueArraySettingsGroup" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -38823,6 +38875,20 @@ export namespace TypedKeyValueSettings {
     }
 }
 
+// @public (undocumented)
+export class TypedMappedExplicitElementsArrayUiAction<T> extends TypedExplicitElementsArrayUiAction<T> {
+    // (undocumented)
+    get elementPropertiesMap(): Map<T, TypedExplicitElementsArrayUiAction.ElementProperties<T>>;
+    // (undocumented)
+    getElementProperties(element: T): TypedExplicitElementsArrayUiAction.ElementProperties<T> | undefined;
+    // (undocumented)
+    getElementPropertiesArray(): TypedExplicitElementsArrayUiAction.ElementProperties<T>[];
+    // (undocumented)
+    pushElement(element: T, caption: string, title: string): void;
+    // (undocumented)
+    pushElements(elementPropertiesArray: TypedExplicitElementsArrayUiAction.ElementProperties<T>[], filter?: T[] | undefined | null): void;
+}
+
 // Warning: (ae-missing-release-tag) "UiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "UiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -38874,6 +38940,8 @@ export abstract class UiAction {
     get inputtedText(): string;
     // (undocumented)
     isValueOk(): boolean;
+    // (undocumented)
+    isValueOkOrDisabled(): boolean;
     // (undocumented)
     get placeholder(): string;
     // (undocumented)
