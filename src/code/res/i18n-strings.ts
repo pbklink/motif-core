@@ -2273,6 +2273,8 @@ export const enum StringId {
     NumericRangeValueScanFieldConditionOperandsTitle_Max,
     DateRangeValueScanFieldConditionOperandsTitle_Min,
     DateRangeValueScanFieldConditionOperandsTitle_Max,
+    NumericComparisonValueScanFieldConditionOperandsCaption_Operator,
+    NumericComparisonValueScanFieldConditionOperandsTitle_Operator,
 }
 
 /** @public */
@@ -13596,56 +13598,67 @@ export namespace I18nStrings {
                 en: 'Specify one or more values',
             }
         },
-        ValueScanFieldConditionOperandsCaption_Value : {
+        ValueScanFieldConditionOperandsCaption_Value: {
             id: StringId.ValueScanFieldConditionOperandsCaption_Value, translations: {
                 en: 'Value',
             }
         },
-        NumericValueScanFieldConditionOperandsTitle_Value : {
+        NumericValueScanFieldConditionOperandsTitle_Value: {
             id: StringId.NumericValueScanFieldConditionOperandsTitle_Value, translations: {
                 en: 'Specify a numeric value',
             }
         },
-        DateValueScanFieldConditionOperandsTitle_Value : {
+        DateValueScanFieldConditionOperandsTitle_Value: {
             id: StringId.DateValueScanFieldConditionOperandsTitle_Value, translations: {
                 en: 'Specify a date value',
             }
         },
-        TextValueScanFieldConditionOperandsTitle_Value : {
+        TextValueScanFieldConditionOperandsTitle_Value: {
             id: StringId.TextValueScanFieldConditionOperandsTitle_Value, translations: {
                 en: 'Specify a text value',
             }
         },
-        RangeScanFieldConditionOperandsCaption_Min : {
+        RangeScanFieldConditionOperandsCaption_Min: {
             id: StringId.RangeScanFieldConditionOperandsCaption_Min, translations: {
                 en: 'Min',
             }
         },
-        RangeScanFieldConditionOperandsCaption_Max : {
+        RangeScanFieldConditionOperandsCaption_Max: {
             id: StringId.RangeScanFieldConditionOperandsCaption_Max, translations: {
                 en: 'Max',
             }
         },
-        NumericRangeValueScanFieldConditionOperandsTitle_Min : {
+        NumericRangeValueScanFieldConditionOperandsTitle_Min: {
             id: StringId.NumericRangeValueScanFieldConditionOperandsTitle_Min, translations: {
                 en: 'Specify a numeric minimum or clear to specify no minimum',
             }
         },
-        NumericRangeValueScanFieldConditionOperandsTitle_Max : {
+        NumericRangeValueScanFieldConditionOperandsTitle_Max: {
             id: StringId.NumericRangeValueScanFieldConditionOperandsTitle_Max, translations: {
                 en: 'Specify a numeric maximum or clear to specify no maximum',
             }
         },
-        DateRangeValueScanFieldConditionOperandsTitle_Min : {
+        DateRangeValueScanFieldConditionOperandsTitle_Min: {
             id: StringId.DateRangeValueScanFieldConditionOperandsTitle_Min, translations: {
                 en: 'Specify a date minimum or clear to specify no minimum',
             }
         },
-        DateRangeValueScanFieldConditionOperandsTitle_Max : {
+        DateRangeValueScanFieldConditionOperandsTitle_Max: {
             id: StringId.DateRangeValueScanFieldConditionOperandsTitle_Max, translations: {
                 en: 'Specify a date maximum or clear to specify no maximum',
             }
         },
+        NumericComparisonValueScanFieldConditionOperandsCaption_Operator: {
+            id: StringId.NumericComparisonValueScanFieldConditionOperandsCaption_Operator, translations: {
+                en: 'Operator',
+            }
+        },
+        NumericComparisonValueScanFieldConditionOperandsTitle_Operator: {
+            id: StringId.NumericComparisonValueScanFieldConditionOperandsTitle_Operator, translations: {
+                en: 'Specify the operator to use to compare the field value with the specified value',
+            }
+        },
+
     } as const;
 
     const recs: readonly Rec[] = Object.values(recsObject);

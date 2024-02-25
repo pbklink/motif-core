@@ -5,7 +5,7 @@
  */
 
 import { CurrencyId, ExchangeId, MarketBoardId, MarketId } from '../../adi/adi-internal-api';
-import { AssertInternalError, ComparableList, Ok, Result, SourceTzOffsetDateTime, UnreachableCaseError } from '../../sys/sys-internal-api';
+import { AssertInternalError, ComparableList, Ok, Result, SourceTzOffsetDate, UnreachableCaseError } from '../../sys/sys-internal-api';
 import { ScanFormula } from '../formula/internal-api';
 import { ScanFieldSetLoadError } from './common/internal-api';
 import {
@@ -956,7 +956,7 @@ export namespace StandAloneScanFieldSet {
         createDateWithEquals(
             _field: ScanField,
             operatorId: DateScanFieldCondition.ValueOperands.OperatorId,
-            value: SourceTzOffsetDateTime,
+            value: SourceTzOffsetDate,
         ): Result<DateScanFieldCondition> {
             const operands: DateScanFieldCondition.ValueOperands = {
                 typeId: ScanFieldCondition.Operands.TypeId.DateValue,
@@ -975,8 +975,8 @@ export namespace StandAloneScanFieldSet {
         createDateWithRange(
             _field: ScanField,
             operatorId: DateScanFieldCondition.RangeOperands.OperatorId,
-            min: SourceTzOffsetDateTime | undefined,
-            max: SourceTzOffsetDateTime | undefined,
+            min: SourceTzOffsetDate | undefined,
+            max: SourceTzOffsetDate | undefined,
         ): Result<DateScanFieldCondition> {
             const operands: DateScanFieldCondition.RangeOperands = {
                 typeId: ScanFieldCondition.Operands.TypeId.DateRange,

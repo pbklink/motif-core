@@ -6486,7 +6486,7 @@ export class DateCorrectnessTableValue extends BaseDateCorrectnessTableValue {
 // @public (undocumented)
 export interface DateFieldEqualsScanCondition extends DateFieldScanCondition {
     // (undocumented)
-    readonly target: SourceTzOffsetDateTime;
+    readonly target: SourceTzOffsetDate;
     // (undocumented)
     readonly typeId: ScanCondition.TypeId.DateFieldEquals;
 }
@@ -6503,9 +6503,9 @@ export namespace DateFieldEqualsScanCondition {
 // @public (undocumented)
 export interface DateFieldInRangeScanCondition extends DateFieldScanCondition {
     // (undocumented)
-    readonly max: SourceTzOffsetDateTime | undefined;
+    readonly max: SourceTzOffsetDate | undefined;
     // (undocumented)
-    readonly min: SourceTzOffsetDateTime | undefined;
+    readonly min: SourceTzOffsetDate | undefined;
     // (undocumented)
     readonly typeId: ScanCondition.TypeId.DateFieldInRange;
 }
@@ -6610,9 +6610,9 @@ export namespace DateScanFieldCondition {
     // (undocumented)
     export interface RangeOperands extends Operands {
         // (undocumented)
-        max: SourceTzOffsetDateTime | undefined;
+        max: SourceTzOffsetDate | undefined;
         // (undocumented)
-        min: SourceTzOffsetDateTime | undefined;
+        min: SourceTzOffsetDate | undefined;
         // (undocumented)
         readonly typeId: ScanFieldCondition.Operands.TypeId.DateRange;
     }
@@ -6630,7 +6630,7 @@ export namespace DateScanFieldCondition {
         // (undocumented)
         readonly typeId: ScanFieldCondition.Operands.TypeId.DateValue;
         // (undocumented)
-        value: SourceTzOffsetDateTime;
+        value: SourceTzOffsetDate;
     }
     // (undocumented)
     export namespace ValueOperands {
@@ -6672,7 +6672,7 @@ export namespace DateSubbedScanField {
 // @public (undocumented)
 export interface DateSubFieldEqualsScanCondition extends DateSubfieldScanCondition {
     // (undocumented)
-    readonly target: SourceTzOffsetDateTime;
+    readonly target: SourceTzOffsetDate;
     // (undocumented)
     readonly typeId: ScanCondition.TypeId.DateSubFieldEquals;
 }
@@ -6704,9 +6704,9 @@ export namespace DateSubFieldHasValueScanCondition {
 // @public (undocumented)
 export interface DateSubFieldInRangeScanCondition extends DateSubfieldScanCondition {
     // (undocumented)
-    readonly max: SourceTzOffsetDateTime | undefined;
+    readonly max: SourceTzOffsetDate | undefined;
     // (undocumented)
-    readonly min: SourceTzOffsetDateTime | undefined;
+    readonly min: SourceTzOffsetDate | undefined;
     // (undocumented)
     readonly typeId: ScanCondition.TypeId.DateSubFieldInRange;
 }
@@ -25672,11 +25672,11 @@ export namespace ScanField {
         // (undocumented)
         createCurrencyOverlaps(field: ScanField, operatorId: OverlapsScanFieldCondition.Operands.OperatorId, values: readonly CurrencyId[]): Result<CurrencyOverlapsScanFieldCondition>;
         // (undocumented)
-        createDateWithEquals(field: ScanField, operatorId: DateScanFieldCondition.ValueOperands.OperatorId, value: SourceTzOffsetDateTime): Result<DateScanFieldCondition>;
+        createDateWithEquals(field: ScanField, operatorId: DateScanFieldCondition.ValueOperands.OperatorId, value: SourceTzOffsetDate): Result<DateScanFieldCondition>;
         // (undocumented)
         createDateWithHasValue(field: ScanField, operatorId: DateScanFieldCondition.HasValueOperands.OperatorId): Result<DateScanFieldCondition>;
         // (undocumented)
-        createDateWithRange(field: ScanField, operatorId: DateScanFieldCondition.RangeOperands.OperatorId, min: SourceTzOffsetDateTime | undefined, max: SourceTzOffsetDateTime | undefined): Result<DateScanFieldCondition>;
+        createDateWithRange(field: ScanField, operatorId: DateScanFieldCondition.RangeOperands.OperatorId, min: SourceTzOffsetDate | undefined, max: SourceTzOffsetDate | undefined): Result<DateScanFieldCondition>;
         // (undocumented)
         createExchangeOverlaps(field: ScanField, operatorId: OverlapsScanFieldCondition.Operands.OperatorId, values: readonly ExchangeId[]): Result<ExchangeOverlapsScanFieldCondition>;
         // (undocumented)
@@ -26271,15 +26271,15 @@ export namespace ScanFormula {
         // (undocumented)
         readonly typeId: NodeTypeId.DateFieldEquals;
         // (undocumented)
-        value: SourceTzOffsetDateTime;
+        value: SourceTzOffsetDate;
     }
     // (undocumented)
     export class DateFieldInRangeNode extends DateFieldNode {
         constructor();
         // (undocumented)
-        max: SourceTzOffsetDateTime | undefined;
+        max: SourceTzOffsetDate | undefined;
         // (undocumented)
-        min: SourceTzOffsetDateTime | undefined;
+        min: SourceTzOffsetDate | undefined;
         // (undocumented)
         readonly typeId: NodeTypeId.DateFieldInRange;
     }
@@ -26313,7 +26313,7 @@ export namespace ScanFormula {
         // (undocumented)
         readonly typeId: NodeTypeId.DateSubFieldEquals;
         // (undocumented)
-        value: SourceTzOffsetDateTime;
+        value: SourceTzOffsetDate;
     }
     // (undocumented)
     export class DateSubFieldHasValueNode extends DateSubFieldNode {
@@ -26330,9 +26330,9 @@ export namespace ScanFormula {
     export class DateSubFieldInRangeNode extends DateSubFieldNode {
         constructor();
         // (undocumented)
-        max: SourceTzOffsetDateTime | undefined;
+        max: SourceTzOffsetDate | undefined;
         // (undocumented)
-        min: SourceTzOffsetDateTime | undefined;
+        min: SourceTzOffsetDate | undefined;
         // (undocumented)
         readonly typeId: NodeTypeId.DateSubFieldInRange;
     }
@@ -29256,6 +29256,8 @@ export namespace SourceTzOffsetDate {
     export function isUndefinableEqual(left: SourceTzOffsetDate | undefined, right: SourceTzOffsetDate | undefined): boolean;
     // (undocumented)
     export function newUndefinable(value: SourceTzOffsetDate | undefined): SourceTzOffsetDate | undefined;
+    // (undocumented)
+    export function toUtcYYYYMMDDString(value: SourceTzOffsetDate): string;
 }
 
 // Warning: (ae-missing-release-tag) "SourceTzOffsetDateCorrectnessTableField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -29506,11 +29508,11 @@ export namespace StandAloneScanFieldSet {
         // (undocumented)
         createCurrencyOverlaps(_field: ScanField, operatorId: OverlapsScanFieldCondition.Operands.OperatorId, values: readonly CurrencyId[]): Result<CurrencyOverlapsScanFieldCondition>;
         // (undocumented)
-        createDateWithEquals(_field: ScanField, operatorId: DateScanFieldCondition.ValueOperands.OperatorId, value: SourceTzOffsetDateTime): Result<DateScanFieldCondition>;
+        createDateWithEquals(_field: ScanField, operatorId: DateScanFieldCondition.ValueOperands.OperatorId, value: SourceTzOffsetDate): Result<DateScanFieldCondition>;
         // (undocumented)
         createDateWithHasValue(_field: ScanField, operatorId: DateScanFieldCondition.HasValueOperands.OperatorId): Result<DateScanFieldCondition>;
         // (undocumented)
-        createDateWithRange(_field: ScanField, operatorId: DateScanFieldCondition.RangeOperands.OperatorId, min: SourceTzOffsetDateTime | undefined, max: SourceTzOffsetDateTime | undefined): Result<DateScanFieldCondition>;
+        createDateWithRange(_field: ScanField, operatorId: DateScanFieldCondition.RangeOperands.OperatorId, min: SourceTzOffsetDate | undefined, max: SourceTzOffsetDate | undefined): Result<DateScanFieldCondition>;
         // (undocumented)
         createExchangeOverlaps(_field: ScanField, operatorId: OverlapsScanFieldCondition.Operands.OperatorId, values: readonly ExchangeId[]): Result<ExchangeOverlapsScanFieldCondition>;
         // (undocumented)
@@ -31567,6 +31569,10 @@ export const enum StringId {
     NotReadable = 160,
     // (undocumented)
     NotString = 113,
+    // (undocumented)
+    NumericComparisonValueScanFieldConditionOperandsCaption_Operator = 2265,
+    // (undocumented)
+    NumericComparisonValueScanFieldConditionOperandsTitle_Operator = 2266,
     // (undocumented)
     NumericRangeValueScanFieldConditionOperandsTitle_Max = 2262,
     // (undocumented)
@@ -40488,7 +40494,7 @@ export namespace ZenithConvert {
         // (undocumented)
         export namespace DateYYYYMMDD {
             // (undocumented)
-            export function fromDate(value: globalThis.Date): void;
+            export function fromSourceTzOffsetDate(value: SourceTzOffsetDate): ZenithProtocol.DateYYYYMMDD;
             // (undocumented)
             export function toSourceTzOffsetDate(value: ZenithProtocol.DateYYYYMMDD): SourceTzOffsetDate | undefined;
         }

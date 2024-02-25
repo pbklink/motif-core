@@ -5,7 +5,7 @@
  */
 
 import { CurrencyId, ExchangeId, MarketBoardId, MarketId } from '../../../adi/adi-internal-api';
-import { PickEnum, SourceTzOffsetDateTime, UnreachableCaseError, isArrayEqualUniquely } from '../../../sys/sys-internal-api';
+import { PickEnum, SourceTzOffsetDate, UnreachableCaseError, isArrayEqualUniquely } from '../../../sys/sys-internal-api';
 import { ScanFormula } from '../../formula/internal-api';
 
 export interface ScanCondition {
@@ -275,30 +275,30 @@ export interface DateFieldScanCondition extends FieldScanCondition {
 
 export interface DateFieldEqualsScanCondition extends DateFieldScanCondition {
     readonly typeId: ScanCondition.TypeId.DateFieldEquals;
-    readonly target: SourceTzOffsetDateTime;
+    readonly target: SourceTzOffsetDate;
 }
 
 export namespace DateFieldEqualsScanCondition {
     export function isEqual(left: DateFieldEqualsScanCondition, right: DateFieldEqualsScanCondition) {
         return (
             FieldScanCondition.isEqual(left, right) &&
-            SourceTzOffsetDateTime.isEqual(left.target, right.target)
+            SourceTzOffsetDate.isEqual(left.target, right.target)
         );
     }
 }
 
 export interface DateFieldInRangeScanCondition extends DateFieldScanCondition {
     readonly typeId: ScanCondition.TypeId.DateFieldInRange;
-    readonly min: SourceTzOffsetDateTime | undefined;
-    readonly max: SourceTzOffsetDateTime | undefined;
+    readonly min: SourceTzOffsetDate | undefined;
+    readonly max: SourceTzOffsetDate | undefined;
 }
 
 export namespace DateFieldInRangeScanCondition {
     export function isEqual(left: DateFieldInRangeScanCondition, right: DateFieldInRangeScanCondition) {
         return (
             FieldScanCondition.isEqual(left, right) &&
-            SourceTzOffsetDateTime.isUndefinableEqual(left.min, right.min) &&
-            SourceTzOffsetDateTime.isUndefinableEqual(left.max, right.max)
+            SourceTzOffsetDate.isUndefinableEqual(left.min, right.min) &&
+            SourceTzOffsetDate.isUndefinableEqual(left.max, right.max)
         );
     }
 }
@@ -482,30 +482,30 @@ export namespace DateSubFieldHasValueScanCondition {
 
 export interface DateSubFieldEqualsScanCondition extends DateSubfieldScanCondition {
     readonly typeId: ScanCondition.TypeId.DateSubFieldEquals;
-    readonly target: SourceTzOffsetDateTime;
+    readonly target: SourceTzOffsetDate;
 }
 
 export namespace DateSubFieldEqualsScanCondition {
     export function isEqual(left: DateSubFieldEqualsScanCondition, right: DateSubFieldEqualsScanCondition) {
         return (
             SubFieldScanCondition.isEqual(left, right) &&
-            SourceTzOffsetDateTime.isEqual(left.target, right.target)
+            SourceTzOffsetDate.isEqual(left.target, right.target)
         );
     }
 }
 
 export interface DateSubFieldInRangeScanCondition extends DateSubfieldScanCondition {
     readonly typeId: ScanCondition.TypeId.DateSubFieldInRange;
-    readonly min: SourceTzOffsetDateTime | undefined;
-    readonly max: SourceTzOffsetDateTime | undefined;
+    readonly min: SourceTzOffsetDate | undefined;
+    readonly max: SourceTzOffsetDate | undefined;
 }
 
 export namespace DateSubFieldInRangeScanCondition {
     export function isEqual(left: DateSubFieldInRangeScanCondition, right: DateSubFieldInRangeScanCondition) {
         return (
             SubFieldScanCondition.isEqual(left, right) &&
-            SourceTzOffsetDateTime.isUndefinableEqual(left.min, right.min) &&
-            SourceTzOffsetDateTime.isUndefinableEqual(left.max, right.max)
+            SourceTzOffsetDate.isUndefinableEqual(left.min, right.min) &&
+            SourceTzOffsetDate.isUndefinableEqual(left.max, right.max)
         );
     }
 }

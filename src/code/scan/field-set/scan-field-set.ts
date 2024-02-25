@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, Err, Integer, Ok, Result, SourceTzOffsetDateTime, UnreachableCaseError } from '../../sys/sys-internal-api';
+import { AssertInternalError, Err, Integer, Ok, Result, SourceTzOffsetDate, UnreachableCaseError } from '../../sys/sys-internal-api';
 import { ScanFormula } from '../formula/internal-api';
 import { ScanFieldSetLoadError, ScanFieldSetLoadErrorTypeId } from './common/internal-api';
 import {
@@ -808,7 +808,7 @@ export namespace ScanFieldSet {
             return tryGetFieldResult.error;
         } else {
             const field = tryGetFieldResult.value;
-            const value = SourceTzOffsetDateTime.createCopy(node.value);
+            const value = SourceTzOffsetDate.createCopy(node.value);
             const conditionFactory = fieldSet.conditionFactory;
             let createConditionResult: Result<ScanFieldCondition>;
             if (not) {
@@ -831,8 +831,8 @@ export namespace ScanFieldSet {
             return tryGetFieldResult.error;
         } else {
             const field = tryGetFieldResult.value;
-            const min = SourceTzOffsetDateTime.newUndefinable(node.min);
-            const max = SourceTzOffsetDateTime.newUndefinable(node.max);
+            const min = SourceTzOffsetDate.newUndefinable(node.min);
+            const max = SourceTzOffsetDate.newUndefinable(node.max);
             const conditionFactory = fieldSet.conditionFactory;
             let createConditionResult: Result<ScanFieldCondition>;
             if (not) {
@@ -877,7 +877,7 @@ export namespace ScanFieldSet {
             return tryGetFieldResult.error;
         } else {
             const field = tryGetFieldResult.value;
-            const value = SourceTzOffsetDateTime.createCopy(node.value);
+            const value = SourceTzOffsetDate.createCopy(node.value);
             const conditionFactory = fieldSet.conditionFactory;
             let createConditionResult: Result<ScanFieldCondition>;
             if (not) {
@@ -900,8 +900,8 @@ export namespace ScanFieldSet {
             return tryGetFieldResult.error;
         } else {
             const field = tryGetFieldResult.value;
-            const min = SourceTzOffsetDateTime.newUndefinable(node.min);
-            const max = SourceTzOffsetDateTime.newUndefinable(node.max);
+            const min = SourceTzOffsetDate.newUndefinable(node.min);
+            const max = SourceTzOffsetDate.newUndefinable(node.max);
             const conditionFactory = fieldSet.conditionFactory;
             let createConditionResult: Result<ScanFieldCondition>;
             if (not) {

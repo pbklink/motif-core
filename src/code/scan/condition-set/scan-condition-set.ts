@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { Err, Integer, Ok, Result, SourceTzOffsetDateTime, UnreachableCaseError } from '../../sys/sys-internal-api';
+import { Err, Integer, Ok, Result, SourceTzOffsetDate, UnreachableCaseError } from '../../sys/sys-internal-api';
 import { ScanFormula } from '../formula/internal-api';
 import { ScanConditionSetLoadError, ScanConditionSetLoadErrorTypeId } from './common/internal-api';
 import {
@@ -486,7 +486,7 @@ export namespace ScanConditionSet {
                 const dateFieldEqualsCondition  = condition as DateFieldEqualsScanCondition;
                 const dateFieldEqualsNode = new ScanFormula.DateFieldEqualsNode();
                 dateFieldEqualsNode.fieldId = dateFieldEqualsCondition.fieldId;
-                dateFieldEqualsNode.value = SourceTzOffsetDateTime.createCopy(dateFieldEqualsCondition.target);
+                dateFieldEqualsNode.value = SourceTzOffsetDate.createCopy(dateFieldEqualsCondition.target);
                 return {
                     node: dateFieldEqualsNode,
                     requiresNot: dateFieldEqualsCondition.not,
@@ -496,8 +496,8 @@ export namespace ScanConditionSet {
                 const dateFieldInRangeCondition  = condition as DateFieldInRangeScanCondition;
                 const dateFieldInRangeNode = new ScanFormula.DateFieldInRangeNode();
                 dateFieldInRangeNode.fieldId = dateFieldInRangeCondition.fieldId;
-                dateFieldInRangeNode.min = SourceTzOffsetDateTime.newUndefinable(dateFieldInRangeCondition.min);
-                dateFieldInRangeNode.max = SourceTzOffsetDateTime.newUndefinable(dateFieldInRangeCondition.max);
+                dateFieldInRangeNode.min = SourceTzOffsetDate.newUndefinable(dateFieldInRangeCondition.min);
+                dateFieldInRangeNode.max = SourceTzOffsetDate.newUndefinable(dateFieldInRangeCondition.max);
                 return {
                     node: dateFieldInRangeNode,
                     requiresNot: dateFieldInRangeCondition.not,
@@ -623,7 +623,7 @@ export namespace ScanConditionSet {
                 const dateSubFieldEqualsNode = new ScanFormula.DateSubFieldEqualsNode();
                 dateSubFieldEqualsNode.fieldId = dateSubFieldEqualsCondition.fieldId;
                 dateSubFieldEqualsNode.subFieldId = dateSubFieldEqualsCondition.subFieldId;
-                dateSubFieldEqualsNode.value = SourceTzOffsetDateTime.createCopy(dateSubFieldEqualsCondition.target);
+                dateSubFieldEqualsNode.value = SourceTzOffsetDate.createCopy(dateSubFieldEqualsCondition.target);
                 return {
                     node: dateSubFieldEqualsNode,
                     requiresNot: dateSubFieldEqualsCondition.not,
@@ -634,8 +634,8 @@ export namespace ScanConditionSet {
                 const datesubFieldInRangeNode = new ScanFormula.DateSubFieldInRangeNode();
                 datesubFieldInRangeNode.fieldId = datesubFieldInRangeCondition.fieldId;
                 datesubFieldInRangeNode.subFieldId = datesubFieldInRangeCondition.subFieldId;
-                datesubFieldInRangeNode.min = SourceTzOffsetDateTime.newUndefinable(datesubFieldInRangeCondition.min);
-                datesubFieldInRangeNode.max = SourceTzOffsetDateTime.newUndefinable(datesubFieldInRangeCondition.max);
+                datesubFieldInRangeNode.min = SourceTzOffsetDate.newUndefinable(datesubFieldInRangeCondition.min);
+                datesubFieldInRangeNode.max = SourceTzOffsetDate.newUndefinable(datesubFieldInRangeCondition.max);
                 return {
                     node: datesubFieldInRangeNode,
                     requiresNot: datesubFieldInRangeCondition.not,

@@ -134,8 +134,9 @@ export namespace ZenithConvert {
                 return SourceTzOffsetDate.createFromIso8601(value);
                 // return new globalThis.Date(globalThis.Date.parse(value)); // switch to SourceTzOffsetDateTime
             }
-            export function fromDate(value: globalThis.Date) {
-                throw new NotImplementedError('ZCDDYMDFD699233382323');
+
+            export function fromSourceTzOffsetDate(value: SourceTzOffsetDate): ZenithProtocol.DateYYYYMMDD {
+                return SourceTzOffsetDate.toUtcYYYYMMDDString(value);
             }
         }
 

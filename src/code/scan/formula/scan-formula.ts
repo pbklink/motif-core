@@ -6,7 +6,7 @@
 
 import { CurrencyId, ExchangeId, MarketBoardId, MarketId } from '../../adi/adi-internal-api';
 import { StringId, Strings } from '../../res/res-internal-api';
-import { EnumInfoOutOfOrderError, PickEnum, SourceTzOffsetDateTime } from '../../sys/sys-internal-api';
+import { EnumInfoOutOfOrderError, PickEnum, SourceTzOffsetDate } from '../../sys/sys-internal-api';
 
 export namespace ScanFormula {
     export const enum NodeTypeId {
@@ -366,7 +366,7 @@ export namespace ScanFormula {
 
     export class DateFieldEqualsNode extends DateFieldNode {
         declare readonly typeId: NodeTypeId.DateFieldEquals;
-        value: SourceTzOffsetDateTime;
+        value: SourceTzOffsetDate;
 
         constructor() {
             super(NodeTypeId.DateFieldEquals);
@@ -375,8 +375,8 @@ export namespace ScanFormula {
 
     export class DateFieldInRangeNode extends DateFieldNode {
         declare readonly typeId: NodeTypeId.DateFieldInRange;
-        min: SourceTzOffsetDateTime | undefined;
-        max: SourceTzOffsetDateTime | undefined;
+        min: SourceTzOffsetDate | undefined;
+        max: SourceTzOffsetDate | undefined;
 
         constructor() {
             super(NodeTypeId.DateFieldInRange);
@@ -511,7 +511,7 @@ export namespace ScanFormula {
 
     export class DateSubFieldEqualsNode extends DateSubFieldNode {
         declare readonly typeId: NodeTypeId.DateSubFieldEquals;
-        value: SourceTzOffsetDateTime;
+        value: SourceTzOffsetDate;
 
         constructor() {
             super(NodeTypeId.DateSubFieldEquals);
@@ -520,8 +520,8 @@ export namespace ScanFormula {
 
     export class DateSubFieldInRangeNode extends DateSubFieldNode {
         declare readonly typeId: NodeTypeId.DateSubFieldInRange;
-        min: SourceTzOffsetDateTime | undefined; // | DateNode;
-        max: SourceTzOffsetDateTime | undefined; // | DateNode;
+        min: SourceTzOffsetDate | undefined; // | DateNode;
+        max: SourceTzOffsetDate | undefined; // | DateNode;
 
         constructor() {
             super(NodeTypeId.DateSubFieldInRange);

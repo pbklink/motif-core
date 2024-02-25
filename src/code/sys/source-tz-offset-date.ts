@@ -6,7 +6,7 @@
 
 import { Iso8601 } from './iso8601';
 import { ComparisonResult, Integer } from './types';
-import { compareDate, isDateEqual, mSecsPerMin, newDate } from './utils';
+import { compareDate, dateToUtcYYYYMMDD, isDateEqual, mSecsPerMin, newDate } from './utils';
 
 /** @public */
 export interface SourceTzOffsetDate {
@@ -60,6 +60,10 @@ export namespace SourceTzOffsetDate {
         } else {
             return createCopy(value);
         }
+    }
+
+    export function toUtcYYYYMMDDString(value: SourceTzOffsetDate) {
+        return dateToUtcYYYYMMDD(value.utcMidnight);
     }
 
     export function isEqual(left: SourceTzOffsetDate, right: SourceTzOffsetDate) {
