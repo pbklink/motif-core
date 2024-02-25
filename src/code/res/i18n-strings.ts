@@ -182,6 +182,9 @@ export const enum StringId {
     Cfi,
     Partial,
     Exact,
+    IgnoreCase,
+    FromStart,
+    FromEnd,
     Full,
     Options,
     Page,
@@ -2275,6 +2278,11 @@ export const enum StringId {
     DateRangeValueScanFieldConditionOperandsTitle_Max,
     NumericComparisonValueScanFieldConditionOperandsCaption_Operator,
     NumericComparisonValueScanFieldConditionOperandsTitle_Operator,
+    TextContainsScanFieldConditionOperandsTitle_Value,
+    TextContainsScanFieldConditionOperandsTitle_FromStart,
+    TextContainsScanFieldConditionOperandsTitle_FromEnd,
+    TextContainsScanFieldConditionOperandsTitle_Exact,
+    TextContainsScanFieldConditionOperandsTitle_IgnoreCase,
 }
 
 /** @public */
@@ -3184,6 +3192,21 @@ export namespace I18nStrings {
         Exact: {
             id: StringId.Exact, translations: {
                 en: 'Exact',
+            }
+        },
+        IgnoreCase: {
+            id: StringId.IgnoreCase, translations: {
+                en: 'Ignore case',
+            }
+        },
+        FromStart: {
+            id: StringId.FromStart, translations: {
+                en: 'From start',
+            }
+        },
+        FromEnd: {
+            id: StringId.FromEnd, translations: {
+                en: 'From end',
             }
         },
         Full: {
@@ -13656,6 +13679,31 @@ export namespace I18nStrings {
         NumericComparisonValueScanFieldConditionOperandsTitle_Operator: {
             id: StringId.NumericComparisonValueScanFieldConditionOperandsTitle_Operator, translations: {
                 en: 'Specify the operator to use to compare the field value with the specified value',
+            }
+        },
+        TextContainsScanFieldConditionOperandsTitle_Value: {
+            id: StringId.TextContainsScanFieldConditionOperandsTitle_Value, translations: {
+                en: 'Text which field value has to contain',
+            }
+        },
+        TextContainsScanFieldConditionOperandsTitle_FromStart: {
+            id: StringId.TextContainsScanFieldConditionOperandsTitle_FromStart, translations: {
+                en: 'Field value has to start with specified text',
+            }
+        },
+        TextContainsScanFieldConditionOperandsTitle_FromEnd: {
+            id: StringId.TextContainsScanFieldConditionOperandsTitle_FromEnd, translations: {
+                en: 'Field value has to end with specified text',
+            }
+        },
+        TextContainsScanFieldConditionOperandsTitle_Exact: {
+            id: StringId.TextContainsScanFieldConditionOperandsTitle_Exact, translations: {
+                en: 'Field value must fully match specified text',
+            }
+        },
+        TextContainsScanFieldConditionOperandsTitle_IgnoreCase: {
+            id: StringId.TextContainsScanFieldConditionOperandsTitle_IgnoreCase, translations: {
+                en: 'Specify whether case of characters in text should be ignored',
             }
         },
 

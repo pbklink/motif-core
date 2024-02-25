@@ -130,7 +130,7 @@ export namespace ScanFormulaZenithEncoding {
     function encodeBooleanNode(node: ScanFormula.BooleanNode): ZenithEncodedScanFormula.BooleanTupleNode {
         switch (node.typeId) {
             case ScanFormula.NodeTypeId.Not: return encodeSingleOperandBooleanNode(ZenithEncodedScanFormula.NotTupleNodeType, node as ScanFormula.SingleOperandBooleanNode);
-            case ScanFormula.NodeTypeId.Xor: return encodeLeftRightOperandBooleanNode(ZenithEncodedScanFormula.NotTupleNodeType, node as ScanFormula.LeftRightOperandBooleanNode);
+            case ScanFormula.NodeTypeId.Xor: return encodeLeftRightOperandBooleanNode(ZenithEncodedScanFormula.XorTupleNodeType, node as ScanFormula.LeftRightOperandBooleanNode);
             case ScanFormula.NodeTypeId.And: return encodeMultiOperandBooleanNode(ZenithEncodedScanFormula.AndTupleNodeType, node as ScanFormula.MultiOperandBooleanNode);
             case ScanFormula.NodeTypeId.Or: return encodeMultiOperandBooleanNode(ZenithEncodedScanFormula.OrTupleNodeType, node as ScanFormula.MultiOperandBooleanNode);
             case ScanFormula.NodeTypeId.NumericEquals: return encodeNumericComparisonNode(ZenithEncodedScanFormula.EqualTupleNodeType, node as ScanFormula.NumericComparisonBooleanNode);
@@ -190,7 +190,7 @@ export namespace ScanFormulaZenithEncoding {
         return [type, param];
     }
 
-    function encodeLeftRightOperandBooleanNode(type: typeof ZenithEncodedScanFormula.NotTupleNodeType, node: ScanFormula.LeftRightOperandBooleanNode): ZenithEncodedScanFormula.LogicalTupleNode {
+    function encodeLeftRightOperandBooleanNode(type: typeof ZenithEncodedScanFormula.XorTupleNodeType, node: ScanFormula.LeftRightOperandBooleanNode): ZenithEncodedScanFormula.LogicalTupleNode {
         const leftParam = encodeBooleanNode(node.leftOperand);
         const rightParam = encodeBooleanNode(node.rightOperand);
         return [type, leftParam, rightParam];

@@ -6,7 +6,7 @@
 
 import { CurrencyId, ExchangeId, MarketBoardId, MarketId } from '../../adi/adi-internal-api';
 import { StringId, Strings } from '../../res/res-internal-api';
-import { EnumInfoOutOfOrderError, PickEnum, SourceTzOffsetDate } from '../../sys/sys-internal-api';
+import { EnumInfoOutOfOrderError, PickEnum, SourceTzOffsetDate, UnreachableCaseError } from '../../sys/sys-internal-api';
 
 export namespace ScanFormula {
     export const enum NodeTypeId {
@@ -749,6 +749,64 @@ export namespace ScanFormula {
         FromStart,
         FromEnd,
         Exact,
+    }
+
+    export namespace TextContainsAs {
+        export function getFromStart(asId: TextContainsAsId) {
+            return asId === ScanFormula.TextContainsAsId.FromStart || asId === ScanFormula.TextContainsAsId.Exact;
+        }
+
+        export function setFromStart(asId: TextContainsAsId, value: boolean): TextContainsAsId {
+            switch (asId) {
+                case ScanFormula.TextContainsAsId.None:
+                    return value ? ScanFormula.TextContainsAsId.FromStart : asId;
+                case ScanFormula.TextContainsAsId.FromStart:
+                    return value ? asId : ScanFormula.TextContainsAsId.None;
+                case ScanFormula.TextContainsAsId.FromEnd:
+                    return value ? ScanFormula.TextContainsAsId.Exact : asId;
+                case ScanFormula.TextContainsAsId.Exact:
+                    return value ? asId : ScanFormula.TextContainsAsId.FromEnd;
+                default:
+                    throw new UnreachableCaseError('SFTCASFS43443', asId);
+            }
+        }
+
+        export function getFromEnd(asId: TextContainsAsId) {
+            return asId === ScanFormula.TextContainsAsId.FromEnd || asId === ScanFormula.TextContainsAsId.Exact;
+        }
+
+        export function setFromEnd(asId: TextContainsAsId, value: boolean): TextContainsAsId {
+            switch (asId) {
+                case ScanFormula.TextContainsAsId.None:
+                    return value ? ScanFormula.TextContainsAsId.FromEnd : asId;
+                case ScanFormula.TextContainsAsId.FromStart:
+                    return value ? ScanFormula.TextContainsAsId.Exact : asId;
+                case ScanFormula.TextContainsAsId.FromEnd:
+                    return value ? asId : ScanFormula.TextContainsAsId.None;
+                case ScanFormula.TextContainsAsId.Exact:
+                    return value ? asId : ScanFormula.TextContainsAsId.FromStart;
+                default:
+                    throw new UnreachableCaseError('SFTCASFE43443', asId);
+            }
+        }
+
+        export function getExact(asId: TextContainsAsId) {
+            return asId === ScanFormula.TextContainsAsId.Exact;
+        }
+
+        export function setExact(asId: TextContainsAsId, value: boolean): TextContainsAsId {
+            switch (asId) {
+                case ScanFormula.TextContainsAsId.None:
+                    return value ? ScanFormula.TextContainsAsId.Exact : asId;
+                case ScanFormula.TextContainsAsId.FromEnd:
+                case ScanFormula.TextContainsAsId.FromStart:
+                    return value ? ScanFormula.TextContainsAsId.Exact : ScanFormula.TextContainsAsId.None;
+                case ScanFormula.TextContainsAsId.Exact:
+                    return value ? asId : ScanFormula.TextContainsAsId.None;
+                default:
+                    throw new UnreachableCaseError('SFTCASE43443', asId);
+            }
+        }
     }
 
     export const enum FieldId {
