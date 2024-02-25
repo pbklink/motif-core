@@ -8,8 +8,8 @@ import { ActiveFaultedStatusId, NotificationDistributionMethodId } from './data-
 import { ZenithProtocolCommon } from './zenith-protocol/internal-api';
 
 export interface NotificationChannel {
-    enabled: boolean,
-    channelId: string;
+    readonly channelId: string;
+    enabled: boolean;
     channelName: string;
     channelDescription: string | undefined;
     userMetadata: ZenithProtocolCommon.UserMetadata;
@@ -33,6 +33,34 @@ export namespace NotificationChannel {
             Low,
             Normal, // default
             High,
+        }
+
+        export function isUndefinableEqual(left: SourceSettings | undefined, right: SourceSettings | undefined) {
+            if (left === undefined) {
+                return right === undefined;
+            } else {
+                if (right === undefined) {
+                    return false;
+                } else {
+                    return isEqual(left, right);
+                }
+            }
+        }
+
+        export function isEqual(left: SourceSettings, right: SourceSettings) {
+            return (
+                left.ttl === right.ttl &&
+                left.urgency === right.urgency &&
+                left.topic === right.topic
+            );
+        }
+
+        export function createCopy(original: SourceSettings): SourceSettings {
+            return {
+                ttl: original.ttl,
+                urgency: original.urgency,
+                topic: original.topic,
+            };
         }
     }
 }

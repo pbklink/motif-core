@@ -99,9 +99,11 @@ export namespace QueryScanMessageConvert {
                         default:
                             throw new UnreachableCaseError('QSMCPM33358', dataMessage.targetTypeId);
                     }
+                    dataMessage.maxMatchCount = parameters.MaxMatchCount,
                     dataMessage.zenithCriteria = parameters.Criteria;
                     dataMessage.zenithRank = parameters.Rank;
-                    dataMessage.notifications = undefined;
+                    const parametersNotifications = parameters.Notifications;
+                    dataMessage.attachedNotificationChannels = parametersNotifications === undefined ? [] : ZenithNotifyConvert.NotificationParameters.to(parametersNotifications);
 
                     return dataMessage;
                 }

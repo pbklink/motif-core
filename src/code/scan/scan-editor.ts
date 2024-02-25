@@ -13,12 +13,14 @@ import {
     ExchangeInfo,
     LitIvemId,
     MarketId,
+    ScanAttachedNotificationChannel,
     ScanTargetTypeId,
     UpdateScanDataDefinition,
     UpdateScanDataItem,
     ZenithEncodedScanFormula,
 } from '../adi/adi-internal-api';
 import { CreateScanDataItem } from '../adi/scan/create-scan-data-item';
+import { NotificationChannelsService } from '../notification-channel/notification-channels-service';
 import { StringId, Strings } from '../res/res-internal-api';
 import { SymbolsService } from '../services/symbols-service';
 import {
@@ -41,6 +43,8 @@ import { ScanConditionSet } from './condition-set/internal-api';
 import { ScanFieldSet } from './field-set/internal-api';
 import { ScanFormula } from './formula/scan-formula';
 import { ScanFormulaZenithEncoding } from './formula/scan-formula-zenith-encoding';
+import { LockerScanAttachedNotificationChannel } from './locker-scan-attached-notification-channel';
+import { LockerScanAttachedNotificationChannelList } from './locker-scan-attached-notification-channel-list';
 import { Scan } from './scan';
 
 // eslint-disable-next-line @typescript-eslint/no-extraneous-class
@@ -70,6 +74,8 @@ export abstract class OpenableScanEditor {
 
 export class ScanEditor extends OpenableScanEditor {
     readonly readonly: boolean; // put here so ESLint does not complain
+    readonly attachedNotificationChannelsList: LockerScanAttachedNotificationChannelList;
+
     private _finalised = false;
 
     private _scan: Scan | undefined;
@@ -123,6 +129,7 @@ export class ScanEditor extends OpenableScanEditor {
     constructor(
         private readonly _adiService: AdiService,
         private readonly _symbolsService: SymbolsService,
+        private readonly _notificationChannelsService: NotificationChannelsService,
         scan: Scan | undefined,
         opener: LockOpenListItem.Opener,
         emptyScanFieldSet: ScanFieldSet | undefined,
@@ -131,6 +138,11 @@ export class ScanEditor extends OpenableScanEditor {
         private readonly _errorEventer: ScanEditor.ErrorEventer | undefined,
     ) {
         super(opener);
+        const attachedNotificationChannelsListLocker: LockOpenListItem.Locker = {
+            lockerName: scan === undefined ? `${opener.lockerName} (editor)` : `${scan.id} (scan)`,
+        }
+        this.attachedNotificationChannelsList = new LockerScanAttachedNotificationChannelList(this._notificationChannelsService, attachedNotificationChannelsListLocker);
+
         this._criteriaAsFieldSet = emptyScanFieldSet;
         this._criteriaAsConditionSet = emptyScanConditionSet;
 
@@ -664,8 +676,7 @@ export class ScanEditor extends OpenableScanEditor {
                     definition.zenithRank = zenithRank;
                     definition.zenithCriteriaSource = this._criteriaSourceId === ScanEditor.SourceId.ZenithText ? this._criteriaAsZenithText : undefined;
                     definition.zenithRankSource = this._rankSourceId === ScanEditor.SourceId.ZenithText ? this._rankAsZenithText : undefined;
-                    definition.notifications = []; // todo
-                    // definition.enabled = this._enabled;
+                    definition.attachedNotificationChannels = this.attachedNotificationChannelsList.toScanAttachedNotificationChannelArray();
 
                     const incubator = new DataItemIncubator<CreateScanDataItem>(this._adiService);
                     const dataItemOrPromise = incubator.incubateSubcribe(definition);
@@ -766,8 +777,7 @@ export class ScanEditor extends OpenableScanEditor {
                         definition.targetTypeId = targetTypeId;
                         definition.targets = this.calculateTargets(targetTypeId);
                         definition.maxMatchCount = this._maxMatchCount;
-                        definition.notifications = []; // todo
-                        // definition.enabled = this._enabled;
+                        definition.attachedNotificationChannels = this.attachedNotificationChannelsList.toScanAttachedNotificationChannelArray();
 
                         const incubator = new DataItemIncubator<UpdateScanDataItem>(this._adiService);
                         const dataItemOrPromise = incubator.incubateSubcribe(definition);
@@ -862,6 +872,22 @@ export class ScanEditor extends OpenableScanEditor {
         }
     }
 
+    getNotificationChannelAt(idx: Integer) {
+        return this.attachedNotificationChannelsList.getAt(idx);
+    }
+
+    attachNotificationChannel(channelId: string, modifier?: Integer) {
+        return this.attachedNotificationChannelsList.attachChannel(channelId, modifier);
+    }
+
+    detachNotificationChannel(channel: LockerScanAttachedNotificationChannel, modifier?: Integer) {
+        this.attachedNotificationChannelsList.detachChannel(channel, modifier);
+    }
+
+    detachAllNotificationChannels(modifier?: Integer) {
+        this.attachedNotificationChannelsList.detachAllChannels(modifier);
+    }
+
     subscribeLifeCycleStateChangeEvents(handler: ScanEditor.StateChangeEventHandler) {
         return this._lifeCycleStateChangeMultiEvent.subscribe(handler);
     }
@@ -938,47 +964,67 @@ export class ScanEditor extends OpenableScanEditor {
                 }
                 case Scan.FieldId.TargetTypeId: {
                     const newTargetTypeId = scan.targetTypeId;
-                    if (newTargetTypeId !== undefined && newTargetTypeId !== this._targetTypeId && !fieldConflict) {
-                        this.setTargetTypeId(newTargetTypeId);
-                        lastTargetTypeIdWasMultiCalculationRequired = true;
+                    if (newTargetTypeId === undefined) {
+                        throw new AssertInternalError('SEPSVCTTI34589'); // Since scan is opened, this should always be defined
+                    } else {
+                        if (newTargetTypeId !== this._targetTypeId && !fieldConflict) {
+                            this.setTargetTypeId(newTargetTypeId);
+                            lastTargetTypeIdWasMultiCalculationRequired = true;
+                        }
+                        break;
                     }
-                    break;
                 }
                 case Scan.FieldId.TargetMarkets: {
                     const newTargetMarketIds = scan.targetMarketIds;
-                    if (newTargetMarketIds !== undefined && !isUndefinableArrayEqual(newTargetMarketIds, this._targetMarketIds) && !fieldConflict) {
-                        this.setTargetMarketIds(newTargetMarketIds.slice());
-                        this.setLastTargetTypeIdWasMulti(newTargetMarketIds.length === 1);
-                        lastTargetTypeIdWasMultiCalculationRequired = true;
+                    if (newTargetMarketIds === undefined) {
+                        throw new AssertInternalError('SEPSVCTMI34589'); // Since scan is opened, this should always be defined
+                    } else {
+                        if (!isUndefinableArrayEqual(newTargetMarketIds, this._targetMarketIds) && !fieldConflict) {
+                            this.setTargetMarketIds(newTargetMarketIds.slice());
+                            this.setLastTargetTypeIdWasMulti(newTargetMarketIds.length === 1);
+                            lastTargetTypeIdWasMultiCalculationRequired = true;
+                        }
+                        break;
                     }
-                    break;
                 }
                 case Scan.FieldId.TargetLitIvemIds: {
                     const newTargetLitIvemIds = scan.targetLitIvemIds;
-                    if (newTargetLitIvemIds !== undefined && !isUndefinableArrayEqual(newTargetLitIvemIds, this._targetLitIvemIds) && !fieldConflict) {
-                        this.setTargetLitIvemIds(newTargetLitIvemIds.slice());
-                        this.setLastTargetTypeIdWasMulti(newTargetLitIvemIds.length === 1);
-                        lastTargetTypeIdWasMultiCalculationRequired = true;
+                    if (newTargetLitIvemIds === undefined) {
+                        throw new AssertInternalError('SEPSVCTLIID34589'); // Since scan is opened, this should always be defined
+                    } else {
+                        if (!isUndefinableArrayEqual(newTargetLitIvemIds, this._targetLitIvemIds) && !fieldConflict) {
+                            this.setTargetLitIvemIds(newTargetLitIvemIds.slice());
+                            this.setLastTargetTypeIdWasMulti(newTargetLitIvemIds.length === 1);
+                            lastTargetTypeIdWasMultiCalculationRequired = true;
+                        }
+                        break;
                     }
-                    break;
                 }
                 case Scan.FieldId.MaxMatchCount: {
                     const newMaxMatchCount = scan.maxMatchCount;
-                    if (newMaxMatchCount !== undefined && newMaxMatchCount !== this._maxMatchCount && !fieldConflict) {
-                        this.setMaxMatchCount(newMaxMatchCount);
+                    if (newMaxMatchCount === undefined) {
+                        throw new AssertInternalError('SEPSVCTLIID34589'); // Since scan is opened, this should always be defined
+                    } else {
+                        if (newMaxMatchCount !== this._maxMatchCount && !fieldConflict) {
+                            this.setMaxMatchCount(newMaxMatchCount);
+                        }
+                        break;
                     }
-                    break;
                 }
                 case Scan.FieldId.ZenithCriteria: {
                     const newZenithCriteria = scan.zenithCriteria;
-                    if (newZenithCriteria !== undefined && !fieldConflict) {
-                        const sourceConflict = modifiedScanFieldIds.includes(Scan.FieldId.ZenithCriteriaSource);
-                        if (!sourceConflict) {
-                            zenithCriteriaSource = scan.zenithCriteriaSource;  // will load at end if defined (and overwrite criteria if ok)
+                    if (newZenithCriteria === undefined) {
+                        throw new AssertInternalError('SEPSVCZC34589'); // Since scan is opened, this should always be defined
+                    } else {
+                        if (!fieldConflict) {
+                            const sourceConflict = modifiedScanFieldIds.includes(Scan.FieldId.ZenithCriteriaSource);
+                            if (!sourceConflict) {
+                                zenithCriteriaSource = scan.zenithCriteriaSource;  // will load at end if defined (and overwrite criteria if ok)
+                            }
+                            this.loadZenithCriteria(newZenithCriteria, scan.id, false);
                         }
-                        this.loadZenithCriteria(newZenithCriteria, scan.id, false);
+                        break;
                     }
-                    break;
                 }
                 case Scan.FieldId.ZenithCriteriaSource: {
                     if (!fieldConflict) {
@@ -1000,6 +1046,18 @@ export class ScanEditor extends OpenableScanEditor {
                 case Scan.FieldId.ZenithRankSource: {
                     if (!fieldConflict) {
                         zenithRankSource = scan.zenithRankSource;
+                    }
+                    break;
+                }
+                case Scan.FieldId.AttachedNotificationChannels: {
+                    const newAttachedNotificationChannels = scan.attachedNotificationChannels;
+                    if (newAttachedNotificationChannels === undefined) {
+                        throw new AssertInternalError('SEPSVCANC34589'); // Since scan is opened, this should always be defined
+                    } else {
+                        if (!ScanAttachedNotificationChannel.isArrayAndListEqual(newAttachedNotificationChannels, this.attachedNotificationChannelsList)) {
+                            this.attachedNotificationChannelsList.load(newAttachedNotificationChannels);
+                            this.addFieldChange(ScanEditor.FieldId.AttachedNotificationChannels);
+                        }
                     }
                     break;
                 }
@@ -1064,6 +1122,7 @@ export class ScanEditor extends OpenableScanEditor {
         this.setCriteria(ScanEditor.DefaultCriteria, undefined);
         this.updateCriteriaSourceValid(true);
         this.setRank(ScanEditor.DefaultRank, undefined);
+        this.detachAllNotificationChannels(undefined);
         this._versionNumber = 0;
         this._versionId = undefined;
         this._versioningInterrupted = false;
@@ -1406,6 +1465,7 @@ export namespace ScanEditor {
         Rank,
         RankAsFormula,
         RankAsZenithText,
+        AttachedNotificationChannels,
         Version,
         LastSavedTime,
     }
@@ -1480,6 +1540,9 @@ export namespace ScanEditor {
             },
             RankAsZenithText: { fieldId: FieldId.RankAsZenithText,
                 scanFieldId: Scan.FieldId.ZenithRank,
+            },
+            AttachedNotificationChannels: { fieldId: FieldId.AttachedNotificationChannels,
+                scanFieldId: Scan.FieldId.AttachedNotificationChannels,
             },
             Version: { fieldId: FieldId.Version,
                 scanFieldId: Scan.FieldId.Version,

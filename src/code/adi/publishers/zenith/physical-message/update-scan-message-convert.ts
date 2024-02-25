@@ -38,12 +38,15 @@ export namespace UpdateScanMessageConvert {
             Metadata: ZenithNotifyConvert.ScanMetaType.from(convertMetadata),
         }
 
+        const definitionNotifications = definition.attachedNotificationChannels;
+
         const parameters: ZenithProtocol.NotifyController.ScanParameters = {
             Criteria: definition.zenithCriteria,
             Rank: definition.zenithRank,
             Type: ZenithNotifyConvert.ScanType.fromId(definition.targetTypeId),
             Target: ZenithNotifyConvert.Target.fromId(definition.targetTypeId, definition.targets),
             MaxMatchCount: definition.maxMatchCount,
+            Notifications: definitionNotifications.length === 0 ? undefined : ZenithNotifyConvert.NotificationParameters.from(definitionNotifications),
         }
 
         const result: ZenithProtocol.NotifyController.UpdateScan.PublishMessageContainer = {

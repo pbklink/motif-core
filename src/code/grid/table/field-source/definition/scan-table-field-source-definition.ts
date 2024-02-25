@@ -90,6 +90,7 @@ export namespace ScanTableFieldSourceDefinition {
             Scan.FieldId.Index,
             Scan.FieldId.ZenithCriteria,
             Scan.FieldId.ZenithRank,
+            Scan.FieldId.AttachedNotificationChannels,
             Scan.FieldId.ZenithCriteriaSource,
             Scan.FieldId.ZenithRankSource,
             Scan.FieldId.LastEditSessionId,

@@ -5552,6 +5552,8 @@ export function createRandomUrlSearch(): string;
 export class CreateScanDataDefinition extends FeedSubscriptionDataDefinition {
     constructor();
     // (undocumented)
+    attachedNotificationChannels: readonly ScanAttachedNotificationChannel[];
+    // (undocumented)
     enabled: boolean;
     // (undocumented)
     lastEditSessionId: Guid;
@@ -5559,8 +5561,6 @@ export class CreateScanDataDefinition extends FeedSubscriptionDataDefinition {
     lastSavedTime: Date;
     // (undocumented)
     maxMatchCount: Integer | undefined;
-    // (undocumented)
-    notifications: readonly ScanNotification[] | undefined;
     // (undocumented)
     get referencable(): boolean;
     // (undocumented)
@@ -16163,6 +16163,66 @@ export namespace LockOpenManager {
     export type TryFirstLockEventer = (this: void, firstLocker: LockOpenListItem.Locker) => Promise<Result<void>>;
 }
 
+// Warning: (ae-missing-release-tag) "LockOpenNotificationChannel" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "LockOpenNotificationChannel" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class LockOpenNotificationChannel implements NotificationChannel, LockOpenListItem<LockOpenNotificationChannel> {
+    constructor(notificationChannel: NotificationChannel, _deletedAndUnlockedEventer: LockOpenNotificationChannel.DeletedAndUnlockedEventer);
+    // (undocumented)
+    get channelDescription(): string | undefined;
+    // (undocumented)
+    get channelId(): string;
+    // (undocumented)
+    get channelName(): string;
+    // (undocumented)
+    get channelStatusId(): ActiveFaultedStatusId;
+    // (undocumented)
+    closeLocked(opener: LockOpenListItem.Opener): void;
+    // (undocumented)
+    delete(): void;
+    // (undocumented)
+    get distributionMethodId(): NotificationDistributionMethodId;
+    // (undocumented)
+    get enabled(): boolean;
+    // (undocumented)
+    equals(other: LockOpenNotificationChannel): boolean;
+    // (undocumented)
+    get faulted(): boolean;
+    // (undocumented)
+    get favourite(): boolean;
+    // (undocumented)
+    index: number;
+    // (undocumented)
+    isLocked(ignoreOnlyLocker: LockOpenListItem.Locker | undefined): boolean;
+    // (undocumented)
+    get lockCount(): number;
+    // (undocumented)
+    get lockers(): readonly LockOpenListItem.Locker[];
+    // (undocumented)
+    readonly mapKey: MapKey;
+    // (undocumented)
+    get openCount(): number;
+    // (undocumented)
+    get openers(): readonly LockOpenListItem.Opener[];
+    // (undocumented)
+    openLocked(opener: LockOpenListItem.Opener): void;
+    // (undocumented)
+    get settings(): ZenithProtocolCommon.NotificationChannelSettings | undefined;
+    // (undocumented)
+    tryLock(locker: LockOpenListItem.Locker): Promise<Result<void>>;
+    // (undocumented)
+    unlock(locker: LockOpenListItem.Locker): void;
+    // (undocumented)
+    get userMetadata(): ZenithProtocolCommon.UserMetadata;
+}
+
+// @public (undocumented)
+export namespace LockOpenNotificationChannel {
+    // (undocumented)
+    export type DeletedAndUnlockedEventer = (this: void, notificationChannel: LockOpenNotificationChannel) => void;
+}
+
 // @public (undocumented)
 export namespace Logger {
     let // (undocumented)
@@ -18059,13 +18119,14 @@ export namespace NoneScanCondition {
 }
 
 // Warning: (ae-missing-release-tag) "NotificationChannel" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "NotificationChannel" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface NotificationChannel {
     // (undocumented)
     channelDescription: string | undefined;
     // (undocumented)
-    channelId: string;
+    readonly channelId: string;
     // (undocumented)
     channelName: string;
     // (undocumented)
@@ -18084,10 +18145,43 @@ export interface NotificationChannel {
     userMetadata: ZenithProtocolCommon.UserMetadata;
 }
 
+// @public (undocumented)
+export namespace NotificationChannel {
+    // (undocumented)
+    export interface SourceSettings {
+        // (undocumented)
+        topic: string | undefined;
+        // (undocumented)
+        ttl: number;
+        // (undocumented)
+        urgency: SourceSettings.UrgencyId | undefined;
+    }
+    // (undocumented)
+    export namespace SourceSettings {
+        // (undocumented)
+        export function createCopy(original: SourceSettings): SourceSettings;
+        // (undocumented)
+        export function isEqual(left: SourceSettings, right: SourceSettings): boolean;
+        // (undocumented)
+        export function isUndefinableEqual(left: SourceSettings | undefined, right: SourceSettings | undefined): boolean;
+        // (undocumented)
+        export const enum UrgencyId {
+            // (undocumented)
+            High = 3,
+            // (undocumented)
+            Low = 1,
+            // (undocumented)
+            Normal = 2,
+            // (undocumented)
+            VeryLow = 0
+        }
+    }
+}
+
 // Warning: (ae-missing-release-tag) "NotificationChannelList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
-// @public
-export class NotificationChannelList {
+// @public (undocumented)
+export class NotificationChannelList extends LockOpenList<LockOpenNotificationChannel> {
     // (undocumented)
     finalise(): void;
     // (undocumented)
@@ -18101,13 +18195,19 @@ export class NotificationChannelList {
 export class NotificationChannelsService {
     constructor(adiService: AdiService);
     // (undocumented)
-    readonly channelList: ModifierComparableList<NotificationChannel, Integer>;
+    readonly channelList: NotificationChannelList;
     // (undocumented)
     finalise(): void;
     // (undocumented)
     getSupportedDistributionMethodIds(refresh: boolean): Promise<readonly NotificationDistributionMethodId[] | undefined>;
     // (undocumented)
     initialise(): void;
+    // (undocumented)
+    refreshChannels(): Promise<void>;
+    // (undocumented)
+    tryLockChannel(channelId: string, locker: LockOpenListItem.Locker): Promise<Result<LockOpenNotificationChannel | undefined>>;
+    // (undocumented)
+    unlockChannel(channel: LockOpenNotificationChannel, locker: LockOpenListItem.Locker): void;
 }
 
 // @public (undocumented)
@@ -22289,13 +22389,15 @@ export class QueryScanDetailDataItem extends ScanPublishDataItem {
 export class QueryScanDetailDataMessage extends DataMessage {
     constructor();
     // (undocumented)
+    attachedNotificationChannels: readonly ScanAttachedNotificationChannel[];
+    // (undocumented)
     enabled: boolean;
     // (undocumented)
     lastEditSessionId: Guid | undefined;
     // (undocumented)
     lastSavedTime: Date | undefined;
     // (undocumented)
-    notifications: readonly ScanNotification[] | undefined;
+    maxMatchCount: Integer | undefined;
     // (undocumented)
     scanDescription: string | undefined;
     // (undocumented)
@@ -24688,6 +24790,8 @@ export namespace ScalarSettings {
 export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>, RankedLitIvemIdListDirectoryItem {
     constructor(adiService: AdiService, _descriptor: ScanStatusedDescriptor, _listCorrectnessId: CorrectnessId, _requireUnwantDetailOnLastCloseEventer: Scan.RequireUnwantDetailOnLastCloseEventer, _deletedAndUnlockedEventer: Scan.DeletedAndUnlockedEventer);
     // (undocumented)
+    get attachedNotificationChannels(): readonly ScanAttachedNotificationChannel[] | undefined;
+    // (undocumented)
     closeLocked(opener: LockOpenListItem.Opener): void;
     // (undocumented)
     get correctnessId(): CorrectnessId;
@@ -24851,6 +24955,8 @@ export namespace Scan {
     // (undocumented)
     export const enum FieldId {
         // (undocumented)
+        AttachedNotificationChannels = 13,
+        // (undocumented)
         Description = 6,
         // (undocumented)
         Enabled = 4,
@@ -24859,9 +24965,9 @@ export namespace Scan {
         // (undocumented)
         Index = 2,
         // (undocumented)
-        LastEditSessionId = 16,
+        LastEditSessionId = 17,
         // (undocumented)
-        LastSavedTime = 15,
+        LastSavedTime = 16,
         // (undocumented)
         MaxMatchCount = 10,
         // (undocumented)
@@ -24871,7 +24977,7 @@ export namespace Scan {
         // (undocumented)
         StatusId = 3,
         // (undocumented)
-        SymbolListEnabled = 13,
+        SymbolListEnabled = 14,
         // (undocumented)
         TargetLitIvemIds = 9,
         // (undocumented)
@@ -24879,15 +24985,15 @@ export namespace Scan {
         // (undocumented)
         TargetTypeId = 7,
         // (undocumented)
-        Version = 14,
+        Version = 15,
         // (undocumented)
         ZenithCriteria = 11,
         // (undocumented)
-        ZenithCriteriaSource = 17,
+        ZenithCriteriaSource = 18,
         // (undocumented)
         ZenithRank = 12,
         // (undocumented)
-        ZenithRankSource = 18
+        ZenithRankSource = 19
     }
     // (undocumented)
     export type GetListCorrectnessIdEventer = (this: void) => CorrectnessId;
@@ -24908,6 +25014,35 @@ export namespace Scan {
     }
     // (undocumented)
     export type ValuesChangedEventHandler = (this: void, valueChanges: ValueChange[]) => void;
+}
+
+// Warning: (ae-missing-release-tag) "ScanAttachedNotificationChannel" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ScanAttachedNotificationChannel" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ScanAttachedNotificationChannel {
+    // (undocumented)
+    channelId: string;
+    // (undocumented)
+    channelSourceSettings: NotificationChannel.SourceSettings | undefined;
+    // (undocumented)
+    cultureCode: string | undefined;
+    // (undocumented)
+    minimumElapsed: number | undefined;
+    // (undocumented)
+    minimumStable: number | undefined;
+}
+
+// @public (undocumented)
+export namespace ScanAttachedNotificationChannel {
+    // (undocumented)
+    export function isArrayAndListEqual(array: readonly ScanAttachedNotificationChannel[], list: ModifierComparableList<ScanAttachedNotificationChannel, Integer>): boolean;
+    // (undocumented)
+    export function isArrayEqual(left: readonly ScanAttachedNotificationChannel[], right: readonly ScanAttachedNotificationChannel[]): boolean;
+    // (undocumented)
+    export function isEqual(left: ScanAttachedNotificationChannel, right: ScanAttachedNotificationChannel): boolean;
+    // (undocumented)
+    export function isUndefinableArrayEqual(left: readonly ScanAttachedNotificationChannel[] | undefined, right: readonly ScanAttachedNotificationChannel[] | undefined): boolean;
 }
 
 // Warning: (ae-missing-release-tag) "ScanCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -25156,7 +25291,9 @@ export class ScanDescriptorsDataDefinition extends FeedSubscriptionDataDefinitio
 // @public (undocumented)
 export interface ScanDetail {
     // (undocumented)
-    readonly notifications: readonly ScanNotification[] | undefined;
+    readonly attachedNotificationChannels: readonly ScanAttachedNotificationChannel[];
+    // (undocumented)
+    readonly maxMatchCount: Integer | undefined;
     // (undocumented)
     readonly targetLitIvemIds: readonly LitIvemId[] | undefined;
     // (undocumented)
@@ -25174,7 +25311,7 @@ export interface ScanDetail {
 //
 // @public (undocumented)
 export class ScanEditor extends OpenableScanEditor {
-    constructor(_adiService: AdiService, _symbolsService: SymbolsService, scan: Scan | undefined, opener: LockOpenListItem.Opener, emptyScanFieldSet: ScanFieldSet | undefined, emptyScanConditionSet: ScanConditionSet | undefined, _getOrWaitForScanEventer: ScanEditor.GetOrWaitForScanEventer, _errorEventer: ScanEditor.ErrorEventer | undefined);
+    constructor(_adiService: AdiService, _symbolsService: SymbolsService, _notificationChannelsService: NotificationChannelsService, scan: Scan | undefined, opener: LockOpenListItem.Opener, emptyScanFieldSet: ScanFieldSet | undefined, emptyScanConditionSet: ScanConditionSet | undefined, _getOrWaitForScanEventer: ScanEditor.GetOrWaitForScanEventer, _errorEventer: ScanEditor.ErrorEventer | undefined);
     // (undocumented)
     apply(): void;
     // (undocumented)
@@ -25183,6 +25320,12 @@ export class ScanEditor extends OpenableScanEditor {
     asyncDeleteScan(): Promise<Err<undefined, string> | Ok<undefined, unknown>>;
     // (undocumented)
     asyncUpdateScan(): Promise<Result<void>>;
+    // Warning: (ae-forgotten-export) The symbol "LockerScanAttachedNotificationChannelList" needs to be exported by the entry point public-api.d.ts
+    //
+    // (undocumented)
+    readonly attachedNotificationChannelsList: LockerScanAttachedNotificationChannelList;
+    // (undocumented)
+    attachNotificationChannel(channelId: string, modifier?: Integer): Promise<number>;
     // (undocumented)
     beginFieldChanges(modifier: ScanEditor.Modifier | undefined): void;
     // (undocumented)
@@ -25214,6 +25357,10 @@ export class ScanEditor extends OpenableScanEditor {
     // (undocumented)
     get description(): string;
     // (undocumented)
+    detachAllNotificationChannels(modifier?: Integer): void;
+    // (undocumented)
+    detachNotificationChannel(channel: LockerScanAttachedNotificationChannel, modifier?: Integer): void;
+    // (undocumented)
     get enabled(): boolean;
     // (undocumented)
     endFieldChanges(): void;
@@ -25223,6 +25370,10 @@ export class ScanEditor extends OpenableScanEditor {
     finalise(): void;
     // (undocumented)
     flagCriteriaAsFieldSetChanged(modifier?: ScanEditor.Modifier): void;
+    // Warning: (ae-forgotten-export) The symbol "LockerScanAttachedNotificationChannel" needs to be exported by the entry point public-api.d.ts
+    //
+    // (undocumented)
+    getNotificationChannelAt(idx: Integer): LockerScanAttachedNotificationChannel;
     // (undocumented)
     get id(): string | undefined;
     // (undocumented)
@@ -25345,6 +25496,8 @@ export namespace ScanEditor {
     // (undocumented)
     export const enum FieldId {
         // (undocumented)
+        AttachedNotificationChannels = 20,
+        // (undocumented)
         Criteria = 12,
         // (undocumented)
         CriteriaAsConditionSet = 14,
@@ -25361,7 +25514,7 @@ export namespace ScanEditor {
         // (undocumented)
         Id = 0,
         // (undocumented)
-        LastSavedTime = 21,
+        LastSavedTime = 22,
         // (undocumented)
         LastTargetTypeIdWasMulti = 7,
         // (undocumented)
@@ -25387,7 +25540,7 @@ export namespace ScanEditor {
         // (undocumented)
         TargetTypeId = 8,
         // (undocumented)
-        Version = 20
+        Version = 21
     }
     // (undocumented)
     export type GetOrWaitForScanEventer = (this: void, scanId: string) => Promise<Scan>;
@@ -27251,17 +27404,9 @@ export namespace ScanModule {
     export function initialiseStatic(): void;
 }
 
-// Warning: (ae-missing-release-tag) "ScanNotification" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public
-export interface ScanNotification {
-    // (undocumented)
-    channelId: string;
-}
-
 // @public (undocumented)
 export class ScansService {
-    constructor(_adiService: AdiService, _symbolsService: SymbolsService);
+    constructor(_adiService: AdiService, _symbolsService: SymbolsService, _notificationChannelsService: NotificationChannelsService);
     // (undocumented)
     closeScanEditor(scanEditor: ScanEditor, opener: LockOpenListItem.Opener): void;
     // (undocumented)
@@ -29919,9 +30064,9 @@ export const enum StringId {
     // (undocumented)
     CannotDeleteWatchlist = 189,
     // (undocumented)
-    CategoryValueScanFieldConditionOperandsCaption_Category = 2242,
+    CategoryValueScanFieldConditionOperandsCaption_Category = 2243,
     // (undocumented)
-    CategoryValueScanFieldConditionOperandsTitle_Category = 2243,
+    CategoryValueScanFieldConditionOperandsTitle_Category = 2244,
     // (undocumented)
     Cfi = 172,
     // (undocumented)
@@ -30123,59 +30268,59 @@ export const enum StringId {
     // (undocumented)
     CommandContextDisplay_Root = 1903,
     // (undocumented)
-    ConditionSetScanFormulaViewNgComponent_ConditionKindCaption_All = 2238,
+    ConditionSetScanFormulaViewNgComponent_ConditionKindCaption_All = 2239,
     // (undocumented)
-    ConditionSetScanFormulaViewNgComponent_ConditionKindCaption_Compare = 2224,
+    ConditionSetScanFormulaViewNgComponent_ConditionKindCaption_Compare = 2225,
     // (undocumented)
-    ConditionSetScanFormulaViewNgComponent_ConditionKindCaption_Contains = 2232,
+    ConditionSetScanFormulaViewNgComponent_ConditionKindCaption_Contains = 2233,
     // (undocumented)
-    ConditionSetScanFormulaViewNgComponent_ConditionKindCaption_Equals = 2228,
+    ConditionSetScanFormulaViewNgComponent_ConditionKindCaption_Equals = 2229,
     // (undocumented)
-    ConditionSetScanFormulaViewNgComponent_ConditionKindCaption_Has = 2234,
+    ConditionSetScanFormulaViewNgComponent_ConditionKindCaption_Has = 2235,
     // (undocumented)
-    ConditionSetScanFormulaViewNgComponent_ConditionKindCaption_Includes = 2230,
+    ConditionSetScanFormulaViewNgComponent_ConditionKindCaption_Includes = 2231,
     // (undocumented)
-    ConditionSetScanFormulaViewNgComponent_ConditionKindCaption_InRange = 2226,
+    ConditionSetScanFormulaViewNgComponent_ConditionKindCaption_InRange = 2227,
     // (undocumented)
-    ConditionSetScanFormulaViewNgComponent_ConditionKindCaption_Is = 2236,
+    ConditionSetScanFormulaViewNgComponent_ConditionKindCaption_Is = 2237,
     // (undocumented)
-    ConditionSetScanFormulaViewNgComponent_ConditionKindCaption_None = 2240,
+    ConditionSetScanFormulaViewNgComponent_ConditionKindCaption_None = 2241,
     // (undocumented)
-    ConditionSetScanFormulaViewNgComponent_ConditionKindTitle_All = 2239,
+    ConditionSetScanFormulaViewNgComponent_ConditionKindTitle_All = 2240,
     // (undocumented)
-    ConditionSetScanFormulaViewNgComponent_ConditionKindTitle_Compare = 2225,
+    ConditionSetScanFormulaViewNgComponent_ConditionKindTitle_Compare = 2226,
     // (undocumented)
-    ConditionSetScanFormulaViewNgComponent_ConditionKindTitle_Contains = 2233,
+    ConditionSetScanFormulaViewNgComponent_ConditionKindTitle_Contains = 2234,
     // (undocumented)
-    ConditionSetScanFormulaViewNgComponent_ConditionKindTitle_Equals = 2229,
+    ConditionSetScanFormulaViewNgComponent_ConditionKindTitle_Equals = 2230,
     // (undocumented)
-    ConditionSetScanFormulaViewNgComponent_ConditionKindTitle_Has = 2235,
+    ConditionSetScanFormulaViewNgComponent_ConditionKindTitle_Has = 2236,
     // (undocumented)
-    ConditionSetScanFormulaViewNgComponent_ConditionKindTitle_Includes = 2231,
+    ConditionSetScanFormulaViewNgComponent_ConditionKindTitle_Includes = 2232,
     // (undocumented)
-    ConditionSetScanFormulaViewNgComponent_ConditionKindTitle_InRange = 2227,
+    ConditionSetScanFormulaViewNgComponent_ConditionKindTitle_InRange = 2228,
     // (undocumented)
-    ConditionSetScanFormulaViewNgComponent_ConditionKindTitle_Is = 2237,
+    ConditionSetScanFormulaViewNgComponent_ConditionKindTitle_Is = 2238,
     // (undocumented)
-    ConditionSetScanFormulaViewNgComponent_ConditionKindTitle_None = 2241,
+    ConditionSetScanFormulaViewNgComponent_ConditionKindTitle_None = 2242,
     // (undocumented)
-    ConditionSetScanFormulaViewNgComponent_SetOperationCaption_All = 2222,
+    ConditionSetScanFormulaViewNgComponent_SetOperationCaption_All = 2223,
     // (undocumented)
-    ConditionSetScanFormulaViewNgComponent_SetOperationCaption_Any = 2220,
+    ConditionSetScanFormulaViewNgComponent_SetOperationCaption_Any = 2221,
     // (undocumented)
-    ConditionSetScanFormulaViewNgComponent_SetOperationTitle_All = 2223,
+    ConditionSetScanFormulaViewNgComponent_SetOperationTitle_All = 2224,
     // (undocumented)
-    ConditionSetScanFormulaViewNgComponent_SetOperationTitle_Any = 2221,
+    ConditionSetScanFormulaViewNgComponent_SetOperationTitle_Any = 2222,
     // (undocumented)
-    ConditionSetScanFormulaViewNgComponentCaption_NewCondition = 2218,
+    ConditionSetScanFormulaViewNgComponentCaption_NewCondition = 2219,
     // (undocumented)
-    ConditionSetScanFormulaViewNgComponentCaption_SetOperation = 2215,
+    ConditionSetScanFormulaViewNgComponentCaption_SetOperation = 2216,
     // (undocumented)
-    ConditionSetScanFormulaViewNgComponentTitle_Exclude = 2217,
+    ConditionSetScanFormulaViewNgComponentTitle_Exclude = 2218,
     // (undocumented)
-    ConditionSetScanFormulaViewNgComponentTitle_NewCondition = 2219,
+    ConditionSetScanFormulaViewNgComponentTitle_NewCondition = 2220,
     // (undocumented)
-    ConditionSetScanFormulaViewNgComponentTitle_SetOperation = 2216,
+    ConditionSetScanFormulaViewNgComponentTitle_SetOperation = 2217,
     // (undocumented)
     ConfigExternalError = 13,
     // (undocumented)
@@ -30197,9 +30342,9 @@ export const enum StringId {
     // (undocumented)
     CurrencyCode_Usd = 610,
     // (undocumented)
-    CurrencyOverlapsScanFieldConditionOperandsCaption_Values = 2244,
+    CurrencyOverlapsScanFieldConditionOperandsCaption_Values = 2245,
     // (undocumented)
-    CurrencyOverlapsScanFieldConditionOperandsTitle_Values = 2245,
+    CurrencyOverlapsScanFieldConditionOperandsTitle_Values = 2246,
     // (undocumented)
     CurrencySymbol_Aud = 609,
     // (undocumented)
@@ -30225,11 +30370,11 @@ export const enum StringId {
     // (undocumented)
     DataExternalError = 15,
     // (undocumented)
-    DateRangeValueScanFieldConditionOperandsTitle_Max = 2263,
+    DateRangeValueScanFieldConditionOperandsTitle_Max = 2264,
     // (undocumented)
-    DateRangeValueScanFieldConditionOperandsTitle_Min = 2262,
+    DateRangeValueScanFieldConditionOperandsTitle_Min = 2263,
     // (undocumented)
-    DateValueScanFieldConditionOperandsTitle_Value = 2256,
+    DateValueScanFieldConditionOperandsTitle_Value = 2257,
     // (undocumented)
     DayTradesDataItemRecordTypeIdDisplay_Cancelled = 1804,
     // (undocumented)
@@ -30335,11 +30480,11 @@ export const enum StringId {
     // (undocumented)
     Details = 65,
     // (undocumented)
-    Diagnostics_CloseSocketConnection = 2141,
+    Diagnostics_CloseSocketConnection = 2142,
     // (undocumented)
-    DiagnosticsDitemGroup_DebugCaption = 2139,
+    DiagnosticsDitemGroup_DebugCaption = 2140,
     // (undocumented)
-    DiagnosticsDitemGroup_DebugTitle = 2140,
+    DiagnosticsDitemGroup_DebugTitle = 2141,
     // (undocumented)
     Disabled = 100,
     // (undocumented)
@@ -30489,9 +30634,9 @@ export const enum StringId {
     // (undocumented)
     ExchangeFullDisplay_Ptx = 433,
     // (undocumented)
-    ExchangeOverlapsScanFieldConditionOperandsCaption_Values = 2246,
+    ExchangeOverlapsScanFieldConditionOperandsCaption_Values = 2247,
     // (undocumented)
-    ExchangeOverlapsScanFieldConditionOperandsTitle_Values = 2247,
+    ExchangeOverlapsScanFieldConditionOperandsTitle_Values = 2248,
     // (undocumented)
     Exclude = 50,
     // (undocumented)
@@ -30749,17 +30894,17 @@ export const enum StringId {
     // (undocumented)
     Grid_SelectAllTitle = 927,
     // (undocumented)
-    GridFieldFieldHeading_DefaultHeading = 2129,
+    GridFieldFieldHeading_DefaultHeading = 2130,
     // (undocumented)
-    GridFieldFieldHeading_DefaultTextAlign = 2130,
+    GridFieldFieldHeading_DefaultTextAlign = 2131,
     // (undocumented)
-    GridFieldFieldHeading_DefaultWidth = 2131,
+    GridFieldFieldHeading_DefaultWidth = 2132,
     // (undocumented)
-    GridFieldFieldHeading_Heading = 2127,
+    GridFieldFieldHeading_Heading = 2128,
     // (undocumented)
-    GridFieldFieldHeading_Name = 2126,
+    GridFieldFieldHeading_Name = 2127,
     // (undocumented)
-    GridFieldFieldHeading_SourceName = 2128,
+    GridFieldFieldHeading_SourceName = 2129,
     // (undocumented)
     GridLayoutDefinitionColumnDescription_FieldHeading = 2084,
     // (undocumented)
@@ -31149,9 +31294,9 @@ export const enum StringId {
     // (undocumented)
     MarketBoardIdDisplay_SouthPacificStockExchangeRestricted = 576,
     // (undocumented)
-    MarketBoardOverlapsScanFieldConditionOperandsCaption_Values = 2250,
+    MarketBoardOverlapsScanFieldConditionOperandsCaption_Values = 2251,
     // (undocumented)
-    MarketBoardOverlapsScanFieldConditionOperandsTitle_Values = 2251,
+    MarketBoardOverlapsScanFieldConditionOperandsTitle_Values = 2252,
     // (undocumented)
     MarketCodeNotFoundInRic = 142,
     // (undocumented)
@@ -31261,9 +31406,9 @@ export const enum StringId {
     // (undocumented)
     MarketFieldHeading_TradingMarkets = 846,
     // (undocumented)
-    MarketOverlapsScanFieldConditionOperandsCaption_Values = 2248,
+    MarketOverlapsScanFieldConditionOperandsCaption_Values = 2249,
     // (undocumented)
-    MarketOverlapsScanFieldConditionOperandsTitle_Values = 2249,
+    MarketOverlapsScanFieldConditionOperandsTitle_Values = 2250,
     // (undocumented)
     Markets = 169,
     // (undocumented)
@@ -31423,11 +31568,11 @@ export const enum StringId {
     // (undocumented)
     NotString = 113,
     // (undocumented)
-    NumericRangeValueScanFieldConditionOperandsTitle_Max = 2261,
+    NumericRangeValueScanFieldConditionOperandsTitle_Max = 2262,
     // (undocumented)
-    NumericRangeValueScanFieldConditionOperandsTitle_Min = 2260,
+    NumericRangeValueScanFieldConditionOperandsTitle_Min = 2261,
     // (undocumented)
-    NumericValueScanFieldConditionOperandsTitle_Value = 2255,
+    NumericValueScanFieldConditionOperandsTitle_Value = 2256,
     // (undocumented)
     Of = 178,
     // (undocumented)
@@ -32421,9 +32566,9 @@ export const enum StringId {
     // (undocumented)
     RangeError = 28,
     // (undocumented)
-    RangeScanFieldConditionOperandsCaption_Max = 2259,
+    RangeScanFieldConditionOperandsCaption_Max = 2260,
     // (undocumented)
-    RangeScanFieldConditionOperandsCaption_Min = 2258,
+    RangeScanFieldConditionOperandsCaption_Min = 2259,
     // (undocumented)
     Rank = 208,
     // (undocumented)
@@ -32447,19 +32592,19 @@ export const enum StringId {
     // (undocumented)
     RankedLitIvemIdListAbbreviation_WatchmakerListId = 364,
     // (undocumented)
-    RankedLitIvemIdListDirectoryItem_TypeId_Scan = 2138,
+    RankedLitIvemIdListDirectoryItem_TypeId_Scan = 2139,
     // (undocumented)
-    RankedLitIvemIdListDirectoryItem_TypeId_WatchmakerList = 2137,
+    RankedLitIvemIdListDirectoryItem_TypeId_WatchmakerList = 2138,
     // (undocumented)
-    RankedLitIvemIdListDirectoryItemFieldHeading_Description = 2136,
+    RankedLitIvemIdListDirectoryItemFieldHeading_Description = 2137,
     // (undocumented)
-    RankedLitIvemIdListDirectoryItemFieldHeading_Id = 2133,
+    RankedLitIvemIdListDirectoryItemFieldHeading_Id = 2134,
     // (undocumented)
-    RankedLitIvemIdListDirectoryItemFieldHeading_Name = 2135,
+    RankedLitIvemIdListDirectoryItemFieldHeading_Name = 2136,
     // (undocumented)
-    RankedLitIvemIdListDirectoryItemFieldHeading_Readonly = 2134,
+    RankedLitIvemIdListDirectoryItemFieldHeading_Readonly = 2135,
     // (undocumented)
-    RankedLitIvemIdListDirectoryItemFieldHeading_TypeId = 2132,
+    RankedLitIvemIdListDirectoryItemFieldHeading_TypeId = 2133,
     // (undocumented)
     RankedLitIvemIdListDisplay_LitIvemIdArray = 363,
     // (undocumented)
@@ -32529,129 +32674,131 @@ export const enum StringId {
     // (undocumented)
     ScanEditorTargetsComponent_EditMultiSymbolList = 2079,
     // (undocumented)
-    ScanField_BooleanOperationDescription_All = 2151,
+    ScanField_BooleanOperationDescription_All = 2152,
     // (undocumented)
-    ScanField_BooleanOperationDescription_Any = 2153,
+    ScanField_BooleanOperationDescription_Any = 2154,
     // (undocumented)
-    ScanField_BooleanOperationDescription_Xor = 2155,
+    ScanField_BooleanOperationDescription_Xor = 2156,
     // (undocumented)
-    ScanField_BooleanOperationDisplay_All = 2150,
+    ScanField_BooleanOperationDisplay_All = 2151,
     // (undocumented)
-    ScanField_BooleanOperationDisplay_Any = 2152,
+    ScanField_BooleanOperationDisplay_Any = 2153,
     // (undocumented)
-    ScanField_BooleanOperationDisplay_Xor = 2154,
+    ScanField_BooleanOperationDisplay_Xor = 2155,
     // (undocumented)
-    ScanFieldConditionOperandsEditor_NotContainsValue = 2214,
+    ScanFieldConditionOperandsEditor_NotContainsValue = 2215,
     // (undocumented)
-    ScanFieldConditionOperandsEditor_NotEqualsValue = 2210,
+    ScanFieldConditionOperandsEditor_NotEqualsValue = 2211,
     // (undocumented)
-    ScanFieldConditionOperandsEditor_NotHasValue = 2213,
+    ScanFieldConditionOperandsEditor_NotHasValue = 2214,
     // (undocumented)
-    ScanFieldConditionOperandsEditor_NotInRange = 2211,
+    ScanFieldConditionOperandsEditor_NotInRange = 2212,
     // (undocumented)
-    ScanFieldConditionOperandsEditor_NotIsCategory = 2209,
+    ScanFieldConditionOperandsEditor_NotIsCategory = 2210,
     // (undocumented)
-    ScanFieldConditionOperandsEditor_NotOverlaps = 2212,
+    ScanFieldConditionOperandsEditor_NotOverlaps = 2213,
     // (undocumented)
-    ScanFieldConditionOperandsEditorCaption_DeleteMe = 2207,
+    ScanFieldConditionOperandsEditorCaption_DeleteMe = 2208,
     // (undocumented)
-    ScanFieldConditionOperandsEditorTitle_DeleteMe = 2208,
+    ScanFieldConditionOperandsEditorTitle_DeleteMe = 2209,
     // (undocumented)
-    ScanFieldConditionOperatorDescription_Contains = 2195,
+    ScanFieldConditionOperatorDescription_Contains = 2196,
     // (undocumented)
-    ScanFieldConditionOperatorDescription_Equals = 2179,
+    ScanFieldConditionOperatorDescription_Equals = 2180,
     // (undocumented)
-    ScanFieldConditionOperatorDescription_GreaterThan = 2183,
+    ScanFieldConditionOperatorDescription_GreaterThan = 2184,
     // (undocumented)
-    ScanFieldConditionOperatorDescription_GreaterThanOrEqual = 2185,
+    ScanFieldConditionOperatorDescription_GreaterThanOrEqual = 2186,
     // (undocumented)
-    ScanFieldConditionOperatorDescription_HasValue = 2175,
+    ScanFieldConditionOperatorDescription_HasValue = 2176,
     // (undocumented)
-    ScanFieldConditionOperatorDescription_InRange = 2191,
+    ScanFieldConditionOperatorDescription_InRange = 2192,
     // (undocumented)
-    ScanFieldConditionOperatorDescription_Is = 2203,
+    ScanFieldConditionOperatorDescription_Is = 2204,
     // (undocumented)
-    ScanFieldConditionOperatorDescription_LessThan = 2187,
+    ScanFieldConditionOperatorDescription_LessThan = 2188,
     // (undocumented)
-    ScanFieldConditionOperatorDescription_LessThanOrEqual = 2189,
+    ScanFieldConditionOperatorDescription_LessThanOrEqual = 2190,
     // (undocumented)
-    ScanFieldConditionOperatorDescription_NotContains = 2197,
+    ScanFieldConditionOperatorDescription_NotContains = 2198,
     // (undocumented)
-    ScanFieldConditionOperatorDescription_NotEquals = 2181,
+    ScanFieldConditionOperatorDescription_NotEquals = 2182,
     // (undocumented)
-    ScanFieldConditionOperatorDescription_NotHasValue = 2177,
+    ScanFieldConditionOperatorDescription_NotHasValue = 2178,
     // (undocumented)
-    ScanFieldConditionOperatorDescription_NotInRange = 2193,
+    ScanFieldConditionOperatorDescription_NotInRange = 2194,
     // (undocumented)
-    ScanFieldConditionOperatorDescription_NotIs = 2205,
+    ScanFieldConditionOperatorDescription_NotIs = 2206,
     // (undocumented)
-    ScanFieldConditionOperatorDescription_NotOverlaps = 2201,
+    ScanFieldConditionOperatorDescription_NotOverlaps = 2202,
     // (undocumented)
-    ScanFieldConditionOperatorDescription_Overlaps = 2199,
+    ScanFieldConditionOperatorDescription_Overlaps = 2200,
     // (undocumented)
-    ScanFieldConditionOperatorDisplay_Contains = 2194,
+    ScanFieldConditionOperatorDisplay_Contains = 2195,
     // (undocumented)
-    ScanFieldConditionOperatorDisplay_Equals = 2178,
+    ScanFieldConditionOperatorDisplay_Equals = 2179,
     // (undocumented)
-    ScanFieldConditionOperatorDisplay_GreaterThan = 2182,
+    ScanFieldConditionOperatorDisplay_GreaterThan = 2183,
     // (undocumented)
-    ScanFieldConditionOperatorDisplay_GreaterThanOrEqual = 2184,
+    ScanFieldConditionOperatorDisplay_GreaterThanOrEqual = 2185,
     // (undocumented)
-    ScanFieldConditionOperatorDisplay_HasValue = 2174,
+    ScanFieldConditionOperatorDisplay_HasValue = 2175,
     // (undocumented)
-    ScanFieldConditionOperatorDisplay_InRange = 2190,
+    ScanFieldConditionOperatorDisplay_InRange = 2191,
     // (undocumented)
-    ScanFieldConditionOperatorDisplay_Is = 2202,
+    ScanFieldConditionOperatorDisplay_Is = 2203,
     // (undocumented)
-    ScanFieldConditionOperatorDisplay_LessThan = 2186,
+    ScanFieldConditionOperatorDisplay_LessThan = 2187,
     // (undocumented)
-    ScanFieldConditionOperatorDisplay_LessThanOrEqual = 2188,
+    ScanFieldConditionOperatorDisplay_LessThanOrEqual = 2189,
     // (undocumented)
-    ScanFieldConditionOperatorDisplay_NotContains = 2196,
+    ScanFieldConditionOperatorDisplay_NotContains = 2197,
     // (undocumented)
-    ScanFieldConditionOperatorDisplay_NotEquals = 2180,
+    ScanFieldConditionOperatorDisplay_NotEquals = 2181,
     // (undocumented)
-    ScanFieldConditionOperatorDisplay_NotHasValue = 2176,
+    ScanFieldConditionOperatorDisplay_NotHasValue = 2177,
     // (undocumented)
-    ScanFieldConditionOperatorDisplay_NotInRange = 2192,
+    ScanFieldConditionOperatorDisplay_NotInRange = 2193,
     // (undocumented)
-    ScanFieldConditionOperatorDisplay_NotIs = 2204,
+    ScanFieldConditionOperatorDisplay_NotIs = 2205,
     // (undocumented)
-    ScanFieldConditionOperatorDisplay_NotOverlaps = 2200,
+    ScanFieldConditionOperatorDisplay_NotOverlaps = 2201,
     // (undocumented)
-    ScanFieldConditionOperatorDisplay_OrEqual = 2206,
+    ScanFieldConditionOperatorDisplay_OrEqual = 2207,
     // (undocumented)
-    ScanFieldConditionOperatorDisplay_Overlaps = 2198,
+    ScanFieldConditionOperatorDisplay_Overlaps = 2199,
     // (undocumented)
-    ScanFieldEditor_AddConditionDescription = 2163,
+    ScanFieldEditor_AddConditionDescription = 2164,
     // (undocumented)
-    ScanFieldEditor_AddConditionDisplay = 2162,
+    ScanFieldEditor_AddConditionDisplay = 2163,
     // (undocumented)
-    ScanFieldEditor_Conditions = 2161,
+    ScanFieldEditor_Conditions = 2162,
     // (undocumented)
-    ScanFieldEditor_DeleteMeDescription = 2160,
+    ScanFieldEditor_DeleteMeDescription = 2161,
     // (undocumented)
-    ScanFieldEditor_DeleteMeDisplay = 2159,
+    ScanFieldEditor_DeleteMeDisplay = 2160,
     // (undocumented)
-    ScanFieldEditor_FieldName = 2156,
+    ScanFieldEditor_FieldName = 2157,
     // (undocumented)
-    ScanFieldEditor_OneOrMoreConditionsInvalid = 2164,
+    ScanFieldEditor_OneOrMoreConditionsInvalid = 2165,
     // (undocumented)
-    ScanFieldEditor_RequiresDescription = 2158,
+    ScanFieldEditor_RequiresDescription = 2159,
     // (undocumented)
-    ScanFieldEditor_RequiresDisplay = 2157,
+    ScanFieldEditor_RequiresDisplay = 2158,
     // (undocumented)
-    ScanFieldEditor_XorRequiresExactly2Conditions = 2165,
+    ScanFieldEditor_XorRequiresExactly2Conditions = 2166,
     // (undocumented)
-    ScanFieldEditorFrameFieldHeading_ConditionCount = 2173,
+    ScanFieldEditorFrameFieldHeading_ConditionCount = 2174,
     // (undocumented)
-    ScanFieldEditorFrameFieldHeading_ConditionsOperationId = 2172,
+    ScanFieldEditorFrameFieldHeading_ConditionsOperationId = 2173,
     // (undocumented)
-    ScanFieldEditorFrameFieldHeading_ErrorText = 2171,
+    ScanFieldEditorFrameFieldHeading_ErrorText = 2172,
     // (undocumented)
-    ScanFieldEditorFrameFieldHeading_Name = 2169,
+    ScanFieldEditorFrameFieldHeading_Name = 2170,
     // (undocumented)
-    ScanFieldEditorFrameFieldHeading_Valid = 2170,
+    ScanFieldEditorFrameFieldHeading_Valid = 2171,
+    // (undocumented)
+    ScanFieldHeading_AttachedNotificationChannels = 2104,
     // (undocumented)
     ScanFieldHeading_Description = 2097,
     // (undocumented)
@@ -32661,9 +32808,9 @@ export const enum StringId {
     // (undocumented)
     ScanFieldHeading_Index = 2093,
     // (undocumented)
-    ScanFieldHeading_LastEditSessionId = 2107,
+    ScanFieldHeading_LastEditSessionId = 2108,
     // (undocumented)
-    ScanFieldHeading_LastSavedTime = 2106,
+    ScanFieldHeading_LastSavedTime = 2107,
     // (undocumented)
     ScanFieldHeading_MaxMatchCount = 2101,
     // (undocumented)
@@ -32673,7 +32820,7 @@ export const enum StringId {
     // (undocumented)
     ScanFieldHeading_StatusId = 2094,
     // (undocumented)
-    ScanFieldHeading_SymbolListEnabled = 2104,
+    ScanFieldHeading_SymbolListEnabled = 2105,
     // (undocumented)
     ScanFieldHeading_TargetLitIvemIds = 2100,
     // (undocumented)
@@ -32681,25 +32828,25 @@ export const enum StringId {
     // (undocumented)
     ScanFieldHeading_TargetTypeId = 2098,
     // (undocumented)
-    ScanFieldHeading_Version = 2105,
+    ScanFieldHeading_Version = 2106,
     // (undocumented)
     ScanFieldHeading_ZenithCriteria = 2102,
     // (undocumented)
-    ScanFieldHeading_ZenithCriteriaSource = 2108,
+    ScanFieldHeading_ZenithCriteriaSource = 2109,
     // (undocumented)
     ScanFieldHeading_ZenithRank = 2103,
     // (undocumented)
-    ScanFieldHeading_ZenithRankSource = 2109,
+    ScanFieldHeading_ZenithRankSource = 2110,
     // (undocumented)
-    ScanFieldSetEditor_AddAField = 2166,
+    ScanFieldSetEditor_AddAField = 2167,
     // (undocumented)
-    ScanFieldSetEditor_AddAnAltCodeBasedField = 2168,
+    ScanFieldSetEditor_AddAnAltCodeBasedField = 2169,
     // (undocumented)
-    ScanFieldSetEditor_AddAnAttributeBasedField = 2167,
+    ScanFieldSetEditor_AddAnAttributeBasedField = 2168,
     // (undocumented)
-    ScanFormulaIsNodeCategoryCaption_Index = 2148,
+    ScanFormulaIsNodeCategoryCaption_Index = 2149,
     // (undocumented)
-    ScanFormulaIsNodeCategoryTitle_Index = 2149,
+    ScanFormulaIsNodeCategoryTitle_Index = 2150,
     // (undocumented)
     ScanFormulaZenithEncodingError_AltCodeSubFieldContainsSubFieldIsUnknown = 1964,
     // (undocumented)
@@ -33447,9 +33594,9 @@ export const enum StringId {
     // (undocumented)
     SourceTzOffsetDateTimeTimezoneModeDisplay_Utc = 1769,
     // (undocumented)
-    StringOverlapsScanFieldConditionOperandsCaption_Values = 2252,
+    StringOverlapsScanFieldConditionOperandsCaption_Values = 2253,
     // (undocumented)
-    StringOverlapsScanFieldConditionOperandsTitle_Values = 2253,
+    StringOverlapsScanFieldConditionOperandsTitle_Values = 2254,
     // (undocumented)
     SubscribabilityExtentDisplay_All = 742,
     // (undocumented)
@@ -33677,7 +33824,7 @@ export const enum StringId {
     // (undocumented)
     Test = 63,
     // (undocumented)
-    TextValueScanFieldConditionOperandsTitle_Value = 2257,
+    TextValueScanFieldConditionOperandsTitle_Value = 2258,
     // (undocumented)
     TimeInForceDisplay_AllOrNone = 773,
     // (undocumented)
@@ -33879,17 +34026,17 @@ export const enum StringId {
     // (undocumented)
     UpdateScan = 253,
     // (undocumented)
-    UserAlert_ChangesSavedOkToLeaveOrRestorePage = 2147,
+    UserAlert_ChangesSavedOkToLeaveOrRestorePage = 2148,
     // (undocumented)
-    UserAlert_PleaseWaitSavingChanges = 2146,
+    UserAlert_PleaseWaitSavingChanges = 2147,
     // (undocumented)
-    UserAlert_RestartReason_AttemptingSessionRenewal = 2144,
+    UserAlert_RestartReason_AttemptingSessionRenewal = 2145,
     // (undocumented)
-    UserAlert_RestartReason_NewSessionRequired = 2143,
+    UserAlert_RestartReason_NewSessionRequired = 2144,
     // (undocumented)
-    UserAlert_RestartReason_Unstable = 2142,
+    UserAlert_RestartReason_Unstable = 2143,
     // (undocumented)
-    UserAlert_RestartReason_UserAction = 2145,
+    UserAlert_RestartReason_UserAction = 2146,
     // (undocumented)
     Valid = 107,
     // (undocumented)
@@ -33897,7 +34044,7 @@ export const enum StringId {
     // (undocumented)
     ValueRequired = 136,
     // (undocumented)
-    ValueScanFieldConditionOperandsCaption_Value = 2254,
+    ValueScanFieldConditionOperandsCaption_Value = 2255,
     // (undocumented)
     Version = 90,
     // (undocumented)
@@ -33933,23 +34080,23 @@ export const enum StringId {
     // (undocumented)
     Watchlist_SymbolButtonTitle = 898,
     // (undocumented)
-    WatchmakerListHeading_Category = 2122,
+    WatchmakerListHeading_Category = 2123,
     // (undocumented)
-    WatchmakerListHeading_ConfigModified = 2124,
+    WatchmakerListHeading_ConfigModified = 2125,
     // (undocumented)
-    WatchmakerListHeading_Description = 2121,
+    WatchmakerListHeading_Description = 2122,
     // (undocumented)
-    WatchmakerListHeading_Id = 2117,
+    WatchmakerListHeading_Id = 2118,
     // (undocumented)
-    WatchmakerListHeading_Index = 2119,
+    WatchmakerListHeading_Index = 2120,
     // (undocumented)
-    WatchmakerListHeading_LastSavedTime = 2125,
+    WatchmakerListHeading_LastSavedTime = 2126,
     // (undocumented)
-    WatchmakerListHeading_Name = 2120,
+    WatchmakerListHeading_Name = 2121,
     // (undocumented)
-    WatchmakerListHeading_Readonly = 2118,
+    WatchmakerListHeading_Readonly = 2119,
     // (undocumented)
-    WatchmakerListHeading_SyncStatusId = 2123,
+    WatchmakerListHeading_SyncStatusId = 2124,
     // (undocumented)
     Writable = 76,
     // (undocumented)
@@ -33995,19 +34142,19 @@ export const enum StringId {
     // (undocumented)
     ZenithPublisherStateDisplay_SocketOpen = 1100,
     // (undocumented)
-    ZenithScanFormulaView_ErrorCaption = 2110,
+    ZenithScanFormulaView_ErrorCaption = 2111,
     // (undocumented)
-    ZenithScanFormulaView_ErrorTitle = 2111,
+    ZenithScanFormulaView_ErrorTitle = 2112,
     // (undocumented)
-    ZenithScanFormulaViewDecodeProgress_CountCaption = 2113,
+    ZenithScanFormulaViewDecodeProgress_CountCaption = 2114,
     // (undocumented)
-    ZenithScanFormulaViewDecodeProgress_CountTitle = 2114,
+    ZenithScanFormulaViewDecodeProgress_CountTitle = 2115,
     // (undocumented)
-    ZenithScanFormulaViewDecodeProgress_DepthCaption = 2115,
+    ZenithScanFormulaViewDecodeProgress_DepthCaption = 2116,
     // (undocumented)
-    ZenithScanFormulaViewDecodeProgress_DepthTitle = 2116,
+    ZenithScanFormulaViewDecodeProgress_DepthTitle = 2117,
     // (undocumented)
-    ZenithScanFormulaViewDecodeProgress_Title = 2112,
+    ZenithScanFormulaViewDecodeProgress_Title = 2113,
     // (undocumented)
     ZenithUnexpectedCaseExternalError = 18,
     // (undocumented)
@@ -39251,6 +39398,8 @@ export class UpdateNotificationChannelEnabledDataMessage extends DataMessage {
 export class UpdateScanDataDefinition extends FeedSubscriptionDataDefinition {
     constructor();
     // (undocumented)
+    attachedNotificationChannels: readonly ScanAttachedNotificationChannel[];
+    // (undocumented)
     enabled: boolean;
     // (undocumented)
     lastEditSessionId: Guid;
@@ -39258,8 +39407,6 @@ export class UpdateScanDataDefinition extends FeedSubscriptionDataDefinition {
     lastSavedTime: Date;
     // (undocumented)
     maxMatchCount: Integer | undefined;
-    // (undocumented)
-    notifications: readonly ScanNotification[] | undefined;
     // (undocumented)
     get referencable(): boolean;
     // (undocumented)
@@ -40741,6 +40888,8 @@ export namespace ZenithConvert {
     export namespace Time {
         // (undocumented)
         export function fromChartIntervalId(value: ChartIntervalId): void;
+        // (undocumented)
+        export function fromTimeSpan(milliseconds: number): string;
         // (undocumented)
         export function toTimeSpan(value: ZenithProtocol.Time): number | undefined;
     }
@@ -43580,31 +43729,6 @@ export namespace ZenithProtocol {
         // (undocumented)
         export type Metadata = Record<string, string | undefined>;
         // (undocumented)
-        export interface Notification {
-            // (undocumented)
-            readonly ChannelID: string;
-            // (undocumented)
-            readonly CultureCode?: string;
-            // (undocumented)
-            readonly MimimumElapsed?: Time;
-            // (undocumented)
-            readonly MinimumStable?: Time;
-            // (undocumented)
-            readonly Settings?: Notification.SourceSettings;
-        }
-        // (undocumented)
-        export namespace Notification {
-            // (undocumented)
-            export interface SourceSettings {
-                // (undocumented)
-                readonly topic?: string;
-                // (undocumented)
-                readonly ttl: number;
-                // (undocumented)
-                readonly urgency?: Urgency;
-            }
-        }
-        // (undocumented)
         export namespace QueryScan {
             // (undocumented)
             export interface PublishMessageContainer extends RequestMessageContainer {
@@ -43655,7 +43779,35 @@ export namespace ZenithProtocol {
         // (undocumented)
         export interface ScanParameters extends ScanParametersWithoutNotifications {
             // (undocumented)
-            readonly Notifications?: Notification[];
+            readonly Notifications?: ScanParameters.Notification[];
+        }
+        // (undocumented)
+        export namespace ScanParameters {
+            // (undocumented)
+            export interface Notification {
+                // (undocumented)
+                readonly ChannelID: string;
+                // (undocumented)
+                readonly CultureCode?: string;
+                // (undocumented)
+                readonly MinimumElapsed?: Time;
+                // (undocumented)
+                readonly MinimumStable?: Time;
+                // (undocumented)
+                readonly Settings?: Notification.SourceSettings;
+            }
+            // (undocumented)
+            export namespace Notification {
+                // (undocumented)
+                export interface SourceSettings {
+                    // (undocumented)
+                    readonly topic?: string;
+                    // (undocumented)
+                    readonly ttl: number;
+                    // (undocumented)
+                    readonly urgency?: Urgency;
+                }
+            }
         }
         // (undocumented)
         export interface ScanParametersWithoutNotifications {

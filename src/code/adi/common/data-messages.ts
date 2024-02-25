@@ -65,7 +65,7 @@ import { NotificationChannel, SettingsedNotificationChannel } from './notificati
 import { OrderRoute } from './order-route';
 import { OrderStatuses } from './order-status';
 import { OrderTrigger } from './order-trigger';
-import { ScanNotificationParameters } from './scan-types';
+import { ScanAttachedNotificationChannel } from './scan-attached-notification-channel';
 import { TmcLeg } from './tmc-leg';
 import { TopShareholder } from './top-shareholder';
 import { TradingStates } from './trading-state';
@@ -806,7 +806,8 @@ export class QueryScanDetailDataMessage extends DataMessage {
     targetTypeId: ScanTargetTypeId;
     targetMarketIds: readonly MarketId[] | undefined;
     targetLitIvemIds: readonly LitIvemId[] | undefined;
-    notifications: readonly ScanNotificationParameters[] | undefined;
+    maxMatchCount: Integer | undefined;
+    attachedNotificationChannels: readonly ScanAttachedNotificationChannel[];
 
     constructor() {
         super(QueryScanDetailDataMessage.typeId);

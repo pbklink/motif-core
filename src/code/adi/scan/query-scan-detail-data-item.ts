@@ -49,7 +49,8 @@ export class QueryScanDetailDataItem extends ScanPublishDataItem {
             targetTypeId: msg.targetTypeId,
             targetMarketIds: msg.targetMarketIds,
             targetLitIvemIds: msg.targetLitIvemIds,
-            notifications: msg.notifications,
+            maxMatchCount: msg.maxMatchCount,
+            attachedNotificationChannels: msg.attachedNotificationChannels,
         };
     }
 }

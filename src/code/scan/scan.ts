@@ -12,6 +12,7 @@ import {
     MarketId,
     QueryScanDetailDataDefinition,
     QueryScanDetailDataItem,
+    ScanAttachedNotificationChannel,
     ScanDetail,
     ScanStatusedDescriptor,
     ScanStatusedDescriptorInterface,
@@ -79,6 +80,7 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
     private _maxMatchCount: Integer | undefined;
     private _zenithCriteria: ZenithEncodedScanFormula.BooleanTupleNode | undefined;
     private _zenithRank: ZenithEncodedScanFormula.NumericTupleNode | undefined;
+    private _attachedNotificationChannels: readonly ScanAttachedNotificationChannel[] | undefined;
 
     private _deleted = false;
     private _detailWanted = false;
@@ -130,19 +132,11 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
 
         this._descriptorChangedSubscriptionId = this._descriptor.subscribeUpdatedEvent(
             (changedFieldIds) => {
-                this.beginChange();
-                this.applyDescriptorChanges(this._descriptor, changedFieldIds);
-                const detail: Partial<ScanDetail> = {
-                    zenithCriteria: undefined,
-                    zenithRank: undefined,
-                    targetTypeId: undefined,
-                    targetMarketIds: undefined,
-                    targetLitIvemIds: undefined,
-                    notifications: undefined,
+                if (this._detailWanted) {
+                    this.wantDetail(true);
+                } else {
+                    this.applyDescriptorChanges(this._descriptor, changedFieldIds);
                 }
-                this.applyDetail(detail);
-                this.endChange();
-                this.wantDetail(true);
             }
         );
 
@@ -177,6 +171,7 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
     get maxMatchCount() { return this._maxMatchCount; }
     get zenithCriteria() { return this._zenithCriteria; }
     get zenithRank() { return this._zenithRank; }
+    get attachedNotificationChannels() { return this._attachedNotificationChannels; }
     get zenithCriteriaSource() { return this._zenithCriteriaSource; }
     get zenithRankSource() { return this._zenithRankSource; }
 
@@ -607,6 +602,13 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
                     recentChangeTypeId: ValueRecentChangeTypeId.Update,
                 });
             }
+            if (this._attachedNotificationChannels !== undefined) {
+                this._attachedNotificationChannels = undefined;
+                this._valueChanges.push({
+                    fieldId: Scan.FieldId.AttachedNotificationChannels,
+                    recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                });
+            }
             this.endChange();
         }
     }
@@ -641,7 +643,7 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
                 recentChangeTypeId: ValueRecentChangeTypeId.Update,
             });
         }
-        const newMaxMatchCount = this._maxMatchCount;
+        const newMaxMatchCount = detail.maxMatchCount;
         if (newMaxMatchCount !== this._maxMatchCount) {
             this._maxMatchCount = newMaxMatchCount;
             this._valueChanges.push({
@@ -662,6 +664,14 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
             this._zenithRank = newZenithRank;
             this._valueChanges.push({
                 fieldId: Scan.FieldId.ZenithRank,
+                recentChangeTypeId: ValueRecentChangeTypeId.Update,
+            });
+        }
+        const newAttachedNotificationChannels = detail.attachedNotificationChannels;
+        if (!ScanAttachedNotificationChannel.isUndefinableArrayEqual(newAttachedNotificationChannels, this._attachedNotificationChannels)) {
+            this._attachedNotificationChannels = newAttachedNotificationChannels;
+            this._valueChanges.push({
+                fieldId: Scan.FieldId.AttachedNotificationChannels,
                 recentChangeTypeId: ValueRecentChangeTypeId.Update,
             });
         }
@@ -757,6 +767,7 @@ export namespace Scan {
         MaxMatchCount,
         ZenithCriteria,
         ZenithRank,
+        AttachedNotificationChannels,
         SymbolListEnabled,
         Version,
         LastSavedTime,
@@ -782,6 +793,7 @@ export namespace Scan {
             FieldId.MaxMatchCount,
             FieldId.ZenithCriteria,
             FieldId.ZenithRank,
+            FieldId.AttachedNotificationChannels,
             FieldId.SymbolListEnabled,
             FieldId.Version,
             FieldId.LastSavedTime,
@@ -890,6 +902,13 @@ export namespace Scan {
                 name: 'ZenithRank',
                 dataTypeId: FieldDataTypeId.Object,
                 headingId: StringId.ScanFieldHeading_ZenithRank,
+                directoryItemFieldId: undefined,
+            },
+            AttachedNotificationChannels: {
+                id: FieldId.AttachedNotificationChannels,
+                name: 'AttachedNotificationChannels',
+                dataTypeId: FieldDataTypeId.Object,
+                headingId: StringId.ScanFieldHeading_AttachedNotificationChannels,
                 directoryItemFieldId: undefined,
             },
             SymbolListEnabled: {

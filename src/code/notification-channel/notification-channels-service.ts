@@ -5,22 +5,24 @@
  */
 
 import { AdiService, DataItemIncubator, NotificationChannel, NotificationDistributionMethodId, QueryNotificationDistributionMethodsDataDefinition, QueryNotificationDistributionMethodsDataItem } from '../adi/adi-internal-api';
-import { AssertInternalError, Integer, Logger, ModifierComparableList } from '../sys/sys-internal-api';
+import { AssertInternalError, Integer, LockOpenListItem, Logger, Ok, Result } from '../sys/sys-internal-api';
+import { LockOpenNotificationChannel } from './lock-open-notification-channel';
+import { NotificationChannelList } from './notification-channel-list';
 
 export class NotificationChannelsService {
-    readonly channelList: ModifierComparableList<NotificationChannel, Integer>;
+    readonly channelList: NotificationChannelList;
     private readonly _supportedDistributionMethodIdsIncubator: DataItemIncubator<QueryNotificationDistributionMethodsDataItem>;
     private readonly _getSupportedDistributionMethodIdsResolves = new Array<NotificationChannelsService.GetSupportedDistributionMethodIdsResolve>();
 
     private _supportedDistributionMethodIds: readonly NotificationDistributionMethodId[];
-    private _channelListLoaded = false;
+    private _channelListBeenLoaded = false;
     private _supportedDistributionMethodIdsLoaded = false;
 
 
     constructor(
         adiService: AdiService,
     ) {
-        this.channelList = new ModifierComparableList<NotificationChannel, Integer>(0);
+        this.channelList = new NotificationChannelList();
         this._supportedDistributionMethodIds = new Array<NotificationDistributionMethodId>();
         this._supportedDistributionMethodIdsIncubator = new DataItemIncubator<QueryNotificationDistributionMethodsDataItem>(adiService);
 
@@ -46,6 +48,21 @@ export class NotificationChannelsService {
             this.refreshSupportedDistributionMethodIds();
             return promise;
         }
+    }
+
+    tryLockChannel(channelId: string, locker: LockOpenListItem.Locker): Promise<Result<LockOpenNotificationChannel | undefined>> {
+        // First check to see if list contains channel
+        const channel = this.channelList.getItemByKey(channelId);
+        if (channel !== undefined) {
+            // Exists.  Lock it and return it with a promise
+            return this.channelList.tryLockItemByKey(channelId, locker);
+        } else {
+            return Promise.resolve(new Ok(undefined)); // ToDo
+        }
+    }
+
+    unlockChannel(channel: LockOpenNotificationChannel, locker: LockOpenListItem.Locker) {
+        this.channelList.unlockItem(channel, locker);
     }
 
     // getChannelStateWithSettings(channelId: string): Promise<> {
@@ -92,9 +109,9 @@ export class NotificationChannelsService {
 
     // }
 
-    // refreshChannels(): Promise<void> {
-
-    // }
+    refreshChannels(): Promise<void> {
+        return Promise.resolve(); // ToDo
+    }
 
     private refreshSupportedDistributionMethodIds() {
         if (this._supportedDistributionMethodIdsIncubator.incubating) {

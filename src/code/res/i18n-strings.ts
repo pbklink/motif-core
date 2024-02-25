@@ -2112,6 +2112,7 @@ export const enum StringId {
     ScanFieldHeading_MaxMatchCount,
     ScanFieldHeading_ZenithCriteria,
     ScanFieldHeading_ZenithRank,
+    ScanFieldHeading_AttachedNotificationChannels,
     ScanFieldHeading_SymbolListEnabled,
     ScanFieldHeading_Version,
     ScanFieldHeading_LastSavedTime,
@@ -12838,6 +12839,11 @@ export namespace I18nStrings {
         ScanFieldHeading_ZenithRank: {
             id: StringId.ScanFieldHeading_ZenithRank, translations: {
                 en: 'Z.Rank',
+            }
+        },
+        ScanFieldHeading_AttachedNotificationChannels: {
+            id: StringId.ScanFieldHeading_AttachedNotificationChannels, translations: {
+                en: 'Notifications',
             }
         },
         ScanFieldHeading_SymbolListEnabled: {

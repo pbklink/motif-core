@@ -159,6 +159,9 @@ export class ScanTableValueSource extends CorrectnessTableValueSource<Scan> {
             case Scan.FieldId.ZenithRank: {
                 throw new AssertInternalError('STVSLVZR34345');
             }
+            case Scan.FieldId.AttachedNotificationChannels: {
+                throw new AssertInternalError('STVSLVZANC34345');
+            }
             case Scan.FieldId.ZenithCriteriaSource: {
                 throw new AssertInternalError('STVSLVZCS34345');
             }

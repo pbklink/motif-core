@@ -16,6 +16,7 @@
     { "path": "./condition-set/tsconfig.json" },
     { "path": "./field-set/tsconfig.json" },
     { "path": "./formula/tsconfig.json" },
+    { "path": "../notification-channel/tsconfig.json" },
     { "path": "../services/tsconfig.json" },
     { "path": "../adi/tsconfig.json" },
     { "path": "../sys/tsconfig.json" },

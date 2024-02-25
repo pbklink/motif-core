@@ -161,10 +161,26 @@ export namespace ZenithConvert {
 
     export namespace Time {
         // [days.]hours:minutes[:seconds[.fractional seconds]]
-        export function fromTimeSpan(value: number) {
-            const days = value / mSecsPerDay;
+        export function fromTimeSpan(milliseconds: number) {
+            const days = milliseconds / mSecsPerDay;
             const intDays = Math.floor(days);
-            const daysRemainder = value - (intDays * mSecsPerDay);
+            milliseconds -= intDays * mSecsPerDay;
+            const hours = milliseconds / mSecsPerHour;
+            const intHours = Math.floor(hours);
+            milliseconds -= intHours * mSecsPerHour;
+            const minutes = milliseconds / mSecsPerMin;
+            const intMinutes = Math.floor(minutes);
+            milliseconds -= intMinutes * mSecsPerMin;
+            const seconds = milliseconds / mSecsPerSec;
+
+            let result = `${intHours}:${intMinutes}`;
+            if (intDays > 0) {
+                result = `${intDays}.${result}`;
+            }
+            if (seconds > 0) {
+                result += `:${seconds}`;
+            }
+            return result;
         }
 
         export function toTimeSpan(value: ZenithProtocol.Time) {

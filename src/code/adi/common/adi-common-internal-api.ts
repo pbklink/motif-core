@@ -24,7 +24,7 @@ export * from './order-details';
 export * from './order-route';
 export * from './order-status';
 export * from './order-trigger';
-export * from './scan-types';
+export * from './scan-attached-notification-channel';
 export * from './tmc-leg';
 export * from './top-shareholder';
 export * from './trading-state';

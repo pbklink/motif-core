@@ -5,6 +5,7 @@
  */
 
 import { AdiService } from '../adi/adi-internal-api';
+import { NotificationChannelsService } from '../notification-channel/internal-api';
 import { SymbolsService } from '../services/services-internal-api';
 import {
     ErrorCode,
@@ -33,7 +34,8 @@ export class ScansService {
 
     constructor(
         private readonly _adiService: AdiService,
-        private readonly _symbolsService: SymbolsService
+        private readonly _symbolsService: SymbolsService,
+        private readonly _notificationChannelsService: NotificationChannelsService,
     ) {
         this.scanList = new ScanList(this._adiService);
     }
@@ -60,6 +62,7 @@ export class ScansService {
         return new ScanEditor(
             this._adiService,
             this._symbolsService,
+            this._notificationChannelsService,
             undefined,
             opener,
             emptyScanFieldSet,
@@ -97,6 +100,7 @@ export class ScansService {
                         openedEditor = new ScanEditor(
                             this._adiService,
                             this._symbolsService,
+                            this._notificationChannelsService,
                             scan,
                             opener,
                             emptyScanFieldSet,
