@@ -55,6 +55,7 @@ export namespace TableFieldSourceDefinition {
         RankedLitIvemIdListDirectoryItem,
         GridField,
         ScanFieldEditorFrame, // outside
+        LockerScanAttachedNotificationChannel,
         /*LitIvemId_News,
         IvemId_Holding,
         CashItem_Holding,
@@ -91,6 +92,7 @@ export namespace TableFieldSourceDefinition {
         export const rankedLitIvemIdListDirectoryItemName = 'RllDI';
         export const gridFieldName = 'Gf';
         export const ScanFieldEditorFrame = 'Sfef';
+        export const LockerScanAttachedNotificationChannel = 'LSAnc';
 
         interface Info {
             readonly id: Id;
@@ -120,6 +122,7 @@ export namespace TableFieldSourceDefinition {
             RankedLitIvemIdListDirectoryItem: { id: TypeId.RankedLitIvemIdListDirectoryItem, name: rankedLitIvemIdListDirectoryItemName },
             GridField: { id: TypeId.GridField, name: gridFieldName },
             ScanFieldEditorFrame: { id: TypeId.ScanFieldEditorFrame, name: ScanFieldEditorFrame },
+            LockerScanAttachedNotificationChannel: { id: TypeId.LockerScanAttachedNotificationChannel, name: LockerScanAttachedNotificationChannel },
         };
 
         const infos: Info[] = Object.values(infoObject);

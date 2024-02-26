@@ -343,7 +343,10 @@ export class TableRecordSourceDefinitionFactoryService {
                 }
             }
             case TableRecordSourceDefinition.TypeId.ScanFieldEditorFrame: {
-                throw new AssertInternalError('TRSDFSTCTFJ45550', 'outside');
+                throw new AssertInternalError('TRSDFSTCTFJSFEF45550', 'outside');
+            }
+            case TableRecordSourceDefinition.TypeId.ScanEditorAttachedNotificationChannel: {
+                throw new AssertInternalError('TRSDFSTCTFJSEANC45550', 'outside');
             }
             default:
                 throw new UnreachableCaseError('TDLFCFTID17742', typeId);

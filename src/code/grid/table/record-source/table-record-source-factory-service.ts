@@ -91,6 +91,7 @@ export class TableRecordSourceFactoryService {
             case TableRecordSourceDefinition.TypeId.GridField: return this.createGridField(definition);
             case TableRecordSourceDefinition.TypeId.ScanTest: return this.createScanTest(definition);
             case TableRecordSourceDefinition.TypeId.ScanFieldEditorFrame: return this.factoryClosure[definition.typeId](definition); // in future create all via registration
+            case TableRecordSourceDefinition.TypeId.ScanEditorAttachedNotificationChannel: return this.factoryClosure[definition.typeId](definition); // in future create all via registration
             default: throw new UnreachableCaseError('TDLFCFTID17742', definition.typeId);
         }
     }

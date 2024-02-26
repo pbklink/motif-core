@@ -109,6 +109,7 @@ export namespace TableRecordSourceDefinition {
         GridField,
         ScanTest,
         ScanFieldEditorFrame,
+        ScanEditorAttachedNotificationChannel,
     }
 
     export interface AddArrayResult {
@@ -284,6 +285,12 @@ export namespace TableRecordSourceDefinition {
                 name: 'ScanFieldEditorFrame',
                 display: StringId.TableRecordDefinitionList_ListTypeDisplay_ScanFieldEditorFrame,
                 abbr: StringId.TableRecordDefinitionList_ListTypeAbbr_ScanFieldEditorFrame
+            },
+            ScanEditorAttachedNotificationChannel: {
+                id: TableRecordSourceDefinition.TypeId.ScanEditorAttachedNotificationChannel,
+                name: 'ScanEditorAttachedNotificationChannel',
+                display: StringId.TableRecordDefinitionList_ListTypeDisplay_ScanEditorAttachedNotificationChannel,
+                abbr: StringId.TableRecordDefinitionList_ListTypeAbbr_ScanEditorAttachedNotificationChannel
             },
         };
 
