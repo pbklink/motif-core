@@ -432,6 +432,8 @@ export const enum StringId {
     TableRecordDefinitionList_ListTypeAbbr_ScanTest,
     TableRecordDefinitionList_ListTypeDisplay_ScanFieldEditorFrame,
     TableRecordDefinitionList_ListTypeAbbr_ScanFieldEditorFrame,
+    TableRecordDefinitionList_ListTypeDisplay_ScanEditorAttachedNotificationChannel,
+    TableRecordDefinitionList_ListTypeAbbr_ScanEditorAttachedNotificationChannel,
     ExchangeAbbreviatedDisplay_Asx,
     ExchangeFullDisplay_Asx,
     ExchangeAbbreviatedDisplay_Cxa,
@@ -2050,20 +2052,14 @@ export const enum StringId {
     ScanPropertiesTitle_SymbolListMaxCount,
     ScanPropertiesCaption_View,
     ScanPropertiesTitle_View,
-    ScanPropertiesCaption_MobileNotifier,
-    ScanPropertiesDescription_MobileNotifier,
-    ScanPropertiesCaption_SmsNotifier,
-    ScanPropertiesDescription_SmsNotifier,
-    ScanPropertiesCaption_EmailNotifier,
-    ScanPropertiesDescription_EmailNotifier,
-    ScanPropertiesCaption_MotifNotifier,
-    ScanPropertiesDescription_MotifNotifier,
-    ScanPropertiesCaption_AllNotifiers,
-    ScanPropertiesDescription_AllNotifiers,
-    ScanPropertiesCaption_MinimumStableTime,
-    ScanPropertiesDescription_MinimumStableTime,
-    ScanPropertiesCaption_MinimumElapsedTime,
-    ScanPropertiesDescription_MinimumElapsedTime,
+    ScanEditorAttachedNotificationChannelPropertiesCaption_MinimumStable,
+    ScanEditorAttachedNotificationChannelPropertiesDescription_MinimumStable,
+    ScanEditorAttachedNotificationChannelPropertiesCaption_MinimumElapsed,
+    ScanEditorAttachedNotificationChannelPropertiesDescription_MinimumElapsed,
+    ScanEditorAttachedNotificationChannelPropertiesCaption_Ttl,
+    ScanEditorAttachedNotificationChannelPropertiesDescription_Ttl,
+    ScanEditorAttachedNotificationChannelPropertiesCaption_Urgency,
+    ScanEditorAttachedNotificationChannelPropertiesDescription_Urgency,
     ScanTargetsCaption_TargetType,
     ScanTargetsDescription_TargetType,
     ScanTargetsCaption_SingleSymbol,
@@ -2283,6 +2279,18 @@ export const enum StringId {
     TextContainsScanFieldConditionOperandsTitle_FromEnd,
     TextContainsScanFieldConditionOperandsTitle_Exact,
     TextContainsScanFieldConditionOperandsTitle_IgnoreCase,
+    LockerScanAttachedNotificationChannelHeader_ChannelId,
+    LockerScanAttachedNotificationChannelHeader_Name,
+    LockerScanAttachedNotificationChannelHeader_CultureCode,
+    LockerScanAttachedNotificationChannelHeader_MinimumStable,
+    LockerScanAttachedNotificationChannelHeader_MinimumElapsed,
+    LockerScanAttachedNotificationChannelHeader_Ttl,
+    LockerScanAttachedNotificationChannelHeader_Urgency,
+    LockerScanAttachedNotificationChannelHeader_Topic,
+    NotificationChannel_SourceSettings_Urgency_VeryLow,
+    NotificationChannel_SourceSettings_Urgency_Low,
+    NotificationChannel_SourceSettings_Urgency_Normal,
+    NotificationChannel_SourceSettings_Urgency_High,
 }
 
 /** @public */
@@ -4437,12 +4445,22 @@ export namespace I18nStrings {
         },
         TableRecordDefinitionList_ListTypeDisplay_ScanFieldEditorFrame: {
             id: StringId.TableRecordDefinitionList_ListTypeDisplay_ScanFieldEditorFrame, translations: {
-                en: 'Scan Field Editor Fame',
+                en: 'Scan Field Editor Frame',
             }
         },
         TableRecordDefinitionList_ListTypeAbbr_ScanFieldEditorFrame: {
             id: StringId.TableRecordDefinitionList_ListTypeAbbr_ScanFieldEditorFrame, translations: {
                 en: 'SFEF',
+            }
+        },
+        TableRecordDefinitionList_ListTypeDisplay_ScanEditorAttachedNotificationChannel: {
+            id: StringId.TableRecordDefinitionList_ListTypeDisplay_ScanEditorAttachedNotificationChannel, translations: {
+                en: 'Attached notification channel',
+            }
+        },
+        TableRecordDefinitionList_ListTypeAbbr_ScanEditorAttachedNotificationChannel: {
+            id: StringId.TableRecordDefinitionList_ListTypeAbbr_ScanEditorAttachedNotificationChannel, translations: {
+                en: 'SEANC',
             }
         },
         ExchangeAbbreviatedDisplay_Asx: {
@@ -12539,74 +12557,44 @@ export namespace I18nStrings {
                 en: 'Specifies how the criteria should be viewed/edited',
             }
         },
-        ScanPropertiesCaption_MobileNotifier: {
-            id: StringId.ScanPropertiesCaption_MobileNotifier, translations: {
-                en: 'Mobile',
-            }
-        },
-        ScanPropertiesDescription_MobileNotifier: {
-            id: StringId.ScanPropertiesDescription_MobileNotifier, translations: {
-                en: 'Enable the default Mobile Notifier',
-            }
-        },
-        ScanPropertiesCaption_SmsNotifier: {
-            id: StringId.ScanPropertiesCaption_SmsNotifier, translations: {
-                en: 'SMS',
-            }
-        },
-        ScanPropertiesDescription_SmsNotifier: {
-            id: StringId.ScanPropertiesDescription_SmsNotifier, translations: {
-                en: 'Enable the default SMS notifier',
-            }
-        },
-        ScanPropertiesCaption_EmailNotifier: {
-            id: StringId.ScanPropertiesCaption_EmailNotifier, translations: {
-                en: 'Email',
-            }
-        },
-        ScanPropertiesDescription_EmailNotifier: {
-            id: StringId.ScanPropertiesDescription_EmailNotifier, translations: {
-                en: 'Enable the default Email notifier',
-            }
-        },
-        ScanPropertiesCaption_MotifNotifier: {
-            id: StringId.ScanPropertiesCaption_MotifNotifier, translations: {
-                en: 'Motif',
-            }
-        },
-        ScanPropertiesDescription_MotifNotifier: {
-            id: StringId.ScanPropertiesDescription_MotifNotifier, translations: {
-                en: 'Allow Motif to receive notifications',
-            }
-        },
-        ScanPropertiesCaption_AllNotifiers: {
-            id: StringId.ScanPropertiesCaption_AllNotifiers, translations: {
-                en: 'All',
-            }
-        },
-        ScanPropertiesDescription_AllNotifiers: {
-            id: StringId.ScanPropertiesDescription_AllNotifiers, translations: {
-                en: 'All notifiers enabled for this scan',
-            }
-        },
-        ScanPropertiesCaption_MinimumStableTime: {
-            id: StringId.ScanPropertiesCaption_MinimumStableTime, translations: {
+        ScanEditorAttachedNotificationChannelPropertiesCaption_MinimumStable: {
+            id: StringId.ScanEditorAttachedNotificationChannelPropertiesCaption_MinimumStable, translations: {
                 en: 'Minimum stable time',
             }
         },
-        ScanPropertiesDescription_MinimumStableTime: {
-            id: StringId.ScanPropertiesDescription_MinimumStableTime, translations: {
+        ScanEditorAttachedNotificationChannelPropertiesDescription_MinimumStable: {
+            id: StringId.ScanEditorAttachedNotificationChannelPropertiesDescription_MinimumStable, translations: {
                 en: 'The minimum amount of time (in seconds) a scan must match before a notification can be sent',
             }
         },
-        ScanPropertiesCaption_MinimumElapsedTime: {
-            id: StringId.ScanPropertiesCaption_MinimumElapsedTime, translations: {
+        ScanEditorAttachedNotificationChannelPropertiesCaption_MinimumElapsed: {
+            id: StringId.ScanEditorAttachedNotificationChannelPropertiesCaption_MinimumElapsed, translations: {
                 en: 'Minimum elapsed time',
             }
         },
-        ScanPropertiesDescription_MinimumElapsedTime: {
-            id: StringId.ScanPropertiesDescription_MinimumElapsedTime, translations: {
+        ScanEditorAttachedNotificationChannelPropertiesDescription_MinimumElapsed: {
+            id: StringId.ScanEditorAttachedNotificationChannelPropertiesDescription_MinimumElapsed, translations: {
                 en: 'The minimum amount of time since the last notification before a new one can be sent',
+            }
+        },
+        ScanEditorAttachedNotificationChannelPropertiesCaption_Ttl: {
+            id: StringId.ScanEditorAttachedNotificationChannelPropertiesCaption_Ttl, translations: {
+                en: 'TTL',
+            }
+        },
+        ScanEditorAttachedNotificationChannelPropertiesDescription_Ttl: {
+            id: StringId.ScanEditorAttachedNotificationChannelPropertiesDescription_Ttl, translations: {
+                en: 'The time (in seconds) after which a notification will be cancelled if it cannot be sent',
+            }
+        },
+        ScanEditorAttachedNotificationChannelPropertiesCaption_Urgency: {
+            id: StringId.ScanEditorAttachedNotificationChannelPropertiesCaption_Urgency, translations: {
+                en: 'Urgency',
+            }
+        },
+        ScanEditorAttachedNotificationChannelPropertiesDescription_Urgency: {
+            id: StringId.ScanEditorAttachedNotificationChannelPropertiesDescription_Urgency, translations: {
+                en: 'Specifies the priority of notifications if multiple notifications are dispatched at once',
             }
         },
         ScanTargetsCaption_TargetType: {
@@ -13704,6 +13692,66 @@ export namespace I18nStrings {
         TextContainsScanFieldConditionOperandsTitle_IgnoreCase: {
             id: StringId.TextContainsScanFieldConditionOperandsTitle_IgnoreCase, translations: {
                 en: 'Specify whether case of characters in text should be ignored',
+            }
+        },
+        LockerScanAttachedNotificationChannelHeader_ChannelId: {
+            id: StringId.LockerScanAttachedNotificationChannelHeader_ChannelId, translations: {
+                en: 'Channel ID',
+            }
+        },
+        LockerScanAttachedNotificationChannelHeader_Name: {
+            id: StringId.LockerScanAttachedNotificationChannelHeader_Name, translations: {
+                en: 'Name',
+            }
+        },
+        LockerScanAttachedNotificationChannelHeader_CultureCode: {
+            id: StringId.LockerScanAttachedNotificationChannelHeader_CultureCode, translations: {
+                en: 'Culture',
+            }
+        },
+        LockerScanAttachedNotificationChannelHeader_MinimumStable: {
+            id: StringId.LockerScanAttachedNotificationChannelHeader_MinimumStable, translations: {
+                en: 'Min stable',
+            }
+        },
+        LockerScanAttachedNotificationChannelHeader_MinimumElapsed: {
+            id: StringId.LockerScanAttachedNotificationChannelHeader_MinimumElapsed, translations: {
+                en: 'Min elapsed',
+            }
+        },
+        LockerScanAttachedNotificationChannelHeader_Ttl: {
+            id: StringId.LockerScanAttachedNotificationChannelHeader_Ttl, translations: {
+                en: 'TTL',
+            }
+        },
+        LockerScanAttachedNotificationChannelHeader_Urgency: {
+            id: StringId.LockerScanAttachedNotificationChannelHeader_Urgency, translations: {
+                en: 'Urgency',
+            }
+        },
+        LockerScanAttachedNotificationChannelHeader_Topic: {
+            id: StringId.LockerScanAttachedNotificationChannelHeader_Topic, translations: {
+                en: 'Topic',
+            }
+        },
+        NotificationChannel_SourceSettings_Urgency_VeryLow: {
+            id: StringId.NotificationChannel_SourceSettings_Urgency_VeryLow, translations: {
+                en: 'VeryLow',
+            }
+        },
+        NotificationChannel_SourceSettings_Urgency_Low: {
+            id: StringId.NotificationChannel_SourceSettings_Urgency_Low, translations: {
+                en: 'Low',
+            }
+        },
+        NotificationChannel_SourceSettings_Urgency_Normal: {
+            id: StringId.NotificationChannel_SourceSettings_Urgency_Normal, translations: {
+                en: 'Normal',
+            }
+        },
+        NotificationChannel_SourceSettings_Urgency_High: {
+            id: StringId.NotificationChannel_SourceSettings_Urgency_High, translations: {
+                en: 'High',
             }
         },
 

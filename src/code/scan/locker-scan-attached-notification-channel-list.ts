@@ -15,7 +15,13 @@ export class LockerScanAttachedNotificationChannelList extends ModifierComparabl
         private readonly _notificationChannelsService: NotificationChannelsService,
         private readonly _locker: LockOpenListItem.Locker,
     ) {
-        super(0);
+        super(LockerScanAttachedNotificationChannelList.notChangingModifier);
+    }
+
+    override clone(): LockerScanAttachedNotificationChannelList {
+        const result = new LockerScanAttachedNotificationChannelList(this._notificationChannelsService, this._locker);
+        result.assign(this);
+        return result;
     }
 
     load(newChannels: readonly ScanAttachedNotificationChannel[]) {
@@ -140,4 +146,8 @@ export class LockerScanAttachedNotificationChannelList extends ModifierComparabl
             }
         }
     }
+}
+
+export namespace LockerScanAttachedNotificationChannelList {
+    export const notChangingModifier = 0;
 }

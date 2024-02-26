@@ -10,7 +10,7 @@ import { LockOpenNotificationChannel } from './lock-open-notification-channel';
 import { NotificationChannelList } from './notification-channel-list';
 
 export class NotificationChannelsService {
-    readonly channelList: NotificationChannelList;
+    private readonly _channelList: NotificationChannelList;
     private readonly _supportedDistributionMethodIdsIncubator: DataItemIncubator<QueryNotificationDistributionMethodsDataItem>;
     private readonly _getSupportedDistributionMethodIdsResolves = new Array<NotificationChannelsService.GetSupportedDistributionMethodIdsResolve>();
 
@@ -22,7 +22,7 @@ export class NotificationChannelsService {
     constructor(
         adiService: AdiService,
     ) {
-        this.channelList = new NotificationChannelList();
+        this._channelList = new NotificationChannelList();
         this._supportedDistributionMethodIds = new Array<NotificationDistributionMethodId>();
         this._supportedDistributionMethodIdsIncubator = new DataItemIncubator<QueryNotificationDistributionMethodsDataItem>(adiService);
 
@@ -50,19 +50,28 @@ export class NotificationChannelsService {
         }
     }
 
+    async getChannelList(refresh: boolean): Promise<NotificationChannelList> {
+        if (refresh || this._channelListBeenLoaded) {
+            await this.refreshChannels();
+            return this._channelList;
+        } else {
+            return this._channelList;
+        }
+    }
+
     tryLockChannel(channelId: string, locker: LockOpenListItem.Locker): Promise<Result<LockOpenNotificationChannel | undefined>> {
         // First check to see if list contains channel
-        const channel = this.channelList.getItemByKey(channelId);
+        const channel = this._channelList.getItemByKey(channelId);
         if (channel !== undefined) {
             // Exists.  Lock it and return it with a promise
-            return this.channelList.tryLockItemByKey(channelId, locker);
+            return this._channelList.tryLockItemByKey(channelId, locker);
         } else {
             return Promise.resolve(new Ok(undefined)); // ToDo
         }
     }
 
     unlockChannel(channel: LockOpenNotificationChannel, locker: LockOpenListItem.Locker) {
-        this.channelList.unlockItem(channel, locker);
+        this._channelList.unlockItem(channel, locker);
     }
 
     // getChannelStateWithSettings(channelId: string): Promise<> {
