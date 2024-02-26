@@ -132,6 +132,7 @@ export namespace RenderValue {
         ScanCriteriaTypeId,
         ScanTargetTypeId,
         ScanFieldBooleanOperationId,
+        NotificationChannelSourceSettingsUrgency,
 
         // Array
         StringArray,

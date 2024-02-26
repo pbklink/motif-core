@@ -11,7 +11,7 @@ import { ZenithProtocol } from './protocol/internal-api';
 export namespace ZenithDistributionChannelsConvert {
     export namespace NotificationSourceSettings {
         export function from(value: NotificationChannel.SourceSettings): ZenithProtocol.NotifyController.ScanParameters.Notification.SourceSettings {
-            const valueUrgency = value.urgency;
+            const valueUrgency = value.urgencyId;
             const resultUrgency = valueUrgency === undefined ? undefined : Urgency.fromId(valueUrgency);
 
             const result: ZenithProtocol.NotifyController.ScanParameters.Notification.SourceSettings = {
@@ -28,7 +28,7 @@ export namespace ZenithDistributionChannelsConvert {
 
             const result: NotificationChannel.SourceSettings = {
                 ttl: value.ttl,
-                urgency: resultUrgency,
+                urgencyId: resultUrgency,
                 topic: value.topic,
             };
             return result;

@@ -221,6 +221,12 @@ export class ScanFieldBooleanOperationIdTableValue extends EnumTableValue {
         this.renderValueTypeId = RenderValue.TypeId.ScanFieldBooleanOperationId;
     }
 }
+export class NotificationChannelSourceSettingsUrgencyTableValue extends EnumTableValue {
+    constructor() {
+        super();
+        this.renderValueTypeId = RenderValue.TypeId.NotificationChannelSourceSettingsUrgency;
+    }
+}
 
 export abstract class BaseIntegerArrayTableValue extends GenericTableValue<Integer[]> {
     protected renderValueTypeId: RenderValue.TypeId;

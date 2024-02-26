@@ -1435,7 +1435,7 @@ export namespace ScanEditor {
     export type Modifier = Integer;
 
     export type StateChangeEventHandler = (this: void) => void;
-    export type FieldChangesEventHandler = (this: void, changedFieldIds: readonly FieldId[], changer: Modifier | undefined) => void;
+    export type FieldChangesEventHandler = (this: void, changedFieldIds: readonly FieldId[], modifier: Modifier | undefined) => void;
     export type GetOrWaitForScanEventer = (this: void, scanId: string) => Promise<Scan>; // returns ScanId
     export type ErrorEventer = (this: void, errorText: string) => void;
 

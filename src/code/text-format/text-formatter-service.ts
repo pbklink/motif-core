@@ -35,6 +35,7 @@ import {
     Movement,
     MovementId,
     MyxLitIvemAttributes,
+    NotificationChannel,
     OrderExtendedSide,
     OrderExtendedSideId,
     OrderPriceUnitType,
@@ -425,6 +426,9 @@ export class TextFormatterService {
     formatScanFieldBooleanOperationId(value: ScanField.BooleanOperationId) {
         return ScanField.BooleanOperation.idToDisplay(value);
     }
+    formatUrgency(value: NotificationChannel.SourceSettings.UrgencyId) {
+        return NotificationChannel.SourceSettings.Urgency.idToDisplay(value);
+    }
 
     formatStringArrayAsCommaText(value: readonly string[]) {
         return CommaText.fromStringArray(value);
@@ -710,6 +714,8 @@ export class TextFormatterService {
                 return this.formatScanTargetTypeId((renderValue as EnumRenderValue).definedData);
             case RenderValue.TypeId.ScanFieldBooleanOperationId:
                 return this.formatScanFieldBooleanOperationId((renderValue as EnumRenderValue).definedData);
+            case RenderValue.TypeId.NotificationChannelSourceSettingsUrgency:
+                return this.formatUrgency((renderValue as EnumRenderValue).definedData);
             case RenderValue.TypeId.StringArray:
                 return this.formatStringArrayAsCommaText((renderValue as StringArrayRenderValue).definedData);
             case RenderValue.TypeId.IntegerArray:
