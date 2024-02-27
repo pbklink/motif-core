@@ -64,6 +64,8 @@ export const enum StringId {
     Delete,
     Deleting,
     Deleted,
+    Attach,
+    Detach,
     Update,
     Edit,
     Apply,
@@ -2291,6 +2293,7 @@ export const enum StringId {
     NotificationChannel_SourceSettings_Urgency_Low,
     NotificationChannel_SourceSettings_Urgency_Normal,
     NotificationChannel_SourceSettings_Urgency_High,
+    ScanEditorAttachNotificationChannels_AttachDescription,
 }
 
 /** @public */
@@ -2614,6 +2617,16 @@ export namespace I18nStrings {
         Deleted: {
             id: StringId.Deleted, translations: {
                 en: 'Deleted',
+            }
+        },
+        Attach: {
+            id: StringId.Attach, translations: {
+                en: 'Attach',
+            }
+        },
+        Detach: {
+            id: StringId.Detach, translations: {
+                en: 'Detach',
             }
         },
         Update: {
@@ -13752,6 +13765,11 @@ export namespace I18nStrings {
         NotificationChannel_SourceSettings_Urgency_High: {
             id: StringId.NotificationChannel_SourceSettings_Urgency_High, translations: {
                 en: 'High',
+            }
+        },
+        ScanEditorAttachNotificationChannels_AttachDescription: {
+            id: StringId.ScanEditorAttachNotificationChannels_AttachDescription, translations: {
+                en: 'Attach an existing notification channel to this scan',
             }
         },
 

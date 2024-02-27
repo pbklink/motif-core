@@ -8,13 +8,13 @@ import { ActiveFaultedStatusId, NotificationChannel, NotificationDistributionMet
 import { LockOpenListItem, LockOpenManager, MapKey, Ok, Result } from '../sys/sys-internal-api';
 
 export class LockOpenNotificationChannel implements NotificationChannel, LockOpenListItem<LockOpenNotificationChannel> {
+    readonly channelId: string;
     readonly mapKey: MapKey;
 
     public index: number; // within list of LockOpenNotificationChannel - used by LockOpenList
 
     private readonly _lockOpenManager: LockOpenManager<LockOpenNotificationChannel>;
 
-    private readonly _channelId: string;
     private _enabled: boolean;
     private _channelName: string;
     private _channelDescription: string | undefined;
@@ -25,13 +25,17 @@ export class LockOpenNotificationChannel implements NotificationChannel, LockOpe
     private _settings: ZenithProtocolCommon.NotificationChannelSettings | undefined;
     private _faulted: boolean;
 
+    private _settingsLoaded: boolean;
     private _deleted = false;
 
     constructor(
         notificationChannel: NotificationChannel,
-        private readonly _deletedAndUnlockedEventer: LockOpenNotificationChannel.DeletedAndUnlockedEventer,
+        settingsSpecified: boolean,
+        // private readonly _deletedAndUnlockedEventer: LockOpenNotificationChannel.DeletedAndUnlockedEventer,
     ) {
-        this.mapKey = notificationChannel.channelId;
+        const channelId = notificationChannel.channelId;
+        this.channelId = channelId;
+        this.mapKey = channelId;
 
         this._lockOpenManager = new LockOpenManager<LockOpenNotificationChannel>(
             () => this.tryProcessFirstLock(),
@@ -39,6 +43,8 @@ export class LockOpenNotificationChannel implements NotificationChannel, LockOpe
             () => this.processFirstOpen(),
             () => this.processLastClose(),
         );
+
+        this.load(notificationChannel, settingsSpecified);
     }
 
     get lockCount() { return this._lockOpenManager.lockCount; }
@@ -47,7 +53,6 @@ export class LockOpenNotificationChannel implements NotificationChannel, LockOpe
     get openers(): readonly LockOpenListItem.Opener[] { return this._lockOpenManager.openers; }
 
     get enabled() { return this._enabled; }
-    get channelId() { return this._channelId; }
     get channelName() { return this._channelName; }
     get channelDescription() { return this._channelDescription; }
     get userMetadata() { return this._userMetadata; }
@@ -56,6 +61,20 @@ export class LockOpenNotificationChannel implements NotificationChannel, LockOpe
     get distributionMethodId() { return this._distributionMethodId; }
     get settings() { return this._settings; }
     get faulted() { return this._faulted; }
+
+    load(notificationChannel: NotificationChannel, settingsSpecified: boolean) {
+        this._enabled = notificationChannel.enabled;
+        this._channelName = notificationChannel.channelName;
+        this._channelDescription = notificationChannel.channelDescription;
+        this._userMetadata = notificationChannel.userMetadata;
+        this._favourite = notificationChannel.favourite;
+        this._channelStatusId = notificationChannel.channelStatusId;
+        this._distributionMethodId = notificationChannel.distributionMethodId;
+        this._settings = notificationChannel.settings;
+        this._faulted = notificationChannel.faulted;
+
+        this._settingsLoaded = settingsSpecified;
+    }
 
     async tryLock(locker: LockOpenListItem.Locker): Promise<Result<void>> {
         return this._lockOpenManager.tryLock(locker);
@@ -85,13 +104,17 @@ export class LockOpenNotificationChannel implements NotificationChannel, LockOpe
 
     }
 
+    forceDelete() {
+
+    }
+
     private tryProcessFirstLock(): Promise<Result<void>> {
         return Promise.resolve(new Ok(undefined));
     }
 
     private processLastUnlock() {
         if (this._deleted) {
-            this._deletedAndUnlockedEventer(this);
+            // this._deletedAndUnlockedEventer(this);
         }
     }
 

@@ -52,6 +52,17 @@ export class LockerScanAttachedNotificationChannelList extends ModifierComparabl
         }
     }
 
+    indexOfChannelId(channelId: string) {
+        const count = this.count;
+        for (let i = 0; i < count; i++) {
+            const item = this.getAt(i);
+            if (item.channelId === channelId) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
     async attachChannel(channelId: string, modifier?: Integer): Promise<Integer> {
         const lockerAttachedChannel = await this.tryLockChannel(channelId, undefined, undefined, undefined);
         const index = this.add(lockerAttachedChannel, modifier);

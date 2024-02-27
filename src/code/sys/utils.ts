@@ -555,7 +555,11 @@ export function removeFromArray<T>(array: T[], removeElements: readonly T[]): In
 }
 
 /** @public */
-export function testRemoveFromArray<T>(array: T[], removeTest: ((element: T) => boolean)): Integer | undefined {
+export function testRemoveFromArray<T>(
+    array: T[],
+    removeTest: ((element: T) => boolean),
+    beforeBlockRemoveCallback?: (blockIndex: Integer, blockLength: Integer) => void
+): Integer | undefined {
     let firstRemoveIndex: Integer | undefined;
     let blockLastIndex: Integer | undefined;
     for (let i = array.length - 1; i >= 0; i--) {
@@ -568,15 +572,23 @@ export function testRemoveFromArray<T>(array: T[], removeTest: ((element: T) => 
             firstRemoveIndex = i;
         } else {
             if (blockLastIndex !== undefined) {
+                const blockIndex = i + 1;
                 const blockLength = blockLastIndex - i;
-                array.splice(i + 1, blockLength);
+                if (beforeBlockRemoveCallback !== undefined) {
+                    beforeBlockRemoveCallback(blockIndex, blockLength);
+                }
+                array.splice(blockIndex, blockLength);
                 blockLastIndex = undefined;
             }
         }
     }
 
     if (blockLastIndex !== undefined) {
-        array.splice(0, blockLastIndex + 1);
+        const blockLength = blockLastIndex + 1;
+        if (beforeBlockRemoveCallback !== undefined) {
+            beforeBlockRemoveCallback(0, blockLength);
+        }
+        array.splice(0, blockLength);
     }
 
     return firstRemoveIndex;

@@ -621,7 +621,7 @@ export class ScanEditor extends OpenableScanEditor {
                     this._errorEventer(result.error);
                 }
             },
-            (reason) => { throw AssertInternalError.createIfNotError(reason, 'SEC55716'); }
+            (reason) => { throw AssertInternalError.createIfNotError(reason, 'SECS55716'); }
         );
     }
 
@@ -714,7 +714,7 @@ export class ScanEditor extends OpenableScanEditor {
                     this._errorEventer(result.error);
                 }
             },
-            (reason) => { throw AssertInternalError.createIfNotError(reason, 'SEC55716'); }
+            (reason) => { throw AssertInternalError.createIfNotError(reason, 'SEUS55716'); }
         );
     }
 
@@ -1322,26 +1322,17 @@ export class ScanEditor extends OpenableScanEditor {
         // Only switch to more modified state
         switch (whileSavingModifiedStateId) {
             case ScanEditor.ModifiedStateId.Unmodified:
-                if (modifiedScanFieldIds.length > 0) {
-                    throw new AssertInternalError('SEPSAUSSU20201');
-                }
                 break;
             case ScanEditor.ModifiedStateId.Modified:
-                if (modifiedScanFieldIds.length === 0) {
-                    throw new AssertInternalError('SEPSAUSSM20201');
-                } else {
-                    if (this._modifiedStateId !== ScanEditor.ModifiedStateId.Conflict) {
-                        this.setModifiedState(ScanEditor.ModifiedStateId.Modified);
-                    }
+                if (this._modifiedStateId !== ScanEditor.ModifiedStateId.Conflict) {
+                    this.setModifiedState(ScanEditor.ModifiedStateId.Modified);
                 }
                 break;
             case ScanEditor.ModifiedStateId.Conflict:
-                if (modifiedScanFieldIds.length === 0) {
-                    throw new AssertInternalError('SEPSAUSSC20201');
-                } else {
-                    this.setModifiedState(ScanEditor.ModifiedStateId.Conflict);
-                }
+                this.setModifiedState(ScanEditor.ModifiedStateId.Conflict);
                 break;
+            default:
+                throw new UnreachableCaseError('SEPSAUSSD20201', whileSavingModifiedStateId);
         }
 
         this.setLifeCycleState(newStateId);

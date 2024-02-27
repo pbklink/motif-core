@@ -42,7 +42,7 @@ export class LockerScanAttachedNotificationChannel implements ScanAttachedNotifi
     get topic() { return this._channelSourceSettings?.topic; }
 
     setLockedNotificationChannel(value: LockOpenNotificationChannel | undefined) {
-        // todo
+        this._lockedNotificationChannel = value;
     }
 
     toScanAttachedNotificationChannel(): ScanAttachedNotificationChannel {
