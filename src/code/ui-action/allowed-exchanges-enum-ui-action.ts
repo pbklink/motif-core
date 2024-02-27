@@ -9,11 +9,11 @@ import { SymbolsService } from '../services/services-internal-api';
 import { Integer, MultiEvent } from '../sys/sys-internal-api';
 import { EnumUiAction } from './enum-ui-action';
 
-export class AllowedExchangesEnumUiAction extends EnumUiAction {
+export class AllowedExchangesEnumUiAction extends EnumUiAction<Integer> {
     private _allowedExchangeIdsChangedSubscriptionId: MultiEvent.SubscriptionId;
 
     constructor(private _symbolsService: SymbolsService, valueRequired: boolean | undefined = true) {
-        super(valueRequired);
+        super(EnumUiAction.integerUndefinedValue, valueRequired);
 
         this._allowedExchangeIdsChangedSubscriptionId = this._symbolsService.subscribeAllowedExchangeIdsChangedEvent(
             () => this.handleAllowedExchangeIdsChanged()
@@ -37,7 +37,7 @@ export class AllowedExchangesEnumUiAction extends EnumUiAction {
     getElementPropertiesArray() {
         const exchangeIds = this._symbolsService.allowedExchangeIds;
         const count = exchangeIds.length;
-        const result = new Array<EnumUiAction.ElementProperties>(count);
+        const result = new Array<EnumUiAction.ElementProperties<Integer>>(count);
         for (let i = 0; i < count; i++) {
             const exchangeId = exchangeIds[i];
             result[i] = this.createEnumUiActionElementProperties(exchangeId);
@@ -50,7 +50,7 @@ export class AllowedExchangesEnumUiAction extends EnumUiAction {
     }
 
     private createEnumUiActionElementProperties(exchangeId: ExchangeId) {
-        const result: EnumUiAction.ElementProperties = {
+        const result: EnumUiAction.ElementProperties<Integer> = {
             element: exchangeId,
             caption: ExchangeInfo.idToAbbreviatedDisplay(exchangeId),
             title: ExchangeInfo.idToFullDisplay(exchangeId),

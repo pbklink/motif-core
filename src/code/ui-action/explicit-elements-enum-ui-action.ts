@@ -4,18 +4,17 @@
  * License: motionite.trade/license/motif
  */
 
-import { Integer } from '../sys/sys-internal-api';
 import { EnumUiAction } from './enum-ui-action';
 
-export class ExplicitElementsEnumUiAction extends EnumUiAction {
-    private _elementPropertiesMap = new Map<Integer, EnumUiAction.ElementProperties>();
+export abstract class ExplicitElementsEnumUiAction<T> extends EnumUiAction<T> {
+    private _elementPropertiesMap = new Map<T, EnumUiAction.ElementProperties<T>>();
 
-    getElementProperties(element: Integer) {
+    getElementProperties(element: T) {
         return this._elementPropertiesMap.get(element);
     }
 
     getElementPropertiesArray() {
-        const result = new Array<EnumUiAction.ElementProperties>(this._elementPropertiesMap.size);
+        const result = new Array<EnumUiAction.ElementProperties<T>>(this._elementPropertiesMap.size);
         let idx = 0;
         for (const value of this._elementPropertiesMap.values()) {
             result[idx++] = value;
@@ -23,8 +22,8 @@ export class ExplicitElementsEnumUiAction extends EnumUiAction {
         return result;
     }
 
-    pushElement(element: Integer, caption: string, title: string) {
-        const elementProperties: EnumUiAction.ElementProperties = {
+    pushElement(element: T, caption: string, title: string) {
+        const elementProperties: EnumUiAction.ElementProperties<T> = {
             element,
             caption,
             title,
@@ -33,8 +32,8 @@ export class ExplicitElementsEnumUiAction extends EnumUiAction {
         this.notifyElementPush(element, caption, title);
     }
 
-    pushElements(elementPropertiesArray: EnumUiAction.ElementProperties[],
-        filter: Integer[] | undefined | null = null) {
+    pushElements(elementPropertiesArray: EnumUiAction.ElementProperties<T>[],
+        filter: T[] | undefined | null = null) {
         this._elementPropertiesMap.clear();
         for (const elementProperties of elementPropertiesArray) {
             this._elementPropertiesMap.set(elementProperties.element, elementProperties);

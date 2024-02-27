@@ -9,11 +9,11 @@ import { SymbolsService } from '../services/services-internal-api';
 import { Integer, MultiEvent } from '../sys/sys-internal-api';
 import { EnumUiAction } from './enum-ui-action';
 
-export class AllowedMarketsEnumUiAction extends EnumUiAction {
+export class AllowedMarketsEnumUiAction extends EnumUiAction<Integer> {
     private _allowedMarketIdsChangedSubscriptionId: MultiEvent.SubscriptionId;
 
     constructor(private _symbolsService: SymbolsService, valueRequired: boolean | undefined = true) {
-        super(valueRequired);
+        super(EnumUiAction.integerUndefinedValue, valueRequired);
 
         this._allowedMarketIdsChangedSubscriptionId = this._symbolsService.subscribeAllowedMarketIdsChangedEvent(
             () => this.handleAllowedMarketIdsChanged()
@@ -37,7 +37,7 @@ export class AllowedMarketsEnumUiAction extends EnumUiAction {
     getElementPropertiesArray() {
         const marketIds = this._symbolsService.allowedMarketIds;
         const count = marketIds.length;
-        const result = new Array<EnumUiAction.ElementProperties>(count);
+        const result = new Array<EnumUiAction.ElementProperties<Integer>>(count);
         for (let i = 0; i < count; i++) {
             const marketId = marketIds[i];
             result[i] = this.createEnumUiActionElementProperties(marketId);
@@ -50,7 +50,7 @@ export class AllowedMarketsEnumUiAction extends EnumUiAction {
     }
 
     private createEnumUiActionElementProperties(marketId: MarketId) {
-        const result: EnumUiAction.ElementProperties = {
+        const result: EnumUiAction.ElementProperties<Integer> = {
             element: marketId,
             caption: this._symbolsService.getMarketGlobalCode(marketId),
             title: MarketInfo.idToDisplay(marketId),
