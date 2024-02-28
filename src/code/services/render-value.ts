@@ -189,7 +189,7 @@ export namespace RenderValue {
 
         export const error: CorrectnessAttribute = {
             id: AttributeId.Correctness,
-            correctnessId: CorrectnessId.Suspect
+            correctnessId: CorrectnessId.Error
         } as const;
     }
 

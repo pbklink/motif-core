@@ -16025,16 +16025,16 @@ export class LitIvemIdWatchmakerListMembersDataItem extends WatchmakerListMember
 // Warning: (ae-missing-release-tag) "LockerScanAttachedNotificationChannel" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class LockerScanAttachedNotificationChannel implements ScanAttachedNotificationChannel {
+export class LockerScanAttachedNotificationChannel {
     constructor(channelId: string, _minimumStable: number | undefined, // milli seconds
     _minimumElapsed: number | undefined, // milli seconds
-    _channelSourceSettings: NotificationChannel.SourceSettings | undefined);
+    channelSourceSettings: NotificationChannel.SourceSettings | undefined);
     // (undocumented)
     beginFieldChanges(modifier: LockerScanAttachedNotificationChannel.Modifier | undefined): void;
     // (undocumented)
-    readonly channelId: string;
+    changedEventer: LockerScanAttachedNotificationChannel.ChangedEventer | undefined;
     // (undocumented)
-    get channelSourceSettings(): NotificationChannel.SourceSettings | undefined;
+    readonly channelId: string;
     // (undocumented)
     get cultureCode(): string | undefined;
     // (undocumented)
@@ -16056,11 +16056,11 @@ export class LockerScanAttachedNotificationChannel implements ScanAttachedNotifi
     // (undocumented)
     setMinimumStable(value: number | undefined, modifier?: LockerScanAttachedNotificationChannel.Modifier): void;
     // (undocumented)
-    setTopic(value: string | undefined, modifier?: LockerScanAttachedNotificationChannel.Modifier): void;
+    setTopic(value: string | undefined, modifier?: LockerScanAttachedNotificationChannel.Modifier): boolean;
     // (undocumented)
-    setTtl(value: number, modifier?: LockerScanAttachedNotificationChannel.Modifier): void;
+    setTtl(value: number | undefined, modifier?: LockerScanAttachedNotificationChannel.Modifier): boolean;
     // (undocumented)
-    setUrgency(value: NotificationChannel.SourceSettings.UrgencyId | undefined, modifier?: LockerScanAttachedNotificationChannel.Modifier): void;
+    setUrgency(value: NotificationChannel.SourceSettings.UrgencyId | undefined, modifier?: LockerScanAttachedNotificationChannel.Modifier): boolean;
     // (undocumented)
     subscribeFieldsChangedEvent(handler: LockerScanAttachedNotificationChannel.FieldChangesEventHandler): number;
     // (undocumented)
@@ -16070,13 +16070,19 @@ export class LockerScanAttachedNotificationChannel implements ScanAttachedNotifi
     // (undocumented)
     get ttl(): number | undefined;
     // (undocumented)
+    get ttlRequired(): boolean;
+    // (undocumented)
     unsubscribeFieldsChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
     // (undocumented)
     get urgencyId(): NotificationChannel.SourceSettings.UrgencyId | undefined;
+    // (undocumented)
+    get valid(): boolean;
 }
 
 // @public (undocumented)
 export namespace LockerScanAttachedNotificationChannel {
+    // (undocumented)
+    export type ChangedEventer = (this: void, valid: boolean, modifierRoot: Integer | undefined) => void;
     // (undocumented)
     export namespace Field {
         // (undocumented)
@@ -16108,32 +16114,43 @@ export namespace LockerScanAttachedNotificationChannel {
         // (undocumented)
         ChannelId = 0,
         // (undocumented)
-        CultureCode = 2,
+        CultureCode = 3,
         // (undocumented)
-        MinimumElapsed = 4,
+        MinimumElapsed = 5,
         // (undocumented)
-        MinimumStable = 3,
+        MinimumStable = 4,
         // (undocumented)
-        Name = 1,
+        Name = 2,
         // (undocumented)
-        Topic = 7,
+        Topic = 8,
         // (undocumented)
-        Ttl = 5,
+        Ttl = 6,
         // (undocumented)
-        Urgency = 6
+        Urgency = 7,
+        // (undocumented)
+        Valid = 1
     }
     // (undocumented)
-    export type Modifier = Integer;
+    export function isEqual(left: ScanAttachedNotificationChannel, right: LockerScanAttachedNotificationChannel): boolean;
+    // (undocumented)
+    export interface Modifier {
+        // (undocumented)
+        node: Integer;
+        // (undocumented)
+        root: Integer;
+    }
 }
 
 // Warning: (ae-missing-release-tag) "LockerScanAttachedNotificationChannelList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "LockerScanAttachedNotificationChannelList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class LockerScanAttachedNotificationChannelList extends ModifierComparableList<LockerScanAttachedNotificationChannel, Integer, ScanAttachedNotificationChannel> {
+export class LockerScanAttachedNotificationChannelList extends ModifierComparableList<LockerScanAttachedNotificationChannel, Integer | undefined> {
     constructor(_notificationChannelsService: NotificationChannelsService, _locker: LockOpenListItem.Locker);
     // (undocumented)
     attachChannel(channelId: string, modifier?: Integer): Promise<Integer>;
+    // (undocumented)
+    changedEventer: LockerScanAttachedNotificationChannelList.ChangedEventer | undefined;
     // (undocumented)
     clone(): LockerScanAttachedNotificationChannelList;
     // (undocumented)
@@ -16141,19 +16158,33 @@ export class LockerScanAttachedNotificationChannelList extends ModifierComparabl
     // (undocumented)
     detachChannel(channel: LockerScanAttachedNotificationChannel, modifier?: Integer): void;
     // (undocumented)
+    detachChannelsAtIndices(detachIndices: Integer[]): void;
+    // (undocumented)
     indexOfChannelId(channelId: string): number;
     // (undocumented)
-    load(newChannels: readonly ScanAttachedNotificationChannel[]): void;
+    load(newChannels: readonly ScanAttachedNotificationChannel[], modifier?: Integer): void;
     // (undocumented)
     protected notifyListChange(listChangeTypeId: UsableListChangeTypeId, index: Integer, count: Integer): void;
     // (undocumented)
+    subscribeBeforeChannelsDetachEvent(handler: LockerScanAttachedNotificationChannelList.BeforeChannelsDetachEventHandler): number;
+    // (undocumented)
     toScanAttachedNotificationChannelArray(): readonly ScanAttachedNotificationChannel[];
+    // (undocumented)
+    unsubscribeBeforeChannelsDetachEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+    // (undocumented)
+    get valid(): boolean;
 }
 
 // @public (undocumented)
 export namespace LockerScanAttachedNotificationChannelList {
     const // (undocumented)
     notChangingModifier = 0;
+    // (undocumented)
+    export type BeforeChannelsDetachEventHandler = (this: void, idx: Integer, count: Integer) => void;
+    // (undocumented)
+    export type ChangedEventer = (this: void, modifierRoot: Integer | undefined) => void;
+    // (undocumented)
+    export function isArrayAndListEqual(array: readonly ScanAttachedNotificationChannel[], list: LockerScanAttachedNotificationChannelList): boolean;
 }
 
 // Warning: (ae-missing-release-tag) "LockOpenList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -16372,6 +16403,8 @@ export class LockOpenNotificationChannel implements NotificationChannel, LockOpe
     openLocked(opener: LockOpenListItem.Opener): void;
     // (undocumented)
     get settings(): ZenithProtocolCommon.NotificationChannelSettings | undefined;
+    // (undocumented)
+    get settingsLoaded(): boolean;
     // (undocumented)
     tryLock(locker: LockOpenListItem.Locker): Promise<Result<void>>;
     // (undocumented)
@@ -18386,7 +18419,7 @@ export class NotificationChannelSourceSettingsUrgencyTableValue extends EnumTabl
 //
 // @public (undocumented)
 export class NotificationChannelsService {
-    constructor(adiService: AdiService);
+    constructor(_adiService: AdiService);
     // (undocumented)
     finalise(): void;
     // (undocumented)
@@ -18396,7 +18429,7 @@ export class NotificationChannelsService {
     // (undocumented)
     initialise(): void;
     // (undocumented)
-    tryLockChannel(channelId: string, locker: LockOpenListItem.Locker): Promise<Result<LockOpenNotificationChannel | undefined>>;
+    tryLockChannel(channelId: string, locker: LockOpenListItem.Locker, refresh: boolean): Promise<Result<LockOpenNotificationChannel | undefined>>;
     // (undocumented)
     unlockChannel(channel: LockOpenNotificationChannel, locker: LockOpenListItem.Locker): void;
 }
@@ -18405,6 +18438,15 @@ export class NotificationChannelsService {
 export namespace NotificationChannelsService {
     // (undocumented)
     export type GetSupportedDistributionMethodIdsResolve = (this: void, value: readonly NotificationDistributionMethodId[] | undefined) => void;
+    // (undocumented)
+    export interface IdQueryNotificationChannelIncubator {
+        // (undocumented)
+        readonly channelId: string;
+        // (undocumented)
+        readonly incubator: DataItemIncubator<QueryNotificationChannelDataItem>;
+        // (undocumented)
+        resolveFtns: NotificationChannelsService.QueryNotificationChannelResolve[];
+    }
     // (undocumented)
     export interface List {
         // (undocumented)
@@ -18423,7 +18465,17 @@ export namespace NotificationChannelsService {
         removeAtIndex(idx: Integer): void;
     }
     // (undocumented)
+    export type QueryNotificationChannelResolve = (this: void, channel: Result<LockOpenNotificationChannel | undefined>) => void;
+    // (undocumented)
     export type QueryNotificationChannelsResolve = (this: void, list: NotificationChannelList | undefined) => void;
+}
+
+// Warning: (ae-internal-missing-underscore) The name "NotificationChannelStaticInitialise" should be prefixed with an underscore because the declaration is marked as @internal
+//
+// @internal (undocumented)
+export namespace NotificationChannelStaticInitialise {
+    // (undocumented)
+    export function initialise(): void;
 }
 
 // Warning: (ae-missing-release-tag) "NotificationDistributionMethodId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -25231,8 +25283,6 @@ export interface ScanAttachedNotificationChannel {
 // @public (undocumented)
 export namespace ScanAttachedNotificationChannel {
     // (undocumented)
-    export function isArrayAndListEqual(array: readonly ScanAttachedNotificationChannel[], list: ModifierComparableList<ScanAttachedNotificationChannel, Integer>): boolean;
-    // (undocumented)
     export function isArrayEqual(left: readonly ScanAttachedNotificationChannel[], right: readonly ScanAttachedNotificationChannel[]): boolean;
     // (undocumented)
     export function isEqual(left: ScanAttachedNotificationChannel, right: ScanAttachedNotificationChannel): boolean;
@@ -31815,7 +31865,7 @@ export const enum StringId {
     // (undocumented)
     NotificationChannel_SourceSettings_Urgency_VeryLow = 2281,
     // (undocumented)
-    Notifiers = 215,
+    Notifications = 215,
     // (undocumented)
     NotImplementedInternalError = 6,
     // (undocumented)
@@ -32946,6 +32996,12 @@ export const enum StringId {
     ScanEditorAttachedNotificationChannelPropertiesDescription_Urgency = 2053,
     // (undocumented)
     ScanEditorAttachNotificationChannels_AttachDescription = 2285,
+    // (undocumented)
+    ScanEditorAttachNotificationChannels_DetachSelectedChannelsCaption = 2287,
+    // (undocumented)
+    ScanEditorAttachNotificationChannels_DetachSelectedChannelsTitle = 2288,
+    // (undocumented)
+    ScanEditorAttachNotificationChannels_EditGridColumns = 2286,
     // (undocumented)
     ScanEditorComponent_ApplyTitle = 2076,
     // (undocumented)
@@ -36333,6 +36389,11 @@ export namespace TableValueSource {
         newValue: TableValue;
         // (undocumented)
         recentChangeTypeId: ValueRecentChangeTypeId | undefined;
+    }
+    // (undocumented)
+    export namespace ValueChange {
+        // (undocumented)
+        export function arrayIncludesFieldIndex(array: readonly ValueChange[], fieldIndex: Integer, end: Integer): boolean;
     }
     // (undocumented)
     export type ValueChangesEvent = (valueChanges: ValueChange[]) => void;

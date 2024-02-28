@@ -7,6 +7,7 @@
 import { AdiStaticInitialise } from './adi/adi-internal-api';
 import { CommandStaticInitialise } from './command/command-internal-api';
 import { GridStaticInitialise } from './grid/internal-api';
+import { NotificationChannelStaticInitialise } from './notification-channel/internal-api';
 import { PublisherStaticInitialise } from './publisher/publisher-internal-api';
 import { RankedLitIvemIdListStaticInitialise } from './ranked-lit-ivem-id-list/ranked-lit-ivem-id-list-internal-api';
 import { ResStaticInitialise } from './res/res-internal-api';
@@ -25,6 +26,7 @@ export namespace CoreStaticInitialise {
         CommandStaticInitialise.initialise();
         ServicesStaticInitialise.initialise();
         SequenceHistoryStaticInitialise.initialise();
+        NotificationChannelStaticInitialise.initialise();
         ScanStaticInitialise.initialise();
         RankedLitIvemIdListStaticInitialise.initialise();
         GridStaticInitialise.initialise();

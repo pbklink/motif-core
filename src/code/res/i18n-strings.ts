@@ -222,7 +222,7 @@ export const enum StringId {
     Criteria,
     Rank,
     Targets,
-    Notifiers,
+    Notifications,
     ExecuteCommandTitle,
     ApplySymbolCaption,
     ApplySymbolTitle,
@@ -2294,6 +2294,9 @@ export const enum StringId {
     NotificationChannel_SourceSettings_Urgency_Normal,
     NotificationChannel_SourceSettings_Urgency_High,
     ScanEditorAttachNotificationChannels_AttachDescription,
+    ScanEditorAttachNotificationChannels_EditGridColumns,
+    ScanEditorAttachNotificationChannels_DetachSelectedChannelsCaption,
+    ScanEditorAttachNotificationChannels_DetachSelectedChannelsTitle,
 }
 
 /** @public */
@@ -3405,9 +3408,9 @@ export namespace I18nStrings {
                 en: 'Targets',
             }
         },
-        Notifiers: {
-            id: StringId.Notifiers, translations: {
-                en: 'Notifiers',
+        Notifications: {
+            id: StringId.Notifications, translations: {
+                en: 'Notifications',
             }
         },
         ExecuteCommandTitle: {
@@ -13770,6 +13773,21 @@ export namespace I18nStrings {
         ScanEditorAttachNotificationChannels_AttachDescription: {
             id: StringId.ScanEditorAttachNotificationChannels_AttachDescription, translations: {
                 en: 'Attach an existing notification channel to this scan',
+            }
+        },
+        ScanEditorAttachNotificationChannels_EditGridColumns: {
+            id: StringId.ScanEditorAttachNotificationChannels_EditGridColumns, translations: {
+                en: 'Edit scan attached notifications grid columns',
+            }
+        },
+        ScanEditorAttachNotificationChannels_DetachSelectedChannelsCaption: {
+            id: StringId.ScanEditorAttachNotificationChannels_DetachSelectedChannelsCaption, translations: {
+                en: 'Detach selected channels',
+            }
+        },
+        ScanEditorAttachNotificationChannels_DetachSelectedChannelsTitle: {
+            id: StringId.ScanEditorAttachNotificationChannels_DetachSelectedChannelsTitle, translations: {
+                en: 'Detach selected channels from this scan',
             }
         },
 

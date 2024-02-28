@@ -14,7 +14,7 @@ export class NotificationChannelList extends LockOpenList<LockOpenNotificationCh
         const existCount = this.count;
         const newCount = channels.length;
         const newModifyArray = new Array<boolean>(newCount); // array which flags that an new channel already exists and will be modified
-        newModifyArray.forEach((_value, index, array) => array[index] = false); // initialise
+        newModifyArray.fill(false); // initialise
 
         // Force deleted and modify existing
         for (let i = existCount - 1; i >= 0; i--) {

@@ -80,8 +80,15 @@ export function parsePublishPayload(data: ZenithProtocol.ChannelController.Query
     const convertedUserMetadata = ZenithChannelConvert.UserMetadata.to(details.Metadata);
     const channelStatusId = ZenithConvert.ActiveFaultedStatus.toId(details.Status);
 
+    // handle bug in server
+    let channelId = data.ChannelID;
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+    if (channelId === undefined) {
+        channelId = (data as unknown as { ScanID: string}).ScanID;
+    }
+
     const channel: SettingsedNotificationChannel = {
-        channelId: data.ChannelID,
+        channelId: channelId,
         channelName: details.Name,
         channelDescription: details.Description,
         userMetadata: details.Metadata,

@@ -60,6 +60,7 @@ export class LockOpenNotificationChannel implements NotificationChannel, LockOpe
     get channelStatusId() { return this._channelStatusId; }
     get distributionMethodId() { return this._distributionMethodId; }
     get settings() { return this._settings; }
+    get settingsLoaded() { return this._settingsLoaded; }
     get faulted() { return this._faulted; }
 
     load(notificationChannel: NotificationChannel, settingsSpecified: boolean) {

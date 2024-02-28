@@ -9,14 +9,23 @@ import { LockOpenNotificationChannel } from '../notification-channel/internal-ap
 import { StringId, Strings } from '../res/res-internal-api';
 import { AssertInternalError, EnumInfoOutOfOrderError, FieldDataTypeId, Integer, MultiEvent, ValueRecentChangeTypeId } from '../sys/sys-internal-api';
 
-export class LockerScanAttachedNotificationChannel implements ScanAttachedNotificationChannel {
+export class LockerScanAttachedNotificationChannel {
+    changedEventer: LockerScanAttachedNotificationChannel.ChangedEventer | undefined; // only used by List
+
     private _cultureCode: string | undefined;
     private _lockedNotificationChannel: LockOpenNotificationChannel | undefined;
+
+    private _ttl: number | undefined;
+    private _urgencyId: NotificationChannel.SourceSettings.UrgencyId | undefined;
+    private _topic: string | undefined;
+
+    private _valid: boolean;
+    private _ttlRequired: boolean;
 
     private _beginFieldChangesCount = 0;
     private _changedFieldIds = new Array<LockerScanAttachedNotificationChannel.FieldId>();
     private _fieldChangeNotifying = false;
-    private _modifier: LockerScanAttachedNotificationChannel.Modifier | undefined;
+    private _changesModifier: LockerScanAttachedNotificationChannel.Modifier | undefined;
 
     private _fieldChangesMultiEvent = new MultiEvent<LockerScanAttachedNotificationChannel.FieldChangesEventHandler>();
 
@@ -24,8 +33,18 @@ export class LockerScanAttachedNotificationChannel implements ScanAttachedNotifi
         readonly channelId: string,
         private _minimumStable: number | undefined, // milli seconds
         private _minimumElapsed: number | undefined, // milli seconds
-        private _channelSourceSettings: NotificationChannel.SourceSettings | undefined,
+        channelSourceSettings: NotificationChannel.SourceSettings | undefined,
     ) {
+        if (channelSourceSettings === undefined) {
+            this._ttl = undefined;
+            this._urgencyId = undefined;
+            this._topic = undefined;
+        } else {
+            this._ttl = channelSourceSettings.ttl;
+            this._urgencyId = channelSourceSettings.urgencyId;
+            this._topic = channelSourceSettings.topic;
+        }
+        this.updateValid();
     }
 
     get name() {
@@ -35,11 +54,13 @@ export class LockerScanAttachedNotificationChannel implements ScanAttachedNotifi
     get cultureCode() { return this._cultureCode; }
     get minimumStable() { return this._minimumStable; }
     get minimumElapsed() { return this._minimumElapsed; }
-    get channelSourceSettings() { return this._channelSourceSettings; }
     get lockedNotificationChannel() { return this._lockedNotificationChannel; }
-    get ttl() { return this._channelSourceSettings?.ttl; }
-    get urgencyId() { return this._channelSourceSettings?.urgencyId; }
-    get topic() { return this._channelSourceSettings?.topic; }
+    get ttl() { return this._ttl; }
+    get urgencyId() { return this._urgencyId; }
+    get topic() { return this._topic; }
+
+    get valid() { return this._valid; }
+    get ttlRequired() { return this._ttlRequired; }
 
     setLockedNotificationChannel(value: LockOpenNotificationChannel | undefined) {
         this._lockedNotificationChannel = value;
@@ -47,10 +68,21 @@ export class LockerScanAttachedNotificationChannel implements ScanAttachedNotifi
 
     toScanAttachedNotificationChannel(): ScanAttachedNotificationChannel {
         let channelSourceSettings: NotificationChannel.SourceSettings | undefined;
-        if (this._channelSourceSettings === undefined) {
+        const ttl = this._ttl;
+        const urgencyId = this._urgencyId;
+        const topic = this._topic;
+        if (ttl === undefined && urgencyId === undefined && topic === undefined) {
             channelSourceSettings = undefined;
         } else {
-            channelSourceSettings = NotificationChannel.SourceSettings.createCopy(this._channelSourceSettings);
+            if (ttl === undefined) {
+                throw new AssertInternalError('LSANCLTSANC4556');
+            } else {
+                channelSourceSettings = {
+                    ttl,
+                    urgencyId,
+                    topic
+                };
+            }
         }
 
         return {
@@ -65,9 +97,9 @@ export class LockerScanAttachedNotificationChannel implements ScanAttachedNotifi
     beginFieldChanges(modifier: LockerScanAttachedNotificationChannel.Modifier | undefined) {
         if (modifier !== undefined) {
             if (this._beginFieldChangesCount === 0) {
-                this._modifier = modifier;
+                this._changesModifier = modifier;
             } else {
-                if (modifier !== this._modifier) {
+                if (modifier !== this._changesModifier) {
                     throw new AssertInternalError('LSANCBFC55587');
                 }
             }
@@ -82,12 +114,17 @@ export class LockerScanAttachedNotificationChannel implements ScanAttachedNotifi
             while (this._changedFieldIds.length > 0) {
                 const changedFieldIds = this._changedFieldIds;
                 this._changedFieldIds = [];
-                const modifier = this._modifier;
-                this._modifier = undefined;
+                const changesModifier = this._changesModifier;
+                this._changesModifier = undefined;
+
+                if (this.changedEventer !== undefined) {
+                    const changesModifierRoot = changesModifier === undefined ? undefined : changesModifier.root
+                    this.changedEventer(this._valid, changesModifierRoot);
+                }
 
                 const handlers = this._fieldChangesMultiEvent.copyHandlers();
                 for (const handler of handlers) {
-                    handler(changedFieldIds, modifier);
+                    handler(changedFieldIds, changesModifier);
                 }
             }
             this._fieldChangeNotifying = false;
@@ -121,54 +158,42 @@ export class LockerScanAttachedNotificationChannel implements ScanAttachedNotifi
         }
     }
 
-    setTtl(value: number, modifier?: LockerScanAttachedNotificationChannel.Modifier) {
-        if (this._channelSourceSettings === undefined || value !== this._channelSourceSettings.ttl) {
+    setTtl(value: number | undefined, modifier?: LockerScanAttachedNotificationChannel.Modifier) {
+        if (value === this._ttl) {
+            return false;
+        } else {
             this.beginFieldChanges(modifier);
-            if (this._channelSourceSettings === undefined) {
-                this._channelSourceSettings = {
-                    ttl: value,
-                    urgencyId: undefined,
-                    topic: undefined,
-                };
-            } else {
-                this._channelSourceSettings.ttl = value;
-            }
+            this._ttl = value;
             this.addFieldChange(LockerScanAttachedNotificationChannel.FieldId.Ttl);
+            this.updateValid();
             this.endFieldChanges();
+            return true;
         }
     }
 
     setUrgency(value: NotificationChannel.SourceSettings.UrgencyId | undefined, modifier?: LockerScanAttachedNotificationChannel.Modifier) {
-        if (this._channelSourceSettings === undefined || value !== this._channelSourceSettings.urgencyId) {
+        if (value === this._urgencyId) {
+            return false;
+        } else {
             this.beginFieldChanges(modifier);
-            if (this._channelSourceSettings === undefined) {
-                this._channelSourceSettings = {
-                    ttl: NotificationChannel.SourceSettings.defaultTtl,
-                    urgencyId: value,
-                    topic: undefined,
-                };
-            } else {
-                this._channelSourceSettings.urgencyId = value;
-            }
+            this._urgencyId = value;
             this.addFieldChange(LockerScanAttachedNotificationChannel.FieldId.Urgency);
+            this.updateValid();
             this.endFieldChanges();
+            return true;
         }
     }
 
     setTopic(value: string | undefined, modifier?: LockerScanAttachedNotificationChannel.Modifier) {
-        if (this._channelSourceSettings === undefined || value !== this._channelSourceSettings.topic) {
+        if (value === this._topic) {
+            return false;
+        } else {
             this.beginFieldChanges(modifier);
-            if (this._channelSourceSettings === undefined) {
-                this._channelSourceSettings = {
-                    ttl: NotificationChannel.SourceSettings.defaultTtl,
-                    urgencyId: undefined,
-                    topic: value,
-                };
-            } else {
-                this._channelSourceSettings.topic = value;
-            }
+            this._topic = value;
             this.addFieldChange(LockerScanAttachedNotificationChannel.FieldId.Topic);
+            this.updateValid();
             this.endFieldChanges();
+            return true;
         }
     }
 
@@ -180,6 +205,18 @@ export class LockerScanAttachedNotificationChannel implements ScanAttachedNotifi
         this._fieldChangesMultiEvent.unsubscribe(subscriptionId);
     }
 
+    private updateValid() {
+        const ttlRequired = this._urgencyId !== undefined || this._topic !== undefined;
+        this._ttlRequired = ttlRequired;
+        const valid = this._ttl !== undefined || !ttlRequired;
+        if (valid !== this._valid) {
+            this.beginFieldChanges(undefined);
+            this._valid = valid;
+            this.addFieldChange(LockerScanAttachedNotificationChannel.FieldId.Valid);
+            this.endFieldChanges();
+        }
+    }
+
     private addFieldChange(fieldId: LockerScanAttachedNotificationChannel.FieldId) {
         if (!this._changedFieldIds.includes(fieldId)) {
             this._changedFieldIds.push(fieldId);
@@ -188,11 +225,16 @@ export class LockerScanAttachedNotificationChannel implements ScanAttachedNotifi
 }
 
 export namespace LockerScanAttachedNotificationChannel {
-    export type Modifier = Integer;
+    export interface Modifier {
+        root: Integer;
+        node: Integer;
+    }
     export type FieldChangesEventHandler = (this: void, changedFieldIds: readonly FieldId[], modifier: Modifier | undefined) => void;
+    export type ChangedEventer = (this: void, valid: boolean, modifierRoot: Integer | undefined) => void;
 
     export const enum FieldId {
         ChannelId,
+        Valid,
         Name,
         CultureCode,
         MinimumStable,
@@ -225,6 +267,12 @@ export namespace LockerScanAttachedNotificationChannel {
                 name: 'ChannelId',
                 dataTypeId: FieldDataTypeId.String,
                 headingId: StringId.LockerScanAttachedNotificationChannelHeader_ChannelId,
+            },
+            Valid: {
+                id: FieldId.Valid,
+                name: 'Valid',
+                dataTypeId: FieldDataTypeId.Boolean,
+                headingId: StringId.Valid,
             },
             Name: {
                 id: FieldId.Name,
@@ -303,5 +351,27 @@ export namespace LockerScanAttachedNotificationChannel {
         export function idToHeading(id: Id) {
             return Strings[idToHeadingId(id)];
         }
+    }
+
+    export function isEqual(left: ScanAttachedNotificationChannel, right: LockerScanAttachedNotificationChannel): boolean {
+        const leftChannelSourceSettings = left.channelSourceSettings;
+        let channelSourceSettingsEqual: boolean;
+        if (leftChannelSourceSettings === undefined) {
+            channelSourceSettingsEqual = right.ttl === undefined && right.urgencyId === undefined && right.topic === undefined;
+        } else {
+            channelSourceSettingsEqual = (
+                leftChannelSourceSettings.ttl === right.ttl &&
+                leftChannelSourceSettings.urgencyId === right.urgencyId &&
+                leftChannelSourceSettings.topic === right.topic
+            );
+        }
+
+        return (
+            left.channelId === right.channelId &&
+            left.cultureCode === right.cultureCode &&
+            left.minimumStable === right.minimumStable &&
+            left.minimumElapsed === right.minimumElapsed &&
+            channelSourceSettingsEqual
+        );
     }
 }

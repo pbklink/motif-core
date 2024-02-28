@@ -986,7 +986,7 @@ export class QueryNotificationChannelDataMessage extends DataMessage {
     notificationChannel: SettingsedNotificationChannel;
 
     constructor() {
-        super(QueryNotificationChannelsDataMessage.typeId);
+        super(QueryNotificationChannelDataMessage.typeId);
     }
 }
 

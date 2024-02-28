@@ -4,8 +4,6 @@
  * License: motionite.trade/license/motif
  */
 
-import { ModifierComparableList } from '../../sys/modifier-comparable-list';
-import { Integer } from '../../sys/sys-internal-api';
 import { NotificationChannel } from "./notification-channel";
 
 // export interface ScanDetails {
@@ -49,22 +47,6 @@ export namespace ScanAttachedNotificationChannel {
                 const leftElement = left[i];
                 const rightElement = right[i];
                 if (!isEqual(leftElement, rightElement)) {
-                    return false;
-                }
-            }
-            return true;
-        }
-    }
-
-    export function isArrayAndListEqual(array: readonly ScanAttachedNotificationChannel[], list: ModifierComparableList<ScanAttachedNotificationChannel, Integer>) {
-        const count = array.length;
-        if (count !== list.count) {
-            return false;
-        } else {
-            for (let i = 0; i < count; i++) {
-                const arrayElement = array[i];
-                const listItem = list.getAt(i);
-                if (!isEqual(arrayElement, listItem)) {
                     return false;
                 }
             }
