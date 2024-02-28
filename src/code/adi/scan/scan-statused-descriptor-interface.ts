@@ -5,14 +5,15 @@
  */
 
 import { Guid, Integer } from '../../sys/sys-internal-api';
-import { ScanStatusId } from '../common/adi-common-internal-api';
+import { ActiveFaultedStatusId } from '../common/adi-common-internal-api';
 
 export interface ScanStatusedDescriptorInterface {
     readonly id: string;
     readonly name: string;
     readonly description: string | undefined;
     readonly readonly: boolean;
-    readonly statusId: ScanStatusId;
+    readonly statusId: ActiveFaultedStatusId;
+    readonly enabled: boolean;
     readonly versionNumber: Integer | undefined;
     readonly versionId: Guid | undefined;
     readonly versioningInterrupted: boolean;

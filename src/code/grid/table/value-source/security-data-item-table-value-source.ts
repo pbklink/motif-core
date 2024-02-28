@@ -15,7 +15,7 @@ import {
     UnexpectedCaseError,
     UnreachableCaseError
 } from "../../../sys/sys-internal-api";
-import { PrefixableSecurityDataItemTableFieldSourceDefinition } from '../field-source/definition/grid-table-field-source-definition-internal-api';
+import { PrefixableSecurityDataItemTableFieldSourceDefinition } from '../field-source/definition/internal-api';
 import {
     BooleanCorrectnessTableValue,
     CorrectnessTableValue,

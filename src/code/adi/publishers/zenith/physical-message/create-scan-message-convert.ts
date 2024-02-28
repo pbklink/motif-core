@@ -9,7 +9,8 @@ import {
     AdiPublisherRequest,
     AdiPublisherSubscription,
     CreateScanDataDefinition,
-    CreateScanDataMessage
+    CreateScanDataMessage,
+    ErrorPublisherSubscriptionDataMessage_PublishRequestError
 } from "../../../common/adi-common-internal-api";
 import { ZenithProtocol } from './protocol/zenith-protocol';
 import { ZenithConvert } from './zenith-convert';
@@ -27,7 +28,7 @@ export namespace CreateScanMessageConvert {
     }
 
     export function createPublishMessage(definition: CreateScanDataDefinition) {
-        const convertMetaData: ZenithNotifyConvert.ScanMetaData = {
+        const convertMetadata: ZenithNotifyConvert.ScanMetadata = {
             versionNumber: definition.versionNumber,
             versionId: definition.versionId,
             versioningInterrupted: definition.versioningInterrupted,
@@ -39,10 +40,12 @@ export namespace CreateScanMessageConvert {
         }
 
         const details: ZenithProtocol.NotifyController.ScanDescriptor = {
-            Name: definition.name,
+            Name: definition.scanName,
             Description: definition.scanDescription,
-            MetaData: ZenithNotifyConvert.ScanMetaType.from(convertMetaData),
+            Metadata: ZenithNotifyConvert.ScanMetaType.from(convertMetadata),
         }
+
+        const definitionNotifications = definition.attachedNotificationChannels;
 
         const parameters: ZenithProtocol.NotifyController.ScanParameters = {
             Criteria: definition.zenithCriteria,
@@ -50,6 +53,7 @@ export namespace CreateScanMessageConvert {
             Type: ZenithNotifyConvert.ScanType.fromId(definition.targetTypeId),
             Target: ZenithNotifyConvert.Target.fromId(definition.targetTypeId, definition.targets),
             MaxMatchCount: definition.maxMatchCount,
+            Notifications: definitionNotifications.length === 0 ? undefined : ZenithNotifyConvert.NotificationParameters.from(definitionNotifications),
         }
 
         const result: ZenithProtocol.NotifyController.CreateScan.PublishMessageContainer = {
@@ -60,15 +64,18 @@ export namespace CreateScanMessageConvert {
             Data: {
                 Details: details,
                 Parameters: parameters,
+                IsActive: definition.enabled ? true : undefined,
             }
         };
 
         return result;
     }
 
-    export function parseMessage(subscription: AdiPublisherSubscription, message: ZenithProtocol.MessageContainer,
-        actionId: ZenithConvert.MessageContainer.Action.Id) {
-
+    export function parseMessage(
+        subscription: AdiPublisherSubscription,
+        message: ZenithProtocol.MessageContainer,
+        actionId: ZenithConvert.MessageContainer.Action.Id
+    ) {
         if (message.Controller !== ZenithProtocol.MessageContainer.Controller.Notify) {
             throw new ZenithDataError(ErrorCode.ZenithMessageConvert_Notify_Controller, message.Controller);
         } else {
@@ -79,12 +86,16 @@ export namespace CreateScanMessageConvert {
                     throw new ZenithDataError(ErrorCode.ZenithMessageConvert_CreateScan_Topic, message.Topic);
                 } else {
                     const responseMsg = message as ZenithProtocol.NotifyController.CreateScan.PublishPayloadMessageContainer;
-                    const response = responseMsg.Data;
-                    const dataMessage = new CreateScanDataMessage();
-                    dataMessage.dataItemId = subscription.dataItemId;
-                    dataMessage.dataItemRequestNr = subscription.dataItemRequestNr;
-                    dataMessage.scanId = response.ScanID;
-                    return dataMessage;
+                    const responseData = responseMsg.Data;
+                    if (responseData === undefined || subscription.errorWarningCount > 0) {
+                        return ErrorPublisherSubscriptionDataMessage_PublishRequestError.createFromAdiPublisherSubscription(subscription);
+                    } else {
+                        const dataMessage = new CreateScanDataMessage();
+                        dataMessage.dataItemId = subscription.dataItemId;
+                        dataMessage.dataItemRequestNr = subscription.dataItemRequestNr;
+                        dataMessage.scanId = responseData.ScanID;
+                        return dataMessage;
+                    }
                 }
             }
         }

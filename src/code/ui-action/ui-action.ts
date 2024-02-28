@@ -243,6 +243,18 @@ export abstract class UiAction {
         }
     }
 
+    isValueOkOrDisabled() {
+        switch (this.stateId) {
+            case UiAction.StateId.Disabled:
+            case UiAction.StateId.Readonly:
+            case UiAction.StateId.Accepted:
+            case UiAction.StateId.Valid:
+                return true;
+            default:
+                return false;
+        }
+    }
+
     subscribePushEvents(handlersInterface: UiAction.PushEventHandlersInterface) {
         return this._pushMultiEvent.subscribe(handlersInterface);
     }

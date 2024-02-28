@@ -11,9 +11,9 @@ import {
     RankedLitIvemIdListDefinitionFactoryService,
     RankedLitIvemIdListDirectory,
 } from "../../../../ranked-lit-ivem-id-list/ranked-lit-ivem-id-list-internal-api";
-import { AssertInternalError, Err, ErrorCode, JsonElement, LockOpenListItem, NotImplementedError, Ok, Result, UiBadnessComparableList, UnreachableCaseError } from '../../../../sys/sys-internal-api';
+import { AssertInternalError, Err, ErrorCode, JsonElement, LockOpenListItem, NotImplementedError, Ok, Result, UiComparableList, UnreachableCaseError } from '../../../../sys/sys-internal-api';
 import { GridField, GridFieldCustomHeadingsService } from '../../../field/grid-field-internal-api';
-import { TableFieldSourceDefinitionRegistryService } from '../../field-source/grid-table-field-source-internal-api';
+import { TableFieldSourceDefinitionCachedFactoryService } from '../../field-source/grid-table-field-source-internal-api';
 import { BalancesTableRecordSourceDefinition } from './balances-table-record-source-definition';
 import { BrokerageAccountGroupTableRecordSourceDefinition } from './brokerage-account-group-table-record-source-definition';
 import { BrokerageAccountTableRecordSourceDefinition } from './brokerage-account-table-record-source-definition';
@@ -39,7 +39,7 @@ export class TableRecordSourceDefinitionFactoryService {
     constructor(
         private readonly _litIvemIdListDefinitionFactoryService: RankedLitIvemIdListDefinitionFactoryService,
         readonly gridFieldCustomHeadingsService: GridFieldCustomHeadingsService,
-        readonly tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
+        readonly tableFieldSourceDefinitionCachedFactoryService: TableFieldSourceDefinitionCachedFactoryService,
     ) {
 
     }
@@ -62,15 +62,15 @@ export class TableRecordSourceDefinitionFactoryService {
     createLitIvemIdFromSearchSymbols(dataDefinition: SearchSymbolsDataDefinition) {
         return new LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition(
             this.gridFieldCustomHeadingsService,
-            this.tableFieldSourceDefinitionRegistryService,
+            this.tableFieldSourceDefinitionCachedFactoryService,
             dataDefinition,
         );
     }
 
-    createLitIvemIdComparableList(list: UiBadnessComparableList<LitIvemId>) {
+    createLitIvemIdComparableList(list: UiComparableList<LitIvemId>) {
         return new LitIvemIdComparableListTableRecordSourceDefinition(
             this.gridFieldCustomHeadingsService,
-            this.tableFieldSourceDefinitionRegistryService,
+            this.tableFieldSourceDefinitionCachedFactoryService,
             list,
         );
     }
@@ -81,7 +81,7 @@ export class TableRecordSourceDefinitionFactoryService {
                 if (definition instanceof LitIvemIdExecuteScanRankedLitIvemIdListDefinition) {
                     return new ScanTestTableRecordSourceDefinition(
                         this.gridFieldCustomHeadingsService,
-                        this.tableFieldSourceDefinitionRegistryService,
+                        this.tableFieldSourceDefinitionCachedFactoryService,
                         definition,
                     );
                 } else {
@@ -90,7 +90,7 @@ export class TableRecordSourceDefinitionFactoryService {
             case TableRecordSourceDefinition.TypeId.Watchlist:
                 return new WatchlistTableRecordSourceDefinition(
                     this.gridFieldCustomHeadingsService,
-                    this.tableFieldSourceDefinitionRegistryService,
+                    this.tableFieldSourceDefinitionCachedFactoryService,
                     definition,
                 );
             default:
@@ -101,7 +101,7 @@ export class TableRecordSourceDefinitionFactoryService {
     createCallPutFromUnderlying(underlyingIvemId: IvemId) {
         return new CallPutFromUnderlyingTableRecordSourceDefinition(
             this.gridFieldCustomHeadingsService,
-            this.tableFieldSourceDefinitionRegistryService,
+            this.tableFieldSourceDefinitionCachedFactoryService,
             underlyingIvemId
         );
     }
@@ -109,21 +109,21 @@ export class TableRecordSourceDefinitionFactoryService {
     createFeed() {
         return new FeedTableRecordSourceDefinition(
             this.gridFieldCustomHeadingsService,
-            this.tableFieldSourceDefinitionRegistryService,
+            this.tableFieldSourceDefinitionCachedFactoryService,
         );
     }
 
     createBrokerageAccount() {
         return new BrokerageAccountTableRecordSourceDefinition(
             this.gridFieldCustomHeadingsService,
-            this.tableFieldSourceDefinitionRegistryService,
+            this.tableFieldSourceDefinitionCachedFactoryService,
         );
     }
 
     createOrder(brokerageAccountGroup: BrokerageAccountGroup) {
         return new OrderTableRecordSourceDefinition(
             this.gridFieldCustomHeadingsService,
-            this.tableFieldSourceDefinitionRegistryService,
+            this.tableFieldSourceDefinitionCachedFactoryService,
             brokerageAccountGroup,
         );
     }
@@ -131,7 +131,7 @@ export class TableRecordSourceDefinitionFactoryService {
     createHolding(brokerageAccountGroup: BrokerageAccountGroup) {
         return new HoldingTableRecordSourceDefinition(
             this.gridFieldCustomHeadingsService,
-            this.tableFieldSourceDefinitionRegistryService,
+            this.tableFieldSourceDefinitionCachedFactoryService,
             brokerageAccountGroup,
         );
     }
@@ -139,7 +139,7 @@ export class TableRecordSourceDefinitionFactoryService {
     createBalances(brokerageAccountGroup: BrokerageAccountGroup) {
         return new BalancesTableRecordSourceDefinition(
             this.gridFieldCustomHeadingsService,
-            this.tableFieldSourceDefinitionRegistryService,
+            this.tableFieldSourceDefinitionCachedFactoryService,
             brokerageAccountGroup,
         );
     }
@@ -151,7 +151,7 @@ export class TableRecordSourceDefinitionFactoryService {
     ) {
         return new TopShareholderTableRecordSourceDefinition(
             this.gridFieldCustomHeadingsService,
-            this.tableFieldSourceDefinitionRegistryService,
+            this.tableFieldSourceDefinitionCachedFactoryService,
             litIvemId,
             tradingDate,
             compareToTradingDate,
@@ -161,7 +161,7 @@ export class TableRecordSourceDefinitionFactoryService {
     createEditableGridLayoutDefinitionColumn(list: EditableGridLayoutDefinitionColumnList) {
         return new EditableGridLayoutDefinitionColumnTableRecordSourceDefinition(
             this.gridFieldCustomHeadingsService,
-            this.tableFieldSourceDefinitionRegistryService,
+            this.tableFieldSourceDefinitionCachedFactoryService,
             list
         );
     }
@@ -169,7 +169,7 @@ export class TableRecordSourceDefinitionFactoryService {
     createGridField(gridFieldArray: GridField[]) {
         return new GridFieldTableRecordSourceDefinition(
             this.gridFieldCustomHeadingsService,
-            this.tableFieldSourceDefinitionRegistryService,
+            this.tableFieldSourceDefinitionCachedFactoryService,
             gridFieldArray,
         );
     }
@@ -177,14 +177,14 @@ export class TableRecordSourceDefinitionFactoryService {
     createScan() {
         return new ScanTableRecordSourceDefinition(
             this.gridFieldCustomHeadingsService,
-            this.tableFieldSourceDefinitionRegistryService,
+            this.tableFieldSourceDefinitionCachedFactoryService,
         );
     }
 
     createRankedLitIvemIdListDirectoryItem(rankedLitIvemIdListDirectory: RankedLitIvemIdListDirectory) {
         return new RankedLitIvemIdListDirectoryItemTableRecordSourceDefinition(
             this.gridFieldCustomHeadingsService,
-            this.tableFieldSourceDefinitionRegistryService,
+            this.tableFieldSourceDefinitionCachedFactoryService,
             rankedLitIvemIdListDirectory,
         );
     }
@@ -192,10 +192,18 @@ export class TableRecordSourceDefinitionFactoryService {
     createScanTest(listDefinition: LitIvemIdExecuteScanRankedLitIvemIdListDefinition) {
         return new ScanTestTableRecordSourceDefinition(
             this.gridFieldCustomHeadingsService,
-            this.tableFieldSourceDefinitionRegistryService,
+            this.tableFieldSourceDefinitionCachedFactoryService,
             listDefinition,
         );
     }
+
+    // createLitIvemIdComparableList(list: UiComparableList<LitIvemId>) {
+    //     return new LitIvemIdComparableListTableRecordSourceDefinition(
+    //         this.gridFieldCustomHeadingsService,
+    //         this.tableFieldSourceDefinitionCachedFactoryService,
+    //         list,
+    //     );
+    // }
 
     private tryCreateTypedFromJson(element: JsonElement, typeId: TableRecordSourceDefinition.TypeId): Result<TableRecordSourceDefinition> {
         switch (typeId) {
@@ -232,7 +240,7 @@ export class TableRecordSourceDefinitionFactoryService {
 
                     const definition = new WatchlistTableRecordSourceDefinition(
                         this.gridFieldCustomHeadingsService,
-                        this.tableFieldSourceDefinitionRegistryService,
+                        this.tableFieldSourceDefinitionCachedFactoryService,
                         rankedLitIvemIdListDefinition
                     )
                     return new Ok(definition);
@@ -333,6 +341,12 @@ export class TableRecordSourceDefinitionFactoryService {
                         return new Ok(definition);
                     }
                 }
+            }
+            case TableRecordSourceDefinition.TypeId.ScanFieldEditorFrame: {
+                throw new AssertInternalError('TRSDFSTCTFJSFEF45550', 'outside');
+            }
+            case TableRecordSourceDefinition.TypeId.ScanEditorAttachedNotificationChannel: {
+                throw new AssertInternalError('TRSDFSTCTFJSEANC45550', 'outside');
             }
             default:
                 throw new UnreachableCaseError('TDLFCFTID17742', typeId);

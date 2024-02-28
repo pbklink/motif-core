@@ -5,7 +5,7 @@
  */
 
 import { AssertInternalError, ErrorCode, ZenithDataError } from '../../../../sys/sys-internal-api';
-import { AdiPublisherRequest, AdiPublisherSubscription, UpdateScanDataDefinition, UpdateScanDataMessage } from '../../../common/adi-common-internal-api';
+import { AdiPublisherRequest, AdiPublisherSubscription, ErrorPublisherSubscriptionDataMessage_PublishRequestError, UpdateScanDataDefinition, UpdateScanDataMessage } from '../../../common/adi-common-internal-api';
 import { ZenithProtocol } from './protocol/zenith-protocol';
 import { ZenithConvert } from './zenith-convert';
 import { ZenithNotifyConvert } from './zenith-notify-convert';
@@ -21,7 +21,7 @@ export namespace UpdateScanMessageConvert {
     }
 
     export function createPublishMessage(definition: UpdateScanDataDefinition) {
-        const convertMetaData: ZenithNotifyConvert.ScanMetaData = {
+        const convertMetadata: ZenithNotifyConvert.ScanMetadata = {
             versionNumber: definition.versionNumber,
             versionId: definition.versionId,
             versioningInterrupted: definition.versioningInterrupted,
@@ -35,8 +35,10 @@ export namespace UpdateScanMessageConvert {
         const details: ZenithProtocol.NotifyController.ScanDescriptor = {
             Name: definition.scanName,
             Description: definition.scanDescription,
-            MetaData: ZenithNotifyConvert.ScanMetaType.from(convertMetaData),
+            Metadata: ZenithNotifyConvert.ScanMetaType.from(convertMetadata),
         }
+
+        const definitionNotifications = definition.attachedNotificationChannels;
 
         const parameters: ZenithProtocol.NotifyController.ScanParameters = {
             Criteria: definition.zenithCriteria,
@@ -44,6 +46,7 @@ export namespace UpdateScanMessageConvert {
             Type: ZenithNotifyConvert.ScanType.fromId(definition.targetTypeId),
             Target: ZenithNotifyConvert.Target.fromId(definition.targetTypeId, definition.targets),
             MaxMatchCount: definition.maxMatchCount,
+            Notifications: definitionNotifications.length === 0 ? undefined : ZenithNotifyConvert.NotificationParameters.from(definitionNotifications),
         }
 
         const result: ZenithProtocol.NotifyController.UpdateScan.PublishMessageContainer = {
@@ -55,6 +58,7 @@ export namespace UpdateScanMessageConvert {
                 ScanID: definition.scanId,
                 Details: details,
                 Parameters: parameters,
+                IsActive: definition.enabled ? true : undefined,
             }
         };
 
@@ -73,11 +77,15 @@ export namespace UpdateScanMessageConvert {
                 if (message.Topic as ZenithProtocol.NotifyController.TopicName !== ZenithProtocol.NotifyController.TopicName.UpdateScan) {
                     throw new ZenithDataError(ErrorCode.ZenithMessageConvert_UpdateScan_Topic, message.Topic);
                 } else {
-                    const dataMessage = new UpdateScanDataMessage();
-                    dataMessage.dataItemId = subscription.dataItemId;
-                    dataMessage.dataItemRequestNr = subscription.dataItemRequestNr;
+                    if (subscription.errorWarningCount > 0) {
+                        return ErrorPublisherSubscriptionDataMessage_PublishRequestError.createFromAdiPublisherSubscription(subscription);
+                    } else {
+                        const dataMessage = new UpdateScanDataMessage();
+                        dataMessage.dataItemId = subscription.dataItemId;
+                        dataMessage.dataItemRequestNr = subscription.dataItemRequestNr;
 
-                    return dataMessage;
+                        return dataMessage;
+                    }
                 }
             }
         }

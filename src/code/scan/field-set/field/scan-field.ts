@@ -6,7 +6,7 @@
 
 import { CurrencyId, ExchangeId, MarketBoardId, MarketId } from '../../../adi/adi-internal-api';
 import { StringId, Strings } from '../../../res/res-internal-api';
-import { AssertInternalError, EnumInfoOutOfOrderError, Integer, Result, SourceTzOffsetDateTime, UnreachableCaseError } from '../../../sys/sys-internal-api';
+import { AssertInternalError, EnumInfoOutOfOrderError, Integer, Result, SourceTzOffsetDate, UnreachableCaseError } from '../../../sys/sys-internal-api';
 import { ScanFormula } from '../../formula/scan-formula';
 import {
     BaseNumericScanFieldCondition,
@@ -107,7 +107,7 @@ export namespace ScanField {
                 descriptionId: StringId.ScanField_BooleanOperationDescription_Any,
             },
             Xor: {
-                id: BooleanOperationId.And,
+                id: BooleanOperationId.Xor,
                 displayId: StringId.ScanField_BooleanOperationDisplay_Xor,
                 descriptionId: StringId.ScanField_BooleanOperationDescription_Xor,
             },
@@ -156,8 +156,8 @@ export namespace ScanField {
         createNumericWithValue(field: ScanField, operatorId: NumericScanFieldCondition.ValueOperands.OperatorId, value: number): Result<NumericScanFieldCondition>;
         createNumericWithRange(field: ScanField, operatorId: BaseNumericScanFieldCondition.RangeOperands.OperatorId, min: number | undefined, max: number | undefined): Result<NumericScanFieldCondition>;
         createDateWithHasValue(field: ScanField, operatorId: DateScanFieldCondition.HasValueOperands.OperatorId): Result<DateScanFieldCondition>;
-        createDateWithEquals(field: ScanField, operatorId: DateScanFieldCondition.ValueOperands.OperatorId, value: SourceTzOffsetDateTime): Result<DateScanFieldCondition>;
-        createDateWithRange(field: ScanField, operatorId: DateScanFieldCondition.RangeOperands.OperatorId, min: SourceTzOffsetDateTime | undefined, max: SourceTzOffsetDateTime | undefined): Result<DateScanFieldCondition>;
+        createDateWithEquals(field: ScanField, operatorId: DateScanFieldCondition.ValueOperands.OperatorId, value: SourceTzOffsetDate): Result<DateScanFieldCondition>;
+        createDateWithRange(field: ScanField, operatorId: DateScanFieldCondition.RangeOperands.OperatorId, min: SourceTzOffsetDate | undefined, max: SourceTzOffsetDate | undefined): Result<DateScanFieldCondition>;
         createTextEquals(field: ScanField, operatorId: TextEqualsScanFieldCondition.Operands.OperatorId, value: string): Result<TextEqualsScanFieldCondition>;
         createTextContains(field: ScanField, operatorId: TextContainsScanFieldCondition.Operands.OperatorId, value: string, asId: ScanFormula.TextContainsAsId, ignoreCase: boolean): Result<TextContainsScanFieldCondition>;
         createTextHasValueEqualsWithHasValue(field: ScanField, operatorId: BaseTextScanFieldCondition.HasValueOperands.OperatorId): Result<TextHasValueEqualsScanFieldCondition>;
@@ -238,6 +238,7 @@ export namespace ScanField {
                 case BooleanOperationId.Or:
                     if (orNode === undefined) {
                         orNode = new ScanFormula.OrNode();
+                        orNode.operands = [];
                         andedOredXorNodes.orNodes.push(orNode);
                     }
                     orNode.operands.push(node);

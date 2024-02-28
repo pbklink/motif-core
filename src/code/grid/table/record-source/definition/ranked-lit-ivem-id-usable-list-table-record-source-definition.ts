@@ -4,24 +4,24 @@
  * License: motionite.trade/license/motif
  */
 
+import { RankedLitIvemId } from '../../../../adi/adi-internal-api';
 import { PickEnum, UsableList } from '../../../../sys/sys-internal-api';
 import { GridFieldCustomHeadingsService } from '../../../field/grid-field-internal-api';
-import { TableFieldSourceDefinition, TableFieldSourceDefinitionRegistryService } from '../../field-source/grid-table-field-source-internal-api';
-import { UsableListTableRecordSourceDefinition } from './usable-list-table-record-source-definition';
+import { TableFieldSourceDefinition, TableFieldSourceDefinitionCachedFactoryService } from '../../field-source/grid-table-field-source-internal-api';
 import { TableRecordSourceDefinition } from './table-record-source-definition';
-import { RankedLitIvemId } from '../../../../adi/adi-internal-api';
+import { UsableListTableRecordSourceDefinition } from './usable-list-table-record-source-definition';
 
 /** @public */
 export abstract class RankedLitIvemIdUsableListTableRecordSourceDefinition extends UsableListTableRecordSourceDefinition<RankedLitIvemId> {
     // eslint-disable-next-line @typescript-eslint/no-useless-constructor
     constructor(
         customHeadingsService: GridFieldCustomHeadingsService,
-        tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
+        tableFieldSourceDefinitionCachedFactoryService: TableFieldSourceDefinitionCachedFactoryService,
         typeId: TableRecordSourceDefinition.TypeId,
         allowedFieldSourceDefinitionTypeIds: RankedLitIvemIdUsableListTableRecordSourceDefinition.FieldSourceDefinitionTypeId[],
         list: UsableList<RankedLitIvemId>,
     ) {
-        super(customHeadingsService, tableFieldSourceDefinitionRegistryService, typeId, allowedFieldSourceDefinitionTypeIds, list);
+        super(customHeadingsService, tableFieldSourceDefinitionCachedFactoryService, typeId, allowedFieldSourceDefinitionTypeIds, list);
     }
 
     abstract get defaultFieldSourceDefinitionTypeIds(): RankedLitIvemIdUsableListTableRecordSourceDefinition.FieldSourceDefinitionTypeId[];

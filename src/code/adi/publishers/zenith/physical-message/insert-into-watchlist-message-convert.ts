@@ -8,6 +8,7 @@ import { AssertInternalError, ErrorCode, ZenithDataError } from '../../../../sys
 import {
     AdiPublisherRequest,
     AdiPublisherSubscription,
+    ErrorPublisherSubscriptionDataMessage_PublishRequestError,
     LitIvemIdInsertIntoWatchmakerListDataDefinition,
     WatchmakerListRequestAcknowledgeDataMessage
 } from "../../../common/adi-common-internal-api";
@@ -53,11 +54,15 @@ export namespace InsertIntoWatchlistMessageConvert {
                 if (message.Topic as ZenithProtocol.WatchlistController.TopicName !== ZenithProtocol.WatchlistController.TopicName.InsertIntoWatchlist) {
                     throw new ZenithDataError(ErrorCode.ZenithMessageConvert_InsertIntoWatchmakerList_Topic, message.Topic);
                 } else {
-                    const dataMessage = new WatchmakerListRequestAcknowledgeDataMessage();
-                    dataMessage.dataItemId = subscription.dataItemId;
-                    dataMessage.dataItemRequestNr = subscription.dataItemRequestNr;
+                    if (subscription.errorWarningCount > 0) {
+                        return ErrorPublisherSubscriptionDataMessage_PublishRequestError.createFromAdiPublisherSubscription(subscription);
+                    } else {
+                        const dataMessage = new WatchmakerListRequestAcknowledgeDataMessage();
+                        dataMessage.dataItemId = subscription.dataItemId;
+                        dataMessage.dataItemRequestNr = subscription.dataItemRequestNr;
 
-                    return dataMessage;
+                        return dataMessage;
+                    }
                 }
             }
         }

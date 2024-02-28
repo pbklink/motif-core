@@ -9,19 +9,19 @@ import { CallPut } from '../../../../services/services-internal-api';
 import { ErrorCode, JsonElement, Ok, PickEnum, Result } from '../../../../sys/sys-internal-api';
 import { GridFieldCustomHeadingsService } from '../../../field/grid-field-internal-api';
 import { GridLayoutDefinition } from '../../../layout/grid-layout-internal-api';
-import { TableFieldSourceDefinition, TableFieldSourceDefinitionRegistryService } from '../../field-source/grid-table-field-source-internal-api';
+import { TableFieldSourceDefinition, TableFieldSourceDefinitionCachedFactoryService } from '../../field-source/grid-table-field-source-internal-api';
 import { TableRecordSourceDefinition } from './table-record-source-definition';
 
 /** @public */
 export class CallPutFromUnderlyingTableRecordSourceDefinition extends TableRecordSourceDefinition {
     constructor(
         customHeadingsService: GridFieldCustomHeadingsService,
-        tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
+        tableFieldSourceDefinitionCachedFactoryService: TableFieldSourceDefinitionCachedFactoryService,
         readonly underlyingIvemId: IvemId
     ) {
         super(
             customHeadingsService,
-            tableFieldSourceDefinitionRegistryService,
+            tableFieldSourceDefinitionCachedFactoryService,
             TableRecordSourceDefinition.TypeId.CallPutFromUnderlying,
             CallPutFromUnderlyingTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
         );
@@ -34,9 +34,9 @@ export class CallPutFromUnderlyingTableRecordSourceDefinition extends TableRecor
     }
 
     override createDefaultLayoutDefinition() {
-        const callPutFieldSourceDefinition = this.fieldSourceDefinitionRegistryService.callPut;
-        const callSecurityDataItemFieldSourceDefinition = this.fieldSourceDefinitionRegistryService.callSecurityDataItem;
-        const putSecurityDataItemFieldSourceDefinition = this.fieldSourceDefinitionRegistryService.putSecurityDataItem;
+        const callPutFieldSourceDefinition = this.tableFieldSourceDefinitionCachedFactoryService.callPut;
+        const callSecurityDataItemFieldSourceDefinition = this.tableFieldSourceDefinitionCachedFactoryService.callSecurityDataItem;
+        const putSecurityDataItemFieldSourceDefinition = this.tableFieldSourceDefinitionCachedFactoryService.putSecurityDataItem;
 
         const fieldNames = new Array<string>();
 

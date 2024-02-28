@@ -20,6 +20,7 @@ export namespace ZenithProtocol {
     export type DateOptionalTimeIso8601 = string;
 
     export type Time = string;
+
     export const timeDayTerminatorChar = '.';
     export const TimeHoursMinutesSecondsSeparatorChar = ':';
     export const timeFractionalSecondsIntroducerChar = '.';
@@ -61,6 +62,7 @@ export namespace ZenithProtocol {
             Trading = 'Trading',
             Watchlist = 'Watchlist',
             Notify = 'Notify',
+            Channel= 'Channel',
         }
 
         export const enum Action {
@@ -106,6 +108,12 @@ export namespace ZenithProtocol {
         All = 'All',
     }
 
+    export const enum ActiveFaultedStatus {
+        Active = 'Active',
+        Inactive = 'Inactive',
+        Faulted = 'Faulted',
+    }
+
     export const enum FeedStatus {
         Initialising = 'Initialising',
         Active = 'Active', // Feed is online and updating
@@ -143,6 +151,7 @@ export namespace ZenithProtocol {
         Fnsx = 'FNSX',
         Fpsx = 'FPSX',
         Cfx = 'CFMX',
+        Dax = 'DAXM',
         AsxCxa = 'ASX+CXA',
     }
 
@@ -1123,6 +1132,8 @@ export namespace ZenithProtocol {
         FpsxFpsx = '',
         // eslint-disable-next-line @typescript-eslint/no-duplicate-enum-values
         CfxCfx = '',
+        // eslint-disable-next-line @typescript-eslint/no-duplicate-enum-values
+        DaxDax = '',
     }
 
     export const enum Market2Node {
@@ -1182,10 +1193,11 @@ export namespace ZenithProtocol {
         MyxNormalMarket = 'NM',
         MyxDirectBusinessTransactionMarket = 'DB',
         MyxIndexMarket = 'IN',
-        Ptx = 'PTX',
-        Fnsx = 'FNSX',
-        Fpsx = 'FPSX',
-        Cfxt = 'CFMX',
+        PtxMainMarket = 'PTX',
+        FnsxMainMarket = 'FNSX',
+        FpsxMainMarket = 'FPSX',
+        CfxMainMarket = 'CFMX',
+        DaxMainMarket = 'DAXM',
     }
 
     export const enum Side {
@@ -2031,6 +2043,7 @@ export namespace ZenithProtocol {
         export const enum TopicName {
             CreateScan = 'CreateScan',
             UpdateScan = 'UpdateScan',
+            UpdateScanStatus = 'UpdateScanStatus',
             DeleteScan = 'DeleteScan',
             QueryScan = 'QueryScan',
             QueryScans = 'QueryScans',
@@ -2041,38 +2054,39 @@ export namespace ZenithProtocol {
         }
 
         export type ScanID = string;
-        export type MetaData = Record<string, string | undefined>;
+        export type Metadata = Record<string, string | undefined>;
 
         export interface ScanDescriptor {
             readonly Name: string;
             readonly Description?: string;
-            readonly MetaData?: MetaData;
+            readonly Metadata?: ZenithProtocolCommon.UserMetadata;
         }
 
         export interface ScanStatusedDescriptor extends ScanDescriptor {
             readonly IsWritable: boolean;
-            readonly Status: ScanStatus;
+            readonly Status: ActiveFaultedStatus;
         }
 
         export interface ScanState {
             readonly ID: ScanID;
             readonly Name?: string;
             readonly Description?: string;
-            readonly MetaData?: MetaData;
+            readonly Metadata?: ZenithProtocolCommon.UserMetadata;
             readonly IsWritable?: boolean;
-            readonly Status: ScanStatus;
+            readonly Status: ActiveFaultedStatus;
             readonly Type: ScanType;
-        }
-
-        export const enum ScanStatus {
-            Active = 'Active',
-            Inactive = 'Inactive',
-            Faulted = 'Faulted',
         }
 
         export const enum ScanType {
             MarketSearch = 'Market.Search',
             MarketMonitor = 'Market.Monitor',
+        }
+
+        export const enum Urgency {
+            VeryLow = "VeryLow",
+            Low = "Low",
+            Normal = "Normal",
+            High = "High",
         }
 
         export type TargetSymbol = string;
@@ -2088,7 +2102,25 @@ export namespace ZenithProtocol {
         }
 
         export interface ScanParameters extends ScanParametersWithoutNotifications {
-            readonly Notifications?: [unknown];
+            readonly Notifications?: ScanParameters.Notification[];
+        }
+
+        export namespace ScanParameters {
+            export interface Notification {
+                readonly ChannelID: string;
+                readonly CultureCode?: string;
+                readonly MinimumStable?: Time;
+                readonly MinimumElapsed?: Time;
+                readonly Settings?: Notification.SourceSettings;
+            }
+    
+            export namespace Notification {
+                export interface SourceSettings {
+                    readonly ttl: number;
+                    readonly urgency?: Urgency;
+                    readonly topic?: string;
+                }
+            }    
         }
 
         export interface ScanChange {
@@ -2127,6 +2159,7 @@ export namespace ZenithProtocol {
             export interface QueryRequest {
                 readonly Details: ScanDescriptor;
                 readonly Parameters: ScanParameters;
+                readonly IsActive?: boolean;
             }
 
             export interface PublishMessageContainer extends RequestMessageContainer {
@@ -2135,7 +2168,7 @@ export namespace ZenithProtocol {
 
             export type PublishPayload = Response;
             export interface PublishPayloadMessageContainer extends ResponseUpdateMessageContainer {
-                readonly Data: PublishPayload;
+                readonly Data: PublishPayload | undefined; // undefined is error
             }
 
             export interface Response {
@@ -2179,6 +2212,18 @@ export namespace ZenithProtocol {
                 readonly ScanID: ScanID;
                 readonly Details: ScanDescriptor;
                 readonly Parameters: ScanParameters;
+                readonly IsActive?: boolean;
+            }
+
+            export interface PublishMessageContainer extends RequestMessageContainer {
+                readonly Data: QueryRequest;
+            }
+        }
+
+        export namespace UpdateScanStatus {
+            export interface QueryRequest {
+                readonly ScanID: ScanID;
+                readonly IsActive: boolean;
             }
 
             export interface PublishMessageContainer extends RequestMessageContainer {
@@ -2221,6 +2266,166 @@ export namespace ZenithProtocol {
             export type Payload = readonly MatchChange[];
             export interface PayloadMessageContainer extends ResponseUpdateMessageContainer {
                 readonly Data: Payload;
+            }
+        }
+    }
+
+    export namespace ChannelController {
+        export const enum TopicName {
+            CreateChannel = 'CreateChannel',
+            DeleteChannel = 'DeleteChannel',
+            QueryChannel = 'QueryChannel',
+            QueryChannels = 'QueryChannels',
+            QueryMethod = 'QueryMethod',
+            QueryMethods = 'QueryMethods',
+            UpdateChannel = 'UpdateChannel',
+            UpdateChannelStatus = 'UpdateChannelStatus',
+        }
+
+        export const enum DistributionMethodType {
+            Debug = 'Debug',
+            PushApns = 'Push.APNs', // Apple Push Notification Service
+            Email = 'Email',
+            PushFCM = 'Push.FCM', // Google Firebase Cloud Messaging
+            Sms = 'SMS',
+            PushWeb = 'Push.Web',
+        }
+
+        export type ChannelID = string;
+        export type Metadata = Record<string, string | undefined>;
+
+        export interface ChannelDescriptor { // Details
+            readonly Name: string;
+            readonly Description?: string;
+            readonly Metadata: Metadata;
+        }
+
+        export interface StatusedChannelDescriptor extends ChannelDescriptor {
+            readonly Status: ActiveFaultedStatus;
+        }
+
+        export interface ChannelParameters {
+            readonly Type: DistributionMethodType;
+            readonly Settings: ZenithProtocolCommon.NotificationChannelSettings; // for web push, generated by browswer but must match interface
+        }
+
+        export interface ChannelState extends ChannelDescriptor {
+            readonly ID: ChannelID;
+            readonly Type: DistributionMethodType;
+            readonly Status: ActiveFaultedStatus;
+        }
+
+        export namespace CreateChannel {
+            export interface QueryRequest {
+                readonly Details: ChannelDescriptor;
+                readonly Parameters: ChannelParameters;
+                readonly IsActive: boolean | undefined;
+            }
+
+            export interface PublishMessageContainer extends RequestMessageContainer {
+                readonly Data: QueryRequest;
+            }
+
+            export type PublishPayload = Response;
+            export interface PublishPayloadMessageContainer extends ResponseUpdateMessageContainer {
+                readonly Data: PublishPayload | undefined;
+            }
+
+            export interface Response {
+                readonly ChannelID: ChannelID;
+            }
+        }
+
+        export namespace DeleteChannel {
+            export interface QueryRequest {
+                readonly ChannelID: ChannelID;
+            }
+
+            export interface PublishMessageContainer extends RequestMessageContainer {
+                readonly Data: QueryRequest;
+            }
+        }
+
+        export namespace UpdateChannel {
+            export interface QueryRequest {
+                readonly ChannelID: ChannelID;
+                readonly Details: ChannelDescriptor;
+                readonly Parameters: ChannelParameters;
+                readonly IsActive: boolean | undefined;
+            }
+
+            export interface PublishMessageContainer extends RequestMessageContainer {
+                readonly Data: QueryRequest;
+            }
+        }
+
+        export namespace UpdateChannelStatus {
+            export interface QueryRequest {
+                readonly ChannelID: ChannelID;
+                readonly IsActive: boolean | undefined;
+            }
+
+            export interface PublishMessageContainer extends RequestMessageContainer {
+                readonly Data: QueryRequest;
+            }
+        }
+
+        export namespace QueryChannel {
+            export interface QueryRequest {
+                readonly ChannelID: ChannelID;
+            }
+
+            export interface PublishMessageContainer extends RequestMessageContainer {
+                readonly Data: QueryRequest;
+            }
+
+            export type PublishPayload = Response;
+            export interface PublishPayloadMessageContainer extends ResponseUpdateMessageContainer {
+                readonly Data: PublishPayload | undefined;
+            }
+
+            export interface Response {
+                readonly ChannelID: ChannelID;
+                readonly Details: StatusedChannelDescriptor;
+                readonly Parameters: ChannelParameters;
+            }
+        }
+
+        export namespace QueryChannels {
+            export type PublishMessageContainer = RequestMessageContainer;
+
+            export type PublishPayload = readonly ChannelState[];
+            export interface PublishPayloadMessageContainer extends ResponseUpdateMessageContainer {
+                readonly Data: PublishPayload | undefined;
+            }
+        }
+
+        export namespace QueryMethod {
+            export interface QueryRequest {
+                readonly Type: DistributionMethodType;
+            }
+
+            export interface PublishMessageContainer extends RequestMessageContainer {
+                readonly Data: QueryRequest;
+            }
+
+            export type PublishPayload = Response;
+            export interface PublishPayloadMessageContainer extends ResponseUpdateMessageContainer {
+                readonly Data: PublishPayload | undefined;
+            }
+
+            export interface Response {
+                readonly Type: DistributionMethodType;
+                readonly Metadata: ZenithProtocolCommon.NotificationDistributionMethodMetadata;
+            }
+        }
+
+        export namespace QueryMethods {
+            export type PublishMessageContainer = RequestMessageContainer;
+
+            export type Payload = readonly DistributionMethodType[];
+            export interface PublishPayloadMessageContainer extends ResponseUpdateMessageContainer {
+                readonly Data: Payload | undefined;
             }
         }
     }

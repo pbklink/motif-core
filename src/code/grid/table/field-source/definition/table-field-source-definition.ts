@@ -55,6 +55,7 @@ export namespace TableFieldSourceDefinition {
         RankedLitIvemIdListDirectoryItem,
         GridField,
         ScanFieldEditorFrame, // outside
+        LockerScanAttachedNotificationChannel,
         /*LitIvemId_News,
         IvemId_Holding,
         CashItem_Holding,
@@ -91,6 +92,7 @@ export namespace TableFieldSourceDefinition {
         export const rankedLitIvemIdListDirectoryItemName = 'RllDI';
         export const gridFieldName = 'Gf';
         export const ScanFieldEditorFrame = 'Sfef';
+        export const LockerScanAttachedNotificationChannel = 'LSAnc';
 
         interface Info {
             readonly id: Id;
@@ -120,6 +122,7 @@ export namespace TableFieldSourceDefinition {
             RankedLitIvemIdListDirectoryItem: { id: TypeId.RankedLitIvemIdListDirectoryItem, name: rankedLitIvemIdListDirectoryItemName },
             GridField: { id: TypeId.GridField, name: gridFieldName },
             ScanFieldEditorFrame: { id: TypeId.ScanFieldEditorFrame, name: ScanFieldEditorFrame },
+            LockerScanAttachedNotificationChannel: { id: TypeId.LockerScanAttachedNotificationChannel, name: LockerScanAttachedNotificationChannel },
         };
 
         const infos: Info[] = Object.values(infoObject);
@@ -171,4 +174,30 @@ export namespace TableFieldSourceDefinition {
         sourceTypeId: TypeId;
         id: number;
     }
+
+    export function decodeCommaTextFieldName(value: string): Result<FieldName> {
+        const commaTextResult = CommaText.tryToStringArray(value, true);
+        if (commaTextResult.isErr()) {
+            return commaTextResult.createOuter(commaTextResult.error);
+        } else {
+            const strArray = commaTextResult.value;
+            if (strArray.length !== 2) {
+                return new Err(ErrorCode.TableFieldSourceDefinition_DecodeCommaTextFieldNameNot2Elements);
+            } else {
+                const sourceName = strArray[0];
+                const sourceId = Type.tryNameToId(sourceName);
+                if (sourceId === undefined) {
+                    return new Err(ErrorCode.TableFieldSourceDefinition_DecodeCommaTextFieldNameUnknownSourceId);
+                } else {
+                    const decodedFieldName: FieldName = {
+                        sourceTypeId: sourceId,
+                        sourcelessName: strArray[1],
+                    }
+
+                    return new Ok(decodedFieldName);
+                }
+            }
+        }
+    }
+
 }

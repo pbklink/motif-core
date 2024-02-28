@@ -6,6 +6,7 @@
 
 import { AssertInternalError, ErrorCode, UnreachableCaseError, ZenithDataError } from '../../../../sys/sys-internal-api';
 import {
+    ActiveFaultedStatusId,
     AdiPublisherRequest,
     AdiPublisherSubscription,
     QueryScanDetailDataDefinition,
@@ -61,8 +62,8 @@ export namespace QueryScanMessageConvert {
                     const details = response.Details;
                     dataMessage.scanName = details.Name;
                     dataMessage.scanDescription = details.Description;
-                    const metaData = details.MetaData;
-                    if (metaData === undefined) {
+                    const metadata = details.Metadata;
+                    if (metadata === undefined) {
                         dataMessage.versionNumber = undefined;
                         dataMessage.versionId = undefined;
                         dataMessage.versioningInterrupted = false;
@@ -72,17 +73,20 @@ export namespace QueryScanMessageConvert {
                         dataMessage.zenithCriteriaSource = undefined;
                         dataMessage.zenithRankSource = undefined;
                     } else {
-                        const convertMetaData = ZenithNotifyConvert.ScanMetaType.to(metaData);
-                        dataMessage.versionNumber = convertMetaData.versionNumber;
-                        dataMessage.versionId = convertMetaData.versionId;
-                        dataMessage.versioningInterrupted = convertMetaData.versioningInterrupted;
-                        dataMessage.lastSavedTime = convertMetaData.lastSavedTime;
-                        dataMessage.lastEditSessionId = convertMetaData.lastEditSessionId;
-                        dataMessage.symbolListEnabled = convertMetaData.symbolListEnabled;
-                        dataMessage.zenithCriteriaSource = convertMetaData.zenithCriteriaSource;
-                        dataMessage.zenithRankSource = convertMetaData.zenithRankSource;
+                        const convertMetadata = ZenithNotifyConvert.ScanMetaType.to(metadata);
+                        dataMessage.versionNumber = convertMetadata.versionNumber;
+                        dataMessage.versionId = convertMetadata.versionId;
+                        dataMessage.versioningInterrupted = convertMetadata.versioningInterrupted;
+                        dataMessage.lastSavedTime = convertMetadata.lastSavedTime;
+                        dataMessage.lastEditSessionId = convertMetadata.lastEditSessionId;
+                        dataMessage.symbolListEnabled = convertMetadata.symbolListEnabled;
+                        dataMessage.zenithCriteriaSource = convertMetadata.zenithCriteriaSource;
+                        dataMessage.zenithRankSource = convertMetadata.zenithRankSource;
                     }
                     dataMessage.scanReadonly = !details.IsWritable
+                    const scanStatusId = ZenithConvert.ActiveFaultedStatus.toId(details.Status);
+                    dataMessage.scanStatusId = scanStatusId
+                    dataMessage.enabled = scanStatusId !== ActiveFaultedStatusId.Inactive;
                     const parameters = response.Parameters;
                     dataMessage.targetTypeId = ZenithNotifyConvert.ScanType.toId(parameters.Type);
                     switch (dataMessage.targetTypeId) {
@@ -95,9 +99,11 @@ export namespace QueryScanMessageConvert {
                         default:
                             throw new UnreachableCaseError('QSMCPM33358', dataMessage.targetTypeId);
                     }
+                    dataMessage.maxMatchCount = parameters.MaxMatchCount,
                     dataMessage.zenithCriteria = parameters.Criteria;
                     dataMessage.zenithRank = parameters.Rank;
-                    dataMessage.notifications = undefined;
+                    const parametersNotifications = parameters.Notifications;
+                    dataMessage.attachedNotificationChannels = parametersNotifications === undefined ? [] : ZenithNotifyConvert.NotificationParameters.to(parametersNotifications);
 
                     return dataMessage;
                 }

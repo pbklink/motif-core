@@ -22,5 +22,4 @@ export interface RecordList<Record> {
 
 export namespace RecordList {
     export type ListChangeEventHandler = (this: void, listChangeTypeId: UsableListChangeTypeId, idx: Integer, count: Integer) => void;
-    export type UiListChangeEventHandler = (this: void, listChangeTypeId: UsableListChangeTypeId, idx: Integer, count: Integer, ui: boolean) => void;
 }

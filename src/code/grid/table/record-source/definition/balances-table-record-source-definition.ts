@@ -10,7 +10,7 @@ import { GridFieldCustomHeadingsService } from '../../../field/grid-field-intern
 import { GridLayoutDefinition } from '../../../layout/grid-layout-internal-api';
 import {
     TableFieldSourceDefinition,
-    TableFieldSourceDefinitionRegistryService
+    TableFieldSourceDefinitionCachedFactoryService
 } from "../../field-source/grid-table-field-source-internal-api";
 import { BrokerageAccountGroupTableRecordSourceDefinition } from './brokerage-account-group-table-record-source-definition';
 import { TableRecordSourceDefinition } from './table-record-source-definition';
@@ -18,12 +18,12 @@ import { TableRecordSourceDefinition } from './table-record-source-definition';
 export class BalancesTableRecordSourceDefinition extends BrokerageAccountGroupTableRecordSourceDefinition {
     constructor(
         customHeadingsService: GridFieldCustomHeadingsService,
-        tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
+        tableFieldSourceDefinitionCachedFactoryService: TableFieldSourceDefinitionCachedFactoryService,
         brokerageAccountGroup: BrokerageAccountGroup
     ) {
         super(
             customHeadingsService,
-            tableFieldSourceDefinitionRegistryService,
+            tableFieldSourceDefinitionCachedFactoryService,
             TableRecordSourceDefinition.TypeId.Balances,
             BalancesTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
             brokerageAccountGroup
@@ -31,8 +31,8 @@ export class BalancesTableRecordSourceDefinition extends BrokerageAccountGroupTa
     }
 
     override createDefaultLayoutDefinition() {
-        const balancesDataItemFieldSourceDefinition = this.fieldSourceDefinitionRegistryService.balances;
-        const brokerageAccountsFieldSourceDefinition = this.fieldSourceDefinitionRegistryService.brokerageAccounts;
+        const balancesDataItemFieldSourceDefinition = this.tableFieldSourceDefinitionCachedFactoryService.balances;
+        const brokerageAccountsFieldSourceDefinition = this.tableFieldSourceDefinitionCachedFactoryService.brokerageAccounts;
 
         const fieldNames = new Array<string>();
 

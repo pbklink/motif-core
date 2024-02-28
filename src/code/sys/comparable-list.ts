@@ -236,20 +236,22 @@ export class ComparableList<out T extends U, in U = T> {
     }
 
     exchange(index1: Integer, index2: Integer) {
-        this.processExchange(index1, index2);
+        const temp = this.items[index1];
+        this.items[index1] = this.items[index2];
+        this.items[index2] = temp;
     }
 
     move(fromIndex: Integer, toIndex: Integer) {
         if (fromIndex !== toIndex) {
             this.checkItemRangeInline(toIndex);
-            this.processMove(fromIndex, toIndex);
+            moveElementInArray(this.items, fromIndex, toIndex);
         }
     }
 
     moveRange(fromIndex: Integer, toIndex: Integer, count: Integer) {
         if (fromIndex !== toIndex) {
             this.checkItemRangeInline(toIndex);
-            this.processMoveRange(fromIndex, toIndex, count);
+            moveElementsInArray(this.items, fromIndex, toIndex, count);
         }
     }
 
@@ -274,6 +276,39 @@ export class ComparableList<out T extends U, in U = T> {
         for (let idx = 0; idx < this._count; idx++) {
             if (this.items[idx] === value) {
                 return idx;
+            }
+        }
+        return -1;
+    }
+
+    has(predicate: (value: T, index: Integer) => boolean) {
+        const count = this._count;
+        for (let i = 0; i < count; i++) {
+            const value = this.items[i];
+            if (predicate(value, i)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    find(predicate: (value: T, index: Integer) => boolean) {
+        const count = this._count;
+        for (let i = 0; i < count; i++) {
+            const value = this.items[i];
+            if (predicate(value, i)) {
+                return value;
+            }
+        }
+        return undefined;
+    }
+
+    findIndex(predicate: (value: T, index: Integer) => boolean) {
+        const count = this._count;
+        for (let i = 0; i < count; i++) {
+            const value = this.items[i];
+            if (predicate(value, i)) {
+                return i;
             }
         }
         return -1;
@@ -331,20 +366,6 @@ export class ComparableList<out T extends U, in U = T> {
     protected assign(other: ComparableList<T, U>) {
         this.clear();
         this.addSubRange(other.items, 0, other.count);
-    }
-
-    protected processExchange(index1: number, index2: number) {
-        const temp = this.items[index1];
-        this.items[index1] = this.items[index2];
-        this.items[index2] = temp;
-    }
-
-    protected processMove(fromIndex: Integer, toIndex: Integer) {
-        moveElementInArray(this.items, fromIndex, toIndex);
-    }
-
-    protected processMoveRange(fromIndex: Integer, toIndex: Integer, count: Integer) {
-        moveElementsInArray(this.items, fromIndex, toIndex, count);
     }
 
     private getCapacity(): Integer {

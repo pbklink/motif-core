@@ -83,6 +83,38 @@ export class ChangeSubscribableComparableList<out T extends U, in U = T> extends
         super.removeItems(removeItems, (index, count) => { this.notifyListChange(UsableListChangeTypeId.Remove, index, count); } );
     }
 
+    override exchange(index1: Integer, index2: Integer) {
+        this.notifyListChange(UsableListChangeTypeId.BeforeReplace, index1, 1);
+        this.notifyListChange(UsableListChangeTypeId.BeforeReplace, index2, 1);
+        super.exchange(index1, index2);
+        this.notifyListChange(UsableListChangeTypeId.AfterReplace, index1, 1);
+        this.notifyListChange(UsableListChangeTypeId.AfterReplace, index2, 1);
+    }
+
+    override move(fromIndex: Integer, toIndex: Integer) {
+        const beforeRegistrationIndex = UsableListChangeType.registerMoveParameters(fromIndex, toIndex, 1);
+        this.notifyListChange(UsableListChangeTypeId.BeforeMove, beforeRegistrationIndex, 0);
+        UsableListChangeType.deregisterMoveParameters(beforeRegistrationIndex);
+
+        super.move(fromIndex, toIndex);
+
+        const afterRegistrationIndex = UsableListChangeType.registerMoveParameters(fromIndex, toIndex, 1);
+        this.notifyListChange(UsableListChangeTypeId.AfterMove, afterRegistrationIndex, 0);
+        UsableListChangeType.deregisterMoveParameters(afterRegistrationIndex);
+    }
+
+    override moveRange(fromIndex: Integer, toIndex: Integer, count: Integer) {
+        const beforeRegistrationIndex = UsableListChangeType.registerMoveParameters(fromIndex, toIndex, count);
+        this.notifyListChange(UsableListChangeTypeId.BeforeMove, beforeRegistrationIndex, 0);
+        UsableListChangeType.deregisterMoveParameters(beforeRegistrationIndex);
+
+        super.moveRange(fromIndex, toIndex, count);
+
+        const afterRegistrationIndex = UsableListChangeType.registerMoveParameters(fromIndex, toIndex, count);
+        this.notifyListChange(UsableListChangeTypeId.AfterMove, afterRegistrationIndex, 0);
+        UsableListChangeType.deregisterMoveParameters(afterRegistrationIndex);
+    }
+
     override clear() {
         const count = this.count;
         if (count > 0) {
@@ -104,37 +136,5 @@ export class ChangeSubscribableComparableList<out T extends U, in U = T> extends
         for (let i = 0; i < handlers.length; i++) {
             handlers[i](listChangeTypeId, index, count);
         }
-    }
-
-    protected override processExchange(fromIndex: Integer, toIndex: Integer) {
-        this.notifyListChange(UsableListChangeTypeId.BeforeReplace, fromIndex, 1);
-        this.notifyListChange(UsableListChangeTypeId.BeforeReplace, toIndex, 1);
-        super.processExchange(fromIndex, toIndex);
-        this.notifyListChange(UsableListChangeTypeId.AfterReplace, fromIndex, 1);
-        this.notifyListChange(UsableListChangeTypeId.AfterReplace, toIndex, 1);
-    }
-
-    protected override processMove(fromIndex: Integer, toIndex: Integer) {
-        const beforeRegistrationIndex = UsableListChangeType.registerMoveParameters(fromIndex, toIndex, 1);
-        this.notifyListChange(UsableListChangeTypeId.BeforeMove, beforeRegistrationIndex, 0);
-        UsableListChangeType.deregisterMoveParameters(beforeRegistrationIndex);
-
-        super.processMove(fromIndex, toIndex);
-
-        const afterRegistrationIndex = UsableListChangeType.registerMoveParameters(fromIndex, toIndex, 1);
-        this.notifyListChange(UsableListChangeTypeId.AfterMove, afterRegistrationIndex, 0);
-        UsableListChangeType.deregisterMoveParameters(afterRegistrationIndex);
-    }
-
-    protected override processMoveRange(fromIndex: Integer, toIndex: Integer, count: Integer) {
-        const beforeRegistrationIndex = UsableListChangeType.registerMoveParameters(fromIndex, toIndex, count);
-        this.notifyListChange(UsableListChangeTypeId.BeforeMove, beforeRegistrationIndex, 0);
-        UsableListChangeType.deregisterMoveParameters(beforeRegistrationIndex);
-
-        super.processMoveRange(fromIndex, toIndex, count);
-
-        const afterRegistrationIndex = UsableListChangeType.registerMoveParameters(fromIndex, toIndex, count);
-        this.notifyListChange(UsableListChangeTypeId.AfterMove, afterRegistrationIndex, 0);
-        UsableListChangeType.deregisterMoveParameters(afterRegistrationIndex);
     }
 }

@@ -15,7 +15,7 @@ import {
     RankedLitIvemIdTableFieldSourceDefinition,
     SecurityDataItemTableFieldSourceDefinition,
     TableFieldSourceDefinition,
-    TableFieldSourceDefinitionRegistryService
+    TableFieldSourceDefinitionCachedFactoryService
 } from "../../field-source/grid-table-field-source-internal-api";
 import { RankedLitIvemIdListTableRecordSourceDefinition } from './ranked-lit-ivem-id-list-table-record-source-definition';
 import { TableRecordSourceDefinition } from './table-record-source-definition';
@@ -24,12 +24,12 @@ import { TableRecordSourceDefinition } from './table-record-source-definition';
 export class WatchlistTableRecordSourceDefinition extends RankedLitIvemIdListTableRecordSourceDefinition {
     constructor(
         customHeadingsService: GridFieldCustomHeadingsService,
-        tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
+        tableFieldSourceDefinitionCachedFactoryService: TableFieldSourceDefinitionCachedFactoryService,
         rankedLitIvemIdListDefinition: RankedLitIvemIdListDefinition
     ) {
         super(
             customHeadingsService,
-            tableFieldSourceDefinitionRegistryService,
+            tableFieldSourceDefinitionCachedFactoryService,
             TableRecordSourceDefinition.TypeId.Watchlist,
             WatchlistTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
             rankedLitIvemIdListDefinition,
@@ -39,7 +39,7 @@ export class WatchlistTableRecordSourceDefinition extends RankedLitIvemIdListTab
     override get defaultFieldSourceDefinitionTypeIds() { return WatchlistTableRecordSourceDefinition.defaultFieldSourceDefinitionTypeIds; }
 
     override createDefaultLayoutDefinition() {
-        const fieldSourceDefinition = this.fieldSourceDefinitionRegistryService.securityDataItem;
+        const fieldSourceDefinition = this.tableFieldSourceDefinitionCachedFactoryService.securityDataItem;
 
         const fieldNames = new Array<string>();
 
@@ -108,7 +108,7 @@ export namespace WatchlistTableRecordSourceDefinition {
 
 
     export function createLayoutDefinition(
-        fieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
+        fieldSourceDefinitionRegistryService: TableFieldSourceDefinitionCachedFactoryService,
         fieldIds: FieldId[],
     ): GridLayoutDefinition {
         return fieldSourceDefinitionRegistryService.createLayoutDefinition(fieldIds);

@@ -35,6 +35,7 @@ export class QueryScanDetailDataItem extends ScanPublishDataItem {
             description: msg.scanDescription,
             readonly: msg.scanReadonly,
             statusId: msg.scanStatusId,
+            enabled: msg.enabled,
             versionNumber: msg.versionNumber,
             versionId: msg.versionId,
             versioningInterrupted: msg.versioningInterrupted,
@@ -48,7 +49,8 @@ export class QueryScanDetailDataItem extends ScanPublishDataItem {
             targetTypeId: msg.targetTypeId,
             targetMarketIds: msg.targetMarketIds,
             targetLitIvemIds: msg.targetLitIvemIds,
-            notifications: msg.notifications,
+            maxMatchCount: msg.maxMatchCount,
+            attachedNotificationChannels: msg.attachedNotificationChannels,
         };
     }
 }

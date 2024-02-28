@@ -6,10 +6,10 @@
 
 import { CurrencyId, ExchangeId, MarketBoardId, MarketId } from '../../../../adi/adi-internal-api';
 import { StringId, Strings } from '../../../../res/res-internal-api';
-import { AssertInternalError, EnumInfoOutOfOrderError, Integer, PickEnum, SourceTzOffsetDateTime, UnreachableCaseError, isArrayEqualUniquely } from '../../../../sys/sys-internal-api';
+import { AssertInternalError, EnumInfoOutOfOrderError, Integer, PickEnum, SourceTzOffsetDate, UnreachableCaseError, isArrayEqualUniquely } from '../../../../sys/sys-internal-api';
 import { ScanFormula } from '../../../formula/internal-api';
 
-export interface ScanFieldCondition {
+export interface ScanFieldCondition<IgnoredModifier = void> {
     readonly typeId: ScanFieldCondition.TypeId;
     readonly operatorId: ScanFieldCondition.OperatorId;
 }
@@ -31,7 +31,7 @@ export namespace ScanFieldCondition {
         Is,
     }
 
-    export interface Operands {
+    export interface Operands<IgnoredModifier = void> {
         readonly typeId: Operands.TypeId;
     }
 
@@ -678,12 +678,12 @@ export namespace ScanFieldCondition {
 
     function createFormulaNodeForDateFieldEquals(
         fieldId: ScanFormula.DateRangeFieldId,
-        value: SourceTzOffsetDateTime,
+        value: SourceTzOffsetDate,
         not: boolean,
     ): ScanFormula.DateFieldEqualsNode | ScanFormula.NotNode {
         const dateFieldEqualsNode = new ScanFormula.DateFieldEqualsNode();
         dateFieldEqualsNode.fieldId = fieldId;
-        dateFieldEqualsNode.value = SourceTzOffsetDateTime.createCopy(value);
+        dateFieldEqualsNode.value = SourceTzOffsetDate.createCopy(value);
         if (not) {
             const notNode = new ScanFormula.NotNode();
             notNode.operand = dateFieldEqualsNode;
@@ -695,14 +695,14 @@ export namespace ScanFieldCondition {
 
     function createFormulaNodeForDateFieldInRange(
         fieldId: ScanFormula.DateRangeFieldId,
-        min: SourceTzOffsetDateTime | undefined,
-        max: SourceTzOffsetDateTime | undefined,
+        min: SourceTzOffsetDate | undefined,
+        max: SourceTzOffsetDate | undefined,
         not: boolean,
     ): ScanFormula.DateFieldInRangeNode | ScanFormula.NotNode {
         const dateFieldInRangeNode = new ScanFormula.DateFieldInRangeNode();
         dateFieldInRangeNode.fieldId = fieldId;
-        dateFieldInRangeNode.min = SourceTzOffsetDateTime.newUndefinable(min);
-        dateFieldInRangeNode.max = SourceTzOffsetDateTime.newUndefinable(max);
+        dateFieldInRangeNode.min = SourceTzOffsetDate.newUndefinable(min);
+        dateFieldInRangeNode.max = SourceTzOffsetDate.newUndefinable(max);
         if (not) {
             const notNode = new ScanFormula.NotNode();
             notNode.operand = dateFieldInRangeNode;
@@ -789,13 +789,13 @@ export namespace ScanFieldCondition {
     function createFormulaNodeForDateSubFieldEquals(
         fieldId: ScanFormula.FieldId.DateSubbed,
         subFieldId: ScanFormula.DateSubFieldId,
-        value: SourceTzOffsetDateTime,
+        value: SourceTzOffsetDate,
         not: boolean,
     ): ScanFormula.DateSubFieldEqualsNode | ScanFormula.NotNode {
         const dateSubFieldEqualsNode = new ScanFormula.DateSubFieldEqualsNode();
         dateSubFieldEqualsNode.fieldId = fieldId;
         dateSubFieldEqualsNode.subFieldId = subFieldId;
-        dateSubFieldEqualsNode.value = SourceTzOffsetDateTime.createCopy(value);
+        dateSubFieldEqualsNode.value = SourceTzOffsetDate.createCopy(value);
         if (not) {
             const notNode = new ScanFormula.NotNode();
             notNode.operand = dateSubFieldEqualsNode;
@@ -808,15 +808,15 @@ export namespace ScanFieldCondition {
     function createFormulaNodeForDateSubFieldInRange(
         fieldId: ScanFormula.FieldId.DateSubbed,
         subFieldId: ScanFormula.DateSubFieldId,
-        min: SourceTzOffsetDateTime | undefined,
-        max: SourceTzOffsetDateTime | undefined,
+        min: SourceTzOffsetDate | undefined,
+        max: SourceTzOffsetDate | undefined,
         not: boolean,
     ): ScanFormula.DateSubFieldInRangeNode | ScanFormula.NotNode {
         const dateSubFieldInRangeNode = new ScanFormula.DateSubFieldInRangeNode();
         dateSubFieldInRangeNode.fieldId = fieldId;
         dateSubFieldInRangeNode.subFieldId = subFieldId;
-        dateSubFieldInRangeNode.min = SourceTzOffsetDateTime.newUndefinable(min);
-        dateSubFieldInRangeNode.max = SourceTzOffsetDateTime.newUndefinable(max);
+        dateSubFieldInRangeNode.min = SourceTzOffsetDate.newUndefinable(min);
+        dateSubFieldInRangeNode.max = SourceTzOffsetDate.newUndefinable(max);
         if (not) {
             const notNode = new ScanFormula.NotNode();
             notNode.operand = dateSubFieldInRangeNode;
@@ -1586,7 +1586,7 @@ export namespace DateScanFieldCondition {
 
     export interface ValueOperands extends Operands {
         readonly typeId: ScanFieldCondition.Operands.TypeId.DateValue;
-        value: SourceTzOffsetDateTime;
+        value: SourceTzOffsetDate;
     }
 
     export namespace ValueOperands {
@@ -1608,8 +1608,8 @@ export namespace DateScanFieldCondition {
 
     export interface RangeOperands extends Operands {
         readonly typeId: ScanFieldCondition.Operands.TypeId.DateRange;
-        min: SourceTzOffsetDateTime | undefined;
-        max: SourceTzOffsetDateTime | undefined;
+        min: SourceTzOffsetDate | undefined;
+        max: SourceTzOffsetDate | undefined;
     }
 
     export namespace RangeOperands {
@@ -1658,15 +1658,15 @@ export namespace DateScanFieldCondition {
                         case ScanFieldCondition.Operands.TypeId.DateValue: {
                             const leftValue = (leftOperands as ValueOperands).value;
                             const rightValue = (rightOperands as ValueOperands).value;
-                            return SourceTzOffsetDateTime.isEqual(leftValue, rightValue);
+                            return SourceTzOffsetDate.isEqual(leftValue, rightValue);
                         }
                         case ScanFieldCondition.Operands.TypeId.DateRange: {
                             const leftInRangeOperands = leftOperands as RangeOperands;
                             const rightInRangeOperands = rightOperands as RangeOperands;
                             return (
-                                SourceTzOffsetDateTime.isUndefinableEqual(leftInRangeOperands.min, rightInRangeOperands.min)
+                                SourceTzOffsetDate.isUndefinableEqual(leftInRangeOperands.min, rightInRangeOperands.min)
                                 &&
-                                SourceTzOffsetDateTime.isUndefinableEqual(leftInRangeOperands.max, rightInRangeOperands.max)
+                                SourceTzOffsetDate.isUndefinableEqual(leftInRangeOperands.max, rightInRangeOperands.max)
                             );
                         }
                         default:

@@ -51,6 +51,7 @@
         "no-constant-condition": ["error", { "checkLoops": false }],
         "@typescript-eslint/consistent-type-definitions": "error",
         "@typescript-eslint/no-unnecessary-condition": ["error", { "allowConstantLoopConditions": true }],
+        "@typescript-eslint/no-confusing-void-expression": ["error", { "ignoreArrowShorthand": true }],
         "@typescript-eslint/naming-convention": ["error", { "selector": "enumMember", "format": null }],
         "@typescript-eslint/no-explicit-any": "error",
         "@typescript-eslint/no-invalid-void-type": ["warn", { "allowAsThisParameter": true }],

@@ -48,6 +48,7 @@ import { TopShareholderTableRecordSource } from './top-shareholder-table-record-
 
 /** @public */
 export class TableRecordSourceFactoryService {
+    private readonly factoryClosure = new Array<TableRecordSource.FactoryClosure>(TableRecordSourceDefinition.Type.idCount);
     constructor(
         private readonly _adiService: AdiService,
         private readonly _symbolDetailCacheService: SymbolDetailCacheService,
@@ -57,6 +58,10 @@ export class TableRecordSourceFactoryService {
         private readonly _textFormatterService: TextFormatterService,
         private readonly _tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService,
     ) { }
+
+    registerFactoryClosure(typeId: TableRecordSourceDefinition.TypeId, factoryClosure: TableRecordSource.FactoryClosure) {
+        this.factoryClosure[typeId] = factoryClosure;
+    }
 
     createFromDefinition(definition: TableRecordSourceDefinition): TableRecordSource {
         switch (definition.typeId) {
@@ -85,6 +90,8 @@ export class TableRecordSourceFactoryService {
             case TableRecordSourceDefinition.TypeId.RankedLitIvemIdListDirectoryItem: return this.createRankedLitIvemIdListDirectoryItem(definition);
             case TableRecordSourceDefinition.TypeId.GridField: return this.createGridField(definition);
             case TableRecordSourceDefinition.TypeId.ScanTest: return this.createScanTest(definition);
+            case TableRecordSourceDefinition.TypeId.ScanFieldEditorFrame: return this.factoryClosure[definition.typeId](definition); // in future create all via registration
+            case TableRecordSourceDefinition.TypeId.ScanEditorAttachedNotificationChannel: return this.factoryClosure[definition.typeId](definition); // in future create all via registration
             default: throw new UnreachableCaseError('TDLFCFTID17742', definition.typeId);
         }
     }
@@ -99,7 +106,7 @@ export class TableRecordSourceFactoryService {
                 definition
             );
         } else {
-            throw new AssertInternalError('TRSFCLIIFSS21099');
+            throw new AssertInternalError('TRSFCLIICL21099');
         }
     }
 

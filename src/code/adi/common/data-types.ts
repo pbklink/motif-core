@@ -107,10 +107,11 @@ export const enum MarketBoardId {
     MyxIndexMarket,
     MyxBuyInMarket,
     MyxOddLotMarket,
-    Ptx,
-    Fnsx,
-    Fpsx,
-    Cfxt,
+    PtxMain,
+    FnsxMain,
+    FpsxMain,
+    CfxMain,
+    DaxMain,
 }
 
 export const enum TMarketMoversSymbolSortTypeId {
@@ -313,10 +314,11 @@ export const enum FeedId {
     Market_MyxBuyIn,
     Market_Calastone,
     Market_AsxCxa,
-    Market_Ptx,
-    Market_Fnsx,
-    Market_Fpsx,
-    Market_Cfxt,
+    Market_PtxMain,
+    Market_FnsxMain,
+    Market_FpsxMain,
+    Market_CfxMain,
+    Market_DaxMain,
     News_Asx,
     News_Nsx,
     News_Nzx,
@@ -360,10 +362,11 @@ export const enum MarketId {
     MyxBuyIn,
     Calastone,
     AsxCxa,
-    Ptx,
-    Fnsx,
-    Fpsx,
-    Cfxt,
+    PtxMain,
+    FnsxMain,
+    FpsxMain,
+    CfxMain,
+    DaxMain,
 }
 
 export const enum ExchangeId {
@@ -377,6 +380,7 @@ export const enum ExchangeId {
     Fnsx,
     Fpsx,
     Cfx,
+    Dax,
     AsxCxa,
 }
 
@@ -451,6 +455,14 @@ export const enum DataMessageTypeId {
     ExecuteScan,
     ScanDescriptors,
     LitIvemIdMatches,
+    CreateNotificationChannel,
+    DeleteNotificationChannel,
+    UpdateNotificationChannel,
+    UpdateNotificationChannelEnabled,
+    QueryNotificationChannel,
+    QueryNotificationChannels,
+    QueryNotificationDistributionMethod,
+    QueryNotificationDistributionMethods,
     WatchmakerListRequestAcknowledge,
     CreateOrCopyWatchmakerList,
     WatchmakerListDescriptors,
@@ -498,6 +510,14 @@ export const enum DataChannelId {
     ScanDescriptors,
     LitIvemIdMatches,
     LitIvemIdCreateWatchmakerList,
+    CreateNotificationChannel,
+    DeleteNotificationChannel,
+    UpdateNotificationChannel,
+    UpdateNotificationChannelEnabled,
+    QueryNotificationChannel,
+    QueryNotificationChannels,
+    QueryNotificationDistributionMethod,
+    QueryNotificationDistributionMethods,
     UpdateWatchmakerList,
     CopyWatchmakerList,
     DeleteWatchmakerList,
@@ -1074,15 +1094,24 @@ export const enum PublisherSessionTerminatedReasonId {
     Other,
 }
 
-export const enum ScanStatusId {
-    Active,
-    Inactive,
-    Faulted,
+export const enum ActiveFaultedStatusId {
+    Active, // Enabled and not faulty
+    Inactive, // Disabled
+    Faulted, // Enabled and ok
 }
 
 export const enum ScanTargetTypeId {
     Markets,
     Symbols,
+}
+
+export const enum NotificationDistributionMethodId {
+    Debug,
+    Email,
+    Sms,
+    WebPush,
+    ApplePush,
+    GooglePush,
 }
 
 export type DataItemId = Integer;
@@ -1198,18 +1227,30 @@ export namespace Currency {
         },
     } as const;
 
-    export const idCount = Object.keys(infosObject).length;
     const infos = Object.values(infosObject);
+    export const idCount = infos.length;
+    export const allIds: readonly CurrencyId[] = generateAllIds();
 
-    export function initialise() {
-        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as CurrencyId);
-        if (outOfOrderIdx >= 0) {
-            throw new EnumInfoOutOfOrderError('TCurrency', outOfOrderIdx, Strings[infos[outOfOrderIdx].codeId]);
+    function generateAllIds(): readonly CurrencyId[] {
+        const result = new Array<CurrencyId>(idCount);
+        for (let i = 0; i < idCount; i++) {
+            const info = infos[i];
+            const id = info.id;
+            if (id !== i as CurrencyId) {
+                throw new EnumInfoOutOfOrderError('CurrencyId', i, Strings[info.codeId]);
+            } else {
+                result[i] = id;
+            }
         }
+        return result;
+    }
+
+    export function idToCodeId(id: Id) {
+        return infos[id].codeId;
     }
 
     export function idToCode(id: Id) {
-        return infos[id].codeId;
+        return Strings[idToCodeId(id)];
     }
 
     export function tryCodeToId(code: string) {
@@ -2253,44 +2294,58 @@ export namespace MarketBoard {
             displayId: StringId.MarketBoardIdDisplay_MyxOddLot,
             orderDestination: undefined,
         },
-        Ptx: {
-            id: MarketBoardId.Ptx,
-            name: 'Ptx',
+        PtxMain: {
+            id: MarketBoardId.PtxMain,
+            name: 'PtxMain',
             exchangeId: ExchangeId.Ptx,
-            displayId: StringId.MarketBoardIdDisplay_Ptx,
+            displayId: StringId.MarketBoardIdDisplay_PtxMain,
             orderDestination: undefined,
         },
-        Fnsx: {
-            id: MarketBoardId.Fnsx,
-            name: 'Fnsx',
+        FnsxMain: {
+            id: MarketBoardId.FnsxMain,
+            name: 'FnsxMain',
             exchangeId: ExchangeId.Fnsx,
-            displayId: StringId.MarketBoardIdDisplay_Fnsx,
+            displayId: StringId.MarketBoardIdDisplay_FnsxMain,
             orderDestination: undefined,
         },
-        Fpsx: {
-            id: MarketBoardId.Fpsx,
-            name: 'Fpsx',
+        FpsxMain: {
+            id: MarketBoardId.FpsxMain,
+            name: 'FpsxMain',
             exchangeId: ExchangeId.Fpsx,
-            displayId: StringId.MarketBoardIdDisplay_Fpsx,
+            displayId: StringId.MarketBoardIdDisplay_FpsxMain,
             orderDestination: undefined,
         },
-        Cfxt: {
-            id: MarketBoardId.Cfxt,
-            name: 'Cfxt',
+        CfxMain: {
+            id: MarketBoardId.CfxMain,
+            name: 'CfxMain',
             exchangeId: ExchangeId.Cfx,
-            displayId: StringId.MarketBoardIdDisplay_Cfxt,
+            displayId: StringId.MarketBoardIdDisplay_CfxMain,
+            orderDestination: undefined,
+        },
+        DaxMain: {
+            id: MarketBoardId.DaxMain,
+            name: 'DaxMain',
+            exchangeId: ExchangeId.Dax,
+            displayId: StringId.MarketBoardIdDisplay_DaxMain,
             orderDestination: undefined,
         },
     };
 
-    export const idCount = Object.keys(infosObject).length;
     const infos = Object.values(infosObject);
+    export const idCount = infos.length;
+    export let allIds: readonly MarketBoardId[];
 
     export function initialise() {
-        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as MarketBoardId);
-        if (outOfOrderIdx >= 0) {
-            throw new EnumInfoOutOfOrderError('MarketBoardId', outOfOrderIdx, Strings[infos[outOfOrderIdx].displayId]);
+        const initAllIds = new Array<MarketBoardId>(idCount);
+        for (let i = 0; i < idCount; i++) {
+            const info = infos[i];
+            if (info.id !== i as MarketBoardId) {
+                throw new EnumInfoOutOfOrderError('MarketBoardId', i, Strings[infos[i].displayId]);
+            } else {
+                initAllIds[i] = info.id;
+            }
         }
+        allIds = initAllIds;
     }
 
     export function idToDisplayId(id: Id) {
@@ -3117,29 +3172,35 @@ export namespace FeedInfo {
             name: 'Market_AsxCxa',
             displayId: StringId.FeedDisplay_Market_AsxCxa,
         },
-        Market_Ptx: {
-            id: FeedId.Market_Ptx,
+        Market_PtxMain: {
+            id: FeedId.Market_PtxMain,
             classId: FeedClassId.Market,
-            name: 'Market_Ptx',
-            displayId: StringId.FeedDisplay_Market_Ptx,
+            name: 'Market_PtxMain',
+            displayId: StringId.FeedDisplay_Market_PtxMain,
         },
-        Market_Fnsx: {
-            id: FeedId.Market_Fnsx,
+        Market_FnsxMain: {
+            id: FeedId.Market_FnsxMain,
             classId: FeedClassId.Market,
-            name: 'Market_Fnsx',
-            displayId: StringId.FeedDisplay_Market_Fnsx,
+            name: 'Market_FnsxMain',
+            displayId: StringId.FeedDisplay_Market_FnsxMain,
         },
-        Market_Fpsx: {
-            id: FeedId.Market_Fpsx,
+        Market_FpsxMain: {
+            id: FeedId.Market_FpsxMain,
             classId: FeedClassId.Market,
-            name: 'Market_Fpsx',
-            displayId: StringId.FeedDisplay_Market_Fpsx,
+            name: 'Market_FpsxMain',
+            displayId: StringId.FeedDisplay_Market_FpsxMain,
         },
-        Market_Cfxt: {
-            id: FeedId.Market_Cfxt,
+        Market_CfxMain: {
+            id: FeedId.Market_CfxMain,
             classId: FeedClassId.Market,
-            name: 'Market_Cfxt',
-            displayId: StringId.FeedDisplay_Market_Cfxt,
+            name: 'Market_CfxMain',
+            displayId: StringId.FeedDisplay_Market_CfxMain,
+        },
+        Market_DaxMain: {
+            id: FeedId.Market_DaxMain,
+            classId: FeedClassId.Market,
+            name: 'Market_DaxMain',
+            displayId: StringId.FeedDisplay_Market_DaxMain,
         },
         News_Asx: {
             id: FeedId.News_Asx,
@@ -3818,18 +3879,18 @@ export namespace MarketInfo {
             quantityMultiple: 1,
             displayPriority: 10,
         },
-        Ptx: {
-            id: MarketId.Ptx,
-            feedId: FeedId.Market_Ptx,
+        PtxMain: {
+            id: MarketId.PtxMain,
+            feedId: FeedId.Market_PtxMain,
             defaultExchangeId: ExchangeId.Ptx,
             supportedExchanges: [ExchangeId.Ptx],
             legacyDefaultPscGlobalCode: 'PTX',
-            defaultExchangeLocalCode: 'X',
+            defaultExchangeLocalCode: 'N',
             lit: true,
-            bestLitId: MarketId.Ptx,
+            bestLitId: MarketId.PtxMain,
             isRoutable: true,
             jsonValue: 'Ptx',
-            displayId: StringId.MarketDisplay_Ptx,
+            displayId: StringId.MarketDisplay_PtxMain,
             allowedOrderTypeIds: [OrderTypeId.Limit],
             defaultOrderTypeId: OrderTypeId.Limit,
             allowedTimeInForceIds: [TimeInForceId.Day, TimeInForceId.GoodTillCancel, TimeInForceId.GoodTillDate],
@@ -3840,18 +3901,18 @@ export namespace MarketInfo {
             quantityMultiple: 1,
             displayPriority: 10,
         },
-        Fnsx: {
-            id: MarketId.Fnsx,
-            feedId: FeedId.Market_Fnsx,
+        FnsxMain: {
+            id: MarketId.FnsxMain,
+            feedId: FeedId.Market_FnsxMain,
             defaultExchangeId: ExchangeId.Fnsx,
             supportedExchanges: [ExchangeId.Fnsx],
             legacyDefaultPscGlobalCode: 'FNSX',
-            defaultExchangeLocalCode: 'X',
+            defaultExchangeLocalCode: 'N',
             lit: true,
-            bestLitId: MarketId.Fnsx,
+            bestLitId: MarketId.FnsxMain,
             isRoutable: true,
             jsonValue: 'Fnsx',
-            displayId: StringId.MarketDisplay_Fnsx,
+            displayId: StringId.MarketDisplay_FnsxMain,
             allowedOrderTypeIds: [OrderTypeId.Limit],
             defaultOrderTypeId: OrderTypeId.Limit,
             allowedTimeInForceIds: [TimeInForceId.Day, TimeInForceId.GoodTillCancel, TimeInForceId.GoodTillDate],
@@ -3862,18 +3923,18 @@ export namespace MarketInfo {
             quantityMultiple: 1,
             displayPriority: 10,
         },
-        Fpsx: {
-            id: MarketId.Fpsx,
-            feedId: FeedId.Market_Fpsx,
+        FpsxMain: {
+            id: MarketId.FpsxMain,
+            feedId: FeedId.Market_FpsxMain,
             defaultExchangeId: ExchangeId.Fpsx,
             supportedExchanges: [ExchangeId.Fpsx],
             legacyDefaultPscGlobalCode: 'FPSX',
-            defaultExchangeLocalCode: 'X',
+            defaultExchangeLocalCode: 'N',
             lit: true,
-            bestLitId: MarketId.Fpsx,
+            bestLitId: MarketId.FpsxMain,
             isRoutable: true,
             jsonValue: 'Fpsx',
-            displayId: StringId.MarketDisplay_Fpsx,
+            displayId: StringId.MarketDisplay_FpsxMain,
             allowedOrderTypeIds: [OrderTypeId.Limit],
             defaultOrderTypeId: OrderTypeId.Limit,
             allowedTimeInForceIds: [TimeInForceId.Day, TimeInForceId.GoodTillCancel, TimeInForceId.GoodTillDate],
@@ -3884,18 +3945,40 @@ export namespace MarketInfo {
             quantityMultiple: 1,
             displayPriority: 10,
         },
-        Cfxt: {
-            id: MarketId.Cfxt,
-            feedId: FeedId.Market_Cfxt,
+        CfxMain: {
+            id: MarketId.CfxMain,
+            feedId: FeedId.Market_CfxMain,
             defaultExchangeId: ExchangeId.Cfx,
             supportedExchanges: [ExchangeId.Cfx],
             legacyDefaultPscGlobalCode: 'CFXT',
-            defaultExchangeLocalCode: 'T',
+            defaultExchangeLocalCode: 'N',
             lit: true,
-            bestLitId: MarketId.Cfxt,
+            bestLitId: MarketId.CfxMain,
             isRoutable: true,
             jsonValue: 'Cfxt',
-            displayId: StringId.MarketDisplay_Cfxt,
+            displayId: StringId.MarketDisplay_CfxMain,
+            allowedOrderTypeIds: [OrderTypeId.Limit],
+            defaultOrderTypeId: OrderTypeId.Limit,
+            allowedTimeInForceIds: [TimeInForceId.Day, TimeInForceId.GoodTillCancel, TimeInForceId.GoodTillDate],
+            defaultTimeInForceId: TimeInForceId.GoodTillCancel,
+            hasPriceStepRestrictions: true,
+            allowedOrderExtendedSideIds: StandardAllowedOrderExtendedSideIds,
+            allowedOrderTriggerTypeIds: [OrderTriggerTypeId.Immediate],
+            quantityMultiple: 1,
+            displayPriority: 10,
+        },
+        DaxMain: {
+            id: MarketId.DaxMain,
+            feedId: FeedId.Market_DaxMain,
+            defaultExchangeId: ExchangeId.Dax,
+            supportedExchanges: [ExchangeId.Dax],
+            legacyDefaultPscGlobalCode: 'DAXT',
+            defaultExchangeLocalCode: 'N',
+            lit: true,
+            bestLitId: MarketId.DaxMain,
+            isRoutable: true,
+            jsonValue: 'DaxN',
+            displayId: StringId.MarketDisplay_DaxMain,
             allowedOrderTypeIds: [OrderTypeId.Limit],
             defaultOrderTypeId: OrderTypeId.Limit,
             allowedTimeInForceIds: [TimeInForceId.Day, TimeInForceId.GoodTillCancel, TimeInForceId.GoodTillDate],
@@ -3910,6 +3993,7 @@ export namespace MarketInfo {
 
     const infos = Object.values(infosObject);
     export const idCount = infos.length;
+    export let allIds: readonly MarketId[];
 
     class ConstructInfo {
         id: Id;
@@ -3938,10 +4022,14 @@ export namespace MarketInfo {
         const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as MarketId);
         if (outOfOrderIdx >= 0) {
             throw new EnumInfoOutOfOrderError('TMarketId', outOfOrderIdx, infos[outOfOrderIdx].jsonValue);
-        }
-
-        for (let i = 0; i < idCount; i++) {
-            constructInfos[i] = new ConstructInfo(infos[i]);
+        } else {
+            const initAllIds = new Array<MarketId>(idCount);
+            for (let i = 0; i < idCount; i++) {
+                const info = infos[i];
+                initAllIds[i] = info.id;
+                constructInfos[i] = new ConstructInfo(info);
+            }
+            allIds = initAllIds;
         }
     }
 
@@ -4087,6 +4175,7 @@ export namespace ExchangeInfo {
         Fnsx = 'Fnsx',
         Fpsx = 'Fpsx',
         Cfx = 'Cfx',
+        Dax = 'Dax',
         AsxCxa = 'AsxCxa',
     }
 
@@ -4203,7 +4292,7 @@ export namespace ExchangeInfo {
             name: Name.Ptx,
             abbreviatedDisplayId: StringId.ExchangeAbbreviatedDisplay_Ptx,
             fullDisplayId: StringId.ExchangeFullDisplay_Ptx,
-            defaultMarket: MarketId.Ptx,
+            defaultMarket: MarketId.PtxMain,
             defaultPscCode: 'PX',
             defaultSymbolNameFieldId: SymbolFieldId.Name,
             allowableSymbolNameFieldIds: [SymbolFieldId.Code, SymbolFieldId.Name],
@@ -4215,7 +4304,7 @@ export namespace ExchangeInfo {
             name: Name.Fnsx,
             abbreviatedDisplayId: StringId.ExchangeAbbreviatedDisplay_Fnsx,
             fullDisplayId: StringId.ExchangeFullDisplay_Fnsx,
-            defaultMarket: MarketId.Fnsx,
+            defaultMarket: MarketId.FnsxMain,
             defaultPscCode: 'FN',
             defaultSymbolNameFieldId: SymbolFieldId.Name,
             allowableSymbolNameFieldIds: [SymbolFieldId.Code, SymbolFieldId.Name],
@@ -4227,7 +4316,7 @@ export namespace ExchangeInfo {
             name: Name.Fpsx,
             abbreviatedDisplayId: StringId.ExchangeAbbreviatedDisplay_Fpsx,
             fullDisplayId: StringId.ExchangeFullDisplay_Fpsx,
-            defaultMarket: MarketId.Fpsx,
+            defaultMarket: MarketId.FpsxMain,
             defaultPscCode: 'FP',
             defaultSymbolNameFieldId: SymbolFieldId.Name,
             allowableSymbolNameFieldIds: [SymbolFieldId.Code, SymbolFieldId.Name],
@@ -4239,8 +4328,20 @@ export namespace ExchangeInfo {
             name: Name.Cfx,
             abbreviatedDisplayId: StringId.ExchangeAbbreviatedDisplay_Cfx,
             fullDisplayId: StringId.ExchangeFullDisplay_Cfx,
-            defaultMarket: MarketId.Cfxt,
+            defaultMarket: MarketId.CfxMain,
             defaultPscCode: 'CF',
+            defaultSymbolNameFieldId: SymbolFieldId.Name,
+            allowableSymbolNameFieldIds: [SymbolFieldId.Code, SymbolFieldId.Name],
+            defaultSymbolSearchFieldIds: [SymbolFieldId.Code, SymbolFieldId.Name],
+            allowableSymbolSearchFieldIds: [SymbolFieldId.Code, SymbolFieldId.Name],
+        },
+        Dax: {
+            id: ExchangeId.Dax,
+            name: Name.Dax,
+            abbreviatedDisplayId: StringId.ExchangeAbbreviatedDisplay_Dax,
+            fullDisplayId: StringId.ExchangeFullDisplay_Dax,
+            defaultMarket: MarketId.DaxMain,
+            defaultPscCode: 'DX',
             defaultSymbolNameFieldId: SymbolFieldId.Name,
             allowableSymbolNameFieldIds: [SymbolFieldId.Code, SymbolFieldId.Name],
             defaultSymbolSearchFieldIds: [SymbolFieldId.Code, SymbolFieldId.Name],
@@ -4262,6 +4363,7 @@ export namespace ExchangeInfo {
 
     const infos: readonly Info[] = Object.values(infosObject);
     export const idCount = infos.length;
+    export let allIds: readonly ExchangeId[];
 
     interface ConstructInfo {
         localMarkets: MarketId[];
@@ -4271,10 +4373,13 @@ export namespace ExchangeInfo {
     const constructInfos = new Array<ConstructInfo>(idCount);
 
     export function initialise() {
+        const initAllIds = new Array<ExchangeId>(idCount);
+
         for (let id = 0; id < idCount; id++) {
             if (infos[id].id !== id as ExchangeId) {
                 throw new EnumInfoOutOfOrderError('ExchangeId', id, Strings[infos[id].abbreviatedDisplayId]);
             } else {
+                initAllIds[id] = id;
                 const localMarkets = calculateLocalMarkets(id);
 
                 const constructInfo: ConstructInfo = {
@@ -4285,6 +4390,7 @@ export namespace ExchangeInfo {
                 constructInfos[id] = constructInfo;
             }
         }
+        allIds = initAllIds;
     }
 
     function calculateLocalMarkets(id: ExchangeId) {
@@ -4600,168 +4706,167 @@ export namespace TradingEnvironment {
     }
 }
 
-export namespace DataMessageType {
-    export type Id = DataMessageTypeId;
-    export type IdArray = Id[];
+// export namespace DataMessageType {
+//     export type Id = DataMessageTypeId;
 
-    interface Info {
-        id: Id;
-    }
+//     interface Info {
+//         id: Id;
+//     }
 
-    type InfosObject = { [id in keyof typeof DataMessageTypeId]: Info };
+//     type InfosObject = { [id in keyof typeof DataMessageTypeId]: Info };
 
-    const infosObject: InfosObject = {
-        PublisherSubscription_Onlined: {
-            id: DataMessageTypeId.PublisherSubscription_Onlined,
-        },
-        PublisherSubscription_Offlining: {
-            id: DataMessageTypeId.PublisherSubscription_Offlining,
-        },
-        PublisherSubscription_Warning: {
-            id: DataMessageTypeId.PublisherSubscription_Warning,
-        },
-        PublisherSubscription_Error: {
-            id: DataMessageTypeId.PublisherSubscription_Error,
-        },
-        SuccessFail: {
-            id: DataMessageTypeId.SuccessFail,
-        },
-        Feeds: {
-            id: DataMessageTypeId.Feeds,
-        },
-        Markets: {
-            id: DataMessageTypeId.Markets,
-        },
-        TradingStates: {
-            id: DataMessageTypeId.TradingStates,
-        },
-        Depth: {
-            id: DataMessageTypeId.Depth,
-        },
-        DepthLevels: {
-            id: DataMessageTypeId.DepthLevels,
-        },
-        Security: {
-            id: DataMessageTypeId.Security,
-        },
-        Trades: {
-            id: DataMessageTypeId.Trades,
-        },
-        Symbols: {
-            id: DataMessageTypeId.Symbols,
-        },
-        Holdings: {
-            id: DataMessageTypeId.Holdings,
-        },
-        Balances: {
-            id: DataMessageTypeId.Balances,
-        },
-        TopShareholders: {
-            id: DataMessageTypeId.TopShareholders,
-        },
-        BrokerageAccounts: {
-            id: DataMessageTypeId.BrokerageAccounts,
-        },
-        Orders: {
-            id: DataMessageTypeId.Orders,
-        },
-        Transactions: {
-            id: DataMessageTypeId.Transactions,
-        },
-        OrderStatuses: {
-            id: DataMessageTypeId.OrderStatuses,
-        },
-        ZenithServerInfo: {
-            id: DataMessageTypeId.ZenithServerInfo,
-        },
-        Synchronised: {
-            id: DataMessageTypeId.Synchronised,
-        },
-        ChartHistory: {
-            id: DataMessageTypeId.ChartHistory,
-        },
-        ZenithPublisherStateChange: {
-            id: DataMessageTypeId.ZenithPublisherStateChange,
-        },
-        ZenithReconnect: {
-            id: DataMessageTypeId.ZenithReconnect,
-        },
-        ZenithPublisherOnlineChange: {
-            id: DataMessageTypeId.ZenithPublisherOnlineChange,
-        },
-        ZenithEndpointSelected: {
-            id: DataMessageTypeId.ZenithEndpointSelected,
-        },
-        ZenithCounter: {
-            id: DataMessageTypeId.ZenithCounter,
-        },
-        ZenithLog: {
-            id: DataMessageTypeId.ZenithLog,
-        },
-        ZenithSessionTerminated: {
-            id: DataMessageTypeId.ZenithSessionTerminated,
-        },
-        ZenithQueryConfigure: {
-            id: DataMessageTypeId.ZenithQueryConfigure,
-        },
-        PlaceOrderResponse: {
-            id: DataMessageTypeId.PlaceOrderResponse,
-        },
-        AmendOrderResponse: {
-            id: DataMessageTypeId.AmendOrderResponse,
-        },
-        CancelOrderResponse: {
-            id: DataMessageTypeId.CancelOrderResponse,
-        },
-        MoveOrderResponse: {
-            id: DataMessageTypeId.MoveOrderResponse,
-        },
-        CreateScan: {
-            id: DataMessageTypeId.CreateScan,
-        },
-        UpdateScan: {
-            id: DataMessageTypeId.UpdateScan,
-        },
-        DeleteScan: {
-            id: DataMessageTypeId.DeleteScan,
-        },
-        QueryScanDetail: {
-            id: DataMessageTypeId.QueryScanDetail,
-        },
-        ExecuteScan: {
-            id: DataMessageTypeId.ExecuteScan,
-        },
-        ScanDescriptors: {
-            id: DataMessageTypeId.ScanDescriptors,
-        },
-        LitIvemIdMatches: {
-            id: DataMessageTypeId.LitIvemIdMatches,
-        },
-        WatchmakerListRequestAcknowledge: {
-            id: DataMessageTypeId.WatchmakerListRequestAcknowledge,
-        },
-        CreateOrCopyWatchmakerList: {
-            id: DataMessageTypeId.CreateOrCopyWatchmakerList,
-        },
-        WatchmakerListDescriptors: {
-            id: DataMessageTypeId.WatchmakerListDescriptors,
-        },
-        WatchmakerListLitIvemIds: {
-            id: DataMessageTypeId.WatchmakerListLitIvemIds,
-        },
-    } as const;
+//     const infosObject: InfosObject = {
+//         PublisherSubscription_Onlined: {
+//             id: DataMessageTypeId.PublisherSubscription_Onlined,
+//         },
+//         PublisherSubscription_Offlining: {
+//             id: DataMessageTypeId.PublisherSubscription_Offlining,
+//         },
+//         PublisherSubscription_Warning: {
+//             id: DataMessageTypeId.PublisherSubscription_Warning,
+//         },
+//         PublisherSubscription_Error: {
+//             id: DataMessageTypeId.PublisherSubscription_Error,
+//         },
+//         SuccessFail: {
+//             id: DataMessageTypeId.SuccessFail,
+//         },
+//         Feeds: {
+//             id: DataMessageTypeId.Feeds,
+//         },
+//         Markets: {
+//             id: DataMessageTypeId.Markets,
+//         },
+//         TradingStates: {
+//             id: DataMessageTypeId.TradingStates,
+//         },
+//         Depth: {
+//             id: DataMessageTypeId.Depth,
+//         },
+//         DepthLevels: {
+//             id: DataMessageTypeId.DepthLevels,
+//         },
+//         Security: {
+//             id: DataMessageTypeId.Security,
+//         },
+//         Trades: {
+//             id: DataMessageTypeId.Trades,
+//         },
+//         Symbols: {
+//             id: DataMessageTypeId.Symbols,
+//         },
+//         Holdings: {
+//             id: DataMessageTypeId.Holdings,
+//         },
+//         Balances: {
+//             id: DataMessageTypeId.Balances,
+//         },
+//         TopShareholders: {
+//             id: DataMessageTypeId.TopShareholders,
+//         },
+//         BrokerageAccounts: {
+//             id: DataMessageTypeId.BrokerageAccounts,
+//         },
+//         Orders: {
+//             id: DataMessageTypeId.Orders,
+//         },
+//         Transactions: {
+//             id: DataMessageTypeId.Transactions,
+//         },
+//         OrderStatuses: {
+//             id: DataMessageTypeId.OrderStatuses,
+//         },
+//         ZenithServerInfo: {
+//             id: DataMessageTypeId.ZenithServerInfo,
+//         },
+//         Synchronised: {
+//             id: DataMessageTypeId.Synchronised,
+//         },
+//         ChartHistory: {
+//             id: DataMessageTypeId.ChartHistory,
+//         },
+//         ZenithPublisherStateChange: {
+//             id: DataMessageTypeId.ZenithPublisherStateChange,
+//         },
+//         ZenithReconnect: {
+//             id: DataMessageTypeId.ZenithReconnect,
+//         },
+//         ZenithPublisherOnlineChange: {
+//             id: DataMessageTypeId.ZenithPublisherOnlineChange,
+//         },
+//         ZenithEndpointSelected: {
+//             id: DataMessageTypeId.ZenithEndpointSelected,
+//         },
+//         ZenithCounter: {
+//             id: DataMessageTypeId.ZenithCounter,
+//         },
+//         ZenithLog: {
+//             id: DataMessageTypeId.ZenithLog,
+//         },
+//         ZenithSessionTerminated: {
+//             id: DataMessageTypeId.ZenithSessionTerminated,
+//         },
+//         ZenithQueryConfigure: {
+//             id: DataMessageTypeId.ZenithQueryConfigure,
+//         },
+//         PlaceOrderResponse: {
+//             id: DataMessageTypeId.PlaceOrderResponse,
+//         },
+//         AmendOrderResponse: {
+//             id: DataMessageTypeId.AmendOrderResponse,
+//         },
+//         CancelOrderResponse: {
+//             id: DataMessageTypeId.CancelOrderResponse,
+//         },
+//         MoveOrderResponse: {
+//             id: DataMessageTypeId.MoveOrderResponse,
+//         },
+//         CreateScan: {
+//             id: DataMessageTypeId.CreateScan,
+//         },
+//         UpdateScan: {
+//             id: DataMessageTypeId.UpdateScan,
+//         },
+//         DeleteScan: {
+//             id: DataMessageTypeId.DeleteScan,
+//         },
+//         QueryScanDetail: {
+//             id: DataMessageTypeId.QueryScanDetail,
+//         },
+//         ExecuteScan: {
+//             id: DataMessageTypeId.ExecuteScan,
+//         },
+//         ScanDescriptors: {
+//             id: DataMessageTypeId.ScanDescriptors,
+//         },
+//         LitIvemIdMatches: {
+//             id: DataMessageTypeId.LitIvemIdMatches,
+//         },
+//         WatchmakerListRequestAcknowledge: {
+//             id: DataMessageTypeId.WatchmakerListRequestAcknowledge,
+//         },
+//         CreateOrCopyWatchmakerList: {
+//             id: DataMessageTypeId.CreateOrCopyWatchmakerList,
+//         },
+//         WatchmakerListDescriptors: {
+//             id: DataMessageTypeId.WatchmakerListDescriptors,
+//         },
+//         WatchmakerListLitIvemIds: {
+//             id: DataMessageTypeId.WatchmakerListLitIvemIds,
+//         },
+//     } as const;
 
-    export const idCount = Object.keys(infosObject).length;
-    const infos = Object.values(infosObject);
+//     export const idCount = Object.keys(infosObject).length;
+//     const infos = Object.values(infosObject);
 
-    export function initialise() {
-        for (let id = 0; id < DataMessageType.idCount; id++) {
-            if (id as DataMessageTypeId !== infos[id].id) {
-                throw new EnumInfoOutOfOrderError('DataMessageTypeId', id, `${id}`);
-            }
-        }
-    }
-}
+//     export function initialise() {
+//         for (let id = 0; id < DataMessageType.idCount; id++) {
+//             if (id as DataMessageTypeId !== infos[id].id) {
+//                 throw new EnumInfoOutOfOrderError('DataMessageTypeId', id, `${id}`);
+//             }
+//         }
+//     }
+// }
 
 export namespace DataChannel {
     export type Id = DataChannelId;
@@ -5060,7 +5165,7 @@ export namespace DataChannel {
         },
         LitIvemIdMatches: {
             channel: DataChannelId.LitIvemIdMatches,
-            name: 'Matches',
+            name: 'LitIvemIdMatches',
             defaultActiveSubscriptionsLimit: 5000,
             defaultDeactivationDelay: 30 * mSecsPerSec,
             dependsOn: [DataChannelId.Feeds],
@@ -5068,6 +5173,62 @@ export namespace DataChannel {
         LitIvemIdCreateWatchmakerList: {
             channel: DataChannelId.LitIvemIdCreateWatchmakerList,
             name: 'LitIvemIdCreateWatchmakerList',
+            defaultActiveSubscriptionsLimit: 50,
+            defaultDeactivationDelay: 0,
+            dependsOn: [DataChannelId.Feeds],
+        },
+        CreateNotificationChannel: {
+            channel: DataChannelId.CreateNotificationChannel,
+            name: 'CreateNotificationChannel',
+            defaultActiveSubscriptionsLimit: 50,
+            defaultDeactivationDelay: 0,
+            dependsOn: [DataChannelId.Feeds],
+        },
+        DeleteNotificationChannel: {
+            channel: DataChannelId.DeleteNotificationChannel,
+            name: 'DeleteNotificationChannel',
+            defaultActiveSubscriptionsLimit: 50,
+            defaultDeactivationDelay: 0,
+            dependsOn: [DataChannelId.Feeds],
+        },
+        UpdateNotificationChannel: {
+            channel: DataChannelId.UpdateNotificationChannel,
+            name: 'UpdateNotificationChannel',
+            defaultActiveSubscriptionsLimit: 50,
+            defaultDeactivationDelay: 0,
+            dependsOn: [DataChannelId.Feeds],
+        },
+        UpdateNotificationChannelEnabled: {
+            channel: DataChannelId.UpdateNotificationChannelEnabled,
+            name: 'UpdateNotificationChannelEnabled',
+            defaultActiveSubscriptionsLimit: 50,
+            defaultDeactivationDelay: 0,
+            dependsOn: [DataChannelId.Feeds],
+        },
+        QueryNotificationChannel: {
+            channel: DataChannelId.QueryNotificationChannel,
+            name: 'QueryNotificationChannel',
+            defaultActiveSubscriptionsLimit: 50,
+            defaultDeactivationDelay: 0,
+            dependsOn: [DataChannelId.Feeds],
+        },
+        QueryNotificationChannels: {
+            channel: DataChannelId.QueryNotificationChannels,
+            name: 'QueryNotificationChannels',
+            defaultActiveSubscriptionsLimit: 50,
+            defaultDeactivationDelay: 0,
+            dependsOn: [DataChannelId.Feeds],
+        },
+        QueryNotificationDistributionMethod: {
+            channel: DataChannelId.QueryNotificationDistributionMethod,
+            name: 'QueryNotificationDistributionMethod',
+            defaultActiveSubscriptionsLimit: 50,
+            defaultDeactivationDelay: 0,
+            dependsOn: [DataChannelId.Feeds],
+        },
+        QueryNotificationDistributionMethods: {
+            channel: DataChannelId.QueryNotificationDistributionMethods,
+            name: 'QueryNotificationDistributionMethods',
             defaultActiveSubscriptionsLimit: 50,
             defaultDeactivationDelay: 0,
             dependsOn: [DataChannelId.Feeds],
@@ -7455,8 +7616,8 @@ export namespace OrderRequestErrorCode {
     }
 }
 
-export namespace ScanStatus {
-    export type Id = ScanStatusId;
+export namespace ActiveFaultedStatus {
+    export type Id = ActiveFaultedStatusId;
 
     interface Info {
         readonly id: Id;
@@ -7464,21 +7625,21 @@ export namespace ScanStatus {
         readonly displayId: StringId;
     }
 
-    type InfosObject = { [id in keyof typeof ScanStatusId]: Info };
+    type InfosObject = { [id in keyof typeof ActiveFaultedStatusId]: Info };
 
     const infosObject: InfosObject = {
         Active: {
-            id: ScanStatusId.Active,
+            id: ActiveFaultedStatusId.Active,
             name: 'Active',
             displayId: StringId.ScanStatusDisplay_Active,
         },
         Inactive: {
-            id: ScanStatusId.Inactive,
+            id: ActiveFaultedStatusId.Inactive,
             name: 'Inactive',
             displayId: StringId.ScanStatusDisplay_Inactive,
         },
         Faulted: {
-            id: ScanStatusId.Faulted,
+            id: ActiveFaultedStatusId.Faulted,
             name: 'Faulted',
             displayId: StringId.ScanStatusDisplay_Faulted,
         },
@@ -7489,7 +7650,7 @@ export namespace ScanStatus {
 
 
     export function initialise() {
-        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as ScanStatusId);
+        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as ActiveFaultedStatusId);
         if (outOfOrderIdx >= 0) {
             throw new EnumInfoOutOfOrderError('ScanStatusId', outOfOrderIdx, infos[outOfOrderIdx].name);
         }
@@ -7608,9 +7769,8 @@ export function CreateEnumSet(enumArray: number[]) {
 
 export namespace DataTypesModule {
     export function initialiseStatic(): void {
-        Currency.initialise();
         DataChannel.initialise();
-        DataMessageType.initialise();
+        // DataMessageType.initialise();
         MarketInfo.initialise();
         TBrokerageAccOrAggField.StaticConstructor();
         DataEnvironment.initialise();
@@ -7642,7 +7802,7 @@ export namespace DataTypesModule {
         SymbolField.initialise();
         ZenithPublisherState.initialise();
         ZenithPublisherReconnectReason.initialise();
-        ScanStatus.initialise();
+        ActiveFaultedStatus.initialise();
         ScanTargetType.initialise();
     }
 }

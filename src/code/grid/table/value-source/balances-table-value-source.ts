@@ -6,7 +6,7 @@
 
 import { Balances } from '../../../adi/adi-internal-api';
 import { Integer, MultiEvent, UnreachableCaseError } from '../../../sys/sys-internal-api';
-import { BalancesTableFieldSourceDefinition } from '../field-source/definition/grid-table-field-source-definition-internal-api';
+import { BalancesTableFieldSourceDefinition } from '../field-source/definition/internal-api';
 import {
     CorrectnessTableValue,
     CurrencyIdCorrectnessTableValue,

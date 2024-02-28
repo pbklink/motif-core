@@ -4,12 +4,12 @@
  * License: motionite.trade/license/motif
  */
 
-import { ArrayUiAction } from './array-ui-action';
+import { TypedExplicitElementsArrayUiAction } from './typed-explicit-elements-array-ui-action';
 
 /** @public */
-export class ExplicitElementsArrayUiAction<T> extends ArrayUiAction<T> {
+export class TypedMappedExplicitElementsArrayUiAction<T> extends TypedExplicitElementsArrayUiAction<T> {
 
-    private _elementPropertiesMap = new Map<T, ArrayUiAction.ElementProperties<T>>();
+    private _elementPropertiesMap = new Map<T, TypedExplicitElementsArrayUiAction.ElementProperties<T>>();
 
     get elementPropertiesMap() { return this._elementPropertiesMap; }
 
@@ -18,7 +18,7 @@ export class ExplicitElementsArrayUiAction<T> extends ArrayUiAction<T> {
     }
 
     getElementPropertiesArray() {
-        const result = new Array<ArrayUiAction.ElementProperties<T>>(this._elementPropertiesMap.size);
+        const result = new Array<TypedExplicitElementsArrayUiAction.ElementProperties<T>>(this._elementPropertiesMap.size);
         let idx = 0;
         for (const value of this._elementPropertiesMap.values()) {
             result[idx++] = value;
@@ -27,7 +27,7 @@ export class ExplicitElementsArrayUiAction<T> extends ArrayUiAction<T> {
     }
 
     pushElement(element: T, caption: string, title: string) {
-        const elementProperties: ArrayUiAction.ElementProperties<T> = {
+        const elementProperties: TypedExplicitElementsArrayUiAction.ElementProperties<T> = {
             element,
             caption,
             title,
@@ -36,7 +36,7 @@ export class ExplicitElementsArrayUiAction<T> extends ArrayUiAction<T> {
         this.notifyElementPush(element, caption, title);
     }
 
-    pushElements(elementPropertiesArray: ArrayUiAction.ElementProperties<T>[],
+    pushElements(elementPropertiesArray: TypedExplicitElementsArrayUiAction.ElementProperties<T>[],
         filter: T[] | undefined | null = null) {
         this._elementPropertiesMap.clear();
         for (const elementProperties of elementPropertiesArray) {

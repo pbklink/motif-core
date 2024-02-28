@@ -8,18 +8,18 @@ import { Feed } from '../../../../adi/adi-internal-api';
 import { PickEnum } from '../../../../sys/sys-internal-api';
 import { GridFieldCustomHeadingsService } from '../../../field/grid-field-internal-api';
 import { GridLayoutDefinition } from '../../../layout/grid-layout-internal-api';
-import { TableFieldSourceDefinition, TableFieldSourceDefinitionRegistryService } from '../../field-source/grid-table-field-source-internal-api';
+import { TableFieldSourceDefinition, TableFieldSourceDefinitionCachedFactoryService } from '../../field-source/grid-table-field-source-internal-api';
 import { TableRecordSourceDefinition } from './table-record-source-definition';
 
 /** @public */
 export class FeedTableRecordSourceDefinition extends TableRecordSourceDefinition {
     constructor(
         customHeadingsService: GridFieldCustomHeadingsService,
-        tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService
+        tableFieldSourceDefinitionCachedFactoryService: TableFieldSourceDefinitionCachedFactoryService
     ) {
         super(
             customHeadingsService,
-            tableFieldSourceDefinitionRegistryService,
+            tableFieldSourceDefinitionCachedFactoryService,
             TableRecordSourceDefinition.TypeId.Feed,
             FeedTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
         );
@@ -28,7 +28,7 @@ export class FeedTableRecordSourceDefinition extends TableRecordSourceDefinition
     // no override for saveToJson()
 
     override createDefaultLayoutDefinition() {
-        const feedFieldSourceDefinition = this.fieldSourceDefinitionRegistryService.feed;
+        const feedFieldSourceDefinition = this.tableFieldSourceDefinitionCachedFactoryService.feed;
 
         const fieldNames = new Array<string>();
 

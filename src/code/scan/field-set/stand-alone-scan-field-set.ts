@@ -5,7 +5,7 @@
  */
 
 import { CurrencyId, ExchangeId, MarketBoardId, MarketId } from '../../adi/adi-internal-api';
-import { AssertInternalError, ComparableList, Ok, Result, SourceTzOffsetDateTime, UnreachableCaseError } from '../../sys/sys-internal-api';
+import { AssertInternalError, ComparableList, Ok, Result, SourceTzOffsetDate, UnreachableCaseError } from '../../sys/sys-internal-api';
 import { ScanFormula } from '../formula/internal-api';
 import { ScanFieldSetLoadError } from './common/internal-api';
 import {
@@ -48,13 +48,24 @@ import { ScanFieldSet } from './scan-field-set';
 export class StandAloneScanFieldSet implements ScanFieldSet {
     readonly fieldFactory = new StandAloneScanFieldSet.FieldFactory();
     readonly conditionFactory = new StandAloneScanFieldSet.ConditionFactory();
+    readonly valid = true;
 
     readonly fields = new ComparableList<ScanField>();
 
-    loadError: ScanFieldSetLoadError | undefined;
+    private _loadError: ScanFieldSetLoadError | undefined;
+
+    get loadError() { return this._loadError; }
+
+    beginLoad() {
+        this._loadError = undefined;
+    }
+
+    endLoad(error: ScanFieldSetLoadError | undefined) {
+        this._loadError = error;
+    }
 
     assign(value: ScanFieldSet): void {
-        this.loadError = value.loadError;
+        this._loadError = value.loadError;
         this.fields.clear();
 
         const valueFields = value.fields;
@@ -550,16 +561,7 @@ export class StandAloneScanFieldSet implements ScanFieldSet {
     }
 
     private cloneIsScanFieldCondition(condition: IsScanFieldCondition): IsScanFieldCondition {
-        const operands = condition.operands;
-        const categoryId = operands.categoryId;
-        return {
-            typeId: ScanFieldCondition.TypeId.Is,
-            operatorId: condition.operatorId,
-            operands: {
-                typeId: ScanFieldCondition.Operands.TypeId.CategoryValue,
-                categoryId,
-            }
-        };
+        return condition;
     }
 
     private cloneBaseNumericScanFieldConditionOperands(operands: BaseNumericScanFieldCondition.Operands): BaseNumericScanFieldCondition.Operands {
@@ -954,7 +956,7 @@ export namespace StandAloneScanFieldSet {
         createDateWithEquals(
             _field: ScanField,
             operatorId: DateScanFieldCondition.ValueOperands.OperatorId,
-            value: SourceTzOffsetDateTime,
+            value: SourceTzOffsetDate,
         ): Result<DateScanFieldCondition> {
             const operands: DateScanFieldCondition.ValueOperands = {
                 typeId: ScanFieldCondition.Operands.TypeId.DateValue,
@@ -973,8 +975,8 @@ export namespace StandAloneScanFieldSet {
         createDateWithRange(
             _field: ScanField,
             operatorId: DateScanFieldCondition.RangeOperands.OperatorId,
-            min: SourceTzOffsetDateTime | undefined,
-            max: SourceTzOffsetDateTime | undefined,
+            min: SourceTzOffsetDate | undefined,
+            max: SourceTzOffsetDate | undefined,
         ): Result<DateScanFieldCondition> {
             const operands: DateScanFieldCondition.RangeOperands = {
                 typeId: ScanFieldCondition.Operands.TypeId.DateRange,
@@ -1203,16 +1205,7 @@ export namespace StandAloneScanFieldSet {
             operatorId: IsScanFieldCondition.Operands.OperatorId,
             categoryId: ScanFormula.IsNode.CategoryId,
         ): Result<IsScanFieldCondition> {
-            const condition: IsScanFieldCondition = {
-                typeId: ScanFieldCondition.TypeId.Is,
-                operatorId,
-                operands: {
-                    typeId: ScanFieldCondition.Operands.TypeId.CategoryValue,
-                    categoryId,
-                }
-            }
-
-            return new Ok(condition);
+            throw new Error();
         }
     }
 }

@@ -171,6 +171,7 @@ export namespace InternalCommand {
         ScanEditor_Test,
 
         ScanField_DeleteMe,
+        ScanFieldCondition_DeleteMe,
 
         RegisterContactRequestRegardingFocusedAdvertisement,
         RegisterInterestInFocusedAdvertisement,
@@ -337,6 +338,7 @@ export namespace InternalCommand {
         ScanEditor_Test = 'ScanEditor_Test',
 
         ScanField_DeleteMe = 'ScanField_DeleteMe',
+        ScanFieldCondition_DeleteMe = 'ScanFieldCondition_DeleteMe',
 
         RegisterContactRequestRegardingFocusedAdvertisement = 'RegisterContactRequestRegardingFocusedAdvertisement',
         RegisterInterestInFocusedAdvertisement = 'RegisterInterestInFocusedAdvertisement',
@@ -483,6 +485,7 @@ export namespace InternalCommand {
         ScanEditor_Delete: { id: Id.ScanEditor_Delete, nameId: NameId.ScanEditor_Delete },
         ScanEditor_Test: { id: Id.ScanEditor_Test, nameId: NameId.ScanEditor_Test },
         ScanField_DeleteMe: { id: Id.ScanField_DeleteMe, nameId: NameId.ScanField_DeleteMe },
+        ScanFieldCondition_DeleteMe: { id: Id.ScanFieldCondition_DeleteMe, nameId: NameId.ScanFieldCondition_DeleteMe },
         RegisterContactRequestRegardingFocusedAdvertisement: { id: Id.RegisterContactRequestRegardingFocusedAdvertisement, nameId: NameId.RegisterContactRequestRegardingFocusedAdvertisement},
         RegisterInterestInFocusedAdvertisement: { id: Id.RegisterInterestInFocusedAdvertisement, nameId: NameId.RegisterInterestInFocusedAdvertisement},
         RegisterInterestInSimilarToFocusedAdvertisement: { id: Id.RegisterInterestInSimilarToFocusedAdvertisement, nameId: NameId.RegisterInterestInSimilarToFocusedAdvertisement},

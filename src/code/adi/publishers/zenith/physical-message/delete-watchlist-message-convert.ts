@@ -9,6 +9,7 @@ import {
     AdiPublisherRequest,
     AdiPublisherSubscription,
     DeleteWatchmakerListDataDefinition,
+    ErrorPublisherSubscriptionDataMessage_PublishRequestError,
     WatchmakerListRequestAcknowledgeDataMessage
 } from "../../../common/adi-common-internal-api";
 import { ZenithProtocol } from './protocol/zenith-protocol';
@@ -50,11 +51,15 @@ export namespace DeleteWatchlistMessageConvert {
                 if (message.Topic as ZenithProtocol.WatchlistController.TopicName !== ZenithProtocol.WatchlistController.TopicName.DeleteWatchlist) {
                     throw new ZenithDataError(ErrorCode.ZenithMessageConvert_DeleteWatchmakerList_Topic, message.Topic);
                 } else {
-                    const dataMessage = new WatchmakerListRequestAcknowledgeDataMessage();
-                    dataMessage.dataItemId = subscription.dataItemId;
-                    dataMessage.dataItemRequestNr = subscription.dataItemRequestNr;
+                    if (subscription.errorWarningCount > 0) {
+                        return ErrorPublisherSubscriptionDataMessage_PublishRequestError.createFromAdiPublisherSubscription(subscription);
+                    } else {
+                        const dataMessage = new WatchmakerListRequestAcknowledgeDataMessage();
+                        dataMessage.dataItemId = subscription.dataItemId;
+                        dataMessage.dataItemRequestNr = subscription.dataItemRequestNr;
 
-                    return dataMessage;
+                        return dataMessage;
+                    }
                 }
             }
         }

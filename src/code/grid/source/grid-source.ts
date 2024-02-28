@@ -12,7 +12,7 @@ import {
     ReferenceableGridLayout,
     ReferenceableGridLayoutsService
 } from "../layout/grid-layout-internal-api";
-import { Table, TableFieldSourceDefinition, TableFieldSourceDefinitionRegistryService, TableRecordSource, TableRecordSourceDefinition, TableRecordSourceFactoryService } from '../table/internal-api';
+import { Table, TableFieldSourceDefinition, TableRecordSource, TableRecordSourceDefinition, TableRecordSourceFactory } from '../table/internal-api';
 import { GridRowOrderDefinition, GridSourceDefinition } from './definition/grid-source-definition-internal-api';
 
 /** @public */
@@ -38,8 +38,7 @@ export class GridSource implements LockOpenListItem<GridSource>, IndexedRecord {
 
     constructor(
         private readonly _referenceableGridLayoutsService: ReferenceableGridLayoutsService,
-        private readonly _tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
-        private readonly _tableRecordSourceFactoryService: TableRecordSourceFactoryService,
+        private readonly _tableRecordSourceFactory: TableRecordSourceFactory,
         definition: GridSourceDefinition,
         id?: Guid,
         mapKey?: MapKey,
@@ -215,7 +214,7 @@ export class GridSource implements LockOpenListItem<GridSource>, IndexedRecord {
     }
 
     private async tryProcessFirstLock(locker: LockOpenListItem.Locker): Promise<Result<void>> {
-        const tableRecordSource = this._tableRecordSourceFactoryService.createFromDefinition(this._tableRecordSourceDefinition);
+        const tableRecordSource = this._tableRecordSourceFactory.create(this._tableRecordSourceDefinition);
         const tableRecordSourceLockResult = await tableRecordSource.tryLock(locker);
         if (tableRecordSourceLockResult.isErr()) {
             return tableRecordSourceLockResult.createOuter(ErrorCode.GridSource_TryLockTableRecordSource);
@@ -303,7 +302,7 @@ export class GridSource implements LockOpenListItem<GridSource>, IndexedRecord {
         const typeIds = new Array<TableFieldSourceDefinition.TypeId>();
         for (const column of columns) {
             const fieldName = column.fieldName;
-            const decodeResult = this._tableFieldSourceDefinitionRegistryService.decodeCommaTextFieldName(fieldName);
+            const decodeResult = TableFieldSourceDefinition.decodeCommaTextFieldName(fieldName);
             if (decodeResult.isOk()) {
                 const typeId = decodeResult.value.sourceTypeId;
                 if (!typeIds.includes(typeId)) {

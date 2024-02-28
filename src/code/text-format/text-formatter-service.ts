@@ -6,6 +6,8 @@
 
 import { Decimal } from 'decimal.js-light';
 import {
+    ActiveFaultedStatus,
+    ActiveFaultedStatusId,
     CallOrPut,
     CallOrPutId,
     Currency,
@@ -33,6 +35,7 @@ import {
     Movement,
     MovementId,
     MyxLitIvemAttributes,
+    NotificationChannel,
     OrderExtendedSide,
     OrderExtendedSideId,
     OrderPriceUnitType,
@@ -50,7 +53,8 @@ import {
     OrderTypeId,
     PublisherSubscriptionDataType,
     PublisherSubscriptionDataTypeId,
-    RoutedIvemId, ScanStatus, ScanStatusId, ScanTargetType,
+    RoutedIvemId,
+    ScanTargetType,
     ScanTargetTypeId,
     TimeInForce,
     TimeInForceId,
@@ -410,8 +414,8 @@ export class TextFormatterService {
     formatDayTradesDataItemRecordTypeId(value: DayTradesDataItem.Record.TypeId) {
         return DayTradesDataItem.Record.Type.idToDisplay(value);
     }
-    formatScanStatusId(value: ScanStatusId) {
-        return ScanStatus.idToDisplay(value);
+    formatScanStatusId(value: ActiveFaultedStatusId) {
+        return ActiveFaultedStatus.idToDisplay(value);
     }
     formatScanCriteriaTypeId(value: Scan.CriterionId) {
         return Scan.CriteriaType.idToDisplay(value);
@@ -421,6 +425,9 @@ export class TextFormatterService {
     }
     formatScanFieldBooleanOperationId(value: ScanField.BooleanOperationId) {
         return ScanField.BooleanOperation.idToDisplay(value);
+    }
+    formatUrgency(value: NotificationChannel.SourceSettings.UrgencyId) {
+        return NotificationChannel.SourceSettings.Urgency.idToDisplay(value);
     }
 
     formatStringArrayAsCommaText(value: readonly string[]) {
@@ -707,6 +714,8 @@ export class TextFormatterService {
                 return this.formatScanTargetTypeId((renderValue as EnumRenderValue).definedData);
             case RenderValue.TypeId.ScanFieldBooleanOperationId:
                 return this.formatScanFieldBooleanOperationId((renderValue as EnumRenderValue).definedData);
+            case RenderValue.TypeId.NotificationChannelSourceSettingsUrgency:
+                return this.formatUrgency((renderValue as EnumRenderValue).definedData);
             case RenderValue.TypeId.StringArray:
                 return this.formatStringArrayAsCommaText((renderValue as StringArrayRenderValue).definedData);
             case RenderValue.TypeId.IntegerArray:

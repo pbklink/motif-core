@@ -8,6 +8,7 @@ import {
     AssertInternalError, ErrorCode, UnreachableCaseError, ZenithDataError
 } from '../../../../sys/sys-internal-api';
 import {
+    ActiveFaultedStatusId,
     AdiPublisherRequest,
     AdiPublisherSubscription,
     AurcChangeTypeId,
@@ -107,24 +108,25 @@ export namespace ScansMessageConvert {
             case AurcChangeTypeId.Update: {
                 const addUpdateZenithChange = zenithChange as ZenithProtocol.NotifyController.AddUpdateRemoveScanChange;
                 const scan = addUpdateZenithChange.Scan;
-                const scanStatusId = ZenithNotifyConvert.ScanStatus.toId(scan.Status);
-                const scanStateMetaData = scan.MetaData;
-                const metaData = scanStateMetaData === undefined ? undefined : ZenithNotifyConvert.ScanMetaType.to(scanStateMetaData);
+                const scanStatusId = ZenithConvert.ActiveFaultedStatus.toId(scan.Status);
+                const scanStateMetadata = scan.Metadata;
+                const metadata = scanStateMetadata === undefined ? undefined : ZenithNotifyConvert.ScanMetaType.to(scanStateMetadata);
                 const change: ScanStatusedDescriptorsDataMessage.AddUpdateChange = {
                     typeId: changeTypeId,
                     scanId: scan.ID,
                     scanName: scan.Name,
                     scanDescription: scan.Description,
-                    versionNumber: metaData === undefined ? undefined : metaData.versionNumber,
-                    versionId: metaData === undefined ? undefined : metaData.versionId,
-                    versioningInterrupted: metaData === undefined ? true : metaData.versioningInterrupted,
-                    lastSavedTime: metaData === undefined ? undefined : metaData.lastSavedTime,
-                    lastEditSessionId: metaData === undefined ? undefined : metaData.lastEditSessionId,
-                    symbolListEnabled: metaData === undefined ? undefined : metaData.symbolListEnabled,
-                    zenithCriteriaSource: metaData === undefined ? undefined : metaData.zenithCriteriaSource,
-                    zenithRankSource: metaData === undefined ? undefined : metaData.zenithRankSource,
+                    versionNumber: metadata === undefined ? undefined : metadata.versionNumber,
+                    versionId: metadata === undefined ? undefined : metadata.versionId,
+                    versioningInterrupted: metadata === undefined ? true : metadata.versioningInterrupted,
+                    lastSavedTime: metadata === undefined ? undefined : metadata.lastSavedTime,
+                    lastEditSessionId: metadata === undefined ? undefined : metadata.lastEditSessionId,
+                    symbolListEnabled: metadata === undefined ? undefined : metadata.symbolListEnabled,
+                    zenithCriteriaSource: metadata === undefined ? undefined : metadata.zenithCriteriaSource,
+                    zenithRankSource: metadata === undefined ? undefined : metadata.zenithRankSource,
                     readonly: !scan.IsWritable,
                     scanStatusId,
+                    enabled: scanStatusId !== ActiveFaultedStatusId.Inactive,
                 };
                 return change;
             }

@@ -19,6 +19,7 @@ import {
 } from '../../sys/sys-internal-api';
 import { AdiPublisherSubscription } from './adi-publisher-subscription';
 import {
+    ActiveFaultedStatusId,
     AuiChangeTypeId,
     AurcChangeTypeId,
     broadcastDataItemRequestNr,
@@ -27,7 +28,6 @@ import {
     CurrencyId,
     DataEnvironmentId,
     DataItemId,
-    DataMessageType,
     DataMessageTypeId,
     DepthDirectionId,
     ExchangeId,
@@ -38,6 +38,7 @@ import {
     MarketBoardId,
     MarketId,
     MovementId,
+    NotificationDistributionMethodId,
     OrderId,
     OrderInstructionId,
     OrderPriceUnitTypeId,
@@ -48,7 +49,6 @@ import {
     OrderTypeId,
     PublisherSessionTerminatedReasonId,
     PublisherSubscriptionDataTypeId,
-    ScanStatusId,
     ScanTargetTypeId,
     TimeInForceId,
     TradeAffectsId,
@@ -61,15 +61,16 @@ import { ClearIrrcChange, InsertRemoveReplaceIrrcChange, InsertReplaceIrrcChange
 import { LitIvemAlternateCodes } from './lit-ivem-alternate-codes';
 import { LitIvemAttributes } from './lit-ivem-attributes';
 import { LitIvemId } from './lit-ivem-id';
+import { NotificationChannel, SettingsedNotificationChannel } from './notification-channel';
 import { OrderRoute } from './order-route';
 import { OrderStatuses } from './order-status';
 import { OrderTrigger } from './order-trigger';
-import { ScanNotification } from './scan-types';
+import { ScanAttachedNotificationChannel } from './scan-attached-notification-channel';
 import { TmcLeg } from './tmc-leg';
 import { TopShareholder } from './top-shareholder';
 import { TradingStates } from './trading-state';
 import { Transaction } from './transaction';
-import { ZenithEncodedScanFormula } from './zenith-protocol/internal-api';
+import { ZenithEncodedScanFormula, ZenithProtocolCommon } from './zenith-protocol/internal-api';
 
 export abstract class DataMessage {
     dataItemRequestNr: number;
@@ -82,7 +83,7 @@ export abstract class DataMessage {
 }
 
 export namespace DataMessage {
-    export const typeIdCount = DataMessageType.idCount;
+    // export const typeIdCount = DataMessageType.idCount;
 
     export function isErrorPublisherSubscriptionDataMessage(message: DataMessage): message is ErrorPublisherSubscriptionDataMessage {
         return message.typeId === DataMessageTypeId.PublisherSubscription_Error;
@@ -790,7 +791,8 @@ export class QueryScanDetailDataMessage extends DataMessage {
     scanName: string;
     scanDescription: string | undefined;
     scanReadonly: boolean;
-    scanStatusId: ScanStatusId;
+    scanStatusId: ActiveFaultedStatusId;
+    enabled: boolean;
     versionNumber: Integer | undefined;
     versionId: Guid | undefined;
     versioningInterrupted: boolean;
@@ -804,7 +806,8 @@ export class QueryScanDetailDataMessage extends DataMessage {
     targetTypeId: ScanTargetTypeId;
     targetMarketIds: readonly MarketId[] | undefined;
     targetLitIvemIds: readonly LitIvemId[] | undefined;
-    notifications: readonly ScanNotification[] | undefined;
+    maxMatchCount: Integer | undefined;
+    attachedNotificationChannels: readonly ScanAttachedNotificationChannel[];
 
     constructor() {
         super(QueryScanDetailDataMessage.typeId);
@@ -841,7 +844,8 @@ export namespace ScanStatusedDescriptorsDataMessage {
         scanName: string | undefined;
         scanDescription: string | undefined;
         readonly: boolean | undefined;
-        scanStatusId: ScanStatusId | undefined;
+        scanStatusId: ActiveFaultedStatusId | undefined;
+        enabled: boolean | undefined;
         versionNumber: Integer | undefined;
         versionId: Guid | undefined;
         versioningInterrupted: boolean;
@@ -858,7 +862,8 @@ export namespace ScanStatusedDescriptorsDataMessage {
         scanName: string;
         scanDescription: string | undefined;
         readonly: boolean;
-        scanStatusId: ScanStatusId;
+        scanStatusId: ActiveFaultedStatusId;
+        enabled: boolean;
         versionId: string | undefined;
         versioningInterrupted: boolean;
         lastSavedTime: Date | undefined;
@@ -939,6 +944,81 @@ export namespace LitIvemIdMatchesDataMessage {
     export type AddUpdateRemoveChange = MatchesDataMessage.AddUpdateRemoveChange<RecordType>;
     export type RemoveChange = MatchesDataMessage.RemoveChange<RecordType>;
     export type AddUpdateChange = MatchesDataMessage.AddUpdateChange<RecordType>;
+}
+
+export class CreateNotificationChannelDataMessage extends DataMessage {
+    static readonly typeId = DataMessageTypeId.CreateNotificationChannel;
+
+    notificationChannelId: string;
+
+    constructor() {
+        super(CreateNotificationChannelDataMessage.typeId);
+    }
+}
+
+export class DeleteNotificationChannelDataMessage extends DataMessage {
+    static readonly typeId = DataMessageTypeId.DeleteNotificationChannel;
+
+    constructor() {
+        super(DeleteNotificationChannelDataMessage.typeId);
+    }
+}
+
+export class UpdateNotificationChannelDataMessage extends DataMessage {
+    static readonly typeId = DataMessageTypeId.UpdateNotificationChannel;
+
+    constructor() {
+        super(UpdateNotificationChannelDataMessage.typeId);
+    }
+}
+
+export class UpdateNotificationChannelEnabledDataMessage extends DataMessage {
+    static readonly typeId = DataMessageTypeId.UpdateNotificationChannelEnabled;
+
+    constructor() {
+        super(UpdateNotificationChannelEnabledDataMessage.typeId);
+    }
+}
+
+export class QueryNotificationChannelDataMessage extends DataMessage {
+    static readonly typeId = DataMessageTypeId.QueryNotificationChannel;
+
+    notificationChannel: SettingsedNotificationChannel;
+
+    constructor() {
+        super(QueryNotificationChannelDataMessage.typeId);
+    }
+}
+
+export class QueryNotificationChannelsDataMessage extends DataMessage {
+    static readonly typeId = DataMessageTypeId.QueryNotificationChannels;
+
+    notificationChannels: readonly NotificationChannel[];
+
+    constructor() {
+        super(QueryNotificationChannelsDataMessage.typeId);
+    }
+}
+
+export class QueryNotificationDistributionMethodDataMessage extends DataMessage {
+    static readonly typeId = DataMessageTypeId.QueryNotificationDistributionMethod;
+
+    methodId: NotificationDistributionMethodId;
+    metadata: ZenithProtocolCommon.NotificationDistributionMethodMetadata
+
+    constructor() {
+        super(QueryNotificationDistributionMethodDataMessage.typeId);
+    }
+}
+
+export class QueryNotificationDistributionMethodsDataMessage extends DataMessage {
+    static readonly typeId = DataMessageTypeId.QueryNotificationDistributionMethods;
+
+    methodIds: readonly NotificationDistributionMethodId[];
+
+    constructor() {
+        super(QueryNotificationDistributionMethodsDataMessage.typeId);
+    }
 }
 
 export class WatchmakerListRequestAcknowledgeDataMessage extends DataMessage {
@@ -1316,6 +1396,22 @@ export class ErrorPublisherSubscriptionDataMessage_PublishRequestError extends E
         super(dataItemId, dataItemRequestNr,
             AdiPublisherSubscription.ErrorTypeId.PublishRequestError, errorText, allowedRetryTypeId,
             true);
+    }
+}
+
+export namespace ErrorPublisherSubscriptionDataMessage_PublishRequestError {
+    export function createFromAdiPublisherSubscription(subscription: AdiPublisherSubscription, allowedRetryTypeId?: AdiPublisherSubscription.AllowedRetryTypeId) {
+        const errorText = AdiPublisherSubscription.generatePublishErrorText(subscription);
+        if (allowedRetryTypeId === undefined) {
+            allowedRetryTypeId = AdiPublisherSubscription.generateAllowedRetryTypeId(subscription);
+        }
+        const errorMessage = new ErrorPublisherSubscriptionDataMessage_PublishRequestError(
+            subscription.dataItemId,
+            subscription.dataItemRequestNr,
+            errorText,
+            allowedRetryTypeId,
+        );
+        return errorMessage;
     }
 }
 

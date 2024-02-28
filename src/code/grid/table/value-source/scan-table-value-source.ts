@@ -125,6 +125,10 @@ export class ScanTableValueSource extends CorrectnessTableValueSource<Scan> {
                 (value as ScanStatusIdCorrectnessTableValue).data = this._scan.statusId;
                 break;
             }
+            case Scan.FieldId.Enabled: {
+                (value as EnabledCorrectnessTableValue).data = this._scan.enabled;
+                break;
+            }
             case Scan.FieldId.Name: {
                 (value as StringCorrectnessTableValue).data = this._scan.name;
                 break;
@@ -154,6 +158,9 @@ export class ScanTableValueSource extends CorrectnessTableValueSource<Scan> {
             }
             case Scan.FieldId.ZenithRank: {
                 throw new AssertInternalError('STVSLVZR34345');
+            }
+            case Scan.FieldId.AttachedNotificationChannels: {
+                throw new AssertInternalError('STVSLVZANC34345');
             }
             case Scan.FieldId.ZenithCriteriaSource: {
                 throw new AssertInternalError('STVSLVZCS34345');

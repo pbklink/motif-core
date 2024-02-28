@@ -90,6 +90,7 @@ export namespace ScanTableFieldSourceDefinition {
             Scan.FieldId.Index,
             Scan.FieldId.ZenithCriteria,
             Scan.FieldId.ZenithRank,
+            Scan.FieldId.AttachedNotificationChannels,
             Scan.FieldId.ZenithCriteriaSource,
             Scan.FieldId.ZenithRankSource,
             Scan.FieldId.LastEditSessionId,
@@ -113,6 +114,10 @@ export namespace ScanTableFieldSourceDefinition {
             {
                 id: Scan.FieldId.StatusId,
                 tableFieldValueConstructors: [EnumCorrectnessTableField, ScanStatusIdCorrectnessTableValue],
+            },
+            {
+                id: Scan.FieldId.Enabled,
+                tableFieldValueConstructors: [BooleanCorrectnessTableField, EnabledCorrectnessTableValue],
             },
             {
                 id: Scan.FieldId.Name,

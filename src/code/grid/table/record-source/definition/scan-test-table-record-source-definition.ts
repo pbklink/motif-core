@@ -8,7 +8,7 @@ import { LitIvemBaseDetail, RankedLitIvemId } from '../../../../adi/adi-internal
 import { LitIvemIdExecuteScanRankedLitIvemIdListDefinition } from '../../../../ranked-lit-ivem-id-list/ranked-lit-ivem-id-list-internal-api';
 import { GridFieldCustomHeadingsService } from '../../../field/grid-field-internal-api';
 import { GridLayoutDefinition } from '../../../layout/grid-layout-internal-api';
-import { TableFieldSourceDefinition, TableFieldSourceDefinitionRegistryService } from '../../field-source/grid-table-field-source-internal-api';
+import { TableFieldSourceDefinition, TableFieldSourceDefinitionCachedFactoryService } from '../../field-source/grid-table-field-source-internal-api';
 import { RankedLitIvemIdListTableRecordSourceDefinition } from './ranked-lit-ivem-id-list-table-record-source-definition';
 import { TableRecordSourceDefinition } from './table-record-source-definition';
 
@@ -16,12 +16,12 @@ import { TableRecordSourceDefinition } from './table-record-source-definition';
 export class ScanTestTableRecordSourceDefinition extends RankedLitIvemIdListTableRecordSourceDefinition {
     constructor(
         customHeadingsService: GridFieldCustomHeadingsService,
-        tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
+        tableFieldSourceDefinitionCachedFactoryService: TableFieldSourceDefinitionCachedFactoryService,
         rankedLitIvemIdListDefinition: LitIvemIdExecuteScanRankedLitIvemIdListDefinition,
     ) {
         super(
             customHeadingsService,
-            tableFieldSourceDefinitionRegistryService,
+            tableFieldSourceDefinitionCachedFactoryService,
             TableRecordSourceDefinition.TypeId.ScanTest,
             ScanTestTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
             rankedLitIvemIdListDefinition,
@@ -31,8 +31,8 @@ export class ScanTestTableRecordSourceDefinition extends RankedLitIvemIdListTabl
     override get defaultFieldSourceDefinitionTypeIds() { return ScanTestTableRecordSourceDefinition.defaultFieldSourceDefinitionTypeIds; }
 
     override createDefaultLayoutDefinition(): GridLayoutDefinition {
-        const rankedLitIvemIdFieldSourceDefinition = this.fieldSourceDefinitionRegistryService.rankedLitIvemId;
-        const litIvemBaseDetailFieldSourceDefinition = this.fieldSourceDefinitionRegistryService.litIvemBaseDetail;
+        const rankedLitIvemIdFieldSourceDefinition = this.tableFieldSourceDefinitionCachedFactoryService.rankedLitIvemId;
+        const litIvemBaseDetailFieldSourceDefinition = this.tableFieldSourceDefinitionCachedFactoryService.litIvemBaseDetail;
 
         const fieldNames = new Array<string>();
 

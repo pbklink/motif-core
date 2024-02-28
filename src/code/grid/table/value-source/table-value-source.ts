@@ -63,11 +63,24 @@ export namespace TableValueSource {
         fieldIdx: Integer;
         newValue: TableValue;
     }
+
     export interface ValueChange {
         fieldIndex: Integer;
         newValue: TableValue;
         recentChangeTypeId: ValueRecentChangeTypeId | undefined;
     }
+    export namespace ValueChange {
+        export function arrayIncludesFieldIndex(array: readonly ValueChange[], fieldIndex: Integer, end: Integer): boolean {
+            for (let i = 0; i < end; i++) {
+                const valueChange = array[i];
+                if (valueChange.fieldIndex === fieldIndex) {
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+
     export type BeginValuesChangeEvent = (this: void) => void;
     export type EndValuesChangeEvent = (this: void) => void;
     export type ValueChangesEvent = (valueChanges: ValueChange[]) => void;

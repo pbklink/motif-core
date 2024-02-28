@@ -5,9 +5,11 @@
  */
 
 import { AssertInternalError, Guid, UnreachableCaseError, parseIntStrict } from '../../../../sys/sys-internal-api';
-import { LitIvemId, MarketId, ScanStatusId, ScanTargetTypeId } from '../../../common/adi-common-internal-api';
+import { LitIvemId, MarketId, ScanAttachedNotificationChannel, ScanTargetTypeId } from '../../../common/adi-common-internal-api';
+import { ZenithProtocolCommon } from '../../../common/zenith-protocol/internal-api';
 import { ZenithProtocol } from './protocol/zenith-protocol';
 import { ZenithConvert } from './zenith-convert';
+import { ZenithDistributionChannelsConvert } from './zenith-distribution-channels-convert';
 
 export namespace ZenithNotifyConvert {
     export namespace ScanType {
@@ -26,18 +28,6 @@ export namespace ZenithNotifyConvert {
                 case ScanTargetTypeId.Symbols: return ZenithProtocol.NotifyController.ScanType.MarketMonitor;
                 default:
                     throw new UnreachableCaseError('ZNCSTFI20008', value);
-            }
-        }
-    }
-
-    export namespace ScanStatus {
-        export function toId(value: ZenithProtocol.NotifyController.ScanStatus) {
-            switch (value) {
-                case ZenithProtocol.NotifyController.ScanStatus.Inactive: return ScanStatusId.Inactive;
-                case ZenithProtocol.NotifyController.ScanStatus.Active: return ScanStatusId.Active;
-                case ZenithProtocol.NotifyController.ScanStatus.Faulted: return ScanStatusId.Faulted;
-                default:
-                    throw new UnreachableCaseError('ZNCSSTI20008', value);
             }
         }
     }
@@ -99,7 +89,59 @@ export namespace ZenithNotifyConvert {
         }
     }
 
-    export interface ScanMetaData {
+    export namespace NotificationParameters {
+        export function from(value: readonly ScanAttachedNotificationChannel[]): ZenithProtocol.NotifyController.ScanParameters.Notification[] {
+            const count = value.length;
+            const result = new Array<ZenithProtocol.NotifyController.ScanParameters.Notification>(count);
+            for (let i = 0; i < count; i++) {
+                const valueElement = value[i];
+                const valueElementMinimumElapsed = valueElement.minimumElapsed;
+                const minimumElapsed = valueElementMinimumElapsed === undefined ? undefined : ZenithConvert.Time.fromTimeSpan(valueElementMinimumElapsed);
+                const valueElementMinimumStable = valueElement.minimumStable;
+                const minimumStable = valueElementMinimumStable === undefined ? undefined : ZenithConvert.Time.fromTimeSpan(valueElementMinimumStable);
+                const valueElementChannelSourceSettings = valueElement.channelSourceSettings;
+                const settings = valueElementChannelSourceSettings === undefined ?
+                    undefined :
+                    ZenithDistributionChannelsConvert.NotificationSourceSettings.from(valueElementChannelSourceSettings);
+                const resultElement: ZenithProtocol.NotifyController.ScanParameters.Notification = {
+                    ChannelID: valueElement.channelId,
+                    CultureCode: valueElement.cultureCode,
+                    MinimumElapsed: minimumElapsed,
+                    MinimumStable: minimumStable,
+                    Settings: settings,
+                };
+                result[i] = resultElement;
+            }
+            return result;
+        }
+
+        export function to(value: ZenithProtocol.NotifyController.ScanParameters.Notification[]): ScanAttachedNotificationChannel[] {
+            const count = value.length;
+            const result = new Array<ScanAttachedNotificationChannel>(count);
+            for (let i = 0; i < count; i++) {
+                const valueElement = value[i];
+                const valueElementMinimumElapsed = valueElement.MinimumElapsed;
+                const minimumElapsed = valueElementMinimumElapsed === undefined ? undefined : ZenithConvert.Time.toTimeSpan(valueElementMinimumElapsed);
+                const valueElementMinimumStable = valueElement.MinimumStable;
+                const minimumStable = valueElementMinimumStable === undefined ? undefined : ZenithConvert.Time.toTimeSpan(valueElementMinimumStable);
+                const valueElementsettings = valueElement.Settings;
+                const channelSourceSettings = valueElementsettings === undefined ?
+                    undefined :
+                    ZenithDistributionChannelsConvert.NotificationSourceSettings.to(valueElementsettings);
+                const resultElement: ScanAttachedNotificationChannel = {
+                    channelId: valueElement.ChannelID,
+                    cultureCode: valueElement.CultureCode,
+                    minimumElapsed: minimumElapsed,
+                    minimumStable: minimumStable,
+                    channelSourceSettings,
+                };
+                result[i] = resultElement;
+            }
+            return result;
+        }
+    }
+
+    export interface ScanMetadata {
         readonly versionNumber: number | undefined;
         readonly versionId: string | undefined;
         readonly versioningInterrupted: boolean;
@@ -111,7 +153,7 @@ export namespace ZenithNotifyConvert {
     }
 
     export namespace ScanMetaType {
-        export function from(value: ScanMetaData): ZenithProtocol.NotifyController.MetaData {
+        export function from(value: ScanMetadata): ZenithProtocolCommon.UserMetadata {
             const versionNumber = value.versionNumber;
             if (versionNumber === undefined) {
                 throw new AssertInternalError('ZNCSMTFVN44498');
@@ -148,7 +190,7 @@ export namespace ZenithNotifyConvert {
             }
         }
 
-        export function to(value: ZenithProtocol.NotifyController.MetaData): ScanMetaData {
+        export function to(value: ZenithProtocolCommon.UserMetadata): ScanMetadata {
             // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
             const versionNumberAsString = value['versionNumber'];
             const versionNumber = versionNumberAsString === undefined ? undefined : parseIntStrict(versionNumberAsString);

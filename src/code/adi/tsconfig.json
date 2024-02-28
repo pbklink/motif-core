@@ -16,6 +16,7 @@
   ],
 
   "references": [
+    { "path": "./notification-channel/tsconfig.json" },
     { "path": "./scan/tsconfig.json" },
     { "path": "./watchmaker/tsconfig.json" },
     { "path": "./rank-scored-lit-ivem-id/tsconfig.json" },

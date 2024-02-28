@@ -14,7 +14,7 @@ import {
     Integer,
     Ok,
     Result,
-    SourceTzOffsetDateTime,
+    SourceTzOffsetDate,
     UnreachableCaseError
 } from "../../sys/sys-internal-api";
 import { ScanFormula } from './scan-formula';
@@ -130,7 +130,7 @@ export namespace ScanFormulaZenithEncoding {
     function encodeBooleanNode(node: ScanFormula.BooleanNode): ZenithEncodedScanFormula.BooleanTupleNode {
         switch (node.typeId) {
             case ScanFormula.NodeTypeId.Not: return encodeSingleOperandBooleanNode(ZenithEncodedScanFormula.NotTupleNodeType, node as ScanFormula.SingleOperandBooleanNode);
-            case ScanFormula.NodeTypeId.Xor: return encodeLeftRightOperandBooleanNode(ZenithEncodedScanFormula.NotTupleNodeType, node as ScanFormula.LeftRightOperandBooleanNode);
+            case ScanFormula.NodeTypeId.Xor: return encodeLeftRightOperandBooleanNode(ZenithEncodedScanFormula.XorTupleNodeType, node as ScanFormula.LeftRightOperandBooleanNode);
             case ScanFormula.NodeTypeId.And: return encodeMultiOperandBooleanNode(ZenithEncodedScanFormula.AndTupleNodeType, node as ScanFormula.MultiOperandBooleanNode);
             case ScanFormula.NodeTypeId.Or: return encodeMultiOperandBooleanNode(ZenithEncodedScanFormula.OrTupleNodeType, node as ScanFormula.MultiOperandBooleanNode);
             case ScanFormula.NodeTypeId.NumericEquals: return encodeNumericComparisonNode(ZenithEncodedScanFormula.EqualTupleNodeType, node as ScanFormula.NumericComparisonBooleanNode);
@@ -186,11 +186,11 @@ export namespace ScanFormulaZenithEncoding {
     }
 
     function encodeSingleOperandBooleanNode(type: typeof ZenithEncodedScanFormula.NotTupleNodeType, node: ScanFormula.SingleOperandBooleanNode): ZenithEncodedScanFormula.LogicalTupleNode {
-        const param = encodeBooleanNode(node);
+        const param = encodeBooleanNode(node.operand);
         return [type, param];
     }
 
-    function encodeLeftRightOperandBooleanNode(type: typeof ZenithEncodedScanFormula.NotTupleNodeType, node: ScanFormula.LeftRightOperandBooleanNode): ZenithEncodedScanFormula.LogicalTupleNode {
+    function encodeLeftRightOperandBooleanNode(type: typeof ZenithEncodedScanFormula.XorTupleNodeType, node: ScanFormula.LeftRightOperandBooleanNode): ZenithEncodedScanFormula.LogicalTupleNode {
         const leftParam = encodeBooleanNode(node.leftOperand);
         const rightParam = encodeBooleanNode(node.rightOperand);
         return [type, leftParam, rightParam];
@@ -348,7 +348,7 @@ export namespace ScanFormulaZenithEncoding {
 
     function encodeDateFieldEqualsNode(node: ScanFormula.DateFieldEqualsNode): ZenithEncodedScanFormula.DateRangeMatchingTupleNode {
         const field = Field.dateRangeFromId(node.fieldId);
-        const target = DateValue.encodeDate(node.value.utcDate);
+        const target = DateValue.encodeDate(node.value);
         return [field, target];
     }
 
@@ -357,8 +357,8 @@ export namespace ScanFormulaZenithEncoding {
         const nodeMin = node.min;
         const nodeMax = node.max;
         const namedParameters: ZenithEncodedScanFormula.DateNamedParameters = {
-            Min: nodeMin === undefined ? undefined: DateValue.encodeDate(nodeMin.utcDate),
-            Max: nodeMax === undefined ? undefined: DateValue.encodeDate(nodeMax.utcDate),
+            Min: nodeMin === undefined ? undefined: DateValue.encodeDate(nodeMin),
+            Max: nodeMax === undefined ? undefined: DateValue.encodeDate(nodeMax),
         }
         return [field, namedParameters];
     }
@@ -478,7 +478,7 @@ export namespace ScanFormulaZenithEncoding {
     function encodeDateSubFieldEqualsNode(node: ScanFormula.DateSubFieldEqualsNode): ZenithEncodedScanFormula.DateNamedRangeMatchingTupleNode {
         const field = ZenithEncodedScanFormula.DateTupleNodeType;
         const subField = DateSubField.encodeId(node.subFieldId);
-        const target = DateValue.encodeDate(node.value.utcDate);
+        const target = DateValue.encodeDate(node.value);
         return [field, subField, target];
     }
 
@@ -488,8 +488,8 @@ export namespace ScanFormulaZenithEncoding {
         const nodeMin = node.min;
         const nodeMax = node.max;
         const namedParameters: ZenithEncodedScanFormula.DateNamedParameters = {
-            Min: nodeMin === undefined ? undefined: DateValue.encodeDate(nodeMin.utcDate),
-            Max: nodeMax === undefined ? undefined: DateValue.encodeDate(nodeMax.utcDate),
+            Min: nodeMin === undefined ? undefined: DateValue.encodeDate(nodeMin),
+            Max: nodeMax === undefined ? undefined: DateValue.encodeDate(nodeMax),
         }
         return [field, subField, namedParameters];
     }
@@ -1365,7 +1365,7 @@ export namespace ScanFormulaZenithEncoding {
     }
 
     function tryDecodeDateFieldInRangeNode(fieldId: ScanFormula.DateRangeFieldId, min: unknown, max: unknown): Result<ScanFormula.DateFieldInRangeNode, DecodeError> {
-        let minDate: SourceTzOffsetDateTime | undefined;
+        let minDate: SourceTzOffsetDate | undefined;
         if (min === undefined) {
             minDate = undefined;
         } else {
@@ -1380,7 +1380,7 @@ export namespace ScanFormulaZenithEncoding {
             }
         }
 
-        let maxDate: SourceTzOffsetDateTime | undefined;
+        let maxDate: SourceTzOffsetDate | undefined;
         if (max === undefined) {
             maxDate = undefined;
         } else {
@@ -1566,7 +1566,7 @@ export namespace ScanFormulaZenithEncoding {
         }
     }
 
-    function tryDecodeDateSubFieldEqualsNode(subField: string, target: SourceTzOffsetDateTime): Result<ScanFormula.DateSubFieldEqualsNode, DecodeError> {
+    function tryDecodeDateSubFieldEqualsNode(subField: string, target: SourceTzOffsetDate): Result<ScanFormula.DateSubFieldEqualsNode, DecodeError> {
         const subFieldId = DateSubField.tryDecodeId(subField as ZenithEncodedScanFormula.DateSubFieldEnum);
         if (subFieldId === undefined) {
             return createDecodeErrorResult(ErrorId.DateSubFieldEqualsSubFieldIsUnknown, `${subField}`);
@@ -1589,7 +1589,7 @@ export namespace ScanFormulaZenithEncoding {
             // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
             return createDecodeErrorResult(ErrorId.SubFieldIsNotString, `${subField}`);
         } else {
-            let minDate: SourceTzOffsetDateTime | undefined;
+            let minDate: SourceTzOffsetDate | undefined;
             if (min === undefined) {
                 minDate = undefined;
             } else {
@@ -1604,7 +1604,7 @@ export namespace ScanFormulaZenithEncoding {
                 }
             }
 
-            let maxDate: SourceTzOffsetDateTime | undefined;
+            let maxDate: SourceTzOffsetDate | undefined;
             if (max === undefined) {
                 maxDate = undefined;
             } else {
@@ -1633,8 +1633,8 @@ export namespace ScanFormulaZenithEncoding {
 
     function tryDecodeDateSubFieldInRangeNode(
         subField: string,
-        min: SourceTzOffsetDateTime | undefined,
-        max: SourceTzOffsetDateTime | undefined
+        min: SourceTzOffsetDate | undefined,
+        max: SourceTzOffsetDate | undefined
     ): Result<ScanFormula.DateSubFieldInRangeNode, DecodeError> {
         const subFieldId = DateSubField.tryDecodeId(subField as ZenithEncodedScanFormula.DateSubFieldEnum);
         if (subFieldId === undefined) {
@@ -2476,12 +2476,12 @@ export namespace ScanFormulaZenithEncoding {
     }
 
     namespace DateValue {
-        export function encodeDate(value: Date): ZenithEncodedScanFormula.DateString {
-            return ZenithConvert.Date.DateTimeIso8601.fromDate(value);
+        export function encodeDate(value: SourceTzOffsetDate): ZenithEncodedScanFormula.DateString {
+            return ZenithConvert.Date.DateYYYYMMDD.fromSourceTzOffsetDate(value);
         }
 
-        export function tryDecodeDate(value: ZenithEncodedScanFormula.DateString): SourceTzOffsetDateTime | undefined {
-            return ZenithConvert.Date.DateTimeIso8601.toSourceTzOffsetDateTime(value);
+        export function tryDecodeDate(value: ZenithEncodedScanFormula.DateString): SourceTzOffsetDate | undefined {
+            return ZenithConvert.Date.DateYYYYMMDD.toSourceTzOffsetDate(value);
         }
     }
 

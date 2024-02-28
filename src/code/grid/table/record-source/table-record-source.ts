@@ -16,7 +16,7 @@ import {
 import { TextFormatterService } from '../../../text-format/text-format-internal-api';
 import { GridFieldCustomHeadingsService } from '../../field/grid-field-custom-headings-service';
 import { AllowedGridField } from '../../field/grid-field-internal-api';
-import { TableFieldSource, TableFieldSourceDefinition, TableFieldSourceDefinitionRegistryService } from '../field-source/grid-table-field-source-internal-api';
+import { TableFieldSource, TableFieldSourceDefinition, TableFieldSourceDefinitionCachedFactoryService } from '../field-source/grid-table-field-source-internal-api';
 import { TableField } from '../field/grid-table-field-internal-api';
 import { TableRecordDefinition } from '../record-definition/table-record-definition';
 import { TableRecord } from '../record/grid-table-record-internal-api';
@@ -25,7 +25,7 @@ import { TableRecordSourceDefinition, TableRecordSourceDefinitionFactoryService 
 /** @public */
 export abstract class TableRecordSource extends CorrectnessBadness {
     protected readonly _gridFieldCustomHeadingsService: GridFieldCustomHeadingsService;
-    protected readonly _tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService;
+    protected readonly _tableFieldSourceDefinitionCachedFactoryService: TableFieldSourceDefinitionCachedFactoryService;
 
     private _activeFieldSources: readonly TableFieldSource[] = [];
     private _fields: readonly TableField[] = [];
@@ -44,7 +44,7 @@ export abstract class TableRecordSource extends CorrectnessBadness {
     ) {
         super();
         this._gridFieldCustomHeadingsService = tableRecordSourceDefinitionFactoryService.gridFieldCustomHeadingsService;
-        this._tableFieldSourceDefinitionRegistryService = tableRecordSourceDefinitionFactoryService.tableFieldSourceDefinitionRegistryService;
+        this._tableFieldSourceDefinitionCachedFactoryService = tableRecordSourceDefinitionFactoryService.tableFieldSourceDefinitionCachedFactoryService;
     }
 
     get activeFieldSources() { return this._activeFieldSources; }
@@ -195,7 +195,7 @@ export abstract class TableRecordSource extends CorrectnessBadness {
     }
 
     private createFieldSource(fieldSourceTypeId: TableFieldSourceDefinition.TypeId, fieldCount: Integer) {
-        const definition = this._tableFieldSourceDefinitionRegistryService.get(fieldSourceTypeId);
+        const definition = this._tableFieldSourceDefinitionCachedFactoryService.get(fieldSourceTypeId);
         const source = new TableFieldSource(this._textFormatterService, this._gridFieldCustomHeadingsService, definition, '');
         source.fieldIndexOffset = fieldCount;
         source.nextFieldIndexOffset = source.fieldIndexOffset + source.fieldCount;
@@ -213,13 +213,7 @@ export abstract class TableRecordSource extends CorrectnessBadness {
 
 /** @public */
 export namespace TableRecordSource {
-
-    export interface TryCreateResult {
-        success: boolean;
-        list: TableRecordSource | undefined;
-        errorCode: string | undefined;
-        errorText: string | undefined;
-    }
+    export type FactoryClosure = (this: void, definition: TableRecordSourceDefinition) => TableRecordSource;
 
     export type ListChangeEventHandler = (
         this: void,

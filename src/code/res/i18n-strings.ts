@@ -64,6 +64,8 @@ export const enum StringId {
     Delete,
     Deleting,
     Deleted,
+    Attach,
+    Detach,
     Update,
     Edit,
     Apply,
@@ -182,6 +184,9 @@ export const enum StringId {
     Cfi,
     Partial,
     Exact,
+    IgnoreCase,
+    FromStart,
+    FromEnd,
     Full,
     Options,
     Page,
@@ -217,7 +222,7 @@ export const enum StringId {
     Criteria,
     Rank,
     Targets,
-    Notifiers,
+    Notifications,
     ExecuteCommandTitle,
     ApplySymbolCaption,
     ApplySymbolTitle,
@@ -427,6 +432,10 @@ export const enum StringId {
     TableRecordDefinitionList_ListTypeAbbr_GridField,
     TableRecordDefinitionList_ListTypeDisplay_ScanTest,
     TableRecordDefinitionList_ListTypeAbbr_ScanTest,
+    TableRecordDefinitionList_ListTypeDisplay_ScanFieldEditorFrame,
+    TableRecordDefinitionList_ListTypeAbbr_ScanFieldEditorFrame,
+    TableRecordDefinitionList_ListTypeDisplay_ScanEditorAttachedNotificationChannel,
+    TableRecordDefinitionList_ListTypeAbbr_ScanEditorAttachedNotificationChannel,
     ExchangeAbbreviatedDisplay_Asx,
     ExchangeFullDisplay_Asx,
     ExchangeAbbreviatedDisplay_Cxa,
@@ -445,6 +454,8 @@ export const enum StringId {
     ExchangeFullDisplay_Fpsx,
     ExchangeAbbreviatedDisplay_Cfx,
     ExchangeFullDisplay_Cfx,
+    ExchangeAbbreviatedDisplay_Dax,
+    ExchangeFullDisplay_Dax,
     ExchangeAbbreviatedDisplay_Myx,
     ExchangeFullDisplay_Myx,
     ExchangeAbbreviatedDisplay_AsxCxa,
@@ -485,10 +496,11 @@ export const enum StringId {
     FeedDisplay_Market_MyxBuyIn,
     FeedDisplay_Market_Calastone,
     FeedDisplay_Market_AsxCxa,
-    FeedDisplay_Market_Ptx,
-    FeedDisplay_Market_Fnsx,
-    FeedDisplay_Market_Fpsx,
-    FeedDisplay_Market_Cfxt,
+    FeedDisplay_Market_PtxMain,
+    FeedDisplay_Market_FnsxMain,
+    FeedDisplay_Market_FpsxMain,
+    FeedDisplay_Market_CfxMain,
+    FeedDisplay_Market_DaxMain,
     FeedDisplay_News_Asx,
     FeedDisplay_News_Nsx,
     FeedDisplay_News_Nzx,
@@ -529,10 +541,11 @@ export const enum StringId {
     MarketDisplay_PtxDemo,
     MarketDisplay_AsxCxa,
     MarketDisplay_AsxCxaDemo,
-    MarketDisplay_Ptx,
-    MarketDisplay_Fnsx,
-    MarketDisplay_Fpsx,
-    MarketDisplay_Cfxt,
+    MarketDisplay_PtxMain,
+    MarketDisplay_FnsxMain,
+    MarketDisplay_FpsxMain,
+    MarketDisplay_CfxMain,
+    MarketDisplay_DaxMain,
     IvemClass_Unknown,
     IvemClass_Market,
     IvemClass_ManagedFund,
@@ -597,10 +610,11 @@ export const enum StringId {
     MarketBoardIdDisplay_MyxIndex,
     MarketBoardIdDisplay_MyxBuyIn,
     MarketBoardIdDisplay_MyxOddLot,
-    MarketBoardIdDisplay_Ptx,
-    MarketBoardIdDisplay_Fnsx,
-    MarketBoardIdDisplay_Fpsx,
-    MarketBoardIdDisplay_Cfxt,
+    MarketBoardIdDisplay_PtxMain,
+    MarketBoardIdDisplay_FnsxMain,
+    MarketBoardIdDisplay_FpsxMain,
+    MarketBoardIdDisplay_CfxMain,
+    MarketBoardIdDisplay_DaxMain,
     CallOrPutDisplay_Call,
     CallOrPutDisplay_Put,
     PublisherSubscriptionDataTypeDisplay_Asset,
@@ -2010,6 +2024,8 @@ export const enum StringId {
     ScanCriteriaTypeDisplay_PriceLessThanValue,
     ScanCriteriaTypeDisplay_TodayPriceIncreaseGreaterThanPercentage,
     ScanCriteriaTypeDisplay_TodayPriceDecreaseGreaterThanPercentage,
+    ScanCriteriaViewDisplay_FieldSet,
+    ScanCriteriaViewDescription_FieldSet,
     ScanCriteriaViewDisplay_ConditionSet,
     ScanCriteriaViewDescription_ConditionSet,
     ScanCriteriaViewDisplay_Zenith,
@@ -2038,20 +2054,14 @@ export const enum StringId {
     ScanPropertiesTitle_SymbolListMaxCount,
     ScanPropertiesCaption_View,
     ScanPropertiesTitle_View,
-    ScanPropertiesCaption_MobileNotifier,
-    ScanPropertiesDescription_MobileNotifier,
-    ScanPropertiesCaption_SmsNotifier,
-    ScanPropertiesDescription_SmsNotifier,
-    ScanPropertiesCaption_EmailNotifier,
-    ScanPropertiesDescription_EmailNotifier,
-    ScanPropertiesCaption_MotifNotifier,
-    ScanPropertiesDescription_MotifNotifier,
-    ScanPropertiesCaption_AllNotifiers,
-    ScanPropertiesDescription_AllNotifiers,
-    ScanPropertiesCaption_MinimumStableTime,
-    ScanPropertiesDescription_MinimumStableTime,
-    ScanPropertiesCaption_MinimumElapsedTime,
-    ScanPropertiesDescription_MinimumElapsedTime,
+    ScanEditorAttachedNotificationChannelPropertiesCaption_MinimumStable,
+    ScanEditorAttachedNotificationChannelPropertiesDescription_MinimumStable,
+    ScanEditorAttachedNotificationChannelPropertiesCaption_MinimumElapsed,
+    ScanEditorAttachedNotificationChannelPropertiesDescription_MinimumElapsed,
+    ScanEditorAttachedNotificationChannelPropertiesCaption_Ttl,
+    ScanEditorAttachedNotificationChannelPropertiesDescription_Ttl,
+    ScanEditorAttachedNotificationChannelPropertiesCaption_Urgency,
+    ScanEditorAttachedNotificationChannelPropertiesDescription_Urgency,
     ScanTargetsCaption_TargetType,
     ScanTargetsDescription_TargetType,
     ScanTargetsCaption_SingleSymbol,
@@ -2094,6 +2104,7 @@ export const enum StringId {
     ScanFieldHeading_Readonly,
     ScanFieldHeading_Index,
     ScanFieldHeading_StatusId,
+    ScanFieldHeading_Enabled,
     ScanFieldHeading_Name,
     ScanFieldHeading_Description,
     ScanFieldHeading_TargetTypeId,
@@ -2102,6 +2113,7 @@ export const enum StringId {
     ScanFieldHeading_MaxMatchCount,
     ScanFieldHeading_ZenithCriteria,
     ScanFieldHeading_ZenithRank,
+    ScanFieldHeading_AttachedNotificationChannels,
     ScanFieldHeading_SymbolListEnabled,
     ScanFieldHeading_Version,
     ScanFieldHeading_LastSavedTime,
@@ -2205,8 +2217,8 @@ export const enum StringId {
     ScanFieldConditionOperatorDisplay_NotIs,
     ScanFieldConditionOperatorDescription_NotIs,
     ScanFieldConditionOperatorDisplay_OrEqual,
-    ScanFieldConditionOperandsEditorCaption_RemoveMe,
-    ScanFieldConditionOperandsEditorTitle_RemoveMe,
+    ScanFieldConditionOperandsEditorCaption_DeleteMe,
+    ScanFieldConditionOperandsEditorTitle_DeleteMe,
     ScanFieldConditionOperandsEditor_NotIsCategory,
     ScanFieldConditionOperandsEditor_NotEqualsValue,
     ScanFieldConditionOperandsEditor_NotInRange,
@@ -2240,6 +2252,51 @@ export const enum StringId {
     ConditionSetScanFormulaViewNgComponent_ConditionKindTitle_All,
     ConditionSetScanFormulaViewNgComponent_ConditionKindCaption_None,
     ConditionSetScanFormulaViewNgComponent_ConditionKindTitle_None,
+    CategoryValueScanFieldConditionOperandsCaption_Category,
+    CategoryValueScanFieldConditionOperandsTitle_Category,
+    CurrencyOverlapsScanFieldConditionOperandsCaption_Values,
+    CurrencyOverlapsScanFieldConditionOperandsTitle_Values,
+    ExchangeOverlapsScanFieldConditionOperandsCaption_Values,
+    ExchangeOverlapsScanFieldConditionOperandsTitle_Values,
+    MarketOverlapsScanFieldConditionOperandsCaption_Values,
+    MarketOverlapsScanFieldConditionOperandsTitle_Values,
+    MarketBoardOverlapsScanFieldConditionOperandsCaption_Values,
+    MarketBoardOverlapsScanFieldConditionOperandsTitle_Values,
+    StringOverlapsScanFieldConditionOperandsCaption_Values,
+    StringOverlapsScanFieldConditionOperandsTitle_Values,
+    ValueScanFieldConditionOperandsCaption_Value,
+    NumericValueScanFieldConditionOperandsTitle_Value,
+    DateValueScanFieldConditionOperandsTitle_Value,
+    TextValueScanFieldConditionOperandsTitle_Value,
+    RangeScanFieldConditionOperandsCaption_Min,
+    RangeScanFieldConditionOperandsCaption_Max,
+    NumericRangeValueScanFieldConditionOperandsTitle_Min,
+    NumericRangeValueScanFieldConditionOperandsTitle_Max,
+    DateRangeValueScanFieldConditionOperandsTitle_Min,
+    DateRangeValueScanFieldConditionOperandsTitle_Max,
+    NumericComparisonValueScanFieldConditionOperandsCaption_Operator,
+    NumericComparisonValueScanFieldConditionOperandsTitle_Operator,
+    TextContainsScanFieldConditionOperandsTitle_Value,
+    TextContainsScanFieldConditionOperandsTitle_FromStart,
+    TextContainsScanFieldConditionOperandsTitle_FromEnd,
+    TextContainsScanFieldConditionOperandsTitle_Exact,
+    TextContainsScanFieldConditionOperandsTitle_IgnoreCase,
+    LockerScanAttachedNotificationChannelHeader_ChannelId,
+    LockerScanAttachedNotificationChannelHeader_Name,
+    LockerScanAttachedNotificationChannelHeader_CultureCode,
+    LockerScanAttachedNotificationChannelHeader_MinimumStable,
+    LockerScanAttachedNotificationChannelHeader_MinimumElapsed,
+    LockerScanAttachedNotificationChannelHeader_Ttl,
+    LockerScanAttachedNotificationChannelHeader_Urgency,
+    LockerScanAttachedNotificationChannelHeader_Topic,
+    NotificationChannel_SourceSettings_Urgency_VeryLow,
+    NotificationChannel_SourceSettings_Urgency_Low,
+    NotificationChannel_SourceSettings_Urgency_Normal,
+    NotificationChannel_SourceSettings_Urgency_High,
+    ScanEditorAttachNotificationChannels_AttachDescription,
+    ScanEditorAttachNotificationChannels_EditGridColumns,
+    ScanEditorAttachNotificationChannels_DetachSelectedChannelsCaption,
+    ScanEditorAttachNotificationChannels_DetachSelectedChannelsTitle,
 }
 
 /** @public */
@@ -2563,6 +2620,16 @@ export namespace I18nStrings {
         Deleted: {
             id: StringId.Deleted, translations: {
                 en: 'Deleted',
+            }
+        },
+        Attach: {
+            id: StringId.Attach, translations: {
+                en: 'Attach',
+            }
+        },
+        Detach: {
+            id: StringId.Detach, translations: {
+                en: 'Detach',
             }
         },
         Update: {
@@ -3151,6 +3218,21 @@ export namespace I18nStrings {
                 en: 'Exact',
             }
         },
+        IgnoreCase: {
+            id: StringId.IgnoreCase, translations: {
+                en: 'Ignore case',
+            }
+        },
+        FromStart: {
+            id: StringId.FromStart, translations: {
+                en: 'From start',
+            }
+        },
+        FromEnd: {
+            id: StringId.FromEnd, translations: {
+                en: 'From end',
+            }
+        },
         Full: {
             id: StringId.Full, translations: {
                 en: 'Full',
@@ -3326,9 +3408,9 @@ export namespace I18nStrings {
                 en: 'Targets',
             }
         },
-        Notifiers: {
-            id: StringId.Notifiers, translations: {
-                en: 'Notifiers',
+        Notifications: {
+            id: StringId.Notifications, translations: {
+                en: 'Notifications',
             }
         },
         ExecuteCommandTitle: {
@@ -4377,6 +4459,26 @@ export namespace I18nStrings {
                 en: 'ST',
             }
         },
+        TableRecordDefinitionList_ListTypeDisplay_ScanFieldEditorFrame: {
+            id: StringId.TableRecordDefinitionList_ListTypeDisplay_ScanFieldEditorFrame, translations: {
+                en: 'Scan Field Editor Frame',
+            }
+        },
+        TableRecordDefinitionList_ListTypeAbbr_ScanFieldEditorFrame: {
+            id: StringId.TableRecordDefinitionList_ListTypeAbbr_ScanFieldEditorFrame, translations: {
+                en: 'SFEF',
+            }
+        },
+        TableRecordDefinitionList_ListTypeDisplay_ScanEditorAttachedNotificationChannel: {
+            id: StringId.TableRecordDefinitionList_ListTypeDisplay_ScanEditorAttachedNotificationChannel, translations: {
+                en: 'Attached notification channel',
+            }
+        },
+        TableRecordDefinitionList_ListTypeAbbr_ScanEditorAttachedNotificationChannel: {
+            id: StringId.TableRecordDefinitionList_ListTypeAbbr_ScanEditorAttachedNotificationChannel, translations: {
+                en: 'SEANC',
+            }
+        },
         ExchangeAbbreviatedDisplay_Asx: {
             id: StringId.ExchangeAbbreviatedDisplay_Asx, translations: {
                 en: 'ASX',
@@ -4465,6 +4567,16 @@ export namespace I18nStrings {
         ExchangeFullDisplay_Cfx: {
             id: StringId.ExchangeFullDisplay_Cfx, translations: {
                 en: 'CF Markets Stock Exchange',
+            }
+        },
+        ExchangeAbbreviatedDisplay_Dax: {
+            id: StringId.ExchangeAbbreviatedDisplay_Dax, translations: {
+                en: 'DAX',
+            }
+        },
+        ExchangeFullDisplay_Dax: {
+            id: StringId.ExchangeFullDisplay_Dax, translations: {
+                en: 'Derivatives Access Stock Exchange',
             }
         },
         ExchangeAbbreviatedDisplay_Myx: {
@@ -4667,24 +4779,29 @@ export namespace I18nStrings {
                 en: 'AsxCxa',
             }
         },
-        FeedDisplay_Market_Ptx: {
-            id: StringId.FeedDisplay_Market_Ptx, translations: {
-                en: 'PTX',
+        FeedDisplay_Market_PtxMain: {
+            id: StringId.FeedDisplay_Market_PtxMain, translations: {
+                en: 'PTX Main',
             }
         },
-        FeedDisplay_Market_Fnsx: {
-            id: StringId.FeedDisplay_Market_Fnsx, translations: {
-                en: 'FNSX',
+        FeedDisplay_Market_FnsxMain: {
+            id: StringId.FeedDisplay_Market_FnsxMain, translations: {
+                en: 'FNSX Main',
             }
         },
-        FeedDisplay_Market_Fpsx: {
-            id: StringId.FeedDisplay_Market_Fpsx, translations: {
-                en: 'FPSX',
+        FeedDisplay_Market_FpsxMain: {
+            id: StringId.FeedDisplay_Market_FpsxMain, translations: {
+                en: 'FPSX Main',
             }
         },
-        FeedDisplay_Market_Cfxt: {
-            id: StringId.FeedDisplay_Market_Cfxt, translations: {
-                en: 'CFXT',
+        FeedDisplay_Market_CfxMain: {
+            id: StringId.FeedDisplay_Market_CfxMain, translations: {
+                en: 'CFX Main',
+            }
+        },
+        FeedDisplay_Market_DaxMain: {
+            id: StringId.FeedDisplay_Market_DaxMain, translations: {
+                en: 'DAX Main',
             }
         },
         FeedDisplay_News_Asx: {
@@ -4887,24 +5004,29 @@ export namespace I18nStrings {
                 en: 'AsxCxaDemo',
             }
         },
-        MarketDisplay_Ptx: {
-            id: StringId.MarketDisplay_Ptx, translations: {
-                en: 'PTX',
+        MarketDisplay_PtxMain: {
+            id: StringId.MarketDisplay_PtxMain, translations: {
+                en: 'PTX Main',
             }
         },
-        MarketDisplay_Fnsx: {
-            id: StringId.MarketDisplay_Fnsx, translations: {
-                en: 'FNSX',
+        MarketDisplay_FnsxMain: {
+            id: StringId.MarketDisplay_FnsxMain, translations: {
+                en: 'FNSX Main',
             }
         },
-        MarketDisplay_Fpsx: {
-            id: StringId.MarketDisplay_Fpsx, translations: {
-                en: 'FPSX',
+        MarketDisplay_FpsxMain: {
+            id: StringId.MarketDisplay_FpsxMain, translations: {
+                en: 'FPSX Main',
             }
         },
-        MarketDisplay_Cfxt: {
-            id: StringId.MarketDisplay_Cfxt, translations: {
-                en: 'CFXT',
+        MarketDisplay_CfxMain: {
+            id: StringId.MarketDisplay_CfxMain, translations: {
+                en: 'CFX Main',
+            }
+        },
+        MarketDisplay_DaxMain: {
+            id: StringId.MarketDisplay_DaxMain, translations: {
+                en: 'DAX Main',
             }
         },
         IvemClass_Unknown: {
@@ -5227,24 +5349,29 @@ export namespace I18nStrings {
                 en: 'MYX Odd Lot',
             }
         },
-        MarketBoardIdDisplay_Ptx: {
-            id: StringId.MarketBoardIdDisplay_Ptx, translations: {
-                en: 'PTX',
+        MarketBoardIdDisplay_PtxMain: {
+            id: StringId.MarketBoardIdDisplay_PtxMain, translations: {
+                en: 'PTX Main',
             }
         },
-        MarketBoardIdDisplay_Fnsx: {
-            id: StringId.MarketBoardIdDisplay_Fnsx, translations: {
-                en: 'FNSX',
+        MarketBoardIdDisplay_FnsxMain: {
+            id: StringId.MarketBoardIdDisplay_FnsxMain, translations: {
+                en: 'FNSX Main',
             }
         },
-        MarketBoardIdDisplay_Fpsx: {
-            id: StringId.MarketBoardIdDisplay_Fpsx, translations: {
-                en: 'FPSX',
+        MarketBoardIdDisplay_FpsxMain: {
+            id: StringId.MarketBoardIdDisplay_FpsxMain, translations: {
+                en: 'FPSX Main',
             }
         },
-        MarketBoardIdDisplay_Cfxt: {
-            id: StringId.MarketBoardIdDisplay_Cfxt, translations: {
-                en: 'CFXT',
+        MarketBoardIdDisplay_CfxMain: {
+            id: StringId.MarketBoardIdDisplay_CfxMain, translations: {
+                en: 'CFX Main',
+            }
+        },
+        MarketBoardIdDisplay_DaxMain: {
+            id: StringId.MarketBoardIdDisplay_DaxMain, translations: {
+                en: 'DAX Main',
             }
         },
         CallOrPutDisplay_Call: {
@@ -12026,7 +12153,7 @@ export namespace I18nStrings {
             }
         },
         ScanFormulaZenithEncodingError_TextSubFieldIsMissing: {
-            id: StringId.ScanFormulaZenithEncodingError_DateFieldEqualsTargetIsNotString, translations: {
+            id: StringId.ScanFormulaZenithEncodingError_TextSubFieldIsMissing, translations: {
                 en: 'Text sub field is missing',
             }
         },
@@ -12296,9 +12423,19 @@ export namespace I18nStrings {
                 en: 'Today price decrease > percentage',
             }
         },
+        ScanCriteriaViewDisplay_FieldSet: {
+            id: StringId.ScanCriteriaViewDisplay_FieldSet, translations: {
+                en: 'Fields',
+            }
+        },
+        ScanCriteriaViewDescription_FieldSet: {
+            id: StringId.ScanCriteriaViewDescription_FieldSet, translations: {
+                en: 'View/edit scan criteria fields',
+            }
+        },
         ScanCriteriaViewDisplay_ConditionSet: {
             id: StringId.ScanCriteriaViewDisplay_ConditionSet, translations: {
-                en: 'Condition set',
+                en: 'Conditions',
             }
         },
         ScanCriteriaViewDescription_ConditionSet: {
@@ -12436,74 +12573,44 @@ export namespace I18nStrings {
                 en: 'Specifies how the criteria should be viewed/edited',
             }
         },
-        ScanPropertiesCaption_MobileNotifier: {
-            id: StringId.ScanPropertiesCaption_MobileNotifier, translations: {
-                en: 'Mobile',
-            }
-        },
-        ScanPropertiesDescription_MobileNotifier: {
-            id: StringId.ScanPropertiesDescription_MobileNotifier, translations: {
-                en: 'Enable the default Mobile Notifier',
-            }
-        },
-        ScanPropertiesCaption_SmsNotifier: {
-            id: StringId.ScanPropertiesCaption_SmsNotifier, translations: {
-                en: 'SMS',
-            }
-        },
-        ScanPropertiesDescription_SmsNotifier: {
-            id: StringId.ScanPropertiesDescription_SmsNotifier, translations: {
-                en: 'Enable the default SMS notifier',
-            }
-        },
-        ScanPropertiesCaption_EmailNotifier: {
-            id: StringId.ScanPropertiesCaption_EmailNotifier, translations: {
-                en: 'Email',
-            }
-        },
-        ScanPropertiesDescription_EmailNotifier: {
-            id: StringId.ScanPropertiesDescription_EmailNotifier, translations: {
-                en: 'Enable the default Email notifier',
-            }
-        },
-        ScanPropertiesCaption_MotifNotifier: {
-            id: StringId.ScanPropertiesCaption_MotifNotifier, translations: {
-                en: 'Motif',
-            }
-        },
-        ScanPropertiesDescription_MotifNotifier: {
-            id: StringId.ScanPropertiesDescription_MotifNotifier, translations: {
-                en: 'Allow Motif to receive notifications',
-            }
-        },
-        ScanPropertiesCaption_AllNotifiers: {
-            id: StringId.ScanPropertiesCaption_AllNotifiers, translations: {
-                en: 'All',
-            }
-        },
-        ScanPropertiesDescription_AllNotifiers: {
-            id: StringId.ScanPropertiesDescription_AllNotifiers, translations: {
-                en: 'All notifiers enabled for this scan',
-            }
-        },
-        ScanPropertiesCaption_MinimumStableTime: {
-            id: StringId.ScanPropertiesCaption_MinimumStableTime, translations: {
+        ScanEditorAttachedNotificationChannelPropertiesCaption_MinimumStable: {
+            id: StringId.ScanEditorAttachedNotificationChannelPropertiesCaption_MinimumStable, translations: {
                 en: 'Minimum stable time',
             }
         },
-        ScanPropertiesDescription_MinimumStableTime: {
-            id: StringId.ScanPropertiesDescription_MinimumStableTime, translations: {
+        ScanEditorAttachedNotificationChannelPropertiesDescription_MinimumStable: {
+            id: StringId.ScanEditorAttachedNotificationChannelPropertiesDescription_MinimumStable, translations: {
                 en: 'The minimum amount of time (in seconds) a scan must match before a notification can be sent',
             }
         },
-        ScanPropertiesCaption_MinimumElapsedTime: {
-            id: StringId.ScanPropertiesCaption_MinimumElapsedTime, translations: {
+        ScanEditorAttachedNotificationChannelPropertiesCaption_MinimumElapsed: {
+            id: StringId.ScanEditorAttachedNotificationChannelPropertiesCaption_MinimumElapsed, translations: {
                 en: 'Minimum elapsed time',
             }
         },
-        ScanPropertiesDescription_MinimumElapsedTime: {
-            id: StringId.ScanPropertiesDescription_MinimumElapsedTime, translations: {
+        ScanEditorAttachedNotificationChannelPropertiesDescription_MinimumElapsed: {
+            id: StringId.ScanEditorAttachedNotificationChannelPropertiesDescription_MinimumElapsed, translations: {
                 en: 'The minimum amount of time since the last notification before a new one can be sent',
+            }
+        },
+        ScanEditorAttachedNotificationChannelPropertiesCaption_Ttl: {
+            id: StringId.ScanEditorAttachedNotificationChannelPropertiesCaption_Ttl, translations: {
+                en: 'TTL',
+            }
+        },
+        ScanEditorAttachedNotificationChannelPropertiesDescription_Ttl: {
+            id: StringId.ScanEditorAttachedNotificationChannelPropertiesDescription_Ttl, translations: {
+                en: 'The time (in seconds) after which a notification will be cancelled if it cannot be sent',
+            }
+        },
+        ScanEditorAttachedNotificationChannelPropertiesCaption_Urgency: {
+            id: StringId.ScanEditorAttachedNotificationChannelPropertiesCaption_Urgency, translations: {
+                en: 'Urgency',
+            }
+        },
+        ScanEditorAttachedNotificationChannelPropertiesDescription_Urgency: {
+            id: StringId.ScanEditorAttachedNotificationChannelPropertiesDescription_Urgency, translations: {
+                en: 'Specifies the priority of notifications if multiple notifications are dispatched at once',
             }
         },
         ScanTargetsCaption_TargetType: {
@@ -12718,6 +12825,11 @@ export namespace I18nStrings {
                 en: 'Status',
             }
         },
+        ScanFieldHeading_Enabled: {
+            id: StringId.ScanFieldHeading_Enabled, translations: {
+                en: 'Enabled',
+            }
+        },
         ScanFieldHeading_Name: {
             id: StringId.ScanFieldHeading_Name, translations: {
                 en: 'Name',
@@ -12756,6 +12868,11 @@ export namespace I18nStrings {
         ScanFieldHeading_ZenithRank: {
             id: StringId.ScanFieldHeading_ZenithRank, translations: {
                 en: 'Z.Rank',
+            }
+        },
+        ScanFieldHeading_AttachedNotificationChannels: {
+            id: StringId.ScanFieldHeading_AttachedNotificationChannels, translations: {
+                en: 'Notifications',
             }
         },
         ScanFieldHeading_SymbolListEnabled: {
@@ -13273,14 +13390,14 @@ export namespace I18nStrings {
                 en: 'or equal',
             }
         },
-        ScanFieldConditionOperandsEditorCaption_RemoveMe: {
-            id: StringId.ScanFieldConditionOperandsEditorCaption_RemoveMe, translations: {
-                en: 'Remove condition',
+        ScanFieldConditionOperandsEditorCaption_DeleteMe: {
+            id: StringId.ScanFieldConditionOperandsEditorCaption_DeleteMe, translations: {
+                en: 'Delete',
             }
         },
-        ScanFieldConditionOperandsEditorTitle_RemoveMe: {
-            id: StringId.ScanFieldConditionOperandsEditorTitle_RemoveMe, translations: {
-                en: 'Remove condition from field',
+        ScanFieldConditionOperandsEditorTitle_DeleteMe: {
+            id: StringId.ScanFieldConditionOperandsEditorTitle_DeleteMe, translations: {
+                en: 'Delete this condition from field',
             }
         },
         ScanFieldConditionOperandsEditor_NotIsCategory: {
@@ -13446,6 +13563,231 @@ export namespace I18nStrings {
         ConditionSetScanFormulaViewNgComponent_ConditionKindTitle_None: {
             id: StringId.ConditionSetScanFormulaViewNgComponent_ConditionKindTitle_None, translations: {
                 en: 'No securities',
+            }
+        },
+        CategoryValueScanFieldConditionOperandsCaption_Category: {
+            id: StringId.CategoryValueScanFieldConditionOperandsCaption_Category, translations: {
+                en: 'Category',
+            }
+        },
+        CategoryValueScanFieldConditionOperandsTitle_Category: {
+            id: StringId.CategoryValueScanFieldConditionOperandsTitle_Category, translations: {
+                en: 'Specify a category in which security is included',
+            }
+        },
+        CurrencyOverlapsScanFieldConditionOperandsCaption_Values: {
+            id: StringId.CurrencyOverlapsScanFieldConditionOperandsCaption_Values, translations: {
+                en: 'Currencies',
+            }
+        },
+        CurrencyOverlapsScanFieldConditionOperandsTitle_Values: {
+            id: StringId.CurrencyOverlapsScanFieldConditionOperandsTitle_Values, translations: {
+                en: 'Specify one or more currencies',
+            }
+        },
+        ExchangeOverlapsScanFieldConditionOperandsCaption_Values: {
+            id: StringId.ExchangeOverlapsScanFieldConditionOperandsCaption_Values, translations: {
+                en: 'Exchanges',
+            }
+        },
+        ExchangeOverlapsScanFieldConditionOperandsTitle_Values: {
+            id: StringId.ExchangeOverlapsScanFieldConditionOperandsTitle_Values, translations: {
+                en: 'Specify one or more exchanges',
+            }
+        },
+        MarketOverlapsScanFieldConditionOperandsCaption_Values: {
+            id: StringId.MarketOverlapsScanFieldConditionOperandsCaption_Values, translations: {
+                en: 'Markets',
+            }
+        },
+        MarketOverlapsScanFieldConditionOperandsTitle_Values: {
+            id: StringId.MarketOverlapsScanFieldConditionOperandsTitle_Values, translations: {
+                en: 'Specify one or more markets',
+            }
+        },
+        MarketBoardOverlapsScanFieldConditionOperandsCaption_Values: {
+            id: StringId.MarketBoardOverlapsScanFieldConditionOperandsCaption_Values, translations: {
+                en: 'Market boards',
+            }
+        },
+        MarketBoardOverlapsScanFieldConditionOperandsTitle_Values: {
+            id: StringId.MarketBoardOverlapsScanFieldConditionOperandsTitle_Values, translations: {
+                en: 'Specify one or more market boards',
+            }
+        },
+        StringOverlapsScanFieldConditionOperandsCaption_Values: {
+            id: StringId.StringOverlapsScanFieldConditionOperandsCaption_Values, translations: {
+                en: 'Values',
+            }
+        },
+        StringOverlapsScanFieldConditionOperandsTitle_Values: {
+            id: StringId.StringOverlapsScanFieldConditionOperandsTitle_Values, translations: {
+                en: 'Specify one or more values',
+            }
+        },
+        ValueScanFieldConditionOperandsCaption_Value: {
+            id: StringId.ValueScanFieldConditionOperandsCaption_Value, translations: {
+                en: 'Value',
+            }
+        },
+        NumericValueScanFieldConditionOperandsTitle_Value: {
+            id: StringId.NumericValueScanFieldConditionOperandsTitle_Value, translations: {
+                en: 'Specify a numeric value',
+            }
+        },
+        DateValueScanFieldConditionOperandsTitle_Value: {
+            id: StringId.DateValueScanFieldConditionOperandsTitle_Value, translations: {
+                en: 'Specify a date value',
+            }
+        },
+        TextValueScanFieldConditionOperandsTitle_Value: {
+            id: StringId.TextValueScanFieldConditionOperandsTitle_Value, translations: {
+                en: 'Specify a text value',
+            }
+        },
+        RangeScanFieldConditionOperandsCaption_Min: {
+            id: StringId.RangeScanFieldConditionOperandsCaption_Min, translations: {
+                en: 'Min',
+            }
+        },
+        RangeScanFieldConditionOperandsCaption_Max: {
+            id: StringId.RangeScanFieldConditionOperandsCaption_Max, translations: {
+                en: 'Max',
+            }
+        },
+        NumericRangeValueScanFieldConditionOperandsTitle_Min: {
+            id: StringId.NumericRangeValueScanFieldConditionOperandsTitle_Min, translations: {
+                en: 'Specify a numeric minimum or clear to specify no minimum',
+            }
+        },
+        NumericRangeValueScanFieldConditionOperandsTitle_Max: {
+            id: StringId.NumericRangeValueScanFieldConditionOperandsTitle_Max, translations: {
+                en: 'Specify a numeric maximum or clear to specify no maximum',
+            }
+        },
+        DateRangeValueScanFieldConditionOperandsTitle_Min: {
+            id: StringId.DateRangeValueScanFieldConditionOperandsTitle_Min, translations: {
+                en: 'Specify a date minimum or clear to specify no minimum',
+            }
+        },
+        DateRangeValueScanFieldConditionOperandsTitle_Max: {
+            id: StringId.DateRangeValueScanFieldConditionOperandsTitle_Max, translations: {
+                en: 'Specify a date maximum or clear to specify no maximum',
+            }
+        },
+        NumericComparisonValueScanFieldConditionOperandsCaption_Operator: {
+            id: StringId.NumericComparisonValueScanFieldConditionOperandsCaption_Operator, translations: {
+                en: 'Operator',
+            }
+        },
+        NumericComparisonValueScanFieldConditionOperandsTitle_Operator: {
+            id: StringId.NumericComparisonValueScanFieldConditionOperandsTitle_Operator, translations: {
+                en: 'Specify the operator to use to compare the field value with the specified value',
+            }
+        },
+        TextContainsScanFieldConditionOperandsTitle_Value: {
+            id: StringId.TextContainsScanFieldConditionOperandsTitle_Value, translations: {
+                en: 'Text which field value has to contain',
+            }
+        },
+        TextContainsScanFieldConditionOperandsTitle_FromStart: {
+            id: StringId.TextContainsScanFieldConditionOperandsTitle_FromStart, translations: {
+                en: 'Field value has to start with specified text',
+            }
+        },
+        TextContainsScanFieldConditionOperandsTitle_FromEnd: {
+            id: StringId.TextContainsScanFieldConditionOperandsTitle_FromEnd, translations: {
+                en: 'Field value has to end with specified text',
+            }
+        },
+        TextContainsScanFieldConditionOperandsTitle_Exact: {
+            id: StringId.TextContainsScanFieldConditionOperandsTitle_Exact, translations: {
+                en: 'Field value must fully match specified text',
+            }
+        },
+        TextContainsScanFieldConditionOperandsTitle_IgnoreCase: {
+            id: StringId.TextContainsScanFieldConditionOperandsTitle_IgnoreCase, translations: {
+                en: 'Specify whether case of characters in text should be ignored',
+            }
+        },
+        LockerScanAttachedNotificationChannelHeader_ChannelId: {
+            id: StringId.LockerScanAttachedNotificationChannelHeader_ChannelId, translations: {
+                en: 'Channel ID',
+            }
+        },
+        LockerScanAttachedNotificationChannelHeader_Name: {
+            id: StringId.LockerScanAttachedNotificationChannelHeader_Name, translations: {
+                en: 'Name',
+            }
+        },
+        LockerScanAttachedNotificationChannelHeader_CultureCode: {
+            id: StringId.LockerScanAttachedNotificationChannelHeader_CultureCode, translations: {
+                en: 'Culture',
+            }
+        },
+        LockerScanAttachedNotificationChannelHeader_MinimumStable: {
+            id: StringId.LockerScanAttachedNotificationChannelHeader_MinimumStable, translations: {
+                en: 'Min stable',
+            }
+        },
+        LockerScanAttachedNotificationChannelHeader_MinimumElapsed: {
+            id: StringId.LockerScanAttachedNotificationChannelHeader_MinimumElapsed, translations: {
+                en: 'Min elapsed',
+            }
+        },
+        LockerScanAttachedNotificationChannelHeader_Ttl: {
+            id: StringId.LockerScanAttachedNotificationChannelHeader_Ttl, translations: {
+                en: 'TTL',
+            }
+        },
+        LockerScanAttachedNotificationChannelHeader_Urgency: {
+            id: StringId.LockerScanAttachedNotificationChannelHeader_Urgency, translations: {
+                en: 'Urgency',
+            }
+        },
+        LockerScanAttachedNotificationChannelHeader_Topic: {
+            id: StringId.LockerScanAttachedNotificationChannelHeader_Topic, translations: {
+                en: 'Topic',
+            }
+        },
+        NotificationChannel_SourceSettings_Urgency_VeryLow: {
+            id: StringId.NotificationChannel_SourceSettings_Urgency_VeryLow, translations: {
+                en: 'VeryLow',
+            }
+        },
+        NotificationChannel_SourceSettings_Urgency_Low: {
+            id: StringId.NotificationChannel_SourceSettings_Urgency_Low, translations: {
+                en: 'Low',
+            }
+        },
+        NotificationChannel_SourceSettings_Urgency_Normal: {
+            id: StringId.NotificationChannel_SourceSettings_Urgency_Normal, translations: {
+                en: 'Normal',
+            }
+        },
+        NotificationChannel_SourceSettings_Urgency_High: {
+            id: StringId.NotificationChannel_SourceSettings_Urgency_High, translations: {
+                en: 'High',
+            }
+        },
+        ScanEditorAttachNotificationChannels_AttachDescription: {
+            id: StringId.ScanEditorAttachNotificationChannels_AttachDescription, translations: {
+                en: 'Attach an existing notification channel to this scan',
+            }
+        },
+        ScanEditorAttachNotificationChannels_EditGridColumns: {
+            id: StringId.ScanEditorAttachNotificationChannels_EditGridColumns, translations: {
+                en: 'Edit scan attached notifications grid columns',
+            }
+        },
+        ScanEditorAttachNotificationChannels_DetachSelectedChannelsCaption: {
+            id: StringId.ScanEditorAttachNotificationChannels_DetachSelectedChannelsCaption, translations: {
+                en: 'Detach selected channels',
+            }
+        },
+        ScanEditorAttachNotificationChannels_DetachSelectedChannelsTitle: {
+            id: StringId.ScanEditorAttachNotificationChannels_DetachSelectedChannelsTitle, translations: {
+                en: 'Detach selected channels from this scan',
             }
         },
 

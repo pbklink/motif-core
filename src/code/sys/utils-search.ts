@@ -201,10 +201,8 @@ export function firstLastRangedQuickSort<T>(values: T[], compareFtn: CompareFtn<
     if (values.length > 0 && (lastIdx - firstIdx) > 0) {
         let i = firstIdx;
         let j = lastIdx;
-        /* eslint-disable no-bitwise */
-        const pivot = values[firstIdx + ((lastIdx - firstIdx) >> 1)];
-        /* eslint-enable no-bitwise */
-        do {
+        const pivot = values[Math.floor((firstIdx + lastIdx) / 2)];
+        while (i <= j) {
             while (compareFtn(values[i], pivot) < ComparisonResult.LeftEqualsRight) {
                 i++;
             }
@@ -213,15 +211,19 @@ export function firstLastRangedQuickSort<T>(values: T[], compareFtn: CompareFtn<
             }
 
             if (i <= j) {
-                if (i !== j) {
-                    const temp = values[i];
-                    values[i] = values[j];
-                    values[j] = temp;
-                }
+                [values[i], values[j]] = [values[j], values[i]]; // swap
 
                 i++;
                 j--;
             }
-        } while (i <= j);
+        }
+
+        if (firstIdx < j) {
+            firstLastRangedQuickSort(values, compareFtn, firstIdx, j);
+        }
+
+        if (i < lastIdx) {
+            firstLastRangedQuickSort(values, compareFtn, i, lastIdx);
+        }
     }
 }

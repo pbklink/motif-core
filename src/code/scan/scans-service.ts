@@ -5,6 +5,7 @@
  */
 
 import { AdiService } from '../adi/adi-internal-api';
+import { NotificationChannelsService } from '../notification-channel/internal-api';
 import { SymbolsService } from '../services/services-internal-api';
 import {
     ErrorCode,
@@ -18,7 +19,7 @@ import {
 import { ScanConditionSet } from './condition-set/internal-api';
 import { ScanFieldSet } from './field-set/internal-api';
 import { Scan } from './scan';
-import { ScanEditor } from './scan-editor';
+import { OpenableScanEditor, ScanEditor } from './scan-editor';
 import { ScanList } from './scan-list';
 
 /** @public */
@@ -27,13 +28,14 @@ export class ScansService {
 
     private _scanWaiters = new Array<ScansService.ScanWaiter>();
 
-    private _openedScanEditors = new Map<Scan, ScanEditor>();
+    private _openedScanEditors = new Map<Scan, OpenableScanEditor>();
 
     private _scanListChangeSubscriptionId: MultiEvent.SubscriptionId;
 
     constructor(
         private readonly _adiService: AdiService,
-        private readonly _symbolsService: SymbolsService
+        private readonly _symbolsService: SymbolsService,
+        private readonly _notificationChannelsService: NotificationChannelsService,
     ) {
         this.scanList = new ScanList(this._adiService);
     }
@@ -60,6 +62,7 @@ export class ScansService {
         return new ScanEditor(
             this._adiService,
             this._symbolsService,
+            this._notificationChannelsService,
             undefined,
             opener,
             emptyScanFieldSet,
@@ -97,6 +100,7 @@ export class ScansService {
                         openedEditor = new ScanEditor(
                             this._adiService,
                             this._symbolsService,
+                            this._notificationChannelsService,
                             scan,
                             opener,
                             emptyScanFieldSet,
@@ -107,7 +111,7 @@ export class ScansService {
                         this._openedScanEditors.set(scan, openedEditor);
                     }
                     openedEditor.addOpener(opener);
-                    return new Ok(openedEditor);
+                    return new Ok(openedEditor as ScanEditor);
                 }
             }
         }

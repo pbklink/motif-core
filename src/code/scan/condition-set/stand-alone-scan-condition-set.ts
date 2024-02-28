@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { Err, Ok, Result, SourceTzOffsetDateTime, UiBadnessComparableList, UnreachableCaseError } from '../../sys/sys-internal-api';
+import { Err, Ok, Result, SourceTzOffsetDate, UiComparableList, UnreachableCaseError } from '../../sys/sys-internal-api';
 import { ScanFormula } from '../formula/internal-api';
 import { ScanConditionSetLoadError, ScanConditionSetLoadErrorTypeId } from './common/internal-api';
 import { AllScanCondition, AltCodeSubFieldContainsScanCondition, AltCodeSubFieldHasValueScanCondition, AttributeSubFieldContainsScanCondition, AttributeSubFieldHasValueScanCondition, CurrencyFieldOverlapsScanCondition, DateFieldEqualsScanCondition, DateFieldInRangeScanCondition, DateSubFieldEqualsScanCondition, DateSubFieldHasValueScanCondition, DateSubFieldInRangeScanCondition, ExchangeFieldOverlapsScanCondition, FieldHasValueScanCondition, IsScanCondition, MarketBoardFieldOverlapsScanCondition, MarketFieldOverlapsScanCondition, NoneScanCondition, NumericComparisonScanCondition, NumericFieldEqualsScanCondition, NumericFieldInRangeScanCondition, PriceSubFieldEqualsScanCondition, PriceSubFieldHasValueScanCondition, PriceSubFieldInRangeScanCondition, ScanCondition, ScanConditionFactory, StringFieldOverlapsScanCondition, TextFieldContainsScanCondition, TextFieldEqualsScanCondition } from './condition/internal-api';
@@ -15,7 +15,7 @@ export class StandAloneScanConditionSet implements ScanConditionSet {
 
     setOperationId: ScanConditionSet.BooleanOperationId;
     notSetOperation: boolean;
-    conditions: UiBadnessComparableList<ScanCondition>;
+    conditions: UiComparableList<ScanCondition>;
     loadError: ScanConditionSetLoadError | undefined;
 
     assign(value: ScanConditionSet): void {
@@ -141,7 +141,7 @@ export class StandAloneScanConditionSet implements ScanConditionSet {
                     typeId: originalCondition.typeId,
                     not: originalCondition.not,
                     fieldId: originalCondition.fieldId,
-                    target: SourceTzOffsetDateTime.createCopy(originalCondition.target),
+                    target: SourceTzOffsetDate.createCopy(originalCondition.target),
                 };
                 return copiedCondition;
             }
@@ -151,8 +151,8 @@ export class StandAloneScanConditionSet implements ScanConditionSet {
                     typeId: originalCondition.typeId,
                     not: originalCondition.not,
                     fieldId: originalCondition.fieldId,
-                    min: SourceTzOffsetDateTime.newUndefinable(originalCondition.min),
-                    max: SourceTzOffsetDateTime.newUndefinable(originalCondition.max),
+                    min: SourceTzOffsetDate.newUndefinable(originalCondition.min),
+                    max: SourceTzOffsetDate.newUndefinable(originalCondition.max),
                 };
                 return copiedCondition;
             }
@@ -278,7 +278,7 @@ export class StandAloneScanConditionSet implements ScanConditionSet {
                     not: originalCondition.not,
                     subFieldId: originalCondition.subFieldId,
                     fieldId: originalCondition.fieldId,
-                    target: SourceTzOffsetDateTime.createCopy(originalCondition.target),
+                    target: SourceTzOffsetDate.createCopy(originalCondition.target),
                 };
                 return copiedCondition;
             }
@@ -289,8 +289,8 @@ export class StandAloneScanConditionSet implements ScanConditionSet {
                     not: originalCondition.not,
                     fieldId: originalCondition.fieldId,
                     subFieldId: originalCondition.subFieldId,
-                    min: SourceTzOffsetDateTime.newUndefinable(originalCondition.min),
-                    max: SourceTzOffsetDateTime.newUndefinable(originalCondition.max),
+                    min: SourceTzOffsetDate.newUndefinable(originalCondition.min),
+                    max: SourceTzOffsetDate.newUndefinable(originalCondition.max),
                 };
                 return copiedCondition;
             }
@@ -460,7 +460,7 @@ export namespace StandAloneScanConditionSet {
                 typeId: ScanCondition.TypeId.DateFieldEquals,
                 not,
                 fieldId: formulaNode.fieldId,
-                target: SourceTzOffsetDateTime.createCopy(formulaNode.value),
+                target: SourceTzOffsetDate.createCopy(formulaNode.value),
             });
         }
         createDateFieldInRange(formulaNode: ScanFormula.DateFieldInRangeNode, not: boolean): Result<DateFieldInRangeScanCondition, ScanConditionSetLoadError> {
@@ -468,8 +468,8 @@ export namespace StandAloneScanConditionSet {
                 typeId: ScanCondition.TypeId.DateFieldInRange,
                 not,
                 fieldId: formulaNode.fieldId,
-                min: SourceTzOffsetDateTime.newUndefinable(formulaNode.min),
-                max: SourceTzOffsetDateTime.newUndefinable(formulaNode.max),
+                min: SourceTzOffsetDate.newUndefinable(formulaNode.min),
+                max: SourceTzOffsetDate.newUndefinable(formulaNode.max),
             });
         }
         createStringFieldOverlaps(formulaNode: ScanFormula.StringFieldOverlapsNode, not: boolean): Result<StringFieldOverlapsScanCondition, ScanConditionSetLoadError> {
@@ -571,7 +571,7 @@ export namespace StandAloneScanConditionSet {
                 not,
                 fieldId: formulaNode.fieldId,
                 subFieldId: formulaNode.subFieldId,
-                target: SourceTzOffsetDateTime.createCopy(formulaNode.value),
+                target: SourceTzOffsetDate.createCopy(formulaNode.value),
             });
         }
         createDateSubFieldInRange(formulaNode: ScanFormula.DateSubFieldInRangeNode, not: boolean): Result<DateSubFieldInRangeScanCondition, ScanConditionSetLoadError> {
@@ -580,8 +580,8 @@ export namespace StandAloneScanConditionSet {
                 not,
                 fieldId: formulaNode.fieldId,
                 subFieldId: formulaNode.subFieldId,
-                min: SourceTzOffsetDateTime.newUndefinable(formulaNode.min),
-                max: SourceTzOffsetDateTime.newUndefinable(formulaNode.max),
+                min: SourceTzOffsetDate.newUndefinable(formulaNode.min),
+                max: SourceTzOffsetDate.newUndefinable(formulaNode.max),
             });
         }
         createAltCodeSubFieldHasValue(formulaNode: ScanFormula.AltCodeSubFieldHasValueNode, not: boolean): Result<AltCodeSubFieldHasValueScanCondition, ScanConditionSetLoadError> {

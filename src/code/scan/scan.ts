@@ -5,16 +5,17 @@
  */
 
 import {
+    ActiveFaultedStatusId,
     AdiService,
     DataItemIncubator,
     LitIvemId,
     MarketId,
     QueryScanDetailDataDefinition,
     QueryScanDetailDataItem,
+    ScanAttachedNotificationChannel,
     ScanDetail,
     ScanStatusedDescriptor,
     ScanStatusedDescriptorInterface,
-    ScanStatusId,
     ScanTargetTypeId,
     ZenithEncodedScanFormula
 } from '../adi/adi-internal-api';
@@ -28,15 +29,15 @@ import {
     FieldDataTypeId,
     Guid,
     Integer,
-    isUndefinableArrayEqualUniquely,
-    isUndefinableDateEqual,
-    isUndefinableStringNumberBooleanNestArrayEqual,
     LockOpenListItem,
     LockOpenManager,
     MapKey,
     MultiEvent, Ok, Result,
     UnreachableCaseError,
-    ValueRecentChangeTypeId
+    ValueRecentChangeTypeId,
+    isUndefinableArrayEqualUniquely,
+    isUndefinableDateEqual,
+    isUndefinableStringNumberBooleanNestArrayEqual
 } from "../sys/sys-internal-api";
 
 /** @public */
@@ -61,7 +62,8 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
     private _description: string | undefined;
     private _upperCaseDescription: string;
     private _readonly: boolean;
-    private _statusId: ScanStatusId;
+    private _statusId: ActiveFaultedStatusId;
+    private _enabled: boolean;
     private _versionNumber: Integer | undefined;
     private _versionId: string | undefined;
     private _versioningInterrupted: boolean;
@@ -78,6 +80,7 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
     private _maxMatchCount: Integer | undefined;
     private _zenithCriteria: ZenithEncodedScanFormula.BooleanTupleNode | undefined;
     private _zenithRank: ZenithEncodedScanFormula.NumericTupleNode | undefined;
+    private _attachedNotificationChannels: readonly ScanAttachedNotificationChannel[] | undefined;
 
     private _deleted = false;
     private _detailWanted = false;
@@ -95,13 +98,13 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
     private _directoryItemChangedMultiEvent = new MultiEvent<RankedLitIvemIdListDirectoryItem.ChangedEventHandler>();
 
     constructor(
-        private readonly _adiService: AdiService,
+        adiService: AdiService,
         private readonly _descriptor: ScanStatusedDescriptor,
         private _listCorrectnessId: CorrectnessId,
         private readonly _requireUnwantDetailOnLastCloseEventer: Scan.RequireUnwantDetailOnLastCloseEventer,
         private readonly _deletedAndUnlockedEventer: Scan.DeletedAndUnlockedEventer,
     ) {
-        this._queryScanDetailDataItemIncubator = new DataItemIncubator<QueryScanDetailDataItem>(this._adiService);
+        this._queryScanDetailDataItemIncubator = new DataItemIncubator<QueryScanDetailDataItem>(adiService);
         this._lockOpenManager = new LockOpenManager<Scan>(
             () => this.tryProcessFirstLock(),
             () => { this.processLastUnlock(); },
@@ -129,19 +132,11 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
 
         this._descriptorChangedSubscriptionId = this._descriptor.subscribeUpdatedEvent(
             (changedFieldIds) => {
-                this.beginChange();
-                this.applyDescriptorChanges(this._descriptor, changedFieldIds);
-                const detail: Partial<ScanDetail> = {
-                    zenithCriteria: undefined,
-                    zenithRank: undefined,
-                    targetTypeId: undefined,
-                    targetMarketIds: undefined,
-                    targetLitIvemIds: undefined,
-                    notifications: undefined,
+                if (this._detailWanted) {
+                    this.wantDetail(true);
+                } else {
+                    this.applyDescriptorChanges(this._descriptor, changedFieldIds);
                 }
-                this.applyDetail(detail);
-                this.endChange();
-                this.wantDetail(true);
             }
         );
 
@@ -169,12 +164,14 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
     get lastEditSessionId() { return this._lastEditSessionId; }
     get readonly() { return this._readonly; }
     get statusId() { return this._statusId; }
+    get enabled() { return this._enabled; }
     get targetTypeId() { return this._targetTypeId; }
     get targetMarketIds() { return this._targetMarketIds; }
     get targetLitIvemIds() { return this._targetLitIvemIds; }
     get maxMatchCount() { return this._maxMatchCount; }
     get zenithCriteria() { return this._zenithCriteria; }
     get zenithRank() { return this._zenithRank; }
+    get attachedNotificationChannels() { return this._attachedNotificationChannels; }
     get zenithCriteriaSource() { return this._zenithCriteriaSource; }
     get zenithRankSource() { return this._zenithRankSource; }
 
@@ -329,6 +326,18 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
                         this._statusId = statusId;
                         const valueChange: Scan.ValueChange = {
                             fieldId: Scan.FieldId.StatusId,
+                            recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                        };
+                        this._valueChanges.push(valueChange);
+                    }
+                    break;
+                }
+                case ScanStatusedDescriptor.FieldId.Enabled: {
+                    const enabled = descriptor.enabled;
+                    if (enabled !== this._enabled) {
+                        this._enabled = enabled;
+                        const valueChange: Scan.ValueChange = {
+                            fieldId: Scan.FieldId.Enabled,
                             recentChangeTypeId: ValueRecentChangeTypeId.Update,
                         };
                         this._valueChanges.push(valueChange);
@@ -593,6 +602,13 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
                     recentChangeTypeId: ValueRecentChangeTypeId.Update,
                 });
             }
+            if (this._attachedNotificationChannels !== undefined) {
+                this._attachedNotificationChannels = undefined;
+                this._valueChanges.push({
+                    fieldId: Scan.FieldId.AttachedNotificationChannels,
+                    recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                });
+            }
             this.endChange();
         }
     }
@@ -627,7 +643,7 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
                 recentChangeTypeId: ValueRecentChangeTypeId.Update,
             });
         }
-        const newMaxMatchCount = this._maxMatchCount;
+        const newMaxMatchCount = detail.maxMatchCount;
         if (newMaxMatchCount !== this._maxMatchCount) {
             this._maxMatchCount = newMaxMatchCount;
             this._valueChanges.push({
@@ -648,6 +664,14 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
             this._zenithRank = newZenithRank;
             this._valueChanges.push({
                 fieldId: Scan.FieldId.ZenithRank,
+                recentChangeTypeId: ValueRecentChangeTypeId.Update,
+            });
+        }
+        const newAttachedNotificationChannels = detail.attachedNotificationChannels;
+        if (!ScanAttachedNotificationChannel.isUndefinableArrayEqual(newAttachedNotificationChannels, this._attachedNotificationChannels)) {
+            this._attachedNotificationChannels = newAttachedNotificationChannels;
+            this._valueChanges.push({
+                fieldId: Scan.FieldId.AttachedNotificationChannels,
                 recentChangeTypeId: ValueRecentChangeTypeId.Update,
             });
         }
@@ -734,6 +758,7 @@ export namespace Scan {
         Readonly,
         Index,
         StatusId,
+        Enabled,
         Name,
         Description,
         TargetTypeId,
@@ -742,6 +767,7 @@ export namespace Scan {
         MaxMatchCount,
         ZenithCriteria,
         ZenithRank,
+        AttachedNotificationChannels,
         SymbolListEnabled,
         Version,
         LastSavedTime,
@@ -758,6 +784,7 @@ export namespace Scan {
             FieldId.Readonly,
             FieldId.Index,
             FieldId.StatusId,
+            FieldId.Enabled,
             FieldId.Name,
             FieldId.Description,
             FieldId.TargetTypeId,
@@ -766,6 +793,7 @@ export namespace Scan {
             FieldId.MaxMatchCount,
             FieldId.ZenithCriteria,
             FieldId.ZenithRank,
+            FieldId.AttachedNotificationChannels,
             FieldId.SymbolListEnabled,
             FieldId.Version,
             FieldId.LastSavedTime,
@@ -811,6 +839,13 @@ export namespace Scan {
                 name: 'StatusId',
                 dataTypeId: FieldDataTypeId.Enumeration,
                 headingId: StringId.ScanFieldHeading_StatusId,
+                directoryItemFieldId: undefined,
+            },
+            Enabled: {
+                id: FieldId.Enabled,
+                name: 'Enabled',
+                dataTypeId: FieldDataTypeId.Boolean,
+                headingId: StringId.ScanFieldHeading_Enabled,
                 directoryItemFieldId: undefined,
             },
             Name: {
@@ -867,6 +902,13 @@ export namespace Scan {
                 name: 'ZenithRank',
                 dataTypeId: FieldDataTypeId.Object,
                 headingId: StringId.ScanFieldHeading_ZenithRank,
+                directoryItemFieldId: undefined,
+            },
+            AttachedNotificationChannels: {
+                id: FieldId.AttachedNotificationChannels,
+                name: 'AttachedNotificationChannels',
+                dataTypeId: FieldDataTypeId.Object,
+                headingId: StringId.ScanFieldHeading_AttachedNotificationChannels,
                 directoryItemFieldId: undefined,
             },
             SymbolListEnabled: {

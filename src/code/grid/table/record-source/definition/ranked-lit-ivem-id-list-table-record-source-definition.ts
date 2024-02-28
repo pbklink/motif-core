@@ -12,7 +12,7 @@ import { ErrorCode, JsonElement, PickEnum, Result } from '../../../../sys/sys-in
 import { GridFieldCustomHeadingsService } from '../../../field/grid-field-internal-api';
 import {
     TableFieldSourceDefinition,
-    TableFieldSourceDefinitionRegistryService
+    TableFieldSourceDefinitionCachedFactoryService
 } from "../../field-source/grid-table-field-source-internal-api";
 import { TableRecordSourceDefinition } from './table-record-source-definition';
 
@@ -20,14 +20,14 @@ import { TableRecordSourceDefinition } from './table-record-source-definition';
 export abstract class RankedLitIvemIdListTableRecordSourceDefinition extends TableRecordSourceDefinition {
     constructor(
         customHeadingsService: GridFieldCustomHeadingsService,
-        tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService,
+        tableFieldSourceDefinitionCachedFactoryService: TableFieldSourceDefinitionCachedFactoryService,
         typeId: TableRecordSourceDefinition.TypeId,
         allowedFieldSourceDefinitionTypeIds: RankedLitIvemIdListTableRecordSourceDefinition.FieldSourceDefinitionTypeId[],
         readonly rankedLitIvemIdListDefinition: RankedLitIvemIdListDefinition
     ) {
         super(
             customHeadingsService,
-            tableFieldSourceDefinitionRegistryService,
+            tableFieldSourceDefinitionCachedFactoryService,
             typeId,
             allowedFieldSourceDefinitionTypeIds,
         );

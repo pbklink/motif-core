@@ -4,13 +4,12 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, Integer, Result, SourceTzOffsetDateTime, UnreachableCaseError } from '../../sys/sys-internal-api';
+import { AssertInternalError, Err, Integer, Ok, Result, SourceTzOffsetDate, UnreachableCaseError } from '../../sys/sys-internal-api';
 import { ScanFormula } from '../formula/internal-api';
 import { ScanFieldSetLoadError, ScanFieldSetLoadErrorTypeId } from './common/internal-api';
 import {
     AltCodeSubbedScanField,
     AttributeSubbedScanField,
-    NumericComparisonScanFieldCondition,
     CurrencyOverlapsScanField,
     DateInRangeScanField,
     DateSubbedScanField,
@@ -18,6 +17,7 @@ import {
     IsScanField,
     MarketBoardOverlapsScanField,
     MarketOverlapsScanField,
+    NumericComparisonScanFieldCondition,
     NumericInRangeScanField,
     PriceSubbedScanField,
     ScanField,
@@ -34,8 +34,11 @@ export interface ScanFieldSet {
 
     readonly fields: ScanFieldSet.Fields;
 
-    loadError: ScanFieldSetLoadError | undefined;
+    readonly valid: boolean;
+    readonly loadError: ScanFieldSetLoadError | undefined;
 
+    beginLoad: () => void; // make sure this sets loadError to undefined
+    endLoad: (loadError: ScanFieldSetLoadError | undefined) => void
     // assign(value: ScanFieldSet): void;
 }
 
@@ -82,11 +85,10 @@ export namespace ScanFieldSet {
     export function tryLoadFromFormulaNode(fieldSet: ScanFieldSet, rootFormulaBooleanNode: ScanFormula.BooleanNode): boolean {
         const fields = fieldSet.fields;
         fields.clear();
-        fieldSet.loadError = undefined;
+        fieldSet.beginLoad();
 
-        if (ScanFormula.NoneNode.is(rootFormulaBooleanNode)) {
-            return true; // empty FieldSet
-        } else {
+        let error: ScanFieldSetLoadError | undefined
+        if (!ScanFormula.NoneNode.is(rootFormulaBooleanNode)) { // if None then ScanFieldSet is empty
             let levelNodes: LevelNode[];
             if (ScanFormula.AndNode.is(rootFormulaBooleanNode)) {
                 levelNodes = [rootFormulaBooleanNode];
@@ -112,18 +114,22 @@ export namespace ScanFieldSet {
             while (levelNodeCount > 0) {
                 for (let i = 0; i < levelNodeCount; i++) {
                     const levelNode = levelNodes[i];
-                    const levelNodesAndInField = processLevelNode(fieldSet, levelNode, isInFieldLevel);
-                    if (levelNodesAndInField === undefined) {
-                        return false;
+                    const processResult: Result<LevelNodesAndInField, ScanFieldSetLoadError> = processLevelNode(fieldSet, levelNode, isInFieldLevel);
+                    if (processResult.isErr()) {
+                        error = processResult.error;
+                        break;
                     } else {
+                        const levelNodesAndInField: LevelNodesAndInField = processResult.value;
                         levelNodes = levelNodesAndInField.levelNodes;
                         levelNodeCount = levelNodes.length;
                         isInFieldLevel = levelNodesAndInField.inField;
                     }
                 }
             }
-            return true;
         }
+
+        fieldSet.endLoad(error);
+        return error === undefined;
     }
 
     export function createFormulaNode(fieldSet: ScanFieldSet): ScanFormula.BooleanNode {
@@ -200,7 +206,7 @@ export namespace ScanFieldSet {
         inField: boolean;
     }
 
-    function processLevelNode(fieldSet: ScanFieldSet, node: LevelNode, inField: boolean): LevelNodesAndInField | undefined {
+    function processLevelNode(fieldSet: ScanFieldSet, node: LevelNode, inField: boolean): Result<LevelNodesAndInField, ScanFieldSetLoadError> {
         switch (node.typeId) {
             case ScanFormula.NodeTypeId.And: {
                 const operands = node.operands;
@@ -214,8 +220,7 @@ export namespace ScanFieldSet {
                             break;
                         case ScanFormula.NodeTypeId.Or:
                             if (inField) {
-                                loadError(fieldSet, ScanFieldSetLoadErrorTypeId.AndFieldHasOrChild);
-                                return undefined;
+                                return createErrResult(ScanFieldSetLoadErrorTypeId.AndFieldHasOrChild);
                             } else {
                                 inField = true;
                                 childLevelNodes[childLevelNodeCount++] = operand as ScanFormula.OrNode;
@@ -223,24 +228,23 @@ export namespace ScanFieldSet {
                             break;
                         case ScanFormula.NodeTypeId.Xor:
                             if (inField) {
-                                loadError(fieldSet, ScanFieldSetLoadErrorTypeId.AndFieldHasXorChild);
-                                return undefined;
+                                return createErrResult(ScanFieldSetLoadErrorTypeId.AndFieldHasXorChild);
                             } else {
                                 inField = true;
                                 childLevelNodes[childLevelNodeCount++] = operand as ScanFormula.XorNode;
                             }
                             break;
                         default: {
-                            const success = processConditionNode(fieldSet, node, ScanField.BooleanOperationId.And, false);
-                            if (!success) {
-                                return undefined;
+                            const error = processConditionNode(fieldSet, node, ScanField.BooleanOperationId.And, false);
+                            if (error !== undefined) {
+                                return new Err(error);
                             }
                         }
                     }
                 }
 
                 childLevelNodes.length = childLevelNodeCount;
-                return { levelNodes: childLevelNodes, inField };
+                return new Ok({ levelNodes: childLevelNodes, inField });
             }
             case ScanFormula.NodeTypeId.Or: {
                 const operands = node.operands;
@@ -250,36 +254,34 @@ export namespace ScanFieldSet {
                 for (const operand of operands) {
                     switch (operand.typeId) {
                         case ScanFormula.NodeTypeId.And:
-                            loadError(fieldSet, ScanFieldSetLoadErrorTypeId.OrFieldHasAndChild);
-                            return undefined;
+                            return createErrResult(ScanFieldSetLoadErrorTypeId.OrFieldHasAndChild);
                         case ScanFormula.NodeTypeId.Or:
                             childLevelNodes[childLevelNodeCount++] = operand as ScanFormula.OrNode;
                             break;
                         case ScanFormula.NodeTypeId.Xor:
-                            loadError(fieldSet, ScanFieldSetLoadErrorTypeId.OrFieldHasXorChild);
-                            return undefined;
+                            return createErrResult(ScanFieldSetLoadErrorTypeId.OrFieldHasXorChild);
                         default: {
-                            const success = processConditionNode(fieldSet, node, ScanField.BooleanOperationId.Or, false);
-                            if (!success) {
-                                return undefined;
+                            const error = processConditionNode(fieldSet, node, ScanField.BooleanOperationId.Or, false);
+                            if (error !== undefined) {
+                                return new Err(error);
                             }
                         }
                     }
                 }
 
                 childLevelNodes.length = childLevelNodeCount;
-                return { levelNodes: childLevelNodes, inField };
+                return new Ok({ levelNodes: childLevelNodes, inField });
             }
             case ScanFormula.NodeTypeId.Xor: {
-                const leftSuccess = processXorLevelNodeOperand(fieldSet, node, node.leftOperand);
-                if (!leftSuccess) {
-                    return undefined;
+                const leftError = processXorLevelNodeOperand(fieldSet, node, node.leftOperand);
+                if (leftError !== undefined) {
+                    return new Err(leftError);
                 } else {
-                    const rightSuccess = processXorLevelNodeOperand(fieldSet, node, node.rightOperand);
-                    if (!rightSuccess) {
-                        return undefined;
+                    const rightError = processXorLevelNodeOperand(fieldSet, node, node.rightOperand);
+                    if (rightError !== undefined) {
+                        return new Err(rightError);
                     } else {
-                        return { levelNodes: [], inField };
+                        return new Ok({ levelNodes: [], inField });
                     }
                 }
             }
@@ -288,14 +290,14 @@ export namespace ScanFieldSet {
         }
     }
 
-    function processXorLevelNodeOperand(fieldSet: ScanFieldSet, node: ScanFormula.XorNode, operand: ScanFormula.BooleanNode) {
+    function processXorLevelNodeOperand(fieldSet: ScanFieldSet, node: ScanFormula.XorNode, operand: ScanFormula.BooleanNode): ScanFieldSetLoadError | undefined {
         switch (operand.typeId) {
             case ScanFormula.NodeTypeId.And:
-                return loadErrorReturnFalse(fieldSet, ScanFieldSetLoadErrorTypeId.XorFieldHasAndChild);
+                return createError(ScanFieldSetLoadErrorTypeId.XorFieldHasAndChild);
             case ScanFormula.NodeTypeId.Or:
-                return loadErrorReturnFalse(fieldSet, ScanFieldSetLoadErrorTypeId.XorFieldHasOrChild);
+                return createError(ScanFieldSetLoadErrorTypeId.XorFieldHasOrChild);
             case ScanFormula.NodeTypeId.Xor:
-                return loadErrorReturnFalse(fieldSet, ScanFieldSetLoadErrorTypeId.XorFieldHasXorChild);
+                return createError(ScanFieldSetLoadErrorTypeId.XorFieldHasXorChild);
             default: {
                 return processConditionNode(fieldSet, node, ScanField.BooleanOperationId.Xor, false);
             }
@@ -307,17 +309,17 @@ export namespace ScanFieldSet {
         node: ScanFormula.BooleanNode,
         fieldOperationId: ScanField.BooleanOperationId,
         not: boolean
-    ): boolean {
+    ): ScanFieldSetLoadError | undefined {
         switch (node.typeId) {
             case ScanFormula.NodeTypeId.And:
                 if (not) {
-                    return loadErrorReturnFalse(fieldSet, ScanFieldSetLoadErrorTypeId.AndFieldOperatorCannotBeNegated);
+                    return createError(ScanFieldSetLoadErrorTypeId.AndFieldOperatorCannotBeNegated);
                 } else {
                     throw new AssertInternalError('SFSPCNA55598', node.typeId.toString());
                 }
             case ScanFormula.NodeTypeId.Or:
                 if (not) {
-                    return loadErrorReturnFalse(fieldSet, ScanFieldSetLoadErrorTypeId.OrFieldOperatorCannotBeNegated);
+                    return createError(ScanFieldSetLoadErrorTypeId.OrFieldOperatorCannotBeNegated);
                 } else {
                     throw new AssertInternalError('SFSPCNO55598', node.typeId.toString());
                 }
@@ -325,7 +327,7 @@ export namespace ScanFieldSet {
                 return processConditionNode(fieldSet, (node as ScanFormula.NotNode).operand, fieldOperationId, not);
             case ScanFormula.NodeTypeId.Xor:
                 if (not) {
-                    return loadErrorReturnFalse(fieldSet, ScanFieldSetLoadErrorTypeId.XorFieldOperatorCannotBeNegated);
+                    return createError(ScanFieldSetLoadErrorTypeId.XorFieldOperatorCannotBeNegated);
                 } else {
                     throw new AssertInternalError('SFSPCNX55598', node.typeId.toString());
                 }
@@ -350,9 +352,9 @@ export namespace ScanFieldSet {
                 return processNumericComparisonBooleanNode(fieldSet, node as ScanFormula.NumericComparisonBooleanNode, fieldOperationId, numericOperatorId);
             }
             case ScanFormula.NodeTypeId.All:
-                return loadErrorReturnFalse(fieldSet, ScanFieldSetLoadErrorTypeId.AllConditionNotSupported);
+                return createError(ScanFieldSetLoadErrorTypeId.AllConditionNotSupported);
             case ScanFormula.NodeTypeId.None:
-                return loadErrorReturnFalse(fieldSet, ScanFieldSetLoadErrorTypeId.NoneConditionNotSupported);
+                return createError(ScanFieldSetLoadErrorTypeId.NoneConditionNotSupported);
             case ScanFormula.NodeTypeId.Is:
                 return processIsNode(fieldSet, node as ScanFormula.IsNode, fieldOperationId, not);
             case ScanFormula.NodeTypeId.FieldHasValue:
@@ -405,13 +407,11 @@ export namespace ScanFieldSet {
     }
 
     function processCreateConditionResult(
-        fieldSet: ScanFieldSet,
         field: ScanField,
         createConditionResult: Result<ScanFieldCondition>,
-    ): boolean {
+    ): ScanFieldSetLoadError | undefined {
         if (createConditionResult.isErr()) {
-            const error = createConditionResult.error;
-            return loadErrorReturnFalse(fieldSet, ScanFieldSetLoadErrorTypeId.FactoryCreateFieldConditionError, error);
+            return createError(ScanFieldSetLoadErrorTypeId.FactoryCreateFieldConditionError, createConditionResult.error);
         } else {
             const condition = createConditionResult.value;
 
@@ -426,7 +426,7 @@ export namespace ScanFieldSet {
                         field.conditions.add(condition);
                     }
                 }
-                return true;
+                return undefined;
             }
         }
     }
@@ -437,26 +437,24 @@ export namespace ScanFieldSet {
         fieldId: ScanFormula.FieldId,
         subFieldId: Integer | undefined,
         conditionsOperationId: ScanField.BooleanOperationId,
-    ) {
+    ): Result<ScanField, ScanFieldSetLoadError> {
         const fields = fieldSet.fields;
         let field = tryFindField(fields, fieldId);
         if (field === undefined) {
             const fieldCreateResult = tryCreateField(fieldSet, fieldTypeId, fieldId, subFieldId);
             if (fieldCreateResult.isErr()) {
                 const error = fieldCreateResult.error;
-                loadError(fieldSet, ScanFieldSetLoadErrorTypeId.FactoryCreateFieldError, error);
-                return undefined;
+                return createErrResult(ScanFieldSetLoadErrorTypeId.FactoryCreateFieldError, error);
             } else {
                 field = fieldCreateResult.value;
                 fields.add(field);
-                return field;
+                return new Ok(field);
             }
         } else {
             if (field.conditionsOperationId !== conditionsOperationId) {
-                loadError(fieldSet, ScanFieldSetLoadErrorTypeId.fieldConditionsOperationIdMismatch, field.typeId.toString());
-                return undefined;
+                return createErrResult(ScanFieldSetLoadErrorTypeId.fieldConditionsOperationIdMismatch, field.typeId.toString());
             } else {
-                return field;
+                return new Ok(field);
             }
         }
     }
@@ -472,7 +470,12 @@ export namespace ScanFieldSet {
         return undefined;
     }
 
-    function tryCreateField(fieldSet: ScanFieldSet, fieldTypeId: ScanField.TypeId, fieldId: ScanFormula.FieldId, subFieldId: Integer | undefined): Result<ScanField> {
+    function tryCreateField(
+        fieldSet: ScanFieldSet,
+        fieldTypeId: ScanField.TypeId,
+        fieldId: ScanFormula.FieldId,
+        subFieldId: Integer | undefined
+    ): Result<ScanField> {
         const factory = fieldSet.fieldFactory;
         switch (fieldTypeId) {
             case ScanField.TypeId.NumericInRange: return factory.createNumericInRange(fieldSet, fieldId as ScanFormula.NumericRangeFieldId);
@@ -531,13 +534,16 @@ export namespace ScanFieldSet {
         }
     }
 
-    function loadErrorReturnFalse(fieldSet: ScanFieldSet, typeId: ScanFieldSetLoadErrorTypeId, extra?: string): boolean {
-        loadError(fieldSet, typeId, extra);
-        return false;
+    function createErrResult<T>(typeId: ScanFieldSetLoadErrorTypeId, extra?: string): Result<T, ScanFieldSetLoadError> {
+        const error = createError(typeId, extra);
+        return new Err<T, ScanFieldSetLoadError>(error);
     }
 
-    function loadError(fieldSet: ScanFieldSet, typeId: ScanFieldSetLoadErrorTypeId, extra?: string) {
-        fieldSet.loadError = { typeId, extra };
+    function createError(typeId: ScanFieldSetLoadErrorTypeId, extra?: string): ScanFieldSetLoadError {
+        return {
+            typeId,
+            extra,
+        };
     }
 
     // processConditionNode cases
@@ -547,7 +553,7 @@ export namespace ScanFieldSet {
         node: ScanFormula.FieldHasValueNode,
         fieldOperationId: ScanField.BooleanOperationId,
         not: boolean,
-    ): boolean {
+    ): ScanFieldSetLoadError | undefined {
         const conditionFactory = fieldSet.conditionFactory;
         const fieldId = node.fieldId;
         const styleId = ScanFormula.Field.idToStyleId(fieldId);
@@ -556,31 +562,33 @@ export namespace ScanFieldSet {
             case ScanFormula.Field.StyleId.InRange: {
                 switch (dataTypeId) {
                     case ScanFormula.Field.DataTypeId.Numeric: {
-                        const field = tryGetField(fieldSet, ScanField.TypeId.NumericInRange, fieldId, undefined, fieldOperationId);
-                        if (field === undefined) {
-                            return false;
+                        const tryGetFieldResult = tryGetField(fieldSet, ScanField.TypeId.NumericInRange, fieldId, undefined, fieldOperationId);
+                        if (tryGetFieldResult.isErr()) {
+                            return tryGetFieldResult.error;
                         } else {
+                            const scanField = tryGetFieldResult.value;
                             let createConditionResult: Result<ScanFieldCondition>;
                             if (not) {
-                                createConditionResult = conditionFactory.createNumericComparisonWithHasValue(field, ScanFieldCondition.OperatorId.NotHasValue);
+                                createConditionResult = conditionFactory.createNumericComparisonWithHasValue(scanField, ScanFieldCondition.OperatorId.NotHasValue);
                             } else {
-                                createConditionResult = conditionFactory.createNumericComparisonWithHasValue(field, ScanFieldCondition.OperatorId.HasValue);
+                                createConditionResult = conditionFactory.createNumericComparisonWithHasValue(scanField, ScanFieldCondition.OperatorId.HasValue);
                             }
-                            return processCreateConditionResult(fieldSet, field, createConditionResult);
+                            return processCreateConditionResult(scanField, createConditionResult);
                         }
                     }
                     case ScanFormula.Field.DataTypeId.Date: {
-                        const field = tryGetField(fieldSet, ScanField.TypeId.DateInRange, fieldId, undefined, fieldOperationId);
-                        if (field === undefined) {
-                            return false;
+                        const tryGetFieldResult = tryGetField(fieldSet, ScanField.TypeId.DateInRange, fieldId, undefined, fieldOperationId);
+                        if (tryGetFieldResult.isErr()) {
+                            return tryGetFieldResult.error;
                         } else {
+                            const scanField = tryGetFieldResult.value;
                             let createConditionResult: Result<ScanFieldCondition>;
                             if (not) {
-                                createConditionResult = conditionFactory.createDateWithHasValue(field, ScanFieldCondition.OperatorId.NotHasValue);
+                                createConditionResult = conditionFactory.createDateWithHasValue(scanField, ScanFieldCondition.OperatorId.NotHasValue);
                             } else {
-                                createConditionResult = conditionFactory.createDateWithHasValue(field, ScanFieldCondition.OperatorId.HasValue);
+                                createConditionResult = conditionFactory.createDateWithHasValue(scanField, ScanFieldCondition.OperatorId.HasValue);
                             }
-                            return processCreateConditionResult(fieldSet, field, createConditionResult);
+                            return processCreateConditionResult(scanField, createConditionResult);
                         }
                     }
                     case ScanFormula.Field.DataTypeId.Text:
@@ -599,17 +607,18 @@ export namespace ScanFieldSet {
                 if (dataTypeId !== ScanFormula.Field.DataTypeId.Text) {
                     throw new AssertInternalError('SFSPFHVNESNT50718');
                 } else {
-                    const field = tryGetField(fieldSet, ScanField.TypeId.TextHasValueEquals, fieldId, undefined, fieldOperationId);
-                    if (field === undefined) {
-                        return false;
+                    const tryGetFieldResult = tryGetField(fieldSet, ScanField.TypeId.TextHasValueEquals, fieldId, undefined, fieldOperationId);
+                    if (tryGetFieldResult.isErr()) {
+                        return tryGetFieldResult.error;
                     } else {
+                        const scanField = tryGetFieldResult.value;
                         let createConditionResult: Result<ScanFieldCondition>;
                         if (not) {
-                            createConditionResult = conditionFactory.createTextHasValueEqualsWithHasValue(field, ScanFieldCondition.OperatorId.NotHasValue);
+                            createConditionResult = conditionFactory.createTextHasValueEqualsWithHasValue(scanField, ScanFieldCondition.OperatorId.NotHasValue);
                         } else {
-                            createConditionResult = conditionFactory.createTextHasValueEqualsWithHasValue(field, ScanFieldCondition.OperatorId.HasValue);
+                            createConditionResult = conditionFactory.createTextHasValueEqualsWithHasValue(scanField, ScanFieldCondition.OperatorId.HasValue);
                         }
-                        return processCreateConditionResult(fieldSet, field, createConditionResult);
+                        return processCreateConditionResult(scanField, createConditionResult);
                     }
                 }
             }
@@ -625,7 +634,7 @@ export namespace ScanFieldSet {
         node: ScanFormula.NumericComparisonBooleanNode,
         fieldOperationId: ScanField.BooleanOperationId,
         conditionOperatorId: NumericComparisonScanFieldCondition.ValueOperands.OperatorId,
-    ): boolean {
+    ): ScanFieldSetLoadError | undefined {
         let fieldId: ScanFormula.FieldId;
         let value: number;
         const leftOperand = node.leftOperand;
@@ -638,9 +647,7 @@ export namespace ScanFieldSet {
                 fieldId = leftOperand.fieldId;
                 value = rightOperand;
             } else {
-                return loadErrorReturnFalse(
-                    fieldSet,
-                    ScanFieldSetLoadErrorTypeId.NumericComparisonBooleanNodeDoesNotHaveANumberOperand,
+                return createError(ScanFieldSetLoadErrorTypeId.NumericComparisonBooleanNodeDoesNotHaveANumberOperand,
                     leftOperand.fieldId.toString(),
                 );
             }
@@ -651,27 +658,26 @@ export namespace ScanFieldSet {
                     fieldId = rightOperand.fieldId;
                     value = leftOperand;
                 } else {
-                    return loadErrorReturnFalse(
-                        fieldSet,
+                    return createError(
                         ScanFieldSetLoadErrorTypeId.NumericComparisonBooleanNodeDoesNotHaveANumberOperand,
                         rightOperand.fieldId.toString(),
                     );
                 }
             } else {
-                return loadErrorReturnFalse(
-                    fieldSet,
+                return createError(
                     ScanFieldSetLoadErrorTypeId.NumericComparisonBooleanNodeDoesNotHaveANumericFieldValueGetOperand,
                     // eslint-disable-next-line @typescript-eslint/no-base-to-string
                     `{${leftOperand.toString()}, ${rightOperand.toString()}}`
                 );
             }
         }
-        const field = tryGetField(fieldSet, ScanField.TypeId.NumericInRange, fieldId, undefined, fieldOperationId);
-        if (field === undefined) {
-            return false;
+        const tryGetFieldResult = tryGetField(fieldSet, ScanField.TypeId.NumericInRange, fieldId, undefined, fieldOperationId);
+        if (tryGetFieldResult.isErr()) {
+            return tryGetFieldResult.error;
         } else {
+            const field = tryGetFieldResult.value;
             const createConditionResult = fieldSet.conditionFactory.createNumericComparisonWithValue(field, conditionOperatorId, value);
-            return processCreateConditionResult(fieldSet, field, createConditionResult);
+            return processCreateConditionResult(field, createConditionResult);
         }
     }
 
@@ -680,11 +686,12 @@ export namespace ScanFieldSet {
         node: ScanFormula.NumericFieldEqualsNode,
         fieldOperationId: ScanField.BooleanOperationId,
         not: boolean,
-    ): boolean {
-        const field = tryGetField(fieldSet, ScanField.TypeId.NumericInRange, node.fieldId, undefined, fieldOperationId);
-        if (field === undefined) {
-            return false;
+    ): ScanFieldSetLoadError | undefined {
+        const tryGetFieldResult = tryGetField(fieldSet, ScanField.TypeId.NumericInRange, node.fieldId, undefined, fieldOperationId);
+        if (tryGetFieldResult.isErr()) {
+            return tryGetFieldResult.error;
         } else {
+            const field = tryGetFieldResult.value;
             const value = node.value;
             const conditionFactory = fieldSet.conditionFactory;
             let createConditionResult: Result<ScanFieldCondition>;
@@ -693,7 +700,7 @@ export namespace ScanFieldSet {
             } else {
                 createConditionResult = conditionFactory.createNumericComparisonWithValue(field, ScanFieldCondition.OperatorId.Equals, value);
             }
-            return processCreateConditionResult(fieldSet, field, createConditionResult);
+            return processCreateConditionResult(field, createConditionResult);
         }
     }
 
@@ -702,11 +709,12 @@ export namespace ScanFieldSet {
         node: ScanFormula.NumericFieldInRangeNode,
         fieldOperationId: ScanField.BooleanOperationId,
         not: boolean,
-    ): boolean {
-        const field = tryGetField(fieldSet, ScanField.TypeId.NumericInRange, node.fieldId, undefined, fieldOperationId);
-        if (field === undefined) {
-            return false;
+    ): ScanFieldSetLoadError | undefined {
+        const tryGetFieldResult = tryGetField(fieldSet, ScanField.TypeId.NumericInRange, node.fieldId, undefined, fieldOperationId);
+        if (tryGetFieldResult.isErr()) {
+            return tryGetFieldResult.error;
         } else {
+            const field = tryGetFieldResult.value;
             const min = node.min;
             const max = node.max;
             const conditionFactory = fieldSet.conditionFactory;
@@ -716,7 +724,7 @@ export namespace ScanFieldSet {
             } else {
                 createConditionResult = conditionFactory.createNumericComparisonWithRange(field, ScanFieldCondition.OperatorId.InRange, min, max);
             }
-            return processCreateConditionResult(fieldSet, field, createConditionResult);
+            return processCreateConditionResult(field, createConditionResult);
         }
     }
 
@@ -725,11 +733,12 @@ export namespace ScanFieldSet {
         node: ScanFormula.PriceSubFieldHasValueNode,
         fieldOperationId: ScanField.BooleanOperationId,
         not: boolean,
-    ): boolean {
-        const field = tryGetField(fieldSet, ScanField.TypeId.PriceSubbed, node.fieldId, node.subFieldId, fieldOperationId);
-        if (field === undefined) {
-            return false;
+    ): ScanFieldSetLoadError | undefined {
+        const tryGetFieldResult = tryGetField(fieldSet, ScanField.TypeId.PriceSubbed, node.fieldId, node.subFieldId, fieldOperationId);
+        if (tryGetFieldResult.isErr()) {
+            return tryGetFieldResult.error;
         } else {
+            const field = tryGetFieldResult.value;
             const conditionFactory = fieldSet.conditionFactory;
             let createConditionResult: Result<ScanFieldCondition>;
             if (not) {
@@ -737,7 +746,7 @@ export namespace ScanFieldSet {
             } else {
                 createConditionResult = conditionFactory.createNumericWithHasValue(field, ScanFieldCondition.OperatorId.HasValue);
             }
-            return processCreateConditionResult(fieldSet, field, createConditionResult);
+            return processCreateConditionResult(field, createConditionResult);
         }
     }
 
@@ -746,11 +755,12 @@ export namespace ScanFieldSet {
         node: ScanFormula.PriceSubFieldEqualsNode,
         fieldOperationId: ScanField.BooleanOperationId,
         not: boolean,
-    ): boolean {
-        const field = tryGetField(fieldSet, ScanField.TypeId.PriceSubbed, node.fieldId, node.subFieldId, fieldOperationId);
-        if (field === undefined) {
-            return false;
+    ): ScanFieldSetLoadError | undefined {
+        const tryGetFieldResult = tryGetField(fieldSet, ScanField.TypeId.PriceSubbed, node.fieldId, node.subFieldId, fieldOperationId);
+        if (tryGetFieldResult.isErr()) {
+            return tryGetFieldResult.error;
         } else {
+            const field = tryGetFieldResult.value;
             const value = node.value;
             const conditionFactory = fieldSet.conditionFactory;
             let createConditionResult: Result<ScanFieldCondition>;
@@ -759,7 +769,7 @@ export namespace ScanFieldSet {
             } else {
                 createConditionResult = conditionFactory.createNumericWithValue(field, ScanFieldCondition.OperatorId.Equals, value);
             }
-            return processCreateConditionResult(fieldSet, field, createConditionResult);
+            return processCreateConditionResult(field, createConditionResult);
         }
     }
 
@@ -768,11 +778,12 @@ export namespace ScanFieldSet {
         node: ScanFormula.PriceSubFieldInRangeNode,
         fieldOperationId: ScanField.BooleanOperationId,
         not: boolean,
-    ): boolean {
-        const field = tryGetField(fieldSet, ScanField.TypeId.PriceSubbed, node.fieldId, node.subFieldId, fieldOperationId);
-        if (field === undefined) {
-            return false;
+    ): ScanFieldSetLoadError | undefined {
+        const tryGetFieldResult = tryGetField(fieldSet, ScanField.TypeId.PriceSubbed, node.fieldId, node.subFieldId, fieldOperationId);
+        if (tryGetFieldResult.isErr()) {
+            return tryGetFieldResult.error;
         } else {
+            const field = tryGetFieldResult.value;
             const min = node.min;
             const max = node.max;
             const conditionFactory = fieldSet.conditionFactory;
@@ -782,7 +793,7 @@ export namespace ScanFieldSet {
             } else {
                 createConditionResult = conditionFactory.createNumericWithRange(field, ScanFieldCondition.OperatorId.InRange, min, max);
             }
-            return processCreateConditionResult(fieldSet, field, createConditionResult);
+            return processCreateConditionResult(field, createConditionResult);
         }
     }
 
@@ -791,12 +802,13 @@ export namespace ScanFieldSet {
         node: ScanFormula.DateFieldEqualsNode,
         fieldOperationId: ScanField.BooleanOperationId,
         not: boolean,
-    ): boolean {
-        const field = tryGetField(fieldSet, ScanField.TypeId.DateInRange, node.fieldId, undefined, fieldOperationId);
-        if (field === undefined) {
-            return false;
+    ): ScanFieldSetLoadError | undefined {
+        const tryGetFieldResult = tryGetField(fieldSet, ScanField.TypeId.DateInRange, node.fieldId, undefined, fieldOperationId);
+        if (tryGetFieldResult.isErr()) {
+            return tryGetFieldResult.error;
         } else {
-            const value = SourceTzOffsetDateTime.createCopy(node.value);
+            const field = tryGetFieldResult.value;
+            const value = SourceTzOffsetDate.createCopy(node.value);
             const conditionFactory = fieldSet.conditionFactory;
             let createConditionResult: Result<ScanFieldCondition>;
             if (not) {
@@ -804,7 +816,7 @@ export namespace ScanFieldSet {
             } else {
                 createConditionResult = conditionFactory.createDateWithEquals(field, ScanFieldCondition.OperatorId.Equals, value);
             }
-            return processCreateConditionResult(fieldSet, field, createConditionResult);
+            return processCreateConditionResult(field, createConditionResult);
         }
     }
 
@@ -813,13 +825,14 @@ export namespace ScanFieldSet {
         node: ScanFormula.DateFieldInRangeNode,
         fieldOperationId: ScanField.BooleanOperationId,
         not: boolean,
-    ): boolean {
-        const field = tryGetField(fieldSet, ScanField.TypeId.DateInRange, node.fieldId, undefined, fieldOperationId);
-        if (field === undefined) {
-            return false;
+    ): ScanFieldSetLoadError | undefined {
+        const tryGetFieldResult = tryGetField(fieldSet, ScanField.TypeId.DateInRange, node.fieldId, undefined, fieldOperationId);
+        if (tryGetFieldResult.isErr()) {
+            return tryGetFieldResult.error;
         } else {
-            const min = SourceTzOffsetDateTime.newUndefinable(node.min);
-            const max = SourceTzOffsetDateTime.newUndefinable(node.max);
+            const field = tryGetFieldResult.value;
+            const min = SourceTzOffsetDate.newUndefinable(node.min);
+            const max = SourceTzOffsetDate.newUndefinable(node.max);
             const conditionFactory = fieldSet.conditionFactory;
             let createConditionResult: Result<ScanFieldCondition>;
             if (not) {
@@ -827,7 +840,7 @@ export namespace ScanFieldSet {
             } else {
                 createConditionResult = conditionFactory.createDateWithRange(field, ScanFieldCondition.OperatorId.InRange, min, max);
             }
-            return processCreateConditionResult(fieldSet, field, createConditionResult);
+            return processCreateConditionResult(field, createConditionResult);
         }
     }
 
@@ -836,11 +849,12 @@ export namespace ScanFieldSet {
         node: ScanFormula.DateSubFieldHasValueNode,
         fieldOperationId: ScanField.BooleanOperationId,
         not: boolean,
-    ): boolean {
-        const field = tryGetField(fieldSet, ScanField.TypeId.DateSubbed, node.fieldId, node.subFieldId, fieldOperationId);
-        if (field === undefined) {
-            return false;
+    ): ScanFieldSetLoadError | undefined {
+        const tryGetFieldResult = tryGetField(fieldSet, ScanField.TypeId.DateSubbed, node.fieldId, node.subFieldId, fieldOperationId);
+        if (tryGetFieldResult.isErr()) {
+            return tryGetFieldResult.error;
         } else {
+            const field = tryGetFieldResult.value;
             const conditionFactory = fieldSet.conditionFactory;
             let createConditionResult: Result<ScanFieldCondition>;
             if (not) {
@@ -848,7 +862,7 @@ export namespace ScanFieldSet {
             } else {
                 createConditionResult = conditionFactory.createDateWithHasValue(field, ScanFieldCondition.OperatorId.HasValue);
             }
-            return processCreateConditionResult(fieldSet, field, createConditionResult);
+            return processCreateConditionResult(field, createConditionResult);
         }
     }
 
@@ -857,12 +871,13 @@ export namespace ScanFieldSet {
         node: ScanFormula.DateSubFieldEqualsNode,
         fieldOperationId: ScanField.BooleanOperationId,
         not: boolean,
-    ): boolean {
-        const field = tryGetField(fieldSet, ScanField.TypeId.DateSubbed, node.fieldId, node.subFieldId, fieldOperationId);
-        if (field === undefined) {
-            return false;
+    ): ScanFieldSetLoadError | undefined {
+        const tryGetFieldResult = tryGetField(fieldSet, ScanField.TypeId.DateSubbed, node.fieldId, node.subFieldId, fieldOperationId);
+        if (tryGetFieldResult.isErr()) {
+            return tryGetFieldResult.error;
         } else {
-            const value = SourceTzOffsetDateTime.createCopy(node.value);
+            const field = tryGetFieldResult.value;
+            const value = SourceTzOffsetDate.createCopy(node.value);
             const conditionFactory = fieldSet.conditionFactory;
             let createConditionResult: Result<ScanFieldCondition>;
             if (not) {
@@ -870,7 +885,7 @@ export namespace ScanFieldSet {
             } else {
                 createConditionResult = conditionFactory.createDateWithEquals(field, ScanFieldCondition.OperatorId.Equals, value);
             }
-            return processCreateConditionResult(fieldSet, field, createConditionResult);
+            return processCreateConditionResult(field, createConditionResult);
         }
     }
 
@@ -879,13 +894,14 @@ export namespace ScanFieldSet {
         node: ScanFormula.DateSubFieldInRangeNode,
         fieldOperationId: ScanField.BooleanOperationId,
         not: boolean,
-    ): boolean {
-        const field = tryGetField(fieldSet, ScanField.TypeId.DateSubbed, node.fieldId, node.subFieldId, fieldOperationId);
-        if (field === undefined) {
-            return false;
+    ): ScanFieldSetLoadError | undefined {
+        const tryGetFieldResult = tryGetField(fieldSet, ScanField.TypeId.DateSubbed, node.fieldId, node.subFieldId, fieldOperationId);
+        if (tryGetFieldResult.isErr()) {
+            return tryGetFieldResult.error;
         } else {
-            const min = SourceTzOffsetDateTime.newUndefinable(node.min);
-            const max = SourceTzOffsetDateTime.newUndefinable(node.max);
+            const field = tryGetFieldResult.value;
+            const min = SourceTzOffsetDate.newUndefinable(node.min);
+            const max = SourceTzOffsetDate.newUndefinable(node.max);
             const conditionFactory = fieldSet.conditionFactory;
             let createConditionResult: Result<ScanFieldCondition>;
             if (not) {
@@ -893,7 +909,7 @@ export namespace ScanFieldSet {
             } else {
                 createConditionResult = conditionFactory.createDateWithRange(field, ScanFieldCondition.OperatorId.InRange, min, max);
             }
-            return processCreateConditionResult(fieldSet, field, createConditionResult);
+            return processCreateConditionResult(field, createConditionResult);
         }
     }
 
@@ -902,7 +918,7 @@ export namespace ScanFieldSet {
         node: ScanFormula.TextFieldEqualsNode,
         fieldOperationId: ScanField.BooleanOperationId,
         not: boolean
-    ): boolean {
+    ): ScanFieldSetLoadError | undefined {
         const fieldId = node.fieldId;
         const conditionFactory = fieldSet.conditionFactory;
         const styleId = ScanFormula.Field.idToStyleId(fieldId);
@@ -912,10 +928,11 @@ export namespace ScanFieldSet {
             case ScanFormula.Field.StyleId.Overlaps:
                 throw new AssertInternalError('SFSPTFENO50718');
             case ScanFormula.Field.StyleId.Equals: {
-                const field = tryGetField(fieldSet, ScanField.TypeId.TextEquals, fieldId, undefined, fieldOperationId);
-                if (field === undefined) {
-                    return false;
+                const tryGetFieldResult = tryGetField(fieldSet, ScanField.TypeId.TextEquals, fieldId, undefined, fieldOperationId);
+                if (tryGetFieldResult.isErr()) {
+                    return tryGetFieldResult.error;
                 } else {
+                    const field = tryGetFieldResult.value;
                     const value = node.value;
                     let createConditionResult: Result<ScanFieldCondition>;
                     if (not) {
@@ -923,14 +940,15 @@ export namespace ScanFieldSet {
                     } else {
                         createConditionResult = conditionFactory.createTextEquals(field, ScanFieldCondition.OperatorId.Equals, value);
                     }
-                    return processCreateConditionResult(fieldSet, field, createConditionResult);
+                    return processCreateConditionResult(field, createConditionResult);
                 }
             }
             case ScanFormula.Field.StyleId.HasValueEquals: {
-                const field = tryGetField(fieldSet, ScanField.TypeId.TextHasValueEquals, fieldId, undefined, fieldOperationId);
-                if (field === undefined) {
-                    return false;
+                const tryGetFieldResult = tryGetField(fieldSet, ScanField.TypeId.TextHasValueEquals, fieldId, undefined, fieldOperationId);
+                if (tryGetFieldResult.isErr()) {
+                    return tryGetFieldResult.error;
                 } else {
+                    const field = tryGetFieldResult.value;
                     const value = node.value;
                     let createConditionResult: Result<ScanFieldCondition>;
                     if (not) {
@@ -938,7 +956,7 @@ export namespace ScanFieldSet {
                     } else {
                         createConditionResult = conditionFactory.createTextHasValueEqualsWithValue(field, ScanFieldCondition.OperatorId.Equals, value);
                     }
-                    return processCreateConditionResult(fieldSet, field, createConditionResult);
+                    return processCreateConditionResult(field, createConditionResult);
                 }
             }
             case ScanFormula.Field.StyleId.Contains:
@@ -953,11 +971,12 @@ export namespace ScanFieldSet {
         node: ScanFormula.TextFieldContainsNode,
         fieldOperationId: ScanField.BooleanOperationId,
         not: boolean
-    ): boolean {
-        const field = tryGetField(fieldSet, ScanField.TypeId.TextContains, node.fieldId, undefined, fieldOperationId);
-        if (field === undefined) {
-            return false;
+    ): ScanFieldSetLoadError | undefined {
+        const tryGetFieldResult = tryGetField(fieldSet, ScanField.TypeId.TextContains, node.fieldId, undefined, fieldOperationId);
+        if (tryGetFieldResult.isErr()) {
+            return tryGetFieldResult.error;
         } else {
+            const field = tryGetFieldResult.value;
             const value = node.value;
             const asId = node.asId;
             const ignoreCase = node.ignoreCase;
@@ -968,7 +987,7 @@ export namespace ScanFieldSet {
             } else {
                 createConditionResult = conditionFactory.createTextContains(field, ScanFieldCondition.OperatorId.Contains, value, asId, ignoreCase);
             }
-            return processCreateConditionResult(fieldSet, field, createConditionResult);
+            return processCreateConditionResult(field, createConditionResult);
         }
     }
 
@@ -977,11 +996,12 @@ export namespace ScanFieldSet {
         node: ScanFormula.AltCodeSubFieldHasValueNode,
         fieldOperationId: ScanField.BooleanOperationId,
         not: boolean
-    ): boolean {
-        const field = tryGetField(fieldSet, ScanField.TypeId.AltCodeSubbed, node.fieldId, node.subFieldId, fieldOperationId);
-        if (field === undefined) {
-            return false;
+    ): ScanFieldSetLoadError | undefined {
+        const tryGetFieldResult = tryGetField(fieldSet, ScanField.TypeId.AltCodeSubbed, node.fieldId, node.subFieldId, fieldOperationId);
+        if (tryGetFieldResult.isErr()) {
+            return tryGetFieldResult.error;
         } else {
+            const field = tryGetFieldResult.value;
             const conditionFactory = fieldSet.conditionFactory;
             let createConditionResult: Result<ScanFieldCondition>;
             if (not) {
@@ -989,7 +1009,7 @@ export namespace ScanFieldSet {
             } else {
                 createConditionResult = conditionFactory.createTextHasValueContainsWithHasValue(field, ScanFieldCondition.OperatorId.HasValue);
             }
-            return processCreateConditionResult(fieldSet, field, createConditionResult);
+            return processCreateConditionResult(field, createConditionResult);
         }
     }
 
@@ -998,11 +1018,12 @@ export namespace ScanFieldSet {
         node: ScanFormula.AltCodeSubFieldContainsNode,
         fieldOperationId: ScanField.BooleanOperationId,
         not: boolean
-    ): boolean {
-        const field = tryGetField(fieldSet, ScanField.TypeId.AltCodeSubbed, node.fieldId, node.subFieldId, fieldOperationId);
-        if (field === undefined) {
-            return false;
+    ): ScanFieldSetLoadError | undefined {
+        const tryGetFieldResult = tryGetField(fieldSet, ScanField.TypeId.AltCodeSubbed, node.fieldId, node.subFieldId, fieldOperationId);
+        if (tryGetFieldResult.isErr()) {
+            return tryGetFieldResult.error;
         } else {
+            const field = tryGetFieldResult.value;
             const value = node.value;
             const asId = node.asId;
             const ignoreCase = node.ignoreCase;
@@ -1013,7 +1034,7 @@ export namespace ScanFieldSet {
             } else {
                 createConditionResult = conditionFactory.createTextHasValueContainsWithContains(field, ScanFieldCondition.OperatorId.Contains, value, asId, ignoreCase);
             }
-            return processCreateConditionResult(fieldSet, field, createConditionResult);
+            return processCreateConditionResult(field, createConditionResult);
         }
     }
 
@@ -1022,11 +1043,12 @@ export namespace ScanFieldSet {
         node: ScanFormula.AttributeSubFieldHasValueNode,
         fieldOperationId: ScanField.BooleanOperationId,
         not: boolean
-    ): boolean {
-        const field = tryGetField(fieldSet, ScanField.TypeId.AttributeSubbed, node.fieldId, node.subFieldId, fieldOperationId);
-        if (field === undefined) {
-            return false;
+    ): ScanFieldSetLoadError | undefined {
+        const tryGetFieldResult = tryGetField(fieldSet, ScanField.TypeId.AttributeSubbed, node.fieldId, node.subFieldId, fieldOperationId);
+        if (tryGetFieldResult.isErr()) {
+            return tryGetFieldResult.error;
         } else {
+            const field = tryGetFieldResult.value;
             const conditionFactory = fieldSet.conditionFactory;
             let createConditionResult: Result<ScanFieldCondition>;
             if (not) {
@@ -1034,7 +1056,7 @@ export namespace ScanFieldSet {
             } else {
                 createConditionResult = conditionFactory.createTextHasValueContainsWithHasValue(field, ScanFieldCondition.OperatorId.HasValue);
             }
-            return processCreateConditionResult(fieldSet, field, createConditionResult);
+            return processCreateConditionResult(field, createConditionResult);
         }
     }
 
@@ -1043,11 +1065,12 @@ export namespace ScanFieldSet {
         node: ScanFormula.AttributeSubFieldContainsNode,
         fieldOperationId: ScanField.BooleanOperationId,
         not: boolean
-    ): boolean {
-        const field = tryGetField(fieldSet, ScanField.TypeId.AttributeSubbed, node.fieldId, node.subFieldId, fieldOperationId);
-        if (field === undefined) {
-            return false;
+    ): ScanFieldSetLoadError | undefined {
+        const tryGetFieldResult = tryGetField(fieldSet, ScanField.TypeId.AttributeSubbed, node.fieldId, node.subFieldId, fieldOperationId);
+        if (tryGetFieldResult.isErr()) {
+            return tryGetFieldResult.error;
         } else {
+            const field = tryGetFieldResult.value;
             const value = node.value;
             const asId = node.asId;
             const ignoreCase = node.ignoreCase;
@@ -1058,7 +1081,7 @@ export namespace ScanFieldSet {
             } else {
                 createConditionResult = conditionFactory.createTextHasValueContainsWithContains(field, ScanFieldCondition.OperatorId.Contains, value, asId, ignoreCase);
             }
-            return processCreateConditionResult(fieldSet, field, createConditionResult);
+            return processCreateConditionResult(field, createConditionResult);
         }
     }
 
@@ -1067,11 +1090,12 @@ export namespace ScanFieldSet {
         node: ScanFormula.StringFieldOverlapsNode,
         fieldOperationId: ScanField.BooleanOperationId,
         not: boolean,
-    ): boolean {
-        const field = tryGetField(fieldSet, ScanField.TypeId.StringOverlaps, node.fieldId, undefined, fieldOperationId);
-        if (field === undefined) {
-            return false;
+    ): ScanFieldSetLoadError | undefined {
+        const tryGetFieldResult = tryGetField(fieldSet, ScanField.TypeId.StringOverlaps, node.fieldId, undefined, fieldOperationId);
+        if (tryGetFieldResult.isErr()) {
+            return tryGetFieldResult.error;
         } else {
+            const field = tryGetFieldResult.value;
             const values = node.values;
             const conditionFactory = fieldSet.conditionFactory;
             let createConditionResult: Result<ScanFieldCondition>;
@@ -1080,7 +1104,7 @@ export namespace ScanFieldSet {
             } else {
                 createConditionResult = conditionFactory.createStringOverlaps(field, ScanFieldCondition.OperatorId.Overlaps, values);
             }
-            return processCreateConditionResult(fieldSet, field, createConditionResult);
+            return processCreateConditionResult(field, createConditionResult);
         }
     }
 
@@ -1089,11 +1113,12 @@ export namespace ScanFieldSet {
         node: ScanFormula.CurrencyFieldOverlapsNode,
         fieldOperationId: ScanField.BooleanOperationId,
         not: boolean,
-    ): boolean {
-        const field = tryGetField(fieldSet, ScanField.TypeId.CurrencyOverlaps, node.fieldId, undefined, fieldOperationId);
-        if (field === undefined) {
-            return false;
+    ): ScanFieldSetLoadError | undefined {
+        const tryGetFieldResult = tryGetField(fieldSet, ScanField.TypeId.CurrencyOverlaps, node.fieldId, undefined, fieldOperationId);
+        if (tryGetFieldResult.isErr()) {
+            return tryGetFieldResult.error;
         } else {
+            const field = tryGetFieldResult.value;
             const values = node.values;
             const conditionFactory = fieldSet.conditionFactory;
             let createConditionResult: Result<ScanFieldCondition>;
@@ -1102,7 +1127,7 @@ export namespace ScanFieldSet {
             } else {
                 createConditionResult = conditionFactory.createCurrencyOverlaps(field, ScanFieldCondition.OperatorId.Overlaps, values);
             }
-            return processCreateConditionResult(fieldSet, field, createConditionResult);
+            return processCreateConditionResult(field, createConditionResult);
         }
     }
 
@@ -1111,11 +1136,12 @@ export namespace ScanFieldSet {
         node: ScanFormula.ExchangeFieldOverlapsNode,
         fieldOperationId: ScanField.BooleanOperationId,
         not: boolean,
-    ): boolean {
-        const field = tryGetField(fieldSet, ScanField.TypeId.ExchangeOverlaps, node.fieldId, undefined, fieldOperationId);
-        if (field === undefined) {
-            return false;
+    ): ScanFieldSetLoadError | undefined {
+        const tryGetFieldResult = tryGetField(fieldSet, ScanField.TypeId.ExchangeOverlaps, node.fieldId, undefined, fieldOperationId);
+        if (tryGetFieldResult.isErr()) {
+            return tryGetFieldResult.error;
         } else {
+            const field = tryGetFieldResult.value;
             const values = node.values;
             const conditionFactory = fieldSet.conditionFactory;
             let createConditionResult: Result<ScanFieldCondition>;
@@ -1124,7 +1150,7 @@ export namespace ScanFieldSet {
             } else {
                 createConditionResult = conditionFactory.createExchangeOverlaps(field, ScanFieldCondition.OperatorId.Overlaps, values);
             }
-            return processCreateConditionResult(fieldSet, field, createConditionResult);
+            return processCreateConditionResult(field, createConditionResult);
         }
     }
 
@@ -1133,11 +1159,12 @@ export namespace ScanFieldSet {
         node: ScanFormula.MarketFieldOverlapsNode,
         fieldOperationId: ScanField.BooleanOperationId,
         not: boolean,
-    ): boolean {
-        const field = tryGetField(fieldSet, ScanField.TypeId.MarketOverlaps, node.fieldId, undefined, fieldOperationId);
-        if (field === undefined) {
-            return false;
+    ): ScanFieldSetLoadError | undefined {
+        const tryGetFieldResult = tryGetField(fieldSet, ScanField.TypeId.MarketOverlaps, node.fieldId, undefined, fieldOperationId);
+        if (tryGetFieldResult.isErr()) {
+            return tryGetFieldResult.error;
         } else {
+            const field = tryGetFieldResult.value;
             const values = node.values;
             const conditionFactory = fieldSet.conditionFactory;
             let createConditionResult: Result<ScanFieldCondition>;
@@ -1146,7 +1173,7 @@ export namespace ScanFieldSet {
             } else {
                 createConditionResult = conditionFactory.createMarketOverlaps(field, ScanFieldCondition.OperatorId.Overlaps, values);
             }
-            return processCreateConditionResult(fieldSet, field, createConditionResult);
+            return processCreateConditionResult(field, createConditionResult);
         }
     }
 
@@ -1155,11 +1182,12 @@ export namespace ScanFieldSet {
         node: ScanFormula.MarketBoardFieldOverlapsNode,
         fieldOperationId: ScanField.BooleanOperationId,
         not: boolean,
-    ): boolean {
-        const field = tryGetField(fieldSet, ScanField.TypeId.MarketBoardOverlaps, node.fieldId, undefined, fieldOperationId);
-        if (field === undefined) {
-            return false;
+    ): ScanFieldSetLoadError | undefined {
+        const tryGetFieldResult = tryGetField(fieldSet, ScanField.TypeId.MarketBoardOverlaps, node.fieldId, undefined, fieldOperationId);
+        if (tryGetFieldResult.isErr()) {
+            return tryGetFieldResult.error;
         } else {
+            const field = tryGetFieldResult.value;
             const values = node.values;
             const conditionFactory = fieldSet.conditionFactory;
             let createConditionResult: Result<ScanFieldCondition>;
@@ -1168,7 +1196,7 @@ export namespace ScanFieldSet {
             } else {
                 createConditionResult = conditionFactory.createMarketBoardOverlaps(field, ScanFieldCondition.OperatorId.Overlaps, values);
             }
-            return processCreateConditionResult(fieldSet, field, createConditionResult);
+            return processCreateConditionResult(field, createConditionResult);
         }
     }
 
@@ -1177,11 +1205,12 @@ export namespace ScanFieldSet {
         node: ScanFormula.IsNode,
         fieldOperationId: ScanField.BooleanOperationId,
         not: boolean,
-    ): boolean {
-        const field = tryGetField(fieldSet, ScanField.TypeId.Is, ScanFormula.FieldId.Is, undefined, fieldOperationId);
-        if (field === undefined) {
-            return false;
+    ): ScanFieldSetLoadError | undefined {
+        const tryGetFieldResult = tryGetField(fieldSet, ScanField.TypeId.Is, ScanFormula.FieldId.Is, undefined, fieldOperationId);
+        if (tryGetFieldResult.isErr()) {
+            return tryGetFieldResult.error;
         } else {
+            const field = tryGetFieldResult.value;
             const categoryId = node.categoryId;
             const conditionFactory = fieldSet.conditionFactory;
             let createConditionResult: Result<ScanFieldCondition>;
@@ -1190,7 +1219,7 @@ export namespace ScanFieldSet {
             } else {
                 createConditionResult = conditionFactory.createIs(field, ScanFieldCondition.OperatorId.Is, categoryId);
             }
-            return processCreateConditionResult(fieldSet, field, createConditionResult);
+            return processCreateConditionResult(field, createConditionResult);
         }
     }
 

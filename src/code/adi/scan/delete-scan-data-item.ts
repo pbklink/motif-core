@@ -5,9 +5,9 @@
  */
 
 import { DataMessage, DataMessageTypeId } from '../common/adi-common-internal-api';
-import { PublisherSubscriptionDataItem } from '../publish-subscribe/internal-api';
+import { ScanPublishDataItem } from './scan-publish-data-item';
 
-export class DeleteScanDataItem extends PublisherSubscriptionDataItem {
+export class DeleteScanDataItem extends ScanPublishDataItem {
     override processMessage(msg: DataMessage) {
         if (msg.typeId !== DataMessageTypeId.DeleteScan) {
             super.processMessage(msg);

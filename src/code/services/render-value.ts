@@ -6,13 +6,15 @@
 
 import { Decimal } from 'decimal.js-light';
 import {
+    ActiveFaultedStatusId,
     DayTradesDataItem,
     HigherLowerId,
     IvemId,
     LitIvemId,
     MarketId,
     MovementId, OrderExtendedSideId, OrderSideId, OrderStatus,
-    RoutedIvemId, ScanStatusId, TradeAffectsId,
+    RoutedIvemId,
+    TradeAffectsId,
     TradeFlagId
 } from "../adi/adi-internal-api";
 import {
@@ -130,6 +132,7 @@ export namespace RenderValue {
         ScanCriteriaTypeId,
         ScanTargetTypeId,
         ScanFieldBooleanOperationId,
+        NotificationChannelSourceSettingsUrgency,
 
         // Array
         StringArray,
@@ -186,7 +189,7 @@ export namespace RenderValue {
 
         export const error: CorrectnessAttribute = {
             id: AttributeId.Correctness,
-            correctnessId: CorrectnessId.Suspect
+            correctnessId: CorrectnessId.Error
         } as const;
     }
 
@@ -533,7 +536,7 @@ export class DayTradesDataItemRecordTypeIdRenderValue extends EnumRenderValue {
 }
 
 export class ScanStatusIdRenderValue extends EnumRenderValue {
-    constructor(data: ScanStatusId | undefined) {
+    constructor(data: ActiveFaultedStatusId | undefined) {
         super(data, RenderValue.TypeId.ScanStatusId);
     }
 }

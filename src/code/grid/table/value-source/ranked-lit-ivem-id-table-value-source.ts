@@ -6,7 +6,7 @@
 
 import { RankedLitIvemId } from '../../../adi/adi-internal-api';
 import { Integer, MultiEvent, UnreachableCaseError } from '../../../sys/sys-internal-api';
-import { RankedLitIvemIdTableFieldSourceDefinition } from '../field-source/definition/grid-table-field-source-definition-internal-api';
+import { RankedLitIvemIdTableFieldSourceDefinition } from '../field-source/definition/internal-api';
 import { CorrectnessTableValue, IntegerCorrectnessTableValue, LitIvemIdCorrectnessTableValue, NumberCorrectnessTableValue, TableValue } from '../value/grid-table-value-internal-api';
 import { CorrectnessTableValueSource } from './correctness-table-value-source';
 import { TableValueSource } from './table-value-source';

@@ -8,18 +8,18 @@ import { Account, Feed } from '../../../../adi/adi-internal-api';
 import { PickEnum } from '../../../../sys/sys-internal-api';
 import { GridFieldCustomHeadingsService } from '../../../field/grid-field-internal-api';
 import { GridLayoutDefinition } from '../../../layout/grid-layout-internal-api';
-import { TableFieldSourceDefinition, TableFieldSourceDefinitionRegistryService } from '../../field-source/grid-table-field-source-internal-api';
+import { TableFieldSourceDefinition, TableFieldSourceDefinitionCachedFactoryService } from '../../field-source/grid-table-field-source-internal-api';
 import { TableRecordSourceDefinition } from './table-record-source-definition';
 
 /** @public */
 export class BrokerageAccountTableRecordSourceDefinition extends TableRecordSourceDefinition {
     constructor(
         customHeadingsService: GridFieldCustomHeadingsService,
-        tableFieldSourceDefinitionRegistryService: TableFieldSourceDefinitionRegistryService
+        tableFieldSourceDefinitionCachedFactoryService: TableFieldSourceDefinitionCachedFactoryService
     ) {
         super(
             customHeadingsService,
-            tableFieldSourceDefinitionRegistryService,
+            tableFieldSourceDefinitionCachedFactoryService,
             TableRecordSourceDefinition.TypeId.BrokerageAccount,
             BrokerageAccountTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds
         );
@@ -28,8 +28,8 @@ export class BrokerageAccountTableRecordSourceDefinition extends TableRecordSour
     // no override for saveToJson()
 
     override createDefaultLayoutDefinition() {
-        const brokerageAccountFieldSourceDefinition = this.fieldSourceDefinitionRegistryService.brokerageAccounts;
-        const feedFieldSourceDefinition = this.fieldSourceDefinitionRegistryService.feed;
+        const brokerageAccountFieldSourceDefinition = this.tableFieldSourceDefinitionCachedFactoryService.brokerageAccounts;
+        const feedFieldSourceDefinition = this.tableFieldSourceDefinitionCachedFactoryService.feed;
 
         const fieldNames = new Array<string>();
 

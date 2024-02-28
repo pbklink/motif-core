@@ -7,10 +7,10 @@
 import { ExchangeId, ExchangeInfo } from '../adi/adi-internal-api';
 import { SymbolsService } from '../services/services-internal-api';
 import { Integer, MultiEvent } from '../sys/sys-internal-api';
-import { ArrayUiAction } from './array-ui-action';
-import { EnumArrayUiAction } from './enum-array-ui-action';
+import { EnumExplicitElementsArrayUiAction } from './enum-explicit-elements-array-ui-action';
+import { TypedExplicitElementsArrayUiAction } from './typed-explicit-elements-array-ui-action';
 
-export class AllowedExchangesEnumArrayUiAction extends EnumArrayUiAction {
+export class AllowedExchangesExplicitElementsArrayUiAction extends EnumExplicitElementsArrayUiAction {
     private _allowedExchangeIdsChangedSubscriptionId: MultiEvent.SubscriptionId;
 
     constructor(private _symbolsService: SymbolsService, valueRequired: boolean | undefined = true) {
@@ -29,7 +29,7 @@ export class AllowedExchangesEnumArrayUiAction extends EnumArrayUiAction {
     getElementProperties(element: Integer) {
         const exchangeIds = this._symbolsService.allowedExchangeIds;
         if (exchangeIds.includes(element)) {
-            return this.createEnumArrayUiActionElementProperties(element);
+            return this.createElementProperties(element);
         } else {
             return undefined;
         }
@@ -38,10 +38,10 @@ export class AllowedExchangesEnumArrayUiAction extends EnumArrayUiAction {
     getElementPropertiesArray() {
         const exchangeIds = this._symbolsService.allowedExchangeIds;
         const count = exchangeIds.length;
-        const result = new Array<ArrayUiAction.ElementProperties<ExchangeId>>(count);
+        const result = new Array<TypedExplicitElementsArrayUiAction.ElementProperties<ExchangeId>>(count);
         for (let i = 0; i < count; i++) {
             const exchangeId = exchangeIds[i];
-            result[i] = this.createEnumArrayUiActionElementProperties(exchangeId);
+            result[i] = this.createElementProperties(exchangeId);
         }
         return result;
     }
@@ -50,8 +50,8 @@ export class AllowedExchangesEnumArrayUiAction extends EnumArrayUiAction {
         this.notifyElementsPush(undefined);
     }
 
-    private createEnumArrayUiActionElementProperties(exchangeId: ExchangeId) {
-        const result: ArrayUiAction.ElementProperties<ExchangeId> = {
+    private createElementProperties(exchangeId: ExchangeId) {
+        const result: TypedExplicitElementsArrayUiAction.ElementProperties<ExchangeId> = {
             element: exchangeId,
             caption: ExchangeInfo.idToAbbreviatedDisplay(exchangeId),
             title: ExchangeInfo.idToFullDisplay(exchangeId),

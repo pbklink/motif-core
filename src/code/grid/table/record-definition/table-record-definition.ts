@@ -30,6 +30,7 @@ export namespace TableRecordDefinition {
         RankedLitIvemIdListDirectoryItem,
         GridField,
         ScanFieldEditorFrame, // Outside
+        LockerScanAttachedNotificationChannel,
     }
 
     export namespace Type {
@@ -114,6 +115,10 @@ export namespace TableRecordDefinition {
             ScanFieldEditorFrame: {  // Outside
                 id: TableRecordDefinition.TypeId.ScanFieldEditorFrame,
                 name: 'ScanFieldEditorFrame',
+            },
+            LockerScanAttachedNotificationChannel: {  // Outside
+                id: TableRecordDefinition.TypeId.LockerScanAttachedNotificationChannel,
+                name: 'LockerScanAttachedNotificationChannel',
             },
         };
 

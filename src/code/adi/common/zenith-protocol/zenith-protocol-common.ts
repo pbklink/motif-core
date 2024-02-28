@@ -5,6 +5,8 @@
  */
 
 export namespace ZenithProtocolCommon {
+    export type UserMetadata = Record<string, string | undefined>;
+
     export namespace Symbol {
         export interface Alternates {
             Ticker?: string;
@@ -39,6 +41,34 @@ export namespace ZenithProtocolCommon {
             ShortSuspended = 'ShortSuspended',
             SubSector = 'SubSector',
             MaxRss = 'MaxRSS',
+        }
+    }
+
+    // This data is returned by QueryMethod.  For Push.Web type methods, the application should pass it to browser's Notification API
+    export interface NotificationDistributionMethodMetadata {
+        readonly userVisibleOnly: boolean;
+        readonly applicationServerKey: string;
+    }
+
+    // The Settings data is included in ChannelParameters.  See below how this is generated
+    // Probably a better name for this would be NotificationDistributionMethodSettings as there will probably be a descendant for each NotificationDistributionMethodId however
+    // the existing name lines up with Zenith documentation
+    export interface NotificationChannelSettings {
+
+    }
+
+    // The WebSettings is used for Push.Web type notifications.  It should be derived from browser's Notification API after passing it the DistributionMethodMetadata.
+    // It needs to support the interface below.
+    export interface WebNotificationChannelSettings extends NotificationChannelSettings {
+        readonly endpoint: string;
+        readonly expirationTime?: number; // seconds
+        readonly keys?: WebNotificationChannelSettings.PushKeys;
+    }
+
+    export namespace WebNotificationChannelSettings {
+        export interface PushKeys {
+            readonly p256dh: string;
+            readonly auth: string;
         }
     }
 }
