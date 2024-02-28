@@ -16577,7 +16577,7 @@ export class MappedComparableList<out T extends (Mappable & U), in U = T> extend
     // (undocumented)
     addRange(values: readonly T[]): void;
     // (undocumented)
-    addSubRange(values: readonly T[], rangeStartIndex: Integer, rangeCount: Integer): void;
+    addSubRange(values: readonly T[], subRangeStartIndex: Integer, subRangeLength: Integer): void;
     // (undocumented)
     addUndefinedRange(undefinedValueCount: Integer): void;
     // (undocumented)
@@ -16597,7 +16597,7 @@ export class MappedComparableList<out T extends (Mappable & U), in U = T> extend
     // (undocumented)
     insertRange(index: Integer, values: readonly T[]): void;
     // (undocumented)
-    insertSubRange(index: Integer, values: readonly T[], subRangeStartIndex: Integer, subRangeCount: Integer): void;
+    insertSubRange(index: Integer, values: readonly T[], subRangeStartIndex: Integer, subRangeLength: Integer): void;
     // (undocumented)
     onDuplicate: MappedComparableList.OnDuplicate;
     // (undocumented)
