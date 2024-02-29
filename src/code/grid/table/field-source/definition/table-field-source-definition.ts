@@ -56,6 +56,7 @@ export namespace TableFieldSourceDefinition {
         GridField,
         ScanFieldEditorFrame, // outside
         LockerScanAttachedNotificationChannel,
+        LockOpenNotificationChannel,
         /*LitIvemId_News,
         IvemId_Holding,
         CashItem_Holding,
@@ -91,8 +92,9 @@ export namespace TableFieldSourceDefinition {
         export const scanName = 'Scn';
         export const rankedLitIvemIdListDirectoryItemName = 'RllDI';
         export const gridFieldName = 'Gf';
-        export const ScanFieldEditorFrame = 'Sfef';
-        export const LockerScanAttachedNotificationChannel = 'LSAnc';
+        export const ScanFieldEditorFrameName = 'Sfef';
+        export const LockerScanAttachedNotificationChannelName = 'LSAnc';
+        export const LockOpenNotificationChannelName = 'LONC'
 
         interface Info {
             readonly id: Id;
@@ -121,8 +123,9 @@ export namespace TableFieldSourceDefinition {
             Scan: { id: TypeId.Scan, name: scanName },
             RankedLitIvemIdListDirectoryItem: { id: TypeId.RankedLitIvemIdListDirectoryItem, name: rankedLitIvemIdListDirectoryItemName },
             GridField: { id: TypeId.GridField, name: gridFieldName },
-            ScanFieldEditorFrame: { id: TypeId.ScanFieldEditorFrame, name: ScanFieldEditorFrame },
-            LockerScanAttachedNotificationChannel: { id: TypeId.LockerScanAttachedNotificationChannel, name: LockerScanAttachedNotificationChannel },
+            ScanFieldEditorFrame: { id: TypeId.ScanFieldEditorFrame, name: ScanFieldEditorFrameName },
+            LockerScanAttachedNotificationChannel: { id: TypeId.LockerScanAttachedNotificationChannel, name: LockerScanAttachedNotificationChannelName },
+            LockOpenNotificationChannel: { id: TypeId.LockOpenNotificationChannel, name: LockOpenNotificationChannelName },
         };
 
         const infos: Info[] = Object.values(infoObject);

@@ -110,6 +110,7 @@ export namespace TableRecordSourceDefinition {
         ScanTest,
         ScanFieldEditorFrame,
         ScanEditorAttachedNotificationChannel,
+        LockOpenNotificationChannelList,
     }
 
     export interface AddArrayResult {
@@ -291,6 +292,12 @@ export namespace TableRecordSourceDefinition {
                 name: 'ScanEditorAttachedNotificationChannel',
                 display: StringId.TableRecordDefinitionList_ListTypeDisplay_ScanEditorAttachedNotificationChannel,
                 abbr: StringId.TableRecordDefinitionList_ListTypeAbbr_ScanEditorAttachedNotificationChannel
+            },
+            LockOpenNotificationChannelList: {
+                id: TableRecordSourceDefinition.TypeId.LockOpenNotificationChannelList,
+                name: 'LockOpenNotificationChannelList',
+                display: StringId.TableRecordDefinitionList_ListTypeDisplay_LockOpenNotificationChannelList,
+                abbr: StringId.TableRecordDefinitionList_ListTypeAbbr_LockOpenNotificationChannelList
             },
         };
 

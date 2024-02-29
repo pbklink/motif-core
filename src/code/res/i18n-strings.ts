@@ -436,6 +436,8 @@ export const enum StringId {
     TableRecordDefinitionList_ListTypeAbbr_ScanFieldEditorFrame,
     TableRecordDefinitionList_ListTypeDisplay_ScanEditorAttachedNotificationChannel,
     TableRecordDefinitionList_ListTypeAbbr_ScanEditorAttachedNotificationChannel,
+    TableRecordDefinitionList_ListTypeDisplay_LockOpenNotificationChannelList,
+    TableRecordDefinitionList_ListTypeAbbr_LockOpenNotificationChannelList,
     ExchangeAbbreviatedDisplay_Asx,
     ExchangeFullDisplay_Asx,
     ExchangeAbbreviatedDisplay_Cxa,
@@ -4477,6 +4479,16 @@ export namespace I18nStrings {
         TableRecordDefinitionList_ListTypeAbbr_ScanEditorAttachedNotificationChannel: {
             id: StringId.TableRecordDefinitionList_ListTypeAbbr_ScanEditorAttachedNotificationChannel, translations: {
                 en: 'SEANC',
+            }
+        },
+        TableRecordDefinitionList_ListTypeDisplay_LockOpenNotificationChannelList: {
+            id: StringId.TableRecordDefinitionList_ListTypeDisplay_LockOpenNotificationChannelList, translations: {
+                en: 'Notification channel list',
+            }
+        },
+        TableRecordDefinitionList_ListTypeAbbr_LockOpenNotificationChannelList: {
+            id: StringId.TableRecordDefinitionList_ListTypeAbbr_LockOpenNotificationChannelList, translations: {
+                en: 'LONCL',
             }
         },
         ExchangeAbbreviatedDisplay_Asx: {

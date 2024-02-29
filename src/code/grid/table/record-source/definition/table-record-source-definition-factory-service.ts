@@ -348,6 +348,9 @@ export class TableRecordSourceDefinitionFactoryService {
             case TableRecordSourceDefinition.TypeId.ScanEditorAttachedNotificationChannel: {
                 throw new AssertInternalError('TRSDFSTCTFJSEANC45550', 'outside');
             }
+            case TableRecordSourceDefinition.TypeId.LockOpenNotificationChannelList: {
+                throw new AssertInternalError('TRSDFSTCTFLONCL45550', 'outside');
+            }
             default:
                 throw new UnreachableCaseError('TDLFCFTID17742', typeId);
         }

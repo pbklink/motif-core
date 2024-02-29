@@ -17,6 +17,7 @@ export * from './holding-table-record-source';
 export * from './keyed-correctness-record-table-record-source';
 export * from './lit-ivem-detail-from-search-symbols-table-record-source';
 export * from './lit-ivem-id-comparable-list-table-record-source';
+export * from './lock-open-list-table-record-source';
 export * from './order-table-record-source';
 export * from './ranked-lit-ivem-id-list-directory-item-table-record-source';
 export * from './ranked-lit-ivem-id-list-table-record-source';

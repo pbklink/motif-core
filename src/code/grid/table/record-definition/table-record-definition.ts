@@ -31,6 +31,7 @@ export namespace TableRecordDefinition {
         GridField,
         ScanFieldEditorFrame, // Outside
         LockerScanAttachedNotificationChannel,
+        LockOpenNotificationChannel,
     }
 
     export namespace Type {
@@ -119,6 +120,10 @@ export namespace TableRecordDefinition {
             LockerScanAttachedNotificationChannel: {  // Outside
                 id: TableRecordDefinition.TypeId.LockerScanAttachedNotificationChannel,
                 name: 'LockerScanAttachedNotificationChannel',
+            },
+            LockOpenNotificationChannel: {  // Outside
+                id: TableRecordDefinition.TypeId.LockOpenNotificationChannel,
+                name: 'LockOpenNotificationChannel',
             },
         };
 
