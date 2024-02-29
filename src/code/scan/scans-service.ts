@@ -109,8 +109,9 @@ export class ScansService {
                             errorEventer,
                         );
                         this._openedScanEditors.set(scan, openedEditor);
+                    } else {
+                        openedEditor.addOpener(opener);
                     }
-                    openedEditor.addOpener(opener);
                     return new Ok(openedEditor as ScanEditor);
                 }
             }
