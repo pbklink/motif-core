@@ -16419,6 +16419,18 @@ export namespace LockOpenNotificationChannel {
     export type DeletedAndUnlockedEventer = (this: void, notificationChannel: LockOpenNotificationChannel) => void;
 }
 
+// Warning: (ae-missing-release-tag) "LockOpenNotificationChannelList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class LockOpenNotificationChannelList extends LockOpenList<LockOpenNotificationChannel> {
+    // (undocumented)
+    finalise(): void;
+    // (undocumented)
+    initialise(): void;
+    // (undocumented)
+    load(channels: readonly NotificationChannel[], settingsSpecified: boolean): void;
+}
+
 // @public (undocumented)
 export namespace Logger {
     let // (undocumented)
@@ -18395,18 +18407,6 @@ export namespace NotificationChannel {
     }
 }
 
-// Warning: (ae-missing-release-tag) "NotificationChannelList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class NotificationChannelList extends LockOpenList<LockOpenNotificationChannel> {
-    // (undocumented)
-    finalise(): void;
-    // (undocumented)
-    initialise(): void;
-    // (undocumented)
-    load(channels: readonly NotificationChannel[], settingsSpecified: boolean): void;
-}
-
 // Warning: (ae-missing-release-tag) "NotificationChannelSourceSettingsUrgencyTableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -18423,7 +18423,7 @@ export class NotificationChannelsService {
     // (undocumented)
     finalise(): void;
     // (undocumented)
-    getChannelList(refresh: boolean): Promise<NotificationChannelList | undefined>;
+    getChannelList(refresh: boolean): Promise<LockOpenNotificationChannelList | undefined>;
     // (undocumented)
     getSupportedDistributionMethodIds(refresh: boolean): Promise<readonly NotificationDistributionMethodId[] | undefined>;
     // (undocumented)
@@ -18467,7 +18467,7 @@ export namespace NotificationChannelsService {
     // (undocumented)
     export type QueryNotificationChannelResolve = (this: void, channel: Result<LockOpenNotificationChannel | undefined>) => void;
     // (undocumented)
-    export type QueryNotificationChannelsResolve = (this: void, list: NotificationChannelList | undefined) => void;
+    export type QueryNotificationChannelsResolve = (this: void, list: LockOpenNotificationChannelList | undefined) => void;
 }
 
 // Warning: (ae-internal-missing-underscore) The name "NotificationChannelStaticInitialise" should be prefixed with an underscore because the declaration is marked as @internal

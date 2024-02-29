@@ -9,7 +9,7 @@ import { LockOpenList } from '../sys/sys-internal-api';
 import { LockOpenNotificationChannel } from './lock-open-notification-channel';
 
 
-export class NotificationChannelList extends LockOpenList<LockOpenNotificationChannel> {
+export class LockOpenNotificationChannelList extends LockOpenList<LockOpenNotificationChannel> {
     load(channels: readonly NotificationChannel[], settingsSpecified: boolean) {
         const existCount = this.count;
         const newCount = channels.length;

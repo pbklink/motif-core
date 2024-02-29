@@ -7,10 +7,10 @@
 import { AdiService, DataItemIncubator, NotificationChannel, NotificationDistributionMethodId, QueryNotificationChannelDataDefinition, QueryNotificationChannelDataItem, QueryNotificationChannelsDataDefinition, QueryNotificationChannelsDataItem, QueryNotificationDistributionMethodsDataDefinition, QueryNotificationDistributionMethodsDataItem } from '../adi/adi-internal-api';
 import { AssertInternalError, Err, Integer, LockOpenListItem, Logger, Ok, Result } from '../sys/sys-internal-api';
 import { LockOpenNotificationChannel } from './lock-open-notification-channel';
-import { NotificationChannelList } from './notification-channel-list';
+import { LockOpenNotificationChannelList } from './lock-open-notification-channel-list';
 
 export class NotificationChannelsService {
-    private readonly _channelList: NotificationChannelList;
+    private readonly _channelList: LockOpenNotificationChannelList;
     private readonly _supportedDistributionMethodIdsIncubator: DataItemIncubator<QueryNotificationDistributionMethodsDataItem>;
     private readonly _getSupportedDistributionMethodIdsResolves = new Array<NotificationChannelsService.GetSupportedDistributionMethodIdsResolve>();
     private readonly _queryNotificationChannelsIncubator: DataItemIncubator<QueryNotificationChannelsDataItem>;
@@ -25,7 +25,7 @@ export class NotificationChannelsService {
     constructor(
         private readonly _adiService: AdiService,
     ) {
-        this._channelList = new NotificationChannelList();
+        this._channelList = new LockOpenNotificationChannelList();
         this._supportedDistributionMethodIds = new Array<NotificationDistributionMethodId>();
         this._supportedDistributionMethodIdsIncubator = new DataItemIncubator<QueryNotificationDistributionMethodsDataItem>(this._adiService);
         this._queryNotificationChannelsIncubator = new DataItemIncubator<QueryNotificationChannelsDataItem>(this._adiService);
@@ -56,9 +56,9 @@ export class NotificationChannelsService {
         }
     }
 
-    getChannelList(refresh: boolean): Promise<NotificationChannelList | undefined> {
+    getChannelList(refresh: boolean): Promise<LockOpenNotificationChannelList | undefined> {
         if (refresh || !this._channelListBeenLoaded) {
-            const promise = new Promise<NotificationChannelList | undefined>((resolve) => {
+            const promise = new Promise<LockOpenNotificationChannelList | undefined>((resolve) => {
                 this._queryNotificationChannelsResolves.push(resolve);
             })
             this.reloadChannelist();
@@ -189,7 +189,7 @@ export class NotificationChannelsService {
     }
 
     private reloadChannel(
-        channelList: NotificationChannelList,
+        channelList: LockOpenNotificationChannelList,
         channelId: string,
         locker: LockOpenListItem.Locker | undefined,
         opener: LockOpenListItem.Opener | undefined,
@@ -265,7 +265,7 @@ export class NotificationChannelsService {
     }
 
     private checkOpenAndResolveQueryNotificationChannelIncubator(
-        channelList: NotificationChannelList,
+        channelList: LockOpenNotificationChannelList,
         opener: LockOpenListItem.Opener | undefined,
         idIncubator: NotificationChannelsService.IdQueryNotificationChannelIncubator,
         channel: LockOpenNotificationChannel,
@@ -305,7 +305,7 @@ export namespace NotificationChannelsService {
     }
 
     export type GetSupportedDistributionMethodIdsResolve = (this: void, value: readonly NotificationDistributionMethodId[] | undefined) => void;
-    export type QueryNotificationChannelsResolve = (this: void, list: NotificationChannelList | undefined) => void;
+    export type QueryNotificationChannelsResolve = (this: void, list: LockOpenNotificationChannelList | undefined) => void;
     export type QueryNotificationChannelResolve = (this: void, channel: Result<LockOpenNotificationChannel | undefined>) => void;
 
     export interface IdQueryNotificationChannelIncubator {
