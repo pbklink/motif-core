@@ -118,6 +118,7 @@ export const enum StringId {
     Modified,
     Valid,
     Invalid,
+    Faulted,
     InvalidIntegerString,
     UnsupportedValue,
     NotObject,
@@ -2299,6 +2300,26 @@ export const enum StringId {
     ScanEditorAttachNotificationChannels_EditGridColumns,
     ScanEditorAttachNotificationChannels_DetachSelectedChannelsCaption,
     ScanEditorAttachNotificationChannels_DetachSelectedChannelsTitle,
+    LockOpenNotificationChannelHeader_Id,
+    LockOpenNotificationChannelHeader_Valid,
+    LockOpenNotificationChannelHeader_Enabled,
+    LockOpenNotificationChannelDescription_Enabled,
+    LockOpenNotificationChannelHeader_Name,
+    LockOpenNotificationChannelDescription_Name,
+    LockOpenNotificationChannelHeader_Description,
+    LockOpenNotificationChannelDescription_Description,
+    LockOpenNotificationChannelHeader_Favourite,
+    LockOpenNotificationChannelHeader_StatusId,
+    LockOpenNotificationChannelHeader_DistributionMethodId,
+    LockOpenNotificationChannelHeader_Settings,
+    LockOpenNotificationChannelHeader_Faulted,
+    NotificationDistributionMethodDisplay_Debug,
+    NotificationDistributionMethodDisplay_Email,
+    NotificationDistributionMethodDisplay_Sms,
+    NotificationDistributionMethodDisplay_WebPush,
+    NotificationDistributionMethodDisplay_ApplePush,
+    NotificationDistributionMethodDisplay_GooglePush,
+
 }
 
 /** @public */
@@ -2888,6 +2909,11 @@ export namespace I18nStrings {
         Invalid: {
             id: StringId.Invalid, translations: {
                 en: 'Invalid',
+            }
+        },
+        Faulted: {
+            id: StringId.Faulted, translations: {
+                en: 'Faulted',
             }
         },
         InvalidIntegerString: {
@@ -13800,6 +13826,101 @@ export namespace I18nStrings {
         ScanEditorAttachNotificationChannels_DetachSelectedChannelsTitle: {
             id: StringId.ScanEditorAttachNotificationChannels_DetachSelectedChannelsTitle, translations: {
                 en: 'Detach selected channels from this scan',
+            }
+        },
+        LockOpenNotificationChannelHeader_Id: {
+            id: StringId.LockOpenNotificationChannelHeader_Id, translations: {
+                en: 'Id',
+            }
+        },
+        LockOpenNotificationChannelHeader_Valid: {
+            id: StringId.LockOpenNotificationChannelHeader_Valid, translations: {
+                en: 'Valid',
+            }
+        },
+        LockOpenNotificationChannelHeader_Enabled: {
+            id: StringId.LockOpenNotificationChannelHeader_Enabled, translations: {
+                en: 'Enabled',
+            }
+        },
+        LockOpenNotificationChannelDescription_Enabled: {
+            id: StringId.LockOpenNotificationChannelDescription_Enabled, translations: {
+                en: 'Enable notifications through this channel',
+            }
+        },
+        LockOpenNotificationChannelHeader_Name: {
+            id: StringId.LockOpenNotificationChannelHeader_Name, translations: {
+                en: 'Name',
+            }
+        },
+        LockOpenNotificationChannelDescription_Name: {
+            id: StringId.LockOpenNotificationChannelDescription_Name, translations: {
+                en: 'Specify name of this notification channel',
+            }
+        },
+        LockOpenNotificationChannelHeader_Description: {
+            id: StringId.LockOpenNotificationChannelHeader_Description, translations: {
+                en: 'Description',
+            }
+        },
+        LockOpenNotificationChannelDescription_Description: {
+            id: StringId.LockOpenNotificationChannelDescription_Description, translations: {
+                en: 'Specify a description of this notification channel',
+            }
+        },
+        LockOpenNotificationChannelHeader_Favourite: {
+            id: StringId.LockOpenNotificationChannelHeader_Favourite, translations: {
+                en: 'Favourite',
+            }
+        },
+        LockOpenNotificationChannelHeader_StatusId: {
+            id: StringId.LockOpenNotificationChannelHeader_StatusId, translations: {
+                en: 'Status',
+            }
+        },
+        LockOpenNotificationChannelHeader_DistributionMethodId: {
+            id: StringId.LockOpenNotificationChannelHeader_DistributionMethodId, translations: {
+                en: 'Type',
+            }
+        },
+        LockOpenNotificationChannelHeader_Settings: {
+            id: StringId.LockOpenNotificationChannelHeader_Settings, translations: {
+                en: 'Settings',
+            }
+        },
+        LockOpenNotificationChannelHeader_Faulted: {
+            id: StringId.LockOpenNotificationChannelHeader_Faulted, translations: {
+                en: 'Faulted',
+            }
+        },
+        NotificationDistributionMethodDisplay_Debug: {
+            id: StringId.NotificationDistributionMethodDisplay_Debug, translations: {
+                en: 'Debug',
+            }
+        },
+        NotificationDistributionMethodDisplay_Email: {
+            id: StringId.NotificationDistributionMethodDisplay_Email, translations: {
+                en: 'Email',
+            }
+        },
+        NotificationDistributionMethodDisplay_Sms: {
+            id: StringId.NotificationDistributionMethodDisplay_Sms, translations: {
+                en: 'SMS',
+            }
+        },
+        NotificationDistributionMethodDisplay_WebPush: {
+            id: StringId.NotificationDistributionMethodDisplay_WebPush, translations: {
+                en: 'Web push',
+            }
+        },
+        NotificationDistributionMethodDisplay_ApplePush: {
+            id: StringId.NotificationDistributionMethodDisplay_ApplePush, translations: {
+                en: 'Apple push',
+            }
+        },
+        NotificationDistributionMethodDisplay_GooglePush: {
+            id: StringId.NotificationDistributionMethodDisplay_GooglePush, translations: {
+                en: 'Google push',
             }
         },
 

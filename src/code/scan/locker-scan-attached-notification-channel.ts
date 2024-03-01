@@ -49,7 +49,7 @@ export class LockerScanAttachedNotificationChannel {
 
     get name() {
         const lockedNotificationChannel = this._lockedNotificationChannel;
-        return lockedNotificationChannel === undefined ? this.channelId : lockedNotificationChannel.channelName;
+        return lockedNotificationChannel === undefined ? this.channelId : lockedNotificationChannel.name;
     }
     get cultureCode() { return this._cultureCode; }
     get minimumStable() { return this._minimumStable; }

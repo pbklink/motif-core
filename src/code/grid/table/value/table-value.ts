@@ -183,10 +183,22 @@ export class VisibleTableValue extends BooleanTableValue {
         this.renderValueTypeId = RenderValue.TypeId.Visible;
     }
 }
+export class EnabledTableValue extends BooleanTableValue {
+    constructor() {
+        super();
+        this.renderValueTypeId = RenderValue.TypeId.Enabled;
+    }
+}
 export class ValidTableValue extends BooleanTableValue {
     constructor() {
         super();
         this.renderValueTypeId = RenderValue.TypeId.Valid;
+    }
+}
+export class FaultedTableValue extends BooleanTableValue {
+    constructor() {
+        super();
+        this.renderValueTypeId = RenderValue.TypeId.Faulted;
     }
 }
 
@@ -195,6 +207,12 @@ export abstract class EnumTableValue extends GenericTableValue<Integer> {
 
     protected createRenderValue() {
         return new EnumRenderValue(this.data, this.renderValueTypeId);
+    }
+}
+export class ActiveFaultedStatusIdTableValue extends EnumTableValue {
+    constructor() {
+        super();
+        this.renderValueTypeId = RenderValue.TypeId.ActiveFaultedStatusId;
     }
 }
 export class MarketIdTableValue extends EnumTableValue {
@@ -221,10 +239,16 @@ export class ScanFieldBooleanOperationIdTableValue extends EnumTableValue {
         this.renderValueTypeId = RenderValue.TypeId.ScanFieldBooleanOperationId;
     }
 }
-export class NotificationChannelSourceSettingsUrgencyTableValue extends EnumTableValue {
+export class NotificationChannelSourceSettingsUrgencyIdTableValue extends EnumTableValue {
     constructor() {
         super();
-        this.renderValueTypeId = RenderValue.TypeId.NotificationChannelSourceSettingsUrgency;
+        this.renderValueTypeId = RenderValue.TypeId.NotificationChannelSourceSettingsUrgencyId;
+    }
+}
+export class NotificationDistributionMethodIdTableValue extends EnumTableValue {
+    constructor() {
+        super();
+        this.renderValueTypeId = RenderValue.TypeId.NotificationDistributionMethodId;
     }
 }
 
@@ -615,10 +639,10 @@ export class ScanTargetTypeIdCorrectnessTableValue extends EnumCorrectnessTableV
         this.renderValueTypeId = RenderValue.TypeId.ScanTargetTypeId;
     }
 }
-export class ScanStatusIdCorrectnessTableValue extends EnumCorrectnessTableValue {
+export class ActiveFaultedStatusIdCorrectnessTableValue extends EnumCorrectnessTableValue {
     constructor() {
         super();
-        this.renderValueTypeId = RenderValue.TypeId.ScanStatusId;
+        this.renderValueTypeId = RenderValue.TypeId.ActiveFaultedStatusId;
     }
 }
 export class RankedLitIvemIdListDirectoryItemTypeIdCorrectnessTableValue extends EnumCorrectnessTableValue {

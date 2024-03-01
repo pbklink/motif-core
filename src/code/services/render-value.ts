@@ -86,6 +86,7 @@ export namespace RenderValue {
         Enabled,
         Readonly,
         Valid,
+        Faulted,
         Modified,
         IsIndex,
         Visible,
@@ -95,6 +96,8 @@ export namespace RenderValue {
         PhysicalDelivery,
         Matched,
         // Enum
+        // eslint-disable-next-line @typescript-eslint/no-shadow
+        ActiveFaultedStatusId,
         TradingStateReasonId,
         // eslint-disable-next-line @typescript-eslint/no-shadow
         MarketId,
@@ -128,11 +131,11 @@ export namespace RenderValue {
         DeliveryBasisIdMyxLitIvemAttribute,
         DayTradesDataItemRecordTypeId,
         // eslint-disable-next-line @typescript-eslint/no-shadow
-        ScanStatusId,
         ScanCriteriaTypeId,
         ScanTargetTypeId,
         ScanFieldBooleanOperationId,
-        NotificationChannelSourceSettingsUrgency,
+        NotificationChannelSourceSettingsUrgencyId,
+        NotificationDistributionMethodId,
 
         // Array
         StringArray,
@@ -499,6 +502,12 @@ export class MatchedRenderValue extends BooleanRenderValue {
 export class EnumRenderValue extends GenericRenderValue<Integer> {
 }
 
+export class ActiveFaultedStatusIdRenderValue extends EnumRenderValue {
+    constructor(data: ActiveFaultedStatusId | undefined) {
+        super(data, RenderValue.TypeId.ActiveFaultedStatusId);
+    }
+}
+
 export class MarketIdRenderValue extends EnumRenderValue {
     constructor(data: MarketId | undefined) {
         super(data, RenderValue.TypeId.MarketId);
@@ -532,12 +541,6 @@ export class ColorSettingsItemStateIdRenderValue extends EnumRenderValue {
 export class DayTradesDataItemRecordTypeIdRenderValue extends EnumRenderValue {
     constructor(data: DayTradesDataItem.Record.TypeId | undefined) {
         super(data, RenderValue.TypeId.DayTradesDataItemRecordTypeId);
-    }
-}
-
-export class ScanStatusIdRenderValue extends EnumRenderValue {
-    constructor(data: ActiveFaultedStatusId | undefined) {
-        super(data, RenderValue.TypeId.ScanStatusId);
     }
 }
 

@@ -36,6 +36,8 @@ import {
     MovementId,
     MyxLitIvemAttributes,
     NotificationChannel,
+    NotificationDistributionMethod,
+    NotificationDistributionMethodId,
     OrderExtendedSide,
     OrderExtendedSideId,
     OrderPriceUnitType,
@@ -159,6 +161,10 @@ export class TextFormatterService {
 
     formatValidBoolean(value: boolean): string {
         return value ? Strings[StringId.Valid] : '';
+    }
+
+    formatFaultedBoolean(value: boolean): string {
+        return value ? Strings[StringId.Faulted] : '';
     }
 
     formatModifiedBoolean(value: boolean): string {
@@ -322,6 +328,9 @@ export class TextFormatterService {
         }
     }
 
+    formatActiveFaultedStatusId(value: ActiveFaultedStatusId) {
+        return ActiveFaultedStatus.idToDisplay(value);
+    }
     formatTradingStateReasonId(value: TradingState.ReasonId) {
         return TradingState.Reason.idToDisplay(value);
     }
@@ -414,9 +423,6 @@ export class TextFormatterService {
     formatDayTradesDataItemRecordTypeId(value: DayTradesDataItem.Record.TypeId) {
         return DayTradesDataItem.Record.Type.idToDisplay(value);
     }
-    formatScanStatusId(value: ActiveFaultedStatusId) {
-        return ActiveFaultedStatus.idToDisplay(value);
-    }
     formatScanCriteriaTypeId(value: Scan.CriterionId) {
         return Scan.CriteriaType.idToDisplay(value);
     }
@@ -428,6 +434,9 @@ export class TextFormatterService {
     }
     formatUrgency(value: NotificationChannel.SourceSettings.UrgencyId) {
         return NotificationChannel.SourceSettings.Urgency.idToDisplay(value);
+    }
+    formatNotificationDistributionMethodId(value: NotificationDistributionMethodId) {
+        return NotificationDistributionMethod.idToDisplay(value);
     }
 
     formatStringArrayAsCommaText(value: readonly string[]) {
@@ -634,6 +643,8 @@ export class TextFormatterService {
                 return this.formatReadonlyBoolean((renderValue as BooleanRenderValue).definedData);
             case RenderValue.TypeId.Valid:
                 return this.formatValidBoolean((renderValue as BooleanRenderValue).definedData);
+            case RenderValue.TypeId.Faulted:
+                return this.formatFaultedBoolean((renderValue as BooleanRenderValue).definedData);
             case RenderValue.TypeId.Modified:
                 return this.formatModifiedBoolean((renderValue as BooleanRenderValue).definedData);
             case RenderValue.TypeId.IsIndex:
@@ -650,6 +661,8 @@ export class TextFormatterService {
                 return this.formatPhysicalDeliveryBoolean((renderValue as BooleanRenderValue).definedData);
             case RenderValue.TypeId.Matched:
                 return this.formatMatchedBoolean((renderValue as BooleanRenderValue).definedData);
+            case RenderValue.TypeId.ActiveFaultedStatusId:
+                return this.formatActiveFaultedStatusId((renderValue as EnumRenderValue).definedData);
             case RenderValue.TypeId.TradingStateReasonId:
                 return this.formatTradingStateReasonId((renderValue as EnumRenderValue).definedData);
             case RenderValue.TypeId.MarketId:
@@ -706,16 +719,16 @@ export class TextFormatterService {
                 return this.formatDeliveryBasisIdMyxLitIvemAttribute((renderValue as EnumRenderValue).definedData);
             case RenderValue.TypeId.DayTradesDataItemRecordTypeId:
                 return this.formatDayTradesDataItemRecordTypeId((renderValue as EnumRenderValue).definedData);
-            case RenderValue.TypeId.ScanStatusId:
-                return this.formatScanStatusId((renderValue as EnumRenderValue).definedData);
             case RenderValue.TypeId.ScanCriteriaTypeId:
                 return this.formatScanCriteriaTypeId((renderValue as EnumRenderValue).definedData);
             case RenderValue.TypeId.ScanTargetTypeId:
                 return this.formatScanTargetTypeId((renderValue as EnumRenderValue).definedData);
             case RenderValue.TypeId.ScanFieldBooleanOperationId:
                 return this.formatScanFieldBooleanOperationId((renderValue as EnumRenderValue).definedData);
-            case RenderValue.TypeId.NotificationChannelSourceSettingsUrgency:
+            case RenderValue.TypeId.NotificationChannelSourceSettingsUrgencyId:
                 return this.formatUrgency((renderValue as EnumRenderValue).definedData);
+            case RenderValue.TypeId.NotificationDistributionMethodId:
+                return this.formatNotificationDistributionMethodId((renderValue as EnumRenderValue).definedData);
             case RenderValue.TypeId.StringArray:
                 return this.formatStringArrayAsCommaText((renderValue as StringArrayRenderValue).definedData);
             case RenderValue.TypeId.IntegerArray:

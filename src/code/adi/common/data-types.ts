@@ -7709,6 +7709,70 @@ export namespace ScanTargetType {
     }
 }
 
+export namespace NotificationDistributionMethod {
+    export type Id = NotificationDistributionMethodId;
+
+    interface Info {
+        readonly id: Id;
+        readonly name: string;
+        readonly displayId: StringId;
+    }
+
+    type InfosObject = { [id in keyof typeof NotificationDistributionMethodId]: Info };
+
+    const infosObject: InfosObject = {
+        Debug: {
+            id: NotificationDistributionMethodId.Debug,
+            name: 'Debug',
+            displayId: StringId.NotificationDistributionMethodDisplay_Debug,
+        },
+        Email: {
+            id: NotificationDistributionMethodId.Email,
+            name: 'Email',
+            displayId: StringId.NotificationDistributionMethodDisplay_Email,
+        },
+        Sms: {
+            id: NotificationDistributionMethodId.Sms,
+            name: 'Sms',
+            displayId: StringId.NotificationDistributionMethodDisplay_Sms,
+        },
+        WebPush: {
+            id: NotificationDistributionMethodId.WebPush,
+            name: 'WebPush',
+            displayId: StringId.NotificationDistributionMethodDisplay_WebPush,
+        },
+        ApplePush: {
+            id: NotificationDistributionMethodId.ApplePush,
+            name: 'ApplePush',
+            displayId: StringId.NotificationDistributionMethodDisplay_ApplePush,
+        },
+        GooglePush: {
+            id: NotificationDistributionMethodId.GooglePush,
+            name: 'GooglePush',
+            displayId: StringId.NotificationDistributionMethodDisplay_GooglePush,
+        },
+    } as const;
+
+    const infos = Object.values(infosObject);
+    export const idCount = infos.length;
+
+
+    export function initialise() {
+        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as NotificationDistributionMethodId);
+        if (outOfOrderIdx >= 0) {
+            throw new EnumInfoOutOfOrderError('NotificationDistributionMethodId', outOfOrderIdx, infos[outOfOrderIdx].name);
+        }
+    }
+
+    export function idToDisplayId(id: Id): StringId {
+        return infos[id].displayId;
+    }
+
+    export function idToDisplay(id: Id): string {
+        return Strings[idToDisplayId(id)];
+    }
+}
+
 // Utility Classes
 
 export interface EnvironmentedAccountId {

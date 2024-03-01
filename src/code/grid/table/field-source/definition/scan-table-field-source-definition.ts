@@ -17,13 +17,13 @@ import {
     TableField
 } from "../../field/grid-table-field-internal-api";
 import {
+    ActiveFaultedStatusIdCorrectnessTableValue,
     CorrectnessTableValue,
     DateTimeCorrectnessTableValue,
     EnabledCorrectnessTableValue,
     IntegerCorrectnessTableValue,
     LitIvemIdArrayCorrectnessTableValue,
     MarketIdArrayCorrectnessTableValue,
-    ScanStatusIdCorrectnessTableValue,
     ScanTargetTypeIdCorrectnessTableValue,
     StringCorrectnessTableValue,
     WritableCorrectnessTableValue
@@ -113,7 +113,7 @@ export namespace ScanTableFieldSourceDefinition {
             },
             {
                 id: Scan.FieldId.StatusId,
-                tableFieldValueConstructors: [EnumCorrectnessTableField, ScanStatusIdCorrectnessTableValue],
+                tableFieldValueConstructors: [EnumCorrectnessTableField, ActiveFaultedStatusIdCorrectnessTableValue],
             },
             {
                 id: Scan.FieldId.Enabled,

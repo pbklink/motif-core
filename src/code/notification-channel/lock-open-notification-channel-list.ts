@@ -19,7 +19,7 @@ export class LockOpenNotificationChannelList extends LockOpenList<LockOpenNotifi
         // Force deleted and modify existing
         for (let i = existCount - 1; i >= 0; i--) {
             const existChannel = this.getAt(i);
-            const existChannelId = existChannel.channelId;
+            const existChannelId = existChannel.id;
             const newIndex = channels.findIndex((channel) => channel.channelId === existChannelId);
             if (newIndex > 0) {
                 // same as new.  Modify
