@@ -48,7 +48,7 @@ export namespace GridLayoutOrReferenceDefinition {
             const gridLayoutOrReferenceDefinition = new GridLayoutOrReferenceDefinition(referenceId);
             return new Ok(gridLayoutOrReferenceDefinition);
         } else {
-            const definitionElementResult = element.tryGetElement(JsonName.gridLayoutDefinition);
+            const definitionElementResult = element.tryGetDefinedElement(JsonName.gridLayoutDefinition);
             if (definitionElementResult.isErr()) {
                 return new Err(ErrorCode.GridLayoutDefinitionOrReference_BothDefinitionAndReferenceAreNotSpecified);
             } else {

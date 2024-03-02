@@ -43,7 +43,7 @@ export abstract class TypedKeyValueArraySettingsGroup extends SettingsGroup {
                 for (const namedInfoArrayElement of namedInfoArrayElements) {
                     const nameResult = namedInfoArrayElement.tryGetString(TypedKeyValueArraySettingsGroup.InfosArrayJsonName.name);
                     if (nameResult.isOk()) {
-                        const infoArrayElementResult = namedInfoArrayElement.tryGetElement(
+                        const infoArrayElementResult = namedInfoArrayElement.tryGetDefinedElement(
                             TypedKeyValueArraySettingsGroup.InfosArrayJsonName.infoArray
                         );
                         if (infoArrayElementResult.isOk()) {

@@ -30,7 +30,7 @@ export namespace ExtensionId {
     }
 
     export function tryCreateFromJson(value: JsonElement): Result<ExtensionId> {
-        const publisherIdElementResult = value.tryGetElement(JsonName.publisherId);
+        const publisherIdElementResult = value.tryGetDefinedElement(JsonName.publisherId);
         if (publisherIdElementResult.isErr()) {
             return publisherIdElementResult.createOuter(ErrorCode.ExtensionId_PublisherIdIsNotSpecified);
         } else {

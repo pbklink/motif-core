@@ -249,7 +249,7 @@ export namespace SingleBrokerageAccountGroup {
     }
 
     export function tryCreateFromJson(element: JsonElement): Result<SingleBrokerageAccountGroup> {
-        const elementResult = element.tryGetElement(SingleJsonTag.AccountKey);
+        const elementResult = element.tryGetDefinedElement(SingleJsonTag.AccountKey);
         if (elementResult.isErr()) {
             return elementResult.createOuter(ErrorCode.SingleBrokerageAccountGroup_AccountKeyNotSpecified);
         } else {

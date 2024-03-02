@@ -94,7 +94,7 @@ export namespace CallPutFromUnderlyingTableRecordSourceDefinition {
     }
 
     export function tryGetUnderlyingIvemIdFromJson(element: JsonElement): Result<IvemId> {
-        const underlyingIvemIdElementResult = element.tryGetElement(JsonTag.underlyingIvemId);
+        const underlyingIvemIdElementResult = element.tryGetDefinedElement(JsonTag.underlyingIvemId);
         if (underlyingIvemIdElementResult.isErr()) {
             return underlyingIvemIdElementResult.createOuter(ErrorCode.CallPutFromUnderlyingTableRecordSourceDefinition_UnderlyingIvemIdNotSpecified);
         } else {

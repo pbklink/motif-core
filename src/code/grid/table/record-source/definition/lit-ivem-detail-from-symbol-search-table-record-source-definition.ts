@@ -205,7 +205,7 @@ export namespace LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition {
             const definition = createDefaultDataDefinition();
             return new Ok(definition);
         } else {
-            const requestElementResult = element.tryGetElement(LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition.JsonName.request);
+            const requestElementResult = element.tryGetDefinedElement(LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition.JsonName.request);
             if (requestElementResult.isErr()) {
                 return requestElementResult.createOuter(ErrorCode.LitIvemDetailsFromSearchSymbolsTableRecordSourceDefinition_RequestNotSpecified);
             } else {

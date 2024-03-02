@@ -828,7 +828,7 @@ export class OrderPad {
                     this.internalSetExpiryDate(expiryDateResult.value);
                 }
 
-                const loadedRoutedIvemIdElementResult = element.tryGetElement(OrderPad.JsonName.LoadedRoutedIvemId);
+                const loadedRoutedIvemIdElementResult = element.tryGetDefinedElement(OrderPad.JsonName.LoadedRoutedIvemId);
                 if (loadedRoutedIvemIdElementResult.isOk()) {
                     const loadedRoutedIvemIdResult = RoutedIvemId.tryCreateFromJson(loadedRoutedIvemIdElementResult.value);
                     if (loadedRoutedIvemIdResult.isOk()) {
@@ -845,7 +845,7 @@ export class OrderPad {
                 // }
 
                 let routedIvemId: RoutedIvemId | undefined;
-                const routedIvemIdElementResult = element.tryGetElement(OrderPad.JsonName.RoutedIvemId);
+                const routedIvemIdElementResult = element.tryGetDefinedElement(OrderPad.JsonName.RoutedIvemId);
                 if (routedIvemIdElementResult.isOk()) {
                     const routedIvemIdResult = RoutedIvemId.tryCreateFromJson(routedIvemIdElementResult.value);
                     if (routedIvemIdResult.isOk()) {

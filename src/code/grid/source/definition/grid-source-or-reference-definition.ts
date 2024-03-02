@@ -74,7 +74,7 @@ export namespace GridSourceOrReferenceDefinition {
             const gridSourceOrReferenceDefinition = new GridSourceOrReferenceDefinition(referenceId);
             return new Ok(gridSourceOrReferenceDefinition);
         } else {
-            const definitionElementResult = element.tryGetElement(JsonName.gridSourceDefinition);
+            const definitionElementResult = element.tryGetDefinedElement(JsonName.gridSourceDefinition);
             if (definitionElementResult.isErr()) {
                 return new Err(ErrorCode.GridSourceOrReferenceDefinition_BothDefinitionAndReferenceAreNotSpecified);
             } else {

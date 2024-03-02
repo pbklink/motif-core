@@ -67,13 +67,33 @@ export class JsonElement {
         return name in this._json;
     }
 
-    tryGetElement(name: string): Result<JsonElement> {
-        const objectValueResult = this.tryGetJsonObject(name);
-        if (objectValueResult.isErr()) {
-            return objectValueResult.createOuter(ErrorCode.JsonElement_TryGetElement);
+    tryGetElement(name: string): Result<JsonElement | undefined> {
+        const getResult = this.tryGetJsonObject(name);
+        if (getResult.isErr()) {
+            return getResult.createOuter(ErrorCode.JsonElement_TryGetElement);
         } else {
-            const element = new JsonElement(objectValueResult.value);
-            return new Ok(element);
+            const jsonObject = getResult.value;
+            if (jsonObject === undefined) {
+                return new Ok(undefined);
+            } else {
+                const element = new JsonElement(getResult.value);
+                return new Ok(element);
+            }
+        }
+    }
+
+    tryGetDefinedElement(name: string): Result<JsonElement> {
+        const getResult = this.tryGetJsonObject(name);
+        if (getResult.isErr()) {
+            return getResult.createOuter(ErrorCode.JsonElement_TryGetDefinedElement);
+        } else {
+            const jsonObject = getResult.value;
+            if (jsonObject === undefined) {
+                return new Err(ErrorCode.JsonElement_ElementNotDefined);
+            } else {
+                const element = new JsonElement(getResult.value);
+                return new Ok(element);
+            }
         }
     }
 
@@ -91,12 +111,16 @@ export class JsonElement {
         }
     }
 
-    tryGetJsonObject(name: string): Result<Json> {
+    tryGetJsonObject(name: string): Result<Json | undefined> {
         const jsonValue = this._json[name];
-        if (JsonValue.isJson(jsonValue)) {
-            return new Ok(jsonValue);
+        if (jsonValue === undefined) {
+            return new Ok(undefined);
         } else {
-            return new Err(typeof jsonValue);
+            if (JsonValue.isJson(jsonValue)) {
+                return new Ok(jsonValue);
+            } else {
+                return new Err(typeof jsonValue);
+            }
         }
     }
 
@@ -578,7 +602,7 @@ export namespace JsonElement {
     }
 
     export function tryGetChildElement(parentElement: JsonElement, childName: string) {
-        return parentElement.tryGetElement(childName);
+        return parentElement.tryGetDefinedElement(childName);
     }
 
     export function generateErrorText(functionName: string, stringId: StringId, jsonValue: unknown): string {

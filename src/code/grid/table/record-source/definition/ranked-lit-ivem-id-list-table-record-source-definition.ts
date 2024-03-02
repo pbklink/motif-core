@@ -61,7 +61,7 @@ export namespace RankedLitIvemIdListTableRecordSourceDefinition {
         litIvemIdListDefinitionFactoryService: RankedLitIvemIdListDefinitionFactoryService,
         element: JsonElement
     ): Result<RankedLitIvemIdListDefinition> {
-        const definitionElementResult = element.tryGetElement(JsonName.definition);
+        const definitionElementResult = element.tryGetDefinedElement(JsonName.definition);
         if (definitionElementResult.isErr()) {
             const errorCode = ErrorCode.RankedLitIvemIdListTableRecordSourceDefinition_DefinitionElementNotSpecified;
             return definitionElementResult.createOuter(errorCode);
