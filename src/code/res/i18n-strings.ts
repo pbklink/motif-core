@@ -146,6 +146,10 @@ export const enum StringId {
     LitIvemIdNotJsonObject,
     InvalidLitIvemIdJson,
     UiEntryError,
+    ErrorGetting,
+    ErrorOpening,
+    ErrorOpeningSaved,
+    ErrorCreatingNew,
     ValueRequired,
     CodeMissing,
     SymbolSourceDoesNotHaveDefaultMarket,
@@ -223,7 +227,24 @@ export const enum StringId {
     Criteria,
     Rank,
     Targets,
+    DistributionMethodIds,
+    NotificationChannel,
+    NotificationChannels,
+    NotificationChannelsGrid,
+    ScanEditorAttachedNotificationChannels,
+    ScanFieldEditorFramesGrid,
+    ScanTestMatches,
+    LitIvemIdListEditor,
+    SearchSymbols,
+    DepthAndSalesWatchlist,
+    Feeds,
     Notifications,
+    AllowedFields,
+    GridLayoutEditorColumns,
+    BrokerageAccounts,
+    OrderAuthorise,
+    Scans,
+    TopShareholders,
     ExecuteCommandTitle,
     ApplySymbolCaption,
     ApplySymbolTitle,
@@ -1847,6 +1868,7 @@ export const enum StringId {
     DitemMenuDisplay_Depth,
     DitemMenuDisplay_NewsHeadlines,
     DitemMenuDisplay_NewsBody,
+    DitemMenuDisplay_NotificationChannels,
     DitemMenuDisplay_Scans,
     DitemMenuDisplay_Alerts,
     DitemMenuDisplay_Search,
@@ -3051,6 +3073,26 @@ export namespace I18nStrings {
                 en: 'UI entry error',
             }
         },
+        ErrorGetting: {
+            id: StringId.ErrorGetting, translations: {
+                en: 'Error getting',
+            }
+        },
+        ErrorOpening: {
+            id: StringId.ErrorOpening, translations: {
+                en: 'Error opening',
+            }
+        },
+        ErrorOpeningSaved: {
+            id: StringId.ErrorOpening, translations: {
+                en: 'Error opening saved',
+            }
+        },
+        ErrorCreatingNew: {
+            id: StringId.ErrorCreatingNew, translations: {
+                en: 'Error creating new',
+            }
+        },
         ValueRequired: {
             id: StringId.ValueRequired, translations: {
                 en: 'Value required',
@@ -3436,9 +3478,94 @@ export namespace I18nStrings {
                 en: 'Targets',
             }
         },
+        DistributionMethodIds: {
+            id: StringId.DistributionMethodIds, translations: {
+                en: 'Notification channel types',
+            }
+        },
+        NotificationChannel: {
+            id: StringId.NotificationChannel, translations: {
+                en: 'Notification channel',
+            }
+        },
+        NotificationChannels: {
+            id: StringId.NotificationChannels, translations: {
+                en: 'Notification channels',
+            }
+        },
+        NotificationChannelsGrid: {
+            id: StringId.NotificationChannelsGrid, translations: {
+                en: 'Notification channels grid',
+            }
+        },
+        ScanEditorAttachedNotificationChannels: {
+            id: StringId.ScanEditorAttachedNotificationChannels, translations: {
+                en: 'Scan editor attached notification channels',
+            }
+        },
+        ScanFieldEditorFramesGrid: {
+            id: StringId.ScanFieldEditorFramesGrid, translations: {
+                en: 'Scan field editor frames grid',
+            }
+        },
+        ScanTestMatches: {
+            id: StringId.ScanTestMatches, translations: {
+                en: 'Scan test matches',
+            }
+        },
+        LitIvemIdListEditor: {
+            id: StringId.LitIvemIdListEditor, translations: {
+                en: 'Symbol list editor',
+            }
+        },
+        SearchSymbols: {
+            id: StringId.SearchSymbols, translations: {
+                en: 'Search symbols',
+            }
+        },
+        DepthAndSalesWatchlist: {
+            id: StringId.DepthAndSalesWatchlist, translations: {
+                en: 'Depth and trades watchlist',
+            }
+        },
+        Feeds: {
+            id: StringId.Feeds, translations: {
+                en: 'Feeds',
+            }
+        },
         Notifications: {
             id: StringId.Notifications, translations: {
                 en: 'Notifications',
+            }
+        },
+        AllowedFields: {
+            id: StringId.AllowedFields, translations: {
+                en: 'Allowed Fields',
+            }
+        },
+        GridLayoutEditorColumns: {
+            id: StringId.GridLayoutEditorColumns, translations: {
+                en: 'Grid Layout Editor Columns',
+            }
+        },
+        BrokerageAccounts: {
+            id: StringId.BrokerageAccounts, translations: {
+                en: 'Brokerage accounts',
+            }
+        },
+        OrderAuthorise: {
+            id: StringId.OrderAuthorise, translations: {
+                en: 'Order authorise',
+            }
+        },
+        Scans: {
+            id: StringId.Scans, translations: {
+                en: 'Scans',
+            }
+        },
+        TopShareholders: {
+            id: StringId.TopShareholders, translations: {
+                en: 'Top shareholders',
             }
         },
         ExecuteCommandTitle: {
@@ -11558,6 +11685,11 @@ export namespace I18nStrings {
         DitemMenuDisplay_NewsBody: {
             id: StringId.DitemMenuDisplay_NewsBody, translations: {
                 en: 'News Body',
+            }
+        },
+        DitemMenuDisplay_NotificationChannels: {
+            id: StringId.DitemMenuDisplay_NotificationChannels, translations: {
+                en: 'Notifications',
             }
         },
         DitemMenuDisplay_Scans: {

@@ -5,12 +5,13 @@
  */
 
 import { AdiService, DataItemIncubator, NotificationChannel, NotificationDistributionMethodId, QueryNotificationChannelDataDefinition, QueryNotificationChannelDataItem, QueryNotificationChannelsDataDefinition, QueryNotificationChannelsDataItem, QueryNotificationDistributionMethodsDataDefinition, QueryNotificationDistributionMethodsDataItem } from '../adi/adi-internal-api';
-import { AssertInternalError, Err, Integer, LockOpenListItem, Logger, Ok, Result } from '../sys/sys-internal-api';
+import { AssertInternalError, Err, Integer, LockOpenListItem, Ok, Result } from '../sys/sys-internal-api';
 import { LockOpenNotificationChannel } from './lock-open-notification-channel';
 import { LockOpenNotificationChannelList } from './lock-open-notification-channel-list';
 
 export class NotificationChannelsService {
-    private readonly _channelList: LockOpenNotificationChannelList;
+    readonly list: LockOpenNotificationChannelList;
+
     private readonly _supportedDistributionMethodIdsIncubator: DataItemIncubator<QueryNotificationDistributionMethodsDataItem>;
     private readonly _getSupportedDistributionMethodIdsResolves = new Array<NotificationChannelsService.GetSupportedDistributionMethodIdsResolve>();
     private readonly _queryNotificationChannelsIncubator: DataItemIncubator<QueryNotificationChannelsDataItem>;
@@ -25,7 +26,7 @@ export class NotificationChannelsService {
     constructor(
         private readonly _adiService: AdiService,
     ) {
-        this._channelList = new LockOpenNotificationChannelList();
+        this.list = new LockOpenNotificationChannelList();
         this._supportedDistributionMethodIds = new Array<NotificationDistributionMethodId>();
         this._supportedDistributionMethodIdsIncubator = new DataItemIncubator<QueryNotificationDistributionMethodsDataItem>(this._adiService);
         this._queryNotificationChannelsIncubator = new DataItemIncubator<QueryNotificationChannelsDataItem>(this._adiService);
@@ -37,18 +38,25 @@ export class NotificationChannelsService {
 
     finalise() {
         this._supportedDistributionMethodIdsIncubator.cancel();
-        this._getSupportedDistributionMethodIdsResolves.forEach((resolve) => resolve(undefined));
+        this._getSupportedDistributionMethodIdsResolves.forEach((resolve) => resolve(new Ok(undefined)));
         this._getSupportedDistributionMethodIdsResolves.length = 0;
         this._queryNotificationChannelsIncubator.cancel();
-        this._queryNotificationChannelsResolves.forEach((resolve) => resolve(undefined));
+        this._queryNotificationChannelsResolves.forEach((resolve) => resolve(new Ok(undefined)));
         this._queryNotificationChannelsResolves.length = 0;
+        this._idQueryNotificationChannelIncubators.forEach(
+            (idIncubator) => {
+                idIncubator.incubator.cancel();
+                idIncubator.resolveFtns.forEach((resolve) => resolve(new Ok(undefined)));
+                idIncubator.resolveFtns.length = 0;
+            }
+        );
     }
 
-    getSupportedDistributionMethodIds(refresh: boolean): Promise<readonly NotificationDistributionMethodId[] | undefined> {
+    getSupportedDistributionMethodIds(refresh: boolean): Promise<Result<readonly NotificationDistributionMethodId[] | undefined>> {
         if (!refresh && !this._supportedDistributionMethodIdsIncubator.incubating && this._supportedDistributionMethodIdsLoaded) {
-            return Promise.resolve(this._supportedDistributionMethodIds);
+            return Promise.resolve(new Ok(this._supportedDistributionMethodIds));
         } else {
-            const promise = new Promise<readonly NotificationDistributionMethodId[] | undefined>((resolve) => {
+            const promise = new Promise<Result<readonly NotificationDistributionMethodId[] | undefined>>((resolve) => {
                 this._getSupportedDistributionMethodIdsResolves.push(resolve);
             });
             this.reloadSupportedDistributionMethodIds();
@@ -56,40 +64,85 @@ export class NotificationChannelsService {
         }
     }
 
-    getChannelList(refresh: boolean): Promise<LockOpenNotificationChannelList | undefined> {
+    getLoadedList(refresh: boolean): Promise<Result<LockOpenNotificationChannelList | undefined>> {
         if (refresh || !this._channelListBeenLoaded) {
-            const promise = new Promise<LockOpenNotificationChannelList | undefined>((resolve) => {
+            const promise = new Promise<Result<LockOpenNotificationChannelList | undefined>>((resolve) => {
                 this._queryNotificationChannelsResolves.push(resolve);
             })
             this.reloadChannelist();
             return promise;
         } else {
-            return Promise.resolve(this._channelList);
+            return Promise.resolve(new Ok(this.list));
         }
     }
 
     async tryLockChannel(channelId: string, locker: LockOpenListItem.Locker, refresh: boolean): Promise<Result<LockOpenNotificationChannel | undefined>> {
         // make sure we have done an initial download of channels
-        const channelList = await this.getChannelList(false);
-        if (channelList === undefined) {
-            return new Ok(undefined); // shutting down - ignore
+        const result = await this.getLoadedList(false);
+        if (result.isErr()) {
+            return result.createType();
         } else {
-            // First check to see if list contains channel
-            const channel = channelList.getItemByKey(channelId);
-            if (channel !== undefined && !refresh) {
-                return this._channelList.tryLockItemByKey(channelId, locker);
+            const list = result.value;
+            if (list === undefined) {
+                return new Ok(undefined); // shutting down - ignore
             } else {
-                const idIncubator = this.reloadChannel(channelList, channelId, locker, undefined);
-                const promise = new Promise<Result<LockOpenNotificationChannel | undefined>>((resolve) => {
+                // First check to see if list contains channel
+                const channel = list.getItemByKey(channelId);
+                if (channel !== undefined && !refresh) {
+                    return this.list.tryLockItemByKey(channelId, locker);
+                } else {
+                    const idIncubator = this.reloadChannel(list, channelId, locker, undefined);
+                    const promise = new Promise<Result<LockOpenNotificationChannel | undefined>>((resolve) => {
+                        idIncubator.resolveFtns = [...idIncubator.resolveFtns, resolve];
+                    });
+                    return promise;
+                }
+            }
+        }
+    }
+
+    tryOpenChannel(lockedChannel: LockOpenNotificationChannel, opener: LockOpenListItem.Opener): Promise<Result<LockOpenNotificationChannel | undefined>> {
+        const list = this.list; // List must have already been loaded to get lockedChannel
+        if (lockedChannel.settingsLoaded) {
+            this.list.openLockedItem(lockedChannel, opener);
+            return Promise.resolve(new Ok(lockedChannel));
+        } else {
+            const idIncubator = this.reloadChannel(list, lockedChannel.id, undefined, opener);
+            const promise = new Promise<Result<LockOpenNotificationChannel | undefined>>(
+                (resolve) => {
                     idIncubator.resolveFtns = [...idIncubator.resolveFtns, resolve];
-                });
-                return promise;
+                }
+            );
+            return promise;
+        }
+    }
+
+    async tryLockAndOpenChannel(channelId: string, lockerOpener: LockOpenListItem.Opener, refresh: boolean): Promise<Result<LockOpenNotificationChannel | undefined>> {
+        const lockResult = await this.tryLockChannel(channelId, lockerOpener, refresh);
+        if (lockResult.isErr()) {
+            return lockResult;
+        } else {
+            const lockedChannel = lockResult.value;
+            if (lockedChannel === undefined) {
+                return new Ok(undefined);
+            } else {
+                const openResult = await this.tryOpenChannel(lockedChannel, lockerOpener);
+                if (openResult.isErr()) {
+                    return openResult;
+                } else {
+                    const openedChannel = openResult.value;
+                    return new Ok(openedChannel);
+                }
             }
         }
     }
 
     unlockChannel(channel: LockOpenNotificationChannel, locker: LockOpenListItem.Locker) {
-        this._channelList.unlockItem(channel, locker);
+        this.list.unlockItem(channel, locker);
+    }
+
+    closeChannel(openedChannel: LockOpenNotificationChannel, opener: LockOpenListItem.Opener) {
+        this.list.closeLockedItem(openedChannel, opener);
     }
 
     // getChannelStateWithSettings(channelId: string): Promise<> {
@@ -148,13 +201,15 @@ export class NotificationChannelsService {
             dataItemOrPromise.then(
                 (dataItem) => {
                     if (dataItem !== undefined) { // If undefined, then cancelled.  Ignore cancels as may have been replaced by newer request (see finalise as well)
+                        let result: Result<readonly NotificationDistributionMethodId[] | undefined>;
                         if (dataItem.error) {
-                            Logger.logDataError('NCSRSDMI43071', '', undefined, '');
+                            result = new Err(dataItem.errorText);
                         } else {
                             this._supportedDistributionMethodIds = dataItem.methodIds;
                             this._supportedDistributionMethodIdsLoaded = true;
+                            result = new Ok(this._supportedDistributionMethodIds);
                         }
-                        this._getSupportedDistributionMethodIdsResolves.forEach((resolve) => resolve(this._supportedDistributionMethodIds));
+                        this._getSupportedDistributionMethodIdsResolves.forEach((resolve) => resolve(result));
                     }
                 },
                 (reason) => { throw AssertInternalError.createIfNotError(reason, 'NCSRSDMR50971'); }
@@ -174,13 +229,16 @@ export class NotificationChannelsService {
             dataItemOrPromise.then(
                 (dataItem) => {
                     if (dataItem !== undefined) { // If undefined, then cancelled.  Ignore cancels as may have been replaced by newer request (see finalise as well)
+                        let result: Result<LockOpenNotificationChannelList | undefined>;
                         if (dataItem.error) {
-                            Logger.logDataError('NCSRCDE50971', '', undefined, '');
+                            result = new Err(dataItem.errorText);
                         } else {
-                            this._channelList.load(dataItem.notificationChannels, false);
+                            this.list.load(dataItem.notificationChannels, false);
                             this._channelListBeenLoaded = true;
+                            result = new Ok(this.list);
                         }
-                        this._queryNotificationChannelsResolves.forEach((resolve) => resolve(this._channelList));
+                        this._queryNotificationChannelsResolves.forEach((resolve) => resolve(result));
+                        this._queryNotificationChannelsResolves.length = 0;
                     }
                 },
                 (reason) => { throw AssertInternalError.createIfNotError(reason, 'NCSRCDR50971'); }
@@ -229,7 +287,7 @@ export class NotificationChannelsService {
                             this.deleteIdQueryNotificationChannelIncubator(idIncubator);
                         } else {
                             const notificationChannel = dataItem.notificationChannelStateAndSettings;
-                            const idx = this._channelList.indexOfKey(notificationChannel.channelId);
+                            const idx = this.list.indexOfKey(notificationChannel.channelId);
                             let channel: LockOpenNotificationChannel;
                             if (idx >= 0) {
                                 channel = channelList.getAt(idx);
@@ -283,6 +341,8 @@ export class NotificationChannelsService {
         if (index < 0) {
             throw new AssertInternalError('NCSDIQNCI45454', `${index}`);
         } else {
+            idIncubator = idIncubators[index];
+            idIncubator.resolveFtns.length = 0;
             idIncubators.splice(index, 1);
         }
     }
@@ -304,9 +364,9 @@ export namespace NotificationChannelsService {
         removeAtIndex(idx: Integer): void;
     }
 
-    export type GetSupportedDistributionMethodIdsResolve = (this: void, value: readonly NotificationDistributionMethodId[] | undefined) => void;
-    export type QueryNotificationChannelsResolve = (this: void, list: LockOpenNotificationChannelList | undefined) => void;
-    export type QueryNotificationChannelResolve = (this: void, channel: Result<LockOpenNotificationChannel | undefined>) => void;
+    export type GetSupportedDistributionMethodIdsResolve = (this: void, result: Result<readonly NotificationDistributionMethodId[] | undefined>) => void;
+    export type QueryNotificationChannelsResolve = (this: void, result: Result<LockOpenNotificationChannelList | undefined>) => void;
+    export type QueryNotificationChannelResolve = (this: void, result: Result<LockOpenNotificationChannel | undefined>) => void;
 
     export interface IdQueryNotificationChannelIncubator {
         readonly channelId: string;
