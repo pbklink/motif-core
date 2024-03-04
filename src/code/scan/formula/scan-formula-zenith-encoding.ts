@@ -1005,10 +1005,10 @@ export namespace ScanFormulaZenithEncoding {
                             }
                         }
                         case 'object': {
-                            if (param1 === null) {
+                            if (param2 === null) {
                                 return createDecodeErrorResult(ErrorId.NamedParametersCannotBeNull, '');
                             } else {
-                                const { As: as, IgnoreCase: ignoreCase } = param1 as ZenithEncodedScanFormula.TextNamedParameters
+                                const { As: as, IgnoreCase: ignoreCase } = param2 as ZenithEncodedScanFormula.TextNamedParameters
                                 if (!subbed) {
                                     return tryDecodeTextFieldContainsNode(fieldId as ScanFormula.TextContainsFieldId, param1, as, ignoreCase);
                                 } else {
