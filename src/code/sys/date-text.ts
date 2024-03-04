@@ -4,7 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
-import { assert, defined } from './utils';
+import { Iso8601 } from './iso8601';
+import { Integer } from './types';
 
 // Dates on the GUI are strings. This unit provides functions to check date strings match expected formats.
 /** @public */
@@ -16,14 +17,12 @@ export namespace DateText {
         if (text === '') {
             return true;
         } else {
-            const re = /[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}/;
-            if (!re.test(text)) {
+            const { nextIdx, year: ignoredYear, month, day } = Iso8601.parseDateIntoParts(text);
+            if (nextIdx === -1) {
                 return false;
+            } else {
+                return isValidMonthAndDayValue(month, day);
             }
-            const dateParts = text.split('-');
-            const monthPart = parseInt(dateParts[1], 10);
-            const dayPart = parseInt(dateParts[2], 10);
-            return isValidMonthAndDayValue(monthPart, dayPart);
         }
     }
 
@@ -31,29 +30,55 @@ export namespace DateText {
         return (month >= 1 && month <= 12 && day >= 1 && day <= 31);
     }
 
-    export function toDate(text: string): Date | undefined {
-        assert(isValidDateText(text), 'ID:2821111713');
-        if (text !== '') {
-            return new Date(text);
-        } else {
+    export function toDate(text: string, utc: boolean): Date | undefined {
+        if (text === '') {
             return undefined;
-        }
-    }
-
-    export function toStr(date: Date | undefined): string {
-        // TODO:MED Is it possible to use Date.toLocaleString() to convert the date to a string?
-        //
-        // #CodeLink:3729104804
-        if (defined(date)) {
-            return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
         } else {
-            return '';
+            const { nextIdx, year, month, day } = Iso8601.parseDateIntoParts(text);
+            const monthIndex = month - 1;
+            if (nextIdx === -1) {
+                return undefined;
+            } else {
+                if (utc) {
+                    const dateMilliseconds = Date.UTC(year, monthIndex, day);
+                    return new Date(dateMilliseconds);
+                } else {
+                    return new Date(year, monthIndex, day);
+                }
+            }
         }
     }
 
-    export function tryParseDate(value: string): Date | undefined {
-        const ms = Date.parse(value);
-        return defined(ms) && !isNaN(ms) ? new Date(ms) : undefined;
+    export function fromDate(date: Date | undefined, utc: boolean): string {
+        if (date === undefined) {
+            return '';
+        } else {
+            let year: Integer;
+            let month: Integer;
+            let day: Integer;
+            if (utc) {
+                year = date.getUTCFullYear();
+                month = date.getUTCMonth();
+                day = date.getUTCDate();
+            } else {
+                year = date.getFullYear();
+                month = date.getMonth();
+                day = date.getDate();
+            }
+            const monthIndex = month + 1;
+
+            const yearStr = year.toString(10);
+            let monthStr = monthIndex.toString(10);
+            if (monthStr.length === 1) {
+                monthStr = '0' + monthStr;
+            }
+            let dayStr = day.toString(10);
+            if (dayStr.length === 1) {
+                dayStr = '0' + dayStr;
+            }
+
+            return `${yearStr}-${monthStr}-${dayStr}`;
+        }
     }
 }
 

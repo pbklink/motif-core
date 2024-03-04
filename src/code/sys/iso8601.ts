@@ -19,6 +19,7 @@ export namespace Iso8601 {
     const utcOffsetChar = 'Z';
     const positiveOffsetChar = '+';
     const negativeOffsetChar = '-';
+    const yyyymmddDatePartLength = 8;
 
     interface ParseResult {
         utcDate: Date;
@@ -33,7 +34,7 @@ export namespace Iso8601 {
         let seconds: number;
         let milliseconds: number;
         let offset: Integer;
-        const { nextIdx: afterDateNextIdx, year, month, date } = parseDate(value);
+        const { nextIdx: afterDateNextIdx, year, month, day } = parseDateIntoParts(value);
         let nextIdx = afterDateNextIdx;
         if (nextIdx < 0) {
             return undefined;
@@ -52,14 +53,14 @@ export namespace Iso8601 {
                     milliseconds = 0;
                     offset = 0;
                 } else {
-                    const hoursMinutesSecondsParseResult = parseHoursMinutesSeconds(value, nextIdx + 1);
-                    nextIdx = hoursMinutesSecondsParseResult.nextIdx;
+                    const timeParts = parseTimeIntoParts(value, nextIdx + 1);
+                    nextIdx = timeParts.nextIdx;
                     if (nextIdx < 0) {
                         return undefined;
                     } else {
-                        hours = hoursMinutesSecondsParseResult.hours;
-                        minutes = hoursMinutesSecondsParseResult.minutes;
-                        seconds = hoursMinutesSecondsParseResult.seconds;
+                        hours = timeParts.hours;
+                        minutes = timeParts.minutes;
+                        seconds = timeParts.seconds;
                     }
 
                     if (nextIdx === valueLength) {
@@ -101,7 +102,7 @@ export namespace Iso8601 {
         }
 
         // got required values
-        const dateMilliseconds = Date.UTC(year, month - 1, date, hours, minutes, seconds, milliseconds);
+        const dateMilliseconds = Date.UTC(year, month - 1, day, hours, minutes, seconds, milliseconds);
 
         return {
             utcDate: new Date(dateMilliseconds - offset), // Note that dateMilliseconds is actually in offset timezone
@@ -109,28 +110,28 @@ export namespace Iso8601 {
         };
     }
 
-    interface DateParseResult {
+    interface DateParts {
         nextIdx: Integer;
         year: Integer;
         month: Integer;
-        date: Integer;
+        day: Integer;
     }
 
-    function parseDate(value: string): DateParseResult {
+    export function parseDateIntoParts(value: string): DateParts {
         const nextIdx = datePartLength;
         if (value.length < nextIdx || value[4] !== yearMonthDaySeparator || value[7] !== yearMonthDaySeparator) {
             return {
                 nextIdx: -1,
                 year: 0,
                 month: 0,
-                date: 0
+                day: 0
             };
         } else {
-            const yearStr = value.substr(0, 4);
+            const yearStr = value.substring(0, 4);
             const year = parseIntStrict(yearStr);
-            const monthStr = value.substr(5, 2);
+            const monthStr = value.substring(5, 7);
             const month = parseIntStrict(monthStr);
-            const dayStr = value.substr(8, 2);
+            const dayStr = value.substring(8, 10);
             const day = parseIntStrict(dayStr);
 
             if (year === undefined || month === undefined || day === undefined) {
@@ -138,27 +139,63 @@ export namespace Iso8601 {
                     nextIdx: -1,
                     year: 0,
                     month: 0,
-                    date: 0
+                    day: 0
                 };
             } else {
                 return {
                     nextIdx,
                     year,
                     month,
-                    date: day
+                    day
                 };
             }
         }
     }
 
-    interface HoursMinutesSecondsParseResult {
+    // Extended format (not used in Zenith)
+    export function parseYyyymmddDateIntoParts(value: string): DateParts {
+        const nextIdx = yyyymmddDatePartLength;
+        if (value.length < nextIdx) {
+            return {
+                nextIdx: -1,
+                year: 0,
+                month: 0,
+                day: 0
+            };
+        } else {
+            const yearStr = value.substring(0, 4);
+            const year = parseIntStrict(yearStr);
+            const monthStr = value.substring(4, 6);
+            const month = parseIntStrict(monthStr);
+            const dayStr = value.substring(6, 8);
+            const day = parseIntStrict(dayStr);
+
+            if (year === undefined || month === undefined || day === undefined) {
+                return {
+                    nextIdx: -1,
+                    year: 0,
+                    month: 0,
+                    day: 0
+                };
+            } else {
+                return {
+                    nextIdx,
+                    year,
+                    month,
+                    day
+                };
+            }
+        }
+    }
+
+    interface TimeParts {
         nextIdx: Integer;
         hours: Integer;
         minutes: Integer;
         seconds: Integer;
     }
 
-    function parseHoursMinutesSeconds(value: string, idx: Integer): HoursMinutesSecondsParseResult {
+    function parseTimeIntoParts(value: string, idx: Integer): TimeParts {
         const nextIdx = idx + hoursMinutesSecondsPartLength;
         if (value.length < nextIdx ||
                 value[idx + 2] !== hoursMonthsSecondsSeparatorChar ||
@@ -170,11 +207,11 @@ export namespace Iso8601 {
                 seconds: 0,
             };
         } else {
-            const hoursStr = value.substr(idx, 2);
+            const hoursStr = value.substring(idx, idx + 2);
             const hours = parseIntStrict(hoursStr);
-            const minutesStr = value.substr(idx + 3, 2);
+            const minutesStr = value.substring(idx + 3, idx + 5);
             const minutes = parseIntStrict(minutesStr);
-            const secondsStr = value.substr(idx + 6, 2);
+            const secondsStr = value.substring(idx + 6, idx + 8);
             const seconds = parseIntStrict(secondsStr);
 
             if (hours === undefined || minutes === undefined || seconds === undefined) {
@@ -211,7 +248,7 @@ export namespace Iso8601 {
             }
         }
 
-        const secondsStr = '0.' + value.substr(idx, nextIdx - idx);
+        const secondsStr = '0.' + value.substring(idx, nextIdx);
         const seconds = parseNumberStrict(secondsStr);
         if (seconds === undefined) {
             return {
@@ -271,9 +308,9 @@ export namespace Iso8601 {
                 offset: 0,
             };
         } else {
-            const hoursStr = value.substr(idx, 2);
+            const hoursStr = value.substring(idx, idx + 2);
             const hours = parseIntStrict(hoursStr);
-            const minutesStr = value.substr(idx + 3, 2);
+            const minutesStr = value.substring(idx + 3, idx + 5);
             const minutes = parseIntStrict(minutesStr);
 
             if (hours === undefined || hours < 0 || hours >= 24 || minutes === undefined || minutes < 0 || minutes >= 60) {

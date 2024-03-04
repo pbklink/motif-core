@@ -16,8 +16,8 @@ export interface SourceTzOffsetDate {
 
 /** @public */
 export namespace SourceTzOffsetDate {
-    /** The Date.toLocale.. functions will set date to local timezone.  So the adjustment needs to take this into account */
-    export function getUtcTimezonedDate(value: SourceTzOffsetDate) {
+    /** Adjusts the time so that it is midnight in local timezone.  Only use for display */
+    export function getAsMidnightLocalTimeDate(value: SourceTzOffsetDate) {
         const utcDate = value.utcMidnight;
         return new Date(utcDate.getTime() + utcDate.getTimezoneOffset() * mSecsPerMin);
     }
@@ -40,7 +40,16 @@ export namespace SourceTzOffsetDate {
             };
             return result;
         }
+    }
 
+    export function createFromUtcDate(value: Date): SourceTzOffsetDate {
+        const utcMidnightDate = newDate(value);
+        utcMidnightDate.setUTCHours(0, 0, 0, 0);
+        const offset = -(value.getTimezoneOffset() * mSecsPerMin);
+        return {
+            utcMidnight: utcMidnightDate, // Internally dates are always utc
+            offset,
+        };
     }
 
     export function createFromLocalDate(value: Date): SourceTzOffsetDate {

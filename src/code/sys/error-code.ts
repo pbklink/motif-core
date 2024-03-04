@@ -93,6 +93,7 @@ export const enum ErrorCode {
     WatchmakerListIdRankedLitIvemIdListDefinition_WatchmakerListIdIsInvalid = 'WLIRLIILDWLIII87722',
     ScanList_InsertAlreadyExistingScan = 'SLIAES05822',
     ScansService_TryOpenScanEditor_LockScan = 'SSTOCELC67341',
+    ZenithConvert_InvalidYyyymmddDate = 'ZCIYD60912',
     ZenithMessageConvert_Notify_Controller = 'ZMCNC30666',
     ZenithMessageConvert_CreateScan_Action = 'ZMCCSA30666',
     ZenithMessageConvert_CreateScan_Topic = 'ZMCCST30666',

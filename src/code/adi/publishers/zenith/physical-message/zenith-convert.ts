@@ -15,6 +15,7 @@ import {
     ErrorCodeWithExtra,
     ErrorCodeWithExtraErr,
     Integer,
+    Iso8601,
     Logger,
     mSecsPerDay,
     mSecsPerHour,
@@ -131,8 +132,14 @@ export namespace ZenithConvert {
     export namespace Date {
         export namespace DateYYYYMMDD {
             export function toSourceTzOffsetDate(value: ZenithProtocol.DateYYYYMMDD): SourceTzOffsetDate | undefined {
-                return SourceTzOffsetDate.createFromIso8601(value);
-                // return new globalThis.Date(globalThis.Date.parse(value)); // switch to SourceTzOffsetDateTime
+                const { nextIdx, year, month, day } = Iso8601.parseYyyymmddDateIntoParts(value);
+                if (nextIdx === -1) {
+                    return undefined;
+                } else {
+                    const dateMilliseconds = globalThis.Date.UTC(year, month - 1, day);
+                    const utcMidnight = new globalThis.Date(dateMilliseconds);
+                    return SourceTzOffsetDate.createFromUtcDate(utcMidnight);
+                }
             }
 
             export function fromSourceTzOffsetDate(value: SourceTzOffsetDate): ZenithProtocol.DateYYYYMMDD {

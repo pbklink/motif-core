@@ -253,7 +253,7 @@ export class TextFormatterService {
     }
 
     formatSourceTzOffsetDate(value: SourceTzOffsetDate) {
-        const date = SourceTzOffsetDate.getUtcTimezonedDate(value); // is midnight in UTC
+        const date = SourceTzOffsetDate.getAsMidnightLocalTimeDate(value); // is midnight in UTC
         return this._dateFormat.format(date);
     }
 

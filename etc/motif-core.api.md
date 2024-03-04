@@ -6766,13 +6766,11 @@ export class DateTableValue extends GenericTableValue<Date> {
 // @public (undocumented)
 export namespace DateText {
     // (undocumented)
+    export function fromDate(date: Date | undefined, utc: boolean): string;
+    // (undocumented)
     export function isValidDateText(text: string): boolean;
     // (undocumented)
-    export function toDate(text: string): Date | undefined;
-    // (undocumented)
-    export function toStr(date: Date | undefined): string;
-    // (undocumented)
-    export function tryParseDate(value: string): Date | undefined;
+    export function toDate(text: string, utc: boolean): Date | undefined;
 }
 
 // Warning: (ae-missing-release-tag) "DateTimeCorrectnessTableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -9201,6 +9199,8 @@ export const enum ErrorCode {
     ZenithCalculateMarketId_DaxUnsupportedM1Node = "ZCMIDAXUM1N91007",
     // (undocumented)
     ZenithCalculateMarketId_DaxUnsupportedM2Node = "ZCMIDAXUM2N91007",
+    // (undocumented)
+    ZenithConvert_InvalidYyyymmddDate = "ZCIYD60912",
     // (undocumented)
     ZenithDepthMessage_AddChangeDoesNotContainOrder = "ZDMADDNCO10945",
     // (undocumented)
@@ -13882,12 +13882,27 @@ export function isIntlFormattedNumber(value: string, charParts: IntlNumberFormat
 // @internal (undocumented)
 export namespace Iso8601 {
     // (undocumented)
+    export interface DateParts {
+        // (undocumented)
+        day: Integer;
+        // (undocumented)
+        month: Integer;
+        // (undocumented)
+        nextIdx: Integer;
+        // (undocumented)
+        year: Integer;
+    }
+    // (undocumented)
+    export function parseDateIntoParts(value: string): DateParts;
+    // (undocumented)
     export interface ParseResult {
         // (undocumented)
         offset: Integer;
         // (undocumented)
         utcDate: Date;
     }
+    // (undocumented)
+    export function parseYyyymmddDateIntoParts(value: string): DateParts;
     export function parseZenith(value: string): ParseResult | undefined;
         {};
 }
@@ -29712,7 +29727,9 @@ export namespace SourceTzOffsetDate {
     export function createFromIso8601(value: string): SourceTzOffsetDate | undefined;
     // (undocumented)
     export function createFromLocalDate(value: Date): SourceTzOffsetDate;
-    export function getUtcTimezonedDate(value: SourceTzOffsetDate): Date;
+    // (undocumented)
+    export function createFromUtcDate(value: Date): SourceTzOffsetDate;
+    export function getAsMidnightLocalTimeDate(value: SourceTzOffsetDate): Date;
     // (undocumented)
     export function isEqual(left: SourceTzOffsetDate, right: SourceTzOffsetDate): boolean;
     // (undocumented)

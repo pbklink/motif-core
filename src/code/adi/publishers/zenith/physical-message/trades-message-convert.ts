@@ -78,7 +78,7 @@ export namespace TradesMessageConvert {
             dataMessage.dataItemRequestNr = subscription.dataItemRequestNr;
             switch (actionId) {
                 case ZenithConvert.MessageContainer.Action.Id.Publish:
-                    if (message.Topic !== ZenithProtocol.MarketController.TopicName.QueryTrades) {
+                    if (message.Topic as ZenithProtocol.MarketController.TopicName !== ZenithProtocol.MarketController.TopicName.QueryTrades) {
                         throw new ZenithDataError(ErrorCode.TMCPMP9333857676, message.Topic);
                     } else {
                         const publishMsg = message as ZenithProtocol.MarketController.Trades.PayloadMessageContainer;

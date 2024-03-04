@@ -672,7 +672,7 @@ export class DayTradesDataDefinition extends DataDefinition {
     get referencable() { return true; }
 
     get date() { return this._date; }
-    set date(value: Date |undefined) {
+    set date(value: Date | undefined) {
         if (value === undefined) {
             this._date = undefined;
         } else {

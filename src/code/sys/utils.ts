@@ -1347,7 +1347,7 @@ export function isStringKeyValueObjectEqual(left: Record<string, string>, right:
 export function dateToUtcYYYYMMDD(value: Date) {
     const year = value.getUTCFullYear();
     const yearStr = year.toString(10);
-    const month = value.getUTCMonth();
+    const month = value.getUTCMonth() + 1;
     let monthStr = month.toString(10);
     if (monthStr.length === 1) {
         monthStr = '0' + monthStr;
