@@ -129,7 +129,7 @@ export class GridSource implements LockOpenListItem<GridSource>, IndexedRecord {
     }
 
     /** Can only call if a GridSource is already opened */
-    async openGridLayoutOrReferenceDefinition(
+    async tryOpenGridLayoutOrReferenceDefinition(
         definition: GridLayoutOrReferenceDefinition,
         opener: LockOpenListItem.Opener
     ): Promise<Result<void>> {

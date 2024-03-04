@@ -28,15 +28,17 @@ export namespace CreateNotificationChannelMessageConvert {
     }
 
     export function createPublishMessage(definition: CreateNotificationChannelDataDefinition) {
+
         const details: ZenithProtocol.ChannelController.ChannelDescriptor = {
             Name: definition.notificationChannelName,
             Description: definition.notificationChannelDescription,
             Metadata: ZenithChannelConvert.UserMetadata.fromMerge(definition.userMetadata, definition.favourite),
         }
 
+        const settings = definition.settings;
         const parameters: ZenithProtocol.ChannelController.ChannelParameters = {
             Type: ZenithChannelConvert.DistributionMethodType.fromId(definition.distributionMethodId),
-            Settings: definition.settings,
+            Settings: settings === undefined ? {} : settings,
         }
 
         const result: ZenithProtocol.ChannelController.CreateChannel.PublishMessageContainer = {

@@ -166,6 +166,8 @@ export namespace InternalCommand {
         RestoreSection,
         CollapseSection,
 
+        NotificationChannels_RefreshAll,
+
         ScanEditor_Apply,
         ScanEditor_Revert,
         ScanEditor_Delete,
@@ -334,6 +336,8 @@ export namespace InternalCommand {
         RestoreSection = 'RestoreSection',
         CollapseSection = 'CollapseSection',
 
+        NotificationChannels_RefreshAll = 'NotificationChannels_RefreshAll',
+
         ScanEditor_Apply = 'ScanEditor_Apply',
         ScanEditor_Revert = 'ScanEditor_Revert',
         ScanEditor_Delete = 'ScanEditor_Delete',
@@ -483,6 +487,7 @@ export namespace InternalCommand {
         ExpandSection: { id: Id.ExpandSection, nameId: NameId.ExpandSection },
         RestoreSection: { id: Id.RestoreSection, nameId: NameId.RestoreSection },
         CollapseSection: { id: Id.CollapseSection, nameId: NameId.CollapseSection },
+        NotificationChannels_RefreshAll: { id: Id.NotificationChannels_RefreshAll, nameId: NameId.NotificationChannels_RefreshAll },
         ScanEditor_Apply: { id: Id.ScanEditor_Apply, nameId: NameId.ScanEditor_Apply },
         ScanEditor_Revert: { id: Id.ScanEditor_Revert, nameId: NameId.ScanEditor_Revert },
         ScanEditor_Delete: { id: Id.ScanEditor_Delete, nameId: NameId.ScanEditor_Delete },

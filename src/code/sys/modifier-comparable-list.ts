@@ -19,6 +19,8 @@ export class ModifierComparableList<out T extends U, Modifier = void, in U = T> 
         super(compareItemsFtn);
     }
 
+    protected get modifier() { return this._modifier; }
+
     override clone(): ModifierComparableList<T, Modifier, U> {
         const result = new ModifierComparableList<T, Modifier, U>(this.notChangingModifier, this._compareItemsFtn);
         result.assign(this);
@@ -202,7 +204,7 @@ export class ModifierComparableList<out T extends U, Modifier = void, in U = T> 
         }
     }
 
-    private notifyAfterListChanged() {
+    protected notifyAfterListChanged() {
         const handlers = this._afterListChangedMultiEvent.copyHandlers();
         for (let i = 0; i < handlers.length; i++) {
             handlers[i](this._modifier);

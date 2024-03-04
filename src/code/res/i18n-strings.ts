@@ -74,12 +74,14 @@ export const enum StringId {
     Test,
     Search,
     Details,
+    Status,
     Acknowledge,
     Keywords,
     ContactMe,
     NotInterested,
     Interested,
     Similar,
+    Incompatible,
     // eslint-disable-next-line id-blacklist
     Undefined,
     Enabled,
@@ -150,6 +152,7 @@ export const enum StringId {
     ErrorOpening,
     ErrorOpeningSaved,
     ErrorCreatingNew,
+    ErrorDeleting,
     ValueRequired,
     CodeMissing,
     SymbolSourceDoesNotHaveDefaultMarket,
@@ -245,6 +248,7 @@ export const enum StringId {
     OrderAuthorise,
     Scans,
     TopShareholders,
+    GridLayout,
     ExecuteCommandTitle,
     ApplySymbolCaption,
     ApplySymbolTitle,
@@ -2341,6 +2345,32 @@ export const enum StringId {
     NotificationDistributionMethodDisplay_WebPush,
     NotificationDistributionMethodDisplay_ApplePush,
     NotificationDistributionMethodDisplay_GooglePush,
+    NotificationChannels_RefreshAllCaption,
+    NotificationChannels_RefreshAllDescription,
+    NotificationChannels_AddCaption,
+    NotificationChannels_AddDescription,
+    NotificationChannels_RemoveSelectedCaption,
+    NotificationChannels_RemoveSelectedDescription,
+    NotificationChannels_SelectAllCaption,
+    NotificationChannels_SelectAllDescription,
+    ScanFieldSetLoadErrorTypeDisplay_AndFieldHasOrChild,
+    ScanFieldSetLoadErrorTypeDisplay_AndFieldHasXorChild,
+    ScanFieldSetLoadErrorTypeDisplay_OrFieldHasAndChild,
+    ScanFieldSetLoadErrorTypeDisplay_OrFieldHasXorChild,
+    ScanFieldSetLoadErrorTypeDisplay_XorFieldDoesNotHave2Children,
+    ScanFieldSetLoadErrorTypeDisplay_XorFieldHasAndChild,
+    ScanFieldSetLoadErrorTypeDisplay_XorFieldHasOrChild,
+    ScanFieldSetLoadErrorTypeDisplay_XorFieldHasXorChild,
+    ScanFieldSetLoadErrorTypeDisplay_AndFieldOperatorCannotBeNegated,
+    ScanFieldSetLoadErrorTypeDisplay_OrFieldOperatorCannotBeNegated,
+    ScanFieldSetLoadErrorTypeDisplay_XorFieldOperatorCannotBeNegated,
+    ScanFieldSetLoadErrorTypeDisplay_AllConditionNotSupported,
+    ScanFieldSetLoadErrorTypeDisplay_NoneConditionNotSupported,
+    ScanFieldSetLoadErrorTypeDisplay_FieldConditionsOperationIdMismatch,
+    ScanFieldSetLoadErrorTypeDisplay_NumericComparisonBooleanNodeDoesNotHaveANumericFieldValueGetOperand,
+    ScanFieldSetLoadErrorTypeDisplay_NumericComparisonBooleanNodeDoesNotHaveANumberOperand,
+    ScanFieldSetLoadErrorTypeDisplay_FactoryCreateFieldError,
+    ScanFieldSetLoadErrorTypeDisplay_FactoryCreateFieldConditionError,
 
 }
 
@@ -2717,6 +2747,11 @@ export namespace I18nStrings {
                 en: 'Details',
             }
         },
+        Status: {
+            id: StringId.Status, translations: {
+                en: 'Status',
+            }
+        },
         Acknowledge: {
             id: StringId.Acknowledge, translations: {
                 en: 'Acknowledge',
@@ -2745,6 +2780,11 @@ export namespace I18nStrings {
         Similar: {
             id: StringId.Similar, translations: {
                 en: 'Similar',
+            }
+        },
+        Incompatible: {
+            id: StringId.Incompatible, translations: {
+                en: 'Incompatible',
             }
         },
         // eslint-disable-next-line id-blacklist
@@ -3084,13 +3124,18 @@ export namespace I18nStrings {
             }
         },
         ErrorOpeningSaved: {
-            id: StringId.ErrorOpening, translations: {
+            id: StringId.ErrorOpeningSaved, translations: {
                 en: 'Error opening saved',
             }
         },
         ErrorCreatingNew: {
             id: StringId.ErrorCreatingNew, translations: {
                 en: 'Error creating new',
+            }
+        },
+        ErrorDeleting: {
+            id: StringId.ErrorDeleting, translations: {
+                en: 'Error deleting',
             }
         },
         ValueRequired: {
@@ -3566,6 +3611,11 @@ export namespace I18nStrings {
         TopShareholders: {
             id: StringId.TopShareholders, translations: {
                 en: 'Top shareholders',
+            }
+        },
+        GridLayout: {
+            id: StringId.GridLayout, translations: {
+                en: 'Grid layout',
             }
         },
         ExecuteCommandTitle: {
@@ -14053,6 +14103,136 @@ export namespace I18nStrings {
         NotificationDistributionMethodDisplay_GooglePush: {
             id: StringId.NotificationDistributionMethodDisplay_GooglePush, translations: {
                 en: 'Google push',
+            }
+        },
+        NotificationChannels_RefreshAllCaption: {
+            id: StringId.NotificationChannels_RefreshAllCaption, translations: {
+                en: 'Refresh',
+            }
+        },
+        NotificationChannels_RefreshAllDescription: {
+            id: StringId.NotificationChannels_RefreshAllDescription, translations: {
+                en: 'Refresh list of channels',
+            }
+        },
+        NotificationChannels_AddCaption: {
+            id: StringId.NotificationChannels_AddCaption, translations: {
+                en: 'Add',
+            }
+        },
+        NotificationChannels_AddDescription: {
+            id: StringId.NotificationChannels_AddDescription, translations: {
+                en: 'Add a new channel of the selected type',
+            }
+        },
+        NotificationChannels_RemoveSelectedCaption: {
+            id: StringId.NotificationChannels_RemoveSelectedCaption, translations: {
+                en: 'Delete selected',
+            }
+        },
+        NotificationChannels_RemoveSelectedDescription: {
+            id: StringId.NotificationChannels_RemoveSelectedDescription, translations: {
+                en: 'Delete channels selected in grid',
+            }
+        },
+        NotificationChannels_SelectAllCaption: {
+            id: StringId.NotificationChannels_SelectAllCaption, translations: {
+                en: 'Select all',
+            }
+        },
+        NotificationChannels_SelectAllDescription: {
+            id: StringId.NotificationChannels_SelectAllDescription, translations: {
+                en: 'Select all channels',
+            }
+        },
+        ScanFieldSetLoadErrorTypeDisplay_AndFieldHasOrChild: {
+            id: StringId.ScanFieldSetLoadErrorTypeDisplay_AndFieldHasOrChild, translations: {
+                en: '"And" field has "Or" child',
+            }
+        },
+        ScanFieldSetLoadErrorTypeDisplay_AndFieldHasXorChild: {
+            id: StringId.ScanFieldSetLoadErrorTypeDisplay_AndFieldHasXorChild, translations: {
+                en: '"And" field has "Xor" child',
+            }
+        },
+        ScanFieldSetLoadErrorTypeDisplay_OrFieldHasAndChild: {
+            id: StringId.ScanFieldSetLoadErrorTypeDisplay_OrFieldHasAndChild, translations: {
+                en: '"Or" field has "And" child',
+            }
+        },
+        ScanFieldSetLoadErrorTypeDisplay_OrFieldHasXorChild: {
+            id: StringId.ScanFieldSetLoadErrorTypeDisplay_OrFieldHasXorChild, translations: {
+                en: '"Or" field has "Xor" child',
+            }
+        },
+        ScanFieldSetLoadErrorTypeDisplay_XorFieldDoesNotHave2Children: {
+            id: StringId.ScanFieldSetLoadErrorTypeDisplay_XorFieldDoesNotHave2Children, translations: {
+                en: '"Xor" field does not have 2 children',
+            }
+        },
+        ScanFieldSetLoadErrorTypeDisplay_XorFieldHasAndChild: {
+            id: StringId.ScanFieldSetLoadErrorTypeDisplay_XorFieldHasAndChild, translations: {
+                en: '"Xor" field has "And" child',
+            }
+        },
+        ScanFieldSetLoadErrorTypeDisplay_XorFieldHasOrChild: {
+            id: StringId.ScanFieldSetLoadErrorTypeDisplay_XorFieldHasOrChild, translations: {
+                en: '"Xor" field has "Or" child',
+            }
+        },
+        ScanFieldSetLoadErrorTypeDisplay_XorFieldHasXorChild: {
+            id: StringId.ScanFieldSetLoadErrorTypeDisplay_XorFieldHasXorChild, translations: {
+                en: '"Xor" field has "Xor" child',
+            }
+        },
+        ScanFieldSetLoadErrorTypeDisplay_AndFieldOperatorCannotBeNegated: {
+            id: StringId.ScanFieldSetLoadErrorTypeDisplay_AndFieldOperatorCannotBeNegated, translations: {
+                en: '"And" field operator cannot be negated',
+            }
+        },
+        ScanFieldSetLoadErrorTypeDisplay_OrFieldOperatorCannotBeNegated: {
+            id: StringId.ScanFieldSetLoadErrorTypeDisplay_OrFieldOperatorCannotBeNegated, translations: {
+                en: '"Or" field operator cannot be negated',
+            }
+        },
+        ScanFieldSetLoadErrorTypeDisplay_XorFieldOperatorCannotBeNegated: {
+            id: StringId.ScanFieldSetLoadErrorTypeDisplay_XorFieldOperatorCannotBeNegated, translations: {
+                en: '"Xor" field operator cannot be negated',
+            }
+        },
+        ScanFieldSetLoadErrorTypeDisplay_AllConditionNotSupported: {
+            id: StringId.ScanFieldSetLoadErrorTypeDisplay_AllConditionNotSupported, translations: {
+                en: '"All" condition not supported',
+            }
+        },
+        ScanFieldSetLoadErrorTypeDisplay_NoneConditionNotSupported: {
+            id: StringId.ScanFieldSetLoadErrorTypeDisplay_NoneConditionNotSupported, translations: {
+                en: '"None" condition not supported',
+            }
+        },
+        ScanFieldSetLoadErrorTypeDisplay_FieldConditionsOperationIdMismatch: {
+            id: StringId.ScanFieldSetLoadErrorTypeDisplay_FieldConditionsOperationIdMismatch, translations: {
+                en: 'Field conditions operation Id mismatch',
+            }
+        },
+        ScanFieldSetLoadErrorTypeDisplay_NumericComparisonBooleanNodeDoesNotHaveANumericFieldValueGetOperand: {
+            id: StringId.ScanFieldSetLoadErrorTypeDisplay_NumericComparisonBooleanNodeDoesNotHaveANumericFieldValueGetOperand, translations: {
+                en: 'Numeric comparison does not have a field operand',
+            }
+        },
+        ScanFieldSetLoadErrorTypeDisplay_NumericComparisonBooleanNodeDoesNotHaveANumberOperand: {
+            id: StringId.ScanFieldSetLoadErrorTypeDisplay_NumericComparisonBooleanNodeDoesNotHaveANumberOperand, translations: {
+                en: 'Numeric comparison does not have a number operand',
+            }
+        },
+        ScanFieldSetLoadErrorTypeDisplay_FactoryCreateFieldError: {
+            id: StringId.ScanFieldSetLoadErrorTypeDisplay_FactoryCreateFieldError, translations: {
+                en: 'Factory create field error',
+            }
+        },
+        ScanFieldSetLoadErrorTypeDisplay_FactoryCreateFieldConditionError: {
+            id: StringId.ScanFieldSetLoadErrorTypeDisplay_FactoryCreateFieldConditionError, translations: {
+                en: 'Factory create field condition error',
             }
         },
 

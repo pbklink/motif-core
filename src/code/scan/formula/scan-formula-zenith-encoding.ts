@@ -588,7 +588,7 @@ export namespace ScanFormulaZenithEncoding {
             case ZenithEncodedScanFormula.AltCodeTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.AltCodeSubbed, strict);
             case ZenithEncodedScanFormula.AttributeTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.AttributeSubbed, strict);
             case ZenithEncodedScanFormula.AuctionTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.Auction, strict);
-            case ZenithEncodedScanFormula.AuctionLastTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.Auction, strict);
+            case ZenithEncodedScanFormula.AuctionLastTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.AuctionLast, strict);
             case ZenithEncodedScanFormula.AuctionQuantityTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.AuctionQuantity, strict);
             case ZenithEncodedScanFormula.BestAskCountTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.BestAskCount, strict);
             case ZenithEncodedScanFormula.BestAskPriceTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.BestAskPrice, strict);

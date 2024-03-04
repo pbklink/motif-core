@@ -101,8 +101,8 @@ export class LockerScanAttachedNotificationChannelList extends ModifierComparabl
         this.remove(channel, modifier);
     }
 
-    detachChannelsAtIndices(detachIndices: Integer[]) {
-        this.removeAtIndices(detachIndices);
+    detachChannelsAtIndices(detachIndices: Integer[], modifier?: Integer) {
+        this.removeAtIndices(detachIndices, modifier);
     }
 
     detachAllChannels(modifier?: Integer) {
@@ -154,6 +154,11 @@ export class LockerScanAttachedNotificationChannelList extends ModifierComparabl
                 super.notifyListChange(listChangeTypeId, index, count);
                 break;
         }
+    }
+
+    protected override notifyAfterListChanged() {
+        super.notifyAfterListChanged();
+        this.notifyChanged(this.modifier);
     }
 
     private async tryLockChannel(

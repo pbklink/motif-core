@@ -13,17 +13,17 @@ export class LockOpenNotificationChannelList extends LockOpenList<LockOpenNotifi
     load(channels: readonly NotificationChannel[], settingsSpecified: boolean) {
         const existCount = this.count;
         const newCount = channels.length;
-        const newModifyArray = new Array<boolean>(newCount); // array which flags that an new channel already exists and will be modified
-        newModifyArray.fill(false); // initialise
+        const newModifieds = new Array<boolean>(newCount); // array which flags that an new channel already exists (and will be modified instead of added)
+        newModifieds.fill(false); // initialise
 
         // Force deleted and modify existing
         for (let i = existCount - 1; i >= 0; i--) {
             const existChannel = this.getAt(i);
             const existChannelId = existChannel.id;
             const newIndex = channels.findIndex((channel) => channel.channelId === existChannelId);
-            if (newIndex > 0) {
+            if (newIndex >= 0) {
                 // same as new.  Modify
-                newModifyArray[newIndex] = true;
+                newModifieds[newIndex] = true;
                 const newChannel = channels[newIndex];
                 existChannel.load(newChannel, settingsSpecified);
             } else {
@@ -36,11 +36,15 @@ export class LockOpenNotificationChannelList extends LockOpenList<LockOpenNotifi
         const addLockOpenNotificationChannels = new Array<LockOpenNotificationChannel>(newCount);
         let addCount = 0;
         for (let i = 0; i < newCount; i++) {
-            const channel = channels[i];
-            addLockOpenNotificationChannels[addCount++] = new LockOpenNotificationChannel(channel, settingsSpecified);
+            if (!newModifieds[i]) {
+                const channel = channels[i];
+                addLockOpenNotificationChannels[addCount++] = new LockOpenNotificationChannel(channel, settingsSpecified);
+            }
         }
 
-        this.addItems(addLockOpenNotificationChannels, addCount);
+        if (addCount > 0) {
+            this.addItems(addLockOpenNotificationChannels, addCount);
+        }
     }
 
     initialise() {
@@ -49,5 +53,16 @@ export class LockOpenNotificationChannelList extends LockOpenList<LockOpenNotifi
 
     finalise() {
 
+    }
+
+    indexOfChannelByName(name: string) {
+        const count = this.count;
+        for (let i = 0; i < count; i++) {
+            const channel = this.getAt(i);
+            if (channel.name === name) {
+                return i;
+            }
+        }
+        return -1;
     }
 }

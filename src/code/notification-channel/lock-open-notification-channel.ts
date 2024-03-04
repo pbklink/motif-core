@@ -18,7 +18,7 @@ export class LockOpenNotificationChannel implements LockOpenListItem<LockOpenNot
 
     private readonly _lockOpenManager: LockOpenManager<LockOpenNotificationChannel>;
 
-    private _valid: boolean;
+    private _valid = false;
     private _enabled: boolean;
     private _name: string;
     private _description: string | undefined;
@@ -86,6 +86,8 @@ export class LockOpenNotificationChannel implements LockOpenListItem<LockOpenNot
         this._faulted = notificationChannel.faulted;
 
         this._settingsLoaded = settingsSpecified;
+
+        this._valid = true;
     }
 
     async tryLock(locker: LockOpenListItem.Locker): Promise<Result<void>> {

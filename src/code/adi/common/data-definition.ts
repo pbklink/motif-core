@@ -1454,10 +1454,10 @@ export class CreateNotificationChannelDataDefinition extends FeedSubscriptionDat
     enabled: boolean;
     notificationChannelName: string;
     notificationChannelDescription?: string;
-    userMetadata: ZenithProtocolCommon.UserMetadata;
-    favourite: boolean;
+    userMetadata?: ZenithProtocolCommon.UserMetadata;
+    favourite?: boolean;
     distributionMethodId: NotificationDistributionMethodId;
-    settings: ZenithProtocolCommon.NotificationChannelSettings;
+    settings?: ZenithProtocolCommon.NotificationChannelSettings;
 
     constructor() {
         super(DataChannelId.CreateNotificationChannel);
@@ -1484,8 +1484,8 @@ export class UpdateNotificationChannelDataDefinition extends FeedSubscriptionDat
     enabled: boolean;
     notificationChannelName: string;
     notificationChannelDescription?: string;
-    userMetadata: ZenithProtocolCommon.UserMetadata;
-    favourite: boolean;
+    userMetadata?: ZenithProtocolCommon.UserMetadata;
+    favourite?: boolean;
     distributionMethodId: NotificationDistributionMethodId;
     settings: ZenithProtocolCommon.NotificationChannelSettings;
 
