@@ -6,12 +6,14 @@
 
 import { BrokerageAccountGroup, IvemId, LitIvemId, SearchSymbolsDataDefinition } from '../../../../adi/adi-internal-api';
 import {
+    LitIvemIdArrayRankedLitIvemIdListDefinition,
     LitIvemIdExecuteScanRankedLitIvemIdListDefinition,
     RankedLitIvemIdListDefinition,
     RankedLitIvemIdListDefinitionFactoryService,
     RankedLitIvemIdListDirectory,
+    ScanIdRankedLitIvemIdListDefinition,
 } from "../../../../ranked-lit-ivem-id-list/ranked-lit-ivem-id-list-internal-api";
-import { AssertInternalError, Err, ErrorCode, JsonElement, LockOpenListItem, NotImplementedError, Ok, Result, UiComparableList, UnreachableCaseError } from '../../../../sys/sys-internal-api';
+import { AssertInternalError, ErrorCode, JsonElement, LockOpenListItem, NotImplementedError, Ok, Result, UiComparableList, UnreachableCaseError } from '../../../../sys/sys-internal-api';
 import { GridField, GridFieldCustomHeadingsService } from '../../../field/grid-field-internal-api';
 import { TableFieldSourceDefinitionCachedFactoryService } from '../../field-source/grid-table-field-source-internal-api';
 import { BalancesTableRecordSourceDefinition } from './balances-table-record-source-definition';
@@ -75,9 +77,9 @@ export class TableRecordSourceDefinitionFactoryService {
         );
     }
 
-    createRankedLitIvemIdList(typeId: TableRecordSourceDefinition.TypeId, definition: RankedLitIvemIdListDefinition) {
-        switch (typeId) {
-            case TableRecordSourceDefinition.TypeId.ScanTest:
+    createRankedLitIvemIdList(definition: RankedLitIvemIdListDefinition) {
+        switch (definition.typeId) {
+            case RankedLitIvemIdListDefinition.TypeId.LitIvemIdExecuteScan:
                 if (definition instanceof LitIvemIdExecuteScanRankedLitIvemIdListDefinition) {
                     return new ScanTestTableRecordSourceDefinition(
                         this.gridFieldCustomHeadingsService,
@@ -85,16 +87,19 @@ export class TableRecordSourceDefinitionFactoryService {
                         definition,
                     );
                 } else {
-                    throw new AssertInternalError('TRSDFS66923', definition.typeId.toString());
+                    throw new AssertInternalError('TRSDFSCRLIILLIIES44456', definition.typeId.toString());
                 }
-            case TableRecordSourceDefinition.TypeId.Watchlist:
+            case RankedLitIvemIdListDefinition.TypeId.ScanId:
+            case RankedLitIvemIdListDefinition.TypeId.LitIvemIdArray:
                 return new WatchlistTableRecordSourceDefinition(
                     this.gridFieldCustomHeadingsService,
                     this.tableFieldSourceDefinitionCachedFactoryService,
-                    definition,
+                    definition as (LitIvemIdArrayRankedLitIvemIdListDefinition | ScanIdRankedLitIvemIdListDefinition),
                 );
+            case RankedLitIvemIdListDefinition.TypeId.WatchmakerListId:
+                throw new NotImplementedError('TRSDFSCRLIILWLI44456');
             default:
-                throw new AssertInternalError('TRSDFSCRLIIL44456', typeId.toString());
+                throw new UnreachableCaseError('TRSDFSCRLIILD44456', definition.typeId);
         }
     }
 
@@ -227,7 +232,7 @@ export class TableRecordSourceDefinitionFactoryService {
                     return new Ok(definition);
                 }
             }
-            case TableRecordSourceDefinition.TypeId.Watchlist: {
+            case TableRecordSourceDefinition.TypeId.RankedLitIvemIdList: {
                 const rankedLitIvemIdListDefinitionResult = RankedLitIvemIdListTableRecordSourceDefinition.tryCreateDefinition(
                     this._litIvemIdListDefinitionFactoryService,
                     element
@@ -238,12 +243,26 @@ export class TableRecordSourceDefinitionFactoryService {
                 } else {
                     const rankedLitIvemIdListDefinition = rankedLitIvemIdListDefinitionResult.value;
 
-                    const definition = new WatchlistTableRecordSourceDefinition(
-                        this.gridFieldCustomHeadingsService,
-                        this.tableFieldSourceDefinitionCachedFactoryService,
-                        rankedLitIvemIdListDefinition
-                    )
-                    return new Ok(definition);
+                    switch (rankedLitIvemIdListDefinition.typeId) {
+                        case RankedLitIvemIdListDefinition.TypeId.LitIvemIdArray: {
+                            const definition = new WatchlistTableRecordSourceDefinition(
+                                this.gridFieldCustomHeadingsService,
+                                this.tableFieldSourceDefinitionCachedFactoryService,
+                                rankedLitIvemIdListDefinition as LitIvemIdArrayRankedLitIvemIdListDefinition
+                            )
+                            return new Ok(definition);
+                        }
+                        case RankedLitIvemIdListDefinition.TypeId.WatchmakerListId:
+                            throw new NotImplementedError('TRSDFSRLIILWLII78783');
+                        case RankedLitIvemIdListDefinition.TypeId.ScanId:
+                            throw new NotImplementedError('TRSDFSRLIILSI78783');
+                        case RankedLitIvemIdListDefinition.TypeId.LitIvemIdExecuteScan: {
+                            const definition = this.createScanTest(rankedLitIvemIdListDefinition as LitIvemIdExecuteScanRankedLitIvemIdListDefinition);
+                            return new Ok(definition);
+                        }
+                        default:
+                            throw new UnreachableCaseError('TRSDFSRLIILU78783', rankedLitIvemIdListDefinition.typeId);
+                    }
                 }
             }
             case TableRecordSourceDefinition.TypeId.MarketMovers:
@@ -327,20 +346,6 @@ export class TableRecordSourceDefinitionFactoryService {
             case TableRecordSourceDefinition.TypeId.GridField: {
                 const definition = this.createGridField([]); // persistence not implemented
                 return new Ok(definition);
-            }
-            case TableRecordSourceDefinition.TypeId.ScanTest: {
-                const listDefinitionResult = RankedLitIvemIdListTableRecordSourceDefinition.tryCreateDefinition(this._litIvemIdListDefinitionFactoryService, element);
-                if (listDefinitionResult.isErr()) {
-                    return listDefinitionResult.createOuter(ErrorCode.TableRecordSourceDefinitionFactoryService_ScanTest_CreateListDefinition);
-                } else {
-                    const listDefinition = listDefinitionResult.value;
-                    if (!(listDefinition instanceof LitIvemIdExecuteScanRankedLitIvemIdListDefinition)) {
-                        return new Err(ErrorCode.TableRecordSourceDefinitionFactoryService_ScanTest_ListDefinitionNotExecuteScanType);
-                    } else {
-                        const definition = this.createScanTest(listDefinition);
-                        return new Ok(definition);
-                    }
-                }
             }
             case TableRecordSourceDefinition.TypeId.ScanFieldEditorFrame: {
                 throw new AssertInternalError('TRSDFSTCTFJSFEF45550', 'outside');

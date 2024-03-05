@@ -6,7 +6,7 @@
 
 import { SecurityDataItem } from '../../../../adi/adi-internal-api';
 import {
-    RankedLitIvemIdListDefinition
+    LitIvemIdArrayRankedLitIvemIdListDefinition, ScanIdRankedLitIvemIdListDefinition
 } from "../../../../ranked-lit-ivem-id-list/ranked-lit-ivem-id-list-internal-api";
 import { GridFieldCustomHeadingsService } from '../../../field/grid-field-internal-api';
 import { GridLayoutDefinition } from '../../../layout/grid-layout-internal-api';
@@ -25,12 +25,11 @@ export class WatchlistTableRecordSourceDefinition extends RankedLitIvemIdListTab
     constructor(
         customHeadingsService: GridFieldCustomHeadingsService,
         tableFieldSourceDefinitionCachedFactoryService: TableFieldSourceDefinitionCachedFactoryService,
-        rankedLitIvemIdListDefinition: RankedLitIvemIdListDefinition
+        rankedLitIvemIdListDefinition: LitIvemIdArrayRankedLitIvemIdListDefinition | ScanIdRankedLitIvemIdListDefinition,
     ) {
         super(
             customHeadingsService,
             tableFieldSourceDefinitionCachedFactoryService,
-            TableRecordSourceDefinition.TypeId.Watchlist,
             WatchlistTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
             rankedLitIvemIdListDefinition,
         );
@@ -115,6 +114,6 @@ export namespace WatchlistTableRecordSourceDefinition {
     }
 
     export function is(definition: TableRecordSourceDefinition): definition is WatchlistTableRecordSourceDefinition {
-        return definition.typeId === TableRecordSourceDefinition.TypeId.Watchlist;
+        return definition.typeId === TableRecordSourceDefinition.TypeId.RankedLitIvemIdList;
     }
 }

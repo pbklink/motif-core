@@ -220,7 +220,6 @@ export const enum ErrorCode {
     LitIvemIdListTableRecordSourceDefinition_JsonLitIvemIdArrayIsInvalid = 'LIILTRSDJLIIAII60330',
     TableRecordSourceDefinitionFactoryService_TryCreateFromJson_TypeId = 'TRSDFSTCFJTI91118',
     TableRecordSourceDefinitionFactoryService_TryCreateFromJson_Definition = 'TRSDFSTCFJD91118',
-    TableRecordSourceDefinitionFactoryService_ScanTest_CreateListDefinition = 'TRSDFSSTCLD91118',
     TableRecordSourceDefinitionFactoryService_ScanTest_ListDefinitionNotExecuteScanType = 'TRSDFSSTLDNEST91118',
     TableRecordSourceDefinitionFactoryService_TopShareholder_CreateParametersError = 'TRSDFSTSCPE91118',
     TableRecordSourceDefinitionFactoryService_LitIvemDetailsFromSearchSymbols_DataDefinitionCreateError = 'TRSDFSLIDFSSDDCE91118',

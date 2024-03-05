@@ -68,7 +68,7 @@ export class TableRecordSourceFactoryService {
             case TableRecordSourceDefinition.TypeId.Null: throw new NotImplementedError('TRSFCFDN29984');
             case TableRecordSourceDefinition.TypeId.LitIvemIdComparableList: return this.createLitIvemIdComparableList(definition);
             case TableRecordSourceDefinition.TypeId.LitIvemDetailsFromSearchSymbols: return this.createLitIvemDetailFromSearchSymbols(definition);
-            case TableRecordSourceDefinition.TypeId.Watchlist: return this.createWatchlist(definition);
+            case TableRecordSourceDefinition.TypeId.RankedLitIvemIdList: return this.createRankedLitIvemIdList(definition);
             case TableRecordSourceDefinition.TypeId.MarketMovers: throw new NotImplementedError('TRSFCFDMM3820');
             case TableRecordSourceDefinition.TypeId.Gics: throw new NotImplementedError('TRSFCFDG78783');
             case TableRecordSourceDefinition.TypeId.ProfitIvemHolding: throw new NotImplementedError('TRSFCFDP18885');
@@ -89,7 +89,6 @@ export class TableRecordSourceFactoryService {
             case TableRecordSourceDefinition.TypeId.Scan: return this.createScan(definition);
             case TableRecordSourceDefinition.TypeId.RankedLitIvemIdListDirectoryItem: return this.createRankedLitIvemIdListDirectoryItem(definition);
             case TableRecordSourceDefinition.TypeId.GridField: return this.createGridField(definition);
-            case TableRecordSourceDefinition.TypeId.ScanTest: return this.createScanTest(definition);
             case TableRecordSourceDefinition.TypeId.ScanFieldEditorFrame: return this.factoryClosure[definition.typeId](definition); // in future create all via registration
             case TableRecordSourceDefinition.TypeId.ScanEditorAttachedNotificationChannel: return this.factoryClosure[definition.typeId](definition); // in future create all via registration
             case TableRecordSourceDefinition.TypeId.LockOpenNotificationChannelList: return this.factoryClosure[definition.typeId](definition); // in future create all via registration
@@ -124,7 +123,7 @@ export class TableRecordSourceFactoryService {
         }
     }
 
-    createWatchlist(definition: TableRecordSourceDefinition) {
+    createRankedLitIvemIdList(definition: TableRecordSourceDefinition) {
         if (definition instanceof RankedLitIvemIdListTableRecordSourceDefinition) {
             return new RankedLitIvemIdListTableRecordSource(
                 this._adiService,
@@ -135,7 +134,7 @@ export class TableRecordSourceFactoryService {
                 definition,
             );
         } else {
-            throw new AssertInternalError('TRSFCW21099');
+            throw new AssertInternalError('TRSFCRLIIL21099');
         }
     }
 

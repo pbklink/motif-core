@@ -10,7 +10,6 @@ import { GridFieldCustomHeadingsService } from '../../../field/grid-field-intern
 import { GridLayoutDefinition } from '../../../layout/grid-layout-internal-api';
 import { TableFieldSourceDefinition, TableFieldSourceDefinitionCachedFactoryService } from '../../field-source/grid-table-field-source-internal-api';
 import { RankedLitIvemIdListTableRecordSourceDefinition } from './ranked-lit-ivem-id-list-table-record-source-definition';
-import { TableRecordSourceDefinition } from './table-record-source-definition';
 
 /** @public */
 export class ScanTestTableRecordSourceDefinition extends RankedLitIvemIdListTableRecordSourceDefinition {
@@ -22,7 +21,6 @@ export class ScanTestTableRecordSourceDefinition extends RankedLitIvemIdListTabl
         super(
             customHeadingsService,
             tableFieldSourceDefinitionCachedFactoryService,
-            TableRecordSourceDefinition.TypeId.ScanTest,
             ScanTestTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
             rankedLitIvemIdListDefinition,
         );

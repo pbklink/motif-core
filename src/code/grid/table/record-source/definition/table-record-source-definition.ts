@@ -85,7 +85,7 @@ export namespace TableRecordSourceDefinition {
         Null,
         LitIvemIdComparableList,
         LitIvemDetailsFromSearchSymbols,
-        Watchlist,
+        RankedLitIvemIdList,
         MarketMovers,
         Gics,
         ProfitIvemHolding,
@@ -107,7 +107,6 @@ export namespace TableRecordSourceDefinition {
         RankedLitIvemIdListDirectoryItem,
         // eslint-disable-next-line @typescript-eslint/no-shadow
         GridField,
-        ScanTest,
         ScanFieldEditorFrame,
         ScanEditorAttachedNotificationChannel,
         LockOpenNotificationChannelList,
@@ -149,11 +148,11 @@ export namespace TableRecordSourceDefinition {
                 display: StringId.TableRecordDefinitionList_ListTypeDisplay_LitIvemDetailsFromSearchSymbols,
                 abbr: StringId.TableRecordDefinitionList_ListTypeAbbr_LitIvemDetailsFromSearchSymbols
             },
-            Watchlist: {
-                id: TableRecordSourceDefinition.TypeId.Watchlist,
-                name: 'Watchlist',
-                display: StringId.TableRecordDefinitionList_ListTypeDisplay_Watchlist,
-                abbr: StringId.TableRecordDefinitionList_ListTypeAbbr_Watchlist
+            RankedLitIvemIdList: {
+                id: TableRecordSourceDefinition.TypeId.RankedLitIvemIdList,
+                name: 'LitIvemIdArrayRankedLitIvemIdList',
+                display: StringId.TableRecordDefinitionList_ListTypeDisplay_LitIvemIdArrayRankedLitIvemIdList,
+                abbr: StringId.TableRecordDefinitionList_ListTypeAbbr_LitIvemIdArrayRankedLitIvemIdList
             },
             MarketMovers: {
                 id: TableRecordSourceDefinition.TypeId.MarketMovers,
@@ -274,12 +273,6 @@ export namespace TableRecordSourceDefinition {
                 name: 'GridField',
                 display: StringId.TableRecordDefinitionList_ListTypeDisplay_GridField,
                 abbr: StringId.TableRecordDefinitionList_ListTypeAbbr_GridField
-            },
-            ScanTest: {
-                id: TableRecordSourceDefinition.TypeId.ScanTest,
-                name: 'ScanTest',
-                display: StringId.TableRecordDefinitionList_ListTypeDisplay_ScanTest,
-                abbr: StringId.TableRecordDefinitionList_ListTypeAbbr_ScanTest
             },
             ScanFieldEditorFrame: {
                 id: TableRecordSourceDefinition.TypeId.ScanFieldEditorFrame,

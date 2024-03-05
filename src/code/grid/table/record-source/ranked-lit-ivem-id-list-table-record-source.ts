@@ -51,7 +51,7 @@ export class RankedLitIvemIdListTableRecordSource extends SubscribeBadnessListTa
             throw new AssertInternalError('RLIILORCD50091');
         } else {
             const listDefinition = list.createDefinition();
-            return this.tableRecordSourceDefinitionFactoryService.createRankedLitIvemIdList(this.definition.typeId, listDefinition);
+            return this.tableRecordSourceDefinitionFactoryService.createRankedLitIvemIdList(listDefinition);
         }
     }
 

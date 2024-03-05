@@ -417,8 +417,8 @@ export const enum StringId {
     TableRecordDefinitionList_ListTypeAbbr_LitIvemIdList,
     TableRecordDefinitionList_ListTypeDisplay_LitIvemDetailsFromSearchSymbols,
     TableRecordDefinitionList_ListTypeAbbr_LitIvemDetailsFromSearchSymbols,
-    TableRecordDefinitionList_ListTypeDisplay_Watchlist,
-    TableRecordDefinitionList_ListTypeAbbr_Watchlist,
+    TableRecordDefinitionList_ListTypeDisplay_LitIvemIdArrayRankedLitIvemIdList,
+    TableRecordDefinitionList_ListTypeAbbr_LitIvemIdArrayRankedLitIvemIdList,
     TableRecordDefinitionList_ListTypeDisplay_MarketMovers,
     TableRecordDefinitionList_ListTypeAbbr_MarketMovers,
     TableRecordDefinitionList_ListTypeDisplay_Gics,
@@ -459,8 +459,6 @@ export const enum StringId {
     TableRecordDefinitionList_ListTypeAbbr_RankedLitIvemIdListDirectoryItem,
     TableRecordDefinitionList_ListTypeDisplay_GridField,
     TableRecordDefinitionList_ListTypeAbbr_GridField,
-    TableRecordDefinitionList_ListTypeDisplay_ScanTest,
-    TableRecordDefinitionList_ListTypeAbbr_ScanTest,
     TableRecordDefinitionList_ListTypeDisplay_ScanFieldEditorFrame,
     TableRecordDefinitionList_ListTypeAbbr_ScanFieldEditorFrame,
     TableRecordDefinitionList_ListTypeDisplay_ScanEditorAttachedNotificationChannel,
@@ -4462,13 +4460,13 @@ export namespace I18nStrings {
                 en: 'SymS',
             }
         },
-        TableRecordDefinitionList_ListTypeDisplay_Watchlist: {
-            id: StringId.TableRecordDefinitionList_ListTypeDisplay_Watchlist, translations: {
+        TableRecordDefinitionList_ListTypeDisplay_LitIvemIdArrayRankedLitIvemIdList: {
+            id: StringId.TableRecordDefinitionList_ListTypeDisplay_LitIvemIdArrayRankedLitIvemIdList, translations: {
                 en: 'Watchlist',
             }
         },
-        TableRecordDefinitionList_ListTypeAbbr_Watchlist: {
-            id: StringId.TableRecordDefinitionList_ListTypeAbbr_Watchlist, translations: {
+        TableRecordDefinitionList_ListTypeAbbr_LitIvemIdArrayRankedLitIvemIdList: {
+            id: StringId.TableRecordDefinitionList_ListTypeAbbr_LitIvemIdArrayRankedLitIvemIdList, translations: {
                 en: 'WL',
             }
         },
@@ -4670,16 +4668,6 @@ export namespace I18nStrings {
         TableRecordDefinitionList_ListTypeAbbr_GridField: {
             id: StringId.TableRecordDefinitionList_ListTypeAbbr_GridField, translations: {
                 en: 'GF',
-            }
-        },
-        TableRecordDefinitionList_ListTypeDisplay_ScanTest: {
-            id: StringId.TableRecordDefinitionList_ListTypeDisplay_ScanTest, translations: {
-                en: 'Scan Test',
-            }
-        },
-        TableRecordDefinitionList_ListTypeAbbr_ScanTest: {
-            id: StringId.TableRecordDefinitionList_ListTypeAbbr_ScanTest, translations: {
-                en: 'ST',
             }
         },
         TableRecordDefinitionList_ListTypeDisplay_ScanFieldEditorFrame: {

@@ -21,14 +21,13 @@ export abstract class RankedLitIvemIdListTableRecordSourceDefinition extends Tab
     constructor(
         customHeadingsService: GridFieldCustomHeadingsService,
         tableFieldSourceDefinitionCachedFactoryService: TableFieldSourceDefinitionCachedFactoryService,
-        typeId: TableRecordSourceDefinition.TypeId,
         allowedFieldSourceDefinitionTypeIds: RankedLitIvemIdListTableRecordSourceDefinition.FieldSourceDefinitionTypeId[],
         readonly rankedLitIvemIdListDefinition: RankedLitIvemIdListDefinition
     ) {
         super(
             customHeadingsService,
             tableFieldSourceDefinitionCachedFactoryService,
-            typeId,
+            TableRecordSourceDefinition.TypeId.RankedLitIvemIdList,
             allowedFieldSourceDefinitionTypeIds,
         );
     }
