@@ -438,7 +438,7 @@ export namespace SymbolsMessageConvert {
                     cfi: detail.CFI,
                     depthDirectionId: ifDefined(detail.DepthDirection, x => ZenithConvert.DepthDirection.toId(x)),
                     isIndex: detail.IsIndex,
-                    expiryDate: ifDefined(detail.ExpiryDate, x => ZenithConvert.Date.DateYYYYMMDD.toSourceTzOffsetDate(x)),
+                    expiryDate: ifDefined(detail.ExpiryDate, x => ZenithConvert.Date.DashedYyyyMmDdDate.toSourceTzOffsetDate(x)),
                     strikePrice: newUndefinableDecimal(detail.StrikePrice),
                     exerciseTypeId: ifDefined(detail.ExerciseType, x => ZenithConvert.ExerciseType.toId(x)),
                     callOrPutId: ifDefined(detail.CallOrPut, x => ZenithConvert.CallOrPut.toId(x)),

@@ -2477,11 +2477,11 @@ export namespace ScanFormulaZenithEncoding {
 
     namespace DateValue {
         export function encodeDate(value: SourceTzOffsetDate): ZenithEncodedScanFormula.DateString {
-            return ZenithConvert.Date.DateYYYYMMDD.fromSourceTzOffsetDate(value);
+            return ZenithConvert.Date.DashedYyyyMmDdDate.fromSourceTzOffsetDate(value);
         }
 
         export function tryDecodeDate(value: ZenithEncodedScanFormula.DateString): SourceTzOffsetDate | undefined {
-            return ZenithConvert.Date.DateYYYYMMDD.toSourceTzOffsetDate(value);
+            return ZenithConvert.Date.DashedYyyyMmDdDate.toSourceTzOffsetDate(value);
         }
     }
 

@@ -5,7 +5,7 @@
  */
 
 import { Decimal } from 'decimal.js-light';
-import { CommaText, dateToUtcYYYYMMDD, Guid, Integer, JsonElement, MapKey, newUndefinableDate, newUndefinableDecimal, NotImplementedError, Ok, Result } from '../../sys/sys-internal-api';
+import { CommaText, dateToUtcYyyyMmDd, Guid, Integer, JsonElement, MapKey, newUndefinableDate, newUndefinableDecimal, NotImplementedError, Ok, Result } from '../../sys/sys-internal-api';
 import { AdiPublisherSubscriptionDelayRetryAlgorithmId } from './adi-publisher-subscription-delay-retry-algorithm';
 import {
     BrokerageAccountId,
@@ -615,7 +615,7 @@ export class QueryTradesDataDefinition extends MarketSubscriptionDataDefinition 
             result += ` LastTradedId: ${this.lastTradeId}`;
         }
         if (this.tradingDate !== undefined) {
-            result += ` TradingDate: ${dateToUtcYYYYMMDD(this.tradingDate)}`;
+            result += ` TradingDate: ${dateToUtcYyyyMmDd(this.tradingDate)}`;
         }
         return result;
     }
@@ -682,12 +682,12 @@ export class DayTradesDataDefinition extends DataDefinition {
     }
 
     protected override getDescription(): string {
-        const dateDescription = this._date === undefined ? '' : ' ' + dateToUtcYYYYMMDD(this._date);
+        const dateDescription = this._date === undefined ? '' : ' ' + dateToUtcYyyyMmDd(this._date);
         return super.getDescription() + ` LitIvemId: ${this.litIvemId.name} Date: ${dateDescription}`;
     }
 
     protected override calculateChannelReferencableKey() {
-        const dateStr = this._date === undefined ? '' : dateToUtcYYYYMMDD(this._date);
+        const dateStr = this._date === undefined ? '' : dateToUtcYyyyMmDd(this._date);
         return dateStr + '|' + this.litIvemId.mapKey;
     }
 }

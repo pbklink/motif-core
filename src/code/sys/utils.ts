@@ -1344,7 +1344,7 @@ export function isStringKeyValueObjectEqual(left: Record<string, string>, right:
 }
 
 /** @public */
-export function dateToUtcYYYYMMDD(value: Date) {
+export function dateToUtcYyyyMmDd(value: Date) {
     const year = value.getUTCFullYear();
     const yearStr = year.toString(10);
     const month = value.getUTCMonth() + 1;
@@ -1359,6 +1359,34 @@ export function dateToUtcYYYYMMDD(value: Date) {
     }
 
     return yearStr + monthStr + dayOfMonthStr;
+}
+
+export function dateToDashedYyyyMmDd(date: Date, utc: boolean): string {
+    let year: Integer;
+    let month: Integer;
+    let day: Integer;
+    if (utc) {
+        year = date.getUTCFullYear();
+        month = date.getUTCMonth();
+        day = date.getUTCDate();
+    } else {
+        year = date.getFullYear();
+        month = date.getMonth();
+        day = date.getDate();
+    }
+    const monthIndex = month + 1;
+
+    const yearStr = year.toString(10);
+    let monthStr = monthIndex.toString(10);
+    if (monthStr.length === 1) {
+        monthStr = '0' + monthStr;
+    }
+    let dayStr = day.toString(10);
+    if (dayStr.length === 1) {
+        dayStr = '0' + dayStr;
+    }
+
+    return `${yearStr}-${monthStr}-${dayStr}`;
 }
 
 /** @public */

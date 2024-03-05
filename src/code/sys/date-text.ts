@@ -5,7 +5,7 @@
  */
 
 import { Iso8601 } from './iso8601';
-import { Integer } from './types';
+import { dateToDashedYyyyMmDd } from './utils';
 
 // Dates on the GUI are strings. This unit provides functions to check date strings match expected formats.
 /** @public */
@@ -53,31 +53,7 @@ export namespace DateText {
         if (date === undefined) {
             return '';
         } else {
-            let year: Integer;
-            let month: Integer;
-            let day: Integer;
-            if (utc) {
-                year = date.getUTCFullYear();
-                month = date.getUTCMonth();
-                day = date.getUTCDate();
-            } else {
-                year = date.getFullYear();
-                month = date.getMonth();
-                day = date.getDate();
-            }
-            const monthIndex = month + 1;
-
-            const yearStr = year.toString(10);
-            let monthStr = monthIndex.toString(10);
-            if (monthStr.length === 1) {
-                monthStr = '0' + monthStr;
-            }
-            let dayStr = day.toString(10);
-            if (dayStr.length === 1) {
-                dayStr = '0' + dayStr;
-            }
-
-            return `${yearStr}-${monthStr}-${dayStr}`;
+            return dateToDashedYyyyMmDd(date, utc);
         }
     }
 }

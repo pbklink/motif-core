@@ -15,7 +15,6 @@ import {
     ErrorCodeWithExtra,
     ErrorCodeWithExtraErr,
     Integer,
-    Iso8601,
     Logger,
     mSecsPerDay,
     mSecsPerHour,
@@ -31,7 +30,7 @@ import {
     SourceTzOffsetDateTime,
     UnexpectedCaseError,
     UnreachableCaseError,
-    ZenithDataError,
+    ZenithDataError
 } from '../../../../sys/sys-internal-api';
 import {
     ActiveFaultedStatusId,
@@ -130,25 +129,18 @@ export namespace ZenithConvert {
     }
 
     export namespace Date {
-        export namespace DateYYYYMMDD {
-            export function toSourceTzOffsetDate(value: ZenithProtocol.DateYYYYMMDD): SourceTzOffsetDate | undefined {
-                const { nextIdx, year, month, day } = Iso8601.parseYyyymmddDateIntoParts(value);
-                if (nextIdx === -1) {
-                    return undefined;
-                } else {
-                    const dateMilliseconds = globalThis.Date.UTC(year, month - 1, day);
-                    const utcMidnight = new globalThis.Date(dateMilliseconds);
-                    return SourceTzOffsetDate.createFromUtcDate(utcMidnight);
-                }
+        export namespace DashedYyyyMmDdDate {
+            export function toSourceTzOffsetDate(value: ZenithProtocol.DashedYyyyMmDdDate): SourceTzOffsetDate | undefined {
+                return SourceTzOffsetDate.createFromIso8601(value);
             }
 
-            export function fromSourceTzOffsetDate(value: SourceTzOffsetDate): ZenithProtocol.DateYYYYMMDD {
-                return SourceTzOffsetDate.toUtcYYYYMMDDString(value);
+            export function fromSourceTzOffsetDate(value: SourceTzOffsetDate): ZenithProtocol.DashedYyyyMmDdDate {
+                return SourceTzOffsetDate.toUtcDashedYyyyMmDdString(value);
             }
         }
 
         export namespace DateTimeIso8601 {
-            export function toSourceTzOffsetDateTime(value: ZenithProtocol.DateTimeIso8601): SourceTzOffsetDateTime | undefined {
+            export function toSourceTzOffsetDateTime(value: ZenithProtocol.Iso8601DateTime): SourceTzOffsetDateTime | undefined {
                 return SourceTzOffsetDateTime.createFromIso8601(value);
             }
 
@@ -158,13 +150,30 @@ export namespace ZenithConvert {
         }
 
         export namespace DateOptionalTimeIso8601 {
-            export function toDate(value: ZenithProtocol.DateOptionalTimeIso8601) {
+            export function toDate(value: ZenithProtocol.OptionalTimeIso8601Date) {
                 return new globalThis.Date(globalThis.Date.parse(value));
             }
             export function fromDate(value: globalThis.Date) {
                 throw new NotImplementedError('ZCDDOTI8FD121200932');
             }
         }
+
+        // export namespace DateYYYYMMDD {
+        //     export function toSourceTzOffsetDate(value: ZenithProtocol.DateYYYYdashMMdashDD): SourceTzOffsetDate | undefined {
+        //         const { nextIdx, year, month, day } = Iso8601.parseYyyymmddDateIntoParts(value);
+        //         if (nextIdx === -1) {
+        //             return undefined;
+        //         } else {
+        //             const dateMilliseconds = globalThis.Date.UTC(year, month - 1, day);
+        //             const utcMidnight = new globalThis.Date(dateMilliseconds);
+        //             return SourceTzOffsetDate.createFromUtcDate(utcMidnight);
+        //         }
+        //     }
+
+        //     export function fromSourceTzOffsetDate(value: SourceTzOffsetDate): ZenithProtocol.DateYYYYdashMMdashDD {
+        //         return SourceTzOffsetDate.toUtcYYYYMMDDString(value);
+        //     }
+        // }
     }
 
     export namespace Time {
@@ -2144,7 +2153,7 @@ export namespace ZenithConvert {
 
             let tradingDate: SourceTzOffsetDate | undefined;
             if (zenithState.TradingDate !== undefined) {
-                tradingDate = ZenithConvert.Date.DateYYYYMMDD.toSourceTzOffsetDate(zenithState.TradingDate);
+                tradingDate = ZenithConvert.Date.DashedYyyyMmDdDate.toSourceTzOffsetDate(zenithState.TradingDate);
             }
 
             let marketTime: SourceTzOffsetDateTime | undefined;
