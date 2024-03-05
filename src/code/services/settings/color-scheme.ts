@@ -355,6 +355,7 @@ export namespace ColorScheme {
 
         // Highlight,
         SectionDividerLine,
+        Toast,
 
         Panel,
         Panel_Hoisted,
@@ -2045,6 +2046,13 @@ export namespace ColorScheme {
                 display: 'Section: Divider Line',
                 bkgdResolver: undefined,
                 foreResolver: resolveForeColor_SectionDividerLine,
+            },
+            Toast: {
+                id: ItemId.Toast,
+                name: 'Toast',
+                display: 'Toast',
+                bkgdResolver: resolveBkgdColor_Toast,
+                foreResolver: resolveForeColor_Toast,
             },
             Panel: {
                 id: ItemId.Panel,
@@ -4355,6 +4363,14 @@ export namespace ColorScheme {
     function resolveForeColor_SectionDividerLine(items: Item[]) {
         const itemColor = items[ItemId.SectionDividerLine].fore;
         return (itemColor === schemeInheritColor) ? resolveForeColor_Panel_Divider(items) : itemColor;
+    }
+    function resolveBkgdColor_Toast(items: Item[]) {
+        const itemColor = items[ItemId.Toast].bkgd;
+        return (itemColor === schemeInheritColor) ? resolveBkgdColor_Panel_Hoisted(items) : itemColor;
+    }
+    function resolveForeColor_Toast(items: Item[]) {
+        const itemColor = items[ItemId.Toast].fore;
+        return (itemColor === schemeInheritColor) ? resolveForeColor_Panel_Hoisted(items) : itemColor;
     }
     function resolveBkgdColor_Panel(items: Item[]) {
         const itemColor = items[ItemId.Panel].bkgd;

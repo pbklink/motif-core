@@ -4428,17 +4428,17 @@ export namespace ColorScheme {
         // (undocumented)
         MenuBar_RootItemHighlighted = 23,
         // (undocumented)
-        Panel = 143,
+        Panel = 144,
         // (undocumented)
-        Panel_Alert = 145,
+        Panel_Alert = 146,
         // (undocumented)
-        Panel_Divider = 146,
+        Panel_Divider = 147,
         // (undocumented)
-        Panel_Hoisted = 144,
+        Panel_Hoisted = 145,
         // (undocumented)
-        Panel_ItemHover = 148,
+        Panel_ItemHover = 149,
         // (undocumented)
-        Panel_Splitter = 147,
+        Panel_Splitter = 148,
         // (undocumented)
         SectionDividerLine = 142,
         // (undocumented)
@@ -4480,7 +4480,9 @@ export namespace ColorScheme {
         // (undocumented)
         TextControl_Warning = 104,
         // (undocumented)
-        Unexpected = 149
+        Toast = 143,
+        // (undocumented)
+        Unexpected = 150
     }
     // (undocumented)
     export type OpaqueColor = string;

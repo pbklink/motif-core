@@ -213,6 +213,7 @@ export namespace ColorSchemePreset {
             Tab_ActiveBorder: { id: ColorScheme.ItemId.Tab_ActiveBorder, bkgd: NoneColor, fore: 'silver' },
 
             SectionDividerLine: { id: ColorScheme.ItemId.SectionDividerLine, bkgd: NoneColor, fore: inherit },
+            Toast: { id: ColorScheme.ItemId.Toast, bkgd: inherit, fore: inherit },
 
             Panel: { id: ColorScheme.ItemId.Panel, bkgd: BtnFaceColor, fore: WindowTextColor },
             Panel_Hoisted: { id: ColorScheme.ItemId.Panel_Hoisted, bkgd: inherit, fore: inherit },
@@ -488,6 +489,7 @@ export namespace ColorSchemePreset {
             Tab_Active: { id: ColorScheme.ItemId.Tab_Active, bkgd: inherit, fore: inherit },
             Tab_ActiveBorder: { id: ColorScheme.ItemId.Tab_ActiveBorder, bkgd: inherit, fore: 'silver' },
             SectionDividerLine: { id: ColorScheme.ItemId.SectionDividerLine, bkgd: NoneColor, fore: inherit },
+            Toast: { id: ColorScheme.ItemId.Toast, bkgd: '#2e2e2e', fore: inherit },
             Panel: { id: ColorScheme.ItemId.Panel, bkgd: '#171717', fore: '#EDE2E6' },
             Panel_Hoisted: { id: ColorScheme.ItemId.Panel_Hoisted, bkgd: '#1b1b1b', fore: inherit },
             Panel_Alert: { id: ColorScheme.ItemId.Panel_Alert, bkgd: 'brown', fore: NoneColor },
