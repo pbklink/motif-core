@@ -57,7 +57,6 @@ export class ScansService {
         opener: LockOpenListItem.Opener,
         emptyScanFieldSet?: ScanFieldSet,
         emptyScanConditionSet?: ScanConditionSet,
-        errorEventer?: ScanEditor.ErrorEventer,
     ): ScanEditor {
         return new ScanEditor(
             this._adiService,
@@ -68,7 +67,6 @@ export class ScansService {
             emptyScanFieldSet,
             emptyScanConditionSet,
             (createdScanId) => this.getOrWaitForScan(createdScanId),
-            errorEventer,
         );
     }
 
@@ -77,7 +75,6 @@ export class ScansService {
         opener: LockOpenListItem.Opener,
         newScanFieldSetCallback?: (this: void) => ScanFieldSet | undefined,
         newScanConditionSetCallback?: (this: void) => ScanConditionSet | undefined,
-        errorEventer?: ScanEditor.ErrorEventer,
     ): Promise<Result<ScanEditor | undefined>> {
         if (scanId === undefined) {
             const emptyScanFieldSet = newScanFieldSetCallback === undefined ? undefined : newScanFieldSetCallback();
@@ -106,7 +103,6 @@ export class ScansService {
                             emptyScanFieldSet,
                             emptyScanConditionSet,
                             (createdScanId) => this.getOrWaitForScan(createdScanId),
-                            errorEventer,
                         );
                         this._openedScanEditors.set(scan, openedEditor);
                     } else {

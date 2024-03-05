@@ -134,7 +134,6 @@ export class ScanEditor extends OpenableScanEditor {
         emptyScanFieldSet: ScanFieldSet | undefined,
         emptyScanConditionSet: ScanConditionSet | undefined,
         private readonly _getOrWaitForScanEventer: ScanEditor.GetOrWaitForScanEventer,
-        private readonly _errorEventer: ScanEditor.ErrorEventer | undefined,
     ) {
         super(opener);
         const attachedNotificationChannelsListLocker: LockOpenListItem.Locker = {
@@ -593,11 +592,9 @@ export class ScanEditor extends OpenableScanEditor {
     apply() {
         switch (this._lifeCycleStateId) {
             case ScanEditor.LifeCycleStateId.NotYetCreated:
-                this.createScan();
-                break;
+                return this.createScan();
             case ScanEditor.LifeCycleStateId.ExistsDetailLoaded:
-                this.updateScan();
-                break;
+                return this.updateScan();
             case ScanEditor.LifeCycleStateId.Creating:
             case ScanEditor.LifeCycleStateId.ExistsInitialDetailLoading:
             case ScanEditor.LifeCycleStateId.Updating:
@@ -617,18 +614,6 @@ export class ScanEditor extends OpenableScanEditor {
             this.loadScan(scan, true);
         }
         this.setUnmodified();
-    }
-
-    createScan() {
-        const promise = this.asyncCreateScan();
-        promise.then(
-            (result) => {
-                if (!this._finalised && result.isErr() && this._errorEventer !== undefined) {
-                    this._errorEventer(result.error);
-                }
-            },
-            (reason) => { throw AssertInternalError.createIfNotError(reason, 'SECS55716'); }
-        );
     }
 
     canCreateScan() {
@@ -653,7 +638,7 @@ export class ScanEditor extends OpenableScanEditor {
         }
     }
 
-    async asyncCreateScan(): Promise<Result<Scan>> {
+    async createScan(): Promise<Result<Scan>> {
         const targetTypeId = this._targetTypeId;
         if (targetTypeId === undefined) {
             throw new AssertInternalError('SEACSTTI31310', this._name);
@@ -720,18 +705,6 @@ export class ScanEditor extends OpenableScanEditor {
         }
     }
 
-    updateScan() {
-        const promise = this.asyncUpdateScan();
-        promise.then(
-            (result) => {
-                if (!this._finalised && result.isErr() && this._errorEventer !== undefined) {
-                    this._errorEventer(result.error);
-                }
-            },
-            (reason) => { throw AssertInternalError.createIfNotError(reason, 'SEUS55716'); }
-        );
-    }
-
     canUpdateScan() {
         // must match conditions at start of asyncUpdateScan()
         if (this._scan === undefined) {
@@ -758,7 +731,7 @@ export class ScanEditor extends OpenableScanEditor {
         }
     }
 
-    async asyncUpdateScan(): Promise<Result<void>> {
+    async updateScan(): Promise<Result<void>> {
         if (this._scan === undefined) {
             throw new AssertInternalError('SEAUS31310', this._name);
         } else {
@@ -829,23 +802,7 @@ export class ScanEditor extends OpenableScanEditor {
         }
     }
 
-    deleteScan() {
-        if (this._lifeCycleStateId === ScanEditor.LifeCycleStateId.NotYetCreated) {
-            this.setLifeCycleState(ScanEditor.LifeCycleStateId.Deleted);
-        } else {
-            const promise = this.asyncDeleteScan();
-            promise.then(
-                (result) => {
-                    if (!this._finalised && result.isErr() && this._errorEventer !== undefined) {
-                        this._errorEventer(result.error);
-                    }
-                },
-                (reason) => { throw AssertInternalError.createIfNotError(reason, 'SED55716'); }
-            );
-        }
-    }
-
-    async asyncDeleteScan() {
+    async deleteScan() {
         if (this._scan === undefined) {
             throw new AssertInternalError('SEADS31310', this._name);
         } else {
@@ -1450,12 +1407,6 @@ export namespace ScanEditor {
     export type StateChangeEventHandler = (this: void) => void;
     export type FieldChangesEventHandler = (this: void, changedFieldIds: readonly FieldId[], modifier: Modifier | undefined) => void;
     export type GetOrWaitForScanEventer = (this: void, scanId: string) => Promise<Scan>; // returns ScanId
-    export type ErrorEventer = (this: void, errorText: string) => void;
-
-    // export interface Modifier {
-    //     readonly typeName: string;
-    //     readonly typeInstanceId: string;
-    // }
 
     export const enum FieldId {
         Id,

@@ -151,7 +151,9 @@ export const enum StringId {
     ErrorGetting,
     ErrorOpening,
     ErrorOpeningSaved,
+    ErrorCreating,
     ErrorCreatingNew,
+    ErrorUpdating,
     ErrorDeleting,
     ValueRequired,
     CodeMissing,
@@ -215,6 +217,7 @@ export const enum StringId {
     DeleteList,
     CannotDeleteList,
     NewScan,
+    Scan,
     TableJsonMissingFieldlist,
     NamedGridSource,
     List,
@@ -3128,9 +3131,19 @@ export namespace I18nStrings {
                 en: 'Error opening saved',
             }
         },
+        ErrorCreating: {
+            id: StringId.ErrorCreating, translations: {
+                en: 'Error creating',
+            }
+        },
         ErrorCreatingNew: {
             id: StringId.ErrorCreatingNew, translations: {
                 en: 'Error creating new',
+            }
+        },
+        ErrorUpdating: {
+            id: StringId.ErrorUpdating, translations: {
+                en: 'Error updating',
             }
         },
         ErrorDeleting: {
@@ -3446,6 +3459,11 @@ export namespace I18nStrings {
         NewScan: {
             id: StringId.NewScan, translations: {
                 en: 'New',
+            }
+        },
+        Scan: {
+            id: StringId.Scan, translations: {
+                en: 'Scan',
             }
         },
         TableJsonMissingFieldlist: {
