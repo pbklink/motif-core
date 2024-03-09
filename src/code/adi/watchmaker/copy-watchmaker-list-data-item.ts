@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError } from '../../sys/sys-internal-api';
+import { AssertInternalError } from '../../sys/internal-api';
 import { CreateOrCopyWatchmakerListDataMessage, DataMessage, DataMessageTypeId } from '../common/adi-common-internal-api';
 import { WatchmakerPublishDataItem } from './watchmaker-publish-data-item';
 

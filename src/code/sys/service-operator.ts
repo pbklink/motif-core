@@ -5,7 +5,7 @@
  */
 
 import { EnumInfoOutOfOrderError } from './internal-error';
-import { Integer } from './types';
+import { Integer } from './xiltyix-sysutils';
 
 export const enum ServiceOperatorId {
     Paritech,

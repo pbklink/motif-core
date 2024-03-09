@@ -5,7 +5,7 @@
  */
 
 import { AssertInternalError } from './internal-error';
-import { Integer } from './types';
+import { Integer } from './xiltyix-sysutils';
 
 /** @public */
 export const enum UsableListChangeTypeId {

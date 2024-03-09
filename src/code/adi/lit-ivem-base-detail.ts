@@ -5,7 +5,7 @@
  */
 
 import { StringId, Strings } from '../res/res-internal-api';
-import { EnumInfoOutOfOrderError, FieldDataTypeId, MultiEvent } from '../sys/sys-internal-api';
+import { EnumInfoOutOfOrderError, FieldDataTypeId, MultiEvent } from '../sys/internal-api';
 import {
     ExchangeId,
     IvemClassId,

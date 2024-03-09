@@ -26,7 +26,7 @@ export * from './html-types';
 export * from './incubator';
 export * from './internal-error';
 export * from './iso8601';
-export * from './json-element';
+export * from './json-element-err';
 export * from './keyed-correctness-list';
 export * from './keyed-correctness-list-item';
 export * from './keyed-correctness-settable-list';
@@ -57,4 +57,27 @@ export * from './types';
 export * from './utils';
 export * from './utils-search';
 export * from './websocket-close-code';
+export {
+    BooleanOrUndefined,
+    ComparisonResult,
+    DateOrDateTime,
+    DayOfWeek,
+    Guid,
+    IndexSignatureHack,
+    IndexedRecord,
+    Integer,
+    Json,
+    JsonElement,
+    JsonValue,
+    JsonValueArray,
+    Line,
+    ListChangeTypeId,
+    MapKey,
+    Mappable,
+    PickEnum,
+    PickExcludedEnum,
+    RGB,
+    Rect,
+    TimeSpan
+} from './xiltyix-sysutils';
 

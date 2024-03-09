@@ -22,7 +22,7 @@ import {
     isDecimalLessThan,
     moveElementInArray,
     newDecimal
-} from "../../../../sys/sys-internal-api";
+} from "../../../../sys/internal-api";
 import { DepthRecord } from '../depth-record';
 import { DepthSideGridRecordStore } from '../depth-side-grid-record-store';
 import { FullDepthRecord, OrderFullDepthRecord, PriceLevelFullDepthRecord } from './full-depth-record';

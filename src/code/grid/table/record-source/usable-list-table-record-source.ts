@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { Integer, LockOpenListItem, MultiEvent, UsableList, UsableListChangeTypeId } from '../../../sys/sys-internal-api';
+import { Integer, LockOpenListItem, MultiEvent, UsableList, UsableListChangeTypeId } from '../../../sys/internal-api';
 import { TextFormatterService } from '../../../text-format/text-format-internal-api';
 import { TableRecordSourceDefinitionFactoryService, UsableListTableRecordSourceDefinition } from './definition/grid-table-record-source-definition-internal-api';
 import { TableRecordSource } from './table-record-source';

@@ -13,7 +13,7 @@ import {
     MultiEvent,
     UnreachableCaseError,
     UsableListChangeTypeId
-} from "../../../sys/sys-internal-api";
+} from "../../../sys/internal-api";
 
 export class DayTradesGridRecordStore implements GridRecordStore {
     private _recordsEventers: GridRecordStoreRecordsEventers;

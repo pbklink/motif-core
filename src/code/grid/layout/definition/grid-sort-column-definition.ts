@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { JsonElement } from '../../../sys/json-element';
+import { JsonElement } from '../../../sys/internal-api';
 
 /* @public */
 export type GridSortDefinition = GridSortDefinition.Field[];

@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { Guid, IndexedRecord } from '../../../sys/sys-internal-api';
+import { Guid, IndexedRecord } from '../../../sys/internal-api';
 
 /** @public */
 export class FavouriteReferenceableGridLayoutDefinition implements IndexedRecord {

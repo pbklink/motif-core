@@ -14,6 +14,7 @@ import {
     FieldDataTypeId,
     Integer,
     JsonElement,
+    JsonElementErr,
     KeyedCorrectnessListItem,
     KeyedRecord,
     MapKey,
@@ -21,7 +22,7 @@ import {
     Ok,
     Result,
     ValueRecentChangeTypeId
-} from "../sys/sys-internal-api";
+} from "../sys/internal-api";
 import {
     BrokerageAccountId,
     BrokerageAccountsDataMessage,
@@ -409,7 +410,7 @@ export namespace Account {
         export function tryCreateFromJson(element: JsonElement): Result<Account.Key> {
             const idResult = element.tryGetString(Key.JsonTag_Id);
             if (idResult.isErr()) {
-                return idResult.createOuter(ErrorCode.Account_IdNotSpecified);
+                return JsonElementErr.createOuter(idResult.error, ErrorCode.Account_IdNotSpecified);
             } else {
                 const environmentResult = element.tryGetString(Key.JsonTag_EnvironmentId);
                 if (environmentResult.isErr()) {

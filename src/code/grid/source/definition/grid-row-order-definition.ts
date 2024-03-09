@@ -4,8 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError } from '../../../sys/internal-error';
-import { JsonElement } from '../../../sys/json-element';
+import { AssertInternalError, JsonElement } from '../../../sys/internal-api';
 import { GridSortDefinition } from '../../layout/definition/grid-layout-definition-internal-api';
 import { TableRecordDefinition } from '../../table/internal-api';
 

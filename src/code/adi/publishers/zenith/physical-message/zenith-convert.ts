@@ -31,7 +31,7 @@ import {
     UnexpectedCaseError,
     UnreachableCaseError,
     ZenithDataError
-} from '../../../../sys/sys-internal-api';
+} from '../../../../sys/internal-api';
 import {
     ActiveFaultedStatusId,
     OrderRequestError as AdiOrderRequestError,

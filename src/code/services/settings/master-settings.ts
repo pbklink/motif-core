@@ -6,7 +6,7 @@
 
 import { DataEnvironmentId } from '../../adi/adi-internal-api';
 import { StringId, Strings } from '../../res/res-internal-api';
-import { AssertInternalError, EnumInfoOutOfOrderError, Integer, UnreachableCaseError } from '../../sys/sys-internal-api';
+import { AssertInternalError, EnumInfoOutOfOrderError, Integer, UnreachableCaseError } from '../../sys/internal-api';
 import { MotifServicesService } from '../motif-services-service';
 import { TypedKeyValueScalarSettingsGroup } from './typed-key-value-scalar-settings-group';
 import { TypedKeyValueSettings } from './typed-key-value-settings';

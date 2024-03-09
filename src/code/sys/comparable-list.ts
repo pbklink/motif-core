@@ -5,9 +5,9 @@
  */
 
 import { AssertInternalError } from './internal-error';
-import { ComparisonResult, Integer } from './types';
 import { moveElementInArray, moveElementsInArray } from './utils';
 import { BinarySearchResult, CompareFtn, rangedAnyBinarySearch, rangedEarliestBinarySearch, rangedLatestBinarySearch, rangedQuickSort } from './utils-search';
+import { ComparisonResult, Integer } from './xiltyix-sysutils';
 
 /** @public */
 export class ComparableList<out T extends U, in U = T> {

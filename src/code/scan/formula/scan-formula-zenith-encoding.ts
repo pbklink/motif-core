@@ -16,7 +16,7 @@ import {
     Result,
     SourceTzOffsetDate,
     UnreachableCaseError
-} from "../../sys/sys-internal-api";
+} from "../../sys/internal-api";
 import { ScanFormula } from './scan-formula';
 
 export namespace ScanFormulaZenithEncoding {

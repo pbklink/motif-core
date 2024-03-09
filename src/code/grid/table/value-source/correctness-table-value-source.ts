@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { Correctness, CorrectnessRecord, MultiEvent } from '../../../sys/sys-internal-api';
+import { Correctness, CorrectnessRecord, MultiEvent } from '../../../sys/internal-api';
 import { TableValue } from '../value/grid-table-value-internal-api';
 import { TableValueSource } from './table-value-source';
 

@@ -36,7 +36,7 @@ import {
     concatenateArrayUniquely,
     isArrayEqualUniquely,
     isDigitCharCode
-} from "../sys/sys-internal-api";
+} from "../sys/internal-api";
 import { ExchangeSettings, ScalarSettings, SettingsService, TypedKeyValueScalarSettingsGroup, TypedKeyValueSettings } from './settings/settings-internal-api';
 
 export class SymbolsService {

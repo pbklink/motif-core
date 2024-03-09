@@ -12,7 +12,7 @@ import {
     FieldDataTypeId,
     Integer,
     UnreachableCaseError
-} from '../../../../sys/sys-internal-api';
+} from '../../../../sys/internal-api';
 import {
     CorrectnessTableField,
     EnumCorrectnessTableField,

@@ -34,7 +34,7 @@ import {
     UnreachableCaseError,
     addToCapacitisedArrayUniquely,
     mSecsPerHour
-} from '../sys/sys-internal-api';
+} from '../sys/internal-api';
 import { SymbolsService } from './symbols-service';
 
 export class SymbolDetailCacheService {

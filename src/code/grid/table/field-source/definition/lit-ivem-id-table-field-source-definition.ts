@@ -11,7 +11,7 @@ import {
     FieldDataType,
     FieldDataTypeId,
     Integer
-} from "../../../../sys/sys-internal-api";
+} from "../../../../sys/internal-api";
 import {
     EnumTableField,
     LitIvemIdTableField,

@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, Err, ErrorCode, Guid, IndexedRecord, LockOpenListItem, LockOpenManager, MapKey, MultiEvent, Ok, Result, newGuid } from '../../sys/sys-internal-api';
+import { AssertInternalError, Err, ErrorCode, Guid, IndexedRecord, LockOpenListItem, LockOpenManager, MapKey, MultiEvent, Ok, Result, newGuid } from '../../sys/internal-api';
 import {
     GridLayout,
     GridLayoutOrReference,

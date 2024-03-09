@@ -5,7 +5,7 @@
  */
 
 import { CurrencyId, ExchangeId, MarketBoardId, MarketId } from '../../adi/adi-internal-api';
-import { AssertInternalError, ComparableList, Ok, Result, SourceTzOffsetDate, UnreachableCaseError } from '../../sys/sys-internal-api';
+import { AssertInternalError, ComparableList, Ok, Result, SourceTzOffsetDate, UnreachableCaseError } from '../../sys/internal-api';
 import { ScanFormula } from '../formula/internal-api';
 import { ScanFieldSetLoadError } from './common/internal-api';
 import {

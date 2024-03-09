@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { BidAskPair, ErrorCode, Integer, JsonElement, Ok, Result } from '../../../sys/sys-internal-api';
+import { BidAskPair, ErrorCode, Integer, JsonElement, JsonElementErr, Ok, Result } from '../../../sys/internal-api';
 
 /** @public */
 export class GridLayoutDefinition {
@@ -150,7 +150,7 @@ export namespace GridLayoutDefinition {
     export function tryCreateColumnsFromJson(element: JsonElement): Result<GridLayoutDefinition.Column[]> {
         const columnElementsResult = element.tryGetElementArray(JsonName.columns);
         if (columnElementsResult.isErr()) {
-            return columnElementsResult.createOuter(ErrorCode.GridLayoutDefinition_ColumnsElementNotSpecified);
+            return JsonElementErr.createOuter(columnElementsResult.error, ErrorCode.GridLayoutDefinition_ColumnsElementNotSpecified);
         } else {
             const columnElements = columnElementsResult.value;
             const maxCount = columnElements.length;

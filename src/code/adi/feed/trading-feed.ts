@@ -15,7 +15,7 @@ import {
     FieldDataTypeId,
     Integer,
     MultiEvent
-} from "../../sys/sys-internal-api";
+} from "../../sys/internal-api";
 import { FeedId, FeedStatusId, OrderStatuses, TradingEnvironment, TradingEnvironmentId } from '../common/adi-common-internal-api';
 import { Feed } from './feed';
 

@@ -14,7 +14,7 @@ import {
     KeyedCorrectnessListItem,
     KeyedRecord,
     MultiEvent
-} from "../../sys/sys-internal-api";
+} from "../../sys/internal-api";
 import { FeedClassId, FeedId, FeedInfo, FeedStatusId } from '../common/adi-common-internal-api';
 
 export class Feed implements KeyedCorrectnessListItem {

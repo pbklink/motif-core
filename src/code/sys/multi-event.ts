@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { Integer } from './types';
+import { Integer } from './xiltyix-sysutils';
 
 /** @public */
 export class MultiEvent<T> {

@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { Result } from '../../../sys/sys-internal-api';
+import { Result } from '../../../sys/internal-api';
 import { ScanFormula } from '../../formula/internal-api';
 import { ScanConditionSetLoadError } from '../common/internal-api';
 import {

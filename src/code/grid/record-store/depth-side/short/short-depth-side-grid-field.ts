@@ -6,7 +6,7 @@
 
 import { OrderSideId } from '../../../../adi/adi-internal-api';
 import { RenderValue } from '../../../../services/services-internal-api';
-import { CorrectnessId, UnreachableCaseError } from '../../../../sys/sys-internal-api';
+import { CorrectnessId, UnreachableCaseError } from '../../../../sys/internal-api';
 import { AllowedGridField, GridFieldDefinition } from '../../../field/grid-field-internal-api';
 import { GridLayoutDefinition } from '../../../layout/grid-layout-internal-api';
 import { DepthSideGridField } from '../depth-side-grid-field';

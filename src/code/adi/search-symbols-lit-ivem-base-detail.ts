@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { MultiEvent, isUndefinableArrayEqualUniquely } from '../sys/sys-internal-api';
+import { MultiEvent, isUndefinableArrayEqualUniquely } from '../sys/internal-api';
 import {
     DataEnvironmentId,
     ExchangeId,

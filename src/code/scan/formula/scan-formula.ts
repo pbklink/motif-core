@@ -6,7 +6,7 @@
 
 import { CurrencyId, ExchangeId, MarketBoardId, MarketId } from '../../adi/adi-internal-api';
 import { StringId, Strings } from '../../res/res-internal-api';
-import { EnumInfoOutOfOrderError, PickEnum, SourceTzOffsetDate, UnreachableCaseError } from '../../sys/sys-internal-api';
+import { EnumInfoOutOfOrderError, PickEnum, SourceTzOffsetDate, UnreachableCaseError } from '../../sys/internal-api';
 
 export namespace ScanFormula {
     export const enum NodeTypeId {

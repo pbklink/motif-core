@@ -18,7 +18,7 @@ import {
     RecordList,
     UnreachableCaseError,
     UsableListChangeTypeId
-} from "../sys/sys-internal-api";
+} from "../sys/internal-api";
 import { AllBrokerageAccountsListChangeDataItem } from './all-brokerage-accounts-list-change-data-item';
 import { AllBrokerageAccountGroup } from './brokerage-account-group';
 import { BrokerageAccountGroupRecordList } from './brokerage-account-group-record-list';

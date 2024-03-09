@@ -22,7 +22,7 @@ import {
     UnreachableCaseError,
     ValueRecentChangeTypeId,
     ZenithDataError
-} from "../sys/sys-internal-api";
+} from "../sys/internal-api";
 import {
     DataDefinition,
     DataMessage,

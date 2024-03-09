@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, getErrorMessage, Logger, UnexpectedCaseError } from '../../../../sys/sys-internal-api';
+import { AssertInternalError, getErrorMessage, Logger, UnexpectedCaseError } from '../../../../sys/internal-api';
 import {
     AdiPublisherRequest,
     AdiPublisherSubscription,

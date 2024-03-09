@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { Integer, KeyedCorrectnessSettableList, MapKey, MultiEvent, RecordList, UsableListChangeTypeId } from '../sys/sys-internal-api';
+import { Integer, KeyedCorrectnessSettableList, MapKey, MultiEvent, RecordList, UsableListChangeTypeId } from '../sys/internal-api';
 import { BrokerageAccountGroup, SingleBrokerageAccountGroup } from './brokerage-account-group';
 import { BrokerageAccountGroupRecordList } from './brokerage-account-group-record-list';
 import { BrokerageAccountRecord } from './brokerage-account-record';

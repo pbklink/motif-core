@@ -37,7 +37,7 @@ import {
     RecordList,
     Result,
     ValueRecentChangeTypeId
-} from "../sys/sys-internal-api";
+} from "../sys/internal-api";
 
 export class WatchmakerList implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>, KeyedCorrectnessSettableListItem, RankScoredLitIvemIdList, RankedLitIvemIdListDirectoryItem {
     readonly directoryItemTypeId = RankedLitIvemIdListDirectoryItem.TypeId.WatchmakerList;

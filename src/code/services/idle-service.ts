@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, Integer, SysTick } from '../sys/sys-internal-api';
+import { AssertInternalError, Integer, SysTick } from '../sys/internal-api';
 
 export class IdleService {
     callbackExecuteEventer: IdleService.CallbackExecuteEventer | undefined;

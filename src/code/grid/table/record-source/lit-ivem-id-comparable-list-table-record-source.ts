@@ -6,7 +6,7 @@
 
 import { AdiService, LitIvemId } from '../../../adi/adi-internal-api';
 import { SymbolDetailCacheService } from '../../../services/services-internal-api';
-import { Integer, UiComparableList, UnreachableCaseError } from '../../../sys/sys-internal-api';
+import { Integer, UiComparableList, UnreachableCaseError } from '../../../sys/internal-api';
 import { TextFormatterService } from '../../../text-format/text-format-internal-api';
 import {
     TableFieldSourceDefinition

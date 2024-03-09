@@ -27,7 +27,7 @@ import {
     MultiEvent,
     UnexpectedUndefinedError,
     UnreachableCaseError
-} from '../../../sys/sys-internal-api';
+} from '../../../sys/internal-api';
 import { GridField } from '../../field/grid-field-internal-api';
 import {
     GridLayout,

@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { CommaText, EnumInfoOutOfOrderError, FieldDataType } from '../../../../sys/sys-internal-api';
+import { CommaText, EnumInfoOutOfOrderError, FieldDataType } from '../../../../sys/internal-api';
 import {
     BooleanTableField,
     IntegerTableField,

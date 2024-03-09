@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { MultiEvent } from '../sys/sys-internal-api';
+import { MultiEvent } from '../sys/internal-api';
 import { UiAction } from './ui-action';
 
 export abstract class TypedArrayUiAction<T> extends UiAction {

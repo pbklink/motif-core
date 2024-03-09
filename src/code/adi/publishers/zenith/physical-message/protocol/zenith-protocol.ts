@@ -7,7 +7,7 @@
 /* eslint-disable @typescript-eslint/no-shadow */
 // Version 3
 
-import { Integer } from '../../../../../sys/sys-internal-api';
+import { Integer } from '../../../../../sys/internal-api';
 import { ZenithEncodedScanFormula, ZenithProtocolCommon } from '../../../../common/zenith-protocol/internal-api';
 
 export namespace ZenithProtocol {

@@ -42,6 +42,7 @@
   "dependencies": {
     "@ctrl/tinycolor": "^4.0.2",
     "@xilytix/revgrid": "^0.8.0",
+    "@xilytix/sysutils": "file:../sysutils",
     "decimal.js-light": "^2.5.1",
     "nanoid": "^5.0.1"
   },

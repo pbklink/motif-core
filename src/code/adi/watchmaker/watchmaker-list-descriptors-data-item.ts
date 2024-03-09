@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, Integer, Logger, UnreachableCaseError, UsableListChangeTypeId } from '../../sys/sys-internal-api';
+import { AssertInternalError, Integer, Logger, UnreachableCaseError, UsableListChangeTypeId } from '../../sys/internal-api';
 import { AurcChangeTypeId, DataDefinition, DataMessage, DataMessageTypeId, FeedId, WatchmakerListDescriptorsDataMessage } from '../common/adi-common-internal-api';
 import { KeyedCorrectnessSettableListFeedSubscriptionDataItem } from '../feed/internal-api';
 import { WatchmakerListDescriptor } from './watchmaker-list-descriptor';

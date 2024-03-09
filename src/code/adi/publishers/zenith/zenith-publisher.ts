@@ -14,7 +14,7 @@ import {
     SysTick,
     UnreachableCaseError,
     WebsocketCloseCode
-} from '../../../sys/sys-internal-api';
+} from '../../../sys/internal-api';
 import {
     AdiPublisherSubscription,
     AdiPublisherTypeId,

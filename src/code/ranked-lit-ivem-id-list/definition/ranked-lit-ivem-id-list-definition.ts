@@ -5,7 +5,7 @@
  */
 
 import { StringId, Strings } from '../../res/res-internal-api';
-import { EnumInfoOutOfOrderError, Err, ErrorCode, JsonElement, Ok, Result } from '../../sys/sys-internal-api';
+import { EnumInfoOutOfOrderError, Err, ErrorCode, JsonElement, JsonElementErr, Ok, Result } from '../../sys/internal-api';
 
 export abstract class RankedLitIvemIdListDefinition {
     constructor(readonly typeId: RankedLitIvemIdListDefinition.TypeId) {
@@ -119,7 +119,7 @@ export namespace RankedLitIvemIdListDefinition {
     export function tryGetTypeIdFromJson(element: JsonElement): Result<TypeId> {
         const typeIdResult = element.tryGetString(typeIdJsonName);
         if (typeIdResult.isErr()) {
-            return new Err(ErrorCode.LitIvemIdListDefinition_TryGetTypeIdFromJson);
+            return JsonElementErr.createOuter(typeIdResult.error, ErrorCode.LitIvemIdListDefinition_TryGetTypeIdFromJson);
         } else {
             const typeId = Type.tryJsonValueToId(typeIdResult.value);
             if (typeId === undefined) {

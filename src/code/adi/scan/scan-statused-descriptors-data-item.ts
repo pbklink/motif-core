@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, BadnessList, Integer, Logger, MultiEvent, RecordList, UnreachableCaseError, UsableListChangeTypeId } from '../../sys/sys-internal-api';
+import { AssertInternalError, BadnessList, Integer, Logger, MultiEvent, RecordList, UnreachableCaseError, UsableListChangeTypeId } from '../../sys/internal-api';
 import { AurcChangeTypeId, DataDefinition, DataMessage, DataMessageTypeId, FeedId, ScanStatusedDescriptorsDataMessage } from '../common/adi-common-internal-api';
 import { FeedSubscriptionDataItem } from '../feed/internal-api';
 import { ScanStatusedDescriptor } from './scan-statused-descriptor';

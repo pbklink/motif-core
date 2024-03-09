@@ -5,7 +5,7 @@
  */
 
 import { LitIvemId } from '../../../../adi/adi-internal-api';
-import { Err, ErrorCode, JsonElement, Ok, PickEnum, Result, UiComparableList } from '../../../../sys/sys-internal-api';
+import { ErrorCode, JsonElement, JsonElementErr, Ok, PickEnum, Result, UiComparableList } from '../../../../sys/internal-api';
 import { GridFieldCustomHeadingsService } from '../../../field/grid-field-internal-api';
 import { GridLayoutDefinition } from '../../../layout/grid-layout-internal-api';
 import {
@@ -87,11 +87,11 @@ export namespace LitIvemIdComparableListTableRecordSourceDefinition {
     export function tryCreateListFromElement(element: JsonElement): Result<UiComparableList<LitIvemId>> {
         const elementArrayResult = element.tryGetElementArray(JsonName.list);
         if (elementArrayResult.isErr()) {
-            const error = elementArrayResult.error;
-            if (error === JsonElement.arrayErrorCode_NotSpecified) {
-                return new Err(ErrorCode.LitIvemIdComparableListTableRecordSourceDefinition_JsonLitIvemIdsNotSpecified);
+            const errorId = elementArrayResult.error;
+            if (errorId === JsonElement.ErrorId.JsonValueIsNotAnArray) {
+                return JsonElementErr.createOuter(elementArrayResult.error, ErrorCode.LitIvemIdComparableListTableRecordSourceDefinition_JsonLitIvemIdsNotSpecified);
             } else {
-                return new Err(ErrorCode.LitIvemIdComparableListTableRecordSourceDefinition_JsonLitIvemIdsIsInvalid);
+                return JsonElementErr.createOuter(elementArrayResult.error, ErrorCode.LitIvemIdComparableListTableRecordSourceDefinition_JsonLitIvemIdsIsInvalid);
             }
         } else {
             const litIvemIdsResult = LitIvemId.tryCreateArrayFromJsonElementArray(elementArrayResult.value);

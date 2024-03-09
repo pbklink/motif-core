@@ -8,7 +8,7 @@ import { AdiService } from '../../../adi/adi-internal-api';
 import { RankedLitIvemIdListFactoryService } from '../../../ranked-lit-ivem-id-list/ranked-lit-ivem-id-list-internal-api';
 import { ScansService } from '../../../scan/internal-api';
 import { SymbolDetailCacheService } from '../../../services/symbol-detail-cache-service';
-import { AssertInternalError, NotImplementedError, UnreachableCaseError } from '../../../sys/sys-internal-api';
+import { AssertInternalError, NotImplementedError, UnreachableCaseError } from '../../../sys/internal-api';
 import { TextFormatterService } from '../../../text-format/text-format-internal-api';
 import { WatchmakerService } from '../../../watchmaker/watchmaker-internal-api';
 import { BalancesTableRecordSource } from './balances-table-record-source';

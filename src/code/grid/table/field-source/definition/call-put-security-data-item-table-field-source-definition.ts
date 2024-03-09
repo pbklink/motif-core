@@ -5,7 +5,7 @@
  */
 
 import { CallOrPutId } from '../../../../adi/adi-internal-api';
-import { UnreachableCaseError } from '../../../../sys/sys-internal-api';
+import { UnreachableCaseError } from '../../../../sys/internal-api';
 import { PrefixableSecurityDataItemTableFieldSourceDefinition } from './prefixable-security-data-item-table-field-source-definition';
 import { TableFieldSourceDefinition } from './table-field-source-definition';
 

@@ -14,7 +14,7 @@ import {
     MapKey,
     MultiEvent,
     ZenithDataError
-} from '../../sys/sys-internal-api';
+} from '../../sys/internal-api';
 import { WatchmakerListDescriptorsDataMessage } from '../common/adi-common-internal-api';
 
 export class WatchmakerListDescriptor implements KeyedCorrectnessSettableListItem {

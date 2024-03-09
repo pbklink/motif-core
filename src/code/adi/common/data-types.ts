@@ -28,7 +28,7 @@ import {
     priorityCompareInteger,
     secsPerHour,
     secsPerMin
-} from '../../sys/sys-internal-api';
+} from '../../sys/internal-api';
 
 // No Enum value should have an external dependency or be persisted. Use exports or imports instead.
 

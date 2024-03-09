@@ -14,7 +14,7 @@ import {
     GridRevRecordField,
     IndexedRecord,
     Integer
-} from '../../sys/sys-internal-api';
+} from '../../sys/internal-api';
 import { GridFieldCustomHeadingsService } from './grid-field-custom-headings-service';
 import { GridFieldDefinition } from './grid-field-definition';
 

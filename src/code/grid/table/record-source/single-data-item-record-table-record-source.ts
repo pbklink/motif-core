@@ -5,7 +5,7 @@
  */
 
 import { DataItem } from '../../../adi/adi-internal-api';
-import { KeyedCorrectnessList, KeyedCorrectnessListItem } from '../../../sys/sys-internal-api';
+import { KeyedCorrectnessList, KeyedCorrectnessListItem } from '../../../sys/internal-api';
 import { KeyedCorrectnessRecordTableRecordSource } from './keyed-correctness-record-table-record-source';
 
 export abstract class SingleDataItemRecordTableRecordSource<

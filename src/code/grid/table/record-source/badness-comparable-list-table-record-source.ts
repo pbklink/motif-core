@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { BadnessList, LockOpenListItem } from '../../../sys/sys-internal-api';
+import { BadnessList, LockOpenListItem } from '../../../sys/internal-api';
 import { TextFormatterService } from '../../../text-format/text-format-internal-api';
 import { TableFieldSourceDefinition } from '../field-source/grid-table-field-source-internal-api';
 import { BadnessListTableRecordSourceDefinition, TableRecordSourceDefinitionFactoryService } from './definition/grid-table-record-source-definition-internal-api';

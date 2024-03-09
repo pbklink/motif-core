@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { ErrorCode, JsonElement, Ok, Result } from '../../../sys/sys-internal-api';
+import { ErrorCode, JsonElement, JsonElementErr, Ok, Result } from '../../../sys/internal-api';
 import { GridLayoutOrReferenceDefinition } from '../../layout/grid-layout-internal-api';
 import { TableRecordSourceDefinition, TableRecordSourceDefinitionFactoryService } from '../../table/record-source/definition/grid-table-record-source-definition-internal-api';
 import { GridRowOrderDefinition } from './grid-row-order-definition';
@@ -44,10 +44,10 @@ export namespace GridSourceDefinition {
         tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService,
         element: JsonElement
     ): Result<TableRecordSourceDefinition> {
-        const tableRecordSourceDefinitionElementResult = element.tryGetDefinedElement(JsonName.tableRecordSource);
+        const tableRecordSourceDefinitionElementResult = element.tryGetElement(JsonName.tableRecordSource);
         if (tableRecordSourceDefinitionElementResult.isErr()) {
             const errorCode = ErrorCode.GridSourceDefinition_TableRecordSourceDefinitionNotSpecified;
-            return tableRecordSourceDefinitionElementResult.createOuter(errorCode);
+            return JsonElementErr.createOuter(tableRecordSourceDefinitionElementResult.error, errorCode);
         } else {
             const tableRecordSourceDefinitionElement = tableRecordSourceDefinitionElementResult.value;
             const tableRecordSourceDefinitionResult =
@@ -63,10 +63,10 @@ export namespace GridSourceDefinition {
     }
 
     export function tryGetGridLayoutOrReferenceDefinitionFromJson(element: JsonElement): Result<GridLayoutOrReferenceDefinition> {
-        const gridLayoutOrReferenceDefinitionElementResult = element.tryGetDefinedElement(JsonName.gridLayoutOrReference);
+        const gridLayoutOrReferenceDefinitionElementResult = element.tryGetElement(JsonName.gridLayoutOrReference);
         if (gridLayoutOrReferenceDefinitionElementResult.isErr()) {
             const errorCode = ErrorCode.GridSourceDefinition_JsonGridLayoutDefinitionOrReference;
-            return gridLayoutOrReferenceDefinitionElementResult.createOuter(errorCode);
+            return JsonElementErr.createOuter(gridLayoutOrReferenceDefinitionElementResult.error, errorCode);
         } else {
             const gridLayoutOrReferenceDefinitionElement = gridLayoutOrReferenceDefinitionElementResult.value;
             const gridLayoutOrReferenceDefinitionResult = GridLayoutOrReferenceDefinition.tryCreateFromJson(
@@ -83,7 +83,7 @@ export namespace GridSourceDefinition {
     }
 
     export function tryGetRowOrderFromJson(element: JsonElement): GridRowOrderDefinition | undefined {
-        const rowOrderDefinitionElementResult = element.tryGetDefinedElement(JsonName.rowOrder);
+        const rowOrderDefinitionElementResult = element.tryGetElement(JsonName.rowOrder);
         if (rowOrderDefinitionElementResult.isErr()) {
             return undefined;
         } else {

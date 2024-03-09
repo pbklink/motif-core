@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { Err, Integer, Ok, Result, SourceTzOffsetDate, UnreachableCaseError } from '../../sys/sys-internal-api';
+import { Err, Integer, Ok, Result, SourceTzOffsetDate, UnreachableCaseError } from '../../sys/internal-api';
 import { ScanFormula } from '../formula/internal-api';
 import { ScanConditionSetLoadError, ScanConditionSetLoadErrorTypeId } from './common/internal-api';
 import {

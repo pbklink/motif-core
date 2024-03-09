@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { Err, Ok, Result, SourceTzOffsetDate, UiComparableList, UnreachableCaseError } from '../../sys/sys-internal-api';
+import { Err, Ok, Result, SourceTzOffsetDate, UiComparableList, UnreachableCaseError } from '../../sys/internal-api';
 import { ScanFormula } from '../formula/internal-api';
 import { ScanConditionSetLoadError, ScanConditionSetLoadErrorTypeId } from './common/internal-api';
 import { AllScanCondition, AltCodeSubFieldContainsScanCondition, AltCodeSubFieldHasValueScanCondition, AttributeSubFieldContainsScanCondition, AttributeSubFieldHasValueScanCondition, CurrencyFieldOverlapsScanCondition, DateFieldEqualsScanCondition, DateFieldInRangeScanCondition, DateSubFieldEqualsScanCondition, DateSubFieldHasValueScanCondition, DateSubFieldInRangeScanCondition, ExchangeFieldOverlapsScanCondition, FieldHasValueScanCondition, IsScanCondition, MarketBoardFieldOverlapsScanCondition, MarketFieldOverlapsScanCondition, NoneScanCondition, NumericComparisonScanCondition, NumericFieldEqualsScanCondition, NumericFieldInRangeScanCondition, PriceSubFieldEqualsScanCondition, PriceSubFieldHasValueScanCondition, PriceSubFieldInRangeScanCondition, ScanCondition, ScanConditionFactory, StringFieldOverlapsScanCondition, TextFieldContainsScanCondition, TextFieldEqualsScanCondition } from './condition/internal-api';

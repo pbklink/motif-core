@@ -11,7 +11,7 @@ import {
     FieldDataTypeId,
     Integer,
     isUndefinableArrayEqualUniquely
-} from "../../sys/sys-internal-api";
+} from "../../sys/internal-api";
 import { ExchangeId, ExchangeInfo } from './data-types';
 import { LitIvemAttributes } from './lit-ivem-attributes';
 

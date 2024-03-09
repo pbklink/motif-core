@@ -13,7 +13,7 @@ import {
     RankedLitIvemIdListDirectory,
     ScanIdRankedLitIvemIdListDefinition,
 } from "../../../../ranked-lit-ivem-id-list/ranked-lit-ivem-id-list-internal-api";
-import { AssertInternalError, ErrorCode, JsonElement, LockOpenListItem, NotImplementedError, Ok, Result, UiComparableList, UnreachableCaseError } from '../../../../sys/sys-internal-api';
+import { AssertInternalError, ErrorCode, JsonElement, LockOpenListItem, NotImplementedError, Ok, Result, UiComparableList, UnreachableCaseError } from '../../../../sys/internal-api';
 import { GridField, GridFieldCustomHeadingsService } from '../../../field/grid-field-internal-api';
 import { TableFieldSourceDefinitionCachedFactoryService } from '../../field-source/grid-table-field-source-internal-api';
 import { BalancesTableRecordSourceDefinition } from './balances-table-record-source-definition';

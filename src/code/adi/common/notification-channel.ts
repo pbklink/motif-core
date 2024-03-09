@@ -5,7 +5,7 @@
  */
 
 import { StringId, Strings } from '../../res/res-internal-api';
-import { EnumInfoOutOfOrderError } from '../../sys/sys-internal-api';
+import { EnumInfoOutOfOrderError } from '../../sys/internal-api';
 import { ActiveFaultedStatusId, NotificationDistributionMethodId } from './data-types';
 import { ZenithProtocolCommon } from './zenith-protocol/internal-api';
 

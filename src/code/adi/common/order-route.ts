@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { ComparisonResult, Err, ErrorCode, Integer, JsonElement, NotImplementedError, Ok, Result, UnreachableCaseError } from '../../sys/sys-internal-api';
+import { ComparisonResult, Err, ErrorCode, Integer, JsonElement, JsonElementErr, NotImplementedError, Ok, Result, UnreachableCaseError } from '../../sys/internal-api';
 import {
     MarketId,
     MarketInfo, OrderExtendedSide, OrderExtendedSideId, OrderRouteAlgorithm, OrderRouteAlgorithmId,
@@ -75,7 +75,7 @@ export namespace OrderRoute {
     export function tryCreateFromJson(element: JsonElement): Result<OrderRoute> {
         const algorithmJsonValueResult = element.tryGetString(algorithmJsonName);
         if (algorithmJsonValueResult.isErr()) {
-            return algorithmJsonValueResult.createOuter(ErrorCode.OrderRoute_AlgorithmNotSpecified);
+            return JsonElementErr.createOuter(algorithmJsonValueResult.error, ErrorCode.OrderRoute_AlgorithmNotSpecified);
         } else {
             const algorithmId = OrderRouteAlgorithm.tryJsonValueToId(algorithmJsonValueResult.value);
             if (algorithmId === undefined) {
@@ -257,7 +257,7 @@ export namespace MarketOrderRoute {
     export function tryCreateFromJson(element: JsonElement): Result<MarketOrderRoute> {
         const marketJsonValueResult = element.tryGetString(JsonName.market);
         if (marketJsonValueResult.isErr()) {
-            return marketJsonValueResult.createOuter(ErrorCode.MarketOrderRoute_MarketNotSpecified);
+            return JsonElementErr.createOuter(marketJsonValueResult.error, ErrorCode.MarketOrderRoute_MarketNotSpecified);
         } else {
             const marketJsonValue = marketJsonValueResult.value;
             const marketId = MarketInfo.tryJsonValueToId(marketJsonValue);

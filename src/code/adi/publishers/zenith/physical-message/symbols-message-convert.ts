@@ -12,7 +12,7 @@ import {
     Logger,
     newUndefinableDecimal,
     ZenithDataError
-} from "../../../../sys/sys-internal-api";
+} from "../../../../sys/internal-api";
 import {
     AdiPublisherRequest,
     AdiPublisherSubscription,

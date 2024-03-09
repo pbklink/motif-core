@@ -114,7 +114,7 @@ import {
     SourceTzOffsetDate,
     SourceTzOffsetDateTime,
     UnreachableCaseError
-} from '../sys/sys-internal-api';
+} from '../sys/internal-api';
 
 /** @public */
 export class TextFormatterService {

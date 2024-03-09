@@ -5,7 +5,7 @@
  */
 
 import { RenderValue } from '../../../services/render-value';
-import { Integer, MultiEvent, UnreachableCaseError, ValueRecentChangeTypeId } from '../../../sys/sys-internal-api';
+import { Integer, MultiEvent, UnreachableCaseError, ValueRecentChangeTypeId } from '../../../sys/internal-api';
 import { EditableGridLayoutDefinitionColumnTableFieldSourceDefinition } from '../field-source/grid-table-field-source-internal-api';
 import { EditableGridLayoutDefinitionColumn } from '../record-definition/grid-table-record-definition-internal-api';
 import { IntegerTableValue, StringTableValue, TableValue, VisibleTableValue } from '../value/grid-table-value-internal-api';

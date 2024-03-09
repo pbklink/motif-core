@@ -20,7 +20,7 @@ import {
     RenderValue,
     StringRenderValue
 } from '../../../services/services-internal-api';
-import { Integer, newUndefinableDate, newUndefinableDecimal } from '../../../sys/sys-internal-api';
+import { Integer, newUndefinableDate, newUndefinableDecimal } from '../../../sys/internal-api';
 import { CorrectnessTableValue } from './table-value';
 
 export abstract class NullableCorrectnessTableValue extends CorrectnessTableValue {

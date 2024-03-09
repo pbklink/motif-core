@@ -16,7 +16,7 @@ import {
     IndexedRecord,
     Integer,
     MultiEvent
-} from "../../../sys/sys-internal-api";
+} from "../../../sys/internal-api";
 
 /** @public */
 export class ColorSchemeGridRecordStore implements GridRecordStore {

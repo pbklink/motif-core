@@ -20,7 +20,7 @@ import {
     isDecimalGreaterThan,
     isUndefinableArrayEqualUniquely,
     uniqueElementArraysOverlap
-} from '../sys/sys-internal-api';
+} from '../sys/internal-api';
 import {
     CallOrPutId,
     DataDefinition,

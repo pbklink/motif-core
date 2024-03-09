@@ -24,7 +24,7 @@ import {
     compareNumber,
     moveElementsInArray,
     rangedAnyBinarySearch
-} from "../sys/sys-internal-api";
+} from "../sys/internal-api";
 import { RankedLitIvemIdListDefinition } from './definition/ranked-lit-ivem-id-list-definition-internal-api';
 import { RankedLitIvemIdList } from './ranked-lit-ivem-id-list';
 

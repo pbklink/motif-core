@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { JsonElement, LockOpenList, mSecsPerSec, SysTick } from '../../sys/sys-internal-api';
+import { JsonElement, LockOpenList, mSecsPerSec, SysTick } from '../../sys/internal-api';
 import { ReferenceableGridLayoutsService } from '../layout/grid-layout-internal-api';
 import { TableRecordSourceFactory } from '../table/internal-api';
 import { ReferenceableGridSourceDefinition } from './definition/grid-source-definition-internal-api';

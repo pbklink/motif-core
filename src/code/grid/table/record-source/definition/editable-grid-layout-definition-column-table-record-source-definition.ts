@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { PickEnum } from '../../../../sys/sys-internal-api';
+import { PickEnum } from '../../../../sys/internal-api';
 import { GridFieldCustomHeadingsService } from '../../../field/grid-field-internal-api';
 import { GridLayoutDefinition } from '../../../layout/grid-layout-internal-api';
 import { TableFieldSourceDefinition, TableFieldSourceDefinitionCachedFactoryService } from '../../field-source/grid-table-field-source-internal-api';

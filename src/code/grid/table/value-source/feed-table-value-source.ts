@@ -5,7 +5,7 @@
  */
 
 import { Feed } from '../../../adi/adi-internal-api';
-import { Correctness, Integer, MultiEvent, UnreachableCaseError, ValueRecentChangeTypeId } from '../../../sys/sys-internal-api';
+import { Correctness, Integer, MultiEvent, UnreachableCaseError, ValueRecentChangeTypeId } from '../../../sys/internal-api';
 import { FeedTableFieldSourceDefinition } from '../field-source/definition/internal-api';
 import {
     CorrectnessTableValue,

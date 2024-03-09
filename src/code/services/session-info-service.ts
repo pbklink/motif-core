@@ -5,7 +5,7 @@
  */
 
 import { DataEnvironmentId, LitIvemId, PublisherSessionTerminatedReasonId } from '../adi/adi-internal-api';
-import { Integer, MultiEvent, ServiceOperatorId } from '../sys/sys-internal-api';
+import { Integer, MultiEvent, ServiceOperatorId } from '../sys/internal-api';
 import { SessionStateId } from './session-state';
 
 /** @public */

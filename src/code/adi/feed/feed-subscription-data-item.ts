@@ -12,7 +12,7 @@ import {
     MultiEvent,
     UnreachableCaseError,
     UsableListChangeTypeId
-} from "../../sys/sys-internal-api";
+} from "../../sys/internal-api";
 import { DataDefinition, FeedId, FeedInfo, FeedsDataDefinition } from '../common/adi-common-internal-api';
 import { Feed } from './feed';
 import { FeedStatusSubscriptionDataItem } from './feed-status-subscription-data-item';

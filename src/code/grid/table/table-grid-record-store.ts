@@ -14,7 +14,7 @@ import {
     Integer,
     MultiEvent,
     UnexpectedUndefinedError
-} from "../../sys/sys-internal-api";
+} from "../../sys/internal-api";
 import { Table } from './table';
 
 /** @public */

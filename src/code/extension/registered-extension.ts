@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { ExtensionHandle, MultiEvent } from '../sys/sys-internal-api';
+import { ExtensionHandle, MultiEvent } from '../sys/internal-api';
 import { ExtensionInfo } from './extension-info';
 
 /** @public */

@@ -21,7 +21,7 @@ import {
     GridFieldHorizontalAlign,
     GridRevRecordField,
     UnreachableCaseError
-} from "../../../sys/sys-internal-api";
+} from "../../../sys/internal-api";
 import { GridField, GridFieldDefinition, GridFieldSourceDefinition } from '../../field/grid-field-internal-api';
 import { GridLayoutDefinition } from '../../layout/grid-layout-internal-api';
 import { ColorSchemeGridRecordStore } from './color-scheme-grid-record-store';

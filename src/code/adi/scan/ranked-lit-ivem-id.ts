@@ -14,7 +14,7 @@ import {
     Mappable,
     MultiEvent,
     ValueRecentChangeTypeId
-} from "../../sys/sys-internal-api";
+} from "../../sys/internal-api";
 import { LitIvemId } from '../common/adi-common-internal-api';
 
 export class RankedLitIvemId implements CorrectnessRecord, Mappable {

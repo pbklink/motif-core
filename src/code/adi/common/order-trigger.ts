@@ -8,11 +8,11 @@ import { Decimal } from 'decimal.js-light';
 import { StringId, Strings } from '../../res/res-internal-api';
 import {
     EnumInfoOutOfOrderError,
+    UnreachableCaseError,
     isDecimalEqual,
     isUndefinableDecimalEqual,
-    newUndefinableDecimal,
-    UnreachableCaseError
-} from '../../sys/sys-internal-api';
+    newUndefinableDecimal
+} from '../../sys/internal-api';
 import { Movement, MovementId, OrderTriggerTypeId } from './data-types';
 
 export abstract class OrderTrigger {

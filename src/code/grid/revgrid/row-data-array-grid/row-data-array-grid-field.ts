@@ -5,7 +5,7 @@
  */
 
 import { RenderValue } from '../../../services/services-internal-api';
-import { AssertInternalError, IndexedRecord } from '../../../sys/sys-internal-api';
+import { AssertInternalError, IndexedRecord } from '../../../sys/internal-api';
 import { GridField } from '../../field/grid-field-internal-api';
 
 export class RowDataArrayGridField extends GridField {

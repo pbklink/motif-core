@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { ErrorCode, Guid, Integer, JsonElement, Ok, Result } from '../../../sys/sys-internal-api';
+import { ErrorCode, Guid, Integer, JsonElement, JsonElementErr, Ok, Result } from '../../../sys/internal-api';
 import { GridLayoutDefinition } from './grid-layout-definition';
 
 /** @public */
@@ -36,11 +36,11 @@ export namespace ReferenceableGridLayoutDefinition {
     ): Result<ReferenceableGridLayoutDefinition> {
         const idResult = element.tryGetGuid(ReferenceableJsonName.id);
         if (idResult.isErr()) {
-            return idResult.createOuter(ErrorCode.ReferenceableGridLayoutDefinition_JsonId);
+            return JsonElementErr.createOuter(idResult.error, ErrorCode.ReferenceableGridLayoutDefinition_JsonId);
         } else {
             const nameResult = element.tryGetString(ReferenceableJsonName.name);
             if (nameResult.isErr()) {
-                return nameResult.createOuter(ErrorCode.ReferenceableGridLayoutDefinition_JsonName)
+                return JsonElementErr.createOuter(nameResult.error, ErrorCode.ReferenceableGridLayoutDefinition_JsonName)
             } else {
                 let columns: GridLayoutDefinition.Column[] | undefined;
                 const columnsResult = GridLayoutDefinition.tryCreateColumnsFromJson(element);

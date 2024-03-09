@@ -13,7 +13,7 @@ import {
     NotImplementedError,
     UnexpectedTypeError,
     UsableListChangeTypeId
-} from '../sys/sys-internal-api';
+} from '../sys/internal-api';
 import {
     DataMessage,
     DataMessageTypeId,

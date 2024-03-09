@@ -14,7 +14,7 @@ import {
     ThrowableError,
     UnexpectedCaseError,
     ZenithDataError
-} from "../../../../sys/sys-internal-api";
+} from "../../../../sys/internal-api";
 import {
     AdiPublisherRequest,
     AdiPublisherSubscription,

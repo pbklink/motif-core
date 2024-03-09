@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { IndexSignatureHack, JsonElement } from '../../sys/sys-internal-api';
+import { IndexSignatureHack, JsonElement } from '../../sys/internal-api';
 import { SettingsGroup } from './settings-group';
 import { TypedKeyValueSettings } from './typed-key-value-settings';
 
@@ -43,7 +43,7 @@ export abstract class TypedKeyValueArraySettingsGroup extends SettingsGroup {
                 for (const namedInfoArrayElement of namedInfoArrayElements) {
                     const nameResult = namedInfoArrayElement.tryGetString(TypedKeyValueArraySettingsGroup.InfosArrayJsonName.name);
                     if (nameResult.isOk()) {
-                        const infoArrayElementResult = namedInfoArrayElement.tryGetDefinedElement(
+                        const infoArrayElementResult = namedInfoArrayElement.tryGetElement(
                             TypedKeyValueArraySettingsGroup.InfosArrayJsonName.infoArray
                         );
                         if (infoArrayElementResult.isOk()) {

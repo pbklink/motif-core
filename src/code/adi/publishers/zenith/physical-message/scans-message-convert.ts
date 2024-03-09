@@ -6,7 +6,7 @@
 
 import {
     AssertInternalError, ErrorCode, UnreachableCaseError, ZenithDataError
-} from '../../../../sys/sys-internal-api';
+} from '../../../../sys/internal-api';
 import {
     ActiveFaultedStatusId,
     AdiPublisherRequest,

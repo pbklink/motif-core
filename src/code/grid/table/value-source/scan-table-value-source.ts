@@ -5,7 +5,7 @@
  */
 
 import { Scan } from '../../../scan/internal-api';
-import { AssertInternalError, Correctness, Integer, MultiEvent, UnreachableCaseError } from '../../../sys/sys-internal-api';
+import { AssertInternalError, Correctness, Integer, MultiEvent, UnreachableCaseError } from '../../../sys/internal-api';
 import { ScanTableFieldSourceDefinition } from '../field-source/grid-table-field-source-internal-api';
 import {
     ActiveFaultedStatusIdCorrectnessTableValue,

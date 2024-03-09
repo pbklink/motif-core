@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { Integer } from '../sys/sys-internal-api';
+import { Integer } from '../sys/internal-api';
 import { HistorySequenceSeries } from './history-sequence-series';
 import { RepeatableExactHistorySequencer } from './repeatable-exact-history-sequencer';
 

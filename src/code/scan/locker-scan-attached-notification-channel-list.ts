@@ -6,8 +6,8 @@
 
 import { NotificationChannel, ScanAttachedNotificationChannel } from '../adi/adi-internal-api';
 import { NotificationChannelsService } from '../notification-channel/internal-api';
+import { AssertInternalError, Integer, LockOpenListItem, MultiEvent, UsableListChangeTypeId } from '../sys/internal-api';
 import { ModifierComparableList } from '../sys/modifier-comparable-list';
-import { AssertInternalError, Integer, LockOpenListItem, MultiEvent, UsableListChangeTypeId } from '../sys/sys-internal-api';
 import { LockerScanAttachedNotificationChannel } from './locker-scan-attached-notification-channel';
 
 export class LockerScanAttachedNotificationChannelList extends ModifierComparableList<LockerScanAttachedNotificationChannel, Integer | undefined> {

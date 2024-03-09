@@ -5,7 +5,7 @@
  */
 
 import { StringId, Strings } from '../../../res/res-internal-api';
-import { EnumInfoOutOfOrderError, Err, Result } from '../../../sys/sys-internal-api';
+import { EnumInfoOutOfOrderError, Err, Result } from '../../../sys/internal-api';
 
 export const enum ScanFieldSetLoadErrorTypeId {
     AndFieldHasOrChild,

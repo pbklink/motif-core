@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, ModifierKey, MultiEvent, UnreachableCaseError } from '../sys/sys-internal-api';
+import { AssertInternalError, ModifierKey, MultiEvent, UnreachableCaseError } from '../sys/internal-api';
 
 export abstract class UiAction {
     private _pushMultiEvent = new MultiEvent<UiAction.PushEventHandlersInterface>();

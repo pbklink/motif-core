@@ -5,8 +5,8 @@
  */
 
 import { StringId } from '../res/i18n-strings';
+import { Integer } from '../sys/internal-api';
 import { EnumInfoOutOfOrderError } from '../sys/internal-error';
-import { Integer } from '../sys/types';
 
 /** @public */
 export class UserAlertService {

@@ -6,7 +6,7 @@
 
 import { AdiService } from '../adi/adi-internal-api';
 import { ScansService } from '../scan/internal-api';
-import { UnreachableCaseError } from '../sys/sys-internal-api';
+import { UnreachableCaseError } from '../sys/internal-api';
 import { WatchmakerService } from '../watchmaker/watchmaker-internal-api';
 import {
     LitIvemIdArrayRankedLitIvemIdListDefinition,

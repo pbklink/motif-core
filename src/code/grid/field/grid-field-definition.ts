@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, CommaText, GridFieldHorizontalAlign, Integer } from '../../sys/sys-internal-api';
+import { AssertInternalError, CommaText, GridFieldHorizontalAlign, Integer } from '../../sys/internal-api';
 import { GridFieldSourceDefinition } from './grid-field-source-definition';
 
 export class GridFieldDefinition {

@@ -4,30 +4,141 @@
 
 ```ts
 
-/// <reference types="node" />
-
+import { addDays } from '@xilytix/sysutils';
+import { addToArrayByPush } from '@xilytix/sysutils';
+import { addToArrayUniquely } from '@xilytix/sysutils';
+import { addToCapacitisedArrayUniquely } from '@xilytix/sysutils';
+import { addToGrow15ArrayUniquely } from '@xilytix/sysutils';
 import { BehavioredColumnSettings } from '@xilytix/revgrid';
 import { BehavioredGridSettings } from '@xilytix/revgrid';
+import { BooleanOrUndefined } from '@xilytix/sysutils';
 import { CachedCanvasRenderingContext2D } from '@xilytix/revgrid';
+import { calculateIntlNumberFormatCharParts } from '@xilytix/sysutils';
 import { CellPainter } from '@xilytix/revgrid';
+import { checkEscapeCharForRegexInsideCharClass } from '@xilytix/sysutils';
+import { checkEscapeCharForRegexOutsideCharClass } from '@xilytix/sysutils';
+import { checkLimitTextLength } from '@xilytix/sysutils';
 import { ClickBoxCellPainter } from '@xilytix/revgrid';
+import { cloneDecimal } from '@xilytix/sysutils';
 import { Column } from '@xilytix/revgrid';
 import { ColumnSettings } from '@xilytix/revgrid';
-import { Config } from 'decimal.js-light';
+import { compareArray } from '@xilytix/sysutils';
+import { compareBoolean } from '@xilytix/sysutils';
+import { compareDate } from '@xilytix/sysutils';
+import { compareDecimal } from '@xilytix/sysutils';
+import { compareEnum } from '@xilytix/sysutils';
+import { compareInteger } from '@xilytix/sysutils';
+import { compareNumber } from '@xilytix/sysutils';
+import { compareString } from '@xilytix/sysutils';
+import { compareUndefinableBoolean } from '@xilytix/sysutils';
+import { compareUndefinableDate } from '@xilytix/sysutils';
+import { compareUndefinableDecimal } from '@xilytix/sysutils';
+import { compareUndefinableEnum } from '@xilytix/sysutils';
+import { compareUndefinableInteger } from '@xilytix/sysutils';
+import { compareUndefinableNumber } from '@xilytix/sysutils';
+import { compareUndefinableString } from '@xilytix/sysutils';
+import { compareValue } from '@xilytix/sysutils';
+import { ComparisonResult } from '@xilytix/sysutils';
+import { concatenateArrayUniquely } from '@xilytix/sysutils';
+import { concatenateElementToArrayUniquely } from '@xilytix/sysutils';
+import { copyJson } from '@xilytix/sysutils';
+import { copyJsonValue } from '@xilytix/sysutils';
+import { createNumberGroupCharRemoveRegex } from '@xilytix/sysutils';
+import { createRandomUrlSearch } from '@xilytix/sysutils';
 import { DatalessViewCell } from '@xilytix/revgrid';
 import { DataRowArrayDataServer } from '@xilytix/revgrid';
 import { DataRowArraySchemaServer } from '@xilytix/revgrid';
 import { DataServer } from '@xilytix/revgrid';
+import { DateOrDateTime } from '@xilytix/sysutils';
+import { dateToDashedYyyyMmDd } from '@xilytix/sysutils';
+import { dateToDateOnlyIsoString } from '@xilytix/sysutils';
+import { dateToUtcYyyyMmDd } from '@xilytix/sysutils';
+import { DayOfWeek } from '@xilytix/sysutils';
 import { Decimal } from 'decimal.js-light';
+import { deepExtendObject } from '@xilytix/sysutils';
+import { deepExtendValue } from '@xilytix/sysutils';
+import { delay1Tick } from '@xilytix/sysutils';
+import { Err } from '@xilytix/sysutils';
+import { getElementDocumentPosition } from '@xilytix/sysutils';
+import { getElementDocumentPositionRect } from '@xilytix/sysutils';
+import { getErrorMessage } from '@xilytix/sysutils';
+import { getUniqueElementArraysOverlapElements } from '@xilytix/sysutils';
 import { GridSettings } from '@xilytix/revgrid';
+import { Guid } from '@xilytix/sysutils';
 import { HorizontalAlign } from '@xilytix/revgrid';
+import { hoursPerDay } from '@xilytix/sysutils';
+import { incDateByDays } from '@xilytix/sysutils';
+import { IndexedRecord } from '@xilytix/sysutils';
+import { IndexSignatureHack } from '@xilytix/sysutils';
 import { IndexSignatureHack as IndexSignatureHack_2 } from '@xilytix/revgrid';
 import { InMemoryBehavioredColumnSettings } from '@xilytix/revgrid';
 import { InMemoryBehavioredGridSettings } from '@xilytix/revgrid';
+import { Integer } from '@xilytix/sysutils';
+import { IntlNumberFormatCharParts } from '@xilytix/sysutils';
+import { isArrayEqual } from '@xilytix/sysutils';
+import { isArrayEqualUniquely } from '@xilytix/sysutils';
+import { isDateEqual } from '@xilytix/sysutils';
+import { isDecimalEqual } from '@xilytix/sysutils';
+import { isDecimalGreaterThan } from '@xilytix/sysutils';
+import { isDecimalLessThan } from '@xilytix/sysutils';
+import { isDigitCharCode } from '@xilytix/sysutils';
+import { isIntlFormattedInteger } from '@xilytix/sysutils';
+import { isIntlFormattedNumber } from '@xilytix/sysutils';
+import { isPartialIntlFormattedInteger } from '@xilytix/sysutils';
+import { isPartialIntlFormattedNumber } from '@xilytix/sysutils';
+import { isSameDay } from '@xilytix/sysutils';
+import { isSamePossiblyUndefinedArray } from '@xilytix/sysutils';
+import { isStringifiedInteger } from '@xilytix/sysutils';
+import { isStringifiedNumber } from '@xilytix/sysutils';
+import { isStringKeyValueObjectEqual } from '@xilytix/sysutils';
+import { isToday } from '@xilytix/sysutils';
+import { isUndefinableArrayEqual } from '@xilytix/sysutils';
+import { isUndefinableArrayEqualUniquely } from '@xilytix/sysutils';
+import { isUndefinableDateEqual } from '@xilytix/sysutils';
+import { isUndefinableDecimalEqual } from '@xilytix/sysutils';
+import { Json } from '@xilytix/sysutils';
+import { JsonElement } from '@xilytix/sysutils';
+import { JsonValue } from '@xilytix/sysutils';
+import { JsonValueArray } from '@xilytix/sysutils';
+import { Line } from '@xilytix/sysutils';
 import { LinedHoverCell } from '@xilytix/revgrid';
 import { ListChangedTypeId } from '@xilytix/revgrid';
-import { Numeric } from 'decimal.js-light';
+import { ListChangeTypeId } from '@xilytix/sysutils';
+import { MapKey } from '@xilytix/sysutils';
+import { Mappable } from '@xilytix/sysutils';
+import { minsPerDay } from '@xilytix/sysutils';
+import { minsPerHour } from '@xilytix/sysutils';
+import { moveElementInArray } from '@xilytix/sysutils';
+import { moveElementsInArray } from '@xilytix/sysutils';
+import { moveIndexedElementsInArrayOnePositionTowardsEndWithSquash } from '@xilytix/sysutils';
+import { moveIndexedElementsInArrayOnePositionTowardsStartWithSquash } from '@xilytix/sysutils';
+import { mSecsPerDay } from '@xilytix/sysutils';
+import { mSecsPerHour } from '@xilytix/sysutils';
+import { mSecsPerMin } from '@xilytix/sysutils';
+import { mSecsPerSec } from '@xilytix/sysutils';
+import { newDate } from '@xilytix/sysutils';
+import { newDecimal } from '@xilytix/sysutils';
+import { newGuid } from '@xilytix/sysutils';
+import { newNowDate } from '@xilytix/sysutils';
+import { newNullDate } from '@xilytix/sysutils';
+import { newUndefinableDate } from '@xilytix/sysutils';
+import { newUndefinableDecimal } from '@xilytix/sysutils';
+import { newUndefinableNullableDecimal } from '@xilytix/sysutils';
+import { nullDate } from '@xilytix/sysutils';
+import { nullDecimal } from '@xilytix/sysutils';
+import { numberToPixels } from '@xilytix/sysutils';
+import { Ok } from '@xilytix/sysutils';
+import { OptionalKeys } from '@xilytix/sysutils';
+import { OptionalValues } from '@xilytix/sysutils';
+import { parseIntStrict } from '@xilytix/sysutils';
+import { parseNumberStrict } from '@xilytix/sysutils';
+import { PickEnum } from '@xilytix/sysutils';
+import { PickExcludedEnum } from '@xilytix/sysutils';
+import { priorityCompareInteger } from '@xilytix/sysutils';
+import { Rect } from '@xilytix/sysutils';
 import { Rectangle } from '@xilytix/revgrid';
+import { removeFromArray } from '@xilytix/sysutils';
+import { Result } from '@xilytix/sysutils';
 import { Revgrid } from '@xilytix/revgrid';
 import { RevRecordDataServer } from '@xilytix/revgrid';
 import { RevRecordField } from '@xilytix/revgrid';
@@ -37,12 +148,24 @@ import { RevRecordInvalidatedValue } from '@xilytix/revgrid';
 import { RevRecordSchemaServer } from '@xilytix/revgrid';
 import { RevRecordStore } from '@xilytix/revgrid';
 import { RevRecordValueRecentChangeTypeId } from '@xilytix/revgrid';
+import { RGB } from '@xilytix/sysutils';
+import { secsPerDay } from '@xilytix/sysutils';
+import { secsPerHour } from '@xilytix/sysutils';
+import { secsPerMin } from '@xilytix/sysutils';
+import { shuffleElementsUpInArray } from '@xilytix/sysutils';
 import { SingleHeadingDataRowArrayServerSet } from '@xilytix/revgrid';
 import { SingleHeadingDataServer } from '@xilytix/revgrid';
 import { StandardCheckboxPainter } from '@xilytix/revgrid';
 import { StandardToggleClickBoxCellEditor } from '@xilytix/revgrid';
 import { Subgrid } from '@xilytix/revgrid';
+import { subtractElementFromArray } from '@xilytix/sysutils';
+import { subtractElementFromArrayUniquely } from '@xilytix/sysutils';
+import { SysTick } from '@xilytix/sysutils';
+import { testRemoveFromArray } from '@xilytix/sysutils';
 import { TextTruncateType } from '@xilytix/revgrid';
+import { TimeSpan } from '@xilytix/sysutils';
+import { tryGetErrorMessage } from '@xilytix/sysutils';
+import { uniqueElementArraysOverlap } from '@xilytix/sysutils';
 import { ViewCell } from '@xilytix/revgrid';
 import { ViewLayout } from '@xilytix/revgrid';
 
@@ -362,20 +485,15 @@ export interface AdaptedRevgridOnlyGridSettings {
     verticalOffset: number;
 }
 
-// @public (undocumented)
-export function addDays(date: Date, count: Integer): Date;
+export { addDays }
 
-// @public (undocumented)
-export function addToArrayByPush<T>(target: T[], addition: readonly T[]): void;
+export { addToArrayByPush }
 
-// @public (undocumented)
-export function addToArrayUniquely<T>(target: T[], addition: readonly T[]): void;
+export { addToArrayUniquely }
 
-// @public (undocumented)
-export function addToCapacitisedArrayUniquely<T>(target: T[], count: Integer, addition: readonly T[]): number;
+export { addToCapacitisedArrayUniquely }
 
-// @public (undocumented)
-export function addToGrow15ArrayUniquely<T>(target: T[], count: Integer, addition: readonly T[]): number;
+export { addToGrow15ArrayUniquely }
 
 // Warning: (ae-missing-release-tag) "AddToWatchmakerListDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -2479,8 +2597,7 @@ export abstract class BooleanCorrectnessTableValue extends GenericCorrectnessTab
     protected renderValueTypeId: RenderValue.TypeId;
 }
 
-// @public (undocumented)
-export type BooleanOrUndefined = boolean | undefined;
+export { BooleanOrUndefined }
 
 // Warning: (ae-missing-release-tag) "BooleanRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -3171,8 +3288,7 @@ export const enum BuyOrSellId {
     Sell = 1
 }
 
-// @public (undocumented)
-export function calculateIntlNumberFormatCharParts(numberFormat: Intl.NumberFormat): Result<IntlNumberFormatCharParts>;
+export { calculateIntlNumberFormatCharParts }
 
 // Warning: (ae-missing-release-tag) "CallOrPut" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -3938,14 +4054,11 @@ export class CheckboxRenderValueRecordGridCellPainter implements ClickBoxCellPai
     paint(cell: DatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined): number | undefined;
 }
 
-// @public (undocumented)
-export function checkEscapeCharForRegexInsideCharClass(char: string): string;
+export { checkEscapeCharForRegexInsideCharClass }
 
-// @public (undocumented)
-export function checkEscapeCharForRegexOutsideCharClass(char: string): string;
+export { checkEscapeCharForRegexOutsideCharClass }
 
-// @public (undocumented)
-export function checkLimitTextLength(text: string, maxTextLength: number | undefined): string;
+export { checkLimitTextLength }
 
 // Warning: (ae-missing-release-tag) "ClassFeedsDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -4000,8 +4113,7 @@ export interface ClearIrrcChange<T> extends IrrcChange<T> {
     typeId: IrrcChangeTypeId.Clear;
 }
 
-// @public (undocumented)
-export function cloneDecimal(config: Config): typeof Decimal;
+export { cloneDecimal }
 
 // Warning: (ae-missing-release-tag) "CloseIntervalHistorySequenceSeries" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "CloseIntervalHistorySequenceSeries" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -5104,75 +5216,49 @@ export namespace ComparableList {
     export type BeforeRemoveRangeCallBack = (this: void, index: Integer, count: Integer) => void;
 }
 
-// @public (undocumented)
-export function compareArray<T>(left: readonly T[], right: readonly T[]): number;
+export { compareArray }
 
-// @public (undocumented)
-export function compareBoolean(left: boolean, right: boolean): number;
+export { compareBoolean }
 
-// @public (undocumented)
-export function compareDate(left: Date, right: Date): ComparisonResult;
+export { compareDate }
 
-// @public (undocumented)
-export function compareDecimal(left: Decimal, right: Decimal): number;
+export { compareDecimal }
 
-// @public (undocumented)
-export function compareEnum<T extends number>(left: T, right: T): number;
+export { compareEnum }
 
 // @public (undocumented)
 export type CompareFtn<in T> = (this: void, left: T, right: T) => ComparisonResult;
 
-// @public (undocumented)
-export function compareInteger(left: Integer, right: Integer): ComparisonResult;
+export { compareInteger }
 
-// @public (undocumented)
-export function compareNumber(left: number, right: number): ComparisonResult;
+export { compareNumber }
 
 // @public (undocumented)
 export function comparePriceOrRemainder(left: PriceOrRemainder, right: PriceOrRemainder, lowToHighSorting: boolean): number;
 
-// @public (undocumented)
-export function compareString(left: string, right: string): number;
+export { compareString }
 
-// @public (undocumented)
-export function compareUndefinableBoolean(left: boolean | undefined, right: boolean | undefined, undefinedIsLowest: boolean): number;
+export { compareUndefinableBoolean }
 
-// @public (undocumented)
-export function compareUndefinableDate(left: Date | undefined, right: Date | undefined, undefinedIsLowest: boolean): ComparisonResult;
+export { compareUndefinableDate }
 
-// @public (undocumented)
-export function compareUndefinableDecimal(left: Decimal | undefined, right: Decimal | undefined, undefinedIsLowest: boolean): number;
+export { compareUndefinableDecimal }
 
-// @public (undocumented)
-export function compareUndefinableEnum<T extends number>(left: T | undefined, right: T | undefined, undefinedIsLowest: boolean): number;
+export { compareUndefinableEnum }
 
-// @public (undocumented)
-export function compareUndefinableInteger(left: Integer | undefined, right: Integer | undefined, undefinedIsLowest: boolean): ComparisonResult;
+export { compareUndefinableInteger }
 
-// @public (undocumented)
-export function compareUndefinableNumber(left: number | undefined, right: number | undefined, undefinedIsLowest: boolean): ComparisonResult;
+export { compareUndefinableNumber }
 
-// @public (undocumented)
-export function compareUndefinableString(left: string | undefined, right: string | undefined, undefinedIsLowest: boolean): number;
+export { compareUndefinableString }
 
-// @public (undocumented)
-export function compareValue<T extends number | string>(left: T, right: T): ComparisonResult;
+export { compareValue }
 
-// @public (undocumented)
-export const enum ComparisonResult {
-    // (undocumented)
-    LeftEqualsRight = 0,
-    // (undocumented)
-    LeftGreaterThanRight = 1,
-    // (undocumented)
-    LeftLessThanRight = -1
-}
+export { ComparisonResult }
 
-// @public (undocumented)
-export function concatenateArrayUniquely<T>(left: readonly T[], right: readonly T[]): T[];
+export { concatenateArrayUniquely }
 
-// @public (undocumented)
-export function concatenateElementToArrayUniquely<T>(array: readonly T[], element: T): T[];
+export { concatenateElementToArrayUniquely }
 
 // Warning: (ae-internal-missing-underscore) The name "ConditionCodesDayTradesGridField" should be prefixed with an underscore because the declaration is marked as @internal
 //
@@ -5197,11 +5283,9 @@ export namespace ConfigServiceGroupModule {
     export function initialiseStatic(): void;
 }
 
-// @public (undocumented)
-export function copyJson(obj: Json): Json;
+export { copyJson }
 
-// @public (undocumented)
-export function copyJsonValue(value: JsonValue): JsonValue;
+export { copyJsonValue }
 
 // Warning: (ae-missing-release-tag) "CopyWatchmakerListDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -5552,8 +5636,7 @@ export class CreateNotificationChannelDataMessage extends DataMessage {
     static readonly typeId = DataMessageTypeId.CreateNotificationChannel;
 }
 
-// @public (undocumented)
-export function createNumberGroupCharRemoveRegex(groupChar: string | undefined): RegExp | undefined;
+export { createNumberGroupCharRemoveRegex }
 
 // Warning: (ae-missing-release-tag) "CreateOrCopyWatchmakerListDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -5566,8 +5649,7 @@ export class CreateOrCopyWatchmakerListDataMessage extends DataMessage {
     static readonly typeId = DataMessageTypeId.CreateOrCopyWatchmakerList;
 }
 
-// @public (undocumented)
-export function createRandomUrlSearch(): string;
+export { createRandomUrlSearch }
 
 // Warning: (ae-missing-release-tag) "CreateScanDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -6568,8 +6650,7 @@ export namespace DateInRangeScanField {
     export function isConditionEqual(left: DateInRangeScanField, right: DateInRangeScanField, index: Integer): boolean;
 }
 
-// @public (undocumented)
-export type DateOrDateTime = Date;
+export { DateOrDateTime }
 
 // Warning: (ae-missing-release-tag) "DateRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -6790,16 +6871,11 @@ export class DateTimeRenderValue extends GenericRenderValue<Date> {
     constructor(data: Date | undefined);
 }
 
-// Warning: (ae-missing-release-tag) "dateToDashedYyyyMmDd" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export function dateToDashedYyyyMmDd(date: Date, utc: boolean): string;
+export { dateToDashedYyyyMmDd }
 
-// @public (undocumented)
-export function dateToDateOnlyIsoString(value: Date): string;
+export { dateToDateOnlyIsoString }
 
-// @public (undocumented)
-export function dateToUtcYyyyMmDd(value: Date): string;
+export { dateToUtcYyyyMmDd }
 
 // Warning: (ae-missing-release-tag) "DateUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "DateUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -6837,23 +6913,7 @@ export namespace DateUiAction {
     export type ValuePushEventHander = (this: void, date: Date | undefined, edited: boolean) => void;
 }
 
-// @public (undocumented)
-export const enum DayOfWeek {
-    // (undocumented)
-    Friday = 5,
-    // (undocumented)
-    Monday = 1,
-    // (undocumented)
-    Saturday = 6,
-    // (undocumented)
-    Sunday = 0,
-    // (undocumented)
-    Thursday = 4,
-    // (undocumented)
-    Tuesday = 2,
-    // (undocumented)
-    Wednesday = 3
-}
+export { DayOfWeek }
 
 // Warning: (ae-missing-release-tag) "DayTradesDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -7202,11 +7262,9 @@ export namespace DecimalUiAction {
     defaultOptions: Options;
 }
 
-// @public (undocumented)
-export function deepExtendObject(target: Record<string, unknown>, obj: Record<string, unknown> | undefined): Record<string, unknown>;
+export { deepExtendObject }
 
-// @public (undocumented)
-export function deepExtendValue(existingTarget: unknown, value: unknown): unknown;
+export { deepExtendValue }
 
 // @public (undocumented)
 export const defaultAdaptedRevgridColumnSettings: AdaptedRevgridColumnSettings;
@@ -7223,11 +7281,7 @@ export const defaultAdaptedRevgridOnlyGridSettings: AdaptedRevgridOnlyGridSettin
 // @public (undocumented)
 export function defined<T>(value: T): value is Exclude<T, undefined>;
 
-// @public (undocumented)
-export function delay1Tick(ftn: () => void): NodeJS.Timeout;
-
-// @public (undocumented)
-export function delay2Ticks(ftn: () => void): void;
+export { delay1Tick }
 
 // Warning: (ae-missing-release-tag) "DeleteNotificationChannelDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -8447,30 +8501,7 @@ export class EquityOrderTypeIdCorrectnessTableValue extends EnumCorrectnessTable
     constructor();
 }
 
-// Warning: (ae-missing-release-tag) "Err" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class Err<T = undefined, E = string> {
-    constructor(error: E);
-    // (undocumented)
-    createOuter<OuterT = undefined>(outerError: string): Err<OuterT, string>;
-    // (undocumented)
-    createOuterResolvedPromise<OuterT = undefined>(outerError: string): Promise<Err<OuterT, string>>;
-    // (undocumented)
-    createType<NewT>(): Err<NewT, E>;
-    // (undocumented)
-    readonly error: E;
-    // (undocumented)
-    isErr(): this is Err<T, E>;
-    // (undocumented)
-    isOk(): this is Ok<T, E>;
-}
-
-// @public (undocumented)
-export namespace Err {
-    // (undocumented)
-    export function createResolvedPromise<T = undefined, E = string>(error: E): Promise<Err<T, E>>;
-}
+export { Err }
 
 // Warning: (ae-missing-release-tag) "ErrorCode" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -8773,11 +8804,37 @@ export const enum ErrorCode {
     // (undocumented)
     IvemId_ExchangeNotSpecified = "IIENS45456",
     // (undocumented)
-    JsonElement_ElementNotDefined = "JEEND11145",
+    JsonElement_DecimalJsonValueIsNotOfTypeString = "JEDJVINOTS11145",
     // (undocumented)
-    JsonElement_TryGetDefinedElement = "JETGDE11145",
+    JsonElement_ElementIsNotAJsonObject = "JEEINAJO11145",
     // (undocumented)
-    JsonElement_TryGetElement = "JETGE11145",
+    JsonElement_ElementIsNotDefined = "JEEIND11145",
+    // (undocumented)
+    JsonElement_InvalidDecimal = "JEID11145",
+    // (undocumented)
+    JsonElement_InvalidJsonText = "JEIJT11145",
+    // (undocumented)
+    JsonElement_JsonValueArrayElementIsNotABoolean = "JEJVAEINAB11145",
+    // (undocumented)
+    JsonElement_JsonValueArrayElementIsNotAnObject = "JEJVAEINAO11145",
+    // (undocumented)
+    JsonElement_JsonValueArrayElementIsNotANumber = "JEJVAEINAN11145",
+    // (undocumented)
+    JsonElement_JsonValueArrayElementIsNotAString = "JEJVAEINAS11145",
+    // (undocumented)
+    JsonElement_JsonValueArrayElementIsNotJson = "JEJVAEINJ11145",
+    // (undocumented)
+    JsonElement_JsonValueIsNotAnArray = "JEJVINAA11145",
+    // (undocumented)
+    JsonElement_JsonValueIsNotDefined = "JEJVIND11145",
+    // (undocumented)
+    JsonElement_JsonValueIsNotOfTypeBoolean = "JEJVINOTB11145",
+    // (undocumented)
+    JsonElement_JsonValueIsNotOfTypeNumber = "JEJVINOTN11145",
+    // (undocumented)
+    JsonElement_JsonValueIsNotOfTypeObject = "JEJVINOTO11145",
+    // (undocumented)
+    JsonElement_JsonValueIsNotOfTypeString = "JEJVINOTS11145",
     // (undocumented)
     LitIvemDetailsFromSearchSymbolsTableRecordSourceDefinition_RequestNotSpecified = "LIDFSSTRSDRNS10198",
     // (undocumented)
@@ -8800,6 +8857,8 @@ export const enum ErrorCode {
     LitIvemIdArrayRankedLitIvemIdListDefinition_JsonIsInvalid = "LIIARLIIDJII45610",
     // (undocumented)
     LitIvemIdArrayRankedLitIvemIdListDefinition_JsonLitIvemIdArrayIsInvalid = "LIIARLIIDJLIIAII45610",
+    // (undocumented)
+    LitIvemIdArrayRankedLitIvemIdListDefinition_JsonNotSpecified = "LIIARLIIDJNS45610",
     // (undocumented)
     LitIvemIdComparableListTableRecordSourceDefinition_JsonListIsInvalid = "LIICLTRSDJLII60912",
     // (undocumented)
@@ -8910,6 +8969,8 @@ export const enum ErrorCode {
     RankedLitIvemIdListTableRecordSourceDefinition_DefinitionElementNotSpecified = "RLIILTRSDDENS54339",
     // (undocumented)
     RankedLitIvemIdListTableRecordSourceDefinition_DefinitionJsonIsInvalid = "RLIILTRSDJII12209",
+    // (undocumented)
+    RankedLitIvemIdListTableRecordSourceDefinition_DefinitionJsonNotSpecified = "RLIILTRSDJNS12209",
     // (undocumented)
     ReferenceableGridLayoutDefinition_JsonColumns = "RGLDJC10883",
     // (undocumented)
@@ -9394,10 +9455,6 @@ export const enum ErrorCode {
     ZPSMPPM23230917111 = "ZPSMPPM23230917111",
     // (undocumented)
     ZPSMPPM2994344434 = "ZPSMPPM2994344434"
-}
-
-// @public (undocumented)
-export class ErrorCodeErr<T = undefined> extends Err<T, ErrorCode> {
 }
 
 // Warning: (ae-missing-release-tag) "ErrorCodeWithExtra" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -10987,23 +11044,16 @@ export abstract class GenericTableValue<T> extends TableValue {
     isUndefined(): boolean;
 }
 
-// @public (undocumented)
-export function getElementDocumentPosition(element: HTMLElement): {
-    left: number;
-    top: number;
-};
+export { getElementDocumentPosition }
 
-// @public (undocumented)
-export function getElementDocumentPositionRect(element: HTMLElement): Rect;
+export { getElementDocumentPositionRect }
 
-// @public (undocumented)
-export function getErrorMessage(e: unknown, defaultMessage?: string): string;
+export { getErrorMessage }
 
 // @public (undocumented)
 export function getUndefinedNullOrFunctionResult<U, T>(value: U | undefined | null, fn: (x: U) => T): T | undefined | null;
 
-// @public (undocumented)
-export function getUniqueElementArraysOverlapElements<T>(left: readonly T[], right: readonly T[]): T[];
+export { getUniqueElementArraysOverlapElements }
 
 // @public (undocumented)
 export type GridDataEditValue = DataServer.EditValue;
@@ -11843,8 +11893,7 @@ export namespace GridTableRecordDefinitionStaticInitialise {
     export function initialise(): void;
 }
 
-// @public (undocumented)
-export type Guid = string;
+export { Guid }
 
 // @public (undocumented)
 export type Handle = Integer;
@@ -12434,8 +12483,7 @@ export class HoldingTableValueSource extends CorrectnessTableValueSource<Holding
     protected getRecord(): Holding;
 }
 
-// @public (undocumented)
-export const hoursPerDay = 24;
+export { hoursPerDay }
 
 // @public (undocumented)
 export namespace HtmlTypes {
@@ -12757,8 +12805,7 @@ export class ImmediateOrderTrigger extends OrderTrigger {
     get value(): undefined;
 }
 
-// @public (undocumented)
-export function incDateByDays(date: Date, count: Integer): void;
+export { incDateByDays }
 
 // Warning: (ae-missing-release-tag) "IncDecAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -12788,11 +12835,7 @@ export interface Incubator {
     readonly incubating: boolean;
 }
 
-// @public
-export interface IndexedRecord {
-    // (undocumented)
-    index: Integer;
-}
+export { IndexedRecord }
 
 // Warning: (ae-missing-release-tag) "IndexedTableRecordDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -12800,10 +12843,7 @@ export interface IndexedRecord {
 export interface IndexedTableRecordDefinition<Record extends IndexedRecord> extends PayloadTableRecordDefinition<Record> {
 }
 
-// @public (undocumented)
-export type IndexSignatureHack<T> = {
-    [K in keyof T]: IndexSignatureHack<T[K]>;
-};
+export { IndexSignatureHack }
 
 // @public (undocumented)
 export class InMemoryAdaptedRevgridBehavioredColumnSettings extends InMemoryBehavioredColumnSettings implements AdaptedRevgridBehavioredColumnSettings {
@@ -12936,8 +12976,7 @@ export const enum InstrumentMovementColorSetId {
     European = 1
 }
 
-// @public (undocumented)
-export type Integer = number;
+export { Integer }
 
 // Warning: (ae-missing-release-tag) "IntegerArrayCorrectnessTableField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -13770,15 +13809,7 @@ export namespace IntervalHistorySequenceSeries {
     }
 }
 
-// @public (undocumented)
-export interface IntlNumberFormatCharParts {
-    // (undocumented)
-    decimal: string;
-    // (undocumented)
-    group: string | undefined;
-    // (undocumented)
-    minusSign: string;
-}
+export { IntlNumberFormatCharParts }
 
 // Warning: (ae-missing-release-tag) "invalidDataItemId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -13837,26 +13868,19 @@ export class IrrcFeedSubscriptionDataItem<T> extends FeedSubscriptionDataItem im
     unsubscribeListChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
 }
 
-// @public (undocumented)
-export function isArrayEqual<T>(left: readonly T[], right: readonly T[]): boolean;
+export { isArrayEqual }
 
-// @public (undocumented)
-export function isArrayEqualUniquely<T>(left: readonly T[], right: readonly T[]): boolean;
+export { isArrayEqualUniquely }
 
-// @public (undocumented)
-export function isDateEqual(left: Date, right: Date): boolean;
+export { isDateEqual }
 
-// @public (undocumented)
-export function isDecimalEqual(left: Decimal, right: Decimal): boolean;
+export { isDecimalEqual }
 
-// @public (undocumented)
-export function isDecimalGreaterThan(subject: Decimal, other: Decimal): boolean;
+export { isDecimalGreaterThan }
 
-// @public (undocumented)
-export function isDecimalLessThan(subject: Decimal, other: Decimal): boolean;
+export { isDecimalLessThan }
 
-// @public (undocumented)
-export function isDigitCharCode(charCode: number): boolean;
+export { isDigitCharCode }
 
 // Warning: (ae-missing-release-tag) "IsIndexCorrectnessTableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -13872,15 +13896,9 @@ export class IsIndexTableValue extends BooleanTableValue {
     constructor();
 }
 
-// Warning: (ae-missing-release-tag) "isIntlFormattedInteger" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export function isIntlFormattedInteger(value: string, charParts: IntlNumberFormatCharParts): boolean;
+export { isIntlFormattedInteger }
 
-// Warning: (ae-missing-release-tag) "isIntlFormattedNumber" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export function isIntlFormattedNumber(value: string, charParts: IntlNumberFormatCharParts): boolean;
+export { isIntlFormattedNumber }
 
 // Warning: (ae-internal-missing-underscore) The name "Iso8601" should be prefixed with an underscore because the declaration is marked as @internal
 //
@@ -13912,15 +13930,9 @@ export namespace Iso8601 {
         {};
 }
 
-// Warning: (ae-missing-release-tag) "isPartialIntlFormattedInteger" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export function isPartialIntlFormattedInteger(value: string, charParts: IntlNumberFormatCharParts): boolean;
+export { isPartialIntlFormattedInteger }
 
-// Warning: (ae-missing-release-tag) "isPartialIntlFormattedNumber" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export function isPartialIntlFormattedNumber(value: string, charParts: IntlNumberFormatCharParts): boolean;
+export { isPartialIntlFormattedNumber }
 
 // @public (undocumented)
 export function isPriceOrRemainderEqual(left: PriceOrRemainder, right: PriceOrRemainder): boolean;
@@ -13941,11 +13953,9 @@ export class IsReadableRenderValue extends BooleanRenderValue {
     constructor(data: boolean | undefined);
 }
 
-// @public (undocumented)
-export function isSameDay(dateA: Date, dateB: Date): boolean;
+export { isSameDay }
 
-// @public (undocumented)
-export function isSamePossiblyUndefinedArray<T>(left?: readonly T[], right?: readonly T[]): boolean;
+export { isSamePossiblyUndefinedArray }
 
 // Warning: (ae-missing-release-tag) "IsScanCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "IsScanCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -14022,14 +14032,11 @@ export namespace IsScanFieldCondition {
     export type OperatorId = Operands.OperatorId;
 }
 
-// @public (undocumented)
-export function isStringifiedInteger(value: string): boolean;
+export { isStringifiedInteger }
 
-// @public (undocumented)
-export function isStringifiedNumber(value: string): boolean;
+export { isStringifiedNumber }
 
-// @public (undocumented)
-export function isStringKeyValueObjectEqual(left: Record<string, string>, right: Record<string, string>): boolean;
+export { isStringKeyValueObjectEqual }
 
 // Warning: (ae-missing-release-tag) "isStringNumberBooleanNestArrayElementEqual" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -14041,20 +14048,15 @@ export function isStringNumberBooleanNestArrayElementEqual(leftElement: unknown,
 // @public (undocumented)
 export function isStringNumberBooleanNestArrayEqual(left: unknown[], right: unknown[]): boolean;
 
-// @public (undocumented)
-export function isToday(date: Date): boolean;
+export { isToday }
 
-// @public (undocumented)
-export function isUndefinableArrayEqual<T>(left: readonly T[] | undefined, right: readonly T[] | undefined): boolean;
+export { isUndefinableArrayEqual }
 
-// @public (undocumented)
-export function isUndefinableArrayEqualUniquely<T>(left: readonly T[] | undefined, right: readonly T[] | undefined): boolean;
+export { isUndefinableArrayEqualUniquely }
 
-// @public (undocumented)
-export function isUndefinableDateEqual(left: Date | undefined, right: Date | undefined): boolean;
+export { isUndefinableDateEqual }
 
-// @public (undocumented)
-export function isUndefinableDecimalEqual(left: Decimal | undefined, right: Decimal | undefined): boolean;
+export { isUndefinableDecimalEqual }
 
 // Warning: (ae-missing-release-tag) "isUndefinableStringNumberBooleanNestArrayEqual" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -14277,169 +14279,29 @@ export namespace IvemIdUiAction {
     export type ValuePushEventHander = (this: void, value: IvemId | undefined, edited: boolean, selectAll: boolean) => void;
 }
 
+export { Json }
+
+export { JsonElement }
+
 // @public (undocumented)
-export interface Json {
+export class JsonElementErr<T = undefined> extends Err<T> {
+    constructor(errorId: JsonElement.ErrorId);
     // (undocumented)
-    [name: string]: JsonValue;
+    readonly errorId: JsonElement.ErrorId;
 }
 
 // @public (undocumented)
-export class JsonElement {
-    constructor(jsonObject?: Json);
+export namespace JsonElementErr {
     // (undocumented)
-    clear(): void;
+    export function create<T>(errorId: JsonElement.ErrorId): JsonElementErr<T>;
     // (undocumented)
-    deepExtend(other: Json): void;
+    export function createOuter<OuterT = undefined>(errorId: JsonElement.ErrorId, outerErrorText: string): Err<OuterT>;
     // (undocumented)
-    forEach(callback: JsonElement.ForEachCallback): void;
-    // (undocumented)
-    forEachBoolean(callback: JsonElement.ForEachBooleanCallback): void;
-    // (undocumented)
-    forEachElement(callback: JsonElement.ForEachElementCallback): void;
-    // (undocumented)
-    forEachNumber(callback: JsonElement.ForEachNumberCallback): void;
-    // (undocumented)
-    forEachString(callback: JsonElement.ForEachStringCallback): void;
-    // (undocumented)
-    forEachValue(callback: JsonElement.ForEachValueCallback): void;
-    // (undocumented)
-    getBoolean(name: string, defaultValue: boolean): boolean;
-    // (undocumented)
-    getBooleanOrUndefined(name: string): boolean | undefined;
-    // (undocumented)
-    getDate(name: string, defaultValue: Date): Date;
-    // (undocumented)
-    getDateTime(name: string, defaultValue: Date): Date;
-    // (undocumented)
-    getDecimal(name: string, defaultValue: Decimal): Decimal;
-    // (undocumented)
-    getGuid(name: string, defaultValue: Guid): string;
-    // (undocumented)
-    getInteger(name: string, defaultValue: Integer): number;
-    // (undocumented)
-    getIntegerOrUndefined(name: string): number | undefined;
-    // (undocumented)
-    getNumber(name: string, defaultValue: number): number;
-    // (undocumented)
-    getNumberOrUndefined(name: string, defaultValue: number): number | undefined;
-    // (undocumented)
-    getState(): Json;
-    // (undocumented)
-    getString(name: string, defaultValue: string): string;
-    // (undocumented)
-    getStringOrUndefined(name: string, defaultValue: string): string | undefined;
-    // (undocumented)
-    hasName(name: string): boolean;
-    // (undocumented)
-    get json(): Json;
-    // (undocumented)
-    newElement(name: string): JsonElement;
-    // (undocumented)
-    parse(jsonText: string): Result<void>;
-    // (undocumented)
-    setBoolean(name: string, value: boolean | undefined): void;
-    // (undocumented)
-    setBooleanArray(name: string, value: boolean[] | undefined): void;
-    // (undocumented)
-    setDate(name: string, value: Date | undefined): void;
-    // (undocumented)
-    setDateTime(name: string, value: Date | undefined): void;
-    // (undocumented)
-    setDecimal(name: string, value: Decimal | undefined): void;
-    // (undocumented)
-    setElement(name: string, value: JsonElement | undefined): void;
-    // (undocumented)
-    setElementArray(name: string, value: JsonElement[] | undefined): void;
-    // (undocumented)
-    setGuid(name: string, value: Guid | undefined): void;
-    // (undocumented)
-    setInteger(name: string, value: Integer | undefined): void;
-    // (undocumented)
-    setJson(name: string, value: Json | undefined): void;
-    // (undocumented)
-    setJsonValue(name: string, value: JsonValue | undefined): void;
-    // (undocumented)
-    setNumber(name: string, value: number | undefined): void;
-    // (undocumented)
-    setNumberArray(name: string, value: number[] | undefined): void;
-    // (undocumented)
-    setObjectArray(name: string, value: Json[] | undefined): void;
-    // (undocumented)
-    setString(name: string, value: string | undefined): void;
-    // (undocumented)
-    setStringArray(name: string, value: string[] | undefined): void;
-    // (undocumented)
-    shallowAssign(element: JsonElement | undefined): void;
-    // (undocumented)
-    stringify(): string;
-    // (undocumented)
-    tryGetAnyJsonValueArray(name: string): Result<JsonValue[], Integer>;
-    // (undocumented)
-    tryGetBoolean(name: string): Result<boolean>;
-    // (undocumented)
-    tryGetBooleanArray(name: string): Result<boolean[], Integer>;
-    // (undocumented)
-    tryGetDate(name: string): Result<Date>;
-    // (undocumented)
-    tryGetDateTime(name: string): Result<Date>;
-    // (undocumented)
-    tryGetDecimal(name: string): Result<Decimal>;
-    // (undocumented)
-    tryGetDefinedElement(name: string): Result<JsonElement>;
-    // (undocumented)
-    tryGetElement(name: string): Result<JsonElement | undefined>;
-    // (undocumented)
-    tryGetElementArray(name: string): Result<JsonElement[], Integer>;
-    // (undocumented)
-    tryGetGuid(name: string): Result<Guid>;
-    // (undocumented)
-    tryGetInteger(name: string): Result<Integer>;
-    // (undocumented)
-    tryGetJsonObject(name: string): Result<Json | undefined>;
-    // (undocumented)
-    tryGetJsonObjectArray(name: string): Result<Json[], Integer>;
-    // (undocumented)
-    tryGetJsonValue(name: string): JsonValue;
-    // (undocumented)
-    tryGetNativeObject(name: string): Result<object>;
-    // (undocumented)
-    tryGetNumber(name: string): Result<number>;
-    // (undocumented)
-    tryGetNumberArray(name: string): Result<number[], Integer>;
-    // (undocumented)
-    tryGetString(name: string): Result<string>;
-    // (undocumented)
-    tryGetStringArray(name: string): Result<string[], Integer>;
-}
-
-// @public (undocumented)
-export namespace JsonElement {
-    // (undocumented)
-    export function createRootElement(rootJson: Json): JsonElement;
-    // (undocumented)
-    export type ForEachBooleanCallback = (this: void, name: string, value: boolean, idx: Integer) => void;
-    // (undocumented)
-    export type ForEachCallback = (this: void, name: string, value: JsonValue, idx: Integer) => void;
-    // (undocumented)
-    export type ForEachElementCallback = (this: void, name: string, value: JsonElement, idx: Integer) => void;
-    // (undocumented)
-    export type ForEachNumberCallback = (this: void, name: string, value: number, idx: Integer) => void;
-    // (undocumented)
-    export type ForEachStringCallback = (this: void, name: string, value: string, idx: Integer) => void;
-    const // (undocumented)
-    arrayErrorCode_NotSpecified = -1;
-    const // (undocumented)
-    arrayErrorCode_NotAnArray = -2;
-    // (undocumented)
-    export type ForEachValueCallback = (this: void, name: string, value: JsonValue, idx: Integer) => void;
+    export function errorIdToCode(errorId: JsonElement.ErrorId): ErrorCode;
     // (undocumented)
     export function generateErrorText(functionName: string, stringId: StringId, jsonValue: unknown): string;
     // (undocumented)
     export function generateGetErrorText(stringId: StringId, jsonValue: unknown): string;
-    // (undocumented)
-    export function isUndefinedError(resultError: string): boolean;
-    // (undocumented)
-    export function tryGetChildElement(parentElement: JsonElement, childName: string): Result<JsonElement>;
 }
 
 // @public (undocumented)
@@ -14447,19 +14309,9 @@ export class JsonLoadError extends ExternalError {
     constructor(code: ErrorCode, message?: string);
 }
 
-// @public (undocumented)
-export type JsonValue = string | number | boolean | null | Json | object | JsonValueArray;
+export { JsonValue }
 
-// @public (undocumented)
-export namespace JsonValue {
-    // (undocumented)
-    export function isJson(value: JsonValue): value is Json;
-    // (undocumented)
-    export function isJsonObject(value: JsonValue): value is Json | object;
-}
-
-// @public (undocumented)
-export type JsonValueArray = JsonValue[];
+export { JsonValueArray }
 
 // @public (undocumented)
 export class KeyboardService {
@@ -14753,29 +14605,9 @@ export namespace LatestTradingDayTradesDataItem {
     export type RecordChangeEventHandler = (this: void, index: Integer, oldRecord: TradesDataItem.Record) => void;
 }
 
-// @public (undocumented)
-export interface Line {
-    // (undocumented)
-    beginX: number;
-    // (undocumented)
-    beginY: number;
-    // (undocumented)
-    endX: number;
-    // (undocumented)
-    endY: number;
-}
+export { Line }
 
-// @public (undocumented)
-export const enum ListChangeTypeId {
-    // (undocumented)
-    Clear = 3,
-    // (undocumented)
-    Insert = 0,
-    // (undocumented)
-    Remove = 2,
-    // (undocumented)
-    Replace = 1
-}
+export { ListChangeTypeId }
 
 // Warning: (ae-missing-release-tag) "LitIvemAlternateCodes" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "LitIvemAlternateCodes" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -16731,14 +16563,9 @@ export interface ManagedFundTransaction extends Transaction {
     unitValue: Decimal;
 }
 
-// @public (undocumented)
-export type MapKey = string;
+export { MapKey }
 
-// @public (undocumented)
-export interface Mappable {
-    // (undocumented)
-    readonly mapKey: MapKey;
-}
+export { Mappable }
 
 // Warning: (ae-missing-release-tag) "MappedComparableList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -17797,11 +17624,9 @@ export namespace MatchesDataMessage {
     }
 }
 
-// @public (undocumented)
-export const minsPerDay: number;
+export { minsPerDay }
 
-// @public (undocumented)
-export const minsPerHour = 60;
+export { minsPerHour }
 
 // Warning: (ae-missing-release-tag) "ModifiedCorrectnessTableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -18061,17 +17886,13 @@ export namespace MotifServicesServiceModule {
     export function initialiseStatic(): void;
 }
 
-// @public (undocumented)
-export function moveElementInArray<T>(array: T[], fromIndex: Integer, toIndex: Integer): void;
+export { moveElementInArray }
 
-// @public (undocumented)
-export function moveElementsInArray<T>(array: T[], fromIndex: Integer, toIndex: Integer, count: Integer): void;
+export { moveElementsInArray }
 
-// @public (undocumented)
-export function moveIndexedElementsInArrayOnePositionTowardsEndWithSquash<T>(array: T[], elementIndices: Integer[]): void;
+export { moveIndexedElementsInArrayOnePositionTowardsEndWithSquash }
 
-// @public (undocumented)
-export function moveIndexedElementsInArrayOnePositionTowardsStartWithSquash<T>(array: T[], elementIndices: Integer[]): void;
+export { moveIndexedElementsInArrayOnePositionTowardsStartWithSquash }
 
 // Warning: (ae-missing-release-tag) "MoveInWatchmakerListDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -18171,17 +17992,13 @@ export class MoveOrderResponseDataMessage extends OrderResponseDataMessage {
     static readonly typeId = DataMessageTypeId.MoveOrderResponse;
 }
 
-// @public (undocumented)
-export const mSecsPerDay: number;
+export { mSecsPerDay }
 
-// @public (undocumented)
-export const mSecsPerHour: number;
+export { mSecsPerHour }
 
-// @public (undocumented)
-export const mSecsPerMin: number;
+export { mSecsPerMin }
 
-// @public (undocumented)
-export const mSecsPerSec = 1000;
+export { mSecsPerSec }
 
 // @public (undocumented)
 export class MultiEvent<T> {
@@ -18441,20 +18258,15 @@ export class NameColorSchemeGridField extends ColorSchemeGridField {
     getViewValue(record: ColorSchemeGridRecordStore.Record): StringRenderValue;
 }
 
-// @public (undocumented)
-export function newDate(value: Date): Date;
+export { newDate }
 
-// @public (undocumented)
-export function newDecimal(value: Numeric): Decimal;
+export { newDecimal }
 
-// @public (undocumented)
-export function newGuid(): string;
+export { newGuid }
 
-// @public (undocumented)
-export function newNowDate(): Date;
+export { newNowDate }
 
-// @public (undocumented)
-export function newNullDate(): Date;
+export { newNullDate }
 
 // Warning: (ae-missing-release-tag) "NewsEnvironmentId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -18466,14 +18278,11 @@ export const enum NewsEnvironmentId {
     Production = 0
 }
 
-// @public (undocumented)
-export function newUndefinableDate(value: Date | undefined): Date | undefined;
+export { newUndefinableDate }
 
-// @public (undocumented)
-export function newUndefinableDecimal(value: Numeric | undefined): Decimal | undefined;
+export { newUndefinableDecimal }
 
-// @public (undocumented)
-export function newUndefinableNullableDecimal(value: Numeric | undefined | null): Decimal | null | undefined;
+export { newUndefinableNullableDecimal }
 
 // Warning: (ae-missing-release-tag) "NoneScanCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "NoneScanCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -18891,11 +18700,9 @@ export class NullableStringCorrectnessTableValue extends GenericNullableCorrectn
 export class NullableStringDataItemTableField extends GenericNullableDataItemTableField<string, NullableStringCorrectnessTableValue> {
 }
 
-// @public (undocumented)
-export const nullDate: Date;
+export { nullDate }
 
-// @public (undocumented)
-export const nullDecimal: Decimal;
+export { nullDecimal }
 
 // Warning: (ae-missing-release-tag) "NumberCorrectnessTableField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -18952,8 +18759,7 @@ export class NumberTableValue extends BaseNumberTableValue {
     protected createRenderValue(): NumberRenderValue;
 }
 
-// @public (undocumented)
-export function numberToPixels(value: number): string;
+export { numberToPixels }
 
 // Warning: (ae-missing-release-tag) "NumberUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "NumberUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -19329,24 +19135,7 @@ export namespace OhlcIntervalHistorySequenceSeries {
     }
 }
 
-// Warning: (ae-missing-release-tag) "Ok" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class Ok<T, E> {
-    constructor(value: T);
-    // (undocumented)
-    isErr(): this is Err<T, E>;
-    // (undocumented)
-    isOk(): this is Ok<T, E>;
-    // (undocumented)
-    readonly value: T;
-}
-
-// @public (undocumented)
-export namespace Ok {
-    // (undocumented)
-    export function createResolvedPromise<T, E>(value: T): Promise<Ok<T, E>>;
-}
+export { Ok }
 
 // Warning: (ae-missing-release-tag) "OnlinedPublisherSubscriptionDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -19370,15 +19159,9 @@ export abstract class OpenableScanEditor {
     abstract get scan(): Scan | undefined;
 }
 
-// @public (undocumented)
-export type OptionalKeys<T> = {
-    [P in keyof T]?: T[P] | undefined;
-};
+export { OptionalKeys }
 
-// @public (undocumented)
-export type OptionalValues<T> = {
-    [P in keyof T]: T[P] | undefined;
-};
+export { OptionalValues }
 
 // Warning: (ae-missing-release-tag) "Order" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "Order" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -21749,11 +21532,9 @@ export class OvernightOrderTrigger extends OrderTrigger {
     get value(): undefined;
 }
 
-// @public (undocumented)
-export function parseIntStrict(value: string): number | undefined;
+export { parseIntStrict }
 
-// @public (undocumented)
-export function parseNumberStrict(value: string): number | undefined;
+export { parseNumberStrict }
 
 // Warning: (ae-missing-release-tag) "PayloadTableRecordDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -21820,15 +21601,9 @@ export namespace PhysicalMessageStaticInitialise {
     export function initialise(): void;
 }
 
-// @public (undocumented)
-export type PickEnum<T, K extends T> = {
-    [P in keyof K]: P extends K ? P : never;
-};
+export { PickEnum }
 
-// @public (undocumented)
-export type PickExcludedEnum<T, K extends T> = {
-    [P in keyof K]: P extends K ? never : P;
-};
+export { PickExcludedEnum }
 
 // Warning: (ae-missing-release-tag) "PlaceOrderDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -22231,8 +22006,7 @@ export class PriceTableValue extends BaseDecimalTableValue {
     protected createRenderValue(): PriceRenderValue;
 }
 
-// @public (undocumented)
-export function priorityCompareInteger(left: Integer, right: Integer, priority: Integer): ComparisonResult;
+export { priorityCompareInteger }
 
 // Warning: (ae-missing-release-tag) "PublisherBroadcastDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -24068,17 +23842,7 @@ export class RecordTypeDayTradesGridField extends DayTradesGridField {
     protected createRenderValue(record: DayTradesDataItem.Record): DayTradesGridField.CreateRenderValueResult;
 }
 
-// @public (undocumented)
-export interface Rect {
-    // (undocumented)
-    height: number;
-    // (undocumented)
-    left: number;
-    // (undocumented)
-    top: number;
-    // (undocumented)
-    width: number;
-}
+export { Rect }
 
 // @public (undocumented)
 export class ReferenceableGridLayout extends GridLayout implements LockOpenListItem<ReferenceableGridLayout> {
@@ -24237,8 +24001,7 @@ export class RelatedIdDayTradesGridField extends DayTradesGridField {
     protected createRenderValue(record: DayTradesDataItem.Record): DayTradesGridField.CreateRenderValueResult;
 }
 
-// @public (undocumented)
-export function removeFromArray<T>(array: T[], removeElements: readonly T[]): Integer | undefined;
+export { removeFromArray }
 
 // Warning: (ae-missing-release-tag) "RemoveIrrcChange" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -24722,18 +24485,9 @@ export namespace ResStaticInitialise {
     export function initialise(): void;
 }
 
-// @public (undocumented)
-export type Result<T, E = string> = Ok<T, E> | Err<T, E>;
+export { Result }
 
-// @public (undocumented)
-export interface RGB {
-    // (undocumented)
-    b: number;
-    // (undocumented)
-    g: number;
-    // (undocumented)
-    r: number;
-}
+export { RGB }
 
 // Warning: (ae-missing-release-tag) "RoutedIvemId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "RoutedIvemId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -28606,14 +28360,11 @@ export namespace SearchSymbolsLitIvemFullDetail {
     }
 }
 
-// @public (undocumented)
-export const secsPerDay: number;
+export { secsPerDay }
 
-// @public (undocumented)
-export const secsPerHour: number;
+export { secsPerHour }
 
-// @public (undocumented)
-export const secsPerMin = 60;
+export { secsPerMin }
 
 // Warning: (ae-missing-release-tag) "SecurityDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -29651,8 +29402,7 @@ export class ShortSellTypeIdArrayMyxLitIvemAttributeCorrectnessTableValue extend
     constructor();
 }
 
-// @public (undocumented)
-export function shuffleElementsUpInArray<T>(array: T[], index: Integer, count: Integer): void;
+export { shuffleElementsUpInArray }
 
 // Warning: (ae-missing-release-tag) "SingleBrokerageAccountGroup" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "SingleBrokerageAccountGroup" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -29700,9 +29450,6 @@ export abstract class SingleDataItemTableRecordSource extends TableRecordSource 
 // @public (undocumented)
 export class SingleHeadingGridDataServer extends SingleHeadingDataServer<GridField> {
 }
-
-// @public (undocumented)
-export function sleep(ms: number): Promise<void>;
 
 // @public (undocumented)
 export interface SourceTzOffsetDate {
@@ -35077,11 +34824,9 @@ export abstract class SubscribeBadnessListTableRecordSource<Record, RecordList e
     protected abstract unsubscribeList(opener: LockOpenListItem.Opener, list: RecordList): void;
 }
 
-// @public (undocumented)
-export function subtractElementFromArray<T>(array: readonly T[], element: T): T[];
+export { subtractElementFromArray }
 
-// @public
-export function subtractElementFromArrayUniquely<T>(array: readonly T[], element: T): T[];
+export { subtractElementFromArrayUniquely }
 
 // Warning: (ae-missing-release-tag) "SymbolDetailCacheService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "SymbolDetailCacheService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -35750,23 +35495,7 @@ export namespace SysStaticInitialise {
     export function initialise(): void;
 }
 
-// @public (undocumented)
-export namespace SysTick {
-    // (undocumented)
-    export function compare(left: Time, right: Time): Span;
-    // (undocumented)
-    export function now(): number;
-    // (undocumented)
-    export function nowDate(): Date;
-    // (undocumented)
-    export type Span = TimeSpan;
-    // (undocumented)
-    export type Time = number;
-    // (undocumented)
-    export function toDate(time: Time): Date;
-    const // (undocumented)
-    MaxSpan: number;
-}
+export { SysTick }
 
 // Warning: (ae-missing-release-tag) "Table" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "Table" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -36929,8 +36658,7 @@ export const enum TDeliveryTypeId {
     dyPhysicalDeliveryScripSettlement = 1
 }
 
-// @public (undocumented)
-export function testRemoveFromArray<T>(array: T[], removeTest: ((element: T) => boolean), beforeBlockRemoveCallback?: (blockIndex: Integer, blockLength: Integer) => void): Integer | undefined;
+export { testRemoveFromArray }
 
 // Warning: (ae-missing-release-tag) "TextContainsScanField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "TextContainsScanField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -37535,8 +37263,7 @@ export class TimeRenderValue extends GenericRenderValue<Date> {
     constructor(data: Date | undefined);
 }
 
-// @public (undocumented)
-export type TimeSpan = number;
+export { TimeSpan }
 
 // Warning: (ae-missing-release-tag) "TLowLevelTopShareholdersDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -39284,8 +39011,7 @@ export class TrueFalseRenderValue extends BooleanRenderValue {
     constructor(data: boolean | undefined);
 }
 
-// @public (undocumented)
-export function tryGetErrorMessage(e: unknown): string | undefined;
+export { tryGetErrorMessage }
 
 // Warning: (ae-missing-release-tag) "TSecurityGicsIndustryGroup" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -40037,8 +39763,7 @@ export class UnexpectedUndefinedError extends BaseInternalError {
     constructor(code: string, message?: string);
 }
 
-// @public (undocumented)
-export function uniqueElementArraysOverlap<T>(left: readonly T[], right: readonly T[]): boolean;
+export { uniqueElementArraysOverlap }
 
 // @public (undocumented)
 export class UnreachableCaseError extends BaseInternalError {

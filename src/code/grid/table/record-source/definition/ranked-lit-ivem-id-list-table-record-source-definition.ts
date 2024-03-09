@@ -8,7 +8,7 @@ import {
     RankedLitIvemIdListDefinition,
     RankedLitIvemIdListDefinitionFactoryService
 } from "../../../../ranked-lit-ivem-id-list/ranked-lit-ivem-id-list-internal-api";
-import { ErrorCode, JsonElement, PickEnum, Result } from '../../../../sys/sys-internal-api';
+import { ErrorCode, JsonElement, JsonElementErr, PickEnum, Result } from '../../../../sys/internal-api';
 import { GridFieldCustomHeadingsService } from '../../../field/grid-field-internal-api';
 import {
     TableFieldSourceDefinition,
@@ -60,16 +60,21 @@ export namespace RankedLitIvemIdListTableRecordSourceDefinition {
         litIvemIdListDefinitionFactoryService: RankedLitIvemIdListDefinitionFactoryService,
         element: JsonElement
     ): Result<RankedLitIvemIdListDefinition> {
-        const definitionElementResult = element.tryGetDefinedElement(JsonName.definition);
+        const definitionElementResult = element.tryGetElement(JsonName.definition);
         if (definitionElementResult.isErr()) {
             const errorCode = ErrorCode.RankedLitIvemIdListTableRecordSourceDefinition_DefinitionElementNotSpecified;
-            return definitionElementResult.createOuter(errorCode);
+            return JsonElementErr.createOuter(definitionElementResult.error, errorCode);
         } else {
             const definitionElement = definitionElementResult.value;
 
             const definitionResult = litIvemIdListDefinitionFactoryService.tryCreateFromJson(definitionElement);
             if (definitionResult.isErr()) {
-                return definitionResult.createOuter(ErrorCode.RankedLitIvemIdListTableRecordSourceDefinition_DefinitionJsonIsInvalid);
+                const errorCode = definitionResult.error as ErrorCode;
+                if (errorCode === ErrorCode.LitIvemIdArrayRankedLitIvemIdListDefinition_JsonNotSpecified) {
+                    return definitionResult.createOuter(ErrorCode.RankedLitIvemIdListTableRecordSourceDefinition_DefinitionJsonNotSpecified);
+                } else {
+                    return definitionResult.createOuter(ErrorCode.RankedLitIvemIdListTableRecordSourceDefinition_DefinitionJsonIsInvalid);
+                }
             } else {
                 return definitionResult;
             }

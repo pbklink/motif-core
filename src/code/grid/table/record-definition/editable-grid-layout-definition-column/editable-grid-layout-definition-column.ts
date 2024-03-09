@@ -12,7 +12,7 @@ import {
     Integer,
     MultiEvent,
     ValueRecentChangeTypeId
-} from "../../../../sys/sys-internal-api";
+} from "../../../../sys/internal-api";
 import { GridField } from '../../../field/grid-field-internal-api';
 
 export class EditableGridLayoutDefinitionColumn implements IndexedRecord {

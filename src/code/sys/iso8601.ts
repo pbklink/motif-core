@@ -4,8 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
-import { Integer } from './types';
 import { isDigitCharCode, mSecsPerHour, mSecsPerMin, parseIntStrict, parseNumberStrict } from './utils';
+import { Integer } from './xiltyix-sysutils';
 
 /** @internal */
 export namespace Iso8601 {

@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { ErrorCode, JsonElement, Ok, Result } from '../../sys/sys-internal-api';
+import { ErrorCode, JsonElement, JsonElementErr, Ok, Result } from '../../sys/internal-api';
 import { RankedLitIvemIdListDefinition } from './ranked-lit-ivem-id-list-definition';
 
 /** @public */
@@ -28,7 +28,7 @@ export namespace  WatchmakerListIdRankedLitIvemIdListDefinition {
     export function tryCreateFromJson(element: JsonElement): Result<WatchmakerListIdRankedLitIvemIdListDefinition> {
         const watchlistIdResult = element.tryGetString(JsonName.watchmakerListId);
         if (watchlistIdResult.isErr()) {
-            return watchlistIdResult.createOuter(ErrorCode.WatchmakerListIdRankedLitIvemIdListDefinition_WatchmakerListIdIsInvalid);
+            return JsonElementErr.createOuter(watchlistIdResult.error, ErrorCode.WatchmakerListIdRankedLitIvemIdListDefinition_WatchmakerListIdIsInvalid);
         } else {
             const definition = new WatchmakerListIdRankedLitIvemIdListDefinition(watchlistIdResult.value);
             return new Ok(definition);

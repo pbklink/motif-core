@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { EnumInfoOutOfOrderError, MultiEvent, Result } from '../sys/sys-internal-api';
+import { EnumInfoOutOfOrderError, MultiEvent, Result } from '../sys/internal-api';
 
 export interface SaveManagement {
     save(): Promise<Result<void>>;

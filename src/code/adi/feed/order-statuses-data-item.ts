@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { assert, AssertInternalError, UnexpectedTypeError } from '../../sys/sys-internal-api';
+import { assert, AssertInternalError, UnexpectedTypeError } from '../../sys/internal-api';
 import { DataDefinition, DataMessage, DataMessageTypeId, FeedStatusId, OrderStatus, OrderStatuses, OrderStatusesDataDefinition, OrderStatusesDataMessage } from '../common/adi-common-internal-api';
 import { FeedStatusSubscriptionDataItem } from './feed-status-subscription-data-item';
 import { TradingFeed } from './trading-feed';

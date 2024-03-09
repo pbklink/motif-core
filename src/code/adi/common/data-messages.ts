@@ -16,7 +16,7 @@ import {
     SourceTzOffsetDate,
     SourceTzOffsetDateTime,
     SysTick
-} from '../../sys/sys-internal-api';
+} from '../../sys/internal-api';
 import { AdiPublisherSubscription } from './adi-publisher-subscription';
 import {
     ActiveFaultedStatusId,

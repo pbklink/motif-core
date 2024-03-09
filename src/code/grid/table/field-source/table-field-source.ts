@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { Integer } from '../../../sys/sys-internal-api';
+import { Integer } from '../../../sys/internal-api';
 import { TextFormatterService } from '../../../text-format/text-format-internal-api';
 import { GridField, GridFieldCustomHeadingsService } from '../../field/grid-field-internal-api';
 // import { GridRecordFieldState } from '../../record/grid-record-internal-api';

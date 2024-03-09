@@ -12,7 +12,7 @@ import {
     Integer,
     UnexpectedCaseError,
     UnreachableCaseError
-} from '../../sys/sys-internal-api';
+} from '../../sys/internal-api';
 import {
     AdiPublisher,
     AdiPublisherSubscription,

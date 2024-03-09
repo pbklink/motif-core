@@ -16,7 +16,7 @@ import {
     UnreachableCaseError,
     ZenithDataError,
     newNowDate
-} from "../../../sys/sys-internal-api";
+} from "../../../sys/internal-api";
 import {
     AdiPublisherRequest,
     AdiPublisherSubscription,

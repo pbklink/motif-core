@@ -6,7 +6,7 @@
 
 import { DataServer, DatalessViewCell, IndexSignatureHack, Rectangle, StandardCheckboxPainter } from '@xilytix/revgrid';
 import { RenderValue, SettingsService } from '../../../../services/services-internal-api';
-import { AssertInternalError, Integer } from '../../../../sys/sys-internal-api';
+import { AssertInternalError, Integer } from '../../../../sys/internal-api';
 import { GridField } from '../../../field/grid-field-internal-api';
 import { AdaptedRevgrid } from '../../adapted-revgrid/adapted-revgrid';
 import { AdaptedRevgridBehavioredColumnSettings } from '../../settings/grid-revgrid-settings-internal-api';

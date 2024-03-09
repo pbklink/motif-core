@@ -8,9 +8,9 @@ import { LitIvemId, RankScoredLitIvemId, RankScoredLitIvemIdList } from '../adi/
 import { Badness } from '../sys/badness';
 import { BadnessList } from '../sys/badness-list';
 import { CorrectnessId } from '../sys/correctness';
+import { CorrectnessRecord, Integer, UsableListChangeTypeId } from '../sys/internal-api';
 import { MultiEvent } from '../sys/multi-event';
 import { RecordList } from '../sys/record-list';
-import { CorrectnessRecord, Integer, UsableListChangeTypeId } from '../sys/sys-internal-api';
 
 export class IndexRankScoredLitIvemIdList implements RankScoredLitIvemIdList {
     readonly userCanAdd = true;

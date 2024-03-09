@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, Err, ErrorCode, Guid, JsonElement, Ok, Result } from '../../../sys/sys-internal-api';
+import { AssertInternalError, ErrorCode, Guid, JsonElement, JsonElementErr, Ok, Result } from '../../../sys/internal-api';
 import { GridLayoutOrReferenceDefinition } from '../../layout/grid-layout-internal-api';
 import { TableRecordSourceDefinitionFactoryService } from '../../table/internal-api';
 import { GridSourceDefinition } from './grid-source-definition';
@@ -74,9 +74,9 @@ export namespace GridSourceOrReferenceDefinition {
             const gridSourceOrReferenceDefinition = new GridSourceOrReferenceDefinition(referenceId);
             return new Ok(gridSourceOrReferenceDefinition);
         } else {
-            const definitionElementResult = element.tryGetDefinedElement(JsonName.gridSourceDefinition);
+            const definitionElementResult = element.tryGetElement(JsonName.gridSourceDefinition);
             if (definitionElementResult.isErr()) {
-                return new Err(ErrorCode.GridSourceOrReferenceDefinition_BothDefinitionAndReferenceAreNotSpecified);
+                return JsonElementErr.createOuter(definitionElementResult.error, ErrorCode.GridSourceOrReferenceDefinition_BothDefinitionAndReferenceAreNotSpecified);
             } else {
                 const definitionElement = definitionElementResult.value;
                 const definitionResult = GridSourceDefinition.tryCreateFromJson(

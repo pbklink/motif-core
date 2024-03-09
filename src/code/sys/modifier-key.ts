@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { Integer } from './types';
+import { Integer } from './xiltyix-sysutils';
 
 export const enum ModifierKeyId {
     Alt = 1,
@@ -28,6 +28,6 @@ export namespace ModifierKey {
 
     export function idSetIncludes(idSet: IdSet, value: ModifierKeyId) {
         // eslint-disable-next-line no-bitwise
-        return (idSet & value) === value;
+        return (idSet & value) as ModifierKeyId === value;
     }
 }

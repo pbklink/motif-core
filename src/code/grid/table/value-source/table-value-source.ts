@@ -5,7 +5,7 @@
  */
 
 import { AdiService } from '../../../adi/adi-internal-api';
-import { Integer, ValueRecentChangeTypeId } from '../../../sys/sys-internal-api';
+import { Integer, ValueRecentChangeTypeId } from '../../../sys/internal-api';
 import { TableValue } from '../value/grid-table-value-internal-api';
 
 export abstract class TableValueSource {

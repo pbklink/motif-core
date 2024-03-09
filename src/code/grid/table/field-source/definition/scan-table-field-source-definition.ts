@@ -5,7 +5,7 @@
  */
 
 import { Scan } from '../../../../scan/internal-api';
-import { AssertInternalError, CommaText, FieldDataType, FieldDataTypeId, Integer } from '../../../../sys/sys-internal-api';
+import { AssertInternalError, CommaText, FieldDataType, FieldDataTypeId, Integer } from '../../../../sys/internal-api';
 import {
     BooleanCorrectnessTableField,
     CorrectnessTableField,

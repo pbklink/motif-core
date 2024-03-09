@@ -5,7 +5,7 @@
  */
 
 import { OrderType, OrderTypeId, TimeInForce, TimeInForceId } from '../../adi/adi-internal-api';
-import { AssertInternalError, Integer, InternalError, parseIntStrict, parseNumberStrict } from '../../sys/sys-internal-api';
+import { AssertInternalError, Integer, InternalError, parseIntStrict, parseNumberStrict } from '../../sys/internal-api';
 
 export namespace TypedKeyValueSettings {
     const _numberFormat = new Intl.NumberFormat(TypedKeyValueSettings.locale, { useGrouping: false });

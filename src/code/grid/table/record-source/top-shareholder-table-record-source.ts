@@ -19,7 +19,7 @@ import {
     MultiEvent, UnreachableCaseError,
     UsableListChangeTypeId,
     newUndefinableDate
-} from "../../../sys/sys-internal-api";
+} from "../../../sys/internal-api";
 import { TextFormatterService } from '../../../text-format/text-format-internal-api';
 import {
     TableFieldSourceDefinition

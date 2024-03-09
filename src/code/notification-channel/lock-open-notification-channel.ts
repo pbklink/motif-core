@@ -6,7 +6,7 @@
 
 import { ActiveFaultedStatusId, NotificationChannel, NotificationDistributionMethodId, ZenithProtocolCommon } from '../adi/adi-internal-api';
 import { StringId, Strings } from '../res/res-internal-api';
-import { AssertInternalError, EnumInfoOutOfOrderError, FieldDataTypeId, Integer, LockOpenListItem, LockOpenManager, MapKey, MultiEvent, Ok, Result, ValueRecentChangeTypeId } from '../sys/sys-internal-api';
+import { AssertInternalError, EnumInfoOutOfOrderError, FieldDataTypeId, Integer, LockOpenListItem, LockOpenManager, MapKey, MultiEvent, Ok, Result, ValueRecentChangeTypeId } from '../sys/internal-api';
 
 export class LockOpenNotificationChannel implements LockOpenListItem<LockOpenNotificationChannel> {
     changedEventer: LockOpenNotificationChannel.ChangedEventer | undefined; // only used by List

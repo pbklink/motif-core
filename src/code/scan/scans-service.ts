@@ -15,7 +15,7 @@ import {
     Ok,
     Result,
     UsableListChangeTypeId
-} from "../sys/sys-internal-api";
+} from "../sys/internal-api";
 import { ScanConditionSet } from './condition-set/internal-api';
 import { ScanFieldSet } from './field-set/internal-api';
 import { Scan } from './scan';

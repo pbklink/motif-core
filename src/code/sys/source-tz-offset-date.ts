@@ -5,8 +5,8 @@
  */
 
 import { Iso8601 } from './iso8601';
-import { ComparisonResult, Integer } from './types';
 import { compareDate, dateToDashedYyyyMmDd, dateToUtcYyyyMmDd, isDateEqual, mSecsPerMin, newDate } from './utils';
+import { ComparisonResult, Integer } from './xiltyix-sysutils';
 
 /** @public */
 export interface SourceTzOffsetDate {

@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { IndexedRecord, LockOpenListItem } from '../../sys/sys-internal-api';
+import { IndexedRecord, LockOpenListItem } from '../../sys/internal-api';
 import { ReferenceableGridLayoutsService } from '../layout/grid-layout-internal-api';
 import { TableRecordSourceFactory } from '../table/internal-api';
 import { GridRowOrderDefinition, ReferenceableGridSourceDefinition } from './definition/grid-source-definition-internal-api';

@@ -23,7 +23,7 @@ import {
     compareBoolean,
     compareInteger,
     comparePriceOrRemainder
-} from '../../../../sys/sys-internal-api';
+} from '../../../../sys/internal-api';
 import { DepthRecord } from '../depth-record';
 import { DepthRecordRenderValue } from '../depth-record-render-value';
 import { ShortDepthSideField, ShortDepthSideFieldId } from './short-depth-side-field';

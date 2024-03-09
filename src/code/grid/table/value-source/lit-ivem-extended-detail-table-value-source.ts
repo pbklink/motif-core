@@ -5,7 +5,7 @@
  */
 
 import { SearchSymbolsLitIvemFullDetail, SymbolsDataItem } from '../../../adi/adi-internal-api';
-import { AssertInternalError, Integer, MultiEvent, UnreachableCaseError } from '../../../sys/sys-internal-api';
+import { AssertInternalError, Integer, MultiEvent, UnreachableCaseError } from '../../../sys/internal-api';
 import { LitIvemExtendedDetailTableFieldSourceDefinition } from '../field-source/definition/internal-api';
 import {
     BooleanCorrectnessTableValue,

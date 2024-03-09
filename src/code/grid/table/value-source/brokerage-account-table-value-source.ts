@@ -5,7 +5,7 @@
  */
 
 import { Account } from '../../../adi/adi-internal-api';
-import { Correctness, Integer, MultiEvent, UnreachableCaseError } from '../../../sys/sys-internal-api';
+import { Correctness, Integer, MultiEvent, UnreachableCaseError } from '../../../sys/internal-api';
 import { BrokerageAccountTableFieldSourceDefinition } from '../field-source/definition/internal-api';
 import {
     CorrectnessTableValue,

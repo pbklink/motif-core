@@ -17,7 +17,7 @@ import {
     compareDecimal,
     compareString,
     compareValue
-} from "../../../sys/sys-internal-api";
+} from "../../../sys/internal-api";
 import { TextFormatterService } from '../../../text-format/text-format-internal-api';
 import { GridField, GridFieldDefinition, GridFieldSourceDefinition } from '../../field/grid-field-internal-api';
 import {

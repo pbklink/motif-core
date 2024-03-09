@@ -5,8 +5,8 @@
  */
 
 import { MultiEvent } from './multi-event';
-import { Integer } from './types';
 import { UsableListChangeTypeId } from './usable-list-change-type';
+import { Integer } from './xiltyix-sysutils';
 
 export interface RecordList<Record> {
     readonly count: Integer;

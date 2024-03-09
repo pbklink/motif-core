@@ -20,7 +20,7 @@ import {
     SysTick,
     UnreachableCaseError,
     UsableListChangeTypeId
-} from '../sys/sys-internal-api';
+} from '../sys/internal-api';
 import {
     AuiChangeTypeId, DataDefinition,
     DataMessage,

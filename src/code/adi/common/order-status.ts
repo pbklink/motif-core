@@ -5,7 +5,7 @@
  */
 
 import { StringId, Strings } from '../../res/res-internal-api';
-import { EnumInfoOutOfOrderError, Integer } from '../../sys/sys-internal-api';
+import { EnumInfoOutOfOrderError, Integer } from '../../sys/internal-api';
 import { DataEnvironmentId, ExchangeId } from './data-types';
 
 export interface OrderStatus {

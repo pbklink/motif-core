@@ -14,7 +14,7 @@ import { ResStaticInitialise } from './res/res-internal-api';
 import { ScanStaticInitialise } from './scan/internal-api';
 import { SequenceHistoryStaticInitialise } from './sequence-history/sequence-history-internal-api';
 import { ServicesStaticInitialise, SettingsStaticInitialise } from './services/services-internal-api';
-import { SysStaticInitialise } from './sys/sys-internal-api';
+import { SysStaticInitialise } from './sys/internal-api';
 
 export namespace CoreStaticInitialise {
     export function initialise() {

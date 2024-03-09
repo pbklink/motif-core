@@ -7,7 +7,7 @@
 import { NotificationChannel, ScanAttachedNotificationChannel } from '../adi/adi-internal-api';
 import { LockOpenNotificationChannel } from '../notification-channel/internal-api';
 import { StringId, Strings } from '../res/res-internal-api';
-import { AssertInternalError, EnumInfoOutOfOrderError, FieldDataTypeId, Integer, MultiEvent, ValueRecentChangeTypeId } from '../sys/sys-internal-api';
+import { AssertInternalError, EnumInfoOutOfOrderError, FieldDataTypeId, Integer, MultiEvent, ValueRecentChangeTypeId } from '../sys/internal-api';
 
 export class LockerScanAttachedNotificationChannel {
     changedEventer: LockerScanAttachedNotificationChannel.ChangedEventer | undefined; // only used by List

@@ -5,7 +5,7 @@
  */
 
 import { ExtStringId } from '../res/res-internal-api';
-import { ExtensionHandle, Handle, Integer, ModifierKey } from '../sys/sys-internal-api';
+import { ExtensionHandle, Handle, Integer, ModifierKey } from '../sys/internal-api';
 
 export interface Command {
     readonly extensionHandle: ExtensionHandle;

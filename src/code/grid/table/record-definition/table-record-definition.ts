@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { EnumInfoOutOfOrderError, MapKey } from '../../../sys/sys-internal-api';
+import { EnumInfoOutOfOrderError, MapKey } from '../../../sys/internal-api';
 
 export interface TableRecordDefinition {
     readonly typeId: TableRecordDefinition.TypeId;

@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, Integer, UnreachableCaseError } from '../../../sys/sys-internal-api';
+import { AssertInternalError, Integer, UnreachableCaseError } from '../../../sys/internal-api';
 import { GridField } from '../../field/grid-field-internal-api';
 import { GridFieldTableFieldSourceDefinition } from '../field-source/grid-table-field-source-internal-api';
 import {

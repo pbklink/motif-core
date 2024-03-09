@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { ErrorCode, Guid, JsonElement, Ok, Result } from '../../sys/sys-internal-api';
+import { ErrorCode, Guid, JsonElement, JsonElementErr, Ok, Result } from '../../sys/internal-api';
 import { RankedLitIvemIdListDefinition } from './ranked-lit-ivem-id-list-definition';
 
 /** @public */
@@ -28,7 +28,7 @@ export namespace ScanIdRankedLitIvemIdListDefinition {
     export function tryCreateFromJson(element: JsonElement): Result<ScanIdRankedLitIvemIdListDefinition> {
         const scanIdResult = element.tryGetString(JsonName.scanId);
         if (scanIdResult.isErr()) {
-            return scanIdResult.createOuter(ErrorCode.ScanIdRankedLitIvemIdListDefinition_ScanIdIsInvalid);
+            return JsonElementErr.createOuter(scanIdResult.error, ErrorCode.ScanIdRankedLitIvemIdListDefinition_ScanIdIsInvalid);
         } else {
             const definition = new ScanIdRankedLitIvemIdListDefinition(scanIdResult.value);
             return new Ok(definition);

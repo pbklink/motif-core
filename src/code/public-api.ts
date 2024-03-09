@@ -19,7 +19,7 @@ export * from './res/res-internal-api';
 export * from './scan/internal-api';
 export * from './sequence-history/sequence-history-internal-api';
 export * from './services/services-internal-api';
-export * from './sys/sys-internal-api';
+export * from './sys/internal-api';
 export * from './text-format/text-format-internal-api';
 export * from './ui-action/internal-api';
 export * from './watchmaker/watchmaker-internal-api';

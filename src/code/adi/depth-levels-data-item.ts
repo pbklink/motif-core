@@ -14,7 +14,7 @@ import {
     UnexpectedCaseError,
     UnreachableCaseError,
     ValueRecentChangeType, ValueRecentChangeTypeId
-} from '../sys/sys-internal-api';
+} from '../sys/internal-api';
 import {
     DataDefinition,
     DataMessage,

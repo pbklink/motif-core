@@ -5,7 +5,7 @@
  */
 
 import { ExchangeId, LitIvemAlternateCodes, LitIvemBaseDetail, MarketInfo, MyxLitIvemAttributes, SearchSymbolsDataDefinition, SearchSymbolsLitIvemFullDetail } from '../../../../adi/adi-internal-api';
-import { ErrorCode, JsonElement, Ok, PickEnum, Result } from '../../../../sys/sys-internal-api';
+import { ErrorCode, JsonElement, JsonElementErr, Ok, PickEnum, Result } from '../../../../sys/internal-api';
 import { GridFieldCustomHeadingsService } from '../../../field/grid-field-internal-api';
 import { GridLayoutDefinition } from '../../../layout/grid-layout-internal-api';
 import {
@@ -205,9 +205,9 @@ export namespace LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition {
             const definition = createDefaultDataDefinition();
             return new Ok(definition);
         } else {
-            const requestElementResult = element.tryGetDefinedElement(LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition.JsonName.request);
+            const requestElementResult = element.tryGetElement(LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition.JsonName.request);
             if (requestElementResult.isErr()) {
-                return requestElementResult.createOuter(ErrorCode.LitIvemDetailsFromSearchSymbolsTableRecordSourceDefinition_RequestNotSpecified);
+                return JsonElementErr.createOuter(requestElementResult.error, ErrorCode.LitIvemDetailsFromSearchSymbolsTableRecordSourceDefinition_RequestNotSpecified);
             } else {
                 return SearchSymbolsDataDefinition.tryCreateFromJson(requestElementResult.value);
             }

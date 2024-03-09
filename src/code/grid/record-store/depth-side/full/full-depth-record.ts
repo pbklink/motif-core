@@ -28,7 +28,7 @@ import {
     compareInteger,
     isArrayEqualUniquely,
     uniqueElementArraysOverlap
-} from "../../../../sys/sys-internal-api";
+} from "../../../../sys/internal-api";
 import { DepthRecord } from '../depth-record';
 import { DepthRecordRenderValue } from '../depth-record-render-value';
 import { FullDepthSideField, FullDepthSideFieldId } from './full-depth-side-field';

@@ -11,10 +11,11 @@ import {
     ErrorCode,
     Integer,
     JsonElement,
+    JsonElementErr,
     Ok,
     Result,
     compareNumber
-} from "../../../../sys/sys-internal-api";
+} from "../../../../sys/internal-api";
 import { AllowedGridField, GridField, GridFieldCustomHeadingsService } from '../../../field/grid-field-internal-api';
 import { GridLayoutDefinition } from '../../../layout/grid-layout-internal-api';
 import {
@@ -338,7 +339,7 @@ export namespace TableRecordSourceDefinition {
     export function tryGetTypeIdFromJson(element: JsonElement): Result<TypeId> {
         const typeIdResult = element.tryGetString(jsonTag_TypeId);
         if (typeIdResult.isErr()) {
-            return typeIdResult.createOuter(ErrorCode.TableRecordSourceDefinition_TypeIdNotSpecified);
+            return JsonElementErr.createOuter(typeIdResult.error, ErrorCode.TableRecordSourceDefinition_TypeIdNotSpecified);
         } else {
             const typeIdJsonValue = typeIdResult.value;
             const typeId = Type.tryJsonToId(typeIdJsonValue);

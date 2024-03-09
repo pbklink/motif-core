@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { Err, ErrorCode, Integer, JsonElement, Result } from '../../sys/sys-internal-api';
+import { Err, ErrorCode, Integer, JsonElement, Result } from '../../sys/internal-api';
 import { LitIvemIdArrayRankedLitIvemIdListDefinition } from './lit-ivem-id-array-ranked-lit-ivem-id-list-definition';
 import { LitIvemIdExecuteScanRankedLitIvemIdListDefinition } from './lit-ivem-id-execute-scan-ranked-lit-ivem-id-list-definition';
 import { RankedLitIvemIdListDefinition } from './ranked-lit-ivem-id-list-definition';

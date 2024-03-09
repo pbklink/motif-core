@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { Guid, Integer } from '../../sys/sys-internal-api';
+import { Guid, Integer } from '../../sys/internal-api';
 import { ActiveFaultedStatusId } from '../common/adi-common-internal-api';
 
 export interface ScanStatusedDescriptorInterface {

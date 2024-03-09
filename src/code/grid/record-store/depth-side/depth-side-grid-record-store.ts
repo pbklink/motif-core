@@ -10,7 +10,7 @@ import {
     GridRecordInvalidatedValue,
     GridRecordStoreRecordsEventers,
     Integer
-} from "../../../sys/sys-internal-api";
+} from "../../../sys/internal-api";
 import { DepthRecord } from './depth-record';
 
 /** @public */

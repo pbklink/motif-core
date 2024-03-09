@@ -19,7 +19,7 @@ import {
     ZenithDataError,
     isDecimalEqual,
     isDecimalGreaterThan
-} from "../sys/sys-internal-api";
+} from "../sys/internal-api";
 import { Account } from './account';
 import { BrokerageAccountRecord } from './brokerage-account-record';
 import {

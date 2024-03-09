@@ -12,7 +12,7 @@ import {
     UsableListChangeType,
     UsableListChangeTypeId,
     moveElementsInArray
-} from "../../sys/sys-internal-api";
+} from "../../sys/internal-api";
 import { AllowedGridField } from '../field/allowed-grid-field';
 import { TableFieldSourceDefinition } from './field-source/grid-table-field-source-internal-api';
 import { TableField } from './field/grid-table-field-internal-api';

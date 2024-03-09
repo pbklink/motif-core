@@ -5,7 +5,7 @@
  */
 
 import { AllBrokerageAccountGroup, BrokerageAccountGroup } from '../adi/adi-internal-api';
-import { MultiEvent } from '../sys/sys-internal-api';
+import { MultiEvent } from '../sys/internal-api';
 import { UiAction } from './ui-action';
 
 export class BrokerageAccountGroupUiAction extends UiAction {

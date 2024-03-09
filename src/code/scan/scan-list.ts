@@ -5,7 +5,7 @@
  */
 
 import { AdiService, ScanDescriptorsDataDefinition, ScanStatusedDescriptor, ScanStatusedDescriptorsDataItem } from '../adi/adi-internal-api';
-import { AssertInternalError, Badness, ErrorCode, Integer, LockOpenList, MultiEvent, UnreachableCaseError, UsableListChangeTypeId, ZenithDataError } from '../sys/sys-internal-api';
+import { AssertInternalError, Badness, ErrorCode, Integer, LockOpenList, MultiEvent, UnreachableCaseError, UsableListChangeTypeId, ZenithDataError } from '../sys/internal-api';
 import { Scan } from './scan';
 
 export class ScanList extends LockOpenList<Scan> {

@@ -14,7 +14,7 @@ import {
     SourceTzOffsetDate,
     isUndefinableArrayEqualUniquely,
     isUndefinableDecimalEqual
-} from '../sys/sys-internal-api';
+} from '../sys/internal-api';
 import {
     CallOrPutId,
     DepthDirectionId,

@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { Ok, Result, ServiceOperator, ServiceOperatorId } from '../../sys/sys-internal-api';
+import { Ok, Result, ServiceOperator, ServiceOperatorId } from '../../sys/internal-api';
 import { KeyValueStore } from './key-value-store';
 
 export class LocalStorageKeyValueStore implements KeyValueStore {

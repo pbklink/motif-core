@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { Integer } from '../../sys/types';
+import { Integer } from '../../sys/internal-api';
 import { LitIvemId, MarketId, ScanAttachedNotificationChannel, ScanTargetTypeId, ZenithEncodedScanFormula } from '../common/adi-common-internal-api';
 
 export interface ScanDetail {

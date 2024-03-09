@@ -5,7 +5,7 @@
  */
 
 import { Account, Balances, BrokerageAccountGroup } from '../../../../adi/adi-internal-api';
-import { PickEnum } from '../../../../sys/sys-internal-api';
+import { PickEnum } from '../../../../sys/internal-api';
 import { GridFieldCustomHeadingsService } from '../../../field/grid-field-internal-api';
 import { GridLayoutDefinition } from '../../../layout/grid-layout-internal-api';
 import {

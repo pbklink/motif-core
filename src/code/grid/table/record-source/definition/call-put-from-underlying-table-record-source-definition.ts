@@ -6,7 +6,7 @@
 
 import { IvemId, SecurityDataItem } from '../../../../adi/adi-internal-api';
 import { CallPut } from '../../../../services/services-internal-api';
-import { ErrorCode, JsonElement, Ok, PickEnum, Result } from '../../../../sys/sys-internal-api';
+import { ErrorCode, JsonElement, JsonElementErr, Ok, PickEnum, Result } from '../../../../sys/internal-api';
 import { GridFieldCustomHeadingsService } from '../../../field/grid-field-internal-api';
 import { GridLayoutDefinition } from '../../../layout/grid-layout-internal-api';
 import { TableFieldSourceDefinition, TableFieldSourceDefinitionCachedFactoryService } from '../../field-source/grid-table-field-source-internal-api';
@@ -94,9 +94,9 @@ export namespace CallPutFromUnderlyingTableRecordSourceDefinition {
     }
 
     export function tryGetUnderlyingIvemIdFromJson(element: JsonElement): Result<IvemId> {
-        const underlyingIvemIdElementResult = element.tryGetDefinedElement(JsonTag.underlyingIvemId);
+        const underlyingIvemIdElementResult = element.tryGetElement(JsonTag.underlyingIvemId);
         if (underlyingIvemIdElementResult.isErr()) {
-            return underlyingIvemIdElementResult.createOuter(ErrorCode.CallPutFromUnderlyingTableRecordSourceDefinition_UnderlyingIvemIdNotSpecified);
+            return JsonElementErr.createOuter(underlyingIvemIdElementResult.error, ErrorCode.CallPutFromUnderlyingTableRecordSourceDefinition_UnderlyingIvemIdNotSpecified);
         } else {
             const underlyingIvemIdResult = IvemId.tryCreateFromJson(underlyingIvemIdElementResult.value);
             if (underlyingIvemIdResult.isErr()) {

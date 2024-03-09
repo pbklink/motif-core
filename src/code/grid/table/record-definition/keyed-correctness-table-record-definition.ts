@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { KeyedCorrectnessListItem, KeyedRecord } from '../../../sys/sys-internal-api';
+import { KeyedCorrectnessListItem, KeyedRecord } from '../../../sys/internal-api';
 import { KeyedCorrectnessSettableTableRecordDefinition } from './keyed-correctness-settable-table-record-definition';
 
 export interface KeyedCorrectnessTableRecordDefinition<Record extends KeyedCorrectnessListItem> extends KeyedCorrectnessSettableTableRecordDefinition<Record> {

@@ -5,7 +5,7 @@
  */
 
 import { AssertInternalError } from './internal-error';
-import { ComparisonResult, Integer } from './types';
+import { ComparisonResult, Integer } from './xiltyix-sysutils';
 
 /** @public */
 export interface BinarySearchResult {

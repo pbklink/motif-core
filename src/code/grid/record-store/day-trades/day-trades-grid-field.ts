@@ -34,7 +34,7 @@ import {
     compareUndefinableEnum,
     compareUndefinableInteger,
     compareUndefinableString
-} from "../../../sys/sys-internal-api";
+} from "../../../sys/internal-api";
 import { AllowedGridField, GridField, GridFieldDefinition, GridFieldSourceDefinition } from '../../field/grid-field-internal-api';
 import { GridLayoutDefinition } from '../../layout/grid-layout-internal-api';
 

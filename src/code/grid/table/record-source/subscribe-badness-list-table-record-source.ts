@@ -4,7 +4,6 @@
  * License: motionite.trade/license/motif
  */
 
-import { LockOpenListItem } from '../../../sys/lock-open-list-item';
 import {
     Badness,
     BadnessList,
@@ -12,7 +11,8 @@ import {
     MultiEvent,
     UnreachableCaseError,
     UsableListChangeTypeId
-} from "../../../sys/sys-internal-api";
+} from "../../../sys/internal-api";
+import { LockOpenListItem } from '../../../sys/lock-open-list-item';
 import { TableRecordSource } from './table-record-source';
 
 /** @public */

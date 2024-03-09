@@ -13,7 +13,7 @@ import {
 } from '@xilytix/revgrid';
 import { HigherLowerId, OrderSideId } from '../../../../adi/adi-internal-api';
 import { ColorRenderValue, ColorScheme, RenderValue, SettingsService } from '../../../../services/services-internal-api';
-import { CorrectnessId, IndexSignatureHack, Integer, UnreachableCaseError } from '../../../../sys/sys-internal-api';
+import { CorrectnessId, IndexSignatureHack, Integer, UnreachableCaseError } from '../../../../sys/internal-api';
 import { TextFormatterService } from '../../../../text-format/text-format-internal-api';
 import { GridField } from '../../../field/grid-field-internal-api';
 import { DepthRecord, DepthRecordRenderValue } from '../../../record-store/grid-record-store-internal-api';

@@ -5,7 +5,7 @@
  */
 
 import { CallPut } from '../../../services/services-internal-api';
-import { Integer, UnreachableCaseError } from '../../../sys/sys-internal-api';
+import { Integer, UnreachableCaseError } from '../../../sys/internal-api';
 import { CallPutTableFieldSourceDefinition } from '../field-source/definition/internal-api';
 import {
     BooleanTableValue,

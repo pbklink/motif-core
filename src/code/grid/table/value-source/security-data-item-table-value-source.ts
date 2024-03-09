@@ -14,7 +14,7 @@ import {
     SourceTzOffsetDate,
     UnexpectedCaseError,
     UnreachableCaseError
-} from "../../../sys/sys-internal-api";
+} from "../../../sys/internal-api";
 import { PrefixableSecurityDataItemTableFieldSourceDefinition } from '../field-source/definition/internal-api';
 import {
     BooleanCorrectnessTableValue,

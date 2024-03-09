@@ -38,7 +38,7 @@ import {
     isUndefinableArrayEqualUniquely,
     isUndefinableDateEqual,
     isUndefinableStringNumberBooleanNestArrayEqual
-} from "../sys/sys-internal-api";
+} from "../sys/internal-api";
 
 /** @public */
 export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>, RankedLitIvemIdListDirectoryItem {

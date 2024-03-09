@@ -13,7 +13,7 @@ import {
     MultiEvent,
     RecordList,
     UsableListChangeTypeId
-} from "../../sys/sys-internal-api";
+} from "../../sys/internal-api";
 import { PublisherSubscriptionDataItem } from './publisher-subscription-data-item';
 
 export class RecordsPublisherSubscriptionDataItem<Record extends KeyedCorrectnessListItem> extends PublisherSubscriptionDataItem

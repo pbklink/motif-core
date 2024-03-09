@@ -13,9 +13,10 @@ import {
     ErrorCode,
     Integer,
     JsonElement,
+    JsonElementErr,
     Ok,
     Result
-} from "../sys/sys-internal-api";
+} from "../sys/internal-api";
 import { Account } from './account';
 
 export abstract class BrokerageAccountGroup {
@@ -122,7 +123,7 @@ export namespace BrokerageAccountGroup {
     export function tryCreateFromJson(element: JsonElement): Result<BrokerageAccountGroup> {
         const typeIdJsonValueResult = element.tryGetString(JsonTag.TypeId);
         if (typeIdJsonValueResult.isErr()) {
-            return typeIdJsonValueResult.createOuter(ErrorCode.BrokerageAccountGroup_TypeIdIsInvalid);
+            return JsonElementErr.createOuter(typeIdJsonValueResult.error, ErrorCode.BrokerageAccountGroup_TypeIdIsInvalid);
         } else {
             const typeIdJsonValue = typeIdJsonValueResult.value;
             const typeId = Type.tryJsonValueToId(typeIdJsonValue);
@@ -249,9 +250,9 @@ export namespace SingleBrokerageAccountGroup {
     }
 
     export function tryCreateFromJson(element: JsonElement): Result<SingleBrokerageAccountGroup> {
-        const elementResult = element.tryGetDefinedElement(SingleJsonTag.AccountKey);
+        const elementResult = element.tryGetElement(SingleJsonTag.AccountKey);
         if (elementResult.isErr()) {
-            return elementResult.createOuter(ErrorCode.SingleBrokerageAccountGroup_AccountKeyNotSpecified);
+            return JsonElementErr.createOuter(elementResult.error, ErrorCode.SingleBrokerageAccountGroup_AccountKeyNotSpecified);
         } else {
             const accountKeyResult = Account.Key.tryCreateFromJson(elementResult.value);
             if (accountKeyResult.isErr()) {

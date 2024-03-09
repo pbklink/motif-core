@@ -19,7 +19,7 @@ import {
     SourceTzOffsetDate,
     SourceTzOffsetDateTime,
     isUndefinableArrayEqualUniquely
-} from "../sys/sys-internal-api";
+} from "../sys/internal-api";
 import {
     DataEnvironmentId,
     FeedStatusId,

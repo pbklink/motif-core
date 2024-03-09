@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { ErrorCode, Guid, JsonElement, Ok, Result } from '../../../sys/sys-internal-api';
+import { ErrorCode, Guid, JsonElement, JsonElementErr, Ok, Result } from '../../../sys/internal-api';
 import { GridLayoutOrReferenceDefinition } from '../../layout/grid-layout-internal-api';
 import {
     TableRecordSourceDefinition,
@@ -45,11 +45,11 @@ export namespace ReferenceableGridSourceDefinition {
     ): Result<ReferenceableGridSourceDefinition> {
         const idResult = element.tryGetString(ReferenceableJsonName.id);
         if (idResult.isErr()) {
-            return idResult.createOuter(ErrorCode.ReferenceableGridSourceDefinition_IdNotSpecified);
+            return JsonElementErr.createOuter(idResult.error, ErrorCode.ReferenceableGridSourceDefinition_IdNotSpecified);
         } else {
             const nameResult = element.tryGetString(ReferenceableJsonName.name);
             if (nameResult.isErr()) {
-                return nameResult.createOuter(ErrorCode.ReferenceableGridSourceDefinition_NameNotSpecified);
+                return JsonElementErr.createOuter(nameResult.error, ErrorCode.ReferenceableGridSourceDefinition_NameNotSpecified);
             } else {
                 const tableRecordSourceDefinitionResult = GridSourceDefinition.tryGetTableRecordSourceDefinitionFromJson(
                     tableRecordSourceDefinitionFactoryService,

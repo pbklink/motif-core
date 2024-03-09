@@ -5,7 +5,7 @@
  */
 
 import { DataEnvironmentId } from '../../adi/adi-internal-api';
-import { AssertInternalError, Err, Integer, JsonElement, Logger, MultiEvent, Ok, Result, getErrorMessage, mSecsPerSec } from '../../sys/sys-internal-api';
+import { AssertInternalError, Err, Integer, JsonElement, JsonElementErr, Logger, MultiEvent, Ok, Result, getErrorMessage, mSecsPerSec } from '../../sys/internal-api';
 import { AppStorageService } from '../app-storage-service';
 import { IdleService } from '../idle-service';
 import { KeyValueStore } from '../key-value-store/services-key-value-store-internal-api';
@@ -112,7 +112,7 @@ export class SettingsService implements SaveManagement {
                 if (parseResult.isOk()) {
                     masterSettings.load(rootElement, undefined);
                 } else {
-                    Logger.logWarning('Could not parse saved master settings. Using defaults.' + parseResult.error);
+                    Logger.logWarning(`Could not parse saved master settings. Using defaults. (${JsonElementErr.errorIdToCode(parseResult.error)})`);
                     masterSettings.load(undefined, undefined);
                     await this.saveMasterSettings();
                 }
@@ -139,7 +139,7 @@ export class SettingsService implements SaveManagement {
                 // Put group elements into loadingGroups array
                 const groupElementsResult = userElement.tryGetElementArray(SettingsService.JsonName.Groups);
                 if (groupElementsResult.isErr()) {
-                    Logger.logWarning('Settings: User element groups error. Index: ' + groupElementsResult.error.toString());
+                    Logger.logWarning('Settings: User element groups error. Index: ' + JsonElementErr.errorIdToCode(groupElementsResult.error));
                 } else {
                     const groupElements = groupElementsResult.value;
                     const maxCount = groupElements.length;
@@ -170,7 +170,7 @@ export class SettingsService implements SaveManagement {
                 // Get group elements and either match with existing in loadingGroups array or add as a new group
                 const groupElementsResult = operatorElement.tryGetElementArray(SettingsService.JsonName.Groups);
                 if (groupElementsResult.isErr()) {
-                    Logger.logWarning('Settings: Operator element groups error. Index: ' + groupElementsResult.error.toString());
+                    Logger.logWarning('Settings: Operator element groups error. Index: ' + JsonElementErr.errorIdToCode(groupElementsResult.error));
                 } else {
                     const groupElements = groupElementsResult.value;
                     for (const groupElement of groupElements) {

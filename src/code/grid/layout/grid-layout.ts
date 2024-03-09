@@ -18,7 +18,7 @@ import {
     moveElementInArray,
     moveElementsInArray,
     newGuid,
-} from '../../sys/sys-internal-api';
+} from '../../sys/internal-api';
 import { GridLayoutDefinition } from './definition/grid-layout-definition-internal-api';
 
 /**

@@ -15,7 +15,7 @@ import {
     UnreachableCaseError,
     UsableListChangeTypeId,
     ZenithDataError
-} from "../sys/sys-internal-api";
+} from "../sys/internal-api";
 import { Balances } from './balances';
 import { BrokerageAccountGroupRecordList } from './brokerage-account-group-record-list';
 import { BalancesDataMessage, CurrencyId, DataMessage, DataMessageTypeId } from './common/adi-common-internal-api';

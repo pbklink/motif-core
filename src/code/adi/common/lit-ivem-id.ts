@@ -5,7 +5,7 @@
  */
 
 import { StringId, Strings } from '../../res/res-internal-api';
-import { ComparableList, EnumInfoOutOfOrderError, Err, ErrorCode, FieldDataTypeId, JsonElement, Mappable, Ok, Result, compareString } from '../../sys/sys-internal-api';
+import { ComparableList, EnumInfoOutOfOrderError, Err, ErrorCode, FieldDataTypeId, JsonElement, JsonElementErr, Mappable, Ok, Result, compareString } from '../../sys/internal-api';
 import { DataEnvironment, DataEnvironmentId, ExchangeId, ExchangeInfo, MarketId, MarketInfo } from './data-types';
 import { IvemId } from './ivem-id';
 
@@ -157,7 +157,7 @@ export namespace LitIvemId {
     export function tryCreateFromJson(element: JsonElement): Result<LitIvemId> {
         const marketResult = element.tryGetString(JsonName.Market);
         if (marketResult.isErr()) {
-            return marketResult.createOuter(ErrorCode.LitIvemId_TryCreateFromJsonMarketNotSpecified);
+            return JsonElementErr.createOuter(marketResult.error, ErrorCode.LitIvemId_TryCreateFromJsonMarketNotSpecified);
         } else {
             const marketId = MarketInfo.tryJsonValueToId(marketResult.value);
             if (marketId === undefined) {
@@ -165,16 +165,17 @@ export namespace LitIvemId {
             } else {
                 const codeResult = element.tryGetString(JsonName.Code);
                 if (codeResult.isErr()) {
-                    return codeResult.createOuter(ErrorCode.LitIvemId_TryCreateFromJsonCodeNotSpecified);
+                    return JsonElementErr.createOuter(codeResult.error, ErrorCode.LitIvemId_TryCreateFromJsonCodeNotSpecified);
                 } else {
                     const code = codeResult.value;
                     const environmentResult = element.tryGetString(JsonName.Environment);
                     if (environmentResult.isErr()) {
-                        if (JsonElement.isUndefinedError(environmentResult.error)) {
+                        const environmentErrorId = environmentResult.error;
+                        if (environmentErrorId === JsonElement.ErrorId.JsonValueIsNotDefined) {
                             const litIvemId = new LitIvemId(code, marketId);
                             return new Ok(litIvemId);
                         } else {
-                            return environmentResult.createOuter(ErrorCode.LitIvemId_TryCreateFromJsonEnvironmentNotSpecified);
+                            return JsonElementErr.createOuter(environmentResult.error, ErrorCode.LitIvemId_TryCreateFromJsonEnvironmentNotSpecified);
                         }
                     } else {
                         const explicitEnvironmentId = DataEnvironment.tryJsonToId(environmentResult.value);

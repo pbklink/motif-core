@@ -37,7 +37,7 @@ import {
     getErrorMessage,
     isUndefinableArrayEqual,
     newGuid
-} from '../sys/sys-internal-api';
+} from '../sys/internal-api';
 import { ScanConditionSet } from './condition-set/internal-api';
 import { ScanFieldSet } from './field-set/internal-api';
 import { ScanFormula } from './formula/scan-formula';

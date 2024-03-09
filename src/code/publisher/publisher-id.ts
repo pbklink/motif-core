@@ -5,7 +5,7 @@
  */
 
 import { StringId, Strings } from '../res/res-internal-api';
-import { EnumInfoOutOfOrderError, Err, ErrorCode, JsonElement, Ok, Result } from '../sys/sys-internal-api';
+import { EnumInfoOutOfOrderError, Err, ErrorCode, JsonElement, JsonElementErr, Ok, Result } from '../sys/internal-api';
 
 /** @public */
 export interface PublisherId {
@@ -75,7 +75,7 @@ export namespace PublisherId {
         export function initialise() {
             for (let i = 0; i < idCount; i++) {
                 const info = infos[i];
-                if (info.id !== i) {
+                if (info.id !== i as TypeId) {
                     throw new EnumInfoOutOfOrderError('ExtensionInfo.PublisherTypeId', i, Strings[info.displayId]);
                 }
             }
@@ -136,7 +136,7 @@ export namespace PublisherId {
     export function tryCreateFromJson(element: JsonElement): Result<PublisherId> {
         const typeNameResult = element.tryGetString(JsonName.type);
         if (typeNameResult.isErr()) {
-            return new Err(ErrorCode.PublisherId_TypeIsNotSpecified);
+            return JsonElementErr.createOuter(typeNameResult.error, ErrorCode.PublisherId_TypeIsNotSpecified);
         } else {
             const typeName = typeNameResult.value;
             const typeId = PublisherId.Type.tryNameToId(typeName);
@@ -145,7 +145,7 @@ export namespace PublisherId {
             } else {
                 const nameResult = element.tryGetString(JsonName.name);
                 if (nameResult.isErr()) {
-                    return new Err(ErrorCode.PublisherId_NameIsNotSpecified);
+                    return JsonElementErr.createOuter(nameResult.error, ErrorCode.PublisherId_NameIsNotSpecified);
                 } else {
                     const publisherId: PublisherId = {
                         typeId,

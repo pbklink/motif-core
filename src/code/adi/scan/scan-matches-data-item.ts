@@ -14,7 +14,7 @@ import {
     UnreachableCaseError,
     UsableListChangeTypeId,
     ZenithDataError
-} from '../../sys/sys-internal-api';
+} from '../../sys/internal-api';
 import {
     AurcChangeTypeId,
     DataDefinition,

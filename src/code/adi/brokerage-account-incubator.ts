@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { getErrorMessage } from '../sys/sys-internal-api';
+import { getErrorMessage } from '../sys/internal-api';
 import { Account } from './account';
 import { AdiService } from './adi-service';
 import { BrokerageAccountsDataItem } from './brokerage-accounts-data-item';

@@ -34,7 +34,7 @@ import {
     SourceTzOffsetDateTime,
     newUndefinableDate,
     newUndefinableDecimal
-} from '../../../sys/sys-internal-api';
+} from '../../../sys/internal-api';
 
 export abstract class TableValue {
     private _renderValue: RenderValue | undefined;

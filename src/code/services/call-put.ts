@@ -7,7 +7,7 @@
 import { Decimal } from 'decimal.js-light';
 import { ExerciseTypeId, IvemId, LitIvemId, MarketId, MarketInfo } from '../adi/adi-internal-api';
 import { StringId, Strings } from '../res/res-internal-api';
-import { EnumInfoOutOfOrderError, FieldDataTypeId, Integer, isDecimalEqual, MapKey, nullDate, nullDecimal } from '../sys/sys-internal-api';
+import { EnumInfoOutOfOrderError, FieldDataTypeId, Integer, MapKey, isDecimalEqual, nullDate, nullDecimal } from '../sys/internal-api';
 
 export class CallPut {
     constructor(

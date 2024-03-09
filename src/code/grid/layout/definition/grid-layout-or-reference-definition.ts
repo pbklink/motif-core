@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, Err, ErrorCode, Guid, JsonElement, Ok, Result } from '../../../sys/sys-internal-api';
+import { AssertInternalError, ErrorCode, Guid, JsonElement, JsonElementErr, Ok, Result } from '../../../sys/internal-api';
 import { GridLayoutDefinition } from './grid-layout-definition';
 
 /** @public */
@@ -48,9 +48,9 @@ export namespace GridLayoutOrReferenceDefinition {
             const gridLayoutOrReferenceDefinition = new GridLayoutOrReferenceDefinition(referenceId);
             return new Ok(gridLayoutOrReferenceDefinition);
         } else {
-            const definitionElementResult = element.tryGetDefinedElement(JsonName.gridLayoutDefinition);
+            const definitionElementResult = element.tryGetElement(JsonName.gridLayoutDefinition);
             if (definitionElementResult.isErr()) {
-                return new Err(ErrorCode.GridLayoutDefinitionOrReference_BothDefinitionAndReferenceAreNotSpecified);
+                return JsonElementErr.createOuter(definitionElementResult.error, ErrorCode.GridLayoutDefinitionOrReference_BothDefinitionAndReferenceAreNotSpecified);
             } else {
                 const definitionElement = definitionElementResult.value;
                 const definitionResult = GridLayoutDefinition.tryCreateFromJson(definitionElement);

@@ -18,7 +18,7 @@ import {
     getErrorMessage,
     mSecsPerSec,
     secsPerMin
-} from '../../sys/sys-internal-api';
+} from '../../sys/internal-api';
 import { AdiPublisherRequest } from './adi-publisher-request';
 import { AdiPublisherSubscription } from './adi-publisher-subscription';
 import { AdiPublisherSubscriptionDelayRetryAlgorithmId } from './adi-publisher-subscription-delay-retry-algorithm';

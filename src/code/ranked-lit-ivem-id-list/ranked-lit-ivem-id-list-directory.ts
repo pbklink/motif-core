@@ -22,7 +22,7 @@ import {
     UsableListChangeType,
     UsableListChangeTypeId,
     removeFromArray
-} from '../sys/sys-internal-api';
+} from '../sys/internal-api';
 
 export class RankedLitIvemIdListDirectory extends CorrectnessBadness implements BadnessList<RankedLitIvemIdListDirectoryItem> {
     private readonly _sourceCount: Integer;

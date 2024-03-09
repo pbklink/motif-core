@@ -24,7 +24,7 @@ import {
     SourceTzOffsetDate,
     SourceTzOffsetDateTime,
     newUndefinableDecimal
-} from '../sys/sys-internal-api';
+} from '../sys/internal-api';
 import { ColorSettings } from './settings/settings-internal-api';
 // import { DepthRecord } from './depth-record';
 

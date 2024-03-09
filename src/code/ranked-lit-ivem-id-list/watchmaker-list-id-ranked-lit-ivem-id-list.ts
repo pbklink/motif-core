@@ -5,7 +5,7 @@
  */
 
 import { LitIvemId, RankScoredLitIvemIdList } from '../adi/adi-internal-api';
-import { AssertInternalError, Err, ErrorCode, Integer, LockOpenListItem, Ok, Result } from "../sys/sys-internal-api";
+import { AssertInternalError, Err, ErrorCode, Integer, LockOpenListItem, Ok, Result } from "../sys/internal-api";
 import { WatchmakerList, WatchmakerService } from '../watchmaker/watchmaker-internal-api';
 import { BaseRankedLitIvemIdList } from './base-ranked-lit-ivem-id-list';
 import { WatchmakerListIdRankedLitIvemIdListDefinition } from './definition/ranked-lit-ivem-id-list-definition-internal-api';

@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { LockOpenList } from '../../sys/sys-internal-api';
+import { LockOpenList } from '../../sys/internal-api';
 import { ReferenceableGridLayoutDefinition } from './definition/grid-layout-definition-internal-api';
 import { ReferenceableGridLayout } from './referenceable-grid-layout';
 

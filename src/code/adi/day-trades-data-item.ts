@@ -19,7 +19,7 @@ import {
     compareInteger,
     mSecsPerMin,
     rangedEarliestBinarySearch
-} from '../sys/sys-internal-api';
+} from '../sys/internal-api';
 import {
     DataDefinition,
     DayTradesDataDefinition,

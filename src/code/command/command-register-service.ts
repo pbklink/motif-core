@@ -5,7 +5,7 @@
  */
 
 import { ExtStringId, StringId } from '../res/res-internal-api';
-import { ExtensionHandle, Handle } from '../sys/sys-internal-api';
+import { ExtensionHandle, Handle } from '../sys/internal-api';
 import { Command } from './command';
 import { InternalCommand } from './internal-command';
 

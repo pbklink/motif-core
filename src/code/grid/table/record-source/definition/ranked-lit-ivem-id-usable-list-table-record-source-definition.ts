@@ -5,7 +5,7 @@
  */
 
 import { RankedLitIvemId } from '../../../../adi/adi-internal-api';
-import { PickEnum, UsableList } from '../../../../sys/sys-internal-api';
+import { PickEnum, UsableList } from '../../../../sys/internal-api';
 import { GridFieldCustomHeadingsService } from '../../../field/grid-field-internal-api';
 import { TableFieldSourceDefinition, TableFieldSourceDefinitionCachedFactoryService } from '../../field-source/grid-table-field-source-internal-api';
 import { TableRecordSourceDefinition } from './table-record-source-definition';

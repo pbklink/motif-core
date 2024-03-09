@@ -6,7 +6,7 @@
 
 import { MapKeyed } from './map-keyed';
 import { Result } from './result';
-import { IndexedRecord, Integer } from './types';
+import { IndexedRecord, Integer } from './xiltyix-sysutils';
 
 export interface LockOpenListItem<T> extends MapKeyed, IndexedRecord {
     readonly lockCount: Integer;

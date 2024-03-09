@@ -43,7 +43,7 @@ import {
     newNowDate,
     newNullDate,
     newUndefinableDate
-} from '../sys/sys-internal-api';
+} from '../sys/internal-api';
 import { HistorySequenceSeries } from './history-sequence-series';
 import { HistorySequencer } from './history-sequencer';
 import { IntervalHistorySequencer } from './interval-history-sequencer';

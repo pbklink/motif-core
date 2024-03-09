@@ -7,7 +7,7 @@
 import { LitIvemId, RankScoredLitIvemIdList } from '../adi/adi-internal-api';
 import {
     AssertInternalError, Integer
-} from "../sys/sys-internal-api";
+} from "../sys/internal-api";
 import { BaseRankedLitIvemIdList } from './base-ranked-lit-ivem-id-list';
 import {
     LitIvemIdArrayRankedLitIvemIdListDefinition

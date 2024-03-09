@@ -7,8 +7,8 @@
 import { ComparableList } from './comparable-list';
 import { MultiEvent } from './multi-event';
 import { RecordList } from './record-list';
-import { Integer, } from './types';
 import { UsableListChangeType, UsableListChangeTypeId } from './usable-list-change-type';
+import { Integer, } from './xiltyix-sysutils';
 
 export class ChangeSubscribableComparableList<out T extends U, in U = T> extends ComparableList<T, U> implements RecordList<T> {
     private _listChangeMultiEvent = new MultiEvent<RecordList.ListChangeEventHandler>();

@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { IndexedRecord, Integer } from '../../../sys/sys-internal-api';
+import { IndexedRecord, Integer } from '../../../sys/internal-api';
 import { TableValue } from './table-value';
 
 export class TableValuesRecord implements IndexedRecord {

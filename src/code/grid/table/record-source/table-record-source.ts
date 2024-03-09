@@ -12,7 +12,7 @@ import {
     Ok,
     Result,
     UsableListChangeTypeId
-} from "../../../sys/sys-internal-api";
+} from "../../../sys/internal-api";
 import { TextFormatterService } from '../../../text-format/text-format-internal-api';
 import { GridFieldCustomHeadingsService } from '../../field/grid-field-custom-headings-service';
 import { AllowedGridField } from '../../field/grid-field-internal-api';
