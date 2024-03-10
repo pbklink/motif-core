@@ -191,7 +191,7 @@ export namespace LitIvemId {
         }
         // function checkLogConfigError(code: string, text: string, maxTextLength: Integer) {
         //     if (configErrorLoggingActive) {
-        //         Logger.logConfigError(code, text, maxTextLength);
+        //         ErrorCodeLogger.logConfigError(code, text, maxTextLength);
         //     }
         // }
 

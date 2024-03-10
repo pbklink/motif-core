@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { logger, parseIntStrict, parseNumberStrict, UnreachableCaseError } from '../../../../sys/internal-api';
+import { ErrorCodeLogger, parseIntStrict, parseNumberStrict, UnreachableCaseError } from '../../../../sys/internal-api';
 import { LitIvemAlternateCodes, ZenithProtocolCommon } from '../../../common/adi-common-internal-api';
 import { MyxLitIvemAttributes } from '../../../common/myx-lit-ivem-attributes';
 import { ZenithMarketMyx } from './zenith-market-myx';
@@ -57,7 +57,7 @@ export namespace ZenithMarketMyxConvert {
                                 break;
                             default: {
                                 const unhandledKey: never = attributeKey;
-                                logger.logDataError('ZMMCSAPA8777877723', `"${key}" "${unhandledKey as string}"`);
+                                ErrorCodeLogger.logDataError('ZMMCSAPA8777877723', `"${key}" "${unhandledKey as string}"`);
                                 result.addUnrecognised(key, value);
                             }
                         }
@@ -89,7 +89,7 @@ export namespace ZenithMarketMyxConvert {
                             return MyxLitIvemAttributes.MarketClassificationId.Leap;
                         default: {
                             const neverValueIgnored: never = marketClassificationValue;
-                            logger.logDataError('ZMMCSACLTI32238283382', `${value}`);
+                            ErrorCodeLogger.logDataError('ZMMCSACLTI32238283382', `${value}`);
                             return undefined;
                         }
                     }
@@ -137,7 +137,7 @@ export namespace ZenithMarketMyxConvert {
                             return MyxLitIvemAttributes.DeliveryBasisId.ImmediateBasisT1;
                         default: {
                             const neverValueIgnored: never = deliveryBasisValue;
-                            logger.logDataError('ZMMCSADTI133223828533382', `${value}`);
+                            ErrorCodeLogger.logDataError('ZMMCSADTI133223828533382', `${value}`);
                             return undefined;
                         }
                     }

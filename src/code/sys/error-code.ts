@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-
+/** @public */
 export const enum ErrorCode {
     MappedComparableList_Duplicate = 'MCLD87725',
     CommaText_UnexpectedCharAfterQuotedElement = 'CTUCAQE69316',

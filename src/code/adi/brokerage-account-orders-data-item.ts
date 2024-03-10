@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { assert, AssertInternalError, Integer, logger, UnreachableCaseError, UsableListChangeTypeId } from '../sys/internal-api';
+import { assert, AssertInternalError, ErrorCodeLogger, Integer, UnreachableCaseError, UsableListChangeTypeId } from '../sys/internal-api';
 import { BrokerageAccountGroupOrderList } from './brokerage-account-group-order-list';
 import { AurcChangeTypeId, DataMessage, DataMessageTypeId, OrdersDataMessage } from './common/adi-common-internal-api';
 import { Order } from './order';
@@ -73,7 +73,7 @@ export class BrokerageAccountOrdersDataItem extends RecordsBrokerageAccountSubsc
                     const addMapKey = Order.Key.generateMapKey(addChange.id, addChange.accountId);
                     if (this.hasRecord(addMapKey)) {
                         addStartMsgIdx = this.checkApplyAdd(msg.changeRecords, addStartMsgIdx, msgOrderIdx);
-                        logger.logDataError('ODIPOMA38877', `${addChange.id}, ${addChange.sideId}, ${addChange.exchangeId}`);
+                        ErrorCodeLogger.logDataError('ODIPOMA38877', `${addChange.id}, ${addChange.sideId}, ${addChange.exchangeId}`);
                     } else {
                         if (addStartMsgIdx < 0) {
                             addStartMsgIdx = msgOrderIdx;
@@ -89,7 +89,7 @@ export class BrokerageAccountOrdersDataItem extends RecordsBrokerageAccountSubsc
                     const updateOrder = this.getRecordByMapKey(updateMapKey);
 
                     if (updateOrder === undefined) {
-                        logger.logDataError('ODIPOMU3389', `${updateChange.accountId}`);
+                        ErrorCodeLogger.logDataError('ODIPOMU3389', `${updateChange.accountId}`);
                     } else {
                         updateOrder.update(updateChange);
                     }
@@ -102,7 +102,7 @@ export class BrokerageAccountOrdersDataItem extends RecordsBrokerageAccountSubsc
                     const removeMapKey = Order.Key.generateMapKey(removeChange.id, removeChange.accountId);
                     const orderIdx = this.indexOfRecordByMapKey(removeMapKey);
                     if (orderIdx < 0) {
-                        logger.logDataError('ODIPOMR11156', `order not found: ${JSON.stringify(removeChange)}`);
+                        ErrorCodeLogger.logDataError('ODIPOMR11156', `order not found: ${JSON.stringify(removeChange)}`);
                     } else {
                         this.checkUsableNotifyListChange(UsableListChangeTypeId.Remove, orderIdx, 1);
                         this.removeRecord(orderIdx);

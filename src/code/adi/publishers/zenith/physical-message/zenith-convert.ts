@@ -12,10 +12,10 @@ import {
     defined,
     EnumInfoOutOfOrderError,
     ErrorCode,
+    ErrorCodeLogger,
     ErrorCodeWithExtra,
     ErrorCodeWithExtraErr,
     Integer,
-    logger,
     mSecsPerDay,
     mSecsPerHour,
     mSecsPerMin,
@@ -1153,7 +1153,7 @@ export namespace ZenithConvert {
                                 case ZenithProtocol.Market2Node.AsxTradeMatchED: return MarketBoardId.AsxTradeMatchED;
                                 default:
                                     if (tryHarder) {
-                                        logger.logDataError('ZCEMCMBIAT223', `${m2}: Using Tradematch`);
+                                        ErrorCodeLogger.logDataError('ZCEMCMBIAT223', `${m2}: Using Tradematch`);
                                         return MarketBoardId.AsxTradeMatch;
                                     } else {
                                         return undefined;
@@ -1170,7 +1170,7 @@ export namespace ZenithConvert {
                                 case ZenithProtocol.Market2Node.AsxPureMatchEquity5: return MarketBoardId.AsxPureMatchEquity5;
                                 default:
                                     if (tryHarder) {
-                                        logger.logDataError('ZCEMCMBIAP847', `${m2}: Using Purematch`);
+                                        ErrorCodeLogger.logDataError('ZCEMCMBIAP847', `${m2}: Using Purematch`);
                                         return MarketBoardId.AsxPureMatch;
                                     } else {
                                         return undefined;
@@ -1218,7 +1218,7 @@ export namespace ZenithConvert {
                             switch (m2) {
                                 case undefined:
                                     if (tryHarder) {
-                                        logger.logDataError('ZCEMCMBNNU33885', 'Using NSX Main');
+                                        ErrorCodeLogger.logDataError('ZCEMCMBNNU33885', 'Using NSX Main');
                                         return MarketBoardId.NsxMain;
                                     } else {
                                         return undefined;
@@ -1232,7 +1232,7 @@ export namespace ZenithConvert {
                                 case ZenithProtocol.Market2Node.NsxRestricted: return MarketBoardId.NsxRestricted;
                                 default:
                                     if (tryHarder) {
-                                        logger.logDataError('ZCEMCMBNND77541', `${m2}: Using NSX Main`);
+                                        ErrorCodeLogger.logDataError('ZCEMCMBNND77541', `${m2}: Using NSX Main`);
                                         return MarketBoardId.NsxMain;
                                     } else {
                                         return undefined;
@@ -1242,7 +1242,7 @@ export namespace ZenithConvert {
                             switch (m2) {
                                 case undefined:
                                     if (tryHarder) {
-                                        logger.logDataError('ZCEMCMBNSPU33997', 'Using NSX Main');
+                                        ErrorCodeLogger.logDataError('ZCEMCMBNSPU33997', 'Using NSX Main');
                                         return MarketBoardId.NsxMain;
                                     } else {
                                         return undefined;
@@ -1251,7 +1251,7 @@ export namespace ZenithConvert {
                                 case ZenithProtocol.Market2Node.SouthPacificStockExchangeRestricted: return MarketBoardId.SouthPacificStockExchangeRestricted;
                                 default:
                                     if (tryHarder) {
-                                        logger.logDataError('ZCEMCMBNSPD23232', `${m2}: Using NSX Main`);
+                                        ErrorCodeLogger.logDataError('ZCEMCMBNSPD23232', `${m2}: Using NSX Main`);
                                         return MarketBoardId.NsxMain;
                                     } else {
                                         return undefined;
@@ -1260,7 +1260,7 @@ export namespace ZenithConvert {
 
                         default:
                             if (tryHarder) {
-                                logger.logDataError('ZCEMCMBND55558', `${m1 ?? '<undefined>'}: Using NSX Main`);
+                                ErrorCodeLogger.logDataError('ZCEMCMBND55558', `${m1 ?? '<undefined>'}: Using NSX Main`);
                                 return MarketBoardId.NsxMain;
                             } else {
                                 return undefined;
@@ -1272,7 +1272,7 @@ export namespace ZenithConvert {
                             switch (m2) {
                                 case undefined:
                                     if (tryHarder) {
-                                        logger.logDataError('ZCEMBCMBINZMU66685', 'Using NZX Main');
+                                        ErrorCodeLogger.logDataError('ZCEMBCMBINZMU66685', 'Using NZX Main');
                                         return MarketBoardId.NzxMainBoard;
                                     } else {
                                         return undefined;
@@ -1293,7 +1293,7 @@ export namespace ZenithConvert {
                                 case ZenithProtocol.Market2Node.NzxMStgy: return MarketBoardId.NzxMStgy;
                                 default:
                                     if (tryHarder) {
-                                        logger.logDataError('ZCEMBCMBINZMD23239', `${m2}: Using NZX Main`);
+                                        ErrorCodeLogger.logDataError('ZCEMBCMBINZMD23239', `${m2}: Using NZX Main`);
                                         return MarketBoardId.NzxMainBoard;
                                     } else {
                                         return undefined;
@@ -1301,7 +1301,7 @@ export namespace ZenithConvert {
                             }
                         default:
                             if (tryHarder) {
-                                logger.logDataError('ZCEMBCMBINZD77559', `${m1 ?? '<undefined>'}: Using NZX Main`);
+                                ErrorCodeLogger.logDataError('ZCEMBCMBINZD77559', `${m1 ?? '<undefined>'}: Using NZX Main`);
                                 return MarketBoardId.NzxMainBoard;
                             } else {
                                 return undefined;
@@ -1316,7 +1316,7 @@ export namespace ZenithConvert {
                                 case ZenithProtocol.Market2Node.MyxDirectBusinessTransactionMarket: return MarketBoardId.MyxDirectBusinessTransactionMarket;
                                 default:
                                     if (tryHarder) {
-                                        logger.logDataError('ZCEMCMBIMYXN239987', `Unknown "${m2 ?? '<undefined>'}": Using MYX Normal`);
+                                        ErrorCodeLogger.logDataError('ZCEMCMBIMYXN239987', `Unknown "${m2 ?? '<undefined>'}": Using MYX Normal`);
                                         return MarketBoardId.MyxNormalMarket;
                                     } else {
                                         return undefined;
@@ -1325,20 +1325,20 @@ export namespace ZenithConvert {
                         case ZenithProtocol.Market1Node.MyxBuyIn:
                             if (m2 !== undefined) {
                                 if (tryHarder) {
-                                    logger.logDataError('ZCEMCMBIMYXBI39286', `Unexpected "${m2}": Using MYX BuyIn`);
+                                    ErrorCodeLogger.logDataError('ZCEMCMBIMYXBI39286', `Unexpected "${m2}": Using MYX BuyIn`);
                                 }
                             }
                             return MarketBoardId.MyxBuyInMarket;
                         case ZenithProtocol.Market1Node.MyxOddLot:
                             if (m2 !== undefined) {
                                 if (tryHarder) {
-                                    logger.logDataError('ZCEMCMBIMYXOL88453', `Unexpected "${m2}": Using MYX OddLot`);
+                                    ErrorCodeLogger.logDataError('ZCEMCMBIMYXOL88453', `Unexpected "${m2}": Using MYX OddLot`);
                                 }
                             }
                             return MarketBoardId.MyxOddLotMarket;
                         default:
                             if (tryHarder) {
-                                logger.logDataError('ZCEMCMBIMYXD12995', `Unsupported ${m1 ?? '<undefined>'}: Using MYX Normal`);
+                                ErrorCodeLogger.logDataError('ZCEMCMBIMYXD12995', `Unsupported ${m1 ?? '<undefined>'}: Using MYX Normal`);
                             }
                             return MarketBoardId.MyxNormalMarket;
                     }
@@ -1943,7 +1943,7 @@ export namespace ZenithConvert {
                         }
                         default: {
                             const neverValueIgnored: never = classId;
-                            logger.logDataError('ZCFTAU98721', `${neverValueIgnored as Integer}`);
+                            ErrorCodeLogger.logDataError('ZCFTAU98721', `${neverValueIgnored as Integer}`);
                             return undefined;
                         }
                     }
@@ -1965,7 +1965,7 @@ export namespace ZenithConvert {
                     case ZenithProtocol.ZenithController.Feeds.FeedClass.Channel: return FeedClassId.Channel;
                     default: {
                         const neverValueIgnored: never = value;
-                        logger.logDataError('ZCFFCU0092288573', `${neverValueIgnored as Integer}`);
+                        ErrorCodeLogger.logDataError('ZCFFCU0092288573', `${neverValueIgnored as Integer}`);
                         return undefined;
                     }
                 }

@@ -8507,9 +8507,7 @@ export class EquityOrderTypeIdCorrectnessTableValue extends EnumCorrectnessTable
 
 export { Err }
 
-// Warning: (ae-missing-release-tag) "ErrorCode" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public
+// @public (undocumented)
 export const enum ErrorCode {
     // (undocumented)
     ACAOPMA23964 = "ACAOPMA23964",
@@ -9459,6 +9457,20 @@ export const enum ErrorCode {
     ZPSMPPM23230917111 = "ZPSMPPM23230917111",
     // (undocumented)
     ZPSMPPM2994344434 = "ZPSMPPM2994344434"
+}
+
+// @public (undocumented)
+export namespace ErrorCodeLogger {
+    // (undocumented)
+    export function logConfigError(code: string, text: string, maxTextLength?: number, telemetryAndExtra?: string): void;
+    // (undocumented)
+    export function logDataError(code: string, text: string, maxTextLength?: number, telemetryAndExtra?: string): void;
+    // (undocumented)
+    export function logExternalError(code: string, text: string, maxTextLength?: number, telemetryAndExtra?: string): void;
+    // (undocumented)
+    export function logLayoutError(code: string, text: string, maxTextLength?: number, telemetryAndExtra?: string): void;
+    // (undocumented)
+    export function logPersistError(code: string, text?: string, maxTextLength?: number, telemetryAndExtra?: string): void;
 }
 
 // Warning: (ae-missing-release-tag) "ErrorCodeWithExtra" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)

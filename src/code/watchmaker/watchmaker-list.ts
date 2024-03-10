@@ -25,6 +25,7 @@ import {
     CorrectnessId,
     EnumInfoOutOfOrderError,
     Err,
+    ErrorCodeLogger,
     FieldDataTypeId,
     Integer,
     KeyedCorrectnessSettableListItem,
@@ -35,8 +36,7 @@ import {
     Ok,
     RecordList,
     Result,
-    ValueRecentChangeTypeId,
-    logger
+    ValueRecentChangeTypeId
 } from "../sys/internal-api";
 
 export class WatchmakerList implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>, KeyedCorrectnessSettableListItem, RankScoredLitIvemIdList, RankedLitIvemIdListDirectoryItem {
@@ -592,7 +592,7 @@ export class WatchmakerList implements LockOpenListItem<RankedLitIvemIdListDirec
         if (dataItem.error) {
             this._errorText = dataItem.errorText;
             this.setSyncStatusId(WatchmakerList.SyncStatusId.Error);
-            logger.logDataError('WLPCOSR60113', dataItem.errorText );
+            ErrorCodeLogger.logDataError('WLPCOSR60113', dataItem.errorText );
         } else {
             this.setSyncStatusId(WatchmakerList.SyncStatusId.Error);
 

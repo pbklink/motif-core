@@ -7,9 +7,9 @@
 import {
     AssertInternalError,
     ErrorCode,
+    ErrorCodeLogger,
     getErrorMessage,
     ifDefined,
-    logger,
     newUndefinableDecimal,
     ZenithDataError
 } from "../../../../sys/internal-api";
@@ -500,7 +500,7 @@ export namespace SymbolsMessageConvert {
                     result = ZenithMarketMyxConvert.Symbols.Attributes.toLitIvem(attributes);
                     break;
                 default:
-                    logger.logDataError('SMCCAUC77667733772', ExchangeInfo.idToName(exchangeId));
+                    ErrorCodeLogger.logDataError('SMCCAUC77667733772', ExchangeInfo.idToName(exchangeId));
                     result = undefined;
             }
             return result;
@@ -554,7 +554,7 @@ export namespace SymbolsMessageConvert {
                     break;
                 }
                 default:
-                    logger.logDataError('SMCCAUC77667733773', ExchangeInfo.idToName(exchangeId));
+                    ErrorCodeLogger.logDataError('SMCCAUC77667733773', ExchangeInfo.idToName(exchangeId));
                     result = undefined;
             }
             return result;
