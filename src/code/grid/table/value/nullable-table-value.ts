@@ -7,7 +7,6 @@
 // We are trying not to use null - only undefined.  If it does become necessary to use null table grid values, then
 // the classes below can be used.  However try to avoid this
 
-import { Decimal } from 'decimal.js-light';
 import {
     BooleanRenderValue,
     DateRenderValue,
@@ -20,7 +19,7 @@ import {
     RenderValue,
     StringRenderValue
 } from '../../../services/services-internal-api';
-import { Integer, newUndefinableDate, newUndefinableDecimal } from '../../../sys/internal-api';
+import { Decimal, Integer, newUndefinableDate, newUndefinableDecimal } from '../../../sys/internal-api';
 import { CorrectnessTableValue } from './table-value';
 
 export abstract class NullableCorrectnessTableValue extends CorrectnessTableValue {

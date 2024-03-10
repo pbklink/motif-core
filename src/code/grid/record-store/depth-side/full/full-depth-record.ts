@@ -4,7 +4,6 @@
  * License: motionite.trade/license/motif
  */
 
-import { Decimal } from 'decimal.js-light';
 import { DepthDataItem, MarketId, MarketInfo, OrderSideId } from '../../../../adi/adi-internal-api';
 import {
     CountAndXrefsRenderValue,
@@ -19,6 +18,7 @@ import {
 } from '../../../../services/services-internal-api';
 import {
     AssertInternalError,
+    Decimal,
     GridRecordInvalidatedValue,
     Integer,
     UnreachableCaseError,
@@ -27,6 +27,7 @@ import {
     compareInteger,
     isArrayEqualUniquely,
     logger,
+    newDecimal,
     uniqueElementArraysOverlap
 } from "../../../../sys/internal-api";
 import { DepthRecord } from '../depth-record';
@@ -333,7 +334,7 @@ export class PriceLevelFullDepthRecord extends FullDepthRecord {
     constructor(index: Integer, firstOrder: DepthDataItem.Order, volumeAhead: Integer | undefined, auctionQuantity: Integer | undefined) {
         super(DepthRecord.TypeId.PriceLevel, index, volumeAhead, auctionQuantity);
 
-        this._price = new Decimal(firstOrder.price);
+        this._price = newDecimal(firstOrder.price);
         this._count = 1;
         this._volume = firstOrder.quantity;
         this._marketIds = [firstOrder.marketId];
@@ -596,7 +597,7 @@ export class PriceLevelFullDepthRecord extends FullDepthRecord {
             switch (valueChange.fieldId) {
                 case DepthDataItem.Order.Field.Id.Price: {
                     if (this._count === 1) {
-                        this._price = new Decimal(newOrder.price);
+                        this._price = newDecimal(newOrder.price);
                         changes[changeCount++] = { fieldIndex: FullDepthSideFieldId.Price, typeId: valueChange.recentChangeTypeId };
                         priceAndHasUndisclosedChangeTypeId = valueChange.recentChangeTypeId;
                     } else {

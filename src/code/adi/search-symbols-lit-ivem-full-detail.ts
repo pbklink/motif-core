@@ -4,13 +4,13 @@
  * License: motionite.trade/license/motif
  */
 
-import { Decimal } from 'decimal.js-light';
 import { StringId, Strings } from '../res/res-internal-api';
 import {
     EnumInfoOutOfOrderError,
     FieldDataTypeId,
     Integer,
     MultiEvent,
+    Decimal,
     SourceTzOffsetDate,
     isUndefinableArrayEqualUniquely,
     isUndefinableDecimalEqual

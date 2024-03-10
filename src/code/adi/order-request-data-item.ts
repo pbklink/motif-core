@@ -4,8 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { Decimal } from 'decimal.js-light';
-import { AssertInternalError } from '../sys/internal-api';
+import { AssertInternalError, Decimal } from '../sys/internal-api';
 import {
     DataDefinition,
     OrderRequestError,

@@ -4,12 +4,12 @@
  * License: motionite.trade/license/motif
  */
 
-import { Decimal } from 'decimal.js-light';
 import { DepthDataItem, DepthStyleId, OrderSide, OrderSideId } from '../../../../adi/adi-internal-api';
 import { SessionInfoService } from '../../../../services/session-info-service';
 import {
     AssertInternalError,
     CorrectnessId,
+    Decimal,
     GridRecordIndex,
     GridRecordInvalidatedValue,
     GridRecordStore,
@@ -63,11 +63,11 @@ export class FullDepthSideGridRecordStore extends DepthSideGridRecordStore imple
         this._sideIdDisplay = OrderSide.idToDisplay(sideId);
         switch (this.sideId) {
             case OrderSideId.Ask: {
-                this._initialPreviousPrice = new Decimal(Number.MIN_VALUE);
+                this._initialPreviousPrice = newDecimal(Number.MIN_VALUE);
                 break;
             }
             case OrderSideId.Bid: {
-                this._initialPreviousPrice = new Decimal(Number.MAX_VALUE);
+                this._initialPreviousPrice = newDecimal(Number.MAX_VALUE);
                 break;
             }
             default:

@@ -54,7 +54,7 @@ import { dateToDashedYyyyMmDd } from '@xilytix/sysutils';
 import { dateToDateOnlyIsoString } from '@xilytix/sysutils';
 import { dateToUtcYyyyMmDd } from '@xilytix/sysutils';
 import { DayOfWeek } from '@xilytix/sysutils';
-import { Decimal } from 'decimal.js-light';
+import { Decimal } from '@xilytix/sysutils';
 import { deepExtendObject } from '@xilytix/sysutils';
 import { deepExtendValue } from '@xilytix/sysutils';
 import { delay1Tick } from '@xilytix/sysutils';
@@ -7161,6 +7161,8 @@ export class DayTradesGridRecordStore implements GridRecordStore {
     // (undocumented)
     setRecordEventers(recordsEventers: GridRecordStoreRecordsEventers): void;
 }
+
+export { Decimal }
 
 // Warning: (ae-missing-release-tag) "DecimalCorrectnessTableField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //

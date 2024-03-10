@@ -4,7 +4,6 @@
  * License: motionite.trade/license/motif
  */
 
-import { Decimal } from 'decimal.js-light';
 import {
     Account,
     AdiService,
@@ -49,6 +48,7 @@ import { StringId, Strings } from '../res/res-internal-api';
 import {
     AssertInternalError,
     concatenateArrayUniquely,
+    Decimal,
     EnumInfoOutOfOrderError,
     getErrorMessage,
     Integer,

@@ -4,13 +4,13 @@
  * License: motionite.trade/license/motif
  */
 
-import { Decimal } from 'decimal.js-light';
 import {
     assert,
     Badness,
     compareInteger,
     ComparisonResult,
     CorrectnessBadness,
+    Decimal,
     Integer,
     mSecsPerMin,
     MultiEvent,

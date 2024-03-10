@@ -4,11 +4,11 @@
  * License: motionite.trade/license/motif
  */
 
-import { Decimal } from 'decimal.js-light';
 import {
     AssertInternalError,
     CommaText,
     concatenateArrayUniquely,
+    Decimal,
     defined,
     EnumInfoOutOfOrderError,
     ErrorCode,
@@ -20,6 +20,7 @@ import {
     mSecsPerHour,
     mSecsPerMin,
     mSecsPerSec,
+    newDecimal,
     newUndefinableDecimal,
     NotImplementedError,
     Ok,
@@ -2303,9 +2304,9 @@ export namespace ZenithConvert {
     export namespace OrderFees {
         export function toDecimal(value: ZenithProtocol.TradingController.OrderFees): AsDecimal {
             const valueBrokerage = value.Brokerage;
-            const brokerage = valueBrokerage === undefined ? undefined : new Decimal(valueBrokerage);
+            const brokerage = valueBrokerage === undefined ? undefined : newDecimal(valueBrokerage);
             const valueTax = value.Tax;
-            const tax = valueTax === undefined ? undefined : new Decimal(valueTax);
+            const tax = valueTax === undefined ? undefined : newDecimal(valueTax);
             return {
                 brokerage,
                 tax,
@@ -3324,7 +3325,7 @@ export namespace ZenithConvert {
                         code: zenithHolding.Code,
                         accountId: environmentedAccountId.accountId,
                         styleId: IvemClassId.Market,
-                        cost: new Decimal(zenithHolding.Cost),
+                        cost: newDecimal(zenithHolding.Cost),
                         currencyId: Currency.tryToId(zenithHolding.Currency),
                         marketDetail,
                     };
@@ -3339,7 +3340,7 @@ export namespace ZenithConvert {
                         code: zenithHolding.Code,
                         accountId: managedFundEnvironmentedAccountId.accountId,
                         styleId: IvemClassId.ManagedFund,
-                        cost: new Decimal(zenithHolding.Cost),
+                        cost: newDecimal(zenithHolding.Cost),
                         currencyId: Currency.tryToId(zenithHolding.Currency),
                     };
                     return managedFund;
@@ -3353,7 +3354,7 @@ export namespace ZenithConvert {
             const marketDetail: HoldingsDataMessage.MarketChangeData.Detail = {
                 totalQuantity: zenithMarketHolding.TotalQuantity,
                 totalAvailableQuantity: zenithMarketHolding.TotalAvailable,
-                averagePrice: new Decimal(zenithMarketHolding.AveragePrice),
+                averagePrice: newDecimal(zenithMarketHolding.AveragePrice),
             };
             return marketDetail;
         }
@@ -3380,7 +3381,7 @@ export namespace ZenithConvert {
                         environmentId: environmentedAccountId.environmentId,
                         balanceType: balance.Type,
                         currencyId,
-                        amount: new Decimal(balance.Amount)
+                        amount: newDecimal(balance.Amount)
                     } as const;
                     return change;
                 }
@@ -3485,13 +3486,13 @@ export namespace ZenithConvert {
                         orderStyleId: IvemClassId.Market,
                         tradeDate,
                         settlementDate,
-                        grossAmount: new Decimal(detail.GrossAmount),
-                        netAmount: new Decimal(detail.NetAmount),
-                        settlementAmount: new Decimal(detail.SettlementAmount),
+                        grossAmount: newDecimal(detail.GrossAmount),
+                        netAmount: newDecimal(detail.NetAmount),
+                        settlementAmount: newDecimal(detail.SettlementAmount),
                         currencyId,
                         orderId: detail.OrderID,
                         totalQuantity: detail.TotalQuantity,
-                        averagePrice: new Decimal(detail.AveragePrice),
+                        averagePrice: newDecimal(detail.AveragePrice),
                     };
 
                     return result;
@@ -3524,13 +3525,13 @@ export namespace ZenithConvert {
                         orderStyleId: IvemClassId.ManagedFund,
                         tradeDate,
                         settlementDate,
-                        grossAmount: new Decimal(detail.GrossAmount),
-                        netAmount: new Decimal(detail.NetAmount),
-                        settlementAmount: new Decimal(detail.SettlementAmount),
+                        grossAmount: newDecimal(detail.GrossAmount),
+                        netAmount: newDecimal(detail.NetAmount),
+                        settlementAmount: newDecimal(detail.SettlementAmount),
                         currencyId,
                         orderId: detail.OrderID,
-                        totalUnits: new Decimal(detail.TotalUnits),
-                        unitValue: new Decimal(detail.UnitValue),
+                        totalUnits: newDecimal(detail.TotalUnits),
+                        unitValue: newDecimal(detail.UnitValue),
                     };
 
                     return result;
@@ -3741,16 +3742,16 @@ export namespace ZenithConvert {
             switch (value.Type) {
                 case ZenithProtocol.TradingController.PlaceOrder.TrailingStopLossCondition.Type.Price: {
                     const trigger = new TrailingPriceOrderTrigger();
-                    trigger.value = new Decimal(value.Value);
-                    trigger.limit = new Decimal(value.Limit);
+                    trigger.value = newDecimal(value.Value);
+                    trigger.limit = newDecimal(value.Limit);
                     trigger.stop = newUndefinableDecimal(value.Stop);
                     return trigger;
                 }
 
                 case ZenithProtocol.TradingController.PlaceOrder.TrailingStopLossCondition.Type.Percent: {
                     const percentTrigger = new PercentageTrailingPriceOrderTrigger();
-                    percentTrigger.value = new Decimal(value.Value);
-                    percentTrigger.limit = new Decimal(value.Limit);
+                    percentTrigger.value = newDecimal(value.Value);
+                    percentTrigger.limit = newDecimal(value.Limit);
                     percentTrigger.stop = newUndefinableDecimal(value.Stop);
                     return percentTrigger;
                 }

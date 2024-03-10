@@ -4,8 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { Decimal } from 'decimal.js-light';
-import { Integer, MultiEvent, newUndefinableDecimal } from '../sys/internal-api';
+import { Decimal, Integer, MultiEvent, newDecimal, newUndefinableDecimal } from '../sys/internal-api';
 import { UiAction } from './ui-action';
 
 export class DecimalUiAction extends UiAction {
@@ -89,7 +88,7 @@ export class DecimalUiAction extends UiAction {
 
 export namespace DecimalUiAction {
     // eslint-disable-next-line @typescript-eslint/no-loss-of-precision
-    export const undefinedDecimal = new Decimal(-9999999999999999999.9999);
+    export const undefinedDecimal = newDecimal(-9999999999999999999.9999);
     export interface Options {
         integer?: boolean;
         max?: number;

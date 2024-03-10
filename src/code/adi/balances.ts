@@ -4,11 +4,11 @@
  * License: motionite.trade/license/motif
  */
 
-import { Decimal } from 'decimal.js-light';
 import { StringId, Strings } from '../res/res-internal-api';
 import {
     AssertInternalError,
     CorrectnessId,
+    Decimal,
     EnumInfoOutOfOrderError,
     FieldDataTypeId,
     Integer,
@@ -18,7 +18,8 @@ import {
     UnreachableCaseError,
     ValueRecentChangeTypeId,
     isDecimalEqual,
-    isDecimalGreaterThan
+    isDecimalGreaterThan,
+    newDecimal
 } from "../sys/internal-api";
 import { Account } from './account';
 import { BrokerageAccountRecord } from './brokerage-account-record';
@@ -206,7 +207,7 @@ export class Balances implements BrokerageAccountRecord {
 
 export namespace Balances {
     export type Id = string;
-    export const initialiseValue = new Decimal(0);
+    export const initialiseValue = newDecimal(0);
 
     export interface BalanceValue {
         readonly type: string;

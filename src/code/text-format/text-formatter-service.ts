@@ -4,7 +4,6 @@
  * License: motionite.trade/license/motif
  */
 
-import { Decimal } from 'decimal.js-light';
 import {
     ActiveFaultedStatus,
     ActiveFaultedStatusId,
@@ -107,6 +106,7 @@ import {
 } from '../services/services-internal-api';
 import {
     CommaText,
+    Decimal,
     Integer,
     MultiEvent,
     PriceOrRemainder,

@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { Decimal } from 'decimal.js-light';
+import { Decimal } from '../sys/internal-api';
 import { AmendOrderResponseDataMessage, DataDefinition, DataMessage, DataMessageTypeId, OrderRequestTypeId } from './common/adi-common-internal-api';
 import { OrderRequestDataItem } from './order-request-data-item';
 

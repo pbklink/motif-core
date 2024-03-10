@@ -61,6 +61,7 @@ export {
     ComparisonResult,
     DateOrDateTime,
     DayOfWeek,
+    Decimal,
     Guid,
     IndexSignatureHack,
     IndexedRecord,

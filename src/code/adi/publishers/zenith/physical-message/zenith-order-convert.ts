@@ -4,8 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { Decimal } from 'decimal.js-light';
-import { AssertInternalError, ErrorCode, newUndefinableDecimal, UnreachableCaseError, ZenithDataError } from '../../../../sys/internal-api';
+import { AssertInternalError, ErrorCode, newDecimal, newUndefinableDecimal, UnreachableCaseError, ZenithDataError } from '../../../../sys/internal-api';
 import {
     AurcChangeTypeId, BestMarketOrderRoute, FixOrderRoute,
     IvemClassId, MarketBoardId, MarketId, MarketOrderRoute,
@@ -86,7 +85,7 @@ export namespace ZenithOrderConvert {
             if (order.AveragePrice === null) {
                 change.averagePrice = null;
             } else {
-                change.averagePrice = new Decimal(order.AveragePrice);
+                change.averagePrice = newDecimal(order.AveragePrice);
             }
         }
     }
@@ -157,7 +156,7 @@ export namespace ZenithOrderConvert {
                     change.currentBrokerage = currentFeesAsDecimal.brokerage;
                     change.currentTax = currentFeesAsDecimal.tax;
                 }
-                change.currentValue = new Decimal(order.CurrentValue);
+                change.currentValue = newDecimal(order.CurrentValue);
                 change.createdDate = createdDate;
                 change.updatedDate = updatedDate;
                 change.children = order.Children;
@@ -208,7 +207,7 @@ export namespace ZenithOrderConvert {
             value: ZenithProtocol.TradingController.PlaceOrder.ManagedFundDetails) {
         // order.styleId = OrderStyleId.ManagedFund; // done in ManagedFundOrder class
         order.unitTypeId = ZenithConvert.OrderPriceUnitType.toId(value.UnitType);
-        order.unitAmount = new Decimal(value.UnitAmount);
+        order.unitAmount = newDecimal(value.UnitAmount);
         order.managedFundCurrency = value.Currency;
         order.physicalDelivery = value.PhysicalDelivery;
     }

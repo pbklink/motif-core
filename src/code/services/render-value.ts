@@ -4,7 +4,6 @@
  * License: motionite.trade/license/motif
  */
 
-import { Decimal } from 'decimal.js-light';
 import {
     ActiveFaultedStatusId,
     DayTradesDataItem,
@@ -19,6 +18,7 @@ import {
 } from "../adi/adi-internal-api";
 import {
     CorrectnessId,
+    Decimal,
     Integer,
     PriceOrRemainder,
     SourceTzOffsetDate,

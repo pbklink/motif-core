@@ -4,10 +4,10 @@
  * License: motionite.trade/license/motif
  */
 
-import { Decimal } from 'decimal.js-light';
 import { StringId, Strings } from '../res/res-internal-api';
 import {
     CorrectnessId,
+    Decimal,
     EnumInfoOutOfOrderError,
     ErrorCode,
     FieldDataTypeId,
@@ -21,7 +21,8 @@ import {
     isDecimalEqual,
     isSamePossiblyUndefinedArray,
     isUndefinableDecimalEqual,
-    logger
+    logger,
+    newDecimal
 } from "../sys/internal-api";
 import { Account } from './account';
 import { BrokerageAccountRecord } from './brokerage-account-record';
@@ -1167,11 +1168,11 @@ export namespace Order {
             marketId: undefined,
             marketBoardId: undefined,
             currencyId: Currency.nullCurrencyId,
-            estimatedBrokerage: new Decimal(0),
-            currentBrokerage: new Decimal(0),
-            estimatedTax: new Decimal(0),
-            currentTax: new Decimal(0),
-            currentValue: new Decimal(0),
+            estimatedBrokerage: newDecimal(0),
+            currentBrokerage: newDecimal(0),
+            estimatedTax: newDecimal(0),
+            currentTax: newDecimal(0),
+            currentValue: newDecimal(0),
             createdDate: SourceTzOffsetDateTime.nullDateTime,
             updatedDate: SourceTzOffsetDateTime.nullDateTime,
             children: undefined,
@@ -1193,7 +1194,7 @@ export namespace Order {
             expiryDate: undefined,
             shortSellTypeId: undefined,
             unitTypeId: OrderPriceUnitType.nullId,
-            unitAmount: new Decimal(0),
+            unitAmount: newDecimal(0),
             managedFundCurrency: undefined,
             physicalDelivery: undefined,
             route: new MarketOrderRoute(MarketInfo.nullId),

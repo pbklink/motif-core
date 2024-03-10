@@ -4,7 +4,6 @@
  * License: motionite.trade/license/motif
  */
 
-import { Decimal } from 'decimal.js-light';
 import {
     AdiService,
     CallOrPutId,
@@ -19,11 +18,13 @@ import { CallPut } from '../../../services/services-internal-api';
 import {
     AssertInternalError,
     Badness,
-    Integer, LockOpenListItem,
+    Integer,
+    LockOpenListItem,
     MultiEvent,
     UnreachableCaseError,
     UsableListChangeTypeId,
-    logger
+    logger,
+    newDecimal
 } from '../../../sys/internal-api';
 import { TextFormatterService } from '../../../text-format/text-format-internal-api';
 import {
@@ -355,7 +356,7 @@ export class CallPutFromUnderlyingTableRecordSource extends SingleDataItemTableR
                     logger.logDataError('CPFUTSCCPFKASC44477', symbolInfo.litIvemId.name);
                     return undefined;
                 } else {
-                    const contractMultiplier = new Decimal(symbolInfoContractMultipler);
+                    const contractMultiplier = newDecimal(symbolInfoContractMultipler);
                     // currently do not need underlyingIvemId or underlyingIsIndex
                     return new CallPut(
                         exercisePrice,

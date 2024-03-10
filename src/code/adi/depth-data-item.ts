@@ -4,24 +4,24 @@
  * License: motionite.trade/license/motif
  */
 
-import { Decimal } from 'decimal.js-light';
 import {
-    assert,
     AssertInternalError,
     BinarySearchResult,
     ComparisonResult,
-    earliestBinarySearch,
+    Decimal,
     ErrorCode,
     Integer,
-    isArrayEqualUniquely,
-    isDecimalEqual,
-    isDecimalGreaterThan,
-    moveElementInArray,
     MultiEvent,
     UnexpectedCaseError,
     UnreachableCaseError,
     ValueRecentChangeTypeId,
-    ZenithDataError
+    ZenithDataError,
+    assert,
+    earliestBinarySearch,
+    isArrayEqualUniquely,
+    isDecimalEqual,
+    isDecimalGreaterThan,
+    moveElementInArray
 } from "../sys/internal-api";
 import {
     DataDefinition,

@@ -4,11 +4,11 @@
  * License: motionite.trade/license/motif
  */
 
-import { Decimal } from 'decimal.js-light';
 import {
     ComparableList,
     compareInteger,
     ComparisonResult,
+    Decimal,
     Guid,
     Integer,
     Logger,

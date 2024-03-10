@@ -4,8 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { Decimal } from 'decimal.js-light';
-import { Integer } from './xiltyix-sysutils';
+import { Integer, Decimal } from './xiltyix-sysutils';
 
 // export {
 //     BooleanOrUndefined,

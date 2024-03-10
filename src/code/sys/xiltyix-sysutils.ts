@@ -9,6 +9,7 @@ export {
     ComparisonResult,
     DateOrDateTime,
     DayOfWeek,
+    Decimal,
     Err,
     Guid,
     IndexSignatureHack,
