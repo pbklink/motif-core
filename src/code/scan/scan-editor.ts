@@ -29,13 +29,13 @@ import {
     Guid,
     Integer,
     LockOpenListItem,
-    Logger,
     MultiEvent,
     Ok,
     Result,
     UnreachableCaseError,
     getErrorMessage,
     isUndefinableArrayEqual,
+    logger,
     newGuid
 } from '../sys/internal-api';
 import { ScanConditionSet } from './condition-set/internal-api';
@@ -1159,7 +1159,7 @@ export class ScanEditor extends OpenableScanEditor {
             }
             const progress = decodedError.progress;
             msg += ` Count: ${progress.tupleNodeCount} Depth: ${progress.tupleNodeDepth}`;
-            Logger.logWarning(msg);
+            logger.logWarning(msg);
             if (defaultIfError) {
                 criteria = ScanEditor.DefaultCriteria;
             }
@@ -1189,7 +1189,7 @@ export class ScanEditor extends OpenableScanEditor {
                 }
                 const progress = decodedError.progress;
                 msg += ` Count: ${progress.tupleNodeCount} Depth: ${progress.tupleNodeDepth}`;
-                Logger.logWarning(msg);
+                logger.logWarning(msg);
                 if (defaultIfError) {
                     rank = ScanEditor.DefaultRank;
                 }

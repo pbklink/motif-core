@@ -16,6 +16,7 @@ import {
     SysTick,
     UnreachableCaseError,
     getErrorMessage,
+    logger,
     mSecsPerSec,
     secsPerMin
 } from '../../sys/internal-api';
@@ -59,7 +60,7 @@ export abstract class AdiPublisherSubscriptionManager {
     protected get subscriptionByMessageMap() { return this._subscriptionByMessageMap; }
 
     finalise() {
-        Logger.logInfo('PublisherRequestEngine finalising');
+        logger.logInfo('PublisherRequestEngine finalising');
 
         this._highPrioritySendQueue.clear();
         this._normalSendQueue.clear();
@@ -411,7 +412,7 @@ export abstract class AdiPublisherSubscriptionManager {
 
                     const exists = this._subscriptionByDataItemIdMap.has(subscription.dataItemId);
                     if (!exists) {
-                        Logger.log(Logger.LevelId.Warning, 'TPariSessSvc.ProcessResponseWaitList - Could not find subscription: '
+                        logger.log(Logger.LevelId.Warning, 'TPariSessSvc.ProcessResponseWaitList - Could not find subscription: '
                             + subscription.dataDefinition.description);
                     } else {
                         // assume Unsubscribe worked. Do not notify as error

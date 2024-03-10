@@ -20,10 +20,10 @@ import {
     AssertInternalError,
     Badness,
     Integer, LockOpenListItem,
-    Logger,
     MultiEvent,
     UnreachableCaseError,
-    UsableListChangeTypeId
+    UsableListChangeTypeId,
+    logger
 } from '../../../sys/internal-api';
 import { TextFormatterService } from '../../../text-format/text-format-internal-api';
 import {
@@ -274,20 +274,20 @@ export class CallPutFromUnderlyingTableRecordSource extends SingleDataItemTableR
                     const existingCallPut = newRecordList[existingIndex];
                     const callOrPutId = symbolDetail.callOrPutId;
                     if (callOrPutId === undefined) {
-                        Logger.logDataError('CPFUTSUCPFSU22995', symbolDetail.litIvemId.name);
+                        logger.logDataError('CPFUTSUCPFSU22995', symbolDetail.litIvemId.name);
                     } else {
                         const litIvemId = symbolDetail.litIvemId;
                         switch (callOrPutId) {
                             case CallOrPutId.Call:
                                 if (existingCallPut.callLitIvemId !== undefined) {
-                                    Logger.logDataError('CPUATSUPCPFSC90445', `${existingCallPut.callLitIvemId.name} ${litIvemId.name}`);
+                                    logger.logDataError('CPUATSUPCPFSC90445', `${existingCallPut.callLitIvemId.name} ${litIvemId.name}`);
                                 } else {
                                     existingCallPut.callLitIvemId = litIvemId;
                                 }
                                 break;
                             case CallOrPutId.Put:
                                 if (existingCallPut.putLitIvemId !== undefined) {
-                                    Logger.logDataError('CPUATSUPCPFSP33852', `${existingCallPut.putLitIvemId.name} ${litIvemId.name}`);
+                                    logger.logDataError('CPUATSUPCPFSP33852', `${existingCallPut.putLitIvemId.name} ${litIvemId.name}`);
                                 } else {
                                     existingCallPut.putLitIvemId = litIvemId;
                                 }
@@ -307,12 +307,12 @@ export class CallPutFromUnderlyingTableRecordSource extends SingleDataItemTableR
     private createKeyFromSymbolDetail(symbolInfo: SymbolsDataItem.Record): CallPut.Key | undefined {
         const exercisePrice = symbolInfo.strikePrice;
         if (exercisePrice === undefined) {
-            Logger.logDataError('CPFUTSCKFSP28875', symbolInfo.litIvemId.name);
+            logger.logDataError('CPFUTSCKFSP28875', symbolInfo.litIvemId.name);
             return undefined;
         } else {
             const expiryDate = symbolInfo.expiryDate;
             if (expiryDate === undefined) {
-                Logger.logDataError('CPFUTSCKFSD18557', symbolInfo.litIvemId.name);
+                logger.logDataError('CPFUTSCKFSD18557', symbolInfo.litIvemId.name);
                 return undefined;
             } else {
                 const litId = symbolInfo.litIvemId.litId;
@@ -327,7 +327,7 @@ export class CallPutFromUnderlyingTableRecordSource extends SingleDataItemTableR
         const litId = key.litId;
         const callOrPutId = symbolInfo.callOrPutId;
         if (callOrPutId === undefined) {
-            Logger.logDataError('CPFUTSCCPFKASCP22887', symbolInfo.litIvemId.name);
+            logger.logDataError('CPFUTSCCPFKASCP22887', symbolInfo.litIvemId.name);
             return undefined;
         } else {
             const litIvemId = symbolInfo.litIvemId;
@@ -345,14 +345,14 @@ export class CallPutFromUnderlyingTableRecordSource extends SingleDataItemTableR
             }
             const symbolInfoExerciseTypeId = symbolInfo.exerciseTypeId;
             if (symbolInfoExerciseTypeId === undefined) {
-                Logger.logDataError('CPFUTSCCPFKASE99811', symbolInfo.name);
+                logger.logDataError('CPFUTSCCPFKASE99811', symbolInfo.name);
                 return undefined;
             } else {
                 const exerciseTypeId = symbolInfoExerciseTypeId;
 
                 const symbolInfoContractMultipler = symbolInfo.contractSize;
                 if (symbolInfoContractMultipler === undefined) {
-                    Logger.logDataError('CPFUTSCCPFKASC44477', symbolInfo.litIvemId.name);
+                    logger.logDataError('CPFUTSCCPFKASC44477', symbolInfo.litIvemId.name);
                     return undefined;
                 } else {
                     const contractMultiplier = new Decimal(symbolInfoContractMultipler);

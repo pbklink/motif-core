@@ -9,12 +9,12 @@ import {
     AssertInternalError,
     ErrorCode,
     Integer,
-    Logger,
     MapKey,
     SysTick,
     UnexpectedCaseError,
     UnreachableCaseError,
     ZenithDataError,
+    logger,
     newNowDate
 } from "../../../sys/internal-api";
 import {
@@ -523,14 +523,14 @@ export class ZenithPublisherSubscriptionManager extends AdiPublisherSubscription
                 const nowTime = newNowDate();
                 const nowTimeStr = ZenithPublisherSubscriptionManager.logTimeFormat.format(nowTime);
                 const directionStr = incoming ? '<-- ' : '--> ';
-                Logger.logDebug(`${nowTimeStr} Zenith ${directionStr}${message}`, 120);
+                logger.logDebug(`${nowTimeStr} Zenith ${directionStr}${message}`, 120);
                 return;
             }
             case ZenithPublisherSubscriptionManager.LogLevelId.Full: {
                 const nowTime = newNowDate();
                 const nowTimeStr = ZenithPublisherSubscriptionManager.logTimeFormat.format(nowTime);
                 const directionStr = incoming ? '<-- ' : '--> ';
-                Logger.logDebug(`${nowTimeStr} Zenith ${directionStr}${message}`);
+                logger.logDebug(`${nowTimeStr} Zenith ${directionStr}${message}`);
                 return;
             }
             default:

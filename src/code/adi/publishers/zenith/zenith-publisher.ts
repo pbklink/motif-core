@@ -8,6 +8,7 @@ import {
     AssertInternalError,
     Integer,
     Logger,
+    logger,
     mSecsPerHour,
     mSecsPerMin,
     mSecsPerSec,
@@ -339,7 +340,7 @@ export class ZenithPublisher extends AdiPublisher {
         this._dataMessages.add(dataMessage);
         if (loggerAsWell) {
             const loggerText = `Zenith Publisher: ${text}`;
-            Logger.log(levelId, loggerText);
+            logger.log(levelId, loggerText);
         }
     }
 

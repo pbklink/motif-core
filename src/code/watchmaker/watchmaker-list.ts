@@ -31,12 +31,12 @@ import {
     KeyedRecord,
     LockOpenListItem,
     LockOpenManager,
-    Logger,
     MultiEvent,
     Ok,
     RecordList,
     Result,
-    ValueRecentChangeTypeId
+    ValueRecentChangeTypeId,
+    logger
 } from "../sys/internal-api";
 
 export class WatchmakerList implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>, KeyedCorrectnessSettableListItem, RankScoredLitIvemIdList, RankedLitIvemIdListDirectoryItem {
@@ -592,7 +592,7 @@ export class WatchmakerList implements LockOpenListItem<RankedLitIvemIdListDirec
         if (dataItem.error) {
             this._errorText = dataItem.errorText;
             this.setSyncStatusId(WatchmakerList.SyncStatusId.Error);
-            Logger.logDataError('WLPCOSR60113', dataItem.errorText );
+            logger.logDataError('WLPCOSR60113', dataItem.errorText );
         } else {
             this.setSyncStatusId(WatchmakerList.SyncStatusId.Error);
 

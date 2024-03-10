@@ -12,7 +12,6 @@ import {
     ErrorCode,
     FieldDataTypeId,
     Integer,
-    Logger,
     MapKey,
     MultiEvent,
     SourceTzOffsetDateTime,
@@ -21,7 +20,8 @@ import {
     isArrayEqualUniquely,
     isDecimalEqual,
     isSamePossiblyUndefinedArray,
-    isUndefinableDecimalEqual
+    isUndefinableDecimalEqual,
+    logger
 } from "../sys/internal-api";
 import { Account } from './account';
 import { BrokerageAccountRecord } from './brokerage-account-record';
@@ -663,7 +663,7 @@ export class Order implements BrokerageAccountRecord {
         if (orderStatus === undefined) {
             statusAllowIds = [];
             statusReasonIds = [];
-            Logger.logError(`OrderStatus not available for status: ${this.status} on account: ${this._account.id}`);
+            logger.logError(`OrderStatus not available for status: ${this.status} on account: ${this._account.id}`);
         } else {
             statusAllowIds = orderStatus.allowIds;
             statusReasonIds = orderStatus.reasonIds;

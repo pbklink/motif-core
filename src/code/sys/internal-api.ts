@@ -35,7 +35,6 @@ export * from './keyed-record';
 export * from './lock-open-list';
 export * from './lock-open-list-item';
 export * from './lock-open-manager';
-export * from './logger';
 export * from './mapped-comparable-list';
 export * from './modifier-comparable-list';
 export * from './modifier-key';
@@ -72,12 +71,14 @@ export {
     JsonValueArray,
     Line,
     ListChangeTypeId,
+    Logger,
     MapKey,
     Mappable,
     PickEnum,
     PickExcludedEnum,
     RGB,
     Rect,
-    TimeSpan
+    TimeSpan,
+    logger
 } from './xiltyix-sysutils';
 

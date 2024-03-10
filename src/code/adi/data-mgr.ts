@@ -13,6 +13,7 @@ import {
     concatenateArrayUniquely,
     Integer,
     Logger,
+    logger,
     MapKey,
     mSecsPerSec,
     NotImplementedError,
@@ -172,10 +173,10 @@ export class DataMgr {
     }
 
     deletePublishers(): void {
-        Logger.log(Logger.LevelId.Info, 'Deleting Publishers');
+        logger.log(Logger.LevelId.Info, 'Deleting Publishers');
 
         if (this.dataItemCount > 0) {
-            Logger.log(Logger.LevelId.Warning, 'DataItemsStore is not empty (DF).  DataItemCount = ' + this.dataItemCount.toString(10));
+            logger.log(Logger.LevelId.Warning, 'DataItemsStore is not empty (DF).  DataItemCount = ' + this.dataItemCount.toString(10));
         }
 
         this._publishers.length = 0;
@@ -630,7 +631,7 @@ export class DataMgr {
                 const cond3 = !this._permanentDependsOnChannels.includes(dataItem.channelId);
 
                 if (cond1 && cond2 && cond3) {
-                    Logger.log(Logger.LevelId.Warning, 'Orphaned DataItem: ' + dataItem.definition.description);
+                    logger.log(Logger.LevelId.Warning, 'Orphaned DataItem: ' + dataItem.definition.description);
                     this._orphanedDataItemList.add(dataItem);
                     orphanCount++;
                 }
@@ -640,7 +641,7 @@ export class DataMgr {
         this._orphanedDataItemList.deactivateDataItems();
 
         if (orphanCount > 0) {
-            Logger.log(Logger.LevelId.Warning, 'Number of Orphaned DataItems: ' + orphanCount.toString(10));
+            logger.log(Logger.LevelId.Warning, 'Number of Orphaned DataItems: ' + orphanCount.toString(10));
         }
     }
 

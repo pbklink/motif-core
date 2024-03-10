@@ -104,6 +104,8 @@ import { Line } from '@xilytix/sysutils';
 import { LinedHoverCell } from '@xilytix/revgrid';
 import { ListChangedTypeId } from '@xilytix/revgrid';
 import { ListChangeTypeId } from '@xilytix/sysutils';
+import { Logger } from '@xilytix/sysutils';
+import { logger } from '@xilytix/sysutils';
 import { MapKey } from '@xilytix/sysutils';
 import { Mappable } from '@xilytix/sysutils';
 import { minsPerDay } from '@xilytix/sysutils';
@@ -16423,83 +16425,9 @@ export class LockOpenNotificationChannelList extends LockOpenList<LockOpenNotifi
     load(channels: readonly NotificationChannel[], settingsSpecified: boolean): void;
 }
 
-// @public (undocumented)
-export namespace Logger {
-    let // (undocumented)
-    telemetryLogEvent: Logger.LogEvent | undefined;
-    // (undocumented)
-    export function assert(condition: boolean, text: string): void;
-    // (undocumented)
-    export function assertError(text: string): void;
-    // (undocumented)
-    export namespace Level {
-        // (undocumented)
-        export type Id = LevelId;
-        const // (undocumented)
-        idCount: number;
-        // (undocumented)
-        export function idToDisplay(id: Id): string;
-        // (undocumented)
-        export function idToDisplayId(id: Id): StringId;
-        // (undocumented)
-        export function idToName(id: Id): string;
-        // (undocumented)
-        export function initialise(): void;
-    }
-    // (undocumented)
-    export const enum LevelId {
-        // (undocumented)
-        Debug = 0,
-        // (undocumented)
-        Error = 3,
-        // (undocumented)
-        Info = 1,
-        // (undocumented)
-        Severe = 4,
-        // (undocumented)
-        Warning = 2
-    }
-    // (undocumented)
-    export function log(levelId: Logger.LevelId, text: string): void;
-    // (undocumented)
-    export function logConfigError(code: string, text: string, maxTextLength?: number, telemetryExtra?: string): void;
-    // (undocumented)
-    export function logDataError(code: string, text: string, maxTextLength?: number, telemetryExtra?: string): void;
-    // (undocumented)
-    export function logDebug(text: string, maxTextLength?: number, telemetryAndExtra?: string): void;
-    // (undocumented)
-    export function logError(text: string, maxTextLength?: number, telemetryExtra?: string): void;
-    // (undocumented)
-    export type LogEvent = (this: void, levelId: LevelId, text: string, extraData: string | undefined) => void;
-    // (undocumented)
-    export function logExternalError(code: string, text: string, maxTextLength?: number, telemetryExtra?: string): void;
-    // (undocumented)
-    export function logInfo(text: string, telemetryAndExtra?: string): void;
-    // (undocumented)
-    export function logInternalError(code: string, text: string, maxTextLength?: number, telemetryExtra?: string): void;
-    // (undocumented)
-    export function logLayoutError(code: string, text: string, maxTextLength?: number, telemetryExtra?: string): void;
-    // (undocumented)
-    export function logPersistError(code: string, text?: string, maxTextLength?: number, telemetryExtra?: string): undefined;
-    // (undocumented)
-    export function logSevere(text: string, maxTextLength?: number, telemetryExtra?: string): void;
-    // (undocumented)
-    export function logWarning(text: string, telemetryExtra?: string): void;
-    // (undocumented)
-    export function notifyTelemetry(levelId: Logger.LevelId, text: string, extraData: string | undefined): void;
-    // (undocumented)
-    export class UnreachableCaseError extends Error {
-        constructor(code: string, value: never);
-    }
-}
+export { Logger }
 
-// Warning: (ae-internal-missing-underscore) The name "LoggerModule" should be prefixed with an underscore because the declaration is marked as @internal
-//
-// @internal (undocumented)
-export namespace LoggerModule {
-    // (undocumented)
-    export function initialiseStatic(): void;
-}
+export { logger }
 
 // Warning: (ae-missing-release-tag) "LowLevelTopShareholdersDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //

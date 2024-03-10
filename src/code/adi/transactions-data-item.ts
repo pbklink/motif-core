@@ -8,7 +8,7 @@ import {
     assert,
     Badness,
     Integer,
-    Logger,
+    logger,
     MultiEvent,
     NotImplementedError,
     UnexpectedTypeError,
@@ -143,7 +143,7 @@ export class TransactionsDataItem extends PublisherSubscriptionDataItem {
             );
 
             if (index >= 0) {
-                Logger.logWarning(
+                logger.logWarning(
                     'Existing order already exists in array. ID:13522165622'
                 );
             } else {

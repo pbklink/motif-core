@@ -32,7 +32,6 @@ import {
     Badness,
     EnumInfoOutOfOrderError,
     Integer,
-    Logger,
     MultiEvent,
     ResourceBadness,
     SourceTzOffsetDateTime,
@@ -40,6 +39,7 @@ import {
     UsableListChangeTypeId,
     compareInteger,
     isDateEqual,
+    logger,
     newNowDate,
     newNullDate,
     newUndefinableDate
@@ -808,7 +808,7 @@ export class LitIvemIdPriceVolumeSequenceHistory extends SequenceHistory {
                     // extremely unlikely but possible - use UTC
                     offset = 0;
                     if (!this._resortedToUtcOffsetLogged) {
-                        Logger.logWarning('LitIvemIdPriceVolumeSequenceHistory resorted to UTC offset: ' + this._litIvemId.name);
+                        logger.logWarning('LitIvemIdPriceVolumeSequenceHistory resorted to UTC offset: ' + this._litIvemId.name);
                         this._resortedToUtcOffsetLogged = true;
                     }
                 }

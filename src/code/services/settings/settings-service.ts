@@ -5,7 +5,7 @@
  */
 
 import { DataEnvironmentId } from '../../adi/adi-internal-api';
-import { AssertInternalError, Err, Integer, JsonElement, JsonElementErr, Logger, MultiEvent, Ok, Result, getErrorMessage, mSecsPerSec } from '../../sys/internal-api';
+import { AssertInternalError, Err, Integer, JsonElement, JsonElementErr, Logger, MultiEvent, Ok, Result, getErrorMessage, logger, mSecsPerSec } from '../../sys/internal-api';
 import { AppStorageService } from '../app-storage-service';
 import { IdleService } from '../idle-service';
 import { KeyValueStore } from '../key-value-store/services-key-value-store-internal-api';
@@ -97,7 +97,7 @@ export class SettingsService implements SaveManagement {
             MotifServicesService.masterApplicationEnvironment
         );
         if (getMasterSettingsResult.isErr()) {
-            Logger.logWarning(`Master Settings error: "${getMasterSettingsResult.error}". Using defaults`);
+            logger.logWarning(`Master Settings error: "${getMasterSettingsResult.error}". Using defaults`);
             masterSettings.load(undefined, undefined);
             await this.saveMasterSettings();
         } else {
@@ -106,13 +106,13 @@ export class SettingsService implements SaveManagement {
                 masterSettings.load(undefined, undefined);
                 await this.saveMasterSettings();
             } else {
-                Logger.logInfo('Loading Master Settings');
+                logger.logInfo('Loading Master Settings');
                 const rootElement = new JsonElement();
                 const parseResult = rootElement.parse(gottenMasterSettings);
                 if (parseResult.isOk()) {
                     masterSettings.load(rootElement, undefined);
                 } else {
-                    Logger.logWarning(`Could not parse saved master settings. Using defaults. (${JsonElementErr.errorIdToCode(parseResult.error)})`);
+                    logger.logWarning(`Could not parse saved master settings. Using defaults. (${JsonElementErr.errorIdToCode(parseResult.error)})`);
                     masterSettings.load(undefined, undefined);
                     await this.saveMasterSettings();
                 }
@@ -139,7 +139,7 @@ export class SettingsService implements SaveManagement {
                 // Put group elements into loadingGroups array
                 const groupElementsResult = userElement.tryGetElementArray(SettingsService.JsonName.Groups);
                 if (groupElementsResult.isErr()) {
-                    Logger.logWarning('Settings: User element groups error. Index: ' + JsonElementErr.errorIdToCode(groupElementsResult.error));
+                    logger.logWarning('Settings: User element groups error. Index: ' + JsonElementErr.errorIdToCode(groupElementsResult.error));
                 } else {
                     const groupElements = groupElementsResult.value;
                     const maxCount = groupElements.length;
@@ -147,11 +147,11 @@ export class SettingsService implements SaveManagement {
                     for (const groupElement of groupElements) {
                         const nameAndTypeIdResult = SettingsGroup.tryGetNameAndTypeId(groupElement);
                         if (nameAndTypeIdResult.isErr()) {
-                            Logger.logWarning('Settings: Error loading user element: ' + nameAndTypeIdResult.error);
+                            logger.logWarning('Settings: Error loading user element: ' + nameAndTypeIdResult.error);
                         } else {
                             const { name, typeId } = nameAndTypeIdResult.value;
                             if (SettingsService.LoadingGroup.arrayIncludesName(loadingGroups, loadingGroupCount, name)) {
-                                Logger.logWarning('Settings: Duplicate user group element name: ' + name);
+                                logger.logWarning('Settings: Duplicate user group element name: ' + name);
                             } else {
                                 const loadingGroup: SettingsService.LoadingGroup = {
                                     name,
@@ -170,20 +170,20 @@ export class SettingsService implements SaveManagement {
                 // Get group elements and either match with existing in loadingGroups array or add as a new group
                 const groupElementsResult = operatorElement.tryGetElementArray(SettingsService.JsonName.Groups);
                 if (groupElementsResult.isErr()) {
-                    Logger.logWarning('Settings: Operator element groups error. Index: ' + JsonElementErr.errorIdToCode(groupElementsResult.error));
+                    logger.logWarning('Settings: Operator element groups error. Index: ' + JsonElementErr.errorIdToCode(groupElementsResult.error));
                 } else {
                     const groupElements = groupElementsResult.value;
                     for (const groupElement of groupElements) {
                         const nameAndTypeIdResult = SettingsGroup.tryGetNameAndTypeId(groupElement);
                         if (nameAndTypeIdResult.isErr()) {
-                            Logger.logWarning('Settings: Error loading operator element: ' + nameAndTypeIdResult.error);
+                            logger.logWarning('Settings: Error loading operator element: ' + nameAndTypeIdResult.error);
                         } else {
                             const { name, typeId } = nameAndTypeIdResult.value;
                             const index = SettingsService.LoadingGroup.indexOfNameInArray(loadingGroups, loadingGroupCount, name);
                             if (index >= 0) {
                                 const loadingGroup = loadingGroups[index];
                                 if (loadingGroup.typeId !== typeId) {
-                                    Logger.logWarning('Settings: Operator and User typeId do not match: ' + name);
+                                    logger.logWarning('Settings: Operator and User typeId do not match: ' + name);
                                 } else {
                                     loadingGroup.operatorElement = groupElement;
                                 }
@@ -213,11 +213,11 @@ export class SettingsService implements SaveManagement {
                 const name = loadingGroup.name;
                 const group = this.getRegisteredGroup(name);
                 if (group === undefined) {
-                    Logger.logWarning('Settings: Loading group is not registered: ' + name);
+                    logger.logWarning('Settings: Loading group is not registered: ' + name);
                 } else {
                     const typeId = loadingGroup.typeId;
                     if (group.typeId !== typeId) {
-                        Logger.logWarning(
+                        logger.logWarning(
                             `Settings: Loading group type does not match registered group type: ${name},` +
                             `${SettingsGroup.Type.idToName(typeId)}, ${SettingsGroup.Type.idToName(group.typeId)},`
                         );
@@ -296,7 +296,7 @@ export class SettingsService implements SaveManagement {
             }
         } else {
             if (!this._lastSaveFailed) {
-                Logger.log(Logger.LevelId.Warning, `${SaveManagement.InitiateReason.idToName(initiateReasonId)} save settings error: ${getErrorMessage(result.error)}`);
+                logger.log(Logger.LevelId.Warning, `${SaveManagement.InitiateReason.idToName(initiateReasonId)} save settings error: ${getErrorMessage(result.error)}`);
                 this._lastSaveFailed = true;
             }
         }

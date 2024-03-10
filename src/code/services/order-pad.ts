@@ -57,7 +57,7 @@ import {
     isUndefinableDecimalEqual,
     Json,
     JsonElement,
-    Logger,
+    logger,
     MultiEvent,
     newDate,
     newUndefinableDate,
@@ -1433,7 +1433,7 @@ export class OrderPad {
                     return detail;
                 }
             }
-            Logger.logWarning(`OrderPad.findBestSymbolDetail did not find a match: ${routedIvemId.name}`);
+            logger.logWarning(`OrderPad.findBestSymbolDetail did not find a match: ${routedIvemId.name}`);
             return details[0];
         }
     }
@@ -2325,7 +2325,7 @@ export class OrderPad {
                             },
                             (reason) => {
                                 const errorText = getErrorMessage(reason);
-                                Logger.logError(`OrderPad.internalSetAccountId: Unexpected reject: ${errorText}`);
+                                logger.logError(`OrderPad.internalSetAccountId: Unexpected reject: ${errorText}`);
                             }
                         );
                     }
@@ -2641,7 +2641,7 @@ export class OrderPad {
                             },
                             (reason) => {
                                 const errorText = getErrorMessage(reason);
-                                Logger.logError(`OrderPad.internalSetDestinationAccountId: Unexpected reject: ${errorText}`);
+                                logger.logError(`OrderPad.internalSetDestinationAccountId: Unexpected reject: ${errorText}`);
                             }
                         );
                     }
@@ -2723,7 +2723,7 @@ export class OrderPad {
                         this.beginChanges();
                         try {
                             const errorText = getErrorMessage(reason);
-                            Logger.logError(`OrderPad: Error retrieving price step for: ${detail.litIvemId.name} Error: ${errorText}`);
+                            logger.logError(`OrderPad: Error retrieving price step for: ${detail.litIvemId.name} Error: ${errorText}`);
                             this._priceStepperRetrieveError = errorText;
                             this.flagFieldChanged(OrderPad.FieldId.LimitValue);
                         } finally {

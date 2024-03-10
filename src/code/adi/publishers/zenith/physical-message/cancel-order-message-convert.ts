@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, ErrorCode, Logger, ZenithDataError } from '../../../../sys/internal-api';
+import { AssertInternalError, ErrorCode, logger, ZenithDataError } from '../../../../sys/internal-api';
 import {
     AdiPublisherRequest, AdiPublisherSubscription, CancelOrderRequestDataDefinition,
     CancelOrderResponseDataMessage
@@ -38,7 +38,7 @@ export namespace CancelOrderMessageConvert {
         };
 
         const messageText = JSON.stringify(result);
-        Logger.logInfo('Cancel Order Request', messageText);
+        logger.logInfo('Cancel Order Request', messageText);
 
         return result;
     }
@@ -47,7 +47,7 @@ export namespace CancelOrderMessageConvert {
         actionId: ZenithConvert.MessageContainer.Action.Id) {
 
         const messageText = JSON.stringify(message);
-        Logger.logInfo('Cancel Order Response', messageText);
+        logger.logInfo('Cancel Order Response', messageText);
 
         if (message.Controller !== ZenithProtocol.MessageContainer.Controller.Trading) {
             throw new ZenithDataError(ErrorCode.COMCPMA6744444883, message.Controller);

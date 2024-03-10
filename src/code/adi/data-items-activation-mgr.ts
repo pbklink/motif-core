@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { assert, AssertInternalError, Logger, SysTick } from '../sys/internal-api';
+import { assert, AssertInternalError, Logger, logger, SysTick } from '../sys/internal-api';
 import { DataItemId } from './common/adi-common-internal-api';
 import { DataItem } from './data-item/internal-api';
 
@@ -48,7 +48,7 @@ export class DataItemsActivationMgr {
                     + this._nrActiveItems.toString(10)
                     + ' of '
                     + this._activeSubscriptionsLimit.toString(10);
-                Logger.log(Logger.LevelId.Warning, msg);
+                logger.log(Logger.LevelId.Warning, msg);
             }
         }
     }
@@ -160,7 +160,7 @@ export class DataItemsActivationMgr {
                     + this._nrActiveItems.toString(10)
                     + ' of '
                     + this._activeSubscriptionsLimit.toString(10);
-                Logger.log(Logger.LevelId.Warning, logMsg);
+                logger.log(Logger.LevelId.Warning, logMsg);
             }
         }
     }

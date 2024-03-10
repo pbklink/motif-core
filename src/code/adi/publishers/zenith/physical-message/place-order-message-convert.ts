@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, ErrorCode, Logger, newUndefinableDecimal, ZenithDataError } from '../../../../sys/internal-api';
+import { AssertInternalError, ErrorCode, logger, newUndefinableDecimal, ZenithDataError } from '../../../../sys/internal-api';
 import {
     AdiPublisherRequest,
     AdiPublisherSubscription,
@@ -45,7 +45,7 @@ export namespace PlaceOrderMessageConvert {
         };
 
         const messageText = JSON.stringify(result);
-        Logger.logInfo('Place Order Request', messageText);
+        logger.logInfo('Place Order Request', messageText);
 
         return result;
     }
@@ -54,7 +54,7 @@ export namespace PlaceOrderMessageConvert {
         actionId: ZenithConvert.MessageContainer.Action.Id) {
 
         const messageText = JSON.stringify(message);
-        Logger.logInfo('Place Order Response', messageText);
+        logger.logInfo('Place Order Response', messageText);
 
         if (message.Controller !== ZenithProtocol.MessageContainer.Controller.Trading) {
             throw new ZenithDataError(ErrorCode.POMCPMC4444838484, message.Controller);

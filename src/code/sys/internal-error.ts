@@ -5,7 +5,7 @@
  */
 
 import { I18nStrings, StringId } from '../res/res-internal-api';
-import { Logger } from './logger';
+import { logger } from './xiltyix-sysutils';
 import { ThrowableError } from './throwable-result';
 
 /** @public */
@@ -15,7 +15,7 @@ export abstract class BaseInternalError extends ThrowableError {
             I18nStrings.getStringPlusEnglish(errorTypeDescription) + `: ${code}`
             :
             I18nStrings.getStringPlusEnglish(errorTypeDescription) + `: ${code}: ${message}`);
-        Logger.logError(this.message, 120);
+        logger.logError(this.message, 120);
     }
 }
 

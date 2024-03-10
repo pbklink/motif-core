@@ -21,12 +21,12 @@ import {
     AssertInternalError,
     GridRecordInvalidatedValue,
     Integer,
-    Logger,
     UnreachableCaseError,
     ValueRecentChangeTypeId,
     compareDecimal,
     compareInteger,
     isArrayEqualUniquely,
+    logger,
     uniqueElementArraysOverlap
 } from "../../../../sys/internal-api";
 import { DepthRecord } from '../depth-record';
@@ -506,7 +506,7 @@ export class PriceLevelFullDepthRecord extends FullDepthRecord {
         // in some cases, order, has been changed so we need to pass in oldQuantity and oldHasUndisclosed separately
         const orderIdx = this._orders.indexOf(order);
         if (orderIdx < 0) {
-            Logger.logInternalError('FDRPLFDRRMR38867', `Not found: ${order.orderId}`);
+            logger.logError(`FDRPLFDRRMR38867: ${order.orderId}`);
             return [];
         } else {
             const changes = new Array<GridRecordInvalidatedValue>(8); // Set to maximum possible number of elements

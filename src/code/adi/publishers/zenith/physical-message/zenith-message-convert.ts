@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, getErrorMessage, Logger, UnexpectedCaseError } from '../../../../sys/internal-api';
+import { AssertInternalError, getErrorMessage, logger, UnexpectedCaseError } from '../../../../sys/internal-api';
 import {
     AdiPublisherRequest,
     AdiPublisherSubscription,
@@ -175,7 +175,7 @@ export namespace ZenithMessageConvert {
             }
         } catch (error) {
             // Failure to parse an incoming data message is a serious error and must be fixed ASAP.
-            Logger.logError(`Zenith message parse error: ${getErrorMessage(error)}`, 300);
+            logger.logError(`Zenith message parse error: ${getErrorMessage(error)}`, 300);
             throw error;
         }
 

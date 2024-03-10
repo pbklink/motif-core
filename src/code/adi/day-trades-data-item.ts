@@ -11,12 +11,12 @@ import {
     ComparisonResult,
     EnumInfoOutOfOrderError,
     Integer,
-    Logger,
     MultiEvent,
     SysTick,
     UnreachableCaseError,
     UsableListChangeTypeId,
     compareInteger,
+    logger,
     mSecsPerMin,
     rangedEarliestBinarySearch
 } from '../sys/internal-api';
@@ -257,7 +257,7 @@ export class DayTradesDataItem extends DataItem {
     private updateRecordCancelled(recordId: Integer, cancelled: boolean) {
         const { found, index } = this.findRecordById(recordId);
         if (!found) {
-            Logger.logDataError('DTDIURCF8777434024', this.definition.description);
+            logger.logDataError('DTDIURCF8777434024', this.definition.description);
             return undefined;
         } else {
             const record = this._records[index];
@@ -285,7 +285,7 @@ export class DayTradesDataItem extends DataItem {
             record.typeId = DayTradesDataItem.Record.TypeId.Canceller;
             const relatedId = tradeRecord.relatedId;
             if (relatedId === undefined) {
-                Logger.logDataError('DTDICIC56694559', this.definition.description);
+                logger.logDataError('DTDICIC56694559', this.definition.description);
                 return undefined;
             } else {
                 return this.updateRecordCancelled(relatedId, true);
@@ -398,7 +398,7 @@ export class DayTradesDataItem extends DataItem {
                 }
             }
             if (newRelatedId === undefined) {
-                Logger.logDataError('DTDIPRC454500281', this.definition.description);
+                logger.logDataError('DTDIPRC454500281', this.definition.description);
             } else {
                 const changedRecordIdx = this.updateRecordCancelled(newRelatedId, newIsCancel);
                 if (changedRecordIdx !== undefined) {

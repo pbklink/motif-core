@@ -108,12 +108,12 @@ import {
 import {
     CommaText,
     Integer,
-    Logger,
     MultiEvent,
     PriceOrRemainder,
     SourceTzOffsetDate,
     SourceTzOffsetDateTime,
-    UnreachableCaseError
+    UnreachableCaseError,
+    logger
 } from '../sys/internal-api';
 
 /** @public */
@@ -561,7 +561,7 @@ export class TextFormatterService {
         } else {
             locale = navigator.language;
             if (locale.length === 0) {
-                Logger.logError('Cannot get user\'s locale. Using browser\'s default locale');
+                logger.logError('Cannot get user\'s locale. Using browser\'s default locale');
                 locale = 'default';
             }
         }
