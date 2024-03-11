@@ -9,6 +9,7 @@ import { addToArrayByPush } from '@xilytix/sysutils';
 import { addToArrayUniquely } from '@xilytix/sysutils';
 import { addToCapacitisedArrayUniquely } from '@xilytix/sysutils';
 import { addToGrow15ArrayUniquely } from '@xilytix/sysutils';
+import { AssertInternalError } from '@xilytix/sysutils';
 import { BehavioredColumnSettings } from '@xilytix/revgrid';
 import { BehavioredGridSettings } from '@xilytix/revgrid';
 import { BooleanOrUndefined } from '@xilytix/sysutils';
@@ -58,6 +59,7 @@ import { Decimal } from '@xilytix/sysutils';
 import { deepExtendObject } from '@xilytix/sysutils';
 import { deepExtendValue } from '@xilytix/sysutils';
 import { delay1Tick } from '@xilytix/sysutils';
+import { EnumInfoOutOfOrderError } from '@xilytix/sysutils';
 import { Err } from '@xilytix/sysutils';
 import { getElementDocumentPosition } from '@xilytix/sysutils';
 import { getElementDocumentPositionRect } from '@xilytix/sysutils';
@@ -74,6 +76,7 @@ import { IndexSignatureHack as IndexSignatureHack_2 } from '@xilytix/revgrid';
 import { InMemoryBehavioredColumnSettings } from '@xilytix/revgrid';
 import { InMemoryBehavioredGridSettings } from '@xilytix/revgrid';
 import { Integer } from '@xilytix/sysutils';
+import { InternalError } from '@xilytix/sysutils';
 import { IntlNumberFormatCharParts } from '@xilytix/sysutils';
 import { isArrayEqual } from '@xilytix/sysutils';
 import { isArrayEqualUniquely } from '@xilytix/sysutils';
@@ -126,6 +129,7 @@ import { newNullDate } from '@xilytix/sysutils';
 import { newUndefinableDate } from '@xilytix/sysutils';
 import { newUndefinableDecimal } from '@xilytix/sysutils';
 import { newUndefinableNullableDecimal } from '@xilytix/sysutils';
+import { NotImplementedError } from '@xilytix/sysutils';
 import { nullDate } from '@xilytix/sysutils';
 import { nullDecimal } from '@xilytix/sysutils';
 import { numberToPixels } from '@xilytix/sysutils';
@@ -167,7 +171,10 @@ import { testRemoveFromArray } from '@xilytix/sysutils';
 import { TextTruncateType } from '@xilytix/revgrid';
 import { TimeSpan } from '@xilytix/sysutils';
 import { tryGetErrorMessage } from '@xilytix/sysutils';
+import { UnexpectedCaseError } from '@xilytix/sysutils';
+import { UnexpectedTypeError } from '@xilytix/sysutils';
 import { uniqueElementArraysOverlap } from '@xilytix/sysutils';
+import { UnreachableCaseError } from '@xilytix/sysutils';
 import { ViewCell } from '@xilytix/revgrid';
 import { ViewLayout } from '@xilytix/revgrid';
 
@@ -1369,33 +1376,7 @@ export namespace AppStorageService {
 // @public (undocumented)
 export function assert(value: boolean, message?: string): void;
 
-// @public (undocumented)
-export class AssertInternalError extends BaseInternalError {
-    constructor(code: string, message?: string);
-}
-
-// @public (undocumented)
-export namespace AssertInternalError {
-    // (undocumented)
-    export function createIfNotError(e: unknown, code: string, extraMessage?: string, extraFormatting?: AssertInternalError.ExtraFormatting): Error;
-    // (undocumented)
-    export const enum ExtraFormatting {
-        // (undocumented)
-        Ignore = 0,
-        // (undocumented)
-        Postpend = 3,
-        // (undocumented)
-        PostpendColonSpace = 4,
-        // (undocumented)
-        PostpendColonSpaceQuoted = 5,
-        // (undocumented)
-        PrependWithColonSpace = 1,
-        // (undocumented)
-        PrependWithColonSpaceQuoteError = 2
-    }
-    // (undocumented)
-    export function throwErrorIfPromiseRejected<T>(promise: Promise<T>, code: string, extraMessage?: string, extraFormatting?: AssertInternalError.ExtraFormatting): void;
-}
+export { AssertInternalError }
 
 // @public (undocumented)
 export function assigned<T>(value: T): value is Exclude<T, null | undefined>;
@@ -2281,13 +2262,6 @@ export abstract class BaseIntegerArrayTableValue extends GenericTableValue<Integ
     protected createRenderValue(): IntegerArrayRenderValue;
     // (undocumented)
     protected renderValueTypeId: RenderValue.TypeId;
-}
-
-// @public (undocumented)
-export abstract class BaseInternalError extends ThrowableError {
-    constructor(errorTypeDescription: StringId, code: string, message?: string);
-    // (undocumented)
-    readonly code: string;
 }
 
 // Warning: (ae-missing-release-tag) "BaseNullableDecimalCorrectnessTableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -8333,10 +8307,7 @@ export abstract class EnumCorrectnessTableValue extends GenericCorrectnessTableV
 export abstract class EnumExplicitElementsArrayUiAction extends TypedExplicitElementsArrayUiAction<Integer> {
 }
 
-// @public (undocumented)
-export class EnumInfoOutOfOrderError extends BaseInternalError {
-    constructor(enumName: string, outOfOrderInfoElementIndex: number, infoDescription: string);
-}
+export { EnumInfoOutOfOrderError }
 
 // @public (undocumented)
 export class EnumMappedExplicitElementsArrayUiAction extends TypedMappedExplicitElementsArrayUiAction<Integer> {
@@ -10007,7 +9978,7 @@ export class ExtensionOrInternalError extends ExternalError {
 }
 
 // @public (undocumented)
-export abstract class ExternalError extends ThrowableError {
+export abstract class ExternalError extends Error {
     constructor(errorTypeDescription: StringId, code: ErrorCode, message?: string);
     // (undocumented)
     readonly code: ErrorCode;
@@ -13655,10 +13626,7 @@ export namespace InternalCommandModule {
     export function initialiseStatic(): void;
 }
 
-// @public (undocumented)
-export class InternalError extends BaseInternalError {
-    constructor(code: string, message: string);
-}
+export { InternalError }
 
 // Warning: (ae-missing-release-tag) "IntervalHistorySequencer" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "IntervalHistorySequencer" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -18473,10 +18441,7 @@ export namespace NotifyMultiEvent {
     export type EventHandler = (this: void) => void;
 }
 
-// @public (undocumented)
-export class NotImplementedError extends BaseInternalError {
-    constructor(code: string);
-}
+export { NotImplementedError }
 
 // Warning: (ae-missing-release-tag) "NotSubbedScanField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -37097,36 +37062,6 @@ export namespace TextRenderValueCellPainter {
     }
 }
 
-// @public (undocumented)
-export class ThrowableError extends Error {
-    // (undocumented)
-    isErr(): this is ThrowableError;
-    // (undocumented)
-    isOk(): this is ThrowableOk<string>;
-}
-
-// @public (undocumented)
-export namespace ThrowableError {
-    // (undocumented)
-    export function appendToErrorMessage(e: unknown, appendText: string): unknown;
-    // (undocumented)
-    export function prependErrorMessage(e: unknown, prependText: string): unknown;
-}
-
-// @public (undocumented)
-export class ThrowableOk<T> {
-    constructor(value: T);
-    // (undocumented)
-    isErr(): this is ThrowableError;
-    // (undocumented)
-    isOk(): this is ThrowableOk<T>;
-    // (undocumented)
-    readonly value: T;
-}
-
-// @public (undocumented)
-export type ThrowableResult<T> = ThrowableOk<T> | ThrowableError;
-
 // Warning: (ae-internal-missing-underscore) The name "TimeDayTradesGridField" should be prefixed with an underscore because the declaration is marked as @internal
 //
 // @internal (undocumented)
@@ -39365,15 +39300,15 @@ export namespace TypedKeyValueSettings {
     const // (undocumented)
     locale = "en";
     // (undocumented)
-    export class AssertDefaulterNotImplemented extends InternalError {
+    export class AssertDefaulterNotImplemented extends AssertInternalError {
         constructor(id: Integer);
     }
     // (undocumented)
-    export class AssertGetterNotImplemented extends InternalError {
+    export class AssertGetterNotImplemented extends AssertInternalError {
         constructor(id: Integer);
     }
     // (undocumented)
-    export class AssertPusherNotImplemented extends InternalError {
+    export class AssertPusherNotImplemented extends AssertInternalError {
         constructor(id: Integer);
     }
     // (undocumented)
@@ -39690,27 +39625,13 @@ export class UndisclosedRenderValue extends BooleanRenderValue {
     constructor(data: boolean | undefined);
 }
 
-// @public (undocumented)
-export class UnexpectedCaseError extends BaseInternalError {
-    constructor(code: string, message?: string);
-}
+export { UnexpectedCaseError }
 
-// @public (undocumented)
-export class UnexpectedTypeError extends BaseInternalError {
-    constructor(code: string, message: string);
-}
-
-// @public (undocumented)
-export class UnexpectedUndefinedError extends BaseInternalError {
-    constructor(code: string, message?: string);
-}
+export { UnexpectedTypeError }
 
 export { uniqueElementArraysOverlap }
 
-// @public (undocumented)
-export class UnreachableCaseError extends BaseInternalError {
-    constructor(code: string, value: never, errorText?: string);
-}
+export { UnreachableCaseError }
 
 // Warning: (ae-missing-release-tag) "UpdateNotificationChannelDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //

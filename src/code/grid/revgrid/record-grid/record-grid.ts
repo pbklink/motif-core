@@ -25,7 +25,6 @@ import {
     AssertInternalError,
     Integer,
     MultiEvent,
-    UnexpectedUndefinedError,
     UnreachableCaseError
 } from '../../../sys/internal-api';
 import { GridField } from '../../field/grid-field-internal-api';
@@ -324,7 +323,7 @@ export class RecordGrid extends AdaptedRevgrid implements GridLayout.ChangeIniti
         const rowIdx =
             this.mainDataServer.getRowIndexFromRecordIndex(recIdx);
         if (rowIdx === undefined) {
-            throw new UnexpectedUndefinedError('DMIRTRI34449');
+            throw new AssertInternalError('DMIRTRI34449');
         } else {
             return rowIdx;
         }

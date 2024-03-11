@@ -4,8 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError } from './internal-error';
-import { ComparisonResult, Integer } from './xiltyix-sysutils';
+import { AssertInternalError, ComparisonResult, Integer } from './xiltyix-sysutils';
 
 /** @public */
 export interface BinarySearchResult {

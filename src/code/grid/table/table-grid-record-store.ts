@@ -5,6 +5,7 @@
  */
 
 import {
+    AssertInternalError,
     GridRecordFieldIndex,
     GridRecordIndex,
     GridRecordInvalidatedValue,
@@ -13,7 +14,6 @@ import {
     IndexedRecord,
     Integer,
     MultiEvent,
-    UnexpectedUndefinedError
 } from "../../sys/internal-api";
 import { Table } from './table';
 
@@ -57,7 +57,7 @@ export class TableGridRecordStore implements GridRecordStore {
 
     getRecord(index: number): IndexedRecord {
         if (this._table === undefined) {
-            throw new UnexpectedUndefinedError('TFGRV882455', `${index}`);
+            throw new AssertInternalError('TFGRV882455', `${index}`);
         } else {
             return this._table.getRecord(index);
         }

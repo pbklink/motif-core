@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { EnumInfoOutOfOrderError, UnreachableCaseError } from './internal-error';
+import { EnumInfoOutOfOrderError, UnreachableCaseError } from './xiltyix-sysutils';
 
 /** @public */
 export const enum CorrectnessId {

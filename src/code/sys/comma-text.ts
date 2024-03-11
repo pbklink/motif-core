@@ -5,9 +5,9 @@
  */
 
 import { ErrorCode } from './error-code';
-import { UnreachableCaseError } from './internal-error';
-import { Err, Ok, Result } from './result';
+import { Err, Ok, Result } from './error-code-with-extra-err';
 import { StringBuilder } from './string-builder';
+import { UnreachableCaseError } from './xiltyix-sysutils';
 
 /** @public */
 export namespace CommaText {

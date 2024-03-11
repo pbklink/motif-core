@@ -5,8 +5,7 @@
  */
 
 import { RenderValue } from '../../services/render-value';
-import { BidAskPair, IndexedRecord } from '../../sys/internal-api';
-import { AssertInternalError } from '../../sys/internal-error';
+import { AssertInternalError, BidAskPair, IndexedRecord } from '../../sys/internal-api';
 import { GridField } from './grid-field';
 
 // AllowedGridField is used in Column selector

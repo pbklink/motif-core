@@ -20,12 +20,12 @@ export * from './date-text';
 export * from './disposable-record';
 export * from './error-code';
 export * from './error-code-logger';
+export * from './error-code-with-extra-err';
 export * from './external-error';
 export * from './field-data-type';
 export * from './grid-revgrid-types';
 export * from './html-types';
 export * from './incubator';
-export * from './internal-error';
 export * from './iso8601';
 export * from './json-element-err';
 export * from './keyed-correctness-list';
@@ -42,7 +42,6 @@ export * from './modifier-key';
 export * from './multi-event';
 export * from './record-list';
 export * from './resource-badness';
-export * from './result';
 export * from './service-operator';
 export * from './ui-comparable-list';
 export * from './usable-list';
@@ -52,21 +51,23 @@ export * from './source-tz-offset-date';
 export * from './source-tz-offset-date-time';
 export * from './string-builder';
 export { SysStaticInitialise } from './sys-static-initialise';
-export * from './throwable-result';
 export * from './types';
 export * from './utils';
 export * from './utils-search';
 export * from './websocket-close-code';
 export {
+    AssertInternalError,
     BooleanOrUndefined,
     ComparisonResult,
     DateOrDateTime,
     DayOfWeek,
     Decimal,
+    EnumInfoOutOfOrderError,
     Guid,
     IndexSignatureHack,
     IndexedRecord,
     Integer,
+    InternalError,
     Json,
     JsonElement,
     JsonValue,
@@ -76,11 +77,15 @@ export {
     Logger,
     MapKey,
     Mappable,
+    NotImplementedError,
     PickEnum,
     PickExcludedEnum,
     RGB,
     Rect,
     TimeSpan,
+    UnexpectedCaseError,
+    UnexpectedTypeError,
+    UnreachableCaseError,
     logger
 } from './xiltyix-sysutils';
 

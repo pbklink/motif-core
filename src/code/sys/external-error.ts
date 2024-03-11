@@ -7,10 +7,9 @@
 import { I18nStrings, StringId } from '../res/res-internal-api';
 import { ErrorCode } from './error-code';
 import { logger } from './xiltyix-sysutils';
-import { ThrowableError } from './throwable-result';
 
 /** @public */
-export abstract class ExternalError extends ThrowableError {
+export abstract class ExternalError extends Error {
     constructor(errorTypeDescription: StringId, readonly code: ErrorCode, message?: string) {
         super(message === undefined || message === '' ?
             I18nStrings.getStringPlusEnglish(errorTypeDescription) + `: ${code}`

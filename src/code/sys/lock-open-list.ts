@@ -8,12 +8,11 @@ import { BadnessList } from './badness-list';
 import { ComparableList } from './comparable-list';
 import { CorrectnessBadness } from './correctness-badness';
 import { ErrorCode } from './error-code';
-import { AssertInternalError } from './internal-error';
+import { Ok, Result } from './error-code-with-extra-err';
 import { LockOpenListItem } from './lock-open-list-item';
 import { MultiEvent } from './multi-event';
-import { Ok, Result } from './result';
 import { UsableListChangeTypeId } from './usable-list-change-type';
-import { Guid, Integer, MapKey } from './xiltyix-sysutils';
+import { AssertInternalError, Guid, Integer, MapKey } from './xiltyix-sysutils';
 
 export abstract class LockOpenList<Item extends LockOpenListItem<Item>> extends CorrectnessBadness implements BadnessList<Item> {
     // private localFilePath = '';

@@ -5,7 +5,7 @@
  */
 
 import { StringId, Strings } from '../res/res-internal-api';
-import { EnumInfoOutOfOrderError } from './internal-error';
+import { EnumInfoOutOfOrderError } from './xiltyix-sysutils';
 
 /** @public */
 export const enum WebsocketCloseCodeId {

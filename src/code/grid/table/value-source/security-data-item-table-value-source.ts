@@ -7,9 +7,9 @@
 import { AdiService, HigherLowerId, LitIvemId, SecurityDataDefinition, SecurityDataItem } from '../../../adi/adi-internal-api';
 import { RenderValue } from '../../../services/services-internal-api';
 import {
+    AssertInternalError,
     Decimal,
     Integer,
-    InternalError,
     MultiEvent,
     SourceTzOffsetDate,
     UnexpectedCaseError,
@@ -63,7 +63,7 @@ export class SecurityDataItemTableValueSource extends TableValueSource {
         if (!(baseDataItem instanceof SecurityDataItem)) {
             const description = baseDataItem.definition.description;
             this._adi.unsubscribe(baseDataItem);
-            throw new InternalError('LIISWGVA438', `${description}`);
+            throw new AssertInternalError('LIISWGVA438', `${description}`);
         } else {
             this.dataItem = baseDataItem;
             this.dataItemDefined = true;

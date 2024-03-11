@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, ErrorCode, ThrowableError, UnexpectedCaseError, ZenithDataError } from '../../../../sys/internal-api';
+import { AssertInternalError, ErrorCode, InternalError, UnexpectedCaseError, ZenithDataError } from '../../../../sys/internal-api';
 import {
     AdiPublisherRequest,
     AdiPublisherSubscription,
@@ -117,7 +117,7 @@ export namespace TransactionsMessageConvert {
                 };
                 result[index] = change;
             } catch (e) {
-                throw ThrowableError.appendToErrorMessage(e, ` Index: ${index}`);
+                throw InternalError.appendToErrorMessage(e, ` Index: ${index}`);
             }
         }
         return result;
@@ -131,7 +131,7 @@ export namespace TransactionsMessageConvert {
                 const change = ZenithConvert.Transactions.toDataMessageChange(zenithChange);
                 result[index] = change;
             } catch (e) {
-                throw ThrowableError.appendToErrorMessage(e, ` Index: ${index}`);
+                throw InternalError.appendToErrorMessage(e, ` Index: ${index}`);
             }
         }
         return result;

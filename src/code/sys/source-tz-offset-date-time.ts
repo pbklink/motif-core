@@ -5,10 +5,9 @@
  */
 
 import { StringId, Strings } from '../res/res-internal-api';
-import { EnumInfoOutOfOrderError, UnreachableCaseError } from './internal-error';
 import { Iso8601 } from './iso8601';
 import { compareDate, isDateEqual, mSecsPerMin, nullDate } from './utils';
-import { ComparisonResult, Integer } from './xiltyix-sysutils';
+import { ComparisonResult, EnumInfoOutOfOrderError, Integer, UnreachableCaseError } from './xiltyix-sysutils';
 
 /** @public */
 export interface SourceTzOffsetDateTime {

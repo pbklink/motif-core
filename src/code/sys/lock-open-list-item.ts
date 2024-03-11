@@ -4,8 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
+import { Result } from './error-code-with-extra-err';
 import { MapKeyed } from './map-keyed';
-import { Result } from './result';
 import { IndexedRecord, Integer } from './xiltyix-sysutils';
 
 export interface LockOpenListItem<T> extends MapKeyed, IndexedRecord {

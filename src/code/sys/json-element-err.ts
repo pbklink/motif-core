@@ -7,9 +7,8 @@
 
 import { I18nStrings, StringId } from '../res/res-internal-api';
 import { ErrorCode } from './error-code';
-import { UnreachableCaseError } from './internal-error';
-import { Err } from './result';
-import { JsonElement } from './xiltyix-sysutils';
+import { Err } from './error-code-with-extra-err';
+import { JsonElement, UnreachableCaseError } from './xiltyix-sysutils';
 
 /** @public */
 export class JsonElementErr<T = undefined> extends Err<T> {

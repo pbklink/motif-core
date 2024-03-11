@@ -4,10 +4,9 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError } from './internal-error';
 import { moveElementInArray, moveElementsInArray } from './utils';
 import { BinarySearchResult, CompareFtn, rangedAnyBinarySearch, rangedEarliestBinarySearch, rangedLatestBinarySearch, rangedQuickSort } from './utils-search';
-import { ComparisonResult, Integer } from './xiltyix-sysutils';
+import { AssertInternalError, ComparisonResult, Integer } from './xiltyix-sysutils';
 
 /** @public */
 export class ComparableList<out T extends U, in U = T> {

@@ -7,8 +7,7 @@
 import { ChangeSubscribableComparableList } from './change-subscribable-comparable-list';
 import { ErrorCode } from './error-code';
 import { DuplicateError } from './external-error';
-import { AssertInternalError, UnreachableCaseError } from './internal-error';
-import { Integer, MapKey, Mappable } from './xiltyix-sysutils';
+import { AssertInternalError, Integer, MapKey, Mappable, UnreachableCaseError } from './xiltyix-sysutils';
 
 /** @public */
 export class MappedComparableList<out T extends (Mappable & U), in U = T> extends ChangeSubscribableComparableList<T, U> {

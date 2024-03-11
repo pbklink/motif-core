@@ -5,7 +5,6 @@
  */
 
 import { ErrorCode } from './error-code';
-
 import { Err } from './xiltyix-sysutils';
 export { Err, Ok, Result } from './xiltyix-sysutils';
 

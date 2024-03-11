@@ -1,7 +1,7 @@
 import { ErrorCode } from './error-code';
-import { AssertInternalError } from './internal-error';
+import { Ok, Result } from './error-code-with-extra-err';
 import { LockOpenListItem } from './lock-open-list-item';
-import { Ok, Result } from './result';
+import { AssertInternalError } from './xiltyix-sysutils';
 
 export class LockOpenManager<Item extends LockOpenListItem<Item>> {
     private readonly _lockers = new Array<LockOpenListItem.Locker>(0);

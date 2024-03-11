@@ -7,8 +7,7 @@
 import { ExchangeId, IvemClassId, LitIvemAlternateCodes, LitIvemBaseDetail, LitIvemId, MarketId, PublisherSubscriptionDataTypeId } from '../../../adi/adi-internal-api';
 import { StringId, Strings } from '../../../res/res-internal-api';
 import { SymbolDetailCacheService } from '../../../services/symbol-detail-cache-service';
-import { MultiEvent, isArrayEqualUniquely } from '../../../sys/internal-api';
-import { AssertInternalError } from '../../../sys/internal-error';
+import { AssertInternalError, MultiEvent, isArrayEqualUniquely } from '../../../sys/internal-api';
 
 export class PromisedLitIvemBaseDetail implements LitIvemBaseDetail {
     readonly key: LitIvemId;

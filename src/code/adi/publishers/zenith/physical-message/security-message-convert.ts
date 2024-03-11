@@ -9,9 +9,9 @@ import {
     ErrorCode,
     getUndefinedNullOrFunctionResult,
     ifDefined,
+    InternalError,
     newDecimal,
     newUndefinableDecimal,
-    ThrowableError,
     UnexpectedCaseError,
     ZenithDataError
 } from "../../../../sys/internal-api";
@@ -190,7 +190,7 @@ export namespace SecurityMessageConvert {
             } as const;
             return result;
         } catch (error) {
-            throw ThrowableError.prependErrorMessage(error, 'Security Data Message: ');
+            throw InternalError.prependErrorMessage(error, 'Security Data Message: ');
         }
     }
 

@@ -4,8 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError } from './internal-error';
-import { Integer } from './xiltyix-sysutils';
+import { AssertInternalError, Integer } from './xiltyix-sysutils';
 
 /** @public */
 export const enum UsableListChangeTypeId {
