@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { CommaText, EnumInfoOutOfOrderError, Err, ErrorCode, Integer, Ok, Result } from '../../../../sys/internal-api';
+import { CommaText, CommaTextErr, EnumInfoOutOfOrderError, Err, ErrorCode, Integer, Ok, Result } from '../../../../sys/internal-api';
 // import { GridRecordFieldState } from '../../../record/grid-record-internal-api';
 import { GridFieldSourceDefinition } from '../../../field/grid-field-internal-api';
 import { CorrectnessTableField, TableField } from '../../field/grid-table-field-internal-api';
@@ -181,7 +181,7 @@ export namespace TableFieldSourceDefinition {
     export function decodeCommaTextFieldName(value: string): Result<FieldName> {
         const commaTextResult = CommaText.tryToStringArray(value, true);
         if (commaTextResult.isErr()) {
-            return commaTextResult.createOuter(commaTextResult.error);
+            return CommaTextErr.createOuter(commaTextResult.error, ErrorCode.TableFieldSourceDefinition_InvalidCommaText);
         } else {
             const strArray = commaTextResult.value;
             if (strArray.length !== 2) {

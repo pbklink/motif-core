@@ -1,7 +1,6 @@
 import { Badness } from './badness';
-import { CommaText } from './comma-text';
 import { CorrectnessId } from './correctness';
-import { UnreachableCaseError } from './xiltyix-sysutils';
+import { CommaText, UnreachableCaseError } from './xiltyix-sysutils';
 
 export interface ResourceBadness extends Badness {
     resourceName: string;

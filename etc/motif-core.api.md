@@ -23,6 +23,7 @@ import { ClickBoxCellPainter } from '@xilytix/revgrid';
 import { cloneDecimal } from '@xilytix/sysutils';
 import { Column } from '@xilytix/revgrid';
 import { ColumnSettings } from '@xilytix/revgrid';
+import { CommaText } from '@xilytix/sysutils';
 import { compareArray } from '@xilytix/sysutils';
 import { compareBoolean } from '@xilytix/sysutils';
 import { compareDate } from '@xilytix/sysutils';
@@ -163,6 +164,7 @@ import { SingleHeadingDataRowArrayServerSet } from '@xilytix/revgrid';
 import { SingleHeadingDataServer } from '@xilytix/revgrid';
 import { StandardCheckboxPainter } from '@xilytix/revgrid';
 import { StandardToggleClickBoxCellEditor } from '@xilytix/revgrid';
+import { StringBuilder } from '@xilytix/sysutils';
 import { Subgrid } from '@xilytix/revgrid';
 import { subtractElementFromArray } from '@xilytix/sysutils';
 import { subtractElementFromArrayUniquely } from '@xilytix/sysutils';
@@ -5039,48 +5041,27 @@ export namespace CommandUiAction {
     }
 }
 
+export { CommaText }
+
 // @public (undocumented)
-export namespace CommaText {
-    const // (undocumented)
-    delimiterChar = ",";
-    const // (undocumented)
-    quoteChar = "\"";
-    const // (undocumented)
-    pairQuoteChar: string;
+export class CommaTextErr<T = undefined> extends Err<T> {
+    constructor(errorId: CommaText.ErrorId, extraInfo: string);
     // (undocumented)
-    export function from2Values(value1: string, value2: string): string;
+    readonly errorId: CommaText.ErrorId;
     // (undocumented)
-    export function from3Values(value1: string, value2: string, value3: string): string;
+    readonly extraInfo: string;
+}
+
+// @public (undocumented)
+export namespace CommaTextErr {
     // (undocumented)
-    export function from4Values(value1: string, value2: string, value3: string, value4: string): string;
+    export function create<T>(errorIdPlusExtra: CommaText.ErrorIdPlusExtra): CommaTextErr<T>;
     // (undocumented)
-    export function fromIntegerArray(value: number[]): string;
+    export function createOuter<OuterT = undefined>(errorIdPlusExtra: CommaText.ErrorIdPlusExtra, outerErrorText: string): Err<OuterT>;
     // (undocumented)
-    export function fromStringArray(value: readonly string[]): string;
+    export function errorIdPlusExtraToCodePlusExtra(errorIdPlusExtra: CommaText.ErrorIdPlusExtra): string;
     // (undocumented)
-    export function strictValidate(value: string): Result<boolean>;
-    // (undocumented)
-    export interface StrictValidateResult {
-        // (undocumented)
-        errorText: string;
-        // (undocumented)
-        success: boolean;
-    }
-    // (undocumented)
-    export interface ToIntegerArrayResult {
-        // (undocumented)
-        array: number[];
-        // (undocumented)
-        errorText: string;
-        // (undocumented)
-        success: boolean;
-    }
-    // (undocumented)
-    export function toIntegerArrayWithResult(value: string): Result<number[]>;
-    // (undocumented)
-    export function toStringArray(value: string): string[];
-    // (undocumented)
-    export function tryToStringArray(value: string, strict?: boolean): Result<string[]>;
+    export function errorIdToCode(errorId: CommaText.ErrorId): ErrorCode;
 }
 
 // Warning: (ae-missing-release-tag) "CommonStaticInitialise" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -9034,6 +9015,8 @@ export const enum ErrorCode {
     TableFieldSourceDefinition_DecodeCommaTextFieldNameNot2Elements = "TFSDDCTFNN2E45009",
     // (undocumented)
     TableFieldSourceDefinition_DecodeCommaTextFieldNameUnknownSourceId = "TFSDDCTFNUSI45009",
+    // (undocumented)
+    TableFieldSourceDefinition_InvalidCommaText = "TFSDICT45009",
     // (undocumented)
     TableRecordSourceDefinition_TypeIdIsUnknown = "TRSDTIIU67689",
     // (undocumented)
@@ -29745,21 +29728,7 @@ export class StringArrayRenderValue extends GenericRenderValue<readonly string[]
 export class StringArrayUiAction extends TypedArrayUiAction<string> {
 }
 
-// @public (undocumented)
-export class StringBuilder {
-    constructor(initialCapacity?: Integer);
-    // (undocumented)
-    append(value: string): void;
-    // (undocumented)
-    appendLine(value?: string): void;
-    // (undocumented)
-    get capacity(): Integer;
-    set capacity(newCapacity: Integer);
-    // (undocumented)
-    clear(): void;
-    // (undocumented)
-    toString(): string;
-}
+export { StringBuilder }
 
 // Warning: (ae-missing-release-tag) "StringCorrectnessTableField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //

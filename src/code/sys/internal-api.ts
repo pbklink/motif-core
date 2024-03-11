@@ -9,7 +9,7 @@ export * from './badness';
 export * from './badness-comparable-list';
 export * from './badness-list';
 export * from './change-subscribable-comparable-list';
-export * from './comma-text';
+export * from './comma-text-err';
 export * from './comparable-list';
 export * from './correctness';
 export * from './correctness-badness';
@@ -49,7 +49,6 @@ export * from './usable-list-change-type';
 // export * from './Scheduler';
 export * from './source-tz-offset-date';
 export * from './source-tz-offset-date-time';
-export * from './string-builder';
 export { SysStaticInitialise } from './sys-static-initialise';
 export * from './types';
 export * from './utils';
@@ -58,6 +57,7 @@ export * from './websocket-close-code';
 export {
     AssertInternalError,
     BooleanOrUndefined,
+    CommaText,
     ComparisonResult,
     DateOrDateTime,
     DayOfWeek,
@@ -82,6 +82,7 @@ export {
     PickExcludedEnum,
     RGB,
     Rect,
+    StringBuilder,
     TimeSpan,
     UnexpectedCaseError,
     UnexpectedTypeError,

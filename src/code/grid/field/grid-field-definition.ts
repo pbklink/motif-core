@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, CommaText, GridFieldHorizontalAlign, Integer } from '../../sys/internal-api';
+import { AssertInternalError, CommaText, CommaTextErr, GridFieldHorizontalAlign, Integer } from '../../sys/internal-api';
 import { GridFieldSourceDefinition } from './grid-field-source-definition';
 
 export class GridFieldDefinition {
@@ -34,7 +34,7 @@ export namespace GridFieldDefinition {
     export function decomposeName(name: string) {
         const toResult = CommaText.tryToStringArray(name, true);
         if (toResult.isErr()) {
-            throw new AssertInternalError('GFDDNE30361', toResult.error);
+            throw new AssertInternalError('GFDDNE30361', CommaTextErr.errorIdPlusExtraToCodePlusExtra(toResult.error));
         } else {
             const result = toResult.value;
             if (result.length !== 2) {

@@ -226,6 +226,7 @@ export const enum ErrorCode {
     RankedLitIvemIdListTableRecordSourceDefinition_DefinitionJsonNotSpecified = 'RLIILTRSDJNS12209',
     RankedLitIvemIdListTableRecordSourceDefinition_DefinitionJsonIsInvalid = 'RLIILTRSDJII12209',
     LitIvemDetailsFromSearchSymbolsTableRecordSourceDefinition_RequestNotSpecified = 'LIDFSSTRSDRNS10198',
+    TableFieldSourceDefinition_InvalidCommaText = 'TFSDICT45009',
     TableFieldSourceDefinition_DecodeCommaTextFieldNameNot2Elements = 'TFSDDCTFNN2E45009',
     TableFieldSourceDefinition_DecodeCommaTextFieldNameUnknownSourceId = 'TFSDDCTFNUSI45009',
     TableRecordSourceDefinition_TypeIdNotSpecified = 'TRSDTINS67689',

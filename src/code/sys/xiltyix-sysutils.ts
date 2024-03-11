@@ -7,6 +7,7 @@
 export {
     AssertInternalError,
     BooleanOrUndefined,
+    CommaText,
     ComparisonResult,
     DateOrDateTime,
     DayOfWeek,
@@ -37,6 +38,7 @@ export {
     RGB,
     Rect,
     Result,
+    StringBuilder,
     SysTick,
     TimeSpan,
     UnexpectedCaseError,

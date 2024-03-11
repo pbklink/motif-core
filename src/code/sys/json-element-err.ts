@@ -12,12 +12,9 @@ import { JsonElement, UnreachableCaseError } from './xiltyix-sysutils';
 
 /** @public */
 export class JsonElementErr<T = undefined> extends Err<T> {
-    readonly errorId: JsonElement.ErrorId;
-
-    constructor(errorId: JsonElement.ErrorId) {
+    constructor(readonly errorId: JsonElement.ErrorId) {
         const errorCode = JsonElementErr.errorIdToCode(errorId);
         super(errorCode);
-        this.errorId = errorId;
     }
 }
 
