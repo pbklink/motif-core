@@ -8,7 +8,7 @@ import { BadnessModule } from './badness';
 import { CorrectnessModule } from './correctness';
 import { FieldDataTypeModule } from './field-data-type';
 import { ConfigServiceGroupModule } from './service-operator';
-import { SourceTzOffsetTimeRenderValueModule } from './source-tz-offset-date-time';
+import { SourceTzOffsetTimeRenderValueModule } from './source-tz-offset-date-time-timezone-mode';
 import { WebsocketCloseCodeModule } from './websocket-close-code';
 
 /** @internal */

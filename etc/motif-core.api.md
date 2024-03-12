@@ -176,6 +176,8 @@ import { secsPerMin } from '@xilytix/sysutils';
 import { shuffleElementsUpInArray } from '@xilytix/sysutils';
 import { SingleHeadingDataRowArrayServerSet } from '@xilytix/revgrid';
 import { SingleHeadingDataServer } from '@xilytix/revgrid';
+import { SourceTzOffsetDate } from '@xilytix/sysutils';
+import { SourceTzOffsetDateTime } from '@xilytix/sysutils';
 import { StandardCheckboxPainter } from '@xilytix/revgrid';
 import { StandardToggleClickBoxCellEditor } from '@xilytix/revgrid';
 import { StringBuilder } from '@xilytix/sysutils';
@@ -29010,40 +29012,7 @@ export abstract class SingleDataItemTableRecordSource extends TableRecordSource 
 export class SingleHeadingGridDataServer extends SingleHeadingDataServer<GridField> {
 }
 
-// @public (undocumented)
-export interface SourceTzOffsetDate {
-    // (undocumented)
-    readonly offset: Integer;
-    // (undocumented)
-    readonly utcMidnight: Date;
-}
-
-// @public (undocumented)
-export namespace SourceTzOffsetDate {
-    // (undocumented)
-    export function compare(left: SourceTzOffsetDate, right: SourceTzOffsetDate): ComparisonResult;
-    // (undocumented)
-    export function compareUndefinable(left: SourceTzOffsetDate | undefined, right: SourceTzOffsetDate | undefined, undefinedIsLowest: boolean): ComparisonResult;
-    // (undocumented)
-    export function createCopy(value: SourceTzOffsetDate): SourceTzOffsetDate;
-    // (undocumented)
-    export function createFromIso8601(value: string): SourceTzOffsetDate | undefined;
-    // (undocumented)
-    export function createFromLocalDate(value: Date): SourceTzOffsetDate;
-    // (undocumented)
-    export function createFromUtcDate(value: Date): SourceTzOffsetDate;
-    export function getAsMidnightLocalTimeDate(value: SourceTzOffsetDate): Date;
-    // (undocumented)
-    export function isEqual(left: SourceTzOffsetDate, right: SourceTzOffsetDate): boolean;
-    // (undocumented)
-    export function isUndefinableEqual(left: SourceTzOffsetDate | undefined, right: SourceTzOffsetDate | undefined): boolean;
-    // (undocumented)
-    export function newUndefinable(value: SourceTzOffsetDate | undefined): SourceTzOffsetDate | undefined;
-    // (undocumented)
-    export function toUtcDashedYyyyMmDdString(value: SourceTzOffsetDate): string;
-    // (undocumented)
-    export function toUtcYYYYMMDDString(value: SourceTzOffsetDate): string;
-}
+export { SourceTzOffsetDate }
 
 // Warning: (ae-missing-release-tag) "SourceTzOffsetDateCorrectnessTableField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -29071,66 +29040,7 @@ export class SourceTzOffsetDateRenderValue extends GenericRenderValue<SourceTzOf
     constructor(data: SourceTzOffsetDate | undefined);
 }
 
-// @public (undocumented)
-export interface SourceTzOffsetDateTime {
-    // (undocumented)
-    readonly offset: Integer;
-    // (undocumented)
-    readonly utcDate: Date;
-}
-
-// @public (undocumented)
-export namespace SourceTzOffsetDateTime {
-    const // (undocumented)
-    nullDateTime: SourceTzOffsetDateTime;
-    // (undocumented)
-    export function compare(left: SourceTzOffsetDateTime, right: SourceTzOffsetDateTime): ComparisonResult;
-    // (undocumented)
-    export function compareUndefinable(left: SourceTzOffsetDateTime | undefined, right: SourceTzOffsetDateTime | undefined, undefinedIsLowest: boolean): ComparisonResult;
-    // (undocumented)
-    export function createCopy(value: SourceTzOffsetDateTime): SourceTzOffsetDateTime;
-    // (undocumented)
-    export function createFromIso8601(value: string): SourceTzOffsetDateTime | undefined;
-    export function getTimezonedDate(value: SourceTzOffsetDateTime, adjustment: TimezoneModeId): Date;
-    // (undocumented)
-    export function isEqual(left: SourceTzOffsetDateTime, right: SourceTzOffsetDateTime): boolean;
-    // (undocumented)
-    export function isUndefinableEqual(left: SourceTzOffsetDateTime | undefined, right: SourceTzOffsetDateTime | undefined): boolean;
-    // (undocumented)
-    export function newUndefinable(value: SourceTzOffsetDateTime | undefined): SourceTzOffsetDateTime | undefined;
-    // (undocumented)
-    export namespace TimezoneMode {
-        // (undocumented)
-        export type Id = TimezoneModeId;
-        const // (undocumented)
-        idCount: number;
-        const // (undocumented)
-        allIds: TimezoneModeId[];
-        // (undocumented)
-        export function idToDescription(id: Id): string;
-        // (undocumented)
-        export function idToDescriptionId(id: Id): StringId;
-        // (undocumented)
-        export function idToDisplay(id: Id): string;
-        // (undocumented)
-        export function idToDisplayId(id: Id): StringId;
-        // (undocumented)
-        export function idToJsonValue(id: Id): string;
-        // (undocumented)
-        export function initialise(): void;
-        // (undocumented)
-        export function tryJsonValueToId(value: string): number | undefined;
-    }
-    // (undocumented)
-    export const enum TimezoneModeId {
-        // (undocumented)
-        Local = 1,
-        // (undocumented)
-        Source = 2,
-        // (undocumented)
-        Utc = 0
-    }
-}
+export { SourceTzOffsetDateTime }
 
 // Warning: (ae-missing-release-tag) "SourceTzOffsetDateTimeCorrectnessTableField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -29175,6 +29085,30 @@ export class SourceTzOffsetDateTimeRenderValue extends GenericRenderValue<Source
 // @public (undocumented)
 export class SourceTzOffsetDateTimeTimeRenderValue extends GenericRenderValue<SourceTzOffsetDateTime> {
     constructor(data: SourceTzOffsetDateTime | undefined);
+}
+
+// @public (undocumented)
+export namespace SourceTzOffsetDateTimeTimezoneMode {
+    // (undocumented)
+    export type Id = SourceTzOffsetDateTime.TimezoneModeId;
+    const // (undocumented)
+    idCount: number;
+    const // (undocumented)
+    allIds: SourceTzOffsetDateTime.TimezoneModeId[];
+    // (undocumented)
+    export function idToDescription(id: Id): string;
+    // (undocumented)
+    export function idToDescriptionId(id: Id): StringId;
+    // (undocumented)
+    export function idToDisplay(id: Id): string;
+    // (undocumented)
+    export function idToDisplayId(id: Id): StringId;
+    // (undocumented)
+    export function idToJsonValue(id: Id): string;
+    // (undocumented)
+    export function initialise(): void;
+    // (undocumented)
+    export function tryJsonValueToId(value: string): number | undefined;
 }
 
 // Warning: (ae-internal-missing-underscore) The name "SourceTzOffsetTimeRenderValueModule" should be prefixed with an underscore because the declaration is marked as @internal

@@ -39,8 +39,7 @@ export * from './service-operator';
 export * from './ui-comparable-list';
 export * from './usable-list';
 // export * from './Scheduler';
-export * from './source-tz-offset-date';
-export * from './source-tz-offset-date-time';
+export * from './source-tz-offset-date-time-timezone-mode';
 export { SysStaticInitialise } from './sys-static-initialise';
 export * from './types';
 export * from './utils';
@@ -78,7 +77,12 @@ export {
     NotImplementedError,
     PickEnum,
     PickExcludedEnum,
-    RGB, RecordList, Rect, StringBuilder,
+    RGB,
+    RecordList,
+    Rect,
+    SourceTzOffsetDate,
+    SourceTzOffsetDateTime,
+    StringBuilder,
     TimeSpan,
     UnexpectedCaseError,
     UnexpectedTypeError,
