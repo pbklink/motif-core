@@ -5,7 +5,7 @@
  */
 
 import { BadnessComparableList } from './badness-comparable-list';
-import { Integer, MultiEvent, UsableListChangeTypeId, CompareFtn } from './xiltyix-sysutils';
+import { CompareFtn, Integer, MultiEvent, UsableListChangeTypeId } from './xilytix-sysutils';
 
 export class ModifierComparableList<out T extends U, Modifier = void, in U = T> extends BadnessComparableList<T, U> {
     private _modifierListChangeMultiEvent = new MultiEvent<ModifierComparableList.ListChangeEventHandler<Modifier>>();

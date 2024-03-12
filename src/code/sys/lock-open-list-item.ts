@@ -6,7 +6,7 @@
 
 import { Result } from './error-code-with-extra-err';
 import { MapKeyed } from './map-keyed';
-import { IndexedRecord, Integer } from './xiltyix-sysutils';
+import { IndexedRecord, Integer } from './xilytix-sysutils';
 
 export interface LockOpenListItem<T> extends MapKeyed, IndexedRecord {
     readonly lockCount: Integer;

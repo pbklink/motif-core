@@ -5,8 +5,8 @@
  */
 
 import { ErrorCode } from './error-code';
-import { Err } from './xiltyix-sysutils';
-export { Err, Ok, Result } from './xiltyix-sysutils';
+import { Err } from './xilytix-sysutils';
+export { Err, Ok, Result } from './xilytix-sysutils';
 
 export interface ErrorCodeWithExtra {
     code: ErrorCode;

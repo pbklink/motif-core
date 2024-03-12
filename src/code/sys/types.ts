@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { Integer, Decimal } from './xiltyix-sysutils';
+import { Decimal, Integer } from './xilytix-sysutils';
 
 // export {
 //     BooleanOrUndefined,

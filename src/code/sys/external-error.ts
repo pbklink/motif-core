@@ -6,7 +6,7 @@
 
 import { I18nStrings, StringId } from '../res/res-internal-api';
 import { ErrorCode } from './error-code';
-import { logger } from './xiltyix-sysutils';
+import { logger } from './xilytix-sysutils';
 
 /** @public */
 export abstract class ExternalError extends Error {

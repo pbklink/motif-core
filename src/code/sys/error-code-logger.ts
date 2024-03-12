@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { Logger, logger } from './xiltyix-sysutils';
+import { Logger, logger } from './xilytix-sysutils';
 
 /** @public */
 export namespace ErrorCodeLogger {

@@ -5,8 +5,8 @@
  */
 
 import { CorrectnessId } from './correctness';
-import { MultiEvent } from './xiltyix-sysutils';
 import { UsableList } from './usable-list';
+import { MultiEvent } from './xilytix-sysutils';
 
 /** @public */
 export interface CorrectnessList<Record> extends UsableList<Record> {

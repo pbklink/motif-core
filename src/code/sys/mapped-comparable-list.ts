@@ -6,7 +6,7 @@
 
 import { ErrorCode } from './error-code';
 import { DuplicateError } from './external-error';
-import { AssertInternalError, ChangeSubscribableComparableList, Integer, MapKey, Mappable, UnreachableCaseError } from './xiltyix-sysutils';
+import { AssertInternalError, ChangeSubscribableComparableList, Integer, MapKey, Mappable, UnreachableCaseError } from './xilytix-sysutils';
 
 /** @public */
 export class MappedComparableList<out T extends (Mappable & U), in U = T> extends ChangeSubscribableComparableList<T, U> {

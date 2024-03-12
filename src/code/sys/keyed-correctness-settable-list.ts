@@ -6,7 +6,7 @@
 
 import { BadnessList } from './badness-list';
 import { KeyedCorrectnessSettableListItem } from './keyed-correctness-settable-list-item';
-import { Integer, MapKey, MultiEvent } from './xiltyix-sysutils';
+import { Integer, MapKey, MultiEvent } from './xilytix-sysutils';
 
 export interface KeyedCorrectnessSettableList<Record extends KeyedCorrectnessSettableListItem> extends BadnessList<Record> {
     readonly records: Record[];

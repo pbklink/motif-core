@@ -112,7 +112,7 @@ export {
     testRemoveFromArray,
     tryGetErrorMessage,
     uniqueElementArraysOverlap
-} from './xiltyix-sysutils';
+} from './xilytix-sysutils';
 
 /** @public */
 export function ifDefined<U, T>(value: U | undefined, fn: (x: U) => T): T | undefined {

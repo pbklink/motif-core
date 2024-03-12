@@ -94,6 +94,6 @@ export {
     logger,
     rangedAnyBinarySearch,
     rangedEarliestBinarySearch,
-    rangedQuickSort,
-} from './xiltyix-sysutils';
+    rangedQuickSort
+} from './xilytix-sysutils';
 

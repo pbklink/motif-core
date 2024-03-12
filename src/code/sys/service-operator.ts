@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { EnumInfoOutOfOrderError, Integer } from './xiltyix-sysutils';
+import { EnumInfoOutOfOrderError, Integer } from './xilytix-sysutils';
 
 export const enum ServiceOperatorId {
     Paritech,

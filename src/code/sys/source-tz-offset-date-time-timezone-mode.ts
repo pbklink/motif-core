@@ -5,7 +5,7 @@
  */
 
 import { StringId, Strings } from '../res/res-internal-api';
-import { EnumInfoOutOfOrderError, SourceTzOffsetDateTime } from './xiltyix-sysutils';
+import { EnumInfoOutOfOrderError, SourceTzOffsetDateTime } from './xilytix-sysutils';
 
 /** @public */
 export namespace SourceTzOffsetDateTimeTimezoneMode {

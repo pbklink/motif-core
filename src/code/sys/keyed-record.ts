@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { MapKey } from './xiltyix-sysutils';
+import { MapKey } from './xilytix-sysutils';
 
 export interface KeyedRecord {
     readonly mapKey: MapKey;

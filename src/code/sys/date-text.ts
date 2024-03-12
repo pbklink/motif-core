@@ -4,8 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
-import { Iso8601 } from './xiltyix-sysutils';
 import { dateToDashedYyyyMmDd } from './utils';
+import { Iso8601 } from './xilytix-sysutils';
 
 // Dates on the GUI are strings. This unit provides functions to check date strings match expected formats.
 /** @public */

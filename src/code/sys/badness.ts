@@ -6,7 +6,7 @@
 
 import { StringId, Strings } from '../res/res-internal-api';
 import { Correctness, CorrectnessId } from './correctness';
-import { EnumInfoOutOfOrderError } from './xiltyix-sysutils';
+import { EnumInfoOutOfOrderError } from './xilytix-sysutils';
 
 /** @public */
 export interface Badness {

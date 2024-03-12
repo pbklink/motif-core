@@ -7,7 +7,7 @@
 
 import { ErrorCode } from './error-code';
 import { Err } from './error-code-with-extra-err';
-import { CommaText, UnreachableCaseError } from './xiltyix-sysutils';
+import { CommaText, UnreachableCaseError } from './xilytix-sysutils';
 
 /** @public */
 export class CommaTextErr<T = undefined> extends Err<T> {

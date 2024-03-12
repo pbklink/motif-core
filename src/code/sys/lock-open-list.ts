@@ -9,7 +9,7 @@ import { CorrectnessBadness } from './correctness-badness';
 import { ErrorCode } from './error-code';
 import { Ok, Result } from './error-code-with-extra-err';
 import { LockOpenListItem } from './lock-open-list-item';
-import { AssertInternalError, UsableListChangeTypeId, ComparableList, Guid, Integer, MapKey, MultiEvent } from './xiltyix-sysutils';
+import { AssertInternalError, ComparableList, Guid, Integer, MapKey, MultiEvent, UsableListChangeTypeId } from './xilytix-sysutils';
 
 export abstract class LockOpenList<Item extends LockOpenListItem<Item>> extends CorrectnessBadness implements BadnessList<Item> {
     // private localFilePath = '';

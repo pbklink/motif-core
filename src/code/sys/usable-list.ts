@@ -5,7 +5,7 @@
  */
 
 // import { MultiEvent } from './multi-event';
-import { RecordList } from './xiltyix-sysutils';
+import { RecordList } from './xilytix-sysutils';
 
 export interface UsableList<Record> extends RecordList<Record> {
     readonly usable: boolean;
