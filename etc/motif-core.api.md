@@ -391,9 +391,9 @@ export namespace ActiveFaultedStatus {
 // @public (undocumented)
 export const enum ActiveFaultedStatusId {
     // (undocumented)
-    Active = 0,
+    Active = 0,// Enabled and not faulty
     // (undocumented)
-    Faulted = 2,
+    Faulted = 2,// Disabled
     // (undocumented)
     Inactive = 1
 }
@@ -1522,11 +1522,11 @@ export namespace Authorisations {
 // @public (undocumented)
 export const enum AuthStatusId {
     // (undocumented)
-    AuthenticationError = 3,
+    AuthenticationError = 3,// 0 - Credentials not sent.
     // (undocumented)
-    CredentialsAccepted = 1,
+    CredentialsAccepted = 1,// 1
     // (undocumented)
-    CredentialsRejected = 2,
+    CredentialsRejected = 2,// 2
     // (undocumented)
     NotAuthorised = 0
 }
@@ -1639,7 +1639,7 @@ export namespace Badness {
         // (undocumented)
         MarketTradingStatesRetrieving = 58,
         // (undocumented)
-        MarketWaiting = 39,
+        MarketWaiting = 39,// Should never be used
         // (undocumented)
         MultipleError = 64,
         // (undocumented)
@@ -4239,25 +4239,25 @@ export namespace ColorScheme {
     // (undocumented)
     export const enum ItemId {
         // (undocumented)
-        Caution = 128,
+        Caution = 128,// 0=bkgd
         // (undocumented)
-        Caution_Error = 131,
+        Caution_Error = 131,// 1=bkgd
         // (undocumented)
-        Caution_Suspect = 130,
+        Caution_Suspect = 130,// 2=fore
         // (undocumented)
-        Caution_UsableButNotGood = 129,
+        Caution_UsableButNotGood = 129,// 3=fore
         // (undocumented)
-        ClickControl = 108,
+        ClickControl = 108,// 4=fore
         // (undocumented)
-        ClickControl_Accepted = 114,
+        ClickControl_Accepted = 114,// 5=bkgd
         // (undocumented)
-        ClickControl_Disabled = 109,
+        ClickControl_Disabled = 109,// 6=fore, 7=bkgd
         // (undocumented)
-        ClickControl_Error = 117,
+        ClickControl_Error = 117,// 8=bkgd
         // (undocumented)
-        ClickControl_Invalid = 112,
+        ClickControl_Invalid = 112,// 9=fore
         // (undocumented)
-        ClickControl_Missing = 111,
+        ClickControl_Missing = 111,// 10=fore
         // (undocumented)
         ClickControl_ReadOnly = 110,
         // (undocumented)
@@ -4381,11 +4381,11 @@ export namespace ColorScheme {
         // (undocumented)
         Grid_PriceSellAlt = 82,
         // (undocumented)
-        Grid_PriceSellOverlap = 83,
+        Grid_PriceSellOverlap = 83,// A news item is incoming. The news body is not available yet.
         // (undocumented)
         Grid_PriceSellOverlapAlt = 84,
         // (undocumented)
-        Grid_RowHeader = 46,
+        Grid_RowHeader = 46,// A news item headline & body is available but user doesn't have permission to view body.
         // (undocumented)
         Grid_RowHeaderAlt = 47,
         // (undocumented)
@@ -5610,11 +5610,11 @@ export namespace CurrencyFieldOverlapsScanCondition {
 // @public (undocumented)
 export const enum CurrencyId {
     // (undocumented)
-    Aud = 0,
+    Aud = 0,// Australian Dollar
     // (undocumented)
-    Gbp = 3,
+    Gbp = 3,// US Dollar
     // (undocumented)
-    Myr = 2,
+    Myr = 2,// Malaysian Ringgit
     // (undocumented)
     Usd = 1
 }
@@ -5742,7 +5742,7 @@ export const enum DataChannelId {
     // (undocumented)
     AllBalances = 16,
     // (undocumented)
-    AllHoldings = 14,
+    AllHoldings = 14,// needs to move out of DataTypes in future
     // (undocumented)
     AllOrders = 20,
     // (undocumented)
@@ -7795,7 +7795,7 @@ export namespace DepthStyle {
 // @public (undocumented)
 export const enum DepthStyleId {
     // (undocumented)
-    Full = 0,
+    Full = 0,// All orders.
     // (undocumented)
     Short = 1
 }
@@ -10057,9 +10057,9 @@ export const enum FeedId {
     // (undocumented)
     Authority_Trading = 1,
     // (undocumented)
-    Authority_Watchlist = 2,
+    Authority_Watchlist = 2,// Authority
     // (undocumented)
-    Channel = 43,
+    Channel = 43,// Authority
     // (undocumented)
     Market_AsxBookBuild = 8,
     // (undocumented)
@@ -16474,109 +16474,109 @@ export namespace MarketBoardFieldOverlapsScanCondition {
 // @public (undocumented)
 export const enum MarketBoardId {
     // (undocumented)
-    AsxBookBuild = 0,
+    AsxBookBuild = 0,// ASX BookBuild
     // (undocumented)
-    AsxPureMatch = 20,
+    AsxPureMatch = 20,// ASX CentrePoint
     // (undocumented)
-    AsxPureMatchEquity1 = 21,
+    AsxPureMatchEquity1 = 21,// ASX TradeMatch
     // (undocumented)
-    AsxPureMatchEquity2 = 22,
+    AsxPureMatchEquity2 = 22,// ASX TradeMatch ??
     // (undocumented)
-    AsxPureMatchEquity3 = 23,
+    AsxPureMatchEquity3 = 23,// ASX TradeMatch ??
     // (undocumented)
-    AsxPureMatchEquity4 = 24,
+    AsxPureMatchEquity4 = 24,// ASX TradeMatch Derivatives Market
     // (undocumented)
-    AsxPureMatchEquity5 = 25,
+    AsxPureMatchEquity5 = 25,// ASX TradeMatch Equity Market 1 (A-B)
     // (undocumented)
-    AsxTradeMatch = 2,
+    AsxTradeMatch = 2,// ASX TradeMatch Equity Market 2 (C-F)
     // (undocumented)
-    AsxTradeMatchAD = 18,
+    AsxTradeMatchAD = 18,// ASX TradeMatch Equity Market 3 (G-M)
     // (undocumented)
-    AsxTradeMatchAgric = 3,
+    AsxTradeMatchAgric = 3,// ASX TradeMatch Equity Market 4 (N-R)
     // (undocumented)
-    AsxTradeMatchAus = 4,
+    AsxTradeMatchAus = 4,// ASX TradeMatch Equity Market 5 (S-Z)
     // (undocumented)
-    AsxTradeMatchCentrePoint = 1,
+    AsxTradeMatchCentrePoint = 1,// ASX TradeMatch Index Market
     // (undocumented)
-    AsxTradeMatchDerivatives = 5,
+    AsxTradeMatchDerivatives = 5,// ASX TradeMatch Index Derivatives Market
     // (undocumented)
-    AsxTradeMatchED = 19,
+    AsxTradeMatchED = 19,// ASX TradeMatch Interest Rate Market
     // (undocumented)
-    AsxTradeMatchEquity1 = 6,
+    AsxTradeMatchEquity1 = 6,// ASX TradeMatch Private Market
     // (undocumented)
-    AsxTradeMatchEquity2 = 7,
+    AsxTradeMatchEquity2 = 7,// ASX TradeMatch Quote Display Board
     // (undocumented)
-    AsxTradeMatchEquity3 = 8,
+    AsxTradeMatchEquity3 = 8,// ASX TradeMatch Practice Market
     // (undocumented)
-    AsxTradeMatchEquity4 = 9,
+    AsxTradeMatchEquity4 = 9,// ASX TradeMatch Warrants Market
     // (undocumented)
-    AsxTradeMatchEquity5 = 10,
+    AsxTradeMatchEquity5 = 10,// ASX TradeMatch AD
     // (undocumented)
-    AsxTradeMatchIndex = 11,
+    AsxTradeMatchIndex = 11,// ASX TradeMatch ED
     // (undocumented)
-    AsxTradeMatchIndexDerivatives = 12,
+    AsxTradeMatchIndexDerivatives = 12,// ASX PureMatch
     // (undocumented)
-    AsxTradeMatchInterestRate = 13,
+    AsxTradeMatchInterestRate = 13,// ASX PureMatch Equity Market 1 (A-B)
     // (undocumented)
-    AsxTradeMatchPractice = 16,
+    AsxTradeMatchPractice = 16,// ASX PureMatch Equity Market 2 (C-F)
     // (undocumented)
-    AsxTradeMatchPrivate = 14,
+    AsxTradeMatchPrivate = 14,// ASX PureMatch Equity Market 3 (G-M)
     // (undocumented)
-    AsxTradeMatchQuoteDisplayBoard = 15,
+    AsxTradeMatchQuoteDisplayBoard = 15,// ASX PureMatch Equity Market 4 (N-R)
     // (undocumented)
-    AsxTradeMatchWarrants = 17,
+    AsxTradeMatchWarrants = 17,// ASX PureMatch Equity Market 5 (S-Z)
     // (undocumented)
-    AsxVolumeMatch = 26,
+    AsxVolumeMatch = 26,// ASX VolumeMatch
     // (undocumented)
-    CfxMain = 65,
+    CfxMain = 65,// Chi-X Australia Far-Point Market
     // (undocumented)
-    ChixAustFarPoint = 27,
+    ChixAustFarPoint = 27,// Chi-X Australia Limit Market
     // (undocumented)
-    ChixAustLimit = 28,
+    ChixAustLimit = 28,// Chi-X Australia Market-on-Close Market
     // (undocumented)
-    ChixAustMarketOnClose = 29,
+    ChixAustMarketOnClose = 29,// Chi-X Australia Mid-Point Market
     // (undocumented)
-    ChixAustMidPoint = 30,
+    ChixAustMidPoint = 30,// Chi-X Australia Near-Point Market
     // (undocumented)
-    ChixAustNearPoint = 31,
+    ChixAustNearPoint = 31,// Australian National Stock Exchange Main
     // (undocumented)
-    DaxMain = 66,
+    DaxMain = 66,// Australian National Stock Exchange Community Banks
     // (undocumented)
-    FnsxMain = 63,
+    FnsxMain = 63,// Australian National Stock Exchange Industrial
     // (undocumented)
-    FpsxMain = 64,
+    FpsxMain = 64,// Australian National Stock Exchange Debt
     // (undocumented)
-    MyxBuyInMarket = 60,
+    MyxBuyInMarket = 60,// Australian National Stock Exchange Mining & Energy
     // (undocumented)
-    MyxDirectBusinessTransactionMarket = 58,
+    MyxDirectBusinessTransactionMarket = 58,// Australian National Stock Exchange Certified Property
     // (undocumented)
-    MyxIndexMarket = 59,
+    MyxIndexMarket = 59,// Australian National Stock Exchange Property
     // (undocumented)
-    MyxNormalMarket = 57,
+    MyxNormalMarket = 57,// Australian National Stock Exchange Restricted
     // (undocumented)
-    MyxOddLotMarket = 61,
+    MyxOddLotMarket = 61,// SIM-VSE
     // (undocumented)
-    NsxCertifiedProperty = 37,
+    NsxCertifiedProperty = 37,// South Pacific Stock Exchange Equities
     // (undocumented)
-    NsxCommunityBanks = 33,
+    NsxCommunityBanks = 33,// South Pacific Stock Exchange Restricted
     // (undocumented)
-    NsxDebt = 35,
+    NsxDebt = 35,// NZX Main Board
     // (undocumented)
-    NsxIndustrial = 34,
+    NsxIndustrial = 34,// NZX Spec
     // (undocumented)
-    NsxMain = 32,
+    NsxMain = 32,// NZX Fonterra Shareholders Market
     // (undocumented)
-    NsxMiningAndEnergy = 36,
+    NsxMiningAndEnergy = 36,// NZX Index Market
     // (undocumented)
-    NsxProperty = 38,
+    NsxProperty = 38,// NZX Debt Market
     // (undocumented)
     NsxRestricted = 39,
     // (undocumented)
-    NzxComm = 48,
+    NzxComm = 48,// NZX Derivative Futures
     // (undocumented)
-    NzxDebtMarket = 47,
+    NzxDebtMarket = 47,// NZX Derivative Options
     // (undocumented)
-    NzxDerivativeFutures = 49,
+    NzxDerivativeFutures = 49,// NZX Index Futures
     // (undocumented)
     NzxDerivativeOptions = 50,
     // (undocumented)
@@ -17981,7 +17981,7 @@ export namespace NotificationChannel {
             // (undocumented)
             Low = 1,
             // (undocumented)
-            Normal = 2,
+            Normal = 2,// default
             // (undocumented)
             VeryLow = 0
         }
@@ -19604,9 +19604,9 @@ export namespace OrderPad {
             // (undocumented)
             NegativeValueNotAllowed = 5,
             // (undocumented)
-            NotBackOfficeScreens = 18,
+            NotBackOfficeScreens = 18,//
             // (undocumented)
-            NotCanSelectBrokerage = 19,
+            NotCanSelectBrokerage = 19,//
             // (undocumented)
             NotIceberg = 28,
             // (undocumented)
@@ -19614,7 +19614,7 @@ export namespace OrderPad {
             // (undocumented)
             NotManualBrokerageCode = 32,
             // (undocumented)
-            NotMove = 24,
+            NotMove = 24,//
             // (undocumented)
             NotRoaEnabled = 42,
             // (undocumented)
@@ -19854,11 +19854,11 @@ export namespace OrderPadStatus {
 // @public (undocumented)
 export const enum OrderPadStatusId {
     // (undocumented)
-    AllFieldsOk = 0,
+    AllFieldsOk = 0,// All fields are ok.
     // (undocumented)
-    DataPending = 3,
+    DataPending = 3,// One or more fields contain invalid data.
     // (undocumented)
-    InvalidFields = 1,
+    InvalidFields = 1,// One or more required fields are missing.
     // (undocumented)
     MissingFields = 2
 }
@@ -20657,11 +20657,11 @@ export namespace OrderStatus {
     // (undocumented)
     export const enum AllowId {
         // (undocumented)
-        Amend = 1,
+        Amend = 1,// The order can potentially match in this state.
         // (undocumented)
-        Cancel = 2,
+        Cancel = 2,// The order can be amended.
         // (undocumented)
-        Move = 3,
+        Move = 3,// The order can be cancelled.
         // (undocumented)
         Trade = 0
     }
@@ -20683,15 +20683,15 @@ export namespace OrderStatus {
     // (undocumented)
     export const enum ReasonId {
         // (undocumented)
-        Abnormal = 3,
+        Abnormal = 3,// The reason is unknown.
         // (undocumented)
-        Completed = 5,
+        Completed = 5,// State is a normal part of the order life-cycle.
         // (undocumented)
-        Manual = 2,
+        Manual = 2,// State was initiated manually.
         // (undocumented)
-        Normal = 1,
+        Normal = 1,// State is abnormal indicating a fault or other issue.
         // (undocumented)
-        Unknown = 0,
+        Unknown = 0,// State is due to a temporary wait.
         // (undocumented)
         Waiting = 4
     }
@@ -21806,15 +21806,15 @@ export namespace PublisherSubscriptionDataItem {
         // (undocumented)
         Error = 1,
         // (undocumented)
-        NeverSubscribed = 0,
+        NeverSubscribed = 0,// subscription is unsubscribed
         // (undocumented)
         PublisherOfflining = 5,
         // (undocumented)
-        PublisherOnlineWaiting = 2,
+        PublisherOnlineWaiting = 2,// connection online but Feed needs to come online or become Active/Closed
         // (undocumented)
         ResponseWaiting = 6,
         // (undocumented)
-        RetryDelayWaiting = 4,
+        RetryDelayWaiting = 4,// If connection goes offline, all subscribed subscriptions are put into this state first
         // (undocumented)
         SubscribabilityIncreaseWaiting = 3,
         // (undocumented)
@@ -25712,13 +25712,13 @@ export namespace ScanFieldCondition {
         // (undocumented)
         ExchangeOverlaps = 9,
         // (undocumented)
-        Is = 12,
+        Is = 12,// Single Equals
         // (undocumented)
-        MarketBoardOverlaps = 11,
+        MarketBoardOverlaps = 11,// Text
         // (undocumented)
-        MarketOverlaps = 10,
+        MarketOverlaps = 10,// Single Exists
         // (undocumented)
-        Numeric = 0,
+        Numeric = 0,// Subbed Text
         // (undocumented)
         NumericComparison = 1,
         // (undocumented)
@@ -26165,13 +26165,13 @@ export namespace ScanFormula {
         // (undocumented)
         export const enum StyleId {
             // (undocumented)
-            Contains = 4,
+            Contains = 4,// Range and Named Range
             // (undocumented)
-            Equals = 2,
+            Equals = 2,// Multiple
             // (undocumented)
-            HasValueEquals = 3,
+            HasValueEquals = 3,// Single but not Single Exists
             // (undocumented)
-            InRange = 0,
+            InRange = 0,// Single Exists
             // (undocumented)
             Overlaps = 1
         }
@@ -26216,7 +26216,7 @@ export namespace ScanFormula {
         // (undocumented)
         CallOrPut = 11,
         // (undocumented)
-        Category = 12,
+        Category = 12,// Corresponds to Symbol.Categories
         // (undocumented)
         Cfi = 13,
         // (undocumented)
@@ -26242,7 +26242,7 @@ export namespace ScanFormula {
         // (undocumented)
         HighPrice = 24,
         // (undocumented)
-        Is = 25,
+        Is = 25,// Dummy field that allows IsNode to be treated as a field
         // (undocumented)
         LastPrice = 26,
         // (undocumented)
@@ -26272,9 +26272,9 @@ export namespace ScanFormula {
         // (undocumented)
         ShareIssue = 39,
         // (undocumented)
-        StatusNote = 42,
+        StatusNote = 42,// Corresponds to TradingState.name  Each market supports a fixed number of trading states.  They are available at Market.tradingStates. These are fetched when Motif Core is started.
         // (undocumented)
-        StrikePrice = 43,
+        StrikePrice = 43,// Corresponds to TradingState.AllowId
         // (undocumented)
         Trades = 44,
         // (undocumented)
@@ -26910,9 +26910,9 @@ export namespace ScanFormulaZenithEncoding {
     // (undocumented)
     export const enum ErrorId {
         // (undocumented)
-        AltCodeSubFieldContainsSubFieldIsUnknown = 35,
+        AltCodeSubFieldContainsSubFieldIsUnknown = 35,// Set externally
         // (undocumented)
-        AltCodeSubFieldHasValueSubFieldIsUnknown = 19,
+        AltCodeSubFieldHasValueSubFieldIsUnknown = 19,// Too be phased out
         // (undocumented)
         AttributeSubFieldContainsSubFieldIsUnknown = 36,
         // (undocumented)
@@ -33452,13 +33452,13 @@ export const enum StringId {
     // (undocumented)
     SettingTitle_Symbol_ExplicitSearchFieldsEnabled = 1058,
     // (undocumented)
-    SettingTitle_Symbol_MarketCodeAsLocalWheneverPossible = 1046,
+    SettingTitle_Symbol_MarketCodeAsLocalWheneverPossible = 1046,// remove when Watchmaker no longer references
     // (undocumented)
-    Show = 42,
+    Show = 42,// remove when Watchmaker no longer references
     // (undocumented)
-    ShowSelectedAlertDetailsTitle = 931,
+    ShowSelectedAlertDetailsTitle = 931,// remove when Watchmaker no longer references
     // (undocumented)
-    SideAbbreviation_Buy = 788,
+    SideAbbreviation_Buy = 788,// remove when Watchmaker no longer references
     // (undocumented)
     SideAbbreviation_IntraDayShortSell = 792,
     // (undocumented)
@@ -35372,7 +35372,7 @@ export namespace TableFieldSourceDefinition {
         // (undocumented)
         Scan = 17,
         // (undocumented)
-        ScanFieldEditorFrame = 20,
+        ScanFieldEditorFrame = 20,// outside
         // (undocumented)
         SecurityDataItem = 8,
         // (undocumented)
@@ -35591,7 +35591,7 @@ export namespace TableRecordDefinition {
         // (undocumented)
         RankedLitIvemIdListDirectoryItem = 13,
         // (undocumented)
-        Scan = 12,
+        Scan = 12,// Outside
         // (undocumented)
         ScanFieldEditorFrame = 15,
         // (undocumented)
@@ -36685,9 +36685,9 @@ export const enum TimeInForceId {
     // (undocumented)
     AtTheOpening = 2,
     // (undocumented)
-    Day = 0,
+    Day = 0,// Is identical to "Fill AND Kill". Ie: Partial orders are allowed.
     // (undocumented)
-    FillAndKill = 3,
+    FillAndKill = 3,// Fill or kill doesn't allow partial files.
     // (undocumented)
     FillOrKill = 4,
     // (undocumented)
@@ -36786,13 +36786,13 @@ export const enum TMarketSegmentId {
     // (undocumented)
     mksgMyxLeap = 19,
     // (undocumented)
-    mksgMyxMain = 14,
+    mksgMyxMain = 14,// (Warrants market)
     // (undocumented)
-    mksgMyxStrw = 15,
+    mksgMyxStrw = 15,// (Technologies, used to be a  separate market)
     // (undocumented)
-    mksgSmallCap = 1,
+    mksgSmallCap = 1,// (Interest based securities)
     // (undocumented)
-    mksgTelecommunicationServices = 12,
+    mksgTelecommunicationServices = 12,// (Exchange Traded Funds)
     // (undocumented)
     mksgUtilities = 13
 }
@@ -38104,15 +38104,15 @@ export namespace TradingState {
     // (undocumented)
     export const enum AllowId {
         // (undocumented)
-        Match = 4,
+        Match = 4,// Orders may be placed
         // (undocumented)
-        OrderAmend = 1,
+        OrderAmend = 1,// Orders may be amended.
         // (undocumented)
-        OrderCancel = 2,
+        OrderCancel = 2,// Orders may be cancelled.
         // (undocumented)
-        OrderMove = 3,
+        OrderMove = 3,// Orders may be moved.
         // (undocumented)
-        OrderPlace = 0,
+        OrderPlace = 0,// Orders will be automatically matched and Trades occur.
         // (undocumented)
         ReportCancel = 5
     }
@@ -38134,13 +38134,13 @@ export namespace TradingState {
     // (undocumented)
     export const enum ReasonId {
         // (undocumented)
-        NewsRelease = 4,
+        NewsRelease = 4,// The reason is unknown.
         // (undocumented)
-        Normal = 1,
+        Normal = 1,// State is a normal part of the order life-cycle.
         // (undocumented)
-        Suspend = 2,
+        Suspend = 2,// This state represents a suspension.
         // (undocumented)
-        TradingHalt = 3,
+        TradingHalt = 3,// This state represents a temporary trading halt.
         // (undocumented)
         Unknown = 0
     }
@@ -39107,21 +39107,21 @@ export namespace UiAction {
     // (undocumented)
     export const enum StateId {
         // (undocumented)
-        Accepted = 5,
+        Accepted = 5,// value cannot be used
         // (undocumented)
-        Disabled = 0,
+        Disabled = 0,// value is acceptable but but cannot changed
         // (undocumented)
-        Error = 8,
+        Error = 8,// value is committed but undefined and required
         // (undocumented)
-        Invalid = 3,
+        Invalid = 3,// value is not committed (edited) but not valid
         // (undocumented)
-        Missing = 2,
+        Missing = 2,// value is committed, present and valid but not accepted by application
         // (undocumented)
-        Readonly = 1,
+        Readonly = 1,// value is committed, present, valid and accepted by application
         // (undocumented)
-        Valid = 4,
+        Valid = 4,// value is committed, present, valid and accepted by application but resulted to waiting
         // (undocumented)
-        Waiting = 6,
+        Waiting = 6,// value is committed, present, valid and accepted by application but resulted in Warning
         // (undocumented)
         Warning = 7
     }
@@ -41808,9 +41808,9 @@ export namespace ZenithProtocol {
     // (undocumented)
     export const enum AbbreviatedAuiChangeType {
         // (undocumented)
-        Add = "A",
+        Add = "A",// A: Add new
         // (undocumented)
-        Initialise = "I",
+        Initialise = "I",// A: Update
         // (undocumented)
         Update = "U"
     }
@@ -42047,11 +42047,11 @@ export namespace ZenithProtocol {
             // (undocumented)
             Debug = "Debug",
             // (undocumented)
-            Email = "Email",
+            Email = "Email",// Apple Push Notification Service
             // (undocumented)
             PushApns = "Push.APNs",
             // (undocumented)
-            PushFCM = "Push.FCM",
+            PushFCM = "Push.FCM",// Google Firebase Cloud Messaging
             // (undocumented)
             PushWeb = "Push.Web",
             // (undocumented)
@@ -42320,13 +42320,13 @@ export namespace ZenithProtocol {
         // (undocumented)
         Active = "Active",
         // (undocumented)
-        Closed = "Closed",
+        Closed = "Closed",// Feed is online and updating
         // (undocumented)
-        Expired = "Expired",
+        Expired = "Expired",// Feed is outside hours and updating
         // (undocumented)
-        Impaired = "Impaired",
+        Impaired = "Impaired",// Feed is outside hours and read-only
         // (undocumented)
-        Inactive = "Inactive",
+        Inactive = "Inactive",// Feed is offline when it shouldn't be
         // (undocumented)
         Initialising = "Initialising"
     }
@@ -42613,11 +42613,11 @@ export namespace ZenithProtocol {
         // (undocumented)
         NzxDerivativeOptions = "D-OPT",
         // (undocumented)
-        NzxDStgy = "D-STGY",
+        NzxDStgy = "D-STGY",// Maybe NZ Futures & Options Equity Options
         // (undocumented)
         NzxEOpt = "E-OPT",
         // (undocumented)
-        NzxFonterraShareholders = "FSM",
+        NzxFonterraShareholders = "FSM",// Maybe NZ Futures & Options Milk Options
         // (undocumented)
         NzxIndex = "INDX",
         // (undocumented)
@@ -43787,37 +43787,37 @@ export namespace ZenithProtocol {
     // (undocumented)
     export const enum OrderInstruction {
         // (undocumented)
-        Any = "Any",
+        Any = "Any",// Order is Proprietary Short-Sell (MYX)
         // (undocumented)
-        AnyHalf = "AnyHalf",
+        AnyHalf = "AnyHalf",// Order is Intra-Day Short-Sell (MYX)
         // (undocumented)
-        Best = "Best",
+        Best = "Best",// Order is Proprietary Day Trade (MYX)
         // (undocumented)
-        Block = "Block",
+        Block = "Block",// Order is Regulated Short-Sell (MYX)
         // (undocumented)
-        Dark = "Dark",
+        Dark = "Dark",// Order is On-Open (MYX)
         // (undocumented)
-        DarkHalf = "DarkHalf",
+        DarkHalf = "DarkHalf",// Order is On-Close (MYX)
         // (undocumented)
-        IDSS = "IDSS",
+        IDSS = "IDSS",// Order is On-Open/On-Close (MYX)
         // (undocumented)
-        Mid = "Mid",
+        Mid = "Mid",// Order is a Best Order (ASX)
         // (undocumented)
-        MidHalf = "MidHalf",
+        MidHalf = "MidHalf",// Order is a Sweep Order (ASX)
         // (undocumented)
-        OnClose = "OnClose",
+        OnClose = "OnClose",// Order is a Block Order (ASX)
         // (undocumented)
-        OnOpen = "OnOpen",
+        OnOpen = "OnOpen",// Order is placed at the Mid Tick (ASX)
         // (undocumented)
-        PDT = "PDT",
+        PDT = "PDT",// Order is placed at the Mid Tick, allowing half-ticks (ASX)
         // (undocumented)
-        PSS = "PSS",
+        PSS = "PSS",// Order is placed Dark (ASX)
         // (undocumented)
-        RSS = "RSS",
+        RSS = "RSS",// Order is placed Dark, allowing half-ticks (ASX)
         // (undocumented)
-        Session = "Session",
+        Session = "Session",// Order allows any Price Block (ASX)
         // (undocumented)
-        Single = "Single",
+        Single = "Single",// Order allows ny Price Block, allowing half-ticks (ASX)
         // (undocumented)
         Sweep = "Sweep"
     }
@@ -45185,7 +45185,7 @@ export namespace ZenithProtocol {
             // (undocumented)
             UpdateWatchlist = "UpdateWatchlist",
             // (undocumented)
-            Watchlist = "Watchlist",
+            Watchlist = "Watchlist",// This really should be called Members
             // (undocumented)
             Watchlists = "Watchlists"
         }
@@ -45265,19 +45265,19 @@ export namespace ZenithProtocol {
         // (undocumented)
         export const enum CloseCode {
             // (undocumented)
-            DataTooLarge = 1009,
+            DataTooLarge = 1009,// Sent in response to a client-initiated closure.
             // (undocumented)
-            GoingAway = 1001,
+            GoingAway = 1001,// Sent if the server deliberately dropped your connection.
             // (undocumented)
-            KickedOff = 4000,
+            KickedOff = 4000,// Sent if the client supplies an invalid or malformed frame.
             // (undocumented)
-            MotifDiagnosticClose = 3000,
+            MotifDiagnosticClose = 3000,// Sent if the client has not responded to ping.
             // (undocumented)
-            Normal = 1000,
+            Normal = 1000,// Sent if the client sends a message that is too large.
             // (undocumented)
-            Protocol = 1002,
+            Protocol = 1002,// Sent if the server encountered a situation requiring it to end the connection.
             // (undocumented)
-            ServerError = 1011,
+            ServerError = 1011,// Sent if the server is shutting down. The client should attempt to reconnect.
             // (undocumented)
             ServerRestart = 1012,
             // (undocumented)
@@ -45676,9 +45676,9 @@ export namespace ZenithPublisherSubscriptionManager {
     // (undocumented)
     export const enum LogLevelId {
         // (undocumented)
-        Full = 2,
+        Full = 2,// No messages are logged.
         // (undocumented)
-        Off = 0,
+        Off = 0,// All outgoing messages are logged. The first incoming message for each request is logged.
         // (undocumented)
         Partial = 1
     }
