@@ -9,13 +9,16 @@ import { addToArrayByPush } from '@xilytix/sysutils';
 import { addToArrayUniquely } from '@xilytix/sysutils';
 import { addToCapacitisedArrayUniquely } from '@xilytix/sysutils';
 import { addToGrow15ArrayUniquely } from '@xilytix/sysutils';
+import { anyBinarySearch } from '@xilytix/sysutils';
 import { AssertInternalError } from '@xilytix/sysutils';
 import { BehavioredColumnSettings } from '@xilytix/revgrid';
 import { BehavioredGridSettings } from '@xilytix/revgrid';
+import { BinarySearchResult } from '@xilytix/sysutils';
 import { BooleanOrUndefined } from '@xilytix/sysutils';
 import { CachedCanvasRenderingContext2D } from '@xilytix/revgrid';
 import { calculateIntlNumberFormatCharParts } from '@xilytix/sysutils';
 import { CellPainter } from '@xilytix/revgrid';
+import { ChangeSubscribableComparableList } from '@xilytix/sysutils';
 import { checkEscapeCharForRegexInsideCharClass } from '@xilytix/sysutils';
 import { checkEscapeCharForRegexOutsideCharClass } from '@xilytix/sysutils';
 import { checkLimitTextLength } from '@xilytix/sysutils';
@@ -24,11 +27,13 @@ import { cloneDecimal } from '@xilytix/sysutils';
 import { Column } from '@xilytix/revgrid';
 import { ColumnSettings } from '@xilytix/revgrid';
 import { CommaText } from '@xilytix/sysutils';
+import { ComparableList } from '@xilytix/sysutils';
 import { compareArray } from '@xilytix/sysutils';
 import { compareBoolean } from '@xilytix/sysutils';
 import { compareDate } from '@xilytix/sysutils';
 import { compareDecimal } from '@xilytix/sysutils';
 import { compareEnum } from '@xilytix/sysutils';
+import { CompareFtn } from '@xilytix/sysutils';
 import { compareInteger } from '@xilytix/sysutils';
 import { compareNumber } from '@xilytix/sysutils';
 import { compareString } from '@xilytix/sysutils';
@@ -60,6 +65,7 @@ import { Decimal } from '@xilytix/sysutils';
 import { deepExtendObject } from '@xilytix/sysutils';
 import { deepExtendValue } from '@xilytix/sysutils';
 import { delay1Tick } from '@xilytix/sysutils';
+import { earliestBinarySearch } from '@xilytix/sysutils';
 import { EnumInfoOutOfOrderError } from '@xilytix/sysutils';
 import { Err } from '@xilytix/sysutils';
 import { getElementDocumentPosition } from '@xilytix/sysutils';
@@ -70,6 +76,7 @@ import { GridSettings } from '@xilytix/revgrid';
 import { Guid } from '@xilytix/sysutils';
 import { HorizontalAlign } from '@xilytix/revgrid';
 import { hoursPerDay } from '@xilytix/sysutils';
+import { HtmlTypes } from '@xilytix/sysutils';
 import { incDateByDays } from '@xilytix/sysutils';
 import { IndexedRecord } from '@xilytix/sysutils';
 import { IndexSignatureHack } from '@xilytix/sysutils';
@@ -114,6 +121,8 @@ import { MapKey } from '@xilytix/sysutils';
 import { Mappable } from '@xilytix/sysutils';
 import { minsPerDay } from '@xilytix/sysutils';
 import { minsPerHour } from '@xilytix/sysutils';
+import { ModifierKey } from '@xilytix/sysutils';
+import { ModifierKeyId } from '@xilytix/sysutils';
 import { moveElementInArray } from '@xilytix/sysutils';
 import { moveElementsInArray } from '@xilytix/sysutils';
 import { moveIndexedElementsInArrayOnePositionTowardsEndWithSquash } from '@xilytix/sysutils';
@@ -122,6 +131,7 @@ import { mSecsPerDay } from '@xilytix/sysutils';
 import { mSecsPerHour } from '@xilytix/sysutils';
 import { mSecsPerMin } from '@xilytix/sysutils';
 import { mSecsPerSec } from '@xilytix/sysutils';
+import { MultiEvent } from '@xilytix/sysutils';
 import { newDate } from '@xilytix/sysutils';
 import { newDecimal } from '@xilytix/sysutils';
 import { newGuid } from '@xilytix/sysutils';
@@ -142,6 +152,10 @@ import { parseNumberStrict } from '@xilytix/sysutils';
 import { PickEnum } from '@xilytix/sysutils';
 import { PickExcludedEnum } from '@xilytix/sysutils';
 import { priorityCompareInteger } from '@xilytix/sysutils';
+import { rangedAnyBinarySearch } from '@xilytix/sysutils';
+import { rangedEarliestBinarySearch } from '@xilytix/sysutils';
+import { rangedQuickSort } from '@xilytix/sysutils';
+import { RecordList } from '@xilytix/sysutils';
 import { Rect } from '@xilytix/sysutils';
 import { Rectangle } from '@xilytix/revgrid';
 import { removeFromArray } from '@xilytix/sysutils';
@@ -177,6 +191,8 @@ import { UnexpectedCaseError } from '@xilytix/sysutils';
 import { UnexpectedTypeError } from '@xilytix/sysutils';
 import { uniqueElementArraysOverlap } from '@xilytix/sysutils';
 import { UnreachableCaseError } from '@xilytix/sysutils';
+import { UsableListChangeType } from '@xilytix/sysutils';
+import { UsableListChangeTypeId } from '@xilytix/sysutils';
 import { ViewCell } from '@xilytix/revgrid';
 import { ViewLayout } from '@xilytix/revgrid';
 
@@ -1337,8 +1353,7 @@ export class AmendOrderResponseDataMessage extends OrderResponseDataMessage {
     static readonly typeId = DataMessageTypeId.AmendOrderResponse;
 }
 
-// @public
-export function anyBinarySearch<T>(values: T[], item: T, compare: CompareFtn<T>): BinarySearchResult;
+export { anyBinarySearch }
 
 // Warning: (ae-missing-release-tag) "AppStorageService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "AppStorageService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -2540,13 +2555,7 @@ export class BigIntRenderValue extends GenericRenderValue<bigint> {
     constructor(data: bigint | undefined);
 }
 
-// @public (undocumented)
-export interface BinarySearchResult {
-    // (undocumented)
-    found: boolean;
-    // (undocumented)
-    index: Integer;
-}
+export { BinarySearchResult }
 
 // Warning: (ae-missing-release-tag) "BkgdItemStateColorSchemeGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -3722,51 +3731,7 @@ export class CellPainterFactoryService {
     createTextRenderValueRowDataArrayGrid(grid: RowDataArrayGrid, dataServer: RowDataArrayGridDataServer): RenderValueRowDataArrayGridCellPainter<TextRenderValueCellPainter>;
 }
 
-// Warning: (ae-missing-release-tag) "ChangeSubscribableComparableList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class ChangeSubscribableComparableList<out T extends U, in U = T> extends ComparableList<T, U> implements RecordList<T> {
-    // (undocumented)
-    add(value: T): number;
-    // (undocumented)
-    addRange(values: readonly T[]): void;
-    // (undocumented)
-    addSubRange(values: readonly T[], rangeStartIndex: Integer, rangeCount: Integer): void;
-    // (undocumented)
-    addUndefinedRange(undefinedValueCount: Integer): void;
-    // (undocumented)
-    clear(): void;
-    // (undocumented)
-    clone(): ChangeSubscribableComparableList<T, U>;
-    // (undocumented)
-    exchange(index1: Integer, index2: Integer): void;
-    // (undocumented)
-    insert(index: Integer, value: T): void;
-    // (undocumented)
-    insertRange(index: Integer, values: readonly T[]): void;
-    // (undocumented)
-    insertSubRange(index: Integer, values: readonly T[], subRangeStartIndex: Integer, subRangeCount: Integer): void;
-    // (undocumented)
-    move(fromIndex: Integer, toIndex: Integer): void;
-    // (undocumented)
-    moveRange(fromIndex: Integer, toIndex: Integer, count: Integer): void;
-    // (undocumented)
-    protected notifyListChange(listChangeTypeId: UsableListChangeTypeId, index: Integer, count: Integer): void;
-    // (undocumented)
-    removeAtIndex(index: Integer): void;
-    // (undocumented)
-    removeAtIndices(removeIndices: Integer[]): void;
-    // (undocumented)
-    removeItems(removeItems: readonly T[]): void;
-    // (undocumented)
-    removeRange(index: Integer, deleteCount: Integer): void;
-    // (undocumented)
-    setAt(index: Integer, value: T): void;
-    // (undocumented)
-    subscribeListChangeEvent(handler: RecordList.ListChangeEventHandler): MultiEvent.DefinedSubscriptionId;
-    // (undocumented)
-    unsubscribeListChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
-}
+export { ChangeSubscribableComparableList }
 
 // Warning: (ae-missing-release-tag) "ChartHistoryDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "ChartHistoryDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -5072,106 +5037,7 @@ export namespace CommonStaticInitialise {
     export function initialise(): void;
 }
 
-// @public (undocumented)
-export class ComparableList<out T extends U, in U = T> {
-    constructor(compareItemsFtn?: CompareFtn<U>);
-    // (undocumented)
-    add(value: T): number;
-    // (undocumented)
-    addRange(values: readonly T[]): void;
-    // (undocumented)
-    addSubRange(values: readonly T[], subRangeStartIndex: Integer, subRangeCount: Integer): void;
-    // (undocumented)
-    addUndefinedRange(undefinedValueCount: Integer): void;
-    // (undocumented)
-    protected assign(other: ComparableList<T, U>): void;
-    // (undocumented)
-    binarySearchAny(item: T, compareItemsFtn?: CompareFtn<T>): BinarySearchResult;
-    // (undocumented)
-    binarySearchEarliest(item: T, compareItemsFtn?: CompareFtn<T>): BinarySearchResult;
-    // (undocumented)
-    binarySearchLatest(item: T, compareItemsFtn?: CompareFtn<T>): BinarySearchResult;
-    // (undocumented)
-    get capacity(): Integer;
-    set capacity(value: Integer);
-    // (undocumented)
-    capacityIncSize: Integer | undefined;
-    // (undocumented)
-    clear(): void;
-    // (undocumented)
-    clone(): ComparableList<T, U>;
-    // (undocumented)
-    compareItems(left: T, right: T): ComparisonResult;
-    // (undocumented)
-    protected _compareItemsFtn: CompareFtn<U>;
-    // (undocumented)
-    contains(value: T): boolean;
-    // (undocumented)
-    get count(): Integer;
-    set count(value: Integer);
-    // (undocumented)
-    exchange(index1: Integer, index2: Integer): void;
-    // (undocumented)
-    extract(value: T): T;
-    // (undocumented)
-    find(predicate: (value: T, index: Integer) => boolean): T | undefined;
-    // (undocumented)
-    findIndex(predicate: (value: T, index: Integer) => boolean): number;
-    // (undocumented)
-    first(): T;
-    // (undocumented)
-    getAt(index: Integer): T;
-    // (undocumented)
-    has(predicate: (value: T, index: Integer) => boolean): boolean;
-    // (undocumented)
-    indexOf(value: T): number;
-    // (undocumented)
-    insert(index: Integer, value: T): void;
-    // (undocumented)
-    insertRange(index: Integer, values: readonly T[]): void;
-    // (undocumented)
-    insertSubRange(index: Integer, values: readonly T[], subRangeStartIndex: Integer, subRangeCount: Integer): void;
-    // (undocumented)
-    readonly items: T[];
-    // (undocumented)
-    last(): T;
-    // (undocumented)
-    get lastIndex(): number;
-    // (undocumented)
-    move(fromIndex: Integer, toIndex: Integer): void;
-    // (undocumented)
-    moveRange(fromIndex: Integer, toIndex: Integer, count: Integer): void;
-    // (undocumented)
-    remove(value: T): void;
-    // (undocumented)
-    removeAtIndex(index: Integer): void;
-    // (undocumented)
-    removeAtIndices(removeIndices: Integer[], beforeRemoveRangeCallBack?: ComparableList.BeforeRemoveRangeCallBack): void;
-    // (undocumented)
-    removeItems(removeItems: readonly T[], beforeRemoveRangeCallBack?: ComparableList.BeforeRemoveRangeCallBack): void;
-    // (undocumented)
-    removeRange(index: Integer, deleteCount: Integer): void;
-    // (undocumented)
-    setAt(index: Integer, value: T): void;
-    // (undocumented)
-    setGrowthCapacity(growth: Integer): void;
-    // (undocumented)
-    setMinimumCapacity(value: Integer): void;
-    // (undocumented)
-    shift(): T | undefined;
-    // (undocumented)
-    sort(compareItemsFtn?: CompareFtn<T>): void;
-    // (undocumented)
-    toArray(): T[];
-    // (undocumented)
-    trimExcess(): void;
-}
-
-// @public (undocumented)
-export namespace ComparableList {
-    // (undocumented)
-    export type BeforeRemoveRangeCallBack = (this: void, index: Integer, count: Integer) => void;
-}
+export { ComparableList }
 
 export { compareArray }
 
@@ -5182,9 +5048,6 @@ export { compareDate }
 export { compareDecimal }
 
 export { compareEnum }
-
-// @public (undocumented)
-export type CompareFtn<in T> = (this: void, left: T, right: T) => ComparisonResult;
 
 export { compareInteger }
 
@@ -7957,8 +7820,7 @@ export class DuplicateError extends ExternalError {
     constructor(code: ErrorCode, message?: string);
 }
 
-// @public
-export function earliestBinarySearch<T>(values: T[], item: T, compare: CompareFtn<T>): BinarySearchResult;
+export { earliestBinarySearch }
 
 // Warning: (ae-missing-release-tag) "EditableGridLayoutDefinitionColumn" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "EditableGridLayoutDefinitionColumn" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -10680,9 +10542,6 @@ export const firstDataItemId: DataItemId;
 // @public (undocumented)
 export const firstDataItemRequestNr: DataItemRequestNr;
 
-// @public (undocumented)
-export function firstLastRangedQuickSort<T>(values: T[], compareFtn: CompareFtn<T>, firstIdx: Integer, lastIdx: Integer): void;
-
 // Warning: (ae-missing-release-tag) "FixOrderRoute" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "FixOrderRoute" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -12455,71 +12314,7 @@ export class HoldingTableValueSource extends CorrectnessTableValueSource<Holding
 
 export { hoursPerDay }
 
-// @public (undocumented)
-export namespace HtmlTypes {
-    // (undocumented)
-    export const enum BorderStyle {
-        // (undocumented)
-        Hidden = "hidden",
-        // (undocumented)
-        Solid = "solid"
-    }
-    // (undocumented)
-    export const enum Display {
-        // (undocumented)
-        Block = "block",
-        // (undocumented)
-        Flex = "flex",
-        // (undocumented)
-        None = "none"
-    }
-    // (undocumented)
-    export const enum FontWeight {
-        // (undocumented)
-        Bold = "bold"
-    }
-    // (undocumented)
-    export const enum Height {
-        // (undocumented)
-        Auto = "auto",
-        // (undocumented)
-        MaxContent = "max-content",
-        // (undocumented)
-        MinContent = "min-content"
-    }
-    // (undocumented)
-    export const enum Opacity {
-        // (undocumented)
-        Opaque = "1",
-        // (undocumented)
-        SemiTransparent = "0.5",
-        // (undocumented)
-        Transparent = "0"
-    }
-    // (undocumented)
-    export const enum Tags {
-        // (undocumented)
-        Display = "display"
-    }
-    // (undocumented)
-    export const enum Visibility {
-        // (undocumented)
-        Hidden = "hidden",
-        // (undocumented)
-        Visible = "visible"
-    }
-    // (undocumented)
-    export const enum Width {
-        // (undocumented)
-        Auto = "auto",
-        // (undocumented)
-        MaxContent = "max-content",
-        // (undocumented)
-        MinContent = "min-content"
-    }
-    const // (undocumented)
-    transparentColor = "transparent";
-}
+export { HtmlTypes }
 
 // @public (undocumented)
 export namespace I18nStrings {
@@ -13867,36 +13662,6 @@ export { isIntlFormattedInteger }
 
 export { isIntlFormattedNumber }
 
-// Warning: (ae-internal-missing-underscore) The name "Iso8601" should be prefixed with an underscore because the declaration is marked as @internal
-//
-// @internal (undocumented)
-export namespace Iso8601 {
-    // (undocumented)
-    export interface DateParts {
-        // (undocumented)
-        day: Integer;
-        // (undocumented)
-        month: Integer;
-        // (undocumented)
-        nextIdx: Integer;
-        // (undocumented)
-        year: Integer;
-    }
-    // (undocumented)
-    export function parseDateIntoParts(value: string): DateParts;
-    // (undocumented)
-    export interface ParseResult {
-        // (undocumented)
-        offset: Integer;
-        // (undocumented)
-        utcDate: Date;
-    }
-    // (undocumented)
-    export function parseYyyymmddDateIntoParts(value: string): DateParts;
-    export function parseZenith(value: string): ParseResult | undefined;
-        {};
-}
-
 export { isPartialIntlFormattedInteger }
 
 export { isPartialIntlFormattedNumber }
@@ -14517,9 +14282,6 @@ export namespace LastIntervalHistorySequenceSeries {
         value: number | undefined;
     }
 }
-
-// @public
-export function latestBinarySearch<T>(values: T[], item: T, compare: CompareFtn<T>): BinarySearchResult;
 
 // Warning: (ae-missing-release-tag) "LatestTradingDayTradesDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -17603,34 +17365,9 @@ export namespace ModifierComparableList {
     export type ListChangeEventHandler<Modifier> = (this: void, listChangeTypeId: UsableListChangeTypeId, idx: Integer, count: Integer, modifier: Modifier) => void;
 }
 
-// Warning: (ae-missing-release-tag) "ModifierKey" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export namespace ModifierKey {
-    // (undocumented)
-    export type IdSet = Integer;
-    // (undocumented)
-    export namespace IdSet {
-        // (undocumented)
-        export function create(altKey: boolean, ctrlKey: boolean, metaKey: boolean, shiftKey: boolean): IdSet;
-    }
-    // (undocumented)
-    export function idSetIncludes(idSet: IdSet, value: ModifierKeyId): boolean;
-}
+export { ModifierKey }
 
-// Warning: (ae-missing-release-tag) "ModifierKeyId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export const enum ModifierKeyId {
-    // (undocumented)
-    Alt = 1,
-    // (undocumented)
-    Ctrl = 2,
-    // (undocumented)
-    Meta = 4,
-    // (undocumented)
-    Shift = 8
-}
+export { ModifierKeyId }
 
 // @public (undocumented)
 export class MotifServicesError extends ExternalError {
@@ -17893,31 +17630,7 @@ export { mSecsPerMin }
 
 export { mSecsPerSec }
 
-// @public (undocumented)
-export class MultiEvent<T> {
-    // (undocumented)
-    copyHandlers(): T[];
-    // (undocumented)
-    get count(): number;
-    // (undocumented)
-    subscribe(handler: T): MultiEvent.DefinedSubscriptionId;
-    // (undocumented)
-    subscribeWithId(handler: T, id: MultiEvent.DefinedSubscriptionId): MultiEvent.DefinedSubscriptionId;
-    // (undocumented)
-    unsubscribe(id: MultiEvent.SubscriptionId): void;
-}
-
-// @public (undocumented)
-export namespace MultiEvent {
-    // (undocumented)
-    export type DefinedSubscriptionId = number;
-    // (undocumented)
-    export function getNextSubscriptionId(): DefinedSubscriptionId;
-    const // (undocumented)
-    nullDefinedSubscriptionId: DefinedSubscriptionId;
-    // (undocumented)
-    export type SubscriptionId = DefinedSubscriptionId | undefined;
-}
+export { MultiEvent }
 
 // Warning: (ae-missing-release-tag) "MyxLitIvemAttributes" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "MyxLitIvemAttributes" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -18410,18 +18123,6 @@ export const enum NotificationDistributionMethodId {
 // @public (undocumented)
 export class NotificationDistributionMethodIdTableValue extends EnumTableValue {
     constructor();
-}
-
-// @public (undocumented)
-export class NotifyMultiEvent extends MultiEvent<() => void> {
-    // (undocumented)
-    trigger(): void;
-}
-
-// @public (undocumented)
-export namespace NotifyMultiEvent {
-    // (undocumented)
-    export type EventHandler = (this: void) => void;
 }
 
 export { NotImplementedError }
@@ -22637,20 +22338,11 @@ export abstract class QueryWatchmakerListMembersDataDefinition extends Watchmake
     get referencable(): boolean;
 }
 
-// @public (undocumented)
-export function quickSort<T>(values: T[], compareFtn: CompareFtn<T>): void;
+export { rangedAnyBinarySearch }
 
-// @public
-export function rangedAnyBinarySearch<T>(values: T[], item: T, compare: CompareFtn<T>, index: Integer, count: Integer): BinarySearchResult;
+export { rangedEarliestBinarySearch }
 
-// @public
-export function rangedEarliestBinarySearch<T>(values: T[], item: T, compare: CompareFtn<T>, index: Integer, count: Integer): BinarySearchResult;
-
-// @public
-export function rangedLatestBinarySearch<T>(values: T[], item: T, compare: CompareFtn<T>, index: Integer, count: Integer): BinarySearchResult;
-
-// @public (undocumented)
-export function rangedQuickSort<T>(values: T[], compareFtn: CompareFtn<T>, index: Integer, count: Integer): void;
+export { rangedQuickSort }
 
 // Warning: (ae-missing-release-tag) "RankedLitIvemId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "RankedLitIvemId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -23596,30 +23288,7 @@ export class RecordGridDataServer extends RevRecordDataServer<GridField> {
 export class RecordGridSchemaServer extends RevRecordSchemaServer<GridField> {
 }
 
-// Warning: (ae-missing-release-tag) "RecordList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "RecordList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export interface RecordList<Record> {
-    // (undocumented)
-    readonly count: Integer;
-    // (undocumented)
-    getAt(index: Integer): Record;
-    // (undocumented)
-    indexOf(record: Record): Integer;
-    // (undocumented)
-    subscribeListChangeEvent(handler: RecordList.ListChangeEventHandler): MultiEvent.DefinedSubscriptionId;
-    // (undocumented)
-    toArray(): readonly Record[];
-    // (undocumented)
-    unsubscribeListChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
-}
-
-// @public (undocumented)
-export namespace RecordList {
-    // (undocumented)
-    export type ListChangeEventHandler = (this: void, listChangeTypeId: UsableListChangeTypeId, idx: Integer, count: Integer) => void;
-}
+export { RecordList }
 
 // Warning: (ae-missing-release-tag) "RecordsBrokerageAccountSubscriptionDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -39767,50 +39436,9 @@ export interface UsableList<Record> extends RecordList<Record> {
     readonly usable: boolean;
 }
 
-// @public (undocumented)
-export namespace UsableListChangeType {
-    // (undocumented)
-    export function deregisterMoveParameters(index: Integer): void;
-    // (undocumented)
-    export function getMoveParameters(index: Integer): MoveParameters;
-    // (undocumented)
-    export interface MoveParameters {
-        // (undocumented)
-        count: Integer;
-        // (undocumented)
-        fromIndex: Integer;
-        // (undocumented)
-        toIndex: Integer;
-    }
-    // (undocumented)
-    export function registerMoveParameters(fromIndex: Integer, toIndex: Integer, count: Integer): Integer;
-}
+export { UsableListChangeType }
 
-// @public (undocumented)
-export const enum UsableListChangeTypeId {
-    // (undocumented)
-    AfterMove = 8,
-    // (undocumented)
-    AfterReplace = 6,
-    // (undocumented)
-    BeforeMove = 7,
-    // (undocumented)
-    BeforeReplace = 5,
-    // (undocumented)
-    Clear = 10,
-    // (undocumented)
-    Insert = 4,
-    // (undocumented)
-    PreUsableAdd = 1,
-    // (undocumented)
-    PreUsableClear = 2,
-    // (undocumented)
-    Remove = 9,
-    // (undocumented)
-    Unusable = 0,
-    // (undocumented)
-    Usable = 3
-}
+export { UsableListChangeTypeId }
 
 // @public (undocumented)
 export abstract class UsableListTableRecordSourceDefinition<T> extends TableRecordSourceDefinition {

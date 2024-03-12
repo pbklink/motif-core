@@ -5,7 +5,7 @@
  */
 
 import { ScanList, ScansService } from '../scan/internal-api';
-import { MultiEvent } from '../sys/multi-event';
+import { MultiEvent } from '../sys/internal-api';
 
 export class RankedLitIvemIdListsService /* extends LockOpenList<RankedLitIvemIdList>*/ {
     private readonly _scanList: ScanList;

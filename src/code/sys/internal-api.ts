@@ -8,9 +8,7 @@ export * from './authorisations';
 export * from './badness';
 export * from './badness-comparable-list';
 export * from './badness-list';
-export * from './change-subscribable-comparable-list';
 export * from './comma-text-err';
-export * from './comparable-list';
 export * from './correctness';
 export * from './correctness-badness';
 export * from './correctness-list';
@@ -24,9 +22,7 @@ export * from './error-code-with-extra-err';
 export * from './external-error';
 export * from './field-data-type';
 export * from './grid-revgrid-types';
-export * from './html-types';
 export * from './incubator';
-export * from './iso8601';
 export * from './json-element-err';
 export * from './keyed-correctness-list';
 export * from './keyed-correctness-list-item';
@@ -38,32 +34,31 @@ export * from './lock-open-list-item';
 export * from './lock-open-manager';
 export * from './mapped-comparable-list';
 export * from './modifier-comparable-list';
-export * from './modifier-key';
-export * from './multi-event';
-export * from './record-list';
 export * from './resource-badness';
 export * from './service-operator';
 export * from './ui-comparable-list';
 export * from './usable-list';
-export * from './usable-list-change-type';
 // export * from './Scheduler';
 export * from './source-tz-offset-date';
 export * from './source-tz-offset-date-time';
 export { SysStaticInitialise } from './sys-static-initialise';
 export * from './types';
 export * from './utils';
-export * from './utils-search';
 export * from './websocket-close-code';
 export {
     AssertInternalError,
+    BinarySearchResult,
     BooleanOrUndefined,
+    ChangeSubscribableComparableList,
     CommaText,
+    ComparableList,
     ComparisonResult,
     DateOrDateTime,
     DayOfWeek,
     Decimal,
     EnumInfoOutOfOrderError,
     Guid,
+    HtmlTypes,
     IndexSignatureHack,
     IndexedRecord,
     Integer,
@@ -77,16 +72,24 @@ export {
     Logger,
     MapKey,
     Mappable,
+    ModifierKey,
+    ModifierKeyId,
+    MultiEvent,
     NotImplementedError,
     PickEnum,
     PickExcludedEnum,
-    RGB,
-    Rect,
-    StringBuilder,
+    RGB, RecordList, Rect, StringBuilder,
     TimeSpan,
     UnexpectedCaseError,
     UnexpectedTypeError,
     UnreachableCaseError,
-    logger
+    UsableListChangeType,
+    UsableListChangeTypeId,
+    anyBinarySearch,
+    earliestBinarySearch,
+    logger,
+    rangedAnyBinarySearch,
+    rangedEarliestBinarySearch,
+    rangedQuickSort,
 } from './xiltyix-sysutils';
 

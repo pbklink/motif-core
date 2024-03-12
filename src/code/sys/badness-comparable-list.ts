@@ -6,11 +6,9 @@
 
 import { Badness } from './badness';
 import { BadnessList } from './badness-list';
-import { ChangeSubscribableComparableList } from './change-subscribable-comparable-list';
 import { CorrectnessBadness } from './correctness-badness';
 import { CorrectnessList } from './correctness-list';
-import { MultiEvent } from './multi-event';
-import { CompareFtn } from './utils-search';
+import { ChangeSubscribableComparableList, CompareFtn, MultiEvent } from './xiltyix-sysutils';
 
 export class BadnessComparableList<out T extends U, in U = T> extends ChangeSubscribableComparableList<T, U> implements CorrectnessList<T>,  BadnessList<T> {
     private readonly _correctnessBadness = new CorrectnessBadness();

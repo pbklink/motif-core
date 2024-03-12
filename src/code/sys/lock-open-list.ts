@@ -5,14 +5,11 @@
  */
 
 import { BadnessList } from './badness-list';
-import { ComparableList } from './comparable-list';
 import { CorrectnessBadness } from './correctness-badness';
 import { ErrorCode } from './error-code';
 import { Ok, Result } from './error-code-with-extra-err';
 import { LockOpenListItem } from './lock-open-list-item';
-import { MultiEvent } from './multi-event';
-import { UsableListChangeTypeId } from './usable-list-change-type';
-import { AssertInternalError, Guid, Integer, MapKey } from './xiltyix-sysutils';
+import { AssertInternalError, UsableListChangeTypeId, ComparableList, Guid, Integer, MapKey, MultiEvent } from './xiltyix-sysutils';
 
 export abstract class LockOpenList<Item extends LockOpenListItem<Item>> extends CorrectnessBadness implements BadnessList<Item> {
     // private localFilePath = '';

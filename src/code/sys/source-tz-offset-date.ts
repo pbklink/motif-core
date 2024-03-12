@@ -4,9 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
-import { Iso8601 } from './iso8601';
 import { compareDate, dateToDashedYyyyMmDd, dateToUtcYyyyMmDd, isDateEqual, mSecsPerMin, newDate } from './utils';
-import { ComparisonResult, Integer } from './xiltyix-sysutils';
+import { ComparisonResult, Integer, Iso8601 } from './xiltyix-sysutils';
 
 /** @public */
 export interface SourceTzOffsetDate {
@@ -30,7 +29,7 @@ export namespace SourceTzOffsetDate {
     }
 
     export function createFromIso8601(value: string) {
-        const parseResult = Iso8601.parseZenith(value);
+        const parseResult = Iso8601.parseLimited(value);
         if (parseResult === undefined) {
             return undefined;
         } else {

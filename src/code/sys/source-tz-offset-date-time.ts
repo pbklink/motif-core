@@ -5,9 +5,8 @@
  */
 
 import { StringId, Strings } from '../res/res-internal-api';
-import { Iso8601 } from './iso8601';
 import { compareDate, isDateEqual, mSecsPerMin, nullDate } from './utils';
-import { ComparisonResult, EnumInfoOutOfOrderError, Integer, UnreachableCaseError } from './xiltyix-sysutils';
+import { ComparisonResult, EnumInfoOutOfOrderError, Integer, Iso8601, UnreachableCaseError } from './xiltyix-sysutils';
 
 /** @public */
 export interface SourceTzOffsetDateTime {
@@ -51,7 +50,7 @@ export namespace SourceTzOffsetDateTime {
     }
 
     export function createFromIso8601(value: string): SourceTzOffsetDateTime | undefined {
-        return Iso8601.parseZenith(value);
+        return Iso8601.parseLimited(value);
     }
 
     export function newUndefinable(value: SourceTzOffsetDateTime | undefined) {
@@ -135,7 +134,7 @@ export namespace SourceTzOffsetDateTime {
 
         export function initialise() {
             for (let id = 0; id < idCount; id++) {
-                if (id !== infos[id].id) {
+                if (id as TimezoneModeId !== infos[id].id) {
                     throw new EnumInfoOutOfOrderError('SourceTzOffsetDateTime.TimezoneModeId', id, idToJsonValue(id));
                 } else {
                     allIds[id] = id;

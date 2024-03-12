@@ -5,8 +5,8 @@
  */
 
 import { Badness } from './badness';
-import { MultiEvent } from './multi-event';
 import { UsableList } from './usable-list';
+import { MultiEvent } from './xiltyix-sysutils';
 
 export interface BadnessList<Record> extends UsableList<Record> {
     readonly badness: Badness;
