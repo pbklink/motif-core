@@ -4,13 +4,13 @@
  * License: motionite.trade/license/motif
  */
 
-import { PickEnum } from '../../../../sys/internal-api';
-import { GridFieldCustomHeadingsService } from '../../../field/grid-field-internal-api';
-import { GridLayoutDefinition } from '../../../layout/grid-layout-internal-api';
-import { TableFieldSourceDefinition, TableFieldSourceDefinitionCachedFactoryService } from '../../field-source/grid-table-field-source-internal-api';
-import { EditableGridLayoutDefinitionColumn } from '../../record-definition/grid-table-record-definition-internal-api';
+import { PickEnum } from '../../../sys/internal-api';
+import { GridFieldCustomHeadingsService } from '../../field/grid-field-internal-api';
+import { GridLayoutDefinition } from '../../layout/grid-layout-internal-api';
+import { TableFieldSourceDefinition, TableFieldSourceDefinitionCachedFactoryService, TableRecordSourceDefinition } from '../../table/internal-api';
+import { EditableGridLayoutDefinitionColumn } from './editable-grid-layout-definition-column';
 import { EditableGridLayoutDefinitionColumnList } from './editable-grid-layout-definition-column-list';
-import { TableRecordSourceDefinition } from './table-record-source-definition';
+import { EditableGridLayoutDefinitionColumnTableFieldSourceDefinition } from './editable-grid-layout-definition-column-table-field-source-definition';
 
 /** @public */
 export class EditableGridLayoutDefinitionColumnTableRecordSourceDefinition extends TableRecordSourceDefinition {
@@ -30,7 +30,7 @@ export class EditableGridLayoutDefinitionColumnTableRecordSourceDefinition exten
     // no override for saveToJson()
 
     override createDefaultLayoutDefinition() {
-        const fieldSourceDefinition = this.tableFieldSourceDefinitionCachedFactoryService.editableGridLayoutDefinitionColumn;
+        const fieldSourceDefinition = EditableGridLayoutDefinitionColumnTableFieldSourceDefinition.getRegistered(this.tableFieldSourceDefinitionCachedFactoryService);
 
         const fieldNames = new Array<string>();
 

@@ -20,7 +20,7 @@ import { TextFormatterService } from '../../../text-format/text-format-internal-
 import {
     TableFieldSourceDefinition
 } from '../field-source/definition/internal-api';
-import { HoldingTableRecordDefinition, TableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
+import { HoldingTableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
 import { TableRecord } from '../record/grid-table-record-internal-api';
 import { BrokerageAccountTableValueSource, HoldingTableValueSource, SecurityDataItemTableValueSource } from '../value-source/internal-api';
 import {
@@ -54,7 +54,7 @@ export class HoldingTableRecordSource
         const record = this.recordList.records[idx];
 
         return {
-            typeId: TableRecordDefinition.TypeId.Holding,
+            typeId: TableFieldSourceDefinition.TypeId.Holding,
             mapKey:record.mapKey,
             record,
         };
@@ -72,12 +72,12 @@ export class HoldingTableRecordSource
             const fieldSourceDefinitionTypeId =
                 fieldSourceDefinition.typeId as HoldingTableRecordSourceDefinition.FieldSourceDefinitionTypeId;
             switch (fieldSourceDefinitionTypeId) {
-                case TableFieldSourceDefinition.TypeId.HoldingsDataItem: {
+                case TableFieldSourceDefinition.TypeId.Holding: {
                     const valueSource = new HoldingTableValueSource(result.fieldCount, holding);
                     result.addSource(valueSource);
                     break;
                 }
-                case TableFieldSourceDefinition.TypeId.BrokerageAccounts: {
+                case TableFieldSourceDefinition.TypeId.BrokerageAccount: {
                     const valueSource = new BrokerageAccountTableValueSource(result.fieldCount, holding.account);
                     result.addSource(valueSource);
                     break;

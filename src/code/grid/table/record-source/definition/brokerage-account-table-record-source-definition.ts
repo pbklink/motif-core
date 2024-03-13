@@ -47,17 +47,17 @@ export class BrokerageAccountTableRecordSourceDefinition extends TableRecordSour
 /** @public */
 export namespace BrokerageAccountTableRecordSourceDefinition {
     export type FieldSourceDefinitionTypeId = PickEnum<TableFieldSourceDefinition.TypeId,
-        TableFieldSourceDefinition.TypeId.BrokerageAccounts |
+        TableFieldSourceDefinition.TypeId.BrokerageAccount |
         TableFieldSourceDefinition.TypeId.Feed
     >;
 
     export const allowedFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[] = [
-        TableFieldSourceDefinition.TypeId.BrokerageAccounts,
+        TableFieldSourceDefinition.TypeId.BrokerageAccount,
         TableFieldSourceDefinition.TypeId.Feed,
     ];
 
     export const defaultFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[] = [
-        TableFieldSourceDefinition.TypeId.BrokerageAccounts,
+        TableFieldSourceDefinition.TypeId.BrokerageAccount,
         TableFieldSourceDefinition.TypeId.Feed,
     ];
 }

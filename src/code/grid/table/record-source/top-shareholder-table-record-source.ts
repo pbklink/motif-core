@@ -24,7 +24,7 @@ import { TextFormatterService } from '../../../text-format/text-format-internal-
 import {
     TableFieldSourceDefinition
 } from "../field-source/grid-table-field-source-internal-api";
-import { TableRecordDefinition, TopShareholderTableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
+import { TopShareholderTableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
 import { TableRecord } from '../record/grid-table-record-internal-api';
 import { TopShareholderTableValueSource } from '../value-source/internal-api';
 import { TableRecordSourceDefinitionFactoryService } from './definition/grid-table-record-source-definition-internal-api';
@@ -73,7 +73,7 @@ export class TopShareholderTableRecordSource extends SingleDataItemTableRecordSo
     override createRecordDefinition(idx: Integer): TopShareholderTableRecordDefinition {
         const record = this.recordList[idx];
         return {
-            typeId: TableRecordDefinition.TypeId.TopShareholder,
+            typeId: TableFieldSourceDefinition.TypeId.TopShareholder,
             mapKey: record.createKey().mapKey,
             record,
         };
@@ -91,7 +91,7 @@ export class TopShareholderTableRecordSource extends SingleDataItemTableRecordSo
             const fieldSourceDefinitionTypeId =
                 fieldSourceDefinition.typeId as TopShareholderTableRecordSourceDefinition.FieldSourceDefinitionTypeId;
             switch (fieldSourceDefinitionTypeId) {
-                case TableFieldSourceDefinition.TypeId.TopShareholdersDataItem: {
+                case TableFieldSourceDefinition.TypeId.TopShareholder: {
                     const valueSource = new TopShareholderTableValueSource(result.fieldCount, topShareholder, this._dataItem);
                     result.addSource(valueSource);
                     break;

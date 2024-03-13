@@ -10,7 +10,7 @@ import { TextFormatterService } from '../../../text-format/text-format-internal-
 import {
     TableFieldSourceDefinition
 } from "../field-source/grid-table-field-source-internal-api";
-import { ScanTableRecordDefinition, TableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
+import { ScanTableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
 import { TableRecord } from '../record/grid-table-record-internal-api';
 import { ScanTableValueSource } from '../value-source/internal-api';
 import { ScanTableRecordSourceDefinition, TableRecordSourceDefinitionFactoryService } from './definition/grid-table-record-source-definition-internal-api';
@@ -41,7 +41,7 @@ export class ScanTableRecordSource extends LockOpenListTableRecordSource<Scan, S
     override createRecordDefinition(idx: Integer): ScanTableRecordDefinition {
         const scan = this._scanList.getAt(idx);
         return {
-            typeId: TableRecordDefinition.TypeId.Scan,
+            typeId: TableFieldSourceDefinition.TypeId.Scan,
             mapKey: scan.mapKey,
             record: scan,
         };

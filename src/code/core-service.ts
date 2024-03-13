@@ -87,15 +87,6 @@ export class CoreService {
         this.textFormatterService = new TextFormatterService(this.symbolsService, this.settingsService);
         this.gridFieldCustomHeadingsService = new GridFieldCustomHeadingsService();
         this.referenceableGridLayoutsService = new ReferenceableGridLayoutsService();
-        // this.tableRecordSourceFactoryService = new TableRecordSourceFactoryService(
-        //     this.adiService,
-        //     this.symbolDetailCacheService,
-        //     this.rankedLitIvemIdListFactoryService,
-        //     this.watchmakerService,
-        //     this.scansService,
-        //     this.textFormatterService,
-        //     this.tableRecordSourceDefinitionFactoryService,
-        // );
         this.referenceableGridSourceDefinitionsStoreService = new ReferenceableGridSourceDefinitionsStoreService(
         );
         this.cellPainterFactoryService = new CellPainterFactoryService(

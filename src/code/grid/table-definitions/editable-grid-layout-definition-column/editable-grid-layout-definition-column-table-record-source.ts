@@ -7,18 +7,17 @@
 import { Badness, Integer, LockOpenListItem, MultiEvent, UnreachableCaseError, UsableListChangeTypeId } from '../../../sys/internal-api';
 import { TextFormatterService } from '../../../text-format/text-format-internal-api';
 import {
-    TableFieldSourceDefinition
-} from "../field-source/grid-table-field-source-internal-api";
-import { TableField } from '../field/grid-table-field-internal-api';
-import { EditableGridLayoutDefinitionColumn, EditableGridLayoutDefinitionColumnTableRecordDefinition, TableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
-import { TableRecord } from '../record/grid-table-record-internal-api';
-import { EditableGridLayoutDefinitionColumnTableValueSource } from '../value-source/internal-api';
-import {
-    EditableGridLayoutDefinitionColumnList,
-    EditableGridLayoutDefinitionColumnTableRecordSourceDefinition,
+    TableField,
+    TableFieldSourceDefinition,
+    TableRecord,
+    TableRecordSource,
     TableRecordSourceDefinitionFactoryService
-} from './definition/grid-table-record-source-definition-internal-api';
-import { TableRecordSource } from './table-record-source';
+} from '../../table/internal-api';
+import { EditableGridLayoutDefinitionColumn } from './editable-grid-layout-definition-column';
+import { EditableGridLayoutDefinitionColumnList } from './editable-grid-layout-definition-column-list';
+import { EditableGridLayoutDefinitionColumnTableRecordDefinition } from './editable-grid-layout-definition-column-table-record-definition';
+import { EditableGridLayoutDefinitionColumnTableRecordSourceDefinition } from './editable-grid-layout-definition-column-table-record-source-definition';
+import { EditableGridLayoutDefinitionColumnTableValueSource } from './editable-grid-layout-definition-column-table-value-source';
 
 /** @public */
 export class EditableGridLayoutDefinitionColumnTableRecordSource extends TableRecordSource {
@@ -73,13 +72,17 @@ export class EditableGridLayoutDefinitionColumnTableRecordSource extends TableRe
     override getCount() { return this._list.count; }
 
     override createDefinition(): EditableGridLayoutDefinitionColumnTableRecordSourceDefinition {
-        return this.tableRecordSourceDefinitionFactoryService.createEditableGridLayoutDefinitionColumn(this._list);
+        return new EditableGridLayoutDefinitionColumnTableRecordSourceDefinition(
+            this._gridFieldCustomHeadingsService,
+            this._tableFieldSourceDefinitionCachedFactoryService,
+            this._list,
+        );
     }
 
     override createRecordDefinition(idx: Integer): EditableGridLayoutDefinitionColumnTableRecordDefinition {
         const record = this._records[idx];
         return {
-            typeId: TableRecordDefinition.TypeId.GridLayoutDefinitionColumn,
+            typeId: TableFieldSourceDefinition.TypeId.EditableGridLayoutDefinitionColumn,
             mapKey: record.fieldName,
             record,
         };

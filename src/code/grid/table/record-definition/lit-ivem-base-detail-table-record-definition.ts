@@ -5,15 +5,16 @@
  */
 
 import { LitIvemBaseDetail } from '../../../adi/adi-internal-api';
-import { PayloadTableRecordDefinition } from './payload-table-record-definition';
+import { TableFieldSourceDefinition } from '../field-source/grid-table-field-source-internal-api';
 import { TableRecordDefinition } from './table-record-definition';
 
-export interface LitIvemBaseDetailTableRecordDefinition extends PayloadTableRecordDefinition<LitIvemBaseDetail> {
-    readonly typeId: TableRecordDefinition.TypeId.LitIvemBaseDetail;
+export interface LitIvemBaseDetailTableRecordDefinition extends TableRecordDefinition {
+    readonly typeId: TableFieldSourceDefinition.TypeId.LitIvemBaseDetail;
+    litIvemBaseDetail: LitIvemBaseDetail;
 }
 
 export namespace LitIvemBaseDetailTableRecordDefinition {
     export function is(definition: TableRecordDefinition): definition is LitIvemBaseDetailTableRecordDefinition {
-        return definition.typeId === TableRecordDefinition.TypeId.LitIvemBaseDetail;
+        return definition.typeId === TableFieldSourceDefinition.TypeId.LitIvemBaseDetail;
     }
 }

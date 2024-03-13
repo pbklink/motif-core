@@ -27,7 +27,7 @@ import { TextFormatterService } from '../../../text-format/text-format-internal-
 import {
     TableFieldSourceDefinition
 } from "../field-source/grid-table-field-source-internal-api";
-import { LitIvemDetailTableRecordDefinition, TableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
+import { LitIvemBaseDetailTableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
 import { TableRecord } from '../record/grid-table-record-internal-api';
 import {
     LitIvemAlternateCodesTableValueSource,
@@ -79,10 +79,10 @@ export class LitIvemDetailFromSearchSymbolsTableRecordSource extends SingleDataI
         return this.tableRecordSourceDefinitionFactoryService.createLitIvemIdFromSearchSymbols(this._dataDefinition.createCopy());
     }
 
-    override createRecordDefinition(idx: Integer): LitIvemDetailTableRecordDefinition {
+    override createRecordDefinition(idx: Integer): LitIvemBaseDetailTableRecordDefinition {
         const litIvemBaseDetail = this.recordList[idx];
         return {
-            typeId: TableRecordDefinition.TypeId.LitIvemDetail,
+            typeId: TableFieldSourceDefinition.TypeId.LitIvemBaseDetail,
             mapKey: litIvemBaseDetail.key.mapKey,
             litIvemBaseDetail,
         };

@@ -6,10 +6,9 @@
 
 import { RenderValue } from '../../../services/render-value';
 import { Integer, MultiEvent, UnreachableCaseError, ValueRecentChangeTypeId } from '../../../sys/internal-api';
-import { EditableGridLayoutDefinitionColumnTableFieldSourceDefinition } from '../field-source/grid-table-field-source-internal-api';
-import { EditableGridLayoutDefinitionColumn } from '../record-definition/grid-table-record-definition-internal-api';
-import { IntegerTableValue, StringTableValue, TableValue, VisibleTableValue } from '../value/grid-table-value-internal-api';
-import { TableValueSource } from './table-value-source';
+import { IntegerTableValue, StringTableValue, TableValue, TableValueSource, VisibleTableValue } from '../../table/internal-api';
+import { EditableGridLayoutDefinitionColumn } from './editable-grid-layout-definition-column';
+import { EditableGridLayoutDefinitionColumnTableFieldSourceDefinition } from './editable-grid-layout-definition-column-table-field-source-definition';
 
 export class EditableGridLayoutDefinitionColumnTableValueSource extends TableValueSource {
     private _widthChangedSubscriptionId: MultiEvent.SubscriptionId;

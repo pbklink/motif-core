@@ -32,7 +32,7 @@ export class BalancesTableFieldSourceDefinition extends TableFieldSourceDefiniti
     override readonly fieldDefinitions: TableField.Definition[];
 
     constructor() {
-        super(TableFieldSourceDefinition.TypeId.BalancesDataItem);
+        super(TableFieldSourceDefinition.TypeId.Balances);
 
         this.fieldDefinitions = this.createFieldDefinitions();
     }
@@ -170,7 +170,7 @@ export namespace BalancesTableFieldSourceDefinition {
     }
 
     export interface FieldId extends TableFieldSourceDefinition.FieldId {
-        sourceTypeId: TableFieldSourceDefinition.TypeId.BalancesDataItem;
+        sourceTypeId: TableFieldSourceDefinition.TypeId.Balances;
         id: Balances.FieldId;
     }
 

@@ -11,7 +11,7 @@ import { TextFormatterService } from '../../../text-format/text-format-internal-
 import {
     TableFieldSourceDefinition
 } from "../field-source/grid-table-field-source-internal-api";
-import { LitIvemIdTableRecordDefinition, TableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
+import { LitIvemIdTableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
 import { TableRecord } from '../record/grid-table-record-internal-api';
 import { LitIvemBaseDetailTableValueSource, LitIvemIdTableValueSource, SecurityDataItemTableValueSource } from '../value-source/internal-api';
 import { BadnessListTableRecordSource } from './badness-comparable-list-table-record-source';
@@ -47,7 +47,7 @@ export class LitIvemIdComparableListTableRecordSource extends BadnessListTableRe
     override createRecordDefinition(idx: Integer): LitIvemIdTableRecordDefinition {
         const litIvemId = this.list.getAt(idx);
         return {
-            typeId: TableRecordDefinition.TypeId.LitIvemId,
+            typeId: TableFieldSourceDefinition.TypeId.LitIvemId,
             mapKey: litIvemId.mapKey,
             litIvemId,
         };

@@ -30,7 +30,7 @@ import { TextFormatterService } from '../../../text-format/text-format-internal-
 import {
     TableFieldSourceDefinition
 } from "../field-source/grid-table-field-source-internal-api";
-import { CallPutTableRecordDefinition, TableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
+import { CallPutTableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
 import { TableRecord } from '../record/grid-table-record-internal-api';
 import { CallPutTableValueSource, SecurityDataItemTableValueSource } from '../value-source/internal-api';
 import { CallPutFromUnderlyingTableRecordSourceDefinition } from './definition/call-put-from-underlying-table-record-source-definition';
@@ -72,7 +72,7 @@ export class CallPutFromUnderlyingTableRecordSource extends SingleDataItemTableR
     override createRecordDefinition(idx: Integer): CallPutTableRecordDefinition {
         const record = this._recordList[idx];
         return {
-            typeId: TableRecordDefinition.TypeId.CallPut,
+            typeId: TableFieldSourceDefinition.TypeId.CallPut,
             mapKey: record.createKey().mapKey,
             record,
         };

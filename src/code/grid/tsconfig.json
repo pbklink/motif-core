@@ -15,6 +15,7 @@
   "references": [
     { "path": "./revgrid/tsconfig.json" },
     { "path": "./source/tsconfig.json" },
+    { "path": "./table-definitions/tsconfig.json" },
     { "path": "./table/tsconfig.json" },
     { "path": "./record-store/tsconfig.json" },
     { "path": "./layout/tsconfig.json" },

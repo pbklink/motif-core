@@ -10,7 +10,6 @@ export * from './brokerage-account-group-table-record-source';
 export * from './brokerage-account-table-record-source';
 export * from './call-put-from-underlying-table-record-source';
 export * from './definition/grid-table-record-source-definition-internal-api';
-export * from './editable-grid-layout-definition-column-table-record-source';
 export * from './feed-table-record-source';
 export * from './grid-field-table-record-source';
 export * from './holding-table-record-source';

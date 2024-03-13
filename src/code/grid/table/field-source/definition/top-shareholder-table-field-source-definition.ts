@@ -26,7 +26,7 @@ export class TopShareholderTableFieldSourceDefinition extends TableFieldSourceDe
     override readonly fieldDefinitions: TableField.Definition[];
 
     constructor() {
-        super(TableFieldSourceDefinition.TypeId.TopShareholdersDataItem);
+        super(TableFieldSourceDefinition.TypeId.TopShareholder);
 
         this.fieldDefinitions = this.createFieldDefinitions();
     }
@@ -159,7 +159,7 @@ export namespace TopShareholderTableFieldSourceDefinition {
     }
 
     export interface FieldId extends TableFieldSourceDefinition.FieldId {
-        sourceTypeId: TableFieldSourceDefinition.TypeId.TopShareholdersDataItem;
+        sourceTypeId: TableFieldSourceDefinition.TypeId.TopShareholder;
         id: TopShareholder.FieldId;
     }
 

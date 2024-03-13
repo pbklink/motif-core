@@ -20,8 +20,6 @@ import { BalancesTableRecordSourceDefinition } from './balances-table-record-sou
 import { BrokerageAccountGroupTableRecordSourceDefinition } from './brokerage-account-group-table-record-source-definition';
 import { BrokerageAccountTableRecordSourceDefinition } from './brokerage-account-table-record-source-definition';
 import { CallPutFromUnderlyingTableRecordSourceDefinition } from './call-put-from-underlying-table-record-source-definition';
-import { EditableGridLayoutDefinitionColumnList } from './editable-grid-layout-definition-column-list';
-import { EditableGridLayoutDefinitionColumnTableRecordSourceDefinition } from './editable-grid-layout-definition-column-table-record-source-definition';
 import { FeedTableRecordSourceDefinition } from './feed-table-record-source-definition';
 import { GridFieldTableRecordSourceDefinition } from './grid-field-table-record-source-definition';
 import { HoldingTableRecordSourceDefinition } from './holding-table-record-source-definition';
@@ -160,14 +158,6 @@ export class TableRecordSourceDefinitionFactoryService {
             litIvemId,
             tradingDate,
             compareToTradingDate,
-        );
-    }
-
-    createEditableGridLayoutDefinitionColumn(list: EditableGridLayoutDefinitionColumnList) {
-        return new EditableGridLayoutDefinitionColumnTableRecordSourceDefinition(
-            this.gridFieldCustomHeadingsService,
-            this.tableFieldSourceDefinitionCachedFactoryService,
-            list
         );
     }
 
@@ -326,9 +316,7 @@ export class TableRecordSourceDefinitionFactoryService {
                 }
             }
             case TableRecordSourceDefinition.TypeId.EditableGridLayoutDefinitionColumn: {
-                const list = new EditableGridLayoutDefinitionColumnList();
-                const definition = this.createEditableGridLayoutDefinitionColumn(list); // persistence not implemented
-                return new Ok(definition);
+                throw new AssertInternalError('TRSDFSTCTFJEGLDC45550', 'outside');
             }
             case TableRecordSourceDefinition.TypeId.Scan: {
                 const definition = this.createScan();

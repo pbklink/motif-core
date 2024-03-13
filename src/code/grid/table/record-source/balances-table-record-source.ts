@@ -20,7 +20,7 @@ import { TextFormatterService } from '../../../text-format/text-format-internal-
 import {
     TableFieldSourceDefinition
 } from '../field-source/grid-table-field-source-internal-api';
-import { BalancesTableRecordDefinition, TableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
+import { BalancesTableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
 import { TableRecord } from '../record/grid-table-record-internal-api';
 import { BalancesTableValueSource, BrokerageAccountTableValueSource } from '../value-source/internal-api';
 import {
@@ -52,7 +52,7 @@ export class BalancesTableRecordSource
     override createRecordDefinition(idx: Integer): BalancesTableRecordDefinition {
         const record = this.recordList.records[idx];
         return {
-            typeId: TableRecordDefinition.TypeId.Balances,
+            typeId: TableFieldSourceDefinition.TypeId.Balances,
             mapKey: record.mapKey,
             record,
         }
@@ -69,12 +69,12 @@ export class BalancesTableRecordSource
             const fieldSourceDefinition = fieldSource.definition;
             const fieldSourceDefinitionTypeId = fieldSourceDefinition.typeId as BalancesTableRecordSourceDefinition.FieldSourceDefinitionTypeId;
             switch (fieldSourceDefinitionTypeId) {
-                case TableFieldSourceDefinition.TypeId.BalancesDataItem: {
+                case TableFieldSourceDefinition.TypeId.Balances: {
                     const valueSource = new BalancesTableValueSource(result.fieldCount, balances);
                     result.addSource(valueSource);
                     break;
                 }
-                case TableFieldSourceDefinition.TypeId.BrokerageAccounts: {
+                case TableFieldSourceDefinition.TypeId.BrokerageAccount: {
                     const valueSource = new BrokerageAccountTableValueSource(result.fieldCount, balances.account);
                     result.addSource(valueSource);
                     break;

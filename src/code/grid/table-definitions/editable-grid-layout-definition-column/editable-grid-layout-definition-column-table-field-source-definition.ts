@@ -4,25 +4,29 @@
  * License: motionite.trade/license/motif
  */
 
-import { CommaText, EnumInfoOutOfOrderError, FieldDataType } from '../../../../sys/internal-api';
+import { CommaText, EnumInfoOutOfOrderError, FieldDataType } from '../../../sys/internal-api';
 import {
     BooleanTableField,
     IntegerTableField,
+    IntegerTableValue,
     StringTableField,
-    TableField
-} from "../../field/grid-table-field-internal-api";
-import {
-    EditableGridLayoutDefinitionColumn
-} from '../../record-definition/grid-table-record-definition-internal-api';
-import { IntegerTableValue, StringTableValue, TableValue, VisibleTableValue } from '../../value/grid-table-value-internal-api';
-import { TableFieldSourceDefinition } from './table-field-source-definition';
+    StringTableValue,
+    TableField,
+    TableFieldSourceDefinition,
+    TableFieldSourceDefinitionCachedFactoryService,
+    TableValue,
+    VisibleTableValue,
+} from '../../table/internal-api';
+import { EditableGridLayoutDefinitionColumn } from './editable-grid-layout-definition-column';
 
 /** @public */
 export class EditableGridLayoutDefinitionColumnTableFieldSourceDefinition extends TableFieldSourceDefinition {
+    declare readonly typeId: EditableGridLayoutDefinitionColumnTableFieldSourceDefinition.TypeId;
+
     override readonly fieldDefinitions: TableField.Definition[];
 
     constructor() {
-        super(TableFieldSourceDefinition.TypeId.EditableGridLayoutDefinitionColumn);
+        super(EditableGridLayoutDefinitionColumnTableFieldSourceDefinition.typeId);
 
         this.fieldDefinitions = this.createFieldDefinitions();
     }
@@ -61,6 +65,9 @@ export class EditableGridLayoutDefinitionColumnTableFieldSourceDefinition extend
 
 /** @public */
 export namespace EditableGridLayoutDefinitionColumnTableFieldSourceDefinition {
+    export const typeId = TableFieldSourceDefinition.TypeId.EditableGridLayoutDefinitionColumn;
+    export type TypeId = typeof typeId;
+
     export namespace Field {
         export type Id = EditableGridLayoutDefinitionColumn.FieldId;
 
@@ -124,6 +131,10 @@ export namespace EditableGridLayoutDefinitionColumnTableFieldSourceDefinition {
     export interface FieldId extends TableFieldSourceDefinition.FieldId {
         sourceTypeId: TableFieldSourceDefinition.TypeId.EditableGridLayoutDefinitionColumn;
         id: EditableGridLayoutDefinitionColumn.FieldId;
+    }
+
+    export function getRegistered(cachedFactoryService: TableFieldSourceDefinitionCachedFactoryService): EditableGridLayoutDefinitionColumnTableFieldSourceDefinition {
+        return cachedFactoryService.get(typeId) as EditableGridLayoutDefinitionColumnTableFieldSourceDefinition;
     }
 
     export function initialiseStatic() {

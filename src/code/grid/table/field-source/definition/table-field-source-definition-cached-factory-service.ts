@@ -9,7 +9,6 @@ import { BalancesTableFieldSourceDefinition } from './balances-table-field-sourc
 import { BrokerageAccountTableFieldSourceDefinition } from './brokerage-account-table-field-source-definition';
 import { CallPutSecurityDataItemTableFieldSourceDefinition } from './call-put-security-data-item-table-field-source-definition';
 import { CallPutTableFieldSourceDefinition } from './call-put-table-field-source-definition';
-import { EditableGridLayoutDefinitionColumnTableFieldSourceDefinition } from './editable-grid-layout-definition-column-table-field-source-definition';
 import { FeedTableFieldSourceDefinition } from './feed-table-field-source-definition';
 import { GridFieldTableFieldSourceDefinition } from './grid-field-table-field-source-definition';
 import { HoldingTableFieldSourceDefinition } from './holding-table-field-source-definition';
@@ -56,23 +55,20 @@ export class TableFieldSourceDefinitionCachedFactoryService {
     get myxLitIvemAttributes() {
         return this.get(TableFieldSourceDefinition.TypeId.MyxLitIvemAttributes) as MyxLitIvemAttributesTableFieldSourceDefinition;
     }
-    get editableGridLayoutDefinitionColumn() {
-        return this.get(TableFieldSourceDefinition.TypeId.EditableGridLayoutDefinitionColumn) as EditableGridLayoutDefinitionColumnTableFieldSourceDefinition;
-    }
     get securityDataItem() {
         return this.get(TableFieldSourceDefinition.TypeId.SecurityDataItem) as SecurityDataItemTableFieldSourceDefinition;
     }
     get brokerageAccounts() {
-        return this.get(TableFieldSourceDefinition.TypeId.BrokerageAccounts) as BrokerageAccountTableFieldSourceDefinition;
+        return this.get(TableFieldSourceDefinition.TypeId.BrokerageAccount) as BrokerageAccountTableFieldSourceDefinition;
     }
     get ordersDataItem() {
-        return this.get(TableFieldSourceDefinition.TypeId.OrdersDataItem) as OrderTableFieldSourceDefinition;
+        return this.get(TableFieldSourceDefinition.TypeId.Order) as OrderTableFieldSourceDefinition;
     }
     get holdingsDataItem() {
-        return this.get(TableFieldSourceDefinition.TypeId.HoldingsDataItem) as HoldingTableFieldSourceDefinition;
+        return this.get(TableFieldSourceDefinition.TypeId.Holding) as HoldingTableFieldSourceDefinition;
     }
     get balances() {
-        return this.get(TableFieldSourceDefinition.TypeId.BalancesDataItem) as BalancesTableFieldSourceDefinition;
+        return this.get(TableFieldSourceDefinition.TypeId.Balances) as BalancesTableFieldSourceDefinition;
     }
     get callPut() {
         return this.get(TableFieldSourceDefinition.TypeId.CallPut) as CallPutTableFieldSourceDefinition;
@@ -84,7 +80,7 @@ export class TableFieldSourceDefinitionCachedFactoryService {
         return this.get(TableFieldSourceDefinition.TypeId.PutSecurityDataItem) as CallPutSecurityDataItemTableFieldSourceDefinition;
     }
     get topShareholdersDataItem() {
-        return this.get(TableFieldSourceDefinition.TypeId.TopShareholdersDataItem) as TopShareholderTableFieldSourceDefinition;
+        return this.get(TableFieldSourceDefinition.TypeId.TopShareholder) as TopShareholderTableFieldSourceDefinition;
     }
     get scan() {
         return this.get(TableFieldSourceDefinition.TypeId.Scan) as ScanTableFieldSourceDefinition;
@@ -94,11 +90,6 @@ export class TableFieldSourceDefinitionCachedFactoryService {
     }
     get gridField() {
         return this.get(TableFieldSourceDefinition.TypeId.GridField) as GridFieldTableFieldSourceDefinition;
-    }
-
-    register(definition: TableFieldSourceDefinition) {
-        this._definitionsByTypeId.set(definition.typeId, definition);
-        this._definitionsByName.set(definition.name, definition);
     }
 
     get(typeId: TableFieldSourceDefinition.TypeId): TableFieldSourceDefinition {

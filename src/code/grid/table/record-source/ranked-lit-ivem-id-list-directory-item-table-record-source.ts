@@ -11,7 +11,7 @@ import { TextFormatterService } from '../../../text-format/text-format-internal-
 import {
     TableFieldSourceDefinition
 } from "../field-source/grid-table-field-source-internal-api";
-import { RankedLitIvemIdListDirectoryItemTableRecordDefinition, TableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
+import { RankedLitIvemIdListDirectoryItemTableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
 import { TableRecord } from '../record/grid-table-record-internal-api';
 import { RankedLitIvemIdListDirectoryItemTableValueSource } from '../value-source/internal-api';
 import { RankedLitIvemIdListDirectoryItemTableRecordSourceDefinition, TableRecordSourceDefinitionFactoryService } from './definition/grid-table-record-source-definition-internal-api';
@@ -59,7 +59,7 @@ export class RankedLitIvemIdListDirectoryItemTableRecordSource extends Subscribe
     override createRecordDefinition(idx: Integer): RankedLitIvemIdListDirectoryItemTableRecordDefinition {
         const rankedLitIvemIdListDirectoryItem = this._listDirectory.getAt(idx);
         return {
-            typeId: TableRecordDefinition.TypeId.RankedLitIvemIdListDirectoryItem,
+            typeId: TableFieldSourceDefinition.TypeId.RankedLitIvemIdListDirectoryItem,
             mapKey: RankedLitIvemIdListDirectoryItem.createMapKey(rankedLitIvemIdListDirectoryItem),
             record: rankedLitIvemIdListDirectoryItem,
         };

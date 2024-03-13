@@ -10,7 +10,7 @@ import { GridField } from '../../field/grid-field-internal-api';
 import {
     TableFieldSourceDefinition
 } from "../field-source/grid-table-field-source-internal-api";
-import { GridFieldTableRecordDefinition, TableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
+import { GridFieldTableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
 import { TableRecord } from '../record/grid-table-record-internal-api';
 import { GridFieldTableValueSource } from '../value-source/internal-api';
 import { GridFieldTableRecordSourceDefinition, TableRecordSourceDefinitionFactoryService } from './definition/grid-table-record-source-definition-internal-api';
@@ -69,7 +69,7 @@ export class GridFieldTableRecordSource extends TableRecordSource {
     override createRecordDefinition(idx: Integer): GridFieldTableRecordDefinition {
         const gridField = this._records[idx];
         return {
-            typeId: TableRecordDefinition.TypeId.GridField,
+            typeId: TableFieldSourceDefinition.TypeId.GridField,
             mapKey: gridField.name,
             record: gridField,
         };

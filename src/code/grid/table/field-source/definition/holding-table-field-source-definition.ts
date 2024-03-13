@@ -36,7 +36,7 @@ export class HoldingTableFieldSourceDefinition extends TableFieldSourceDefinitio
     override readonly fieldDefinitions: TableField.Definition[];
 
     constructor() {
-        super(TableFieldSourceDefinition.TypeId.HoldingsDataItem);
+        super(TableFieldSourceDefinition.TypeId.Holding);
 
         this.fieldDefinitions = this.createFieldDefinitions();
     }
@@ -179,7 +179,7 @@ export namespace HoldingTableFieldSourceDefinition {
     }
 
     export interface FieldId extends TableFieldSourceDefinition.FieldId {
-        sourceTypeId: TableFieldSourceDefinition.TypeId.HoldingsDataItem;
+        sourceTypeId: TableFieldSourceDefinition.TypeId.Holding;
         id: Holding.FieldId;
     }
 

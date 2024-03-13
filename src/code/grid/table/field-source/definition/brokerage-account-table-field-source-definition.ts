@@ -30,7 +30,7 @@ export class BrokerageAccountTableFieldSourceDefinition extends TableFieldSource
     override readonly fieldDefinitions: TableField.Definition[];
 
     constructor() {
-        super(TableFieldSourceDefinition.TypeId.BrokerageAccounts);
+        super(TableFieldSourceDefinition.TypeId.BrokerageAccount);
 
         this.fieldDefinitions = this.createFieldDefinitions();
     }
@@ -166,7 +166,7 @@ export namespace BrokerageAccountTableFieldSourceDefinition {
     }
 
     export interface FieldId extends TableFieldSourceDefinition.FieldId {
-        sourceTypeId: TableFieldSourceDefinition.TypeId.BrokerageAccounts;
+        sourceTypeId: TableFieldSourceDefinition.TypeId.BrokerageAccount;
         id: Account.FieldId;
     }
 

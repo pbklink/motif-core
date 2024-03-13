@@ -11,8 +11,7 @@ import {
     TableFieldSourceDefinition
 } from "../field-source/grid-table-field-source-internal-api";
 import {
-    BrokerageAccountTableRecordDefinition,
-    TableRecordDefinition
+    BrokerageAccountTableRecordDefinition
 } from "../record-definition/grid-table-record-definition-internal-api";
 import { TableRecord } from '../record/grid-table-record-internal-api';
 import { BrokerageAccountTableValueSource, FeedTableValueSource } from '../value-source/internal-api';
@@ -45,7 +44,7 @@ export class BrokerageAccountTableRecordSource
     override createRecordDefinition(idx: Integer): BrokerageAccountTableRecordDefinition {
         const record = this.recordList.records[idx];
         return {
-            typeId: TableRecordDefinition.TypeId.BrokerageAccount,
+            typeId: TableFieldSourceDefinition.TypeId.BrokerageAccount,
             mapKey: record.mapKey,
             record,
         };
@@ -63,7 +62,7 @@ export class BrokerageAccountTableRecordSource
             const fieldSourceDefinitionTypeId =
                 fieldSourceDefinition.typeId as BrokerageAccountTableRecordSourceDefinition.FieldSourceDefinitionTypeId;
             switch (fieldSourceDefinitionTypeId) {
-                case TableFieldSourceDefinition.TypeId.BrokerageAccounts: {
+                case TableFieldSourceDefinition.TypeId.BrokerageAccount: {
                     const valueSource = new BrokerageAccountTableValueSource(result.fieldCount, brokerageAccount);
                     result.addSource(valueSource);
                     break;

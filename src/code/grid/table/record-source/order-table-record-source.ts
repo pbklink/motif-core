@@ -54,7 +54,7 @@ export class OrderTableRecordSource
     override createRecordDefinition(idx: Integer): OrderTableRecordDefinition {
         const record = this.recordList.records[idx];
         return {
-            typeId: TableRecordDefinition.TypeId.Order,
+            typeId: TableFieldSourceDefinition.TypeId.Order,
             mapKey: record.mapKey,
             record,
         }
@@ -72,12 +72,12 @@ export class OrderTableRecordSource
             const fieldSourceDefinitionTypeId =
                 fieldSourceDefinition.typeId as OrderTableRecordSourceDefinition.FieldSourceDefinitionTypeId;
             switch (fieldSourceDefinitionTypeId) {
-                case TableFieldSourceDefinition.TypeId.OrdersDataItem: {
+                case TableFieldSourceDefinition.TypeId.Order: {
                     const valueSource = new OrderTableValueSource(result.fieldCount, order);
                     result.addSource(valueSource);
                     break;
                 }
-                case TableFieldSourceDefinition.TypeId.BrokerageAccounts: {
+                case TableFieldSourceDefinition.TypeId.BrokerageAccount: {
                     const valueSource = new BrokerageAccountTableValueSource(result.fieldCount, order.account);
                     result.addSource(valueSource);
                     break;

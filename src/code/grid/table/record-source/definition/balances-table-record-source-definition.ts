@@ -54,17 +54,17 @@ export class BalancesTableRecordSourceDefinition extends BrokerageAccountGroupTa
 
 export namespace BalancesTableRecordSourceDefinition {
     export type FieldSourceDefinitionTypeId = PickEnum<TableFieldSourceDefinition.TypeId,
-        TableFieldSourceDefinition.TypeId.BalancesDataItem |
-        TableFieldSourceDefinition.TypeId.BrokerageAccounts
+        TableFieldSourceDefinition.TypeId.Balances |
+        TableFieldSourceDefinition.TypeId.BrokerageAccount
     >;
 
     export const allowedFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[] = [
-        TableFieldSourceDefinition.TypeId.BalancesDataItem,
-        TableFieldSourceDefinition.TypeId.BrokerageAccounts,
+        TableFieldSourceDefinition.TypeId.Balances,
+        TableFieldSourceDefinition.TypeId.BrokerageAccount,
     ];
 
     export const defaultFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[] = [
-        TableFieldSourceDefinition.TypeId.BalancesDataItem,
-        TableFieldSourceDefinition.TypeId.BrokerageAccounts,
+        TableFieldSourceDefinition.TypeId.Balances,
+        TableFieldSourceDefinition.TypeId.BrokerageAccount,
     ];
 }

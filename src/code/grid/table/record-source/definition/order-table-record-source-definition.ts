@@ -58,17 +58,17 @@ export class OrderTableRecordSourceDefinition extends BrokerageAccountGroupTable
 /** @public */
 export namespace OrderTableRecordSourceDefinition {
     export type FieldSourceDefinitionTypeId = PickEnum<TableFieldSourceDefinition.TypeId,
-        TableFieldSourceDefinition.TypeId.OrdersDataItem |
-        TableFieldSourceDefinition.TypeId.BrokerageAccounts
+        TableFieldSourceDefinition.TypeId.Order |
+        TableFieldSourceDefinition.TypeId.BrokerageAccount
     >;
 
     export const allowedFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[] = [
-        TableFieldSourceDefinition.TypeId.OrdersDataItem,
-        TableFieldSourceDefinition.TypeId.BrokerageAccounts,
+        TableFieldSourceDefinition.TypeId.Order,
+        TableFieldSourceDefinition.TypeId.BrokerageAccount,
     ];
 
     export const defaultFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[] = [
-        TableFieldSourceDefinition.TypeId.OrdersDataItem,
-        TableFieldSourceDefinition.TypeId.BrokerageAccounts,
+        TableFieldSourceDefinition.TypeId.Order,
+        TableFieldSourceDefinition.TypeId.BrokerageAccount,
     ];
 }

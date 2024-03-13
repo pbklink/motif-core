@@ -60,13 +60,13 @@ export class TopShareholderTableRecordSourceDefinition extends TableRecordSource
 /** @public */
 export namespace TopShareholderTableRecordSourceDefinition {
     export type FieldSourceDefinitionTypeId = PickEnum<TableFieldSourceDefinition.TypeId,
-        TableFieldSourceDefinition.TypeId.TopShareholdersDataItem
+        TableFieldSourceDefinition.TypeId.TopShareholder
     >;
     export const allowedFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[] = [
-        TableFieldSourceDefinition.TypeId.TopShareholdersDataItem,
+        TableFieldSourceDefinition.TypeId.TopShareholder,
     ];
     export const defaultFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[] = [
-        TableFieldSourceDefinition.TypeId.TopShareholdersDataItem,
+        TableFieldSourceDefinition.TypeId.TopShareholder,
     ];
 
     export namespace JsonTag {

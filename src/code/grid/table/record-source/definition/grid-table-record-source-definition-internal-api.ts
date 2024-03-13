@@ -9,8 +9,6 @@ export * from './balances-table-record-source-definition';
 export * from './brokerage-account-group-table-record-source-definition';
 export * from './brokerage-account-table-record-source-definition';
 export * from './call-put-from-underlying-table-record-source-definition';
-export * from './editable-grid-layout-definition-column-list';
-export * from './editable-grid-layout-definition-column-table-record-source-definition';
 export * from './feed-table-record-source-definition';
 export * from './grid-field-table-record-source-definition';
 export * from './holding-table-record-source-definition';

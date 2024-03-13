@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { StringId, Strings } from '../../../../res/res-internal-api';
+import { StringId, Strings } from '../../../res/res-internal-api';
 import {
     EnumInfoOutOfOrderError,
     FieldDataTypeId,
@@ -12,8 +12,8 @@ import {
     Integer,
     MultiEvent,
     ValueRecentChangeTypeId
-} from "../../../../sys/internal-api";
-import { GridField } from '../../../field/grid-field-internal-api';
+} from "../../../sys/internal-api";
+import { GridField } from '../../field/grid-field-internal-api';
 
 export class EditableGridLayoutDefinitionColumn implements IndexedRecord {
     index: Integer;
@@ -166,7 +166,7 @@ export namespace EditableGridLayoutDefinitionColumn {
 
         export function initialise() {
             for (let id = 0; id < idCount; id++) {
-                if (infos[id].id !== id) {
+                if (infos[id].id !== id as FieldId) {
                     throw new EnumInfoOutOfOrderError('GridLayoutDefinitionColumnEditRecord.Field', id, idToName(id));
                 }
             }

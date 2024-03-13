@@ -10,7 +10,7 @@ import { TextFormatterService } from '../../../text-format/text-format-internal-
 import {
     TableFieldSourceDefinition
 } from "../field-source/grid-table-field-source-internal-api";
-import { FeedTableRecordDefinition, TableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
+import { FeedTableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
 import { TableRecord } from '../record/grid-table-record-internal-api';
 import { FeedTableValueSource } from '../value-source/internal-api';
 import { FeedTableRecordSourceDefinition } from './definition/feed-table-record-source-definition';
@@ -40,7 +40,7 @@ export class FeedTableRecordSource extends SingleDataItemRecordTableRecordSource
     override createRecordDefinition(idx: Integer): FeedTableRecordDefinition {
         const record = this.recordList.records[idx];
         return {
-            typeId: TableRecordDefinition.TypeId.Feed,
+            typeId: TableFieldSourceDefinition.TypeId.Feed,
             mapKey: record.mapKey,
             record,
         };

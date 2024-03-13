@@ -57,7 +57,7 @@ export class OrderTableFieldSourceDefinition extends TableFieldSourceDefinition 
     override readonly fieldDefinitions: TableField.Definition[];
 
     constructor() {
-        super(TableFieldSourceDefinition.TypeId.OrdersDataItem);
+        super(TableFieldSourceDefinition.TypeId.Order);
 
         this.fieldDefinitions = this.createFieldDefinitions();
     }
@@ -272,7 +272,7 @@ export namespace OrderTableFieldSourceDefinition {
     }
 
     export interface FieldId extends TableFieldSourceDefinition.FieldId {
-        sourceTypeId: TableFieldSourceDefinition.TypeId.OrdersDataItem;
+        sourceTypeId: TableFieldSourceDefinition.TypeId.Order;
         id: Order.FieldId;
     }
 
