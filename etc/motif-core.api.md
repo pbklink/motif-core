@@ -43019,9 +43019,9 @@ export namespace ZenithProtocol {
         // (undocumented)
         export interface ScanParametersWithoutNotifications {
             // (undocumented)
-            readonly Criteria: ZenithEncodedScanFormula.BooleanTupleNode;
+            readonly Count?: Integer;
             // (undocumented)
-            readonly MaxMatchCount?: Integer;
+            readonly Criteria: ZenithEncodedScanFormula.BooleanTupleNode;
             // (undocumented)
             readonly Rank?: ZenithEncodedScanFormula.NumericTupleNode;
             // (undocumented)

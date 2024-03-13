@@ -99,7 +99,7 @@ export namespace QueryScanMessageConvert {
                         default:
                             throw new UnreachableCaseError('QSMCPM33358', dataMessage.targetTypeId);
                     }
-                    dataMessage.maxMatchCount = parameters.MaxMatchCount,
+                    dataMessage.maxMatchCount = parameters.Count,
                     dataMessage.zenithCriteria = parameters.Criteria;
                     dataMessage.zenithRank = parameters.Rank;
                     const parametersNotifications = parameters.Notifications;

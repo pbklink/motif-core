@@ -45,7 +45,7 @@ export namespace UpdateScanMessageConvert {
             Rank: definition.zenithRank,
             Type: ZenithNotifyConvert.ScanType.fromId(definition.targetTypeId),
             Target: ZenithNotifyConvert.Target.fromId(definition.targetTypeId, definition.targets),
-            MaxMatchCount: definition.maxMatchCount,
+            Count: definition.maxMatchCount,
             Notifications: definitionNotifications.length === 0 ? undefined : ZenithNotifyConvert.NotificationParameters.from(definitionNotifications),
         }
 
