@@ -4,10 +4,10 @@
  * License: motionite.trade/license/motif
  */
 
+import { UiAction } from '@xilytix/ui-action';
 import { BestMarketOrderRoute, ExchangeId, IvemId, RoutedIvemId } from '../adi/adi-internal-api';
 import { SymbolsService } from '../services/services-internal-api';
 import { MultiEvent } from '../sys/internal-api';
-import { UiAction } from './ui-action';
 
 export class RoutedIvemIdUiAction extends UiAction {
 

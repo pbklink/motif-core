@@ -24,7 +24,8 @@
   "typings": "dist/types/public-api.d.ts",
   "files": [
     "dist/**/*",
-    "src/**/*.ts"
+    "src/**/*.ts",
+    "license.txt"
   ],
   "scripts": {
     "lint": "eslint -c .eslintrc.json --ext .ts src/",
@@ -43,6 +44,7 @@
     "@ctrl/tinycolor": "^4.0.3",
     "@xilytix/revgrid": "^0.8.0",
     "@xilytix/sysutils": "^0.0.1",
+    "@xilytix/ui-action": "^0.0.1",
     "nanoid": "^5.0.6"
   },
   "devDependencies": {

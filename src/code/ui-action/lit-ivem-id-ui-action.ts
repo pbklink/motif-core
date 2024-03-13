@@ -4,10 +4,10 @@
  * License: motionite.trade/license/motif
  */
 
+import { UiAction } from '@xilytix/ui-action';
 import { DataEnvironment, LitIvemId, MarketInfo } from '../adi/adi-internal-api';
 import { SymbolsService } from '../services/services-internal-api';
 import { MultiEvent } from '../sys/internal-api';
-import { UiAction } from './ui-action';
 
 export class LitIvemIdUiAction extends UiAction {
     private _value: LitIvemId | undefined;

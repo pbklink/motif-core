@@ -4,11 +4,10 @@
  * License: motionite.trade/license/motif
  */
 
+import { EnumExplicitElementsArrayUiAction, TypedExplicitElementsArrayUiAction } from '@xilytix/ui-action';
 import { ExchangeId, ExchangeInfo } from '../adi/adi-internal-api';
 import { SymbolsService } from '../services/services-internal-api';
 import { Integer, MultiEvent } from '../sys/internal-api';
-import { EnumExplicitElementsArrayUiAction } from './enum-explicit-elements-array-ui-action';
-import { TypedExplicitElementsArrayUiAction } from './typed-explicit-elements-array-ui-action';
 
 export class AllowedExchangesExplicitElementsArrayUiAction extends EnumExplicitElementsArrayUiAction {
     private _allowedExchangeIdsChangedSubscriptionId: MultiEvent.SubscriptionId;

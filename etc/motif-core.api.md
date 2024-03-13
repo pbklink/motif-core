@@ -15,6 +15,7 @@ import { BehavioredColumnSettings } from '@xilytix/revgrid';
 import { BehavioredGridSettings } from '@xilytix/revgrid';
 import { BinarySearchResult } from '@xilytix/sysutils';
 import { BooleanOrUndefined } from '@xilytix/sysutils';
+import { BooleanUiAction } from '@xilytix/ui-action';
 import { CachedCanvasRenderingContext2D } from '@xilytix/revgrid';
 import { calculateIntlNumberFormatCharParts } from '@xilytix/sysutils';
 import { CellPainter } from '@xilytix/revgrid';
@@ -60,14 +61,20 @@ import { DateOrDateTime } from '@xilytix/sysutils';
 import { dateToDashedYyyyMmDd } from '@xilytix/sysutils';
 import { dateToDateOnlyIsoString } from '@xilytix/sysutils';
 import { dateToUtcYyyyMmDd } from '@xilytix/sysutils';
+import { DateUiAction } from '@xilytix/ui-action';
 import { DayOfWeek } from '@xilytix/sysutils';
 import { Decimal } from '@xilytix/sysutils';
+import { DecimalUiAction } from '@xilytix/ui-action';
 import { deepExtendObject } from '@xilytix/sysutils';
 import { deepExtendValue } from '@xilytix/sysutils';
 import { delay1Tick } from '@xilytix/sysutils';
 import { earliestBinarySearch } from '@xilytix/sysutils';
+import { EnumExplicitElementsArrayUiAction } from '@xilytix/ui-action';
 import { EnumInfoOutOfOrderError } from '@xilytix/sysutils';
+import { EnumMappedExplicitElementsArrayUiAction } from '@xilytix/ui-action';
+import { EnumUiAction } from '@xilytix/ui-action';
 import { Err } from '@xilytix/sysutils';
+import { ExplicitElementsEnumUiAction } from '@xilytix/ui-action';
 import { getElementDocumentPosition } from '@xilytix/sysutils';
 import { getElementDocumentPositionRect } from '@xilytix/sysutils';
 import { getErrorMessage } from '@xilytix/sysutils';
@@ -84,6 +91,8 @@ import { IndexSignatureHack as IndexSignatureHack_2 } from '@xilytix/revgrid';
 import { InMemoryBehavioredColumnSettings } from '@xilytix/revgrid';
 import { InMemoryBehavioredGridSettings } from '@xilytix/revgrid';
 import { Integer } from '@xilytix/sysutils';
+import { IntegerExplicitElementsEnumUiAction } from '@xilytix/ui-action';
+import { IntegerUiAction } from '@xilytix/ui-action';
 import { InternalError } from '@xilytix/sysutils';
 import { IntlNumberFormatCharParts } from '@xilytix/sysutils';
 import { isArrayEqual } from '@xilytix/sysutils';
@@ -144,6 +153,7 @@ import { NotImplementedError } from '@xilytix/sysutils';
 import { nullDate } from '@xilytix/sysutils';
 import { nullDecimal } from '@xilytix/sysutils';
 import { numberToPixels } from '@xilytix/sysutils';
+import { NumberUiAction } from '@xilytix/ui-action';
 import { Ok } from '@xilytix/sysutils';
 import { OptionalKeys } from '@xilytix/sysutils';
 import { OptionalValues } from '@xilytix/sysutils';
@@ -180,7 +190,10 @@ import { SourceTzOffsetDate } from '@xilytix/sysutils';
 import { SourceTzOffsetDateTime } from '@xilytix/sysutils';
 import { StandardCheckboxPainter } from '@xilytix/revgrid';
 import { StandardToggleClickBoxCellEditor } from '@xilytix/revgrid';
+import { StringArrayUiAction } from '@xilytix/ui-action';
 import { StringBuilder } from '@xilytix/sysutils';
+import { StringExplicitElementsEnumUiAction } from '@xilytix/ui-action';
+import { StringUiAction } from '@xilytix/ui-action';
 import { Subgrid } from '@xilytix/revgrid';
 import { subtractElementFromArray } from '@xilytix/sysutils';
 import { subtractElementFromArrayUniquely } from '@xilytix/sysutils';
@@ -189,6 +202,10 @@ import { testRemoveFromArray } from '@xilytix/sysutils';
 import { TextTruncateType } from '@xilytix/revgrid';
 import { TimeSpan } from '@xilytix/sysutils';
 import { tryGetErrorMessage } from '@xilytix/sysutils';
+import { TypedArrayUiAction } from '@xilytix/ui-action';
+import { TypedExplicitElementsArrayUiAction } from '@xilytix/ui-action';
+import { TypedMappedExplicitElementsArrayUiAction } from '@xilytix/ui-action';
+import { UiAction } from '@xilytix/ui-action';
 import { UnexpectedCaseError } from '@xilytix/sysutils';
 import { UnexpectedTypeError } from '@xilytix/sysutils';
 import { uniqueElementArraysOverlap } from '@xilytix/sysutils';
@@ -2612,41 +2629,7 @@ export abstract class BooleanTableValue extends GenericTableValue<boolean> {
     protected renderValueTypeId: RenderValue.TypeId;
 }
 
-// Warning: (ae-missing-release-tag) "BooleanUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "BooleanUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class BooleanUiAction extends UiAction {
-    // (undocumented)
-    commitValue(value: boolean | undefined, typeId: UiAction.CommitTypeId): void;
-    // (undocumented)
-    get definedValue(): boolean;
-    // (undocumented)
-    pushValue(value: boolean | undefined): void;
-    // (undocumented)
-    protected repushValue(newEdited: boolean): void;
-    // (undocumented)
-    subscribePushEvents(handlersInterface: BooleanUiAction.PushEventHandlersInterface): number;
-    // (undocumented)
-    unsubscribePushEvents(subscriptionId: MultiEvent.SubscriptionId): void;
-    // (undocumented)
-    get value(): boolean | undefined;
-    // (undocumented)
-    get valueUndefined(): boolean;
-}
-
-// @public (undocumented)
-export namespace BooleanUiAction {
-    const // (undocumented)
-    undefinedBoolean = false;
-    // (undocumented)
-    export interface PushEventHandlersInterface extends UiAction.PushEventHandlersInterface {
-        // (undocumented)
-        value?: ValuePushEventHander;
-    }
-    // (undocumented)
-    export type ValuePushEventHander = (this: void, value: boolean | undefined, edited: boolean) => void;
-}
+export { BooleanUiAction }
 
 // Warning: (ae-missing-release-tag) "broadcastDataItemRequestNr" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -6699,41 +6682,7 @@ export { dateToDateOnlyIsoString }
 
 export { dateToUtcYyyyMmDd }
 
-// Warning: (ae-missing-release-tag) "DateUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "DateUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class DateUiAction extends UiAction {
-    // (undocumented)
-    commitValue(value: Date | undefined, typeId: UiAction.CommitTypeId): void;
-    // (undocumented)
-    get definedValue(): Date;
-    // (undocumented)
-    pushValue(value: Date | undefined): void;
-    // (undocumented)
-    protected repushValue(newEdited: boolean): void;
-    // (undocumented)
-    subscribePushEvents(handlersInterface: DateUiAction.PushEventHandlersInterface): number;
-    // (undocumented)
-    unsubscribePushEvents(subscriptionId: MultiEvent.SubscriptionId): void;
-    // (undocumented)
-    get value(): Date | undefined;
-    // (undocumented)
-    get valueUndefined(): boolean;
-}
-
-// @public (undocumented)
-export namespace DateUiAction {
-    const // (undocumented)
-    undefinedDate: Date;
-    // (undocumented)
-    export interface PushEventHandlersInterface extends UiAction.PushEventHandlersInterface {
-        // (undocumented)
-        value?: ValuePushEventHander;
-    }
-    // (undocumented)
-    export type ValuePushEventHander = (this: void, date: Date | undefined, edited: boolean) => void;
-}
+export { DateUiAction }
 
 export { DayOfWeek }
 
@@ -7023,68 +6972,7 @@ export class DecimalTableValue extends BaseDecimalTableValue {
     protected createRenderValue(): DecimalRenderValue;
 }
 
-// Warning: (ae-missing-release-tag) "DecimalUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "DecimalUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class DecimalUiAction extends UiAction {
-    // (undocumented)
-    commitValue(value: Decimal | undefined, typeId: UiAction.CommitTypeId): void;
-    // (undocumented)
-    get definedValue(): Decimal;
-    // (undocumented)
-    get options(): DecimalUiAction.Options;
-    // (undocumented)
-    pushOptions(options: DecimalUiAction.Options): void;
-    // (undocumented)
-    pushValue(value: Decimal | undefined): void;
-    // (undocumented)
-    protected repushValue(newEdited: boolean): void;
-    // (undocumented)
-    subscribePushEvents(handlersInterface: DecimalUiAction.PushEventHandlersInterface): number;
-    // (undocumented)
-    unsubscribePushEvents(subscriptionId: MultiEvent.SubscriptionId): void;
-    // (undocumented)
-    get value(): Decimal | undefined;
-    // (undocumented)
-    get valueUndefined(): boolean;
-}
-
-// @public (undocumented)
-export namespace DecimalUiAction {
-    const // (undocumented)
-    undefinedDecimal: Decimal;
-    // (undocumented)
-    export interface Options {
-        // (undocumented)
-        integer?: boolean;
-        // (undocumented)
-        max?: number;
-        // (undocumented)
-        maximumFractionDigits?: Integer;
-        // (undocumented)
-        min?: number;
-        // (undocumented)
-        minimumFractionDigits?: Integer;
-        // (undocumented)
-        step?: number;
-        // (undocumented)
-        useGrouping?: boolean;
-    }
-    // (undocumented)
-    export type OptionsPushEventHandler = (this: void, options: Options) => void;
-    // (undocumented)
-    export interface PushEventHandlersInterface extends UiAction.PushEventHandlersInterface {
-        // (undocumented)
-        options?: OptionsPushEventHandler;
-        // (undocumented)
-        value?: ValuePushEventHander;
-    }
-    // (undocumented)
-    export type ValuePushEventHander = (this: void, value: Decimal | undefined, edited: boolean) => void;
-    const // (undocumented)
-    defaultOptions: Options;
-}
+export { DecimalUiAction }
 
 export { deepExtendObject }
 
@@ -8146,17 +8034,11 @@ export abstract class EnumCorrectnessTableValue extends GenericCorrectnessTableV
     protected renderValueTypeId: RenderValue.TypeId;
 }
 
-// Warning: (ae-missing-release-tag) "EnumExplicitElementsArrayUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export abstract class EnumExplicitElementsArrayUiAction extends TypedExplicitElementsArrayUiAction<Integer> {
-}
+export { EnumExplicitElementsArrayUiAction }
 
 export { EnumInfoOutOfOrderError }
 
-// @public (undocumented)
-export class EnumMappedExplicitElementsArrayUiAction extends TypedMappedExplicitElementsArrayUiAction<Integer> {
-}
+export { EnumMappedExplicitElementsArrayUiAction }
 
 // Warning: (ae-missing-release-tag) "EnumRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -8182,77 +8064,7 @@ export abstract class EnumTableValue extends GenericTableValue<Integer> {
     protected renderValueTypeId: RenderValue.TypeId;
 }
 
-// Warning: (ae-missing-release-tag) "EnumUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "EnumUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export abstract class EnumUiAction<T> extends UiAction {
-    constructor(undefinedValue: T, valueRequired: boolean);
-    // (undocumented)
-    commitValue(value: T | undefined, typeId: UiAction.CommitTypeId): void;
-    // (undocumented)
-    get definedValue(): T;
-    // (undocumented)
-    get filter(): readonly T[] | undefined;
-    // (undocumented)
-    abstract getElementProperties(element: T): EnumUiAction.ElementProperties<T> | undefined;
-    // (undocumented)
-    abstract getElementPropertiesArray(): EnumUiAction.ElementProperties<T>[];
-    // (undocumented)
-    protected notifyElementPush(element: T, caption: string, title: string): void;
-    // (undocumented)
-    protected notifyElementsPush(filter: T[] | undefined | null): void;
-    // (undocumented)
-    pushFilter(value: readonly T[] | undefined): void;
-    // (undocumented)
-    pushValue(value: T | undefined): void;
-    // (undocumented)
-    protected repushValue(newEdited: boolean): void;
-    // (undocumented)
-    subscribePushEvents(handlersInterface: EnumUiAction.PushEventHandlersInterface<T>): number;
-    // (undocumented)
-    unsubscribePushEvents(subscriptionId: MultiEvent.SubscriptionId): void;
-    // (undocumented)
-    get value(): T | undefined;
-    // (undocumented)
-    get valueUndefined(): boolean;
-}
-
-// @public (undocumented)
-export namespace EnumUiAction {
-    const // (undocumented)
-    integerUndefinedValue = -99999;
-    const // (undocumented)
-    stringUndefinedValue = "";
-    // (undocumented)
-    export interface ElementProperties<T> {
-        // (undocumented)
-        caption: string;
-        // (undocumented)
-        element: T;
-        // (undocumented)
-        title: string;
-    }
-    // (undocumented)
-    export type ElementPushEventHandler<T> = (this: void, element: T, caption: string, title: string) => void;
-    // (undocumented)
-    export type ElementsPushEventHandler = (this: void) => void;
-    // (undocumented)
-    export type FilterPushEventHandler<T> = (this: void, value: readonly T[] | undefined) => void;
-    // (undocumented)
-    export interface PushEventHandlersInterface<T> extends UiAction.PushEventHandlersInterface {
-        // (undocumented)
-        element?: ElementPushEventHandler<T>;
-        // (undocumented)
-        elements?: ElementsPushEventHandler;
-        // (undocumented)
-        filter?: FilterPushEventHandler<T>;
-        // (undocumented)
-        value?: ValuePushEventHandler<T>;
-    }
-    // (undocumented)
-    export type ValuePushEventHandler<T> = (this: void, value: T | undefined, edited: boolean) => void;
-}
+export { EnumUiAction }
 
 // Warning: (ae-missing-release-tag) "EnvironmentedAccountId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -9719,19 +9531,7 @@ export class ExerciseTypeIdTableValue extends EnumTableValue {
     constructor();
 }
 
-// Warning: (ae-missing-release-tag) "ExplicitElementsEnumUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export abstract class ExplicitElementsEnumUiAction<T> extends EnumUiAction<T> {
-    // (undocumented)
-    getElementProperties(element: T): EnumUiAction.ElementProperties<T> | undefined;
-    // (undocumented)
-    getElementPropertiesArray(): EnumUiAction.ElementProperties<T>[];
-    // (undocumented)
-    pushElement(element: T, caption: string, title: string): void;
-    // (undocumented)
-    pushElements(elementPropertiesArray: EnumUiAction.ElementProperties<T>[], filter?: T[] | undefined | null): void;
-}
+export { ExplicitElementsEnumUiAction }
 
 // Warning: (ae-missing-release-tag) "ExtConnectionDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -12795,26 +12595,7 @@ export class IntegerCorrectnessTableValue extends GenericCorrectnessTableValue<I
     protected createRenderValue(): IntegerRenderValue;
 }
 
-// Warning: (ae-missing-release-tag) "IntegerExplicitElementsEnumUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "IntegerExplicitElementsEnumUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class IntegerExplicitElementsEnumUiAction extends ExplicitElementsEnumUiAction<Integer> {
-    constructor(valueRequired?: boolean);
-}
-
-// @public (undocumented)
-export namespace IntegerExplicitElementsEnumUiAction {
-    // (undocumented)
-    export interface ElementProperties {
-        // (undocumented)
-        caption: string;
-        // (undocumented)
-        element: Integer;
-        // (undocumented)
-        title: string;
-    }
-}
+export { IntegerExplicitElementsEnumUiAction }
 
 // Warning: (ae-missing-release-tag) "IntegerRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -12837,19 +12618,7 @@ export class IntegerTableValue extends GenericTableValue<Integer> {
     protected createRenderValue(): IntegerRenderValue;
 }
 
-// Warning: (ae-missing-release-tag) "IntegerUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "IntegerUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class IntegerUiAction extends NumberUiAction {
-    constructor(required?: boolean);
-}
-
-// @public (undocumented)
-export namespace IntegerUiAction {
-    const // (undocumented)
-    defaultIntegerOptions: NumberUiAction.Options;
-}
+export { IntegerUiAction }
 
 // Warning: (ae-missing-release-tag) "InternalCommand" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "InternalCommand" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -18354,68 +18123,7 @@ export class NumberTableValue extends BaseNumberTableValue {
 
 export { numberToPixels }
 
-// Warning: (ae-missing-release-tag) "NumberUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "NumberUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class NumberUiAction extends UiAction {
-    // (undocumented)
-    commitValue(value: number | undefined, typeId: UiAction.CommitTypeId): void;
-    // (undocumented)
-    get definedValue(): number;
-    // (undocumented)
-    get options(): NumberUiAction.Options;
-    // (undocumented)
-    pushOptions(options: NumberUiAction.Options): void;
-    // (undocumented)
-    pushValue(value: number | undefined): void;
-    // (undocumented)
-    protected repushValue(newEdited: boolean): void;
-    // (undocumented)
-    subscribePushEvents(handlersInterface: NumberUiAction.PushEventHandlersInterface): number;
-    // (undocumented)
-    unsubscribePushEvents(subscriptionId: MultiEvent.SubscriptionId): void;
-    // (undocumented)
-    get value(): number | undefined;
-    // (undocumented)
-    get valueUndefined(): boolean;
-}
-
-// @public (undocumented)
-export namespace NumberUiAction {
-    const // (undocumented)
-    undefinedNumber: number;
-    // (undocumented)
-    export interface Options {
-        // (undocumented)
-        integer?: boolean;
-        // (undocumented)
-        max?: number;
-        // (undocumented)
-        maximumFractionDigits?: Integer;
-        // (undocumented)
-        min?: number;
-        // (undocumented)
-        minimumFractionDigits?: Integer;
-        // (undocumented)
-        step?: number;
-        // (undocumented)
-        useGrouping?: boolean;
-    }
-    // (undocumented)
-    export type OptionsPushEventHandler = (this: void, options: Options) => void;
-    // (undocumented)
-    export interface PushEventHandlersInterface extends UiAction.PushEventHandlersInterface {
-        // (undocumented)
-        options?: OptionsPushEventHandler;
-        // (undocumented)
-        value?: ValuePushEventHander;
-    }
-    // (undocumented)
-    export type ValuePushEventHander = (this: void, value: number | undefined, edited: boolean) => void;
-    const // (undocumented)
-    defaultOptions: Options;
-}
+export { NumberUiAction }
 
 // Warning: (ae-missing-release-tag) "NumericComparisonScanCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "NumericComparisonScanCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -29325,11 +29033,7 @@ export class StringArrayRenderValue extends GenericRenderValue<readonly string[]
     constructor(data: readonly string[] | undefined);
 }
 
-// Warning: (ae-missing-release-tag) "StringArrayUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class StringArrayUiAction extends TypedArrayUiAction<string> {
-}
+export { StringArrayUiAction }
 
 export { StringBuilder }
 
@@ -29347,26 +29051,7 @@ export class StringCorrectnessTableValue extends GenericCorrectnessTableValue<st
     protected createRenderValue(): StringRenderValue;
 }
 
-// Warning: (ae-missing-release-tag) "StringExplicitElementsEnumUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "StringExplicitElementsEnumUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class StringExplicitElementsEnumUiAction extends ExplicitElementsEnumUiAction<string> {
-    constructor(valueRequired?: boolean);
-}
-
-// @public (undocumented)
-export namespace StringExplicitElementsEnumUiAction {
-    // (undocumented)
-    export interface ElementProperties {
-        // (undocumented)
-        caption: string;
-        // (undocumented)
-        element: string;
-        // (undocumented)
-        title: string;
-    }
-}
+export { StringExplicitElementsEnumUiAction }
 
 // Warning: (ae-missing-release-tag) "StringFieldOverlapsScanCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "StringFieldOverlapsScanCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -34188,41 +33873,7 @@ export class StringTableValue extends GenericTableValue<string> {
     protected createRenderValue(): StringRenderValue;
 }
 
-// Warning: (ae-missing-release-tag) "StringUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "StringUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class StringUiAction extends UiAction {
-    // (undocumented)
-    commitValue(value: string | undefined, typeId: UiAction.CommitTypeId): void;
-    // (undocumented)
-    get definedValue(): string;
-    // (undocumented)
-    pushValue(value: string | undefined): void;
-    // (undocumented)
-    protected repushValue(newEdited: boolean): void;
-    // (undocumented)
-    subscribePushEvents(handlersInterface: StringUiAction.PushEventHandlersInterface): number;
-    // (undocumented)
-    unsubscribePushEvents(subscriptionId: MultiEvent.SubscriptionId): void;
-    // (undocumented)
-    get value(): string | undefined;
-    // (undocumented)
-    get valueUndefined(): boolean;
-}
-
-// @public (undocumented)
-export namespace StringUiAction {
-    const // (undocumented)
-    undefinedString = "";
-    // (undocumented)
-    export interface PushEventHandlersInterface extends UiAction.PushEventHandlersInterface {
-        // (undocumented)
-        value?: ValuePushEventHander;
-    }
-    // (undocumented)
-    export type ValuePushEventHander = (this: void, value: string | undefined, edited: boolean) => void;
-}
+export { StringUiAction }
 
 // Warning: (ae-missing-release-tag) "SubFieldScanCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "SubFieldScanCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -38644,92 +38295,9 @@ export const enum TTMyxSectorId {
 export namespace TTradeRecordType {
 }
 
-// Warning: (ae-missing-release-tag) "TypedArrayUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "TypedArrayUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export abstract class TypedArrayUiAction<T> extends UiAction {
-    // (undocumented)
-    commitValue(value: readonly T[] | undefined, typeId: UiAction.CommitTypeId): void;
-    // (undocumented)
-    get definedValue(): readonly T[];
-    // (undocumented)
-    pushValue(value: readonly T[] | undefined): void;
-    // (undocumented)
-    protected repushValue(newEdited: boolean): void;
-    // (undocumented)
-    subscribePushEvents(handlersInterface: TypedArrayUiAction.PushEventHandlersInterface<T>): number;
-    // (undocumented)
-    unsubscribePushEvents(subscriptionId: MultiEvent.SubscriptionId): void;
-    // (undocumented)
-    get value(): readonly T[] | undefined;
-    // (undocumented)
-    get valueUndefined(): boolean;
-}
+export { TypedArrayUiAction }
 
-// @public (undocumented)
-export namespace TypedArrayUiAction {
-    const // (undocumented)
-    undefinedArray: never[];
-    // (undocumented)
-    export interface PushEventHandlersInterface<T> extends UiAction.PushEventHandlersInterface {
-        // (undocumented)
-        value?: ValuePushEventHandler<T>;
-    }
-    // (undocumented)
-    export type ValuePushEventHandler<T> = (this: void, value: readonly T[] | undefined, edited: boolean) => void;
-}
-
-// Warning: (ae-missing-release-tag) "TypedExplicitElementsArrayUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "TypedExplicitElementsArrayUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export abstract class TypedExplicitElementsArrayUiAction<T> extends TypedArrayUiAction<T> {
-    // (undocumented)
-    get filter(): readonly T[] | undefined;
-    // (undocumented)
-    abstract getElementProperties(element: T): TypedExplicitElementsArrayUiAction.ElementProperties<T> | undefined;
-    // (undocumented)
-    abstract getElementPropertiesArray(): TypedExplicitElementsArrayUiAction.ElementProperties<T>[];
-    // (undocumented)
-    protected notifyElementPush(element: T, caption: string, title: string): void;
-    // (undocumented)
-    protected notifyElementsPush(filter: T[] | undefined | null): void;
-    // (undocumented)
-    pushFilter(value: readonly T[] | undefined): void;
-    // (undocumented)
-    subscribePushEvents(handlersInterface: TypedExplicitElementsArrayUiAction.PushEventHandlersInterface<T>): number;
-    // (undocumented)
-    unsubscribePushEvents(subscriptionId: MultiEvent.SubscriptionId): void;
-}
-
-// @public (undocumented)
-export namespace TypedExplicitElementsArrayUiAction {
-    // (undocumented)
-    export interface ElementProperties<T> {
-        // (undocumented)
-        caption: string;
-        // (undocumented)
-        element: T;
-        // (undocumented)
-        title: string;
-    }
-    // (undocumented)
-    export type ElementPushEventHandler<T> = (this: void, element: T, caption: string, title: string) => void;
-    // (undocumented)
-    export type ElementsPushEventHandler = (this: void) => void;
-    // (undocumented)
-    export type FilterPushEventHandler<T> = (this: void, value: readonly T[] | undefined) => void;
-    // (undocumented)
-    export interface PushEventHandlersInterface<T> extends TypedArrayUiAction.PushEventHandlersInterface<T> {
-        // (undocumented)
-        element?: ElementPushEventHandler<T>;
-        // (undocumented)
-        elements?: ElementsPushEventHandler;
-        // (undocumented)
-        filter?: FilterPushEventHandler<T>;
-    }
-}
+export { TypedExplicitElementsArrayUiAction }
 
 // Warning: (ae-missing-release-tag) "TypedKeyValueArraySettingsGroup" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "TypedKeyValueArraySettingsGroup" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -38922,212 +38490,9 @@ export namespace TypedKeyValueSettings {
     }
 }
 
-// @public (undocumented)
-export class TypedMappedExplicitElementsArrayUiAction<T> extends TypedExplicitElementsArrayUiAction<T> {
-    // (undocumented)
-    get elementPropertiesMap(): Map<T, TypedExplicitElementsArrayUiAction.ElementProperties<T>>;
-    // (undocumented)
-    getElementProperties(element: T): TypedExplicitElementsArrayUiAction.ElementProperties<T> | undefined;
-    // (undocumented)
-    getElementPropertiesArray(): TypedExplicitElementsArrayUiAction.ElementProperties<T>[];
-    // (undocumented)
-    pushElement(element: T, caption: string, title: string): void;
-    // (undocumented)
-    pushElements(elementPropertiesArray: TypedExplicitElementsArrayUiAction.ElementProperties<T>[], filter?: T[] | undefined | null): void;
-}
+export { TypedMappedExplicitElementsArrayUiAction }
 
-// Warning: (ae-missing-release-tag) "UiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "UiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export abstract class UiAction {
-    constructor(valueRequired?: boolean);
-    // (undocumented)
-    get autoAcceptanceTypeId(): UiAction.AutoAcceptanceTypeId;
-    set autoAcceptanceTypeId(value: UiAction.AutoAcceptanceTypeId);
-    // (undocumented)
-    get autoEchoCommit(): boolean;
-    set autoEchoCommit(value: boolean);
-    // (undocumented)
-    get autoInvalid(): boolean;
-    set autoInvalid(value: boolean);
-    // (undocumented)
-    cancelEdit(): void;
-    // (undocumented)
-    get caption(): string;
-    // (undocumented)
-    protected commit(typeId: UiAction.CommitTypeId): void;
-    // (undocumented)
-    get commitEvent(): UiAction.CommitEventHandler | undefined;
-    set commitEvent(value: UiAction.CommitEventHandler | undefined);
-    // (undocumented)
-    get commitOnAnyValidInput(): boolean;
-    set commitOnAnyValidInput(value: boolean);
-    // (undocumented)
-    get edited(): boolean;
-    // (undocumented)
-    get editedChangeEvent(): UiAction.EditedChangeEventHandler | undefined;
-    set editedChangeEvent(value: UiAction.EditedChangeEventHandler | undefined);
-    // (undocumented)
-    get editedInvalidErrorText(): string | undefined;
-    // (undocumented)
-    get editedMissing(): boolean;
-    // (undocumented)
-    get editedValid(): boolean;
-    // (undocumented)
-    get enabled(): boolean;
-    // (undocumented)
-    finalise(): void;
-    // (undocumented)
-    input(text: string, valid: boolean, missing: boolean, errorText: string | undefined): void;
-    // (undocumented)
-    get inputEvent(): UiAction.InputEventHandler | undefined;
-    set inputEvent(value: UiAction.InputEventHandler | undefined);
-    // (undocumented)
-    get inputtedText(): string;
-    // (undocumented)
-    isValueOk(): boolean;
-    // (undocumented)
-    isValueOkOrDisabled(): boolean;
-    // (undocumented)
-    get placeholder(): string;
-    // (undocumented)
-    pushAccepted(value?: boolean): void;
-    // (undocumented)
-    protected pushAutoAcceptance(): void;
-    // (undocumented)
-    pushCaption(value: string): void;
-    // (undocumented)
-    pushDisabled(disabledTitleText?: string): void;
-    // (undocumented)
-    pushError(errorTitleText?: string): void;
-    // (undocumented)
-    pushInvalid(invalidTitleText?: string): void;
-    // (undocumented)
-    pushPlaceholder(value: string): void;
-    // (undocumented)
-    pushReadonly(): void;
-    // (undocumented)
-    pushState(newStateId: UiAction.StateId, stateTitleText?: string): void;
-    // (undocumented)
-    pushTitle(value: string): void;
-    // (undocumented)
-    pushValidOrMissing(titleText?: string): void;
-    // (undocumented)
-    pushWaiting(waitingTitleText?: string): void;
-    // (undocumented)
-    pushWarning(warningTitleText?: string): void;
-    // (undocumented)
-    protected abstract repushValue(newEdited: boolean): void;
-    // (undocumented)
-    signal(signalTypeId: UiAction.SignalTypeId, downKeys: ModifierKey.IdSet): void;
-    // (undocumented)
-    get signalEvent(): UiAction.SignalEventHandler | undefined;
-    set signalEvent(value: UiAction.SignalEventHandler | undefined);
-    // (undocumented)
-    get stateId(): UiAction.StateId;
-    // (undocumented)
-    subscribePushEvents(handlersInterface: UiAction.PushEventHandlersInterface): number;
-    // (undocumented)
-    get title(): string;
-    // (undocumented)
-    unsubscribePushEvents(subscriptionId: MultiEvent.SubscriptionId): void;
-    // (undocumented)
-    get valueRequired(): boolean;
-    set valueRequired(value: boolean);
-    // (undocumented)
-    abstract get valueUndefined(): boolean;
-}
-
-// @public (undocumented)
-export namespace UiAction {
-    // (undocumented)
-    export const enum AutoAcceptanceTypeId {
-        // (undocumented)
-        Accepted = 2,
-        // (undocumented)
-        None = 0,
-        // (undocumented)
-        Valid = 1
-    }
-    // (undocumented)
-    export type CaptionPushEventHandler = (this: void, caption: string) => void;
-    // (undocumented)
-    export type CommitEventHandler = (this: void, typeId: UiAction.CommitTypeId) => void;
-    // (undocumented)
-    export namespace CommitType {
-        // (undocumented)
-        export type NotInputId = UiAction.CommitTypeId.Explicit | UiAction.CommitTypeId.Implicit;
-    }
-    // (undocumented)
-    export const enum CommitTypeId {
-        // (undocumented)
-        Explicit = 1,
-        // (undocumented)
-        Implicit = 0,
-        // (undocumented)
-        Input = 2
-    }
-    // (undocumented)
-    export type EditedChangeEventHandler = (this: void) => void;
-    // (undocumented)
-    export type InputEventHandler = (this: void) => void;
-    // (undocumented)
-    export type PlaceholderPushEventHandler = (this: void, text: string) => void;
-    // (undocumented)
-    export interface PushEventHandlersInterface {
-        // (undocumented)
-        caption?: CaptionPushEventHandler;
-        // (undocumented)
-        placeholder?: PlaceholderPushEventHandler;
-        // (undocumented)
-        requiredChange?: RequiredChangePushEventHandler;
-        // (undocumented)
-        stateChange?: StateChangePushEventHandler;
-        // (undocumented)
-        title?: TitlePushEventHandler;
-    }
-    // (undocumented)
-    export type RequiredChangePushEventHandler = (this: void) => void;
-    // (undocumented)
-    export type SignalEventHandler = (this: void, signalTypeId: SignalTypeId, downKeys: ModifierKey.IdSet) => void;
-    // (undocumented)
-    export const enum SignalTypeId {
-        // (undocumented)
-        EnterKeyPress = 1,
-        // (undocumented)
-        KeyboardShortcut = 3,
-        // (undocumented)
-        MouseClick = 0,
-        // (undocumented)
-        SpacebarKeyPress = 2
-    }
-    // (undocumented)
-    export type StateChangePushEventHandler = (this: void, oldState: StateId, newState: StateId) => void;
-    // (undocumented)
-    export const enum StateId {
-        // (undocumented)
-        Accepted = 5,// value cannot be used
-        // (undocumented)
-        Disabled = 0,// value is acceptable but but cannot changed
-        // (undocumented)
-        Error = 8,// value is committed but undefined and required
-        // (undocumented)
-        Invalid = 3,// value is not committed (edited) but not valid
-        // (undocumented)
-        Missing = 2,// value is committed, present and valid but not accepted by application
-        // (undocumented)
-        Readonly = 1,// value is committed, present, valid and accepted by application
-        // (undocumented)
-        Valid = 4,// value is committed, present, valid and accepted by application but resulted to waiting
-        // (undocumented)
-        Waiting = 6,// value is committed, present, valid and accepted by application but resulted in Warning
-        // (undocumented)
-        Warning = 7
-    }
-    // (undocumented)
-    export type TitlePushEventHandler = (this: void, title: string) => void;
-}
+export { UiAction }
 
 // Warning: (ae-missing-release-tag) "UiComparableList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
