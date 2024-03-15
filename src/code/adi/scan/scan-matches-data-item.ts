@@ -72,7 +72,7 @@ export abstract class ScanMatchesDataItem<T> extends FeedSubscriptionDataItem {
                     const addChange = change as MatchesDataMessage.AddUpdateChange<T>;
                     const mapKey = addChange.key;
                     if (this._unrankedRecordMap.has(mapKey)) {
-                        throw new ZenithDataError(ErrorCode.MatchesDataItem_AddChangeKeyAlreadyExists, `${mapKey}`);
+                        throw new ZenithDataError(ErrorCode.MatchesDataItem_AddChangeKeyAlreadyExists, mapKey);
                     } else {
                         if (addStartMsgIdx < 0) {
                             addStartMsgIdx = msgChangeIdx;
@@ -88,7 +88,7 @@ export abstract class ScanMatchesDataItem<T> extends FeedSubscriptionDataItem {
                     const matchRecord = this._unrankedRecordMap.get(mapKey);
 
                     if (matchRecord === undefined) {
-                        throw new ZenithDataError(ErrorCode.MatchesDataItem_UpdateChangeKeyDoesNotExists, `${mapKey}`);
+                        throw new ZenithDataError(ErrorCode.MatchesDataItem_UpdateChangeKeyDoesNotExists, mapKey);
                     } else {
                         matchRecord.update(updateChange.value, updateChange.rankScore);
                     }
@@ -101,7 +101,7 @@ export abstract class ScanMatchesDataItem<T> extends FeedSubscriptionDataItem {
                     const mapKey = removeChange.key;
                     const matchRecord = this._unrankedRecordMap.get(mapKey);
                     if (matchRecord === undefined) {
-                        throw new ZenithDataError(ErrorCode.MatchesDataItem_RemoveChangeKeyDoesNotExists, `${mapKey}`);
+                        throw new ZenithDataError(ErrorCode.MatchesDataItem_RemoveChangeKeyDoesNotExists, mapKey);
                     } else {
                         this.checkUnrankedUsableNotifyListChange(UsableListChangeTypeId.Remove, matchRecord.unrankedIndex, 1);
                         this.removeRecord(matchRecord);
@@ -136,10 +136,10 @@ export abstract class ScanMatchesDataItem<T> extends FeedSubscriptionDataItem {
                 if (!LitIvemIdMatchesDataMessage.isAddUpdateChange(change)) {
                     throw new AssertInternalError('MDICAD10091');
                 } else {
-
                     const match = this.createMatch(addIdx, change.value, change.rankScore);
                     this.unrankedRecords[addIdx] = match;
                     addIdx++;
+                    this._unrankedRecordMap.set(change.key, match);
                 }
             }
             this.checkUnrankedUsableNotifyListChange(UsableListChangeTypeId.Insert, addStartIdx, addCount);
