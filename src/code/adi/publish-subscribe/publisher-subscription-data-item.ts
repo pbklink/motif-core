@@ -133,6 +133,12 @@ export abstract class PublisherSubscriptionDataItem extends DataItem {
 
     }
 
+    /** Descendants can override if they want to do any processing just prior to entering a synchronised state */
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    protected processSubscriptionPreSynchronised() {
+
+    }
+
     protected checkSubscribabilityIncreaseWaitingActivate() {
         switch (this._publisherSubscriptionStateId) {
             case PublisherSubscriptionDataItem.SubscriptionStateId.NeverSubscribed:
@@ -367,6 +373,8 @@ export abstract class PublisherSubscriptionDataItem extends DataItem {
                 } else {
                     newStateId = PublisherSubscriptionDataItem.SubscriptionStateId.Synchronised;
                 }
+
+                this.processSubscriptionPreSynchronised();
 
                 const badness = this.createSubscriptionStateBadness(newStateId);
                 this.setStateId(newStateId, badness);

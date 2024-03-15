@@ -6,6 +6,7 @@
 
 import { DepthStyleId, OrderSideId } from '../../../adi/adi-internal-api';
 import {
+    Decimal,
     GridRecordIndex,
     GridRecordInvalidatedValue,
     GridRecordStoreRecordsEventers,
@@ -51,9 +52,10 @@ export abstract class DepthSideGridRecordStore {
         }
     }
 
-    setAuctionQuantity(value: Integer | undefined) {
-        if (value !== this._auctionVolume) {
-            this._auctionVolume = value;
+    setAuctionQuantity(value: Decimal | undefined) {
+        const valueAsInteger = value === undefined ? undefined : value.toInteger().toNumber(); // Remove this when Depth supports Decimal Auction Quantity
+        if (valueAsInteger !== this._auctionVolume) {
+            this._auctionVolume = valueAsInteger;
             if (this.getRecordCount() > 0) {
                 const lastAffectedFollowingRecordIndex = this.processAuctionAndVolumeAhead(0, true);
                 this.eventifyInvalidateRecordAndFollowingRecords(0, lastAffectedFollowingRecordIndex);

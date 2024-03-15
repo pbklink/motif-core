@@ -816,12 +816,13 @@ export namespace ZenithProtocol {
                 TradingState?: string;
                 TradingMarkets?: string[];
                 IsIndex?: boolean;
-                ExpiryDate?: DashedYyyyMmDdDate;
-                StrikePrice?: Decimal;
-                CallOrPut?: CallOrPut;
-                ContractSize?: Integer;
+                ExpiryDate?: DashedYyyyMmDdDate | null;
+                StrikePrice?: Decimal | null;
+                CallOrPut?: CallOrPut | null;
+                ContractSize?: Decimal | null;
                 SubscriptionData?: CommaString;
-                QuotationBasis?: string | null;
+                QuotationBasis?: string[];
+                Currency?: Currency | null;
                 Open?: Decimal | null;
                 High?: Decimal | null;
                 Low?: Decimal | null;
@@ -831,22 +832,22 @@ export namespace ZenithProtocol {
                 Trend?: Trend;
                 BestAsk?: Decimal | null;
                 AskCount?: Integer;
-                AskQuantity?: Integer;
+                AskQuantity?: Decimal;
                 AskUndisclosed?: boolean;
                 BestBid?: Decimal | null;
                 BidCount?: Integer;
-                BidQuantity?: Integer;
+                BidQuantity?: Decimal;
                 BidUndisclosed?: boolean;
                 NumberOfTrades?: Integer;
-                Volume?: Integer;
+                Volume?: Decimal;
                 AuctionPrice?: Decimal | null;
-                AuctionQuantity?: Integer | null;
-                AuctionRemainder?: Integer | null;
+                AuctionQuantity?: Decimal | null;
+                AuctionRemainder?: Decimal | null;
                 VWAP?: Decimal | null;
-                ValueTraded?: number;
+                ValueTraded?: Decimal;
                 OpenInterest?: Integer | null;
-                ShareIssue?: Integer | null;
-                StatusNote?: string | null;
+                ShareIssue?: Decimal | null;
+                StatusNote?: string[]; // This may be an array of strings
                 Extended?: Extended | null;
             }
 

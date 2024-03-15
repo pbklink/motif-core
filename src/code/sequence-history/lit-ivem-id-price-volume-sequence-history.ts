@@ -1002,7 +1002,8 @@ export class LitIvemIdPriceVolumeSequenceHistory extends SequenceHistory {
         }
 
         const volume = securityDataItem.volume;
-        this.stageVolumeValueTick(dateTime, tickDateTimeRepeatCount, volume);
+        const volumeAsNumber = volume === undefined ? undefined : volume.toNumber();
+        this.stageVolumeValueTick(dateTime, tickDateTimeRepeatCount, volumeAsNumber);
     }
 
     private loadSeriesFromModifiedSecurityFields(valueChanges: SecurityDataItem.ValueChange[]) {

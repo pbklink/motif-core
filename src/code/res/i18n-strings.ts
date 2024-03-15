@@ -339,6 +339,8 @@ export const enum StringId {
     SecurityFieldHeading_SubscriptionDataTypeIds,
     SecurityFieldDisplay_QuotationBasis,
     SecurityFieldHeading_QuotationBasis,
+    SecurityFieldDisplay_Currency,
+    SecurityFieldHeading_Currency,
     SecurityFieldDisplay_Open,
     SecurityFieldHeading_Open,
     SecurityFieldDisplay_High,
@@ -4068,6 +4070,16 @@ export namespace I18nStrings {
         SecurityFieldHeading_QuotationBasis: {
             id: StringId.SecurityFieldHeading_QuotationBasis, translations: {
                 en: 'Basis',
+            }
+        },
+        SecurityFieldDisplay_Currency: {
+            id: StringId.SecurityFieldDisplay_Currency, translations: {
+                en: 'Currency',
+            }
+        },
+        SecurityFieldHeading_Currency: {
+            id: StringId.SecurityFieldHeading_Currency, translations: {
+                en: 'Currency',
             }
         },
         SecurityFieldDisplay_Open: {

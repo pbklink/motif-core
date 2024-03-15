@@ -317,7 +317,7 @@ export class ZenithPublisherSubscriptionManager extends AdiPublisherSubscription
                                 if (texts !== undefined) {
                                     for (let i = 0; i < texts.length; i++) {
                                         const text = texts[i];
-                                        switch (text) {
+                                        switch (text as ZenithProtocol.ResponseUpdateMessageContainer.Error.Code) {
                                             case ZenithProtocol.ResponseUpdateMessageContainer.Error.Code.Retry:
                                                 delayRetryAllowedSpecified = true;
                                                 break;

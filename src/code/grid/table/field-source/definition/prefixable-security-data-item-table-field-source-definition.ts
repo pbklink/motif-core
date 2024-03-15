@@ -22,14 +22,16 @@ import {
     IntegerArrayCorrectnessTableField,
     IntegerCorrectnessTableField,
     LitIvemIdCorrectnessTableField,
-    NumberCorrectnessTableField,
     SourceTzOffsetDateCorrectnessTableField,
+    StringArrayCorrectnessTableField,
     StringCorrectnessTableField,
     TableField
 } from '../../field/grid-table-field-internal-api';
 import {
     CallOrPutCorrectnessTableValue,
     CorrectnessTableValue,
+    CurrencyIdCorrectnessTableValue,
+    DecimalCorrectnessTableValue,
     ExchangeIdCorrectnessTableValue,
     IntegerCorrectnessTableValue,
     IsIndexCorrectnessTableValue,
@@ -37,10 +39,10 @@ import {
     LitIvemIdCorrectnessTableValue,
     MarketIdArrayCorrectnessTableValue,
     MarketIdCorrectnessTableValue,
-    NumberCorrectnessTableValue,
     PriceCorrectnessTableValue,
     PublisherSubscriptionDataTypeIdArrayCorrectnessTableValue,
     SourceTzOffsetDateCorrectnessTableValue,
+    StringArrayCorrectnessTableValue,
     StringCorrectnessTableValue,
     TradingStateAllowIdArrayCorrectnessTableValue,
     TradingStateReasonIdCorrectnessTableValue,
@@ -125,21 +127,21 @@ export namespace PrefixableSecurityDataItemTableFieldSourceDefinition {
                     return [StringCorrectnessTableField, StringCorrectnessTableValue];
                 case SecurityDataItem.FieldId.QuotationBasis:
                 case SecurityDataItem.FieldId.StatusNote:
-                    return [StringCorrectnessTableField, StringCorrectnessTableValue];
+                    return [StringArrayCorrectnessTableField, StringArrayCorrectnessTableValue];
                 case SecurityDataItem.FieldId.AskCount:
-                case SecurityDataItem.FieldId.AskQuantity:
                 case SecurityDataItem.FieldId.BidCount:
-                case SecurityDataItem.FieldId.BidQuantity:
                 case SecurityDataItem.FieldId.NumberOfTrades:
-                case SecurityDataItem.FieldId.ContractSize:
                     return [IntegerCorrectnessTableField, IntegerCorrectnessTableValue];
-                case SecurityDataItem.FieldId.OpenInterest:
+                case SecurityDataItem.FieldId.AskQuantity:
+                case SecurityDataItem.FieldId.BidQuantity:
+                case SecurityDataItem.FieldId.ContractSize:
                 case SecurityDataItem.FieldId.AuctionQuantity:
                 case SecurityDataItem.FieldId.AuctionRemainder:
-                    return [IntegerCorrectnessTableField, IntegerCorrectnessTableValue];
                 case SecurityDataItem.FieldId.Volume:
-                    return [IntegerCorrectnessTableField, IntegerCorrectnessTableValue];
+                case SecurityDataItem.FieldId.ValueTraded:
                 case SecurityDataItem.FieldId.ShareIssue:
+                    return [DecimalCorrectnessTableField, DecimalCorrectnessTableValue];
+                case SecurityDataItem.FieldId.OpenInterest:
                     return [IntegerCorrectnessTableField, IntegerCorrectnessTableValue];
                 case SecurityDataItem.FieldId.Market:
                     return [EnumCorrectnessTableField, MarketIdCorrectnessTableValue];
@@ -149,6 +151,8 @@ export namespace PrefixableSecurityDataItemTableFieldSourceDefinition {
                     return [EnumCorrectnessTableField, IvemClassIdCorrectnessTableValue];
                 case SecurityDataItem.FieldId.Cfi:
                     return [StringCorrectnessTableField, StringCorrectnessTableValue];
+                case SecurityDataItem.FieldId.Currency:
+                    return [EnumCorrectnessTableField, CurrencyIdCorrectnessTableValue];
                 case SecurityDataItem.FieldId.TradingStateReason:
                     return [EnumCorrectnessTableField, TradingStateReasonIdCorrectnessTableValue];
                 case SecurityDataItem.FieldId.CallOrPut:
@@ -175,8 +179,6 @@ export namespace PrefixableSecurityDataItemTableFieldSourceDefinition {
                     return [DecimalCorrectnessTableField, PriceCorrectnessTableValue];
                 case SecurityDataItem.FieldId.Last:
                     return [DecimalCorrectnessTableField, PriceCorrectnessTableValue];
-                case SecurityDataItem.FieldId.ValueTraded:
-                    return [NumberCorrectnessTableField, NumberCorrectnessTableValue];
                 case SecurityDataItem.FieldId.ExpiryDate:
                     return [SourceTzOffsetDateCorrectnessTableField, SourceTzOffsetDateCorrectnessTableValue];
                 case SecurityDataItem.FieldId.SubscriptionDataTypeIds:
