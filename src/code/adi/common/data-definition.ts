@@ -1238,7 +1238,7 @@ export class CreateScanDataDefinition extends FeedSubscriptionDataDefinition {
     symbolListEnabled: boolean;
     targetTypeId: ScanTargetTypeId;
     targets: readonly MarketId[] | readonly LitIvemId[];
-    maxMatchCount: Integer | undefined;
+    maxMatchCount: Integer;
     zenithCriteria: ZenithEncodedScanFormula.BooleanTupleNode;
     zenithRank: ZenithEncodedScanFormula.NumericTupleNode | undefined;
     attachedNotificationChannels: readonly ScanAttachedNotificationChannel[];
@@ -1290,7 +1290,7 @@ export class UpdateScanDataDefinition extends FeedSubscriptionDataDefinition {
     zenithRank: ZenithEncodedScanFormula.NumericTupleNode | undefined;
     targetTypeId: ScanTargetTypeId;
     targets: readonly MarketId[] | readonly LitIvemId[];
-    maxMatchCount: Integer | undefined;
+    maxMatchCount: Integer;
     attachedNotificationChannels: readonly ScanAttachedNotificationChannel[];
 
     constructor() {
@@ -1306,7 +1306,7 @@ export abstract class ExecuteScanDataDefinition extends FeedSubscriptionDataDefi
     zenithRank: ZenithEncodedScanFormula.NumericTupleNode | undefined;
     targetTypeId: ScanTargetTypeId;
     targets: readonly MarketId[] | readonly LitIvemId[];
-    maxMatchCount: Integer | undefined;
+    maxMatchCount: Integer;
 
     // eslint-disable-next-line @typescript-eslint/class-literal-property-style
     get referencable(): boolean { return false; }

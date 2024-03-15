@@ -382,6 +382,9 @@ export class ScanEditor extends OpenableScanEditor {
     }
 
     setMaxMatchCount(value: Integer) {
+        if (value >= ScanEditor.MaxMaxMatchCount) {
+            value = ScanEditor.MaxMaxMatchCount;
+        }
         if (value !== this._maxMatchCount) {
             this.beginFieldChanges(undefined)
             this._maxMatchCount = value;
@@ -622,7 +625,7 @@ export class ScanEditor extends OpenableScanEditor {
         if (targetTypeId === undefined) {
             return false;
         } else {
-            if (targetTypeId === ScanTargetTypeId.Markets && this._maxMatchCount === undefined) {
+            if (this._maxMatchCount === undefined) {
                 return false;
             } else {
                 if (this._criteria === undefined) {
@@ -643,7 +646,7 @@ export class ScanEditor extends OpenableScanEditor {
         if (targetTypeId === undefined) {
             throw new AssertInternalError('SEACSTTI31310', this._name);
         } else {
-            if (targetTypeId === ScanTargetTypeId.Markets && this._maxMatchCount === undefined) {
+            if (this._maxMatchCount === undefined) {
                 throw new AssertInternalError('SEACSMMC31310', this._name);
             } else {
                 if (this._criteria === undefined) {
@@ -653,6 +656,9 @@ export class ScanEditor extends OpenableScanEditor {
                         throw new AssertInternalError('SEACSANCL31310', this._name);
                     } else {
                         const { versionNumber, versionId, versioningInterrupted } = this.updateVersion();
+
+                        // Make sure always less than maximum
+                        const maxMatchCount = this._maxMatchCount <= ScanEditor.MaxMaxMatchCount ? this._maxMatchCount : ScanEditor.MaxMaxMatchCount;
 
                         const criteriaJson = this.createZenithEncodedCriteria(this._criteria);
                         const rank = this._rank;
@@ -669,7 +675,7 @@ export class ScanEditor extends OpenableScanEditor {
                         definition.lastEditSessionId = this._editSessionId;
                         definition.targetTypeId = targetTypeId;
                         definition.targets = this.calculateTargets(targetTypeId);
-                        definition.maxMatchCount = this._maxMatchCount;
+                        definition.maxMatchCount = maxMatchCount;
                         definition.zenithCriteria = criteriaJson;
                         definition.zenithRank = zenithRank;
                         definition.zenithCriteriaSource = this._criteriaSourceId === ScanEditor.SourceId.ZenithText ? this._criteriaAsZenithText : undefined;
@@ -714,7 +720,7 @@ export class ScanEditor extends OpenableScanEditor {
             if (targetTypeId === undefined) {
                 return false;
             } else {
-                if (targetTypeId === ScanTargetTypeId.Markets && this._maxMatchCount === undefined) {
+                if (this._maxMatchCount === undefined) {
                     return false;
                 } else {
                     if (this._criteria === undefined) {
@@ -739,7 +745,7 @@ export class ScanEditor extends OpenableScanEditor {
             if (targetTypeId === undefined) {
                 throw new AssertInternalError('SEAUCTTI31310', this._name);
             } else {
-                if (targetTypeId === ScanTargetTypeId.Markets && this._maxMatchCount === undefined) {
+                if (this._maxMatchCount === undefined) {
                     throw new AssertInternalError('SEAUCMMC31310', this._name);
                 } else {
                     if (this._criteria === undefined) {
@@ -752,6 +758,9 @@ export class ScanEditor extends OpenableScanEditor {
                             const zenithCriteria = this.createZenithEncodedCriteria(this._criteria);
                             const rank = this._rank;
                             const zenithRank = rank === undefined ? undefined : this.createZenithEncodedRank(rank);
+
+                            // Make sure always less than maximum
+                            const maxMatchCount = this._maxMatchCount <= ScanEditor.MaxMaxMatchCount ? this._maxMatchCount : ScanEditor.MaxMaxMatchCount;
 
                             const definition = new UpdateScanDataDefinition();
                             definition.scanId = this._scan.id;
@@ -770,7 +779,7 @@ export class ScanEditor extends OpenableScanEditor {
                             definition.zenithRank = zenithRank;
                             definition.targetTypeId = targetTypeId;
                             definition.targets = this.calculateTargets(targetTypeId);
-                            definition.maxMatchCount = this._maxMatchCount;
+                            definition.maxMatchCount = maxMatchCount;
                             definition.attachedNotificationChannels = this.attachedNotificationChannelsList.toScanAttachedNotificationChannelArray();
 
                             const incubator = new DataItemIncubator<UpdateScanDataItem>(this._adiService);
@@ -1097,7 +1106,7 @@ export class ScanEditor extends OpenableScanEditor {
         const defaultMarketId = ExchangeInfo.idToDefaultMarketId(defaultExchangeId);
         this.setTargetMarketIds([defaultMarketId]);
         this.setTargetTypeId(ScanTargetTypeId.Markets);
-        this.setMaxMatchCount(10);
+        this.setMaxMatchCount(ScanEditor.DefaultMaxMatchCount);
         this.setCriteria(ScanEditor.DefaultCriteria, undefined);
         this.updateCriteriaSourceValid(true);
         this.setRank(ScanEditor.DefaultRank, undefined);
@@ -1401,6 +1410,8 @@ export namespace ScanEditor {
     export const DefaultScanTargetTypeId = ScanTargetTypeId.Markets;
     export const DefaultCriteria: ScanFormula.BooleanNode = { typeId: ScanFormula.NodeTypeId.None };
     export const DefaultRank: ScanFormula.NumericPosNode | undefined = undefined; // { typeId: ScanFormula.NodeTypeId.NumericPos, operand: 0 } ;
+    export const MaxMaxMatchCount = 100;
+    export const DefaultMaxMatchCount = 10;
 
     export type Modifier = Integer;
 
