@@ -14,6 +14,7 @@ export * from './correctness-badness';
 export * from './correctness-list';
 export * from './correctness-record';
 export * from './correctness-settable-list-item';
+export * from './correctness-state';
 export * from './date-text';
 export * from './disposable-record';
 export * from './error-code';

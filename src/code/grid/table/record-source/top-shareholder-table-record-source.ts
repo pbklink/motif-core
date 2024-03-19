@@ -14,6 +14,7 @@ import {
 import {
     AssertInternalError,
     Badness,
+    CorrectnessBadness,
     Integer,
     LockOpenListItem,
     MultiEvent, UnreachableCaseError,
@@ -42,17 +43,19 @@ export class TopShareholderTableRecordSource extends SingleDataItemTableRecordSo
     private _dataItem: TopShareholdersDataItem;
     private _dataItemSubscribed = false;
     private _listChangeEventSubscriptionId: MultiEvent.SubscriptionId;
-    private _badnessChangeEventSubscriptionId: MultiEvent.SubscriptionId;
+    private _badnessChangedEventSubscriptionId: MultiEvent.SubscriptionId;
 
     constructor(
         private readonly _adiService: AdiService,
         textFormatterService: TextFormatterService,
         tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService,
+        correctnessBadness: CorrectnessBadness,
         definition: TopShareholderTableRecordSourceDefinition,
     ) {
         super(
             textFormatterService,
             tableRecordSourceDefinitionFactoryService,
+            correctnessBadness,
             definition,
             TopShareholderTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
         );
@@ -117,8 +120,8 @@ export class TopShareholderTableRecordSource extends SingleDataItemTableRecordSo
         this._listChangeEventSubscriptionId = this._dataItem.subscribeListChangeEvent(
                 (listChangeTypeId, idx, count) => { this.handleDataItemListChangeEvent(listChangeTypeId, idx, count); }
         );
-        this._badnessChangeEventSubscriptionId = this._dataItem.subscribeBadnessChangeEvent(
-            () => { this.handleDataItemBadnessChangeEvent(); }
+        this._badnessChangedEventSubscriptionId = this._dataItem.subscribeBadnessChangedEvent(
+            () => { this.handleDataItembadnessChangedEvent(); }
         );
 
         super.openLocked(opener);
@@ -145,8 +148,8 @@ export class TopShareholderTableRecordSource extends SingleDataItemTableRecordSo
         } else {
             this._dataItem.unsubscribeListChangeEvent(this._listChangeEventSubscriptionId);
             this._listChangeEventSubscriptionId = undefined;
-            this._dataItem.unsubscribeBadnessChangeEvent(this._badnessChangeEventSubscriptionId);
-            this._badnessChangeEventSubscriptionId = undefined;
+            this._dataItem.unsubscribeBadnessChangedEvent(this._badnessChangedEventSubscriptionId);
+            this._badnessChangedEventSubscriptionId = undefined;
 
             super.closeLocked(opener);
 
@@ -178,7 +181,7 @@ export class TopShareholderTableRecordSource extends SingleDataItemTableRecordSo
         this.processDataItemListChange(listChangeTypeId, idx, count);
     }
 
-    private handleDataItemBadnessChangeEvent() {
+    private handleDataItembadnessChangedEvent() {
         this.checkSetUnusable(this._dataItem.badness);
     }
 

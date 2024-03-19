@@ -11,10 +11,10 @@ import { MultiEvent } from './xilytix-sysutils';
 export interface BadnessList<Record> extends UsableList<Record> {
     readonly badness: Badness;
 
-    subscribeBadnessChangeEvent(handler: BadnessList.BadnessChangeEventHandler): MultiEvent.DefinedSubscriptionId;
-    unsubscribeBadnessChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+    subscribeBadnessChangedEvent(handler: BadnessList.badnessChangedEventHandler): MultiEvent.DefinedSubscriptionId;
+    unsubscribeBadnessChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
 }
 
 export namespace BadnessList {
-    export type BadnessChangeEventHandler = (this: void) => void;
+    export type badnessChangedEventHandler = (this: void) => void;
 }

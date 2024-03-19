@@ -4,14 +4,14 @@
  * License: motionite.trade/license/motif
  */
 
-import { Badness, Integer, LockOpenListItem, MultiEvent, UnreachableCaseError, UsableListChangeTypeId } from '../../../sys/internal-api';
+import { Badness, CorrectnessBadness, Integer, LockOpenListItem, MultiEvent, UnreachableCaseError, UsableListChangeTypeId } from '../../../sys/internal-api';
 import { TextFormatterService } from '../../../text-format/text-format-internal-api';
 import {
     TableField,
     TableFieldSourceDefinition,
     TableRecord,
-    TableRecordSource,
-    TableRecordSourceDefinitionFactoryService
+    TableRecordSourceDefinitionFactoryService,
+    TypedTableRecordSource
 } from '../../table/internal-api';
 import { EditableGridLayoutDefinitionColumn } from './editable-grid-layout-definition-column';
 import { EditableGridLayoutDefinitionColumnList } from './editable-grid-layout-definition-column-list';
@@ -20,7 +20,7 @@ import { EditableGridLayoutDefinitionColumnTableRecordSourceDefinition } from '.
 import { EditableGridLayoutDefinitionColumnTableValueSource } from './editable-grid-layout-definition-column-table-value-source';
 
 /** @public */
-export class EditableGridLayoutDefinitionColumnTableRecordSource extends TableRecordSource {
+export class EditableGridLayoutDefinitionColumnTableRecordSource extends TypedTableRecordSource {
     private readonly _list: EditableGridLayoutDefinitionColumnList;
     private readonly _records: readonly EditableGridLayoutDefinitionColumn[];
     private _listChangeEventSubscriptionId: MultiEvent.SubscriptionId;
@@ -28,11 +28,13 @@ export class EditableGridLayoutDefinitionColumnTableRecordSource extends TableRe
     constructor(
         textFormatterService: TextFormatterService,
         tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService,
+        correctnessBadness: CorrectnessBadness,
         definition: EditableGridLayoutDefinitionColumnTableRecordSourceDefinition,
     ) {
         super(
             textFormatterService,
             tableRecordSourceDefinitionFactoryService,
+            correctnessBadness,
             definition,
             EditableGridLayoutDefinitionColumnTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
         );

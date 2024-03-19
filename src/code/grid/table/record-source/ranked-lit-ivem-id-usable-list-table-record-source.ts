@@ -6,7 +6,7 @@
 
 import { AdiService, LitIvemBaseDetail, RankedLitIvemId } from '../../../adi/adi-internal-api';
 import { SymbolDetailCacheService } from '../../../services/symbol-detail-cache-service';
-import { Badness, BadnessComparableList, Integer, NotImplementedError, UnreachableCaseError, UsableListChangeType, UsableListChangeTypeId, moveElementsInArray } from '../../../sys/internal-api';
+import { Badness, BadnessComparableList, CorrectnessBadness, Integer, NotImplementedError, UnreachableCaseError, UsableListChangeType, UsableListChangeTypeId, moveElementsInArray } from '../../../sys/internal-api';
 import { TextFormatterService } from '../../../text-format/text-format-internal-api';
 import {
     TableFieldSourceDefinition
@@ -33,11 +33,13 @@ export class RankedLitIvemIdUsableListTableRecordSource extends UsableListTableR
         private readonly _symbolDetailCacheService: SymbolDetailCacheService,
         textFormatterService: TextFormatterService,
         tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService,
+        correctnessBadness: CorrectnessBadness,
         definition: RankedLitIvemIdUsableListTableRecordSourceDefinition,
     ) {
         super(
             textFormatterService,
             tableRecordSourceDefinitionFactoryService,
+            correctnessBadness,
             definition,
         );
 

@@ -9,6 +9,7 @@ import {
     BrokerageAccountGroupRecordList,
     BrokerageAccountRecord
 } from "../../../adi/adi-internal-api";
+import { CorrectnessBadness } from '../../../sys/internal-api';
 import { TextFormatterService } from '../../../text-format/text-format-internal-api';
 import {
     TableFieldSourceDefinition
@@ -27,12 +28,14 @@ export abstract class BrokerageAccountGroupTableRecordSource<
     constructor(
         textFormatterService: TextFormatterService,
         tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService,
+        correctnessBadness: CorrectnessBadness,
         definition: BrokerageAccountGroupTableRecordSourceDefinition,
         allowedFieldSourceDefinitionTypeIds: TableFieldSourceDefinition.TypeId[],
     ) {
         super(
             textFormatterService,
             tableRecordSourceDefinitionFactoryService,
+            correctnessBadness,
             definition,
             allowedFieldSourceDefinitionTypeIds,
         );

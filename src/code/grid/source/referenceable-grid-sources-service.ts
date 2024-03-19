@@ -10,7 +10,7 @@ import { TableRecordSourceFactory } from '../table/internal-api';
 import { ReferenceableGridSourceDefinition } from './definition/grid-source-definition-internal-api';
 import { ReferenceableGridSource } from './referenceable-grid-source';
 
-export class ReferenceableGridSourcesService extends LockOpenList<ReferenceableGridSource> {
+export class ReferenceableGridSourcesService<Badness> extends LockOpenList<ReferenceableGridSource<Badness>> {
     private _saveModified: boolean;
     private nextPeriodicSaveCheckTime: SysTick.Time =
         SysTick.now() + ReferenceableGridSourcesService.periodicSaveCheckInterval;
@@ -18,7 +18,7 @@ export class ReferenceableGridSourcesService extends LockOpenList<ReferenceableG
 
     constructor(
         private readonly _referenceableGridLayoutsService: ReferenceableGridLayoutsService,
-        private readonly _tableRecordSourceFactory: TableRecordSourceFactory,
+        private readonly _tableRecordSourceFactory: TableRecordSourceFactory<Badness>,
     ) {
         super();
     }
@@ -31,7 +31,7 @@ export class ReferenceableGridSourcesService extends LockOpenList<ReferenceableG
         //
     }
 
-    getOrNew(definition: ReferenceableGridSourceDefinition): ReferenceableGridSource {
+    getOrNew(definition: ReferenceableGridSourceDefinition): ReferenceableGridSource<Badness> {
         let source = this.getItemByKey(definition.id);
         if (source === undefined) {
             source = this.createReferenceableGridSource(definition);
@@ -128,8 +128,8 @@ export namespace ReferenceableGridSourcesService {
     //             this.handleOpenEvent(recordDefinitionList);
     //         this.table.openChangeEvent = (opened) =>
     //             this.handleOpenChangeEvent(opened);
-    //         this.table.badnessChangeEvent = () =>
-    //             this.handleBadnessChangeEvent();
+    //         this.table.badnessChangedEvent = () =>
+    //             this.handlebadnessChangedEvent();
     //         this.table.recordsLoadedEvent = () =>
     //             this.handleTableRecordsLoadedEvent();
     //         this.table.recordsInsertedEvent = (index, count) =>
@@ -242,7 +242,7 @@ export namespace ReferenceableGridSourcesService {
     //         );
     //     }
 
-    //     private handleBadnessChangeEvent() {
+    //     private handlebadnessChangedEvent() {
     //         this.openers.forEach((opener: Table.Opener) =>
     //             opener.notifyTableBadnessChange()
     //         );

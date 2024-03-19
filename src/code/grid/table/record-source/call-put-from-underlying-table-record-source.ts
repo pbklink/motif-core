@@ -18,6 +18,7 @@ import { CallPut } from '../../../services/services-internal-api';
 import {
     AssertInternalError,
     Badness,
+    CorrectnessBadness,
     ErrorCodeLogger,
     Integer,
     LockOpenListItem,
@@ -48,17 +49,19 @@ export class CallPutFromUnderlyingTableRecordSource extends SingleDataItemTableR
     private _dataItemSubscribed = false;
     // private _litIvemDetails: LitIvemDetail[];
     private _dataItemListChangeEventSubscriptionId: MultiEvent.SubscriptionId;
-    private _dataItemBadnessChangeEventSubscriptionId: MultiEvent.SubscriptionId;
+    private _dataItemBadnessChangedEventSubscriptionId: MultiEvent.SubscriptionId;
 
     constructor(
         private readonly _adiService: AdiService,
         textFormatterService: TextFormatterService,
         tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService,
+        correctnessBadness: CorrectnessBadness,
         definition: CallPutFromUnderlyingTableRecordSourceDefinition,
     ) {
         super(
             textFormatterService,
             tableRecordSourceDefinitionFactoryService,
+            correctnessBadness,
             definition,
             CallPutFromUnderlyingTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
         );
@@ -142,8 +145,8 @@ export class CallPutFromUnderlyingTableRecordSource extends SingleDataItemTableR
         this._dataItemListChangeEventSubscriptionId = this._dataItem.subscribeListChangeEvent(
             (listChangeTypeId, idx, count) => { this.handleDataItemListChangeEvent(listChangeTypeId, idx, count); }
         );
-        this._dataItemBadnessChangeEventSubscriptionId = this._dataItem.subscribeBadnessChangeEvent(
-            () => { this.handleDataItemBadnessChangeEvent(); }
+        this._dataItemBadnessChangedEventSubscriptionId = this._dataItem.subscribeBadnessChangedEvent(
+            () => { this.handleDataItemBadnessChangedEvent(); }
         );
 
         super.openLocked(opener);
@@ -170,8 +173,8 @@ export class CallPutFromUnderlyingTableRecordSource extends SingleDataItemTableR
         } else {
             this._dataItem.unsubscribeListChangeEvent(this._dataItemListChangeEventSubscriptionId);
             this._dataItemListChangeEventSubscriptionId = undefined;
-            this._dataItem.unsubscribeBadnessChangeEvent(this._dataItemBadnessChangeEventSubscriptionId);
-            this._dataItemBadnessChangeEventSubscriptionId = undefined;
+            this._dataItem.unsubscribeBadnessChangedEvent(this._dataItemBadnessChangedEventSubscriptionId);
+            this._dataItemBadnessChangedEventSubscriptionId = undefined;
 
             super.closeLocked(opener);
 
@@ -203,7 +206,7 @@ export class CallPutFromUnderlyingTableRecordSource extends SingleDataItemTableR
         this.processDataItemListChange(listChangeTypeId, idx, count);
     }
 
-    private handleDataItemBadnessChangeEvent() {
+    private handleDataItemBadnessChangedEvent() {
         this.checkSetUnusable(this._dataItem.badness);
     }
 

@@ -18,8 +18,8 @@ import {
 import { Table } from './table';
 
 /** @public */
-export class TableGridRecordStore implements GridRecordStore {
-    private _table: Table | undefined;
+export class TableGridRecordStore<Badness> implements GridRecordStore {
+    private _table: Table<Badness> | undefined;
 
     private _recordsEventers: GridRecordStoreRecordsEventers;
 
@@ -38,7 +38,7 @@ export class TableGridRecordStore implements GridRecordStore {
         return this._table === undefined ? 0 : this._table.recordCount;
     }
 
-    setTable(value: Table) {
+    setTable(value: Table<Badness>) {
         if (this._table !== undefined) {
             this.unbindTable(this._table);
             this._recordsEventers.allRecordsDeleted(); // should already be done
@@ -102,7 +102,7 @@ export class TableGridRecordStore implements GridRecordStore {
         this._recordsEventers.invalidateRecord(recordIndex);
     }
 
-    private bindTable(table: Table) {
+    private bindTable(table: Table<Badness>) {
         this._allRecordsDeletedSubscriptionId = table.subscribeAllRecordsDeletedEvent(() => { this._recordsEventers.allRecordsDeleted(); });
         this._recordsLoadedSubscriptionId = table.subscribeRecordsLoadedEvent(() => { this._recordsEventers.recordsLoaded(); });
         this._recordsInsertedSubscriptionId = table.subscribeRecordsInsertedEvent(
@@ -128,7 +128,7 @@ export class TableGridRecordStore implements GridRecordStore {
         );
     }
 
-    private unbindTable(table: Table) {
+    private unbindTable(table: Table<Badness>) {
         table.unsubscribeAllRecordsDeletedEvent(this._allRecordsDeletedSubscriptionId);
         this._allRecordsDeletedSubscriptionId = undefined;
         table.unsubscribeRecordsLoadedEvent(this._recordsLoadedSubscriptionId);

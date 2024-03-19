@@ -5,7 +5,7 @@
  */
 
 import {
-    CorrectnessBadness,
+    CorrectnessState,
     GridRecordInvalidatedValue, Integer, LockOpenListItem,
     MultiEvent,
     UnreachableCaseError,
@@ -21,10 +21,10 @@ import { TableRecordDefinition } from './record-definition/grid-table-record-def
 import { TableRecordSource } from './record-source/internal-api';
 import { TableRecord } from './record/grid-table-record-internal-api';
 
-export class Table extends CorrectnessBadness {
+export class Table<Badness> {
     // openEvent: Table.OpenEventHandler;
     // openChangeEvent: Table.OpenChangeEventHandler;
-    // badnessChangeEvent: Table.BadnessChangeEventHandler;
+    // badnessChangedEvent: Table.badnessChangedEventHandler;
     // recordsLoadedEvent: Table.RecordsLoadedEventHandler;
     // recordsInsertedEvent: Table.RecordsInsertedEventHandler;
     // recordsDeletedEvent: Table.RecordsDeletedEventHandler;
@@ -40,14 +40,16 @@ export class Table extends CorrectnessBadness {
     private _records = new Array<TableRecord>();
     private _beenUsable: boolean;
 
-    private _recordSourceBadnessChangeSubscriptionId: MultiEvent.SubscriptionId;
+    private _correctnessStateUsableChangedSubscriptionId: MultiEvent.SubscriptionId;
+
+    private _recordSourceBadnessChangedSubscriptionId: MultiEvent.SubscriptionId;
     private _recordSourceListChangeSubscriptionId: MultiEvent.SubscriptionId;
     private _recordSourceAfterRecDefinitionChangeSubscriptionId: MultiEvent.SubscriptionId;
     private _recordSourceBeforeRecDefinitionChangeSubscriptionId: MultiEvent.SubscriptionId;
 
     private _fieldsChangedMultiEvent = new MultiEvent<Table.FieldsChangedEventHandler>();
 
-    private _openMultiEvent = new MultiEvent<Table.OpenEventHandler>();
+    private _openMultiEvent = new MultiEvent<Table.OpenEventHandler<Badness>>();
     private _openChangeMultiEvent = new MultiEvent<Table.OpenChangeEventHandler>();
     private _recordsLoadedMultiEvent = new MultiEvent<Table.RecordsLoadedEventHandler>();
     private _recordsInsertedMultiEvent = new MultiEvent<Table.RecordsInsertedEventHandler>();
@@ -65,13 +67,15 @@ export class Table extends CorrectnessBadness {
     private _recordDisplayOrderSetMultiEvent = new MultiEvent<Table.RecordDisplayOrderSetEventHandler>();
 
     constructor(
-        readonly recordSource: TableRecordSource,
+        readonly recordSource: TableRecordSource<Badness>,
+        private readonly _correctnessState: CorrectnessState<Badness>,
         initialActiveFieldSources: TableFieldSourceDefinition.TypeId[],
     ) {
-        super();
-
         this.setActiveFieldSources(initialActiveFieldSources, false);
     }
+
+    get usable() { return this._correctnessState.usable; }
+    get badness() { return this._correctnessState.badness; }
 
     get fields(): readonly TableField[] { return this.recordSource.fields; }
 
@@ -119,8 +123,8 @@ export class Table extends CorrectnessBadness {
     //     this._definition = value;
     //     this._recordDefinitionList = this._definition.lockRecordDefinitionList(this);
 
-    //     this._recordDefinitionListBadnessChangeSubscriptionId = this._recordDefinitionList.subscribeBadnessChangeEvent(
-    //         () => this.handleRecordDefinitionListBadnessChangeEvent()
+    //     this._recordDefinitionListbadnessChangedSubscriptionId = this._recordDefinitionList.subscribebadnessChangedEvent(
+    //         () => this.handleRecordDefinitionListbadnessChangedEvent()
     //     );
     //     this._recordDefinitionListListChangeSubscriptionId = this._recordDefinitionList.subscribeListChangeEvent(
     //         (listChangeType, recordIdx, recordCount) =>
@@ -219,6 +223,8 @@ export class Table extends CorrectnessBadness {
     // }
 
     open(opener: LockOpenListItem.Opener) {
+        this._correctnessStateUsableChangedSubscriptionId = this._correctnessState.subscribeUsableChangedEvent(() => this.processUsableChanged());
+
         this.recordSource.openLocked(opener);
 
         if (this.recordSource.usable) {
@@ -233,8 +239,8 @@ export class Table extends CorrectnessBadness {
             this.processRecordSourceListChange(UsableListChangeTypeId.Unusable, 0, 0);
         }
 
-        this._recordSourceBadnessChangeSubscriptionId = this.recordSource.subscribeBadnessChangeEvent(
-            () => { this.handleRecordSourceBadnessChangeEvent(); }
+        this._recordSourceBadnessChangedSubscriptionId = this.recordSource.subscribeBadnessChangedEvent(
+            () => { this.handleRecordSourceBadnessChangedEvent(); }
         );
         this._recordSourceListChangeSubscriptionId = this.recordSource.subscribeListChangeEvent(
             (listChangeType, recordIdx, recordCount) => {
@@ -252,8 +258,11 @@ export class Table extends CorrectnessBadness {
     }
 
     close(opener: LockOpenListItem.Opener) {
-        this.recordSource.unsubscribeBadnessChangeEvent(this._recordSourceBadnessChangeSubscriptionId);
-        this._recordSourceBadnessChangeSubscriptionId = undefined;
+        this._correctnessState.unsubscribeUsableChangedEvent(this._correctnessStateUsableChangedSubscriptionId);
+        this._correctnessStateUsableChangedSubscriptionId = undefined;
+
+        this.recordSource.unsubscribeBadnessChangedEvent(this._recordSourceBadnessChangedSubscriptionId);
+        this._recordSourceBadnessChangedSubscriptionId = undefined;
         this.recordSource.unsubscribeListChangeEvent(this._recordSourceListChangeSubscriptionId);
         this._recordSourceListChangeSubscriptionId = undefined;
         this.recordSource.unsubscribeBeforeRecDefinitionChangeEvent(
@@ -292,8 +301,8 @@ export class Table extends CorrectnessBadness {
     // }
 
     // close() {
-    //     this.recordSource.unsubscribeBadnessChangeEvent(this._recordDefinitionListBadnessChangeSubscriptionId);
-    //     this._recordDefinitionListBadnessChangeSubscriptionId = undefined;
+    //     this.recordSource.unsubscribebadnessChangedEvent(this._recordDefinitionListbadnessChangedSubscriptionId);
+    //     this._recordDefinitionListbadnessChangedSubscriptionId = undefined;
     //     this.recordSource.unsubscribeListChangeEvent(this._recordDefinitionListListChangeSubscriptionId);
     //     this._recordDefinitionListListChangeSubscriptionId = undefined;
     //     this.recordSource.unsubscribeBeforeRecDefinitionChangeEvent(
@@ -312,8 +321,8 @@ export class Table extends CorrectnessBadness {
 
     // processLastClose() {
     //     if (this._definition !== undefined && this._definition.opened) {
-    //         this.recordSource.unsubscribeBadnessChangeEvent(this._recordDefinitionListBadnessChangeSubscriptionId);
-    //         this._recordDefinitionListBadnessChangeSubscriptionId = undefined;
+    //         this.recordSource.unsubscribebadnessChangedEvent(this._recordDefinitionListbadnessChangedSubscriptionId);
+    //         this._recordDefinitionListbadnessChangedSubscriptionId = undefined;
     //         this.recordSource.unsubscribeListChangeEvent(this._recordDefinitionListListChangeSubscriptionId);
     //         this._recordDefinitionListListChangeSubscriptionId = undefined;
     //         this.recordSource.unsubscribeBeforeRecDefinitionChangeEvent(
@@ -485,6 +494,22 @@ export class Table extends CorrectnessBadness {
     //     return this.recordSource.fieldList.gridFieldsAndInitialStates;
     // }
 
+    subscribeUsableChangedEvent(handler: CorrectnessState.UsableChangedEventHandler) {
+        return this._correctnessState.subscribeUsableChangedEvent(handler);
+    }
+
+    unsubscribeUsableChangedEvent(subscriptionId: MultiEvent.SubscriptionId) {
+        this._correctnessState.unsubscribeUsableChangedEvent(subscriptionId);
+    }
+
+    subscribeBadnessChangedEvent(handler: CorrectnessState.BadnessChangedEventHandler) {
+        return this._correctnessState.subscribeBadnessChangedEvent(handler);
+    }
+
+    unsubscribeBadnessChangedEvent(subscriptionId: MultiEvent.SubscriptionId) {
+        this._correctnessState.unsubscribeBadnessChangedEvent(subscriptionId);
+    }
+
     subscribeFieldsChangedEvent(handler: Table.FieldsChangedEventHandler) {
         return this._fieldsChangedMultiEvent.subscribe(handler);
     }
@@ -492,7 +517,7 @@ export class Table extends CorrectnessBadness {
         this._fieldsChangedMultiEvent.unsubscribe(subscriptionId);
     }
 
-    subscribeOpenEvent(handler: Table.OpenEventHandler) {
+    subscribeOpenEvent(handler: Table.OpenEventHandler<Badness>) {
         return this._openMultiEvent.subscribe(handler);
     }
     unsubscribeOpenEvent(subscriptionId: MultiEvent.SubscriptionId) {
@@ -604,8 +629,8 @@ export class Table extends CorrectnessBadness {
         this._recordDisplayOrderSetMultiEvent.unsubscribe(subscriptionId);
     }
 
-    protected override processUsableChanged() {
-        if (this.usable) {
+    private processUsableChanged() {
+        if (this._correctnessState.usable) {
             const recordCount = this.recordCount;
             if (recordCount > 0) {
                 this.notifyRecordsInserted(0, recordCount);
@@ -622,8 +647,8 @@ export class Table extends CorrectnessBadness {
         }
     }
 
-    private handleRecordSourceBadnessChangeEvent() {
-        this.checkSetUnusable(this.recordSource.badness);
+    private handleRecordSourceBadnessChangedEvent() {
+        this._correctnessState.checkSetUnusable(this.recordSource.badness);
     }
 
     private handleRecordSourceListChangeEvent(
@@ -663,7 +688,7 @@ export class Table extends CorrectnessBadness {
         }
     }
 
-    private notifyOpen(recordDefinitionList: TableRecordSource) {
+    private notifyOpen(recordDefinitionList: TableRecordSource<Badness>) {
         const handlers = this._openMultiEvent.copyHandlers();
         for (let i = 0; i < handlers.length; i++) {
             handlers[i](recordDefinitionList);
@@ -778,7 +803,7 @@ export class Table extends CorrectnessBadness {
     private processRecordSourceListChange(listChangeTypeId: UsableListChangeTypeId, recordIdx: Integer, recordCount: Integer) {
         switch (listChangeTypeId) {
             case UsableListChangeTypeId.Unusable:
-                this.setUnusable(this.recordSource.badness);
+                this._correctnessState.setUnusable(this.recordSource.badness);
                 break;
             case UsableListChangeTypeId.PreUsableClear:
                 this.clearRecords();
@@ -787,7 +812,7 @@ export class Table extends CorrectnessBadness {
                 this.insertRecords(recordIdx, recordCount);
                 break;
             case UsableListChangeTypeId.Usable:
-                this.setUsable(this.recordSource.badness);
+                this._correctnessState.setUsable(this.recordSource.badness);
                 break;
             case UsableListChangeTypeId.Insert:
                 this.insertRecords(recordIdx, recordCount);
@@ -1078,9 +1103,9 @@ export namespace Table {
 
     export type ExclusiveUnlockedEventer = (this: void) => void;
 
-    export type OpenEventHandler = (this: void, recordDefinitionList: TableRecordSource) => void;
+    export type OpenEventHandler<Badness> = (this: void, recordDefinitionList: TableRecordSource<Badness>) => void;
     export type OpenChangeEventHandler = (this: void, opened: boolean) => void;
-    export type BadnessChangeEventHandler = (this: void) => void;
+    export type BadnessChangedEventHandler = (this: void) => void;
     export type RecordsLoadedEventHandler = (this: void) => void;
     export type RecordsInsertedEventHandler = (this: void, index: Integer, count: Integer) => void;
     export type RecordsReplacedEventHandler = (this: void, index: Integer, count: Integer) => void;
@@ -1199,7 +1224,7 @@ export namespace Table {
 //         this.opener = opener;
 //         this.openEvent = (recordDefinitionList) => this.opener.notifyTableOpen(recordDefinitionList);
 //         this.openChangeEvent = (opened) => this.opener.notifyTableOpenChange(opened);
-//         this.badnessChangeEvent = () => this.opener.notifyTableBadnessChange();
+//         this.badnessChangedEvent = () => this.opener.notifyTableBadnessChange();
 //         this.recordsLoadedEvent = () => this.opener.notifyTableRecordsLoaded();
 //         this.recordsInsertedEvent = (index, count) => this.opener.notifyTableRecordsInserted(index, count);
 //         this.recordsDeletedEvent = (index, count) => this.opener.notifyTableRecordsDeleted(index, count);

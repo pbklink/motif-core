@@ -15,7 +15,7 @@ import {
     BrokerageAccountGroupRecordList,
     SingleBrokerageAccountGroup
 } from '../../../adi/adi-internal-api';
-import { Integer, LockOpenListItem, UnreachableCaseError } from '../../../sys/internal-api';
+import { CorrectnessBadness, Integer, LockOpenListItem, UnreachableCaseError } from '../../../sys/internal-api';
 import { TextFormatterService } from '../../../text-format/text-format-internal-api';
 import {
     TableFieldSourceDefinition
@@ -35,11 +35,13 @@ export class BalancesTableRecordSource
         private readonly _adiService: AdiService,
         textFormatterService: TextFormatterService,
         tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService,
+        correctnessBadness: CorrectnessBadness,
         definition: BalancesTableRecordSourceDefinition,
     ) {
         super(
             textFormatterService,
             tableRecordSourceDefinitionFactoryService,
+            correctnessBadness,
             definition,
             BalancesTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
         );

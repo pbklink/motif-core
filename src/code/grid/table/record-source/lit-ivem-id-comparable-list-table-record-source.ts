@@ -6,7 +6,7 @@
 
 import { AdiService, LitIvemId } from '../../../adi/adi-internal-api';
 import { SymbolDetailCacheService } from '../../../services/services-internal-api';
-import { Integer, UiComparableList, UnreachableCaseError } from '../../../sys/internal-api';
+import { CorrectnessBadness, Integer, UiComparableList, UnreachableCaseError } from '../../../sys/internal-api';
 import { TextFormatterService } from '../../../text-format/text-format-internal-api';
 import {
     TableFieldSourceDefinition
@@ -27,11 +27,13 @@ export class LitIvemIdComparableListTableRecordSource extends BadnessListTableRe
         private readonly _symbolDetailCacheService: SymbolDetailCacheService,
         textFormatterService: TextFormatterService,
         tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService,
+        correctnessBadness: CorrectnessBadness,
         definition: LitIvemIdComparableListTableRecordSourceDefinition,
     ) {
         super(
             textFormatterService,
             tableRecordSourceDefinitionFactoryService,
+            correctnessBadness,
             definition,
             definition.allowedFieldSourceDefinitionTypeIds,
         );

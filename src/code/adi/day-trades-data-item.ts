@@ -46,7 +46,7 @@ export class DayTradesDataItem extends DataItem {
     private _datedDataItem: TradesDataItem | undefined;
     private _dataItemRecordAccess: TradesDataItem.UsableBadnessRecordAccess;
 
-    private _badnessChangeSubscriptionId: MultiEvent.SubscriptionId;
+    private _badnessChangedSubscriptionId: MultiEvent.SubscriptionId;
     private _listChangeSubscriptionId: MultiEvent.SubscriptionId;
     private _recordChangeSubscriptionId: MultiEvent.SubscriptionId;
 
@@ -109,8 +109,8 @@ export class DayTradesDataItem extends DataItem {
         this._recordChangeSubscriptionId = this._dataItemRecordAccess.subscribeRecordChangeEvent(
             (index, oldTradeRecord) => { this.handleRecordChangeEvent(index, oldTradeRecord); }
         );
-        this._badnessChangeSubscriptionId = this._dataItemRecordAccess.subscribeBadnessChangeEvent(
-            () => { this.handleBadnessChangeEvent(); }
+        this._badnessChangedSubscriptionId = this._dataItemRecordAccess.subscribeBadnessChangedEvent(
+            () => { this.handleBadnessChangedEvent(); }
         );
 
         if (this._dataItemRecordAccess.usable) {
@@ -129,7 +129,7 @@ export class DayTradesDataItem extends DataItem {
         if (this._dataItemRecordAccess !== undefined) {
             this._dataItemRecordAccess.unsubscribeListChangeEvent(this._listChangeSubscriptionId);
             this._dataItemRecordAccess.unsubscribeRecordChangeEvent(this._recordChangeSubscriptionId);
-            this._dataItemRecordAccess.unsubscribeBadnessChangeEvent(this._badnessChangeSubscriptionId);
+            this._dataItemRecordAccess.unsubscribeBadnessChangedEvent(this._badnessChangedSubscriptionId);
             this._dataItemRecordAccess = undefined as unknown as TradesDataItem.UsableBadnessRecordAccess;
         }
 
@@ -159,7 +159,7 @@ export class DayTradesDataItem extends DataItem {
         }
     }
 
-    private handleBadnessChangeEvent() {
+    private handleBadnessChangedEvent() {
         this.checkSetUnusable(this._dataItemRecordAccess.badness);
     }
 

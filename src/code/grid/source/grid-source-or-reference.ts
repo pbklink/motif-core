@@ -13,17 +13,17 @@ import { ReferenceableGridSource } from './referenceable-grid-source';
 import { ReferenceableGridSourcesService } from './referenceable-grid-sources-service';
 
 /** @public */
-export class GridSourceOrReference {
+export class GridSourceOrReference<Badness> {
     private readonly _referenceId: Guid | undefined;
     private readonly _gridSourceDefinition: GridSourceDefinition | undefined;
 
-    private _lockedGridSource: GridSource | undefined;
-    private _lockedReferenceableGridSource: ReferenceableGridSource | undefined;
+    private _lockedGridSource: GridSource<Badness> | undefined;
+    private _lockedReferenceableGridSource: ReferenceableGridSource<Badness> | undefined;
 
     constructor(
         private readonly _referenceableGridLayoutsService: ReferenceableGridLayoutsService,
-        private readonly _tableRecordSourceFactory: TableRecordSourceFactory,
-        private readonly _referenceableGridSourcesService: ReferenceableGridSourcesService,
+        private readonly _tableRecordSourceFactory: TableRecordSourceFactory<Badness>,
+        private readonly _referenceableGridSourcesService: ReferenceableGridSourcesService<Badness>,
         definition: GridSourceOrReferenceDefinition
     ) {
         if (definition.referenceId !== undefined ) {

@@ -15,12 +15,12 @@ import {
     Order,
     SingleBrokerageAccountGroup
 } from "../../../adi/adi-internal-api";
-import { Integer, LockOpenListItem, UnreachableCaseError } from '../../../sys/internal-api';
+import { CorrectnessBadness, Integer, LockOpenListItem, UnreachableCaseError } from '../../../sys/internal-api';
 import { TextFormatterService } from '../../../text-format/text-format-internal-api';
 import {
     TableFieldSourceDefinition
 } from "../field-source/grid-table-field-source-internal-api";
-import { OrderTableRecordDefinition, TableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
+import { OrderTableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
 import { TableRecord } from '../record/grid-table-record-internal-api';
 import { BrokerageAccountTableValueSource, OrderTableValueSource } from '../value-source/internal-api';
 import {
@@ -37,11 +37,13 @@ export class OrderTableRecordSource
         private readonly _adiService: AdiService,
         textFormatterService: TextFormatterService,
         tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService,
+        correctnessBadness: CorrectnessBadness,
         definition: OrderTableRecordSourceDefinition,
     ) {
         super(
             textFormatterService,
             tableRecordSourceDefinitionFactoryService,
+            correctnessBadness,
             definition,
             OrderTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
         );

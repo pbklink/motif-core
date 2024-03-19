@@ -6,7 +6,7 @@
 
 import { RankedLitIvemIdListDirectory } from '../../../ranked-lit-ivem-id-list/ranked-lit-ivem-id-list-internal-api';
 import { RankedLitIvemIdListDirectoryItem } from '../../../services/services-internal-api';
-import { Integer, LockOpenListItem, Ok, Result, UnreachableCaseError } from '../../../sys/internal-api';
+import { CorrectnessBadness, Integer, LockOpenListItem, Ok, Result, UnreachableCaseError } from '../../../sys/internal-api';
 import { TextFormatterService } from '../../../text-format/text-format-internal-api';
 import {
     TableFieldSourceDefinition
@@ -23,11 +23,13 @@ export class RankedLitIvemIdListDirectoryItemTableRecordSource extends Subscribe
     constructor(
         textFormatterService: TextFormatterService,
         tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService,
+        correctnessBadness: CorrectnessBadness,
         definition: RankedLitIvemIdListDirectoryItemTableRecordSourceDefinition,
     ) {
         super(
             textFormatterService,
             tableRecordSourceDefinitionFactoryService,
+            correctnessBadness,
             definition,
             RankedLitIvemIdListDirectoryItemTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
         );

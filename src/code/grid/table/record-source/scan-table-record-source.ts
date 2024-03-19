@@ -5,7 +5,7 @@
  */
 
 import { Scan, ScanList, ScansService } from '../../../scan/internal-api';
-import { Integer, LockOpenListItem, UnreachableCaseError } from '../../../sys/internal-api';
+import { CorrectnessBadness, Integer, LockOpenListItem, UnreachableCaseError } from '../../../sys/internal-api';
 import { TextFormatterService } from '../../../text-format/text-format-internal-api';
 import {
     TableFieldSourceDefinition
@@ -23,11 +23,13 @@ export class ScanTableRecordSource extends LockOpenListTableRecordSource<Scan, S
         private readonly _scansService: ScansService,
         textFormatterService: TextFormatterService,
         tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService,
+        correctnessBadness: CorrectnessBadness,
         definition: ScanTableRecordSourceDefinition,
     ) {
         super(
             textFormatterService,
             tableRecordSourceDefinitionFactoryService,
+            correctnessBadness,
             definition,
             ScanTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
         );

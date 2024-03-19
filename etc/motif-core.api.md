@@ -1758,13 +1758,13 @@ export class BadnessComparableList<out T extends U, in U = T> extends ChangeSubs
     // (undocumented)
     setBadness(value: Badness): void;
     // (undocumented)
-    subscribeBadnessChangeEvent(handler: CorrectnessBadness.BadnessChangeEventHandler): MultiEvent.DefinedSubscriptionId;
+    subscribeBadnessChangedEvent(handler: CorrectnessBadness.BadnessChangedEventHandler): MultiEvent.DefinedSubscriptionId;
     // (undocumented)
     subscribeCorrectnessChangedEvent(handler: CorrectnessList.CorrectnessChangedEventHandler): MultiEvent.DefinedSubscriptionId;
     // (undocumented)
     subscribeUsableChangedEvent(handler: CorrectnessBadness.UsableChangedEventHandler): MultiEvent.DefinedSubscriptionId;
     // (undocumented)
-    unsubscribeBadnessChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+    unsubscribeBadnessChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
     // (undocumented)
     unsubscribeCorrectnessChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
     // (undocumented)
@@ -1781,22 +1781,22 @@ export interface BadnessList<Record> extends UsableList<Record> {
     // (undocumented)
     readonly badness: Badness;
     // (undocumented)
-    subscribeBadnessChangeEvent(handler: BadnessList.BadnessChangeEventHandler): MultiEvent.DefinedSubscriptionId;
+    subscribeBadnessChangedEvent(handler: BadnessList.badnessChangedEventHandler): MultiEvent.DefinedSubscriptionId;
     // (undocumented)
-    unsubscribeBadnessChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+    unsubscribeBadnessChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
 }
 
 // @public (undocumented)
 export namespace BadnessList {
     // (undocumented)
-    export type BadnessChangeEventHandler = (this: void) => void;
+    export type badnessChangedEventHandler = (this: void) => void;
 }
 
 // Warning: (ae-missing-release-tag) "BadnessListTableRecordSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export abstract class BadnessListTableRecordSource<Record> extends SubscribeBadnessListTableRecordSource<Record, BadnessList<Record>> {
-    constructor(textFormatterService: TextFormatterService, tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService, definition: BadnessListTableRecordSourceDefinition<Record>, allowedFieldSourceDefinitionTypeIds: readonly TableFieldSourceDefinition.TypeId[]);
+    constructor(textFormatterService: TextFormatterService, tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService, correctnessBadness: CorrectnessBadness, definition: BadnessListTableRecordSourceDefinition<Record>, allowedFieldSourceDefinitionTypeIds: readonly TableFieldSourceDefinition.TypeId[]);
     // (undocumented)
     readonly list: BadnessList<Record>;
     // (undocumented)
@@ -2187,7 +2187,7 @@ export namespace BalancesTableRecordDefinition {
 //
 // @public (undocumented)
 export class BalancesTableRecordSource extends BrokerageAccountGroupTableRecordSource<Balances, BrokerageAccountGroupRecordList<Balances>> {
-    constructor(_adiService: AdiService, textFormatterService: TextFormatterService, tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService, definition: BalancesTableRecordSourceDefinition);
+    constructor(_adiService: AdiService, textFormatterService: TextFormatterService, tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService, correctnessBadness: CorrectnessBadness, definition: BalancesTableRecordSourceDefinition);
     // (undocumented)
     createDefinition(): BalancesTableRecordSourceDefinition;
     // (undocumented)
@@ -2769,7 +2769,7 @@ export interface BrokerageAccountGroupRecordList<Record extends BrokerageAccount
 //
 // @public (undocumented)
 export abstract class BrokerageAccountGroupTableRecordSource<Record extends BrokerageAccountRecord, RecordList extends BrokerageAccountGroupRecordList<Record>> extends SingleDataItemRecordTableRecordSource<Record, RecordList> {
-    constructor(textFormatterService: TextFormatterService, tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService, definition: BrokerageAccountGroupTableRecordSourceDefinition, allowedFieldSourceDefinitionTypeIds: TableFieldSourceDefinition.TypeId[]);
+    constructor(textFormatterService: TextFormatterService, tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService, correctnessBadness: CorrectnessBadness, definition: BrokerageAccountGroupTableRecordSourceDefinition, allowedFieldSourceDefinitionTypeIds: TableFieldSourceDefinition.TypeId[]);
     // (undocumented)
     readonly brokerageAccountGroup: BrokerageAccountGroup;
 }
@@ -3150,7 +3150,7 @@ export namespace BrokerageAccountTableRecordDefinition {
 
 // @public (undocumented)
 export class BrokerageAccountTableRecordSource extends SingleDataItemRecordTableRecordSource<Account, KeyedCorrectnessList<Account>> {
-    constructor(_adiService: AdiService, textFormatterService: TextFormatterService, tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService, definition: BrokerageAccountTableRecordSourceDefinition);
+    constructor(_adiService: AdiService, textFormatterService: TextFormatterService, tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService, correctnessBadness: CorrectnessBadness, definition: BrokerageAccountTableRecordSourceDefinition);
     // (undocumented)
     createDefinition(): BrokerageAccountTableRecordSourceDefinition;
     // (undocumented)
@@ -3413,7 +3413,7 @@ export namespace CallPut {
 
 // @public (undocumented)
 export class CallPutFromUnderlyingTableRecordSource extends SingleDataItemTableRecordSource {
-    constructor(_adiService: AdiService, textFormatterService: TextFormatterService, tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService, definition: CallPutFromUnderlyingTableRecordSourceDefinition);
+    constructor(_adiService: AdiService, textFormatterService: TextFormatterService, tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService, correctnessBadness: CorrectnessBadness, definition: CallPutFromUnderlyingTableRecordSourceDefinition);
     // (undocumented)
     closeLocked(opener: LockOpenListItem.Opener): void;
     // (undocumented)
@@ -5155,13 +5155,13 @@ export class CoreService {
     // (undocumented)
     readonly referenceableGridSourceDefinitionsStoreService: ReferenceableGridSourceDefinitionsStoreService;
     // (undocumented)
-    get referenceableGridSourcesService(): ReferenceableGridSourcesService;
+    get referenceableGridSourcesService(): TypedReferenceableGridSourcesService;
     // (undocumented)
     readonly scansService: ScansService;
     // (undocumented)
     setTableFieldSourceDefinitionFactory(tableFieldSourceDefinitionFactory: TableFieldSourceDefinitionFactory): void;
     // (undocumented)
-    setTableRecordSourceFactory(tableRecordSourceFactory: TableRecordSourceFactory): void;
+    setTableRecordSourceFactory(tableRecordSourceFactory: TypedTableRecordSourceFactory): void;
     // (undocumented)
     readonly settingsService: SettingsService;
     // (undocumented)
@@ -5208,13 +5208,13 @@ export namespace Correctness {
 // Warning: (ae-missing-release-tag) "CorrectnessBadness" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class CorrectnessBadness implements CorrectnessRecord {
+export class CorrectnessBadness implements CorrectnessRecord, CorrectnessState<Badness> {
     // (undocumented)
     get badness(): Badness;
     // (undocumented)
     protected calculateUsabilityBadness(): Badness;
     // (undocumented)
-    protected checkSetUnusable(badness: Badness): void;
+    checkSetUnusable(badness: Badness): void;
     // (undocumented)
     get correctnessId(): CorrectnessId;
     // (undocumented)
@@ -5226,7 +5226,7 @@ export class CorrectnessBadness implements CorrectnessRecord {
     // (undocumented)
     get incubated(): boolean;
     // (undocumented)
-    protected processBadnessChange(): void;
+    protected processBadnessChanged(): void;
     // (undocumented)
     protected processCorrectnessChanged(): void;
     // (undocumented)
@@ -5234,18 +5234,18 @@ export class CorrectnessBadness implements CorrectnessRecord {
     // (undocumented)
     setBadness(badness: Badness): void;
     // (undocumented)
-    protected setUnusable(badness: Badness): void;
+    setUnusable(badness: Badness): void;
     // (undocumented)
-    protected setUsable(badness: Badness): void;
+    setUsable(badness: Badness): void;
     // (undocumented)
-    subscribeBadnessChangeEvent(handler: CorrectnessBadness.BadnessChangeEventHandler): number;
+    subscribeBadnessChangedEvent(handler: CorrectnessBadness.BadnessChangedEventHandler): number;
     // (undocumented)
     subscribeCorrectnessChangedEvent(handler: CorrectnessBadness.CorrectnessChangedEventHandler): number;
     // (undocumented)
     subscribeUsableChangedEvent(handler: CorrectnessBadness.UsableChangedEventHandler): number;
     protected trySetUsable(): void;
     // (undocumented)
-    unsubscribeBadnessChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+    unsubscribeBadnessChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
     // (undocumented)
     unsubscribeCorrectnessChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
     // (undocumented)
@@ -5257,7 +5257,7 @@ export class CorrectnessBadness implements CorrectnessRecord {
 // @public (undocumented)
 export namespace CorrectnessBadness {
     // (undocumented)
-    export type BadnessChangeEventHandler = (this: void) => void;
+    export type BadnessChangedEventHandler = (this: void) => void;
     // (undocumented)
     export type CorrectnessChangedEventHandler = (this: void) => void;
     // (undocumented)
@@ -5325,6 +5325,39 @@ export interface CorrectnessSettableListItem {
     readonly correctnessId: CorrectnessId;
     // (undocumented)
     setListCorrectness(value: CorrectnessId): void;
+}
+
+// Warning: (ae-missing-release-tag) "CorrectnessState" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CorrectnessState" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface CorrectnessState<Badness> {
+    // (undocumented)
+    badness: Badness;
+    // (undocumented)
+    checkSetUnusable(badness: Badness): void;
+    // (undocumented)
+    setUnusable(badness: Badness): void;
+    // (undocumented)
+    setUsable(badness: Badness): void;
+    // (undocumented)
+    subscribeBadnessChangedEvent(handler: CorrectnessState.BadnessChangedEventHandler): MultiEvent.SubscriptionId;
+    // (undocumented)
+    subscribeUsableChangedEvent(handler: CorrectnessState.UsableChangedEventHandler): MultiEvent.SubscriptionId;
+    // (undocumented)
+    unsubscribeBadnessChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+    // (undocumented)
+    unsubscribeUsableChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+    // (undocumented)
+    usable: boolean;
+}
+
+// @public (undocumented)
+export namespace CorrectnessState {
+    // (undocumented)
+    export type BadnessChangedEventHandler = (this: void) => void;
+    // (undocumented)
+    export type UsableChangedEventHandler = (this: void) => void;
 }
 
 // Warning: (ae-missing-release-tag) "CorrectnessTableField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -7937,8 +7970,8 @@ export namespace EditableGridLayoutDefinitionColumnTableRecordDefinition {
 }
 
 // @public (undocumented)
-export class EditableGridLayoutDefinitionColumnTableRecordSource extends TableRecordSource {
-    constructor(textFormatterService: TextFormatterService, tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService, definition: EditableGridLayoutDefinitionColumnTableRecordSourceDefinition);
+export class EditableGridLayoutDefinitionColumnTableRecordSource extends TypedTableRecordSource {
+    constructor(textFormatterService: TextFormatterService, tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService, correctnessBadness: CorrectnessBadness, definition: EditableGridLayoutDefinitionColumnTableRecordSourceDefinition);
     // (undocumented)
     closeLocked(opener: LockOpenListItem.Opener): void;
     // (undocumented)
@@ -10178,7 +10211,7 @@ export namespace FeedTableRecordDefinition {
 
 // @public (undocumented)
 export class FeedTableRecordSource extends SingleDataItemRecordTableRecordSource<Feed, KeyedCorrectnessList<Feed>> {
-    constructor(_adiService: AdiService, textFormatterService: TextFormatterService, tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService, definition: FeedTableRecordSourceDefinition);
+    constructor(_adiService: AdiService, textFormatterService: TextFormatterService, tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService, correctnessBadness: CorrectnessBadness, definition: FeedTableRecordSourceDefinition);
     // (undocumented)
     createDefinition(): FeedTableRecordSourceDefinition;
     // (undocumented)
@@ -10893,8 +10926,8 @@ export namespace GridFieldTableRecordDefinition {
 }
 
 // @public (undocumented)
-export class GridFieldTableRecordSource extends TableRecordSource {
-    constructor(textFormatterService: TextFormatterService, tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService, definition: GridFieldTableRecordSourceDefinition);
+export class GridFieldTableRecordSource extends TypedTableRecordSource {
+    constructor(textFormatterService: TextFormatterService, tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService, correctnessBadness: CorrectnessBadness, definition: GridFieldTableRecordSourceDefinition);
     // (undocumented)
     closeLocked(_opener: LockOpenListItem.Opener): void;
     // (undocumented)
@@ -11341,8 +11374,8 @@ export type GridSortFieldSpecifier = RevRecordDataServer.SortFieldSpecifier;
 // Warning: (ae-missing-release-tag) "GridSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class GridSource implements LockOpenListItem<GridSource>, IndexedRecord {
-    constructor(_referenceableGridLayoutsService: ReferenceableGridLayoutsService, _tableRecordSourceFactory: TableRecordSourceFactory, definition: GridSourceDefinition, id?: Guid, mapKey?: MapKey);
+export class GridSource<Badness> implements LockOpenListItem<GridSource<Badness>>, IndexedRecord {
+    constructor(_referenceableGridLayoutsService: ReferenceableGridLayoutsService, _tableRecordSourceFactory: TableRecordSourceFactory<Badness>, definition: GridSourceDefinition, id?: Guid, mapKey?: MapKey);
     // (undocumented)
     closeLocked(opener: LockOpenListItem.Opener): void;
     // (undocumented)
@@ -11352,7 +11385,7 @@ export class GridSource implements LockOpenListItem<GridSource>, IndexedRecord {
     // (undocumented)
     createTableRecordSourceDefinition(): TableRecordSourceDefinition;
     // (undocumented)
-    equals(other: GridSource): boolean;
+    equals(other: GridSource<Badness>): boolean;
     // (undocumented)
     readonly id: Guid;
     // (undocumented)
@@ -11368,7 +11401,7 @@ export class GridSource implements LockOpenListItem<GridSource>, IndexedRecord {
     // (undocumented)
     get lockedReferenceableGridLayout(): ReferenceableGridLayout | undefined;
     // (undocumented)
-    get lockedTableRecordSource(): TableRecordSource | undefined;
+    get lockedTableRecordSource(): TableRecordSource<Badness> | undefined;
     // (undocumented)
     get lockers(): readonly LockOpenListItem.Locker[];
     // (undocumented)
@@ -11382,7 +11415,7 @@ export class GridSource implements LockOpenListItem<GridSource>, IndexedRecord {
     // (undocumented)
     subscribeGridLayoutSetEvent(handler: GridSource.GridLayoutSetEventHandler): number;
     // (undocumented)
-    get table(): Table | undefined;
+    get table(): Table<Badness> | undefined;
     // (undocumented)
     tryLock(locker: LockOpenListItem.Locker): Promise<Result<void>>;
     tryOpenGridLayoutOrReferenceDefinition(definition: GridLayoutOrReferenceDefinition, opener: LockOpenListItem.Opener): Promise<Result<void>>;
@@ -11440,14 +11473,14 @@ export namespace GridSourceDefinition {
 }
 
 // @public (undocumented)
-export class GridSourceOrReference {
-    constructor(_referenceableGridLayoutsService: ReferenceableGridLayoutsService, _tableRecordSourceFactory: TableRecordSourceFactory, _referenceableGridSourcesService: ReferenceableGridSourcesService, definition: GridSourceOrReferenceDefinition);
+export class GridSourceOrReference<Badness> {
+    constructor(_referenceableGridLayoutsService: ReferenceableGridLayoutsService, _tableRecordSourceFactory: TableRecordSourceFactory<Badness>, _referenceableGridSourcesService: ReferenceableGridSourcesService<Badness>, definition: GridSourceOrReferenceDefinition);
     // (undocumented)
     createDefinition(rowOrderDefinition: GridRowOrderDefinition | undefined): GridSourceOrReferenceDefinition;
     // (undocumented)
-    get lockedGridSource(): GridSource | undefined;
+    get lockedGridSource(): GridSource<Badness> | undefined;
     // (undocumented)
-    get lockedReferenceableGridSource(): ReferenceableGridSource | undefined;
+    get lockedReferenceableGridSource(): ReferenceableGridSource<Badness> | undefined;
     // (undocumented)
     tryLock(locker: LockOpenListItem.Locker): Promise<Result<void>>;
     // (undocumented)
@@ -12048,7 +12081,7 @@ export namespace HoldingTableRecordDefinition {
 
 // @public (undocumented)
 export class HoldingTableRecordSource extends BrokerageAccountGroupTableRecordSource<Holding, BrokerageAccountGroupRecordList<Holding>> {
-    constructor(_adiService: AdiService, textFormatterService: TextFormatterService, tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService, definition: HoldingTableRecordSourceDefinition);
+    constructor(_adiService: AdiService, textFormatterService: TextFormatterService, tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService, correctnessBadness: CorrectnessBadness, definition: HoldingTableRecordSourceDefinition);
     // (undocumented)
     createDefinition(): HoldingTableRecordSourceDefinition;
     // (undocumented)
@@ -14452,7 +14485,7 @@ export class LitIvemBaseDetailTableValueSource extends TableValueSource {
 //
 // @public (undocumented)
 export class LitIvemDetailFromSearchSymbolsTableRecordSource extends SingleDataItemTableRecordSource {
-    constructor(_adiService: AdiService, textFormatterService: TextFormatterService, tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService, definition: LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition);
+    constructor(_adiService: AdiService, textFormatterService: TextFormatterService, tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService, correctnessBadness: CorrectnessBadness, definition: LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition);
     // (undocumented)
     closeLocked(opener: LockOpenListItem.Opener): void;
     // (undocumented)
@@ -14849,7 +14882,7 @@ export class LitIvemIdArrayRenderValue extends GenericRenderValue<readonly LitIv
 //
 // @public (undocumented)
 export class LitIvemIdComparableListTableRecordSource extends BadnessListTableRecordSource<LitIvemId> {
-    constructor(_adiService: AdiService, _symbolDetailCacheService: SymbolDetailCacheService, textFormatterService: TextFormatterService, tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService, definition: LitIvemIdComparableListTableRecordSourceDefinition);
+    constructor(_adiService: AdiService, _symbolDetailCacheService: SymbolDetailCacheService, textFormatterService: TextFormatterService, tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService, correctnessBadness: CorrectnessBadness, definition: LitIvemIdComparableListTableRecordSourceDefinition);
     // (undocumented)
     createDefinition(): LitIvemIdComparableListTableRecordSourceDefinition;
     // (undocumented)
@@ -20539,7 +20572,7 @@ export namespace OrderTableRecordDefinition {
 
 // @public (undocumented)
 export class OrderTableRecordSource extends BrokerageAccountGroupTableRecordSource<Order, BrokerageAccountGroupRecordList<Order>> {
-    constructor(_adiService: AdiService, textFormatterService: TextFormatterService, tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService, definition: OrderTableRecordSourceDefinition);
+    constructor(_adiService: AdiService, textFormatterService: TextFormatterService, tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService, correctnessBadness: CorrectnessBadness, definition: OrderTableRecordSourceDefinition);
     // (undocumented)
     createDefinition(): OrderTableRecordSourceDefinition;
     // (undocumented)
@@ -22287,7 +22320,7 @@ export namespace RankedLitIvemIdListDirectory {
     // (undocumented)
     export interface Source {
         // (undocumented)
-        badnessChangeEventSubscriptionId: MultiEvent.SubscriptionId | undefined;
+        badnessChangedEventSubscriptionId: MultiEvent.SubscriptionId | undefined;
         // (undocumented)
         readonly badnessResourceName: string;
         // (undocumented)
@@ -22462,7 +22495,7 @@ export namespace RankedLitIvemIdListDirectoryItemTableRecordDefinition {
 //
 // @public (undocumented)
 export class RankedLitIvemIdListDirectoryItemTableRecordSource extends SubscribeBadnessListTableRecordSource<RankedLitIvemIdListDirectoryItem, RankedLitIvemIdListDirectory> {
-    constructor(textFormatterService: TextFormatterService, tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService, definition: RankedLitIvemIdListDirectoryItemTableRecordSourceDefinition);
+    constructor(textFormatterService: TextFormatterService, tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService, correctnessBadness: CorrectnessBadness, definition: RankedLitIvemIdListDirectoryItemTableRecordSourceDefinition);
     // (undocumented)
     closeLocked(_opener: LockOpenListItem.Opener): void;
     // (undocumented)
@@ -22594,7 +22627,7 @@ export namespace RankedLitIvemIdListStaticInitialise {
 //
 // @public (undocumented)
 export class RankedLitIvemIdListTableRecordSource extends SubscribeBadnessListTableRecordSource<RankedLitIvemId, RankedLitIvemIdList> {
-    constructor(_adiService: AdiService, _symbolDetailCacheService: SymbolDetailCacheService, _rankedLitIvemIdListFactoryService: RankedLitIvemIdListFactoryService, textFormatterService: TextFormatterService, tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService, definition: RankedLitIvemIdListTableRecordSourceDefinition);
+    constructor(_adiService: AdiService, _symbolDetailCacheService: SymbolDetailCacheService, _rankedLitIvemIdListFactoryService: RankedLitIvemIdListFactoryService, textFormatterService: TextFormatterService, tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService, correctnessBadness: CorrectnessBadness, definition: RankedLitIvemIdListTableRecordSourceDefinition);
     // (undocumented)
     createDefinition(): RankedLitIvemIdListTableRecordSourceDefinition;
     // (undocumented)
@@ -23132,8 +23165,8 @@ export class ReferenceableGridLayoutsService extends LockOpenList<ReferenceableG
 // Warning: (ae-missing-release-tag) "ReferenceableGridSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class ReferenceableGridSource extends GridSource implements LockOpenListItem<ReferenceableGridSource>, IndexedRecord {
-    constructor(referenceableGridLayoutsService: ReferenceableGridLayoutsService, tableRecordSourceFactory: TableRecordSourceFactory, lockedDefinition: ReferenceableGridSourceDefinition, index: number);
+export class ReferenceableGridSource<Badness> extends GridSource<Badness> implements LockOpenListItem<ReferenceableGridSource<Badness>>, IndexedRecord {
+    constructor(referenceableGridLayoutsService: ReferenceableGridLayoutsService, tableRecordSourceFactory: TableRecordSourceFactory<Badness>, lockedDefinition: ReferenceableGridSourceDefinition, index: number);
     // (undocumented)
     createDefinition(rowOrderDefinition: GridRowOrderDefinition): ReferenceableGridSourceDefinition;
     // (undocumented)
@@ -23175,8 +23208,8 @@ export class ReferenceableGridSourceDefinitionsStoreService {
 // Warning: (ae-missing-release-tag) "ReferenceableGridSourcesService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class ReferenceableGridSourcesService extends LockOpenList<ReferenceableGridSource> {
-    constructor(_referenceableGridLayoutsService: ReferenceableGridLayoutsService, _tableRecordSourceFactory: TableRecordSourceFactory);
+export class ReferenceableGridSourcesService<Badness> extends LockOpenList<ReferenceableGridSource<Badness>> {
+    constructor(_referenceableGridLayoutsService: ReferenceableGridLayoutsService, _tableRecordSourceFactory: TableRecordSourceFactory<Badness>);
     // (undocumented)
     checkPeriodiSaveRequired(nowTime: SysTick.Time): void;
     // (undocumented)
@@ -23184,7 +23217,7 @@ export class ReferenceableGridSourcesService extends LockOpenList<ReferenceableG
     // (undocumented)
     destroy(): void;
     // (undocumented)
-    getOrNew(definition: ReferenceableGridSourceDefinition): ReferenceableGridSource;
+    getOrNew(definition: ReferenceableGridSourceDefinition): ReferenceableGridSource<Badness>;
     // (undocumented)
     save(): void;
     // (undocumented)
@@ -26910,7 +26943,7 @@ export class ScansService {
 // @public (undocumented)
 export namespace ScansService {
     // (undocumented)
-    export type BadnessChangeEventHandler = (this: void) => void;
+    export type badnessChangedEventHandler = (this: void) => void;
     // (undocumented)
     export type CorrectnessChangedEventHandler = (this: void) => void;
     // (undocumented)
@@ -27271,7 +27304,7 @@ export namespace ScanTableRecordDefinition {
 //
 // @public (undocumented)
 export class ScanTableRecordSource extends LockOpenListTableRecordSource<Scan, ScanList> {
-    constructor(_scansService: ScansService, textFormatterService: TextFormatterService, tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService, definition: ScanTableRecordSourceDefinition);
+    constructor(_scansService: ScansService, textFormatterService: TextFormatterService, tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService, correctnessBadness: CorrectnessBadness, definition: ScanTableRecordSourceDefinition);
     // (undocumented)
     createDefinition(): ScanTableRecordSourceDefinition;
     // (undocumented)
@@ -28111,7 +28144,7 @@ export abstract class SequenceHistory {
     // (undocumented)
     get badness(): Badness;
     // (undocumented)
-    badnessChangeEvent: SequenceHistory.BadnessChangeEvent;
+    badnessChangedEvent: SequenceHistory.badnessChangedEvent;
     // (undocumented)
     becameUsableEvent: SequenceHistory.BecameUsableEvent | undefined;
     // (undocumented)
@@ -28141,7 +28174,7 @@ export namespace SequenceHistory {
     // (undocumented)
     export type AllSeriesLoadedChanged = (this: void) => void;
     // (undocumented)
-    export type BadnessChangeEvent = (this: void) => void;
+    export type badnessChangedEvent = (this: void) => void;
     // (undocumented)
     export type BecameUsableEvent = (this: void) => void;
 }
@@ -28720,7 +28753,7 @@ export namespace SingleBrokerageAccountGroup {
 // Warning: (ae-missing-release-tag) "SingleDataItemTableRecordSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export abstract class SingleDataItemTableRecordSource extends TableRecordSource {
+export abstract class SingleDataItemTableRecordSource extends TypedTableRecordSource {
     // (undocumented)
     protected setSingleDataItem(value: DataItem): void;
     // (undocumented)
@@ -33954,7 +33987,7 @@ export abstract class SubscribabilityExtentSubscriptionDataItem extends Publishe
 }
 
 // @public (undocumented)
-export abstract class SubscribeBadnessListTableRecordSource<Record, RecordList extends BadnessList<Record>> extends TableRecordSource {
+export abstract class SubscribeBadnessListTableRecordSource<Record, RecordList extends BadnessList<Record>> extends TypedTableRecordSource {
     // (undocumented)
     closeLocked(opener: LockOpenListItem.Opener): void;
     // (undocumented)
@@ -34648,8 +34681,10 @@ export { SysTick }
 // Warning: (ae-missing-release-tag) "Table" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class Table extends CorrectnessBadness {
-    constructor(recordSource: TableRecordSource, initialActiveFieldSources: TableFieldSourceDefinition.TypeId[]);
+export class Table<Badness> {
+    constructor(recordSource: TableRecordSource<Badness>, _correctnessState: CorrectnessState<Badness>, initialActiveFieldSources: TableFieldSourceDefinition.TypeId[]);
+    // (undocumented)
+    get badness(): Badness;
     // (undocumented)
     get beenUsable(): boolean;
     // (undocumented)
@@ -34669,17 +34704,17 @@ export class Table extends CorrectnessBadness {
     // (undocumented)
     open(opener: LockOpenListItem.Opener): void;
     // (undocumented)
-    protected processUsableChanged(): void;
-    // (undocumented)
     get recordCount(): number;
     // (undocumented)
     get records(): readonly TableRecord[];
     // (undocumented)
-    readonly recordSource: TableRecordSource;
+    readonly recordSource: TableRecordSource<Badness>;
     // (undocumented)
     setActiveFieldSources(fieldSourceTypeIds: readonly TableFieldSourceDefinition.TypeId[], suppressGridSchemaUpdate: boolean): void;
     // (undocumented)
     subscribeAllRecordsDeletedEvent(handler: Table.AllRecordsDeletedEventHandler): number;
+    // (undocumented)
+    subscribeBadnessChangedEvent(handler: CorrectnessState.BadnessChangedEventHandler): MultiEvent.SubscriptionId;
     // (undocumented)
     subscribeFieldsChangedEvent(handler: Table.FieldsChangedEventHandler): number;
     // (undocumented)
@@ -34689,7 +34724,7 @@ export class Table extends CorrectnessBadness {
     // (undocumented)
     subscribeOpenChangeEvent(handler: Table.OpenChangeEventHandler): number;
     // (undocumented)
-    subscribeOpenEvent(handler: Table.OpenEventHandler): number;
+    subscribeOpenEvent(handler: Table.OpenEventHandler<Badness>): number;
     // (undocumented)
     subscribeRecordChangedEvent(handler: Table.RecordChangedEventHandler): number;
     // (undocumented)
@@ -34713,7 +34748,11 @@ export class Table extends CorrectnessBadness {
     // (undocumented)
     subscribeRecordValuesChangedEvent(handler: Table.RecordValuesChangedEventHandler): number;
     // (undocumented)
+    subscribeUsableChangedEvent(handler: CorrectnessState.UsableChangedEventHandler): MultiEvent.SubscriptionId;
+    // (undocumented)
     unsubscribeAllRecordsDeletedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+    // (undocumented)
+    unsubscribeBadnessChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
     // (undocumented)
     unsubscribeFieldsChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
     // (undocumented)
@@ -34746,6 +34785,10 @@ export class Table extends CorrectnessBadness {
     unsubscribeRecordsSplicedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
     // (undocumented)
     unsubscribeRecordValuesChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+    // (undocumented)
+    unsubscribeUsableChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+    // (undocumented)
+    get usable(): boolean;
 }
 
 // @public (undocumented)
@@ -34753,7 +34796,7 @@ export namespace Table {
     // (undocumented)
     export type AllRecordsDeletedEventHandler = (this: void) => void;
     // (undocumented)
-    export type BadnessChangeEventHandler = (this: void) => void;
+    export type BadnessChangedEventHandler = (this: void) => void;
     // (undocumented)
     export type ExclusiveUnlockedEventer = (this: void) => void;
     // (undocumented)
@@ -34797,7 +34840,7 @@ export namespace Table {
     // (undocumented)
     export type OpenChangeEventHandler = (this: void, opened: boolean) => void;
     // (undocumented)
-    export type OpenEventHandler = (this: void, recordDefinitionList: TableRecordSource) => void;
+    export type OpenEventHandler<Badness> = (this: void, recordDefinitionList: TableRecordSource<Badness>) => void;
     // (undocumented)
     export type RecordChangedEventHandler = (this: void, recordIdx: Integer) => void;
     // (undocumented)
@@ -35122,7 +35165,7 @@ export namespace TableFieldSourceStaticInitialise {
 }
 
 // @public (undocumented)
-export class TableGridRecordStore implements GridRecordStore {
+export class TableGridRecordStore<Badness> implements GridRecordStore {
     // (undocumented)
     allRecordsDeleted(): void;
     // (undocumented)
@@ -35150,9 +35193,9 @@ export class TableGridRecordStore implements GridRecordStore {
     // (undocumented)
     setRecordEventers(recordsEventers: GridRecordStoreRecordsEventers): void;
     // (undocumented)
-    setTable(value: Table): void;
+    setTable(value: Table<Badness>): void;
     // (undocumented)
-    get table(): Table | undefined;
+    get table(): Table<Badness> | undefined;
 }
 
 // Warning: (ae-missing-release-tag) "TableRecord" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -35216,8 +35259,8 @@ export namespace TableRecordDefinition {
 }
 
 // @public (undocumented)
-export abstract class TableRecordSource extends CorrectnessBadness {
-    constructor(_textFormatterService: TextFormatterService, tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService, definition: TableRecordSourceDefinition, allowedFieldSourceDefinitionTypeIds: readonly TableFieldSourceDefinition.TypeId[]);
+export abstract class TableRecordSource<Badness> implements CorrectnessState<Badness> {
+    constructor(_textFormatterService: TextFormatterService, tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService, _correctnessState: CorrectnessState<Badness>, definition: TableRecordSourceDefinition, allowedFieldSourceDefinitionTypeIds: readonly TableFieldSourceDefinition.TypeId[]);
     // (undocumented)
     get activated(): boolean;
     // (undocumented)
@@ -35226,6 +35269,10 @@ export abstract class TableRecordSource extends CorrectnessBadness {
     readonly allowedFieldSourceDefinitionTypeIds: readonly TableFieldSourceDefinition.TypeId[];
     // (undocumented)
     get AsArray(): TableRecordDefinition[];
+    // (undocumented)
+    get badness(): Badness;
+    // (undocumented)
+    checkSetUnusable(badness: Badness): void;
     // (undocumented)
     protected checkUsableNotifyListChange(listChangeTypeId: UsableListChangeTypeId, recIdx: Integer, recCount: Integer): void;
     // (undocumented)
@@ -35247,6 +35294,8 @@ export abstract class TableRecordSource extends CorrectnessBadness {
     // (undocumented)
     get fields(): readonly TableField[];
     // (undocumented)
+    finalise(): void;
+    // (undocumented)
     protected getAsArray(): TableRecordDefinition[];
     // (undocumented)
     protected abstract getCount(): Integer;
@@ -35267,11 +35316,19 @@ export abstract class TableRecordSource extends CorrectnessBadness {
     // (undocumented)
     setActiveFieldSources(fieldSourceTypeIds: readonly TableFieldSourceDefinition.TypeId[]): void;
     // (undocumented)
+    setUnusable(badness: Badness): void;
+    // (undocumented)
+    setUsable(badness: Badness): void;
+    // (undocumented)
     subscribeAfterRecDefinitionChangeEvent(handler: TableRecordSource.RecDefinitionChangeEventHandler): number;
+    // (undocumented)
+    subscribeBadnessChangedEvent(handler: CorrectnessState.BadnessChangedEventHandler): MultiEvent.SubscriptionId;
     // (undocumented)
     subscribeBeforeRecDefinitionChangeEvent(handler: TableRecordSource.RecDefinitionChangeEventHandler): number;
     // (undocumented)
     subscribeListChangeEvent(handler: TableRecordSource.ListChangeEventHandler): number;
+    // (undocumented)
+    subscribeUsableChangedEvent(handler: CorrectnessState.UsableChangedEventHandler): MultiEvent.SubscriptionId;
     // (undocumented)
     protected readonly _tableFieldSourceDefinitionCachedFactoryService: TableFieldSourceDefinitionCachedFactoryService;
     // (undocumented)
@@ -35283,21 +35340,27 @@ export abstract class TableRecordSource extends CorrectnessBadness {
     // (undocumented)
     unsubscribeAfterRecDefinitionChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
     // (undocumented)
+    unsubscribeBadnessChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+    // (undocumented)
     unsubscribeBeforeRecDefinitionChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
     // (undocumented)
     unsubscribeListChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+    // (undocumented)
+    unsubscribeUsableChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+    // (undocumented)
+    get usable(): boolean;
 }
 
 // @public (undocumented)
 export namespace TableRecordSource {
     // (undocumented)
-    export type BadnessChangeEventHandler = (this: void) => void;
+    export type badnessChangedEventHandler = (this: void) => void;
     // (undocumented)
-    export type FactoryClosure = (this: void, definition: TableRecordSourceDefinition) => TableRecordSource;
+    export type FactoryClosure<Badness> = (this: void, definition: TableRecordSourceDefinition) => TableRecordSource<Badness>;
     // (undocumented)
     export type ListChangeEventHandler = (this: void, listChangeTypeId: UsableListChangeTypeId, itemIdx: Integer, itemCount: Integer) => void;
     // (undocumented)
-    export type ModifiedEventHandler = (this: void, list: TableRecordSource) => void;
+    export type ModifiedEventHandler<Badness> = (this: void, list: TableRecordSource<Badness>) => void;
     // (undocumented)
     export type RecDefinitionChangeEventHandler = (this: void, itemIdx: Integer) => void;
     // (undocumented)
@@ -35481,9 +35544,11 @@ export namespace TableRecordSourceDefinitionStaticInitialise {
 // Warning: (ae-missing-release-tag) "TableRecordSourceFactory" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface TableRecordSourceFactory {
+export interface TableRecordSourceFactory<Badness> {
     // (undocumented)
-    create(definition: TableRecordSourceDefinition): TableRecordSource;
+    create(definition: TableRecordSourceDefinition): TableRecordSource<Badness>;
+    // (undocumented)
+    createCorrectnessState(): CorrectnessState<Badness>;
 }
 
 // Warning: (ae-internal-missing-underscore) The name "TableRecordSourceStaticInitialise" should be prefixed with an underscore because the declaration is marked as @internal
@@ -37135,7 +37200,7 @@ export namespace TopShareholderTableRecordDefinition {
 
 // @public (undocumented)
 export class TopShareholderTableRecordSource extends SingleDataItemTableRecordSource {
-    constructor(_adiService: AdiService, textFormatterService: TextFormatterService, tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService, definition: TopShareholderTableRecordSourceDefinition);
+    constructor(_adiService: AdiService, textFormatterService: TextFormatterService, tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService, correctnessBadness: CorrectnessBadness, definition: TopShareholderTableRecordSourceDefinition);
     // (undocumented)
     closeLocked(opener: LockOpenListItem.Opener): void;
     // (undocumented)
@@ -37438,13 +37503,13 @@ export namespace TradesDataItem {
         // (undocumented)
         readonly recordCount: number;
         // (undocumented)
-        subscribeBadnessChangeEvent(handler: CorrectnessBadness.BadnessChangeEventHandler): MultiEvent.DefinedSubscriptionId;
+        subscribeBadnessChangedEvent(handler: CorrectnessBadness.BadnessChangedEventHandler): MultiEvent.DefinedSubscriptionId;
         // (undocumented)
         subscribeListChangeEvent(handler: TradesDataItem.ListChangeEventHandler): MultiEvent.DefinedSubscriptionId;
         // (undocumented)
         subscribeRecordChangeEvent(handler: TradesDataItem.RecordChangeEventHandler): MultiEvent.DefinedSubscriptionId;
         // (undocumented)
-        unsubscribeBadnessChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+        unsubscribeBadnessChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
         // (undocumented)
         unsubscribeListChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
         // (undocumented)
@@ -38262,6 +38327,18 @@ export { TypedArrayUiAction }
 
 export { TypedExplicitElementsArrayUiAction }
 
+// Warning: (ae-missing-release-tag) "TypedGridSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class TypedGridSource extends GridSource<Badness> {
+}
+
+// Warning: (ae-missing-release-tag) "TypedGridSourceOrReference" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class TypedGridSourceOrReference extends GridSourceOrReference<Badness> {
+}
+
 // Warning: (ae-missing-release-tag) "TypedKeyValueArraySettingsGroup" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "TypedKeyValueArraySettingsGroup" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -38454,6 +38531,40 @@ export namespace TypedKeyValueSettings {
 }
 
 export { TypedMappedExplicitElementsArrayUiAction }
+
+// Warning: (ae-missing-release-tag) "TypedReferenceableGridSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class TypedReferenceableGridSource extends ReferenceableGridSource<Badness> {
+}
+
+// Warning: (ae-missing-release-tag) "TypedReferenceableGridSourcesService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class TypedReferenceableGridSourcesService extends ReferenceableGridSourcesService<Badness> {
+}
+
+// Warning: (ae-missing-release-tag) "TypedTable" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class TypedTable extends Table<Badness> {
+}
+
+// Warning: (ae-missing-release-tag) "TypedTableRecordSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export abstract class TypedTableRecordSource extends TableRecordSource<Badness> {
+    constructor(textFormatterService: TextFormatterService, tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService, _correctnessBadness: CorrectnessBadness, definition: TableRecordSourceDefinition, allowedFieldSourceDefinitionTypeIds: readonly TableFieldSourceDefinition.TypeId[]);
+    // (undocumented)
+    finalise(): void;
+    // (undocumented)
+    protected processUsableChanged(): void;
+}
+
+// Warning: (ae-missing-release-tag) "TypedTableRecordSourceFactory" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type TypedTableRecordSourceFactory = TableRecordSourceFactory<Badness>;
 
 export { UiAction }
 
@@ -38968,7 +39079,7 @@ export class WatchmakerList implements LockOpenListItem<RankedLitIvemIdListDirec
     // (undocumented)
     setZenithSource(text: string): void;
     // (undocumented)
-    subscribeBadnessChangeEvent(handler: BadnessList.BadnessChangeEventHandler): number;
+    subscribeBadnessChangedEvent(handler: BadnessList.badnessChangedEventHandler): number;
     // (undocumented)
     subscribeCorrectnessChangedEvent(handler: WatchmakerList.CorrectnessChangedEventHandler): number;
     // (undocumented)
@@ -38988,7 +39099,7 @@ export class WatchmakerList implements LockOpenListItem<RankedLitIvemIdListDirec
     // (undocumented)
     unlock(locker: LockOpenListItem.Locker): void;
     // (undocumented)
-    unsubscribeBadnessChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+    unsubscribeBadnessChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
     // (undocumented)
     unsubscribeCorrectnessChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
     // (undocumented)
@@ -39353,7 +39464,7 @@ export class WatchmakerService extends LockOpenList<WatchmakerList> {
 // @public (undocumented)
 export namespace WatchmakerService {
     // (undocumented)
-    export type BadnessChangeEventHandler = (this: void) => void;
+    export type badnessChangedEventHandler = (this: void) => void;
     // (undocumented)
     export type CorrectnessChangedEventHandler = (this: void) => void;
     // (undocumented)

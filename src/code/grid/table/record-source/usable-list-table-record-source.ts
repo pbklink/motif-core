@@ -4,12 +4,12 @@
  * License: motionite.trade/license/motif
  */
 
-import { Integer, LockOpenListItem, MultiEvent, UsableList, UsableListChangeTypeId } from '../../../sys/internal-api';
+import { CorrectnessBadness, Integer, LockOpenListItem, MultiEvent, UsableList, UsableListChangeTypeId } from '../../../sys/internal-api';
 import { TextFormatterService } from '../../../text-format/text-format-internal-api';
 import { TableRecordSourceDefinitionFactoryService, UsableListTableRecordSourceDefinition } from './definition/grid-table-record-source-definition-internal-api';
-import { TableRecordSource } from './table-record-source';
+import { TypedTableRecordSource } from './typed-table-record-source';
 
-export abstract class UsableListTableRecordSource<Record> extends TableRecordSource {
+export abstract class UsableListTableRecordSource<Record> extends TypedTableRecordSource {
     readonly list: UsableList<Record>;
 
     private _listChangeEventSubscriptionId: MultiEvent.SubscriptionId;
@@ -17,11 +17,13 @@ export abstract class UsableListTableRecordSource<Record> extends TableRecordSou
     constructor(
         textFormatterService: TextFormatterService,
         tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService,
+        correctnessBadness: CorrectnessBadness,
         definition: UsableListTableRecordSourceDefinition<Record>,
     ) {
         super(
             textFormatterService,
             tableRecordSourceDefinitionFactoryService,
+            correctnessBadness,
             definition,
             definition.allowedFieldSourceDefinitionTypeIds,
         );

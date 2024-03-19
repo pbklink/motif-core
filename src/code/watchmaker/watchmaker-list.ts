@@ -84,7 +84,7 @@ export class WatchmakerList implements LockOpenListItem<RankedLitIvemIdListDirec
 
     private _createDataItemIncubator: DataItemIncubator<LitIvemIdCreateWatchmakerListDataItem>;
 
-    private _badnessChangeMultiEvent = new MultiEvent<BadnessList.BadnessChangeEventHandler>();
+    private _badnessChangedMultiEvent = new MultiEvent<BadnessList.badnessChangedEventHandler>();
     private _correctnessChangedMultiEvent = new MultiEvent<WatchmakerList.CorrectnessChangedEventHandler>();
     private _listChangeMultiEvent = new MultiEvent<RecordList.ListChangeEventHandler>();
     private _valuesChangedMultiEvent = new MultiEvent<WatchmakerList.ValuesChangedEventHandler>();
@@ -398,12 +398,12 @@ export class WatchmakerList implements LockOpenListItem<RankedLitIvemIdListDirec
         }
     }
 
-    subscribeBadnessChangeEvent(handler: BadnessList.BadnessChangeEventHandler) {
-        return this._badnessChangeMultiEvent.subscribe(handler);
+    subscribeBadnessChangedEvent(handler: BadnessList.badnessChangedEventHandler) {
+        return this._badnessChangedMultiEvent.subscribe(handler);
     }
 
-    unsubscribeBadnessChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void {
-        this._badnessChangeMultiEvent.unsubscribe(subscriptionId);
+    unsubscribeBadnessChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void {
+        this._badnessChangedMultiEvent.unsubscribe(subscriptionId);
     }
 
     subscribeCorrectnessChangedEvent(handler: WatchmakerList.CorrectnessChangedEventHandler) {

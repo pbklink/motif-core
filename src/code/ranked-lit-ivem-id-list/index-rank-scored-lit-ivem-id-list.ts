@@ -97,11 +97,11 @@ export class IndexRankScoredLitIvemIdList implements RankScoredLitIvemIdList {
         this.notifyModified();
     }
 
-    subscribeBadnessChangeEvent(_handler: BadnessList.BadnessChangeEventHandler) {
+    subscribeBadnessChangedEvent(_handler: BadnessList.badnessChangedEventHandler) {
         return MultiEvent.nullDefinedSubscriptionId;
     }
 
-    unsubscribeBadnessChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void {
+    unsubscribeBadnessChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void {
         // nothing to do
     }
 

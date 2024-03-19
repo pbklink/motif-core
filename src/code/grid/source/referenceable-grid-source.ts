@@ -10,13 +10,13 @@ import { TableRecordSourceFactory } from '../table/internal-api';
 import { GridRowOrderDefinition, ReferenceableGridSourceDefinition } from './definition/grid-source-definition-internal-api';
 import { GridSource } from './grid-source';
 
-export class ReferenceableGridSource extends GridSource implements LockOpenListItem<ReferenceableGridSource>, IndexedRecord {
+export class ReferenceableGridSource<Badness> extends GridSource<Badness> implements LockOpenListItem<ReferenceableGridSource<Badness>>, IndexedRecord {
     readonly name: string;
     readonly upperCaseName: string;
 
     constructor(
         referenceableGridLayoutsService: ReferenceableGridLayoutsService,
-        tableRecordSourceFactory: TableRecordSourceFactory,
+        tableRecordSourceFactory: TableRecordSourceFactory<Badness>,
         lockedDefinition: ReferenceableGridSourceDefinition,
         index: number,
     ) {

@@ -17,6 +17,7 @@ import {
 import {
     AssertInternalError,
     Badness,
+    CorrectnessBadness,
     Integer,
     LockOpenListItem,
     MultiEvent,
@@ -53,18 +54,20 @@ export class LitIvemDetailFromSearchSymbolsTableRecordSource extends SingleDataI
     private _dataItemSubscribed = false;
     private _litIvemDetails: LitIvemBaseDetail[];
     private _listChangeEventSubscriptionId: MultiEvent.SubscriptionId;
-    private _badnessChangeEventSubscriptionId: MultiEvent.SubscriptionId;
+    private _badnessChangedEventSubscriptionId: MultiEvent.SubscriptionId;
 
     // setting accountId to undefined will return orders for all accounts
     constructor(
         private readonly _adiService: AdiService,
         textFormatterService: TextFormatterService,
         tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService,
+        correctnessBadness: CorrectnessBadness,
         definition: LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition
     ) {
         super(
             textFormatterService,
             tableRecordSourceDefinitionFactoryService,
+            correctnessBadness,
             definition,
             definition.allowedFieldSourceDefinitionTypeIds,
         );
@@ -176,9 +179,9 @@ export class LitIvemDetailFromSearchSymbolsTableRecordSource extends SingleDataI
                     );
                 }
             );
-        this._badnessChangeEventSubscriptionId =
-            this._dataItem.subscribeBadnessChangeEvent(
-                () => { this.handleDataItemBadnessChangeEvent(); }
+        this._badnessChangedEventSubscriptionId =
+            this._dataItem.subscribeBadnessChangedEvent(
+                () => { this.handleDataItembadnessChangedEvent(); }
             );
 
         super.openLocked(opener);
@@ -215,10 +218,10 @@ export class LitIvemDetailFromSearchSymbolsTableRecordSource extends SingleDataI
                 this._listChangeEventSubscriptionId
             );
             this._listChangeEventSubscriptionId = undefined;
-            this._dataItem.unsubscribeBadnessChangeEvent(
-                this._badnessChangeEventSubscriptionId
+            this._dataItem.unsubscribeBadnessChangedEvent(
+                this._badnessChangedEventSubscriptionId
             );
-            this._badnessChangeEventSubscriptionId = undefined;
+            this._badnessChangedEventSubscriptionId = undefined;
 
             super.closeLocked(opener);
 
@@ -266,7 +269,7 @@ export class LitIvemDetailFromSearchSymbolsTableRecordSource extends SingleDataI
         this.processDataItemListChange(listChangeTypeId, idx, count);
     }
 
-    private handleDataItemBadnessChangeEvent() {
+    private handleDataItembadnessChangedEvent() {
         this.checkSetUnusable(this._dataItem.badness);
     }
 

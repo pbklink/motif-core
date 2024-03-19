@@ -437,8 +437,8 @@ export namespace TradesDataItem {
 
         getRecord(idx: Integer): Record;
 
-        subscribeBadnessChangeEvent(handler: CorrectnessBadness.BadnessChangeEventHandler): MultiEvent.DefinedSubscriptionId;
-        unsubscribeBadnessChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+        subscribeBadnessChangedEvent(handler: CorrectnessBadness.BadnessChangedEventHandler): MultiEvent.DefinedSubscriptionId;
+        unsubscribeBadnessChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
 
         subscribeListChangeEvent(handler: TradesDataItem.ListChangeEventHandler): MultiEvent.DefinedSubscriptionId;
         unsubscribeListChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;

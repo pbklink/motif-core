@@ -10,7 +10,7 @@ import {
     RankedLitIvemIdListFactoryService
 } from "../../../ranked-lit-ivem-id-list/ranked-lit-ivem-id-list-internal-api";
 import { SymbolDetailCacheService } from '../../../services/symbol-detail-cache-service';
-import { AssertInternalError, ErrorCode, Integer, LockOpenListItem, Ok, Result, UnreachableCaseError } from '../../../sys/internal-api';
+import { AssertInternalError, CorrectnessBadness, ErrorCode, Integer, LockOpenListItem, Ok, Result, UnreachableCaseError } from '../../../sys/internal-api';
 import { TextFormatterService } from '../../../text-format/text-format-internal-api';
 import {
     TableFieldSourceDefinition
@@ -32,11 +32,13 @@ export class RankedLitIvemIdListTableRecordSource extends SubscribeBadnessListTa
         private readonly _rankedLitIvemIdListFactoryService: RankedLitIvemIdListFactoryService,
         textFormatterService: TextFormatterService,
         tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService,
+        correctnessBadness: CorrectnessBadness,
         definition: RankedLitIvemIdListTableRecordSourceDefinition,
     ) {
         super(
             textFormatterService,
             tableRecordSourceDefinitionFactoryService,
+            correctnessBadness,
             definition,
             definition.allowedFieldSourceDefinitionTypeIds,
         );

@@ -6,13 +6,14 @@
 
 import {
     AssertInternalError,
-    CorrectnessBadness,
-    Integer, LockOpenListItem,
+    CorrectnessState,
+    Integer,
+    LockOpenListItem,
     MultiEvent,
     Ok,
     Result,
-    UsableListChangeTypeId
-} from "../../../sys/internal-api";
+    UsableListChangeTypeId,
+} from '../../../sys/internal-api';
 import { TextFormatterService } from '../../../text-format/text-format-internal-api';
 import { GridFieldCustomHeadingsService } from '../../field/grid-field-custom-headings-service';
 import { AllowedGridField } from '../../field/grid-field-internal-api';
@@ -23,7 +24,7 @@ import { TableRecord } from '../record/grid-table-record-internal-api';
 import { TableRecordSourceDefinition, TableRecordSourceDefinitionFactoryService } from './definition/grid-table-record-source-definition-internal-api';
 
 /** @public */
-export abstract class TableRecordSource extends CorrectnessBadness {
+export abstract class TableRecordSource<Badness> implements CorrectnessState<Badness> {
     protected readonly _gridFieldCustomHeadingsService: GridFieldCustomHeadingsService;
     protected readonly _tableFieldSourceDefinitionCachedFactoryService: TableFieldSourceDefinitionCachedFactoryService;
 
@@ -39,13 +40,16 @@ export abstract class TableRecordSource extends CorrectnessBadness {
     constructor(
         private readonly _textFormatterService: TextFormatterService,
         protected readonly tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService,
+        private readonly _correctnessState: CorrectnessState<Badness>,
         protected readonly definition: TableRecordSourceDefinition,
         readonly allowedFieldSourceDefinitionTypeIds: readonly TableFieldSourceDefinition.TypeId[],
     ) {
-        super();
         this._gridFieldCustomHeadingsService = tableRecordSourceDefinitionFactoryService.gridFieldCustomHeadingsService;
         this._tableFieldSourceDefinitionCachedFactoryService = tableRecordSourceDefinitionFactoryService.tableFieldSourceDefinitionCachedFactoryService;
     }
+
+    get usable() { return this._correctnessState.usable; }
+    get badness() { return this._correctnessState.badness; }
 
     get activeFieldSources() { return this._activeFieldSources; }
     get fields() { return this._fields; }
@@ -54,6 +58,22 @@ export abstract class TableRecordSource extends CorrectnessBadness {
 
     get count(): Integer { return this.getCount(); }
     get AsArray(): TableRecordDefinition[] { return this.getAsArray(); }
+
+    finalise() {
+        // descendants can override
+    }
+
+    setUsable(badness: Badness) {
+        this._correctnessState.setUsable(badness);
+    }
+
+    setUnusable(badness: Badness) {
+        this._correctnessState.setUnusable(badness);
+    }
+
+    checkSetUnusable(badness: Badness) {
+        this._correctnessState.checkSetUnusable(badness);
+    }
 
     createAllowedFields(): readonly AllowedGridField[] {
         return this.definition.createAllowedFields();
@@ -101,6 +121,22 @@ export abstract class TableRecordSource extends CorrectnessBadness {
         return -1;
     }
 
+    subscribeUsableChangedEvent(handler: CorrectnessState.UsableChangedEventHandler) {
+        return this._correctnessState.subscribeUsableChangedEvent(handler);
+    }
+
+    unsubscribeUsableChangedEvent(subscriptionId: MultiEvent.SubscriptionId) {
+        this._correctnessState.unsubscribeUsableChangedEvent(subscriptionId);
+    }
+
+    subscribeBadnessChangedEvent(handler: CorrectnessState.BadnessChangedEventHandler) {
+        return this._correctnessState.subscribeBadnessChangedEvent(handler);
+    }
+
+    unsubscribeBadnessChangedEvent(subscriptionId: MultiEvent.SubscriptionId) {
+        this._correctnessState.unsubscribeBadnessChangedEvent(subscriptionId);
+    }
+
     subscribeListChangeEvent(handler: TableRecordSource.ListChangeEventHandler) {
         return this._listChangeMultiEvent.subscribe(handler);
     }
@@ -133,7 +169,7 @@ export abstract class TableRecordSource extends CorrectnessBadness {
     }
 
     protected checkUsableNotifyListChange(listChangeTypeId: UsableListChangeTypeId, recIdx: Integer, recCount: Integer) {
-        if (this.usable) {
+        if (this._correctnessState.usable) {
             this.notifyListChange(listChangeTypeId, recIdx, recCount);
         }
     }
@@ -213,7 +249,7 @@ export abstract class TableRecordSource extends CorrectnessBadness {
 
 /** @public */
 export namespace TableRecordSource {
-    export type FactoryClosure = (this: void, definition: TableRecordSourceDefinition) => TableRecordSource;
+    export type FactoryClosure<Badness> = (this: void, definition: TableRecordSourceDefinition) => TableRecordSource<Badness>;
 
     export type ListChangeEventHandler = (
         this: void,
@@ -222,8 +258,8 @@ export namespace TableRecordSource {
         itemCount: Integer
     ) => void;
     export type RecDefinitionChangeEventHandler = (this: void, itemIdx: Integer) => void;
-    export type BadnessChangeEventHandler = (this: void) => void;
-    export type ModifiedEventHandler = (this: void, list: TableRecordSource) => void;
+    export type badnessChangedEventHandler = (this: void) => void;
+    export type ModifiedEventHandler<Badness> = (this: void, list: TableRecordSource<Badness>) => void;
     export type RequestIsGroupSaveEnabledEventHandler = (this: void) => boolean;
 
 }

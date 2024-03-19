@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { Badness, Integer, LockOpenListItem, Ok, Result, UnreachableCaseError, UsableListChangeTypeId } from '../../../sys/internal-api';
+import { Badness, CorrectnessBadness, Integer, LockOpenListItem, Ok, Result, UnreachableCaseError, UsableListChangeTypeId } from '../../../sys/internal-api';
 import { TextFormatterService } from '../../../text-format/text-format-internal-api';
 import { GridField } from '../../field/grid-field-internal-api';
 import {
@@ -14,20 +14,22 @@ import { GridFieldTableRecordDefinition } from '../record-definition/grid-table-
 import { TableRecord } from '../record/grid-table-record-internal-api';
 import { GridFieldTableValueSource } from '../value-source/internal-api';
 import { GridFieldTableRecordSourceDefinition, TableRecordSourceDefinitionFactoryService } from './definition/grid-table-record-source-definition-internal-api';
-import { TableRecordSource } from './table-record-source';
+import { TypedTableRecordSource } from './typed-table-record-source';
 
 /** @public */
-export class GridFieldTableRecordSource extends TableRecordSource {
+export class GridFieldTableRecordSource extends TypedTableRecordSource {
     private readonly _records: GridField[];
 
     constructor(
         textFormatterService: TextFormatterService,
         tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService,
+        correctnessBadness: CorrectnessBadness,
         definition: GridFieldTableRecordSourceDefinition,
     ) {
         super(
             textFormatterService,
             tableRecordSourceDefinitionFactoryService,
+            correctnessBadness,
             definition,
             GridFieldTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
         );

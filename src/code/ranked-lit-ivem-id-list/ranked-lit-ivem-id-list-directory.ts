@@ -52,7 +52,7 @@ export class RankedLitIvemIdListDirectory extends CorrectnessBadness implements 
                     resourceName: badnessResourceName,
                 },
                 lockedItems: [],
-                badnessChangeEventSubscriptionId: undefined,
+                badnessChangedEventSubscriptionId: undefined,
                 listChangeEventSubscriptionId: undefined,
             }
         }
@@ -77,8 +77,8 @@ export class RankedLitIvemIdListDirectory extends CorrectnessBadness implements 
     open() {
         for (const source of this._sources) {
             const sourceList = source.list;
-            source.badnessChangeEventSubscriptionId = sourceList.subscribeBadnessChangeEvent(
-                () => { this.handleSourceBadnessChangeEvent(source); }
+            source.badnessChangedEventSubscriptionId = sourceList.subscribeBadnessChangedEvent(
+                () => { this.handleSourcebadnessChangedEvent(source); }
             );
             source.listChangeEventSubscriptionId = sourceList.subscribeListChangeEvent(
                 (listChangeTypeId, idx, count) => {
@@ -95,8 +95,8 @@ export class RankedLitIvemIdListDirectory extends CorrectnessBadness implements 
     close() {
         for (const source of this._sources) {
             const sourceList = source.list;
-            sourceList.unsubscribeBadnessChangeEvent(source.badnessChangeEventSubscriptionId);
-            source.badnessChangeEventSubscriptionId = undefined;
+            sourceList.unsubscribeBadnessChangedEvent(source.badnessChangedEventSubscriptionId);
+            source.badnessChangedEventSubscriptionId = undefined;
             sourceList.unsubscribeListChangeEvent(source.listChangeEventSubscriptionId);
             source.listChangeEventSubscriptionId = undefined;
         }
@@ -114,7 +114,7 @@ export class RankedLitIvemIdListDirectory extends CorrectnessBadness implements 
         this._listChangeMultiEvent.unsubscribe(subscriptionId);
     }
 
-    private handleSourceBadnessChangeEvent(source: RankedLitIvemIdListDirectory.Source) {
+    private handleSourcebadnessChangedEvent(source: RankedLitIvemIdListDirectory.Source) {
         this.updateBadness(source);
     }
 
@@ -458,7 +458,7 @@ export namespace RankedLitIvemIdListDirectory {
         lastResourceBadness: ResourceBadness;
         lockedItems: RankedLitIvemIdListDirectoryItem[];
         listChangeEventSubscriptionId: MultiEvent.SubscriptionId | undefined;
-        badnessChangeEventSubscriptionId: MultiEvent.SubscriptionId | undefined;
+        badnessChangedEventSubscriptionId: MultiEvent.SubscriptionId | undefined;
     }
 
     export class ListChangeQueue {

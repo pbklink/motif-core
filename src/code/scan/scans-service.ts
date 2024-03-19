@@ -225,7 +225,7 @@ export class ScansService {
 /** @public */
 export namespace ScansService {
     export type CorrectnessChangedEventHandler = (this: void) => void;
-    export type BadnessChangeEventHandler = (this: void) => void;
+    export type badnessChangedEventHandler = (this: void) => void;
 
     export type ScansOnlineResolve = (this: void, ready: boolean) => void;
     export type CreatedScanWaitingResolve = (this: void, scan: Scan) => void;

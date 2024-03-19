@@ -11,11 +11,11 @@ import {
     GridFieldCustomHeadingsService,
     ReferenceableGridLayoutsService,
     ReferenceableGridSourceDefinitionsStoreService,
-    ReferenceableGridSourcesService,
     TableFieldSourceDefinitionCachedFactoryService,
     TableFieldSourceDefinitionFactory,
     TableRecordSourceDefinitionFactoryService,
-    TableRecordSourceFactory
+    TypedReferenceableGridSourcesService,
+    TypedTableRecordSourceFactory,
 } from "./grid/internal-api";
 import { KeyboardService } from "./keyboard/keyboard-internal-api";
 import { NotificationChannelsService } from './notification-channel/internal-api';
@@ -63,7 +63,7 @@ export class CoreService {
 
     private _tableFieldSourceDefinitionCachedFactoryService: TableFieldSourceDefinitionCachedFactoryService;
     private _tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService;
-    private _referenceableGridSourcesService: ReferenceableGridSourcesService;
+    private _referenceableGridSourcesService: TypedReferenceableGridSourcesService;
     private _activeColorSchemeName: string;
 
     constructor() {
@@ -111,8 +111,8 @@ export class CoreService {
         );
     }
 
-    setTableRecordSourceFactory(tableRecordSourceFactory: TableRecordSourceFactory) {
-        this._referenceableGridSourcesService = new ReferenceableGridSourcesService(
+    setTableRecordSourceFactory(tableRecordSourceFactory: TypedTableRecordSourceFactory) {
+        this._referenceableGridSourcesService = new TypedReferenceableGridSourcesService(
             this.referenceableGridLayoutsService,
             tableRecordSourceFactory,
         );

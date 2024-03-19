@@ -16,29 +16,29 @@ import { Table, TableFieldSourceDefinition, TableRecordSource, TableRecordSource
 import { GridRowOrderDefinition, GridSourceDefinition } from './definition/grid-source-definition-internal-api';
 
 /** @public */
-export class GridSource implements LockOpenListItem<GridSource>, IndexedRecord {
+export class GridSource<Badness> implements LockOpenListItem<GridSource<Badness>>, IndexedRecord {
     readonly id: Guid;
     readonly mapKey: MapKey;
 
     public index: number;
 
-    private readonly _lockOpenManager: LockOpenManager<GridSource>;
+    private readonly _lockOpenManager: LockOpenManager<GridSource<Badness>>;
 
     private readonly _tableRecordSourceDefinition: TableRecordSourceDefinition;
     private _gridLayoutOrReferenceDefinition: GridLayoutOrReferenceDefinition | undefined;
     private _initialRowOrderDefinition: GridRowOrderDefinition | undefined;
 
-    private _lockedTableRecordSource: TableRecordSource | undefined;
+    private _lockedTableRecordSource: TableRecordSource<Badness> | undefined;
     private _lockedGridLayout: GridLayout | undefined;
     private _lockedReferenceableGridLayout: ReferenceableGridLayout | undefined;
 
-    private _table: Table | undefined;
+    private _table: Table<Badness> | undefined;
 
     private _gridLayoutSetMultiEvent = new MultiEvent<GridSource.GridLayoutSetEventHandler>();
 
     constructor(
         private readonly _referenceableGridLayoutsService: ReferenceableGridLayoutsService,
-        private readonly _tableRecordSourceFactory: TableRecordSourceFactory,
+        private readonly _tableRecordSourceFactory: TableRecordSourceFactory<Badness>,
         definition: GridSourceDefinition,
         id?: Guid,
         mapKey?: MapKey,
@@ -46,7 +46,7 @@ export class GridSource implements LockOpenListItem<GridSource>, IndexedRecord {
         this.id = id ?? newGuid();
         this.mapKey = mapKey ?? this.id;
 
-        this._lockOpenManager = new LockOpenManager<GridSource>(
+        this._lockOpenManager = new LockOpenManager<GridSource<Badness>>(
             (locker) => this.tryProcessFirstLock(locker),
             (locker) => { this.processLastUnlock(locker); },
             (opener) => { this.processFirstOpen(opener); },
@@ -90,7 +90,7 @@ export class GridSource implements LockOpenListItem<GridSource>, IndexedRecord {
         return this._lockOpenManager.isLocked(ignoreOnlyLocker);
     }
 
-    equals(other: GridSource): boolean {
+    equals(other: GridSource<Badness>): boolean {
         return this.mapKey === other.mapKey;
     }
 
@@ -239,6 +239,7 @@ export class GridSource implements LockOpenListItem<GridSource>, IndexedRecord {
             throw new AssertInternalError('GSUT23008');
         } else {
             this._lockedTableRecordSource.unlock(locker);
+            this._lockedTableRecordSource.finalise();
             this._lockedTableRecordSource = undefined;
 
             if (this._lockedGridLayout === undefined) {
@@ -256,7 +257,7 @@ export class GridSource implements LockOpenListItem<GridSource>, IndexedRecord {
             throw new AssertInternalError('GSOLT23008');
         } else {
             const tableFieldSourceDefinitionTypeIds = this.getTableFieldSourceDefinitionTypeIdsFromLayout(this._lockedGridLayout);
-            this._table = new Table(this._lockedTableRecordSource, tableFieldSourceDefinitionTypeIds);
+            this._table = new Table<Badness>(this._lockedTableRecordSource, this._tableRecordSourceFactory.createCorrectnessState(), tableFieldSourceDefinitionTypeIds);
             this._table.open(opener);
         }
     }

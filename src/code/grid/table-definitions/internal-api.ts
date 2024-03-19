@@ -6,4 +6,5 @@
 
 export * from './editable-grid-layout-definition-column/internal-api';
 export * from './grid-table-definitions-static-initialise';
+export * from './typed-table';
 
