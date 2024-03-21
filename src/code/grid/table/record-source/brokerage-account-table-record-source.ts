@@ -4,17 +4,17 @@
  * License: motionite.trade/license/motif
  */
 
-import { Account, AdiService, BrokerageAccountsDataDefinition, BrokerageAccountsDataItem } from '../../../adi/adi-internal-api';
+import { Account, AdiService, BrokerageAccountsDataDefinition, BrokerageAccountsDataItem } from '../../../adi/internal-api';
 import { CorrectnessBadness, Integer, KeyedCorrectnessList, LockOpenListItem, UnreachableCaseError } from '../../../sys/internal-api';
-import { TextFormatterService } from '../../../text-format/text-format-internal-api';
-import { GridFieldCustomHeadingsService } from '../../field/grid-field-internal-api';
+import { TextFormatterService } from '../../../text-format/internal-api';
+import { GridFieldCustomHeadingsService } from '../../field/internal-api';
 import {
     TypedTableFieldSourceDefinition, TypedTableFieldSourceDefinitionCachingFactoryService
-} from "../field-source/grid-table-field-source-internal-api";
+} from "../field-source/internal-api";
 import {
     BrokerageAccountTableRecordDefinition
-} from "../record-definition/grid-table-record-definition-internal-api";
-import { TableRecord } from '../record/grid-table-record-internal-api';
+} from "../record-definition/internal-api";
+import { TableRecord } from '../record/internal-api';
 import { BrokerageAccountTableValueSource, FeedTableValueSource } from '../value-source/internal-api';
 import { BrokerageAccountTableRecordSourceDefinition } from './definition/brokerage-account-table-record-source-definition';
 import { SingleDataItemRecordTableRecordSource } from './single-data-item-record-table-record-source';

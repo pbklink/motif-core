@@ -6,8 +6,8 @@
 
 import { EnumInfoOutOfOrderError, Integer } from '../../../../sys/internal-api';
 // import { GridRecordFieldState } from '../../../record/grid-record-internal-api';
-import { CorrectnessTableField } from '../../field/grid-table-field-internal-api';
-import { CorrectnessTableValue } from '../../value/grid-table-value-internal-api';
+import { CorrectnessTableField } from '../../field/internal-api';
+import { CorrectnessTableValue } from '../../value/internal-api';
 import { TableFieldSourceDefinition } from './table-field-source-definition';
 
 export abstract class TypedTableFieldSourceDefinition extends TableFieldSourceDefinition<TypedTableFieldSourceDefinition.TypeId> {

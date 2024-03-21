@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { Account } from '../../../adi/adi-internal-api';
+import { Account } from '../../../adi/internal-api';
 import { Correctness, Integer, MultiEvent, UnreachableCaseError } from '../../../sys/internal-api';
 import { BrokerageAccountTableFieldSourceDefinition } from '../field-source/definition/internal-api';
 import {
@@ -12,7 +12,7 @@ import {
     EnumCorrectnessTableValue,
     StringCorrectnessTableValue,
     TableValue
-} from '../value/grid-table-value-internal-api';
+} from '../value/internal-api';
 import { TableValueSource } from './table-value-source';
 
 export class BrokerageAccountTableValueSource extends TableValueSource {

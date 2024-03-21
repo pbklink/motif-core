@@ -5,7 +5,7 @@
  */
 
 import { AssertInternalError, ErrorCode, ZenithDataError } from '../../../../sys/internal-api';
-import { AdiPublisherRequest, AdiPublisherSubscription, ErrorPublisherSubscriptionDataMessage_PublishRequestError, UpdateScanDataDefinition, UpdateScanDataMessage } from '../../../common/adi-common-internal-api';
+import { AdiPublisherRequest, AdiPublisherSubscription, ErrorPublisherSubscriptionDataMessage_PublishRequestError, UpdateScanDataDefinition, UpdateScanDataMessage } from '../../../common/internal-api';
 import { ZenithProtocol } from './protocol/zenith-protocol';
 import { ZenithConvert } from './zenith-convert';
 import { ZenithNotifyConvert } from './zenith-notify-convert';

@@ -10,7 +10,7 @@ import {
     AdiPublisherSubscription,
     CreateOrCopyWatchmakerListDataMessage,
     LitIvemIdCreateWatchmakerListDataDefinition,
-} from "../../../common/adi-common-internal-api";
+} from "../../../common/internal-api";
 import { ZenithProtocol } from './protocol/zenith-protocol';
 import { ZenithConvert } from './zenith-convert';
 import { ZenithWatchlistConvert } from './zenith-watchlist-convert';

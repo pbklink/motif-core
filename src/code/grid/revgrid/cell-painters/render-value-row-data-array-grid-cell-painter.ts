@@ -12,8 +12,8 @@ import {
     RenderValue,
     StringRenderValue,
     TrueFalseRenderValue
-} from '../../../services/services-internal-api';
-import { GridField } from '../../field/grid-field-internal-api';
+} from '../../../services/internal-api';
+import { GridField } from '../../field/internal-api';
 import { AdaptedRevgridBehavioredColumnSettings } from '../settings/adapted-revgrid-behaviored-column-settings';
 import { RenderValueCellPainter } from './render-value/render-value-cell-painter';
 

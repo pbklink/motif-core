@@ -4,19 +4,19 @@
  * License: motionite.trade/license/motif
  */
 
-import { SecurityDataItem } from '../../../../adi/adi-internal-api';
+import { SecurityDataItem } from '../../../../adi/internal-api';
 import {
     LitIvemIdArrayRankedLitIvemIdListDefinition, ScanIdRankedLitIvemIdListDefinition
-} from "../../../../ranked-lit-ivem-id-list/ranked-lit-ivem-id-list-internal-api";
-import { GridFieldCustomHeadingsService } from '../../../field/grid-field-internal-api';
-import { GridLayoutDefinition } from '../../../layout/grid-layout-internal-api';
+} from "../../../../ranked-lit-ivem-id-list/internal-api";
+import { GridFieldCustomHeadingsService } from '../../../field/internal-api';
+import { GridLayoutDefinition } from '../../../layout/internal-api';
 import {
     LitIvemBaseDetailTableFieldSourceDefinition,
     RankedLitIvemIdTableFieldSourceDefinition,
     SecurityDataItemTableFieldSourceDefinition,
     TypedTableFieldSourceDefinition,
     TypedTableFieldSourceDefinitionCachingFactoryService
-} from "../../field-source/grid-table-field-source-internal-api";
+} from "../../field-source/internal-api";
 import { RankedLitIvemIdListTableRecordSourceDefinition } from './ranked-lit-ivem-id-list-table-record-source-definition';
 import { TypedTableRecordSourceDefinition } from './typed-table-record-source-definition';
 

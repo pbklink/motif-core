@@ -6,7 +6,7 @@
 
 import { AssertInternalError, ErrorCodeLogger, Integer, UnreachableCaseError, UsableListChangeTypeId } from '../sys/internal-api';
 import { BrokerageAccountGroupHoldingList } from './brokerage-account-group-holding-list';
-import { AurcChangeTypeId, DataMessage, DataMessageTypeId, HoldingsDataMessage } from './common/adi-common-internal-api';
+import { AurcChangeTypeId, DataMessage, DataMessageTypeId, HoldingsDataMessage } from './common/internal-api';
 import { Holding } from './holding';
 import { RecordsBrokerageAccountSubscriptionDataItem } from './records-brokerage-account-subscription-data-item';
 

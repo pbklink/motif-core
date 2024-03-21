@@ -5,7 +5,7 @@
  */
 
 import { Integer, SysTick } from '../../../sys/internal-api';
-import { DataItemId, DataMessage, DataMessageTypeId } from '../../common/adi-common-internal-api';
+import { DataItemId, DataMessage, DataMessageTypeId } from '../../common/internal-api';
 
 export class ZenithQueryConfigureDataMessage extends DataMessage {
     static readonly typeId = DataMessageTypeId.ZenithQueryConfigure;

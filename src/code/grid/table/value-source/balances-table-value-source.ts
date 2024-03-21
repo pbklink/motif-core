@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { Balances } from '../../../adi/adi-internal-api';
+import { Balances } from '../../../adi/internal-api';
 import { Integer, MultiEvent, UnreachableCaseError } from '../../../sys/internal-api';
 import { BalancesTableFieldSourceDefinition } from '../field-source/definition/internal-api';
 import {
@@ -13,7 +13,7 @@ import {
     DecimalCorrectnessTableValue,
     StringCorrectnessTableValue,
     TableValue
-} from '../value/grid-table-value-internal-api';
+} from '../value/internal-api';
 import { CorrectnessTableValueSource } from './correctness-table-value-source';
 import { TableValueSource } from './table-value-source';
 

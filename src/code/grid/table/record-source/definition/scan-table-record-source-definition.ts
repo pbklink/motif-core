@@ -6,9 +6,9 @@
 
 import { Scan } from '../../../../scan/internal-api';
 import { PickEnum } from '../../../../sys/internal-api';
-import { GridFieldCustomHeadingsService } from '../../../field/grid-field-internal-api';
-import { GridLayoutDefinition } from '../../../layout/grid-layout-internal-api';
-import { ScanTableFieldSourceDefinition, TypedTableFieldSourceDefinition, TypedTableFieldSourceDefinitionCachingFactoryService } from '../../field-source/grid-table-field-source-internal-api';
+import { GridFieldCustomHeadingsService } from '../../../field/internal-api';
+import { GridLayoutDefinition } from '../../../layout/internal-api';
+import { ScanTableFieldSourceDefinition, TypedTableFieldSourceDefinition, TypedTableFieldSourceDefinitionCachingFactoryService } from '../../field-source/internal-api';
 import { TypedTableRecordSourceDefinition } from './typed-table-record-source-definition';
 
 /** @public */

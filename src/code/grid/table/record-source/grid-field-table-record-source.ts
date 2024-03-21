@@ -5,15 +5,15 @@
  */
 
 import { Badness, CorrectnessBadness, Integer, LockOpenListItem, Ok, Result, UnreachableCaseError, UsableListChangeTypeId } from '../../../sys/internal-api';
-import { TextFormatterService } from '../../../text-format/text-format-internal-api';
-import { GridField, GridFieldCustomHeadingsService } from '../../field/grid-field-internal-api';
+import { TextFormatterService } from '../../../text-format/internal-api';
+import { GridField, GridFieldCustomHeadingsService } from '../../field/internal-api';
 import {
     TypedTableFieldSourceDefinition, TypedTableFieldSourceDefinitionCachingFactoryService
-} from "../field-source/grid-table-field-source-internal-api";
-import { GridFieldTableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
-import { TableRecord } from '../record/grid-table-record-internal-api';
+} from "../field-source/internal-api";
+import { GridFieldTableRecordDefinition } from '../record-definition/internal-api';
+import { TableRecord } from '../record/internal-api';
 import { GridFieldTableValueSource } from '../value-source/internal-api';
-import { GridFieldTableRecordSourceDefinition } from './definition/grid-table-record-source-definition-internal-api';
+import { GridFieldTableRecordSourceDefinition } from './definition/internal-api';
 import { TypedTableRecordSource } from './typed-table-record-source';
 
 /** @public */

@@ -14,7 +14,7 @@ import {
     MarketId,
     PublisherSubscriptionDataTypeId,
     SymbolsDataMessage
-} from './common/adi-common-internal-api';
+} from './common/internal-api';
 import { LitIvemBaseDetail } from './lit-ivem-base-detail';
 
 export class SearchSymbolsLitIvemBaseDetail implements LitIvemBaseDetail {

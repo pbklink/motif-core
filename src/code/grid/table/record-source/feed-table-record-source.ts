@@ -4,15 +4,15 @@
  * License: motionite.trade/license/motif
  */
 
-import { AdiService, Feed, FeedsDataDefinition, FeedsDataItem } from '../../../adi/adi-internal-api';
+import { AdiService, Feed, FeedsDataDefinition, FeedsDataItem } from '../../../adi/internal-api';
 import { CorrectnessBadness, Integer, KeyedCorrectnessList, LockOpenListItem, UnreachableCaseError } from '../../../sys/internal-api';
-import { TextFormatterService } from '../../../text-format/text-format-internal-api';
-import { GridFieldCustomHeadingsService } from '../../field/grid-field-internal-api';
+import { TextFormatterService } from '../../../text-format/internal-api';
+import { GridFieldCustomHeadingsService } from '../../field/internal-api';
 import {
     TypedTableFieldSourceDefinition, TypedTableFieldSourceDefinitionCachingFactoryService
-} from "../field-source/grid-table-field-source-internal-api";
-import { FeedTableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
-import { TableRecord } from '../record/grid-table-record-internal-api';
+} from "../field-source/internal-api";
+import { FeedTableRecordDefinition } from '../record-definition/internal-api';
+import { TableRecord } from '../record/internal-api';
 import { FeedTableValueSource } from '../value-source/internal-api';
 import { FeedTableRecordSourceDefinition } from './definition/feed-table-record-source-definition';
 import { SingleDataItemRecordTableRecordSource } from './single-data-item-record-table-record-source';

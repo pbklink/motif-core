@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { CallOrPutId } from '../../../../adi/adi-internal-api';
+import { CallOrPutId } from '../../../../adi/internal-api';
 import { CallPutSecurityDataItemTableFieldSourceDefinition } from './call-put-security-data-item-table-field-source-definition';
 import { PrefixableSecurityDataItemTableFieldSourceDefinition } from './prefixable-security-data-item-table-field-source-definition';
 import { TypedTableFieldSourceDefinition } from './typed-table-field-source-definition';

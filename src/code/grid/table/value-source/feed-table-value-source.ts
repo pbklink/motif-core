@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { Feed } from '../../../adi/adi-internal-api';
+import { Feed } from '../../../adi/internal-api';
 import { Correctness, Integer, MultiEvent, UnreachableCaseError, ValueRecentChangeTypeId } from '../../../sys/internal-api';
 import { FeedTableFieldSourceDefinition } from '../field-source/definition/internal-api';
 import {
@@ -13,7 +13,7 @@ import {
     IntegerCorrectnessTableValue,
     StringCorrectnessTableValue,
     TableValue
-} from '../value/grid-table-value-internal-api';
+} from '../value/internal-api';
 import { TableValueSource } from './table-value-source';
 
 export class FeedTableValueSource extends TableValueSource {

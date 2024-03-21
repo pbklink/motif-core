@@ -12,7 +12,7 @@ import {
     BrokerageAccountOrdersDataDefinition,
     OrdersDataMessage,
     QueryBrokerageAccountOrdersDataDefinition
-} from "../../../common/adi-common-internal-api";
+} from "../../../common/internal-api";
 import { ZenithProtocol } from './protocol/zenith-protocol';
 import { ZenithConvert } from './zenith-convert';
 import { ZenithOrderConvert } from './zenith-order-convert';

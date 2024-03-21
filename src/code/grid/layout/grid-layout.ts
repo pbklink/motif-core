@@ -19,7 +19,7 @@ import {
     moveElementsInArray,
     newGuid,
 } from '../../sys/internal-api';
-import { GridLayoutDefinition } from './definition/grid-layout-definition-internal-api';
+import { GridLayoutDefinition } from './definition/internal-api';
 
 /**
  * Provides access to a saved layout for a Grid

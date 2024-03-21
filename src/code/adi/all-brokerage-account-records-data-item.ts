@@ -23,7 +23,7 @@ import { AllBrokerageAccountsListChangeDataItem } from './all-brokerage-accounts
 import { AllBrokerageAccountGroup } from './brokerage-account-group';
 import { BrokerageAccountGroupRecordList } from './brokerage-account-group-record-list';
 import { BrokerageAccountRecord } from './brokerage-account-record';
-import { BrokerageAccountId, BrokerageAccountRecordsSubscriptionDataDefinition } from './common/adi-common-internal-api';
+import { BrokerageAccountId, BrokerageAccountRecordsSubscriptionDataDefinition } from './common/internal-api';
 import { RecordsBrokerageAccountSubscriptionDataItem } from './records-brokerage-account-subscription-data-item';
 
 export abstract class AllBrokerageAccountRecordsDataItem<Record extends BrokerageAccountRecord>

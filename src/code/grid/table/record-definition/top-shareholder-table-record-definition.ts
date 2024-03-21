@@ -4,8 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
-import { TopShareholder } from '../../../adi/adi-internal-api';
-import { TypedTableFieldSourceDefinition } from '../field-source/grid-table-field-source-internal-api';
+import { TopShareholder } from '../../../adi/internal-api';
+import { TypedTableFieldSourceDefinition } from '../field-source/internal-api';
 import { TypedTableRecordDefinition } from './typed-table-record-definition';
 
 export interface TopShareholderTableRecordDefinition extends TypedTableRecordDefinition {

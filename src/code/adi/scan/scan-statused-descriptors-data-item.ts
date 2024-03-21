@@ -5,7 +5,7 @@
  */
 
 import { AssertInternalError, BadnessList, ErrorCodeLogger, Integer, MultiEvent, RecordList, UnreachableCaseError, UsableListChangeTypeId } from '../../sys/internal-api';
-import { AurcChangeTypeId, DataDefinition, DataMessage, DataMessageTypeId, FeedId, ScanStatusedDescriptorsDataMessage } from '../common/adi-common-internal-api';
+import { AurcChangeTypeId, DataDefinition, DataMessage, DataMessageTypeId, FeedId, ScanStatusedDescriptorsDataMessage } from '../common/internal-api';
 import { FeedSubscriptionDataItem } from '../feed/internal-api';
 import { ScanStatusedDescriptor } from './scan-statused-descriptor';
 

@@ -11,11 +11,11 @@ import {
     Ok,
     Result
 } from "../../../../sys/internal-api";
-import { AllowedGridField, GridField, GridFieldCustomHeadingsService } from '../../../field/grid-field-internal-api';
-import { GridLayoutDefinition } from '../../../layout/grid-layout-internal-api';
+import { AllowedGridField, GridField, GridFieldCustomHeadingsService } from '../../../field/internal-api';
+import { GridLayoutDefinition } from '../../../layout/internal-api';
 import {
     TableFieldSourceDefinitionCachingFactoryService
-} from "../../field-source/grid-table-field-source-internal-api";
+} from "../../field-source/internal-api";
 
 export abstract class TableRecordSourceDefinition<TypeId, TableFieldSourceDefinitionTypeId> {
     constructor(

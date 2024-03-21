@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { StringId, Strings } from '../res/res-internal-api';
+import { StringId, Strings } from '../res/internal-api';
 import {
     CorrectnessId,
     Decimal,
@@ -60,7 +60,7 @@ import {
     TimeInForceId,
     TradingEnvironment,
     TradingEnvironmentId
-} from "./common/adi-common-internal-api";
+} from "./common/internal-api";
 
 export class Order implements BrokerageAccountRecord {
     private _id: OrderId;

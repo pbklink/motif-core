@@ -18,7 +18,7 @@ import {
     PriceRenderValue,
     RenderValue,
     StringRenderValue
-} from '../../../services/services-internal-api';
+} from '../../../services/internal-api';
 import { Decimal, Integer, newUndefinableDate, newUndefinableDecimal } from '../../../sys/internal-api';
 import { CorrectnessTableValue } from './table-value';
 

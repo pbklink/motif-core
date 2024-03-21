@@ -13,8 +13,8 @@ import {
     SearchSymbolsLitIvemFullDetail,
     SymbolFieldId,
     SymbolsDataItem
-} from '../../../adi/adi-internal-api';
-import { CallPut } from '../../../services/services-internal-api';
+} from '../../../adi/internal-api';
+import { CallPut } from '../../../services/internal-api';
 import {
     AssertInternalError,
     Badness,
@@ -27,13 +27,13 @@ import {
     UsableListChangeTypeId,
     newDecimal
 } from '../../../sys/internal-api';
-import { TextFormatterService } from '../../../text-format/text-format-internal-api';
-import { GridFieldCustomHeadingsService } from '../../field/grid-field-internal-api';
+import { TextFormatterService } from '../../../text-format/internal-api';
+import { GridFieldCustomHeadingsService } from '../../field/internal-api';
 import {
     TypedTableFieldSourceDefinition, TypedTableFieldSourceDefinitionCachingFactoryService
-} from "../field-source/grid-table-field-source-internal-api";
-import { CallPutTableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
-import { TableRecord } from '../record/grid-table-record-internal-api';
+} from "../field-source/internal-api";
+import { CallPutTableRecordDefinition } from '../record-definition/internal-api';
+import { TableRecord } from '../record/internal-api';
 import { CallPutTableValueSource, SecurityDataItemTableValueSource } from '../value-source/internal-api';
 import { CallPutFromUnderlyingTableRecordSourceDefinition } from './definition/call-put-from-underlying-table-record-source-definition';
 import { SingleDataItemTableRecordSource } from './single-data-item-table-record-source';

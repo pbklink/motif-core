@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { LitIvemId, RankScoredLitIvemIdList } from '../adi/adi-internal-api';
+import { LitIvemId, RankScoredLitIvemIdList } from '../adi/internal-api';
 import { RankedLitIvemId } from '../adi/scan/ranked-lit-ivem-id';
 import {
     AssertInternalError,
@@ -25,7 +25,7 @@ import {
     moveElementsInArray,
     rangedAnyBinarySearch
 } from "../sys/internal-api";
-import { RankedLitIvemIdListDefinition } from './definition/ranked-lit-ivem-id-list-definition-internal-api';
+import { RankedLitIvemIdListDefinition } from './definition/internal-api';
 import { RankedLitIvemIdList } from './ranked-lit-ivem-id-list';
 
 /** @public */

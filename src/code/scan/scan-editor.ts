@@ -17,10 +17,10 @@ import {
     UpdateScanDataDefinition,
     UpdateScanDataItem,
     ZenithEncodedScanFormula
-} from '../adi/adi-internal-api';
+} from '../adi/internal-api';
 import { CreateScanDataItem } from '../adi/scan/create-scan-data-item';
 import { NotificationChannelsService } from '../notification-channel/notification-channels-service';
-import { StringId, Strings } from '../res/res-internal-api';
+import { StringId, Strings } from '../res/internal-api';
 import { SymbolsService } from '../services/symbols-service';
 import {
     AssertInternalError,

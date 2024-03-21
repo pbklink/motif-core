@@ -43,8 +43,8 @@ import {
     RoutedIvemId,
     TimeInForce,
     TimeInForceId
-} from "../adi/adi-internal-api";
-import { StringId, Strings } from '../res/res-internal-api';
+} from "../adi/internal-api";
+import { StringId, Strings } from '../res/internal-api';
 import {
     AssertInternalError,
     concatenateArrayUniquely,
@@ -67,7 +67,7 @@ import {
 } from "../sys/internal-api";
 import { PriceStepperIncubator } from './price-stepper-incubator';
 import { SecurityPriceStepper } from './security-price-stepper';
-import { ScalarSettings } from './settings/settings-internal-api';
+import { ScalarSettings } from './settings/internal-api';
 import { SymbolDetailCacheService } from './symbol-detail-cache-service';
 
 /* eslint-disable @typescript-eslint/naming-convention, no-underscore-dangle, id-blacklist, id-match */

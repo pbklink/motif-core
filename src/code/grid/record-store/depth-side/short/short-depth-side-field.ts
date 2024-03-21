@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { DepthLevelsDataItem } from '../../../../adi/adi-internal-api';
+import { DepthLevelsDataItem } from '../../../../adi/internal-api';
 import { EnumInfoOutOfOrderError, GridFieldHorizontalAlign, Integer, UnreachableCaseError } from '../../../../sys/internal-api';
 
 export const enum ShortDepthSideFieldId {

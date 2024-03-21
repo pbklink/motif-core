@@ -11,15 +11,15 @@ import {
     RevRecordValueRecentChangeTypeId,
     StandardTextPainter
 } from '@xilytix/revgrid';
-import { HigherLowerId, OrderSideId } from '../../../../adi/adi-internal-api';
-import { ColorRenderValue, ColorScheme, RenderValue, SettingsService } from '../../../../services/services-internal-api';
+import { HigherLowerId, OrderSideId } from '../../../../adi/internal-api';
+import { ColorRenderValue, ColorScheme, RenderValue, SettingsService } from '../../../../services/internal-api';
 import { CorrectnessId, IndexSignatureHack, Integer, UnreachableCaseError } from '../../../../sys/internal-api';
-import { TextFormatterService } from '../../../../text-format/text-format-internal-api';
-import { GridField } from '../../../field/grid-field-internal-api';
-import { DepthRecord, DepthRecordRenderValue } from '../../../record-store/grid-record-store-internal-api';
-import { AdaptedRevgrid } from '../../adapted-revgrid/grid-revgrid-adapted-revgrid-internal-api';
+import { TextFormatterService } from '../../../../text-format/internal-api';
+import { GridField } from '../../../field/internal-api';
+import { DepthRecord, DepthRecordRenderValue } from '../../../record-store/internal-api';
+import { AdaptedRevgrid } from '../../adapted-revgrid/internal-api';
 import { RecordGridDataServer } from '../../record-grid/record-grid-data-server';
-import { AdaptedRevgridBehavioredColumnSettings } from '../../settings/grid-revgrid-settings-internal-api';
+import { AdaptedRevgridBehavioredColumnSettings } from '../../settings/internal-api';
 import { RenderValueCellPainter } from './render-value-cell-painter';
 
 export class TextRenderValueCellPainter extends RenderValueCellPainter {

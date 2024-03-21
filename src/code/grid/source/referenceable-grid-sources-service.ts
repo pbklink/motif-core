@@ -5,9 +5,9 @@
  */
 
 import { JsonElement, LockOpenList, mSecsPerSec, SysTick } from '../../sys/internal-api';
-import { ReferenceableGridLayoutsService } from '../layout/grid-layout-internal-api';
+import { ReferenceableGridLayoutsService } from '../layout/internal-api';
 import { TableFieldSourceDefinitionFactory, TableRecordSourceFactory } from '../table/internal-api';
-import { ReferenceableGridSourceDefinition } from './definition/grid-source-definition-internal-api';
+import { ReferenceableGridSourceDefinition } from './definition/internal-api';
 import { ReferenceableGridSource } from './referenceable-grid-source';
 
 export class ReferenceableGridSourcesService<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, Badness> extends LockOpenList<ReferenceableGridSource<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, Badness>> {

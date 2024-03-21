@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { DepthDataItem, DepthStyleId, OrderSide, OrderSideId } from '../../../../adi/adi-internal-api';
+import { DepthDataItem, DepthStyleId, OrderSide, OrderSideId } from '../../../../adi/internal-api';
 import { SessionInfoService } from '../../../../services/session-info-service';
 import {
     AssertInternalError,

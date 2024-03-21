@@ -20,22 +20,22 @@ import {
     Subgrid,
     ViewCell
 } from '@xilytix/revgrid';
-import { SettingsService } from '../../../services/services-internal-api';
+import { SettingsService } from '../../../services/internal-api';
 import {
     AssertInternalError,
     Integer,
     MultiEvent,
     UnreachableCaseError
 } from '../../../sys/internal-api';
-import { GridField } from '../../field/grid-field-internal-api';
+import { GridField } from '../../field/internal-api';
 import {
     GridLayout,
     GridLayoutDefinition,
     GridSortDefinition,
-} from '../../layout/grid-layout-internal-api';
+} from '../../layout/internal-api';
 import { TypedGridRowOrderDefinition } from '../../typed/internal-api';
-import { AdaptedRevgrid, SingleHeadingGridDataServer } from '../adapted-revgrid/grid-revgrid-adapted-revgrid-internal-api';
-import { AdaptedRevgridBehavioredColumnSettings } from '../settings/grid-revgrid-settings-internal-api';
+import { AdaptedRevgrid, SingleHeadingGridDataServer } from '../adapted-revgrid/internal-api';
+import { AdaptedRevgridBehavioredColumnSettings } from '../settings/internal-api';
 import { RecordGridDataServer } from './record-grid-data-server';
 import { RecordGridSchemaServer } from './record-grid-schema-server';
 

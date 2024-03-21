@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { StringId, Strings } from '../res/res-internal-api';
+import { StringId, Strings } from '../res/internal-api';
 import { EnumInfoOutOfOrderError, Err, ErrorCode, JsonElement, JsonElementErr, Ok, Result } from '../sys/internal-api';
 
 /** @public */

@@ -4,8 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
-import { GridField } from '../../field/grid-field-internal-api';
-import { TypedTableFieldSourceDefinition } from '../field-source/grid-table-field-source-internal-api';
+import { GridField } from '../../field/internal-api';
+import { TypedTableFieldSourceDefinition } from '../field-source/internal-api';
 import { PayloadTableRecordDefinition } from './payload-table-record-definition';
 import { TypedTableRecordDefinition } from './typed-table-record-definition';
 

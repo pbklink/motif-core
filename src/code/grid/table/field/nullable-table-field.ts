@@ -18,7 +18,7 @@ import {
     NullableNumberCorrectnessTableValue,
     NullableStringCorrectnessTableValue,
     TableValue
-} from "../value/grid-table-value-internal-api";
+} from "../value/internal-api";
 import { CorrectnessTableField } from './table-field';
 
 export abstract class NullableDataItemTableField extends CorrectnessTableField {

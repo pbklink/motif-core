@@ -5,7 +5,7 @@
  */
 
 import { Correctness, CorrectnessRecord, MultiEvent } from '../../../sys/internal-api';
-import { TableValue } from '../value/grid-table-value-internal-api';
+import { TableValue } from '../value/internal-api';
 import { TableValueSource } from './table-value-source';
 
 export abstract class CorrectnessTableValueSource<Record extends CorrectnessRecord> extends TableValueSource {

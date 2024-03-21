@@ -6,9 +6,9 @@
 
 import { CommaText, CommaTextErr, Err, ErrorCode, Integer, Ok, Result } from '../../../../sys/internal-api';
 // import { GridRecordFieldState } from '../../../record/grid-record-internal-api';
-import { GridFieldSourceDefinition } from '../../../field/grid-field-internal-api';
-import { TableField } from '../../field/grid-table-field-internal-api';
-import { TableValue } from '../../value/grid-table-value-internal-api';
+import { GridFieldSourceDefinition } from '../../../field/internal-api';
+import { TableField } from '../../field/internal-api';
+import { TableValue } from '../../value/internal-api';
 
 export abstract class TableFieldSourceDefinition<TypeId> extends GridFieldSourceDefinition {
     readonly fieldDefinitions: TableField.Definition[];

@@ -5,8 +5,8 @@
  */
 
 import { UiAction } from '@xilytix/ui-action';
-import { ExchangeId, IvemId } from '../adi/adi-internal-api';
-import { SymbolsService } from '../services/services-internal-api';
+import { ExchangeId, IvemId } from '../adi/internal-api';
+import { SymbolsService } from '../services/internal-api';
 import { MultiEvent } from '../sys/internal-api';
 
 export class IvemIdUiAction extends UiAction {

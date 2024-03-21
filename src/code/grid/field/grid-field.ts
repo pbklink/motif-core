@@ -4,8 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
-import { StringId, Strings } from '../../res/res-internal-api';
-import { RenderValue } from '../../services/services-internal-api';
+import { StringId, Strings } from '../../res/internal-api';
+import { RenderValue } from '../../services/internal-api';
 import {
     AssertInternalError,
     EnumInfoOutOfOrderError,

@@ -5,7 +5,7 @@
  */
 
 import { Badness } from '../../sys/internal-api';
-import { ReferenceableGridSourcesService } from '../source/grid-source-internal-api';
+import { ReferenceableGridSourcesService } from '../source/internal-api';
 import { TypedTableFieldSourceDefinition, TypedTableRecordSourceDefinition } from '../table/internal-api';
 
 export class TypedReferenceableGridSourcesService extends ReferenceableGridSourcesService<TypedTableRecordSourceDefinition.TypeId, TypedTableFieldSourceDefinition.TypeId, Badness> {}

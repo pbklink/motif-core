@@ -4,8 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
-import { DayTradesDataItem, MovementId, TradeFlagId } from '../../../adi/adi-internal-api';
-import { StringId, Strings } from '../../../res/res-internal-api';
+import { DayTradesDataItem, MovementId, TradeFlagId } from '../../../adi/internal-api';
+import { StringId, Strings } from '../../../res/internal-api';
 import {
     DayTradesDataItemRecordTypeIdRenderValue,
     IntegerRenderValue,
@@ -19,7 +19,7 @@ import {
     TradeAffectsIdArrayRenderValue,
     TradeFlagIdArrayRenderValue,
     TrendIdRenderValue
-} from '../../../services/services-internal-api';
+} from '../../../services/internal-api';
 import {
     ComparisonResult,
     CorrectnessId,
@@ -35,8 +35,8 @@ import {
     compareUndefinableInteger,
     compareUndefinableString
 } from "../../../sys/internal-api";
-import { AllowedGridField, GridField, GridFieldDefinition, GridFieldSourceDefinition } from '../../field/grid-field-internal-api';
-import { GridLayoutDefinition } from '../../layout/grid-layout-internal-api';
+import { AllowedGridField, GridField, GridFieldDefinition, GridFieldSourceDefinition } from '../../field/internal-api';
+import { GridLayoutDefinition } from '../../layout/internal-api';
 
 /** @public */
 export abstract class DayTradesGridField extends GridField implements GridRevRecordField {

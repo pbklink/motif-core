@@ -4,9 +4,9 @@
  * License: motionite.trade/license/motif
  */
 
-import { RenderValue } from '../../../services/services-internal-api';
+import { RenderValue } from '../../../services/internal-api';
 import { CorrectnessId, GridRevRecordField } from '../../../sys/internal-api';
-import { GridField, GridFieldSourceDefinition } from '../../field/grid-field-internal-api';
+import { GridField, GridFieldSourceDefinition } from '../../field/internal-api';
 import { DepthRecord } from './depth-record';
 
 /** @public */

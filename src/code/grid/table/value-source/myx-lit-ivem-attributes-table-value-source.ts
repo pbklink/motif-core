@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { MyxLitIvemAttributes, SearchSymbolsLitIvemFullDetail, SymbolsDataItem } from '../../../adi/adi-internal-api';
+import { MyxLitIvemAttributes, SearchSymbolsLitIvemFullDetail, SymbolsDataItem } from '../../../adi/internal-api';
 import { Integer, MultiEvent, UnreachableCaseError } from '../../../sys/internal-api';
 import { MyxLitIvemAttributesTableFieldSourceDefinition } from '../field-source/definition/internal-api';
 import {
@@ -15,7 +15,7 @@ import {
     PercentageCorrectnessTableValue,
     ShortSellTypeIdArrayMyxLitIvemAttributeCorrectnessTableValue,
     TableValue
-} from '../value/grid-table-value-internal-api';
+} from '../value/internal-api';
 import { TableValueSource } from './table-value-source';
 
 export class MyxLitIvemAttributesTableValueSource extends TableValueSource {

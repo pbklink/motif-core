@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { StringId, Strings } from '../../res/res-internal-api';
+import { StringId, Strings } from '../../res/internal-api';
 import { CommaText, EnumInfoOutOfOrderError, FieldDataTypeId } from '../../sys/internal-api';
 
 export interface LitIvemAlternateCodes {

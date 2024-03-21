@@ -4,9 +4,9 @@
  * License: motionite.trade/license/motif
  */
 
-import { StringId, Strings } from '../../res/res-internal-api';
+import { StringId, Strings } from '../../res/internal-api';
 import { AssertInternalError, Badness, ComparisonResult, UnreachableCaseError } from '../../sys/internal-api';
-import { SubscribabilityExtent, SubscribabilityExtentId } from '../common/adi-common-internal-api';
+import { SubscribabilityExtent, SubscribabilityExtentId } from '../common/internal-api';
 import { PublisherSubscriptionDataItem } from './publisher-subscription-data-item';
 
 export abstract class SubscribabilityExtentSubscriptionDataItem extends PublisherSubscriptionDataItem {

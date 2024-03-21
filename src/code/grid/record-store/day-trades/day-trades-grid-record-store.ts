@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { DayTradesDataItem } from '../../../adi/adi-internal-api';
+import { DayTradesDataItem } from '../../../adi/internal-api';
 import {
     AssertInternalError,
     GridRecordStore,

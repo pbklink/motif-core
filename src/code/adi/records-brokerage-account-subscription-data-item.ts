@@ -9,7 +9,7 @@ import { BrokerageAccountGroup, SingleBrokerageAccountGroup } from './brokerage-
 import { BrokerageAccountGroupRecordList } from './brokerage-account-group-record-list';
 import { BrokerageAccountRecord } from './brokerage-account-record';
 import { BrokerageAccountSubscriptionDataItem } from './brokerage-account-subscription-data-item';
-import { DataDefinition } from './common/adi-common-internal-api';
+import { DataDefinition } from './common/internal-api';
 
 export abstract class RecordsBrokerageAccountSubscriptionDataItem<Record extends BrokerageAccountRecord>
     extends BrokerageAccountSubscriptionDataItem implements BrokerageAccountGroupRecordList<Record> {

@@ -5,7 +5,7 @@
  */
 
 import { LockOpenList } from '../../sys/internal-api';
-import { ReferenceableGridLayoutDefinition } from './definition/grid-layout-definition-internal-api';
+import { ReferenceableGridLayoutDefinition } from './definition/internal-api';
 import { ReferenceableGridLayout } from './referenceable-grid-layout';
 
 export class ReferenceableGridLayoutsService extends LockOpenList<ReferenceableGridLayout> {

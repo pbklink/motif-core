@@ -4,9 +4,9 @@
  * License: motionite.trade/license/motif
  */
 
-import { NotificationChannel, ScanAttachedNotificationChannel } from '../adi/adi-internal-api';
+import { NotificationChannel, ScanAttachedNotificationChannel } from '../adi/internal-api';
 import { LockOpenNotificationChannel } from '../notification-channel/internal-api';
-import { StringId, Strings } from '../res/res-internal-api';
+import { StringId, Strings } from '../res/internal-api';
 import { AssertInternalError, EnumInfoOutOfOrderError, FieldDataTypeId, Integer, MultiEvent, ValueRecentChangeTypeId } from '../sys/internal-api';
 
 export class LockerScanAttachedNotificationChannel {

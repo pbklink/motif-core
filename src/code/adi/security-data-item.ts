@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { StringId, Strings } from '../res/res-internal-api';
+import { StringId, Strings } from '../res/internal-api';
 import {
     AssertInternalError,
     Decimal,
@@ -37,7 +37,7 @@ import {
     SecurityDataMessage,
     TradingState,
     TradingStates
-} from './common/adi-common-internal-api';
+} from './common/internal-api';
 import { MarketSubscriptionDataItem } from './market-subscription-data-item';
 
 export class SecurityDataItem extends MarketSubscriptionDataItem {

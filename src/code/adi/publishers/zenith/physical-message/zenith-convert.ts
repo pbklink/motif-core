@@ -108,7 +108,7 @@ import {
     TrailingStopLossOrderConditionTypeId,
     TransactionsDataMessage,
     ZenithProtocolCommon
-} from '../../../common/adi-common-internal-api';
+} from '../../../common/internal-api';
 import { ZenithProtocol } from './protocol/zenith-protocol';
 
 export namespace ZenithConvert {

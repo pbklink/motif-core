@@ -5,7 +5,7 @@
  */
 
 import { AssertInternalError, Integer, UsableListChangeTypeId } from '../sys/internal-api';
-import { DataDefinition, DataMessage, DataMessageTypeId, MarketId, MarketsDataMessage } from './common/adi-common-internal-api';
+import { DataDefinition, DataMessage, DataMessageTypeId, MarketId, MarketsDataMessage } from './common/internal-api';
 import { DataItem } from './data-item/internal-api';
 import { Market } from './market';
 import { RecordsPublisherSubscriptionDataItem } from './publish-subscribe/internal-api';

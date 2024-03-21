@@ -5,10 +5,10 @@
  */
 
 import { Integer } from '../../../sys/internal-api';
-import { TextFormatterService } from '../../../text-format/text-format-internal-api';
-import { GridField, GridFieldCustomHeadingsService } from '../../field/grid-field-internal-api';
+import { TextFormatterService } from '../../../text-format/internal-api';
+import { GridField, GridFieldCustomHeadingsService } from '../../field/internal-api';
 // import { GridRecordFieldState } from '../../record/grid-record-internal-api';
-import { TableField } from '../field/grid-table-field-internal-api';
+import { TableField } from '../field/internal-api';
 import { TableFieldSourceDefinition } from './definition/internal-api';
 
 export class TableFieldSource<TypeId> {

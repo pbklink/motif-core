@@ -8,7 +8,7 @@ import { getErrorMessage } from '../sys/internal-api';
 import { Account } from './account';
 import { AdiService } from './adi-service';
 import { BrokerageAccountsDataItem } from './brokerage-accounts-data-item';
-import { BrokerageAccountId, BrokerageAccountsDataDefinition } from './common/adi-common-internal-api';
+import { BrokerageAccountId, BrokerageAccountsDataDefinition } from './common/internal-api';
 import { DataItemIncubator } from './data-item-incubator';
 
 export class BrokerageAccountIncubator {

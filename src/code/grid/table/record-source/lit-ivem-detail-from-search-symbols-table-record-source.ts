@@ -13,7 +13,7 @@ import {
     SearchSymbolsLitIvemFullDetail,
     SymbolFieldId,
     SymbolsDataItem
-} from "../../../adi/adi-internal-api";
+} from "../../../adi/internal-api";
 import {
     AssertInternalError,
     Badness,
@@ -24,13 +24,13 @@ import {
     UnreachableCaseError,
     UsableListChangeTypeId
 } from '../../../sys/internal-api';
-import { TextFormatterService } from '../../../text-format/text-format-internal-api';
-import { GridFieldCustomHeadingsService } from '../../field/grid-field-internal-api';
+import { TextFormatterService } from '../../../text-format/internal-api';
+import { GridFieldCustomHeadingsService } from '../../field/internal-api';
 import {
     TypedTableFieldSourceDefinition, TypedTableFieldSourceDefinitionCachingFactoryService
-} from "../field-source/grid-table-field-source-internal-api";
-import { LitIvemBaseDetailTableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
-import { TableRecord } from '../record/grid-table-record-internal-api';
+} from "../field-source/internal-api";
+import { LitIvemBaseDetailTableRecordDefinition } from '../record-definition/internal-api';
+import { TableRecord } from '../record/internal-api';
 import {
     LitIvemAlternateCodesTableValueSource,
     LitIvemBaseDetailTableValueSource,
@@ -39,7 +39,7 @@ import {
 } from "../value-source/internal-api";
 import {
     LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition
-} from './definition/grid-table-record-source-definition-internal-api';
+} from './definition/internal-api';
 import { SingleDataItemTableRecordSource } from './single-data-item-table-record-source';
 
 export class LitIvemDetailFromSearchSymbolsTableRecordSource extends SingleDataItemTableRecordSource {

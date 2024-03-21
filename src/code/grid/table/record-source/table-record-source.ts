@@ -14,14 +14,14 @@ import {
     Result,
     UsableListChangeTypeId,
 } from '../../../sys/internal-api';
-import { TextFormatterService } from '../../../text-format/text-format-internal-api';
+import { TextFormatterService } from '../../../text-format/internal-api';
 import { GridFieldCustomHeadingsService } from '../../field/grid-field-custom-headings-service';
-import { AllowedGridField } from '../../field/grid-field-internal-api';
-import { TableFieldSource, TableFieldSourceDefinitionCachingFactoryService } from '../field-source/grid-table-field-source-internal-api';
-import { TableField } from '../field/grid-table-field-internal-api';
+import { AllowedGridField } from '../../field/internal-api';
+import { TableFieldSource, TableFieldSourceDefinitionCachingFactoryService } from '../field-source/internal-api';
+import { TableField } from '../field/internal-api';
 import { TableRecordDefinition } from '../record-definition/table-record-definition';
-import { TableRecord } from '../record/grid-table-record-internal-api';
-import { TableRecordSourceDefinition } from './definition/grid-table-record-source-definition-internal-api';
+import { TableRecord } from '../record/internal-api';
+import { TableRecordSourceDefinition } from './definition/internal-api';
 
 /** @public */
 export abstract class TableRecordSource<TypeId, TableFieldSourceDefinitionTypeId, Badness> implements CorrectnessState<Badness> {

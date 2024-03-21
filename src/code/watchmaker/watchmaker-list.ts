@@ -14,9 +14,9 @@ import {
     RankScoredLitIvemId,
     RankScoredLitIvemIdList,
     WatchmakerListDescriptor
-} from '../adi/adi-internal-api';
-import { StringId, Strings } from '../res/res-internal-api';
-import { RankedLitIvemIdListDirectoryItem } from '../services/services-internal-api';
+} from '../adi/internal-api';
+import { StringId, Strings } from '../res/internal-api';
+import { RankedLitIvemIdListDirectoryItem } from '../services/internal-api';
 import {
     AssertInternalError,
     Badness,

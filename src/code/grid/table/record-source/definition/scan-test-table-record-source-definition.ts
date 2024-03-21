@@ -4,16 +4,16 @@
  * License: motionite.trade/license/motif
  */
 
-import { LitIvemBaseDetail, RankedLitIvemId } from '../../../../adi/adi-internal-api';
-import { LitIvemIdExecuteScanRankedLitIvemIdListDefinition } from '../../../../ranked-lit-ivem-id-list/ranked-lit-ivem-id-list-internal-api';
-import { GridFieldCustomHeadingsService } from '../../../field/grid-field-internal-api';
-import { GridLayoutDefinition } from '../../../layout/grid-layout-internal-api';
+import { LitIvemBaseDetail, RankedLitIvemId } from '../../../../adi/internal-api';
+import { LitIvemIdExecuteScanRankedLitIvemIdListDefinition } from '../../../../ranked-lit-ivem-id-list/internal-api';
+import { GridFieldCustomHeadingsService } from '../../../field/internal-api';
+import { GridLayoutDefinition } from '../../../layout/internal-api';
 import {
     LitIvemBaseDetailTableFieldSourceDefinition,
     RankedLitIvemIdTableFieldSourceDefinition,
     TypedTableFieldSourceDefinition,
     TypedTableFieldSourceDefinitionCachingFactoryService,
-} from '../../field-source/grid-table-field-source-internal-api';
+} from '../../field-source/internal-api';
 import { RankedLitIvemIdListTableRecordSourceDefinition } from './ranked-lit-ivem-id-list-table-record-source-definition';
 
 /** @public */

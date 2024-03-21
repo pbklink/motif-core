@@ -41,7 +41,7 @@ import {
     DataItemId,
     DataMessage,
     DataMessages
-} from "./common/adi-common-internal-api";
+} from "./common/internal-api";
 import { DataItem } from './data-item/internal-api';
 import { DataItemsActivationMgr } from './data-items-activation-mgr';
 import { DayTradesDataItem } from './day-trades-data-item';
@@ -55,7 +55,7 @@ import { MarketsDataItem } from './markets-data-item';
 import { MoveOrderDataItem } from './move-order-data-item';
 import { CreateNotificationChannelDataItem, DeleteNotificationChannelDataItem, QueryNotificationChannelDataItem, QueryNotificationChannelsDataItem, QueryNotificationDistributionMethodDataItem, QueryNotificationDistributionMethodsDataItem, UpdateNotificationChannelDataItem, UpdateNotificationChannelEnabledDataItem } from './notification-channel/internal-api';
 import { PlaceOrderDataItem } from './place-order-data-item';
-import { ZenithPublisher } from './publishers/adi-publishers-internal-api';
+import { ZenithPublisher } from './publishers/internal-api';
 import { CreateScanDataItem } from './scan/create-scan-data-item';
 import { DeleteScanDataItem } from './scan/delete-scan-data-item';
 import { LitIvemIdScanMatchesDataItem } from './scan/lit-ivem-id-scan-matches-data-item';

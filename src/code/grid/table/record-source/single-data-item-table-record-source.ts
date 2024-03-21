@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { DataItem } from '../../../adi/adi-internal-api';
+import { DataItem } from '../../../adi/internal-api';
 import { TypedTableRecordSource } from './typed-table-record-source';
 
 export abstract class SingleDataItemTableRecordSource extends TypedTableRecordSource {

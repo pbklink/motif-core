@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { RankedLitIvemIdListDirectoryItem } from '../../../../services/services-internal-api';
+import { RankedLitIvemIdListDirectoryItem } from '../../../../services/internal-api';
 import { AssertInternalError, FieldDataType, FieldDataTypeId, Integer } from '../../../../sys/internal-api';
 import {
     BooleanCorrectnessTableField,
@@ -12,13 +12,13 @@ import {
     EnumCorrectnessTableField,
     StringCorrectnessTableField,
     TableField
-} from "../../field/grid-table-field-internal-api";
+} from "../../field/internal-api";
 import {
     CorrectnessTableValue,
     RankedLitIvemIdListDirectoryItemTypeIdCorrectnessTableValue,
     StringCorrectnessTableValue,
     WritableCorrectnessTableValue
-} from '../../value/grid-table-value-internal-api';
+} from '../../value/internal-api';
 import { TypedTableFieldSourceDefinition } from './typed-table-field-source-definition';
 import { TypedTableFieldSourceDefinitionCachingFactoryService } from './typed-table-field-source-definition-caching-factory-service';
 

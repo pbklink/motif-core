@@ -8,7 +8,7 @@ import { AssertInternalError, Err, ErrorCode, Guid, LockOpenListItem, Ok, Result
 import {
     GridLayoutDefinition,
     GridLayoutOrReferenceDefinition
-} from "./definition/grid-layout-definition-internal-api";
+} from "./definition/internal-api";
 import { GridLayout } from './grid-layout';
 import { ReferenceableGridLayout } from './referenceable-grid-layout';
 import { ReferenceableGridLayoutsService } from './referenceable-grid-layouts-service';

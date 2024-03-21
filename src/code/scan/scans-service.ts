@@ -4,9 +4,9 @@
  * License: motionite.trade/license/motif
  */
 
-import { AdiService } from '../adi/adi-internal-api';
+import { AdiService } from '../adi/internal-api';
 import { NotificationChannelsService } from '../notification-channel/internal-api';
-import { SymbolsService } from '../services/services-internal-api';
+import { SymbolsService } from '../services/internal-api';
 import {
     ErrorCode,
     Integer,

@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { LitIvemIdExecuteScanDataDefinition } from '../../adi/adi-internal-api';
+import { LitIvemIdExecuteScanDataDefinition } from '../../adi/internal-api';
 import { Err, ErrorCode, JsonElement, Result } from '../../sys/internal-api';
 import { RankedLitIvemIdListDefinition } from './ranked-lit-ivem-id-list-definition';
 

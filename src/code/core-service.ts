@@ -4,8 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
-import { AdiService } from './adi/adi-internal-api';
-import { CommandRegisterService } from "./command/command-internal-api";
+import { AdiService } from './adi/internal-api';
+import { CommandRegisterService } from "./command/internal-api";
 import {
     CellPainterFactoryService,
     GridFieldCustomHeadingsService,
@@ -16,12 +16,12 @@ import {
     TypedTableFieldSourceDefinitionFactory,
     TypedTableRecordSourceFactory
 } from "./grid/internal-api";
-import { KeyboardService } from "./keyboard/keyboard-internal-api";
+import { KeyboardService } from "./keyboard/internal-api";
 import { NotificationChannelsService } from './notification-channel/internal-api';
 import {
     RankedLitIvemIdListDefinitionFactoryService,
     RankedLitIvemIdListFactoryService,
-} from "./ranked-lit-ivem-id-list/ranked-lit-ivem-id-list-internal-api";
+} from "./ranked-lit-ivem-id-list/internal-api";
 import { ScansService } from './scan/internal-api';
 import {
     AppStorageService,
@@ -31,9 +31,9 @@ import {
     SettingsService,
     SymbolDetailCacheService,
     SymbolsService
-} from "./services/services-internal-api";
-import { TextFormatterService } from "./text-format/text-format-internal-api";
-import { WatchmakerService } from './watchmaker/watchmaker-internal-api';
+} from "./services/internal-api";
+import { TextFormatterService } from "./text-format/internal-api";
+import { WatchmakerService } from './watchmaker/internal-api';
 
 /** @public */
 export class CoreService {

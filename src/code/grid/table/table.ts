@@ -14,11 +14,11 @@ import {
     moveElementsInArray
 } from "../../sys/internal-api";
 import { AllowedGridField } from '../field/allowed-grid-field';
-import { TableField } from './field/grid-table-field-internal-api';
+import { TableField } from './field/internal-api';
 // import { TableFieldAndStateArrays } from './field/grid-table-field-internal-api';
-import { TableRecordDefinition } from './record-definition/grid-table-record-definition-internal-api';
+import { TableRecordDefinition } from './record-definition/internal-api';
 import { TableRecordSource } from './record-source/internal-api';
-import { TableRecord } from './record/grid-table-record-internal-api';
+import { TableRecord } from './record/internal-api';
 
 export class Table<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, Badness> {
     // openEvent: Table.OpenEventHandler;

@@ -5,7 +5,7 @@
  */
 
 import { AssertInternalError } from '../../sys/internal-api';
-import { CreateOrCopyWatchmakerListDataMessage, DataMessage, DataMessageTypeId } from '../common/adi-common-internal-api';
+import { CreateOrCopyWatchmakerListDataMessage, DataMessage, DataMessageTypeId } from '../common/internal-api';
 import { WatchmakerPublishDataItem } from './watchmaker-publish-data-item';
 
 export class LitIvemIdCreateWatchmakerListDataItem extends WatchmakerPublishDataItem {

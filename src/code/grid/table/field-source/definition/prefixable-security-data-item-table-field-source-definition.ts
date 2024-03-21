@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { SecurityDataItem } from '../../../../adi/adi-internal-api';
+import { SecurityDataItem } from '../../../../adi/internal-api';
 import {
     AssertInternalError,
     FieldDataType,
@@ -25,7 +25,7 @@ import {
     StringArrayCorrectnessTableField,
     StringCorrectnessTableField,
     TableField
-} from '../../field/grid-table-field-internal-api';
+} from '../../field/internal-api';
 import {
     CallOrPutCorrectnessTableValue,
     CorrectnessTableValue,
@@ -46,7 +46,7 @@ import {
     TradingStateAllowIdArrayCorrectnessTableValue,
     TradingStateReasonIdCorrectnessTableValue,
     UndisclosedCorrectnessTableValue
-} from '../../value/grid-table-value-internal-api';
+} from '../../value/internal-api';
 import { TypedTableFieldSourceDefinition } from './typed-table-field-source-definition';
 
 export abstract class PrefixableSecurityDataItemTableFieldSourceDefinition extends TypedTableFieldSourceDefinition {

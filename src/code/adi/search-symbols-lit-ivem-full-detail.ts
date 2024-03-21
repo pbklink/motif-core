@@ -4,13 +4,13 @@
  * License: motionite.trade/license/motif
  */
 
-import { StringId, Strings } from '../res/res-internal-api';
+import { StringId, Strings } from '../res/internal-api';
 import {
+    Decimal,
     EnumInfoOutOfOrderError,
     FieldDataTypeId,
     Integer,
     MultiEvent,
-    Decimal,
     SourceTzOffsetDate,
     isUndefinableArrayEqualUniquely,
     isUndefinableDecimalEqual
@@ -23,7 +23,7 @@ import {
     LitIvemAttributes,
     SymbolsDataMessage,
     TmcLegs
-} from './common/adi-common-internal-api';
+} from './common/internal-api';
 import { SearchSymbolsLitIvemBaseDetail } from './search-symbols-lit-ivem-base-detail';
 
 export class SearchSymbolsLitIvemFullDetail extends SearchSymbolsLitIvemBaseDetail {

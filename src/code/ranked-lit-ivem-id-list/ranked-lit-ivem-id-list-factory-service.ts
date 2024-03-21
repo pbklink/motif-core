@@ -4,17 +4,17 @@
  * License: motionite.trade/license/motif
  */
 
-import { AdiService } from '../adi/adi-internal-api';
+import { AdiService } from '../adi/internal-api';
 import { ScansService } from '../scan/internal-api';
 import { UnreachableCaseError } from '../sys/internal-api';
-import { WatchmakerService } from '../watchmaker/watchmaker-internal-api';
+import { WatchmakerService } from '../watchmaker/internal-api';
 import {
     LitIvemIdArrayRankedLitIvemIdListDefinition,
     LitIvemIdExecuteScanRankedLitIvemIdListDefinition,
     RankedLitIvemIdListDefinition,
     ScanIdRankedLitIvemIdListDefinition,
     WatchmakerListIdRankedLitIvemIdListDefinition
-} from "./definition/ranked-lit-ivem-id-list-definition-internal-api";
+} from "./definition/internal-api";
 import { LitIvemIdArrayRankedLitIvemIdList } from './lit-ivem-id-array-ranked-lit-ivem-id-list';
 import { LitIvemIdExecuteScanRankedLitIvemIdList } from './lit-ivem-id-execute-scan-ranked-lit-ivem-id-list';
 import { RankedLitIvemIdList } from './ranked-lit-ivem-id-list';

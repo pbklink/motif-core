@@ -11,7 +11,7 @@ import {
     DataChannel,
     DataChannelId,
     DataMessage
-} from "../../../common/adi-common-internal-api";
+} from "../../../common/internal-api";
 import { AccountsMessageConvert } from './accounts-message-convert';
 import { AddToWatchlistMessageConvert } from './add-to-watchlist-message-convert';
 import { AmendOrderMessageConvert } from './amend-order-message-convert';

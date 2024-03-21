@@ -6,7 +6,7 @@
 
 import { ComparableList, GridRecordInvalidatedValue, Integer } from '../../../sys/internal-api';
 import { TableValueSource } from '../value-source/table-value-source';
-import { TableValuesRecord } from '../value/grid-table-value-internal-api';
+import { TableValuesRecord } from '../value/internal-api';
 import { TableValue } from '../value/table-value';
 
 export class TableRecord extends TableValuesRecord {

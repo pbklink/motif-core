@@ -11,9 +11,9 @@ import {
     GridLayoutOrReferenceDefinition,
     ReferenceableGridLayout,
     ReferenceableGridLayoutsService
-} from "../layout/grid-layout-internal-api";
+} from "../layout/internal-api";
 import { Table, TableFieldSourceDefinition, TableFieldSourceDefinitionFactory, TableRecordSource, TableRecordSourceDefinition, TableRecordSourceFactory } from '../table/internal-api';
-import { GridRowOrderDefinition, GridSourceDefinition } from './definition/grid-source-definition-internal-api';
+import { GridRowOrderDefinition, GridSourceDefinition } from './definition/internal-api';
 
 /** @public */
 export class GridSource<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, Badness>

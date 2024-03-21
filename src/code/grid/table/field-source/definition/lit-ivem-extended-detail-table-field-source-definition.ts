@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { SearchSymbolsLitIvemFullDetail } from '../../../../adi/adi-internal-api';
+import { SearchSymbolsLitIvemFullDetail } from '../../../../adi/internal-api';
 import {
     AssertInternalError,
     FieldDataType,
@@ -22,7 +22,7 @@ import {
     StringArrayCorrectnessTableField,
     StringCorrectnessTableField,
     TableField
-} from '../../field/grid-table-field-internal-api';
+} from '../../field/internal-api';
 import {
     CallOrPutIdCorrectnessTableValue,
     CorrectnessTableValue,
@@ -35,7 +35,7 @@ import {
     SourceTzOffsetDateCorrectnessTableValue,
     StringArrayCorrectnessTableValue,
     StringCorrectnessTableValue
-} from '../../value/grid-table-value-internal-api';
+} from '../../value/internal-api';
 import { TypedTableFieldSourceDefinition } from './typed-table-field-source-definition';
 import { TypedTableFieldSourceDefinitionCachingFactoryService } from './typed-table-field-source-definition-caching-factory-service';
 

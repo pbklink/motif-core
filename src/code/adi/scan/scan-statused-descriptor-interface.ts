@@ -5,7 +5,7 @@
  */
 
 import { Guid, Integer } from '../../sys/internal-api';
-import { ActiveFaultedStatusId } from '../common/adi-common-internal-api';
+import { ActiveFaultedStatusId } from '../common/internal-api';
 
 export interface ScanStatusedDescriptorInterface {
     readonly id: string;

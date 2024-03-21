@@ -5,7 +5,7 @@
  */
 
 import { AssertInternalError, ErrorCodeLogger, Integer, UnreachableCaseError, UsableListChangeTypeId } from '../../sys/internal-api';
-import { AurcChangeTypeId, DataDefinition, DataMessage, DataMessageTypeId, FeedId, WatchmakerListDescriptorsDataMessage } from '../common/adi-common-internal-api';
+import { AurcChangeTypeId, DataDefinition, DataMessage, DataMessageTypeId, FeedId, WatchmakerListDescriptorsDataMessage } from '../common/internal-api';
 import { KeyedCorrectnessSettableListFeedSubscriptionDataItem } from '../feed/internal-api';
 import { WatchmakerListDescriptor } from './watchmaker-list-descriptor';
 

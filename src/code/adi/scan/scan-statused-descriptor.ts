@@ -14,7 +14,7 @@ import {
     MultiEvent,
     ZenithDataError
 } from "../../sys/internal-api";
-import { ActiveFaultedStatusId, ScanStatusedDescriptorsDataMessage } from '../common/adi-common-internal-api';
+import { ActiveFaultedStatusId, ScanStatusedDescriptorsDataMessage } from '../common/internal-api';
 import { ScanStatusedDescriptorInterface } from './scan-statused-descriptor-interface';
 
 export class ScanStatusedDescriptor implements ScanStatusedDescriptorInterface {

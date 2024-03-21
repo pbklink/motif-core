@@ -5,8 +5,8 @@
  */
 
 import { UsableList } from '../../../../sys/internal-api';
-import { GridFieldCustomHeadingsService } from '../../../field/grid-field-internal-api';
-import { TypedTableFieldSourceDefinition, TypedTableFieldSourceDefinitionCachingFactoryService } from '../../field-source/grid-table-field-source-internal-api';
+import { GridFieldCustomHeadingsService } from '../../../field/internal-api';
+import { TypedTableFieldSourceDefinition, TypedTableFieldSourceDefinitionCachingFactoryService } from '../../field-source/internal-api';
 import { TypedTableRecordSourceDefinition } from './typed-table-record-source-definition';
 
 /** @public */

@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { Feed } from '../../../../adi/adi-internal-api';
+import { Feed } from '../../../../adi/internal-api';
 import {
     AssertInternalError,
     FieldDataType,
@@ -18,14 +18,14 @@ import {
     IntegerCorrectnessTableField,
     StringCorrectnessTableField,
     TableField
-} from '../../field/grid-table-field-internal-api';
+} from '../../field/internal-api';
 import {
     CorrectnessTableValue,
     FeedClassIdCorrectnessTableValue,
     FeedStatusIdCorrectnessTableValue,
     IntegerCorrectnessTableValue,
     StringCorrectnessTableValue
-} from '../../value/grid-table-value-internal-api';
+} from '../../value/internal-api';
 import { TypedTableFieldSourceDefinition } from './typed-table-field-source-definition';
 import { TypedTableFieldSourceDefinitionCachingFactoryService } from './typed-table-field-source-definition-caching-factory-service';
 

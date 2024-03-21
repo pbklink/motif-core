@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { ExchangeId, ExchangeInfo, SymbolFieldId } from '../../adi/adi-internal-api';
+import { ExchangeId, ExchangeInfo, SymbolFieldId } from '../../adi/internal-api';
 import { ExchangeSettings } from './exchange-settings';
 import { TypedKeyValueArraySettingsGroup } from './typed-key-value-array-settings-group';
 

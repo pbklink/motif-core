@@ -13,7 +13,7 @@ import {
     LitIvemId,
     SearchSymbolsDataDefinition,
     SymbolsDataMessage
-} from './common/adi-common-internal-api';
+} from './common/internal-api';
 import { PublisherSubscriptionDataItem } from './publish-subscribe/internal-api';
 import { SearchSymbolsLitIvemFullDetail } from './search-symbols-lit-ivem-full-detail';
 

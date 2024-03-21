@@ -14,20 +14,20 @@ import {
     BrokerageAccountGroup,
     BrokerageAccountGroupRecordList,
     SingleBrokerageAccountGroup
-} from '../../../adi/adi-internal-api';
+} from '../../../adi/internal-api';
 import { CorrectnessBadness, Integer, LockOpenListItem, UnreachableCaseError } from '../../../sys/internal-api';
-import { TextFormatterService } from '../../../text-format/text-format-internal-api';
-import { GridFieldCustomHeadingsService } from '../../field/grid-field-internal-api';
+import { TextFormatterService } from '../../../text-format/internal-api';
+import { GridFieldCustomHeadingsService } from '../../field/internal-api';
 import {
     TypedTableFieldSourceDefinition, TypedTableFieldSourceDefinitionCachingFactoryService
-} from '../field-source/grid-table-field-source-internal-api';
-import { BalancesTableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
-import { TableRecord } from '../record/grid-table-record-internal-api';
+} from '../field-source/internal-api';
+import { BalancesTableRecordDefinition } from '../record-definition/internal-api';
+import { TableRecord } from '../record/internal-api';
 import { BalancesTableValueSource, BrokerageAccountTableValueSource } from '../value-source/internal-api';
 import {
     BrokerageAccountGroupTableRecordSource
 } from './brokerage-account-group-table-record-source';
-import { BalancesTableRecordSourceDefinition } from './definition/grid-table-record-source-definition-internal-api';
+import { BalancesTableRecordSourceDefinition } from './definition/internal-api';
 
 export class BalancesTableRecordSource
     extends BrokerageAccountGroupTableRecordSource<Balances, BrokerageAccountGroupRecordList<Balances>> {

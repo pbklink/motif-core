@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { TopShareholder, TopShareholdersDataItem } from '../../../adi/adi-internal-api';
+import { TopShareholder, TopShareholdersDataItem } from '../../../adi/internal-api';
 import { Integer, UnreachableCaseError } from '../../../sys/internal-api';
 import { TopShareholderTableFieldSourceDefinition } from '../field-source/definition/internal-api';
 import {
@@ -12,7 +12,7 @@ import {
     IntegerCorrectnessTableValue,
     StringCorrectnessTableValue,
     TableValue
-} from "../value/grid-table-value-internal-api";
+} from "../value/internal-api";
 import { TableValueSource } from './table-value-source';
 
 export class TopShareholderTableValueSource extends TableValueSource {

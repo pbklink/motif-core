@@ -15,7 +15,7 @@ import {
     MultiEvent,
     ZenithDataError
 } from '../../sys/internal-api';
-import { WatchmakerListDescriptorsDataMessage } from '../common/adi-common-internal-api';
+import { WatchmakerListDescriptorsDataMessage } from '../common/internal-api';
 
 export class WatchmakerListDescriptor implements KeyedCorrectnessSettableListItem {
     readonly id: string;

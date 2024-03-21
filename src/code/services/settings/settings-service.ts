@@ -4,11 +4,11 @@
  * License: motionite.trade/license/motif
  */
 
-import { DataEnvironmentId } from '../../adi/adi-internal-api';
+import { DataEnvironmentId } from '../../adi/internal-api';
 import { AssertInternalError, Err, Integer, JsonElement, JsonElementErr, Logger, MultiEvent, Ok, Result, getErrorMessage, logger, mSecsPerSec } from '../../sys/internal-api';
 import { AppStorageService } from '../app-storage-service';
 import { IdleService } from '../idle-service';
-import { KeyValueStore } from '../key-value-store/services-key-value-store-internal-api';
+import { KeyValueStore } from '../key-value-store/internal-api';
 import { MotifServicesService } from '../motif-services-service';
 import { SaveManagement } from '../save-management';
 import { ColorSettings } from './color-settings';

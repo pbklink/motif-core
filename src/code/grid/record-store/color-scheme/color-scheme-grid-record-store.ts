@@ -8,7 +8,7 @@ import {
     ColorScheme,
     ColorSettings,
     SettingsService
-} from '../../../services/services-internal-api';
+} from '../../../services/internal-api';
 import {
     GridRecordIndex,
     GridRecordStore,

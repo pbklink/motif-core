@@ -4,8 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
-import { Account } from '../../../adi/adi-internal-api';
-import { TypedTableFieldSourceDefinition } from '../field-source/grid-table-field-source-internal-api';
+import { Account } from '../../../adi/internal-api';
+import { TypedTableFieldSourceDefinition } from '../field-source/internal-api';
 import { KeyedCorrectnessTableRecordDefinition } from './keyed-correctness-table-record-definition';
 import { TypedTableRecordDefinition } from './typed-table-record-definition';
 

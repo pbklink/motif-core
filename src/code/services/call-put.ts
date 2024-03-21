@@ -4,8 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
-import { ExerciseTypeId, IvemId, LitIvemId, MarketId, MarketInfo } from '../adi/adi-internal-api';
-import { StringId, Strings } from '../res/res-internal-api';
+import { ExerciseTypeId, IvemId, LitIvemId, MarketId, MarketInfo } from '../adi/internal-api';
+import { StringId, Strings } from '../res/internal-api';
 import { Decimal, EnumInfoOutOfOrderError, FieldDataTypeId, Integer, MapKey, isDecimalEqual, nullDate, nullDecimal } from '../sys/internal-api';
 
 export class CallPut {

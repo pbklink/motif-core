@@ -5,9 +5,9 @@
  */
 
 import { IndexedRecord, LockOpenListItem } from '../../sys/internal-api';
-import { ReferenceableGridLayoutsService } from '../layout/grid-layout-internal-api';
+import { ReferenceableGridLayoutsService } from '../layout/internal-api';
 import { TableFieldSourceDefinitionFactory, TableRecordSourceFactory } from '../table/internal-api';
-import { GridRowOrderDefinition, ReferenceableGridSourceDefinition } from './definition/grid-source-definition-internal-api';
+import { GridRowOrderDefinition, ReferenceableGridSourceDefinition } from './definition/internal-api';
 import { GridSource } from './grid-source';
 
 export class ReferenceableGridSource<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, Badness>

@@ -15,7 +15,7 @@ import {
     RoutedIvemId,
     TradeAffectsId,
     TradeFlagId
-} from "../adi/adi-internal-api";
+} from "../adi/internal-api";
 import {
     CorrectnessId,
     Decimal,
@@ -25,7 +25,7 @@ import {
     SourceTzOffsetDateTime,
     newUndefinableDecimal
 } from '../sys/internal-api';
-import { ColorSettings } from './settings/settings-internal-api';
+import { ColorSettings } from './settings/internal-api';
 // import { DepthRecord } from './depth-record';
 
 export abstract class RenderValue {

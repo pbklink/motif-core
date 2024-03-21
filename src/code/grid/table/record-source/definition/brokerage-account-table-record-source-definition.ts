@@ -4,11 +4,11 @@
  * License: motionite.trade/license/motif
  */
 
-import { Account, Feed } from '../../../../adi/adi-internal-api';
+import { Account, Feed } from '../../../../adi/internal-api';
 import { PickEnum } from '../../../../sys/internal-api';
-import { GridFieldCustomHeadingsService } from '../../../field/grid-field-internal-api';
-import { GridLayoutDefinition } from '../../../layout/grid-layout-internal-api';
-import { BrokerageAccountTableFieldSourceDefinition, FeedTableFieldSourceDefinition, TypedTableFieldSourceDefinition, TypedTableFieldSourceDefinitionCachingFactoryService } from '../../field-source/grid-table-field-source-internal-api';
+import { GridFieldCustomHeadingsService } from '../../../field/internal-api';
+import { GridLayoutDefinition } from '../../../layout/internal-api';
+import { BrokerageAccountTableFieldSourceDefinition, FeedTableFieldSourceDefinition, TypedTableFieldSourceDefinition, TypedTableFieldSourceDefinitionCachingFactoryService } from '../../field-source/internal-api';
 import { TypedTableRecordSourceDefinition } from './typed-table-record-source-definition';
 
 /** @public */

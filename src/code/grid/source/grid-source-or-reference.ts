@@ -5,9 +5,9 @@
  */
 
 import { AssertInternalError, Err, ErrorCode, Guid, LockOpenListItem, Ok, Result } from '../../sys/internal-api';
-import { ReferenceableGridLayoutsService } from '../layout/grid-layout-internal-api';
+import { ReferenceableGridLayoutsService } from '../layout/internal-api';
 import { TableFieldSourceDefinitionFactory, TableRecordSourceFactory } from '../table/internal-api';
-import { GridRowOrderDefinition, GridSourceDefinition, GridSourceOrReferenceDefinition } from './definition/grid-source-definition-internal-api';
+import { GridRowOrderDefinition, GridSourceDefinition, GridSourceOrReferenceDefinition } from './definition/internal-api';
 import { GridSource } from './grid-source';
 import { ReferenceableGridSource } from './referenceable-grid-source';
 import { ReferenceableGridSourcesService } from './referenceable-grid-sources-service';

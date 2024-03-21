@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { LitIvemId } from '../adi/adi-internal-api';
+import { LitIvemId } from '../adi/internal-api';
 import { RankedLitIvemId } from '../adi/scan/ranked-lit-ivem-id';
 import { BadnessList, Integer, LockOpenListItem, Result } from '../sys/internal-api';
 import { RankedLitIvemIdListDefinition } from './definition/ranked-lit-ivem-id-list-definition';

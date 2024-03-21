@@ -14,7 +14,7 @@ import {
     TradingStates,
     TradingStatesDataDefinition,
     TradingStatesDataMessage
-} from './common/adi-common-internal-api';
+} from './common/internal-api';
 import { FeedSubscriptionDataItem } from './feed/internal-api';
 
 export class TradingStatesDataItem extends FeedSubscriptionDataItem {

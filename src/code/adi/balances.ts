@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { StringId, Strings } from '../res/res-internal-api';
+import { StringId, Strings } from '../res/internal-api';
 import {
     AssertInternalError,
     CorrectnessId,
@@ -29,7 +29,7 @@ import {
     CurrencyId,
     TradingEnvironment,
     TradingEnvironmentId
-} from './common/adi-common-internal-api';
+} from './common/internal-api';
 
 export class Balances implements BrokerageAccountRecord {
     private _netBalance = Balances.initialiseValue;

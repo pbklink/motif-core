@@ -5,7 +5,7 @@
  */
 
 import { RevRecordInvalidatedValue } from '@xilytix/revgrid';
-import { DepthLevelsDataItem, OrderSideId } from '../../../../adi/adi-internal-api';
+import { DepthLevelsDataItem, OrderSideId } from '../../../../adi/internal-api';
 import {
     IntegerRenderValue,
     MarketIdRenderValue,
@@ -13,7 +13,7 @@ import {
     PriceOrRemainderRenderValue,
     PriceRenderValue,
     RenderValue
-} from '../../../../services/services-internal-api';
+} from '../../../../services/internal-api';
 import {
     GridRecordInvalidatedValue,
     Integer,

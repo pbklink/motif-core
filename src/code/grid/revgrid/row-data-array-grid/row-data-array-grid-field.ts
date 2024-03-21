@@ -4,9 +4,9 @@
  * License: motionite.trade/license/motif
  */
 
-import { RenderValue } from '../../../services/services-internal-api';
+import { RenderValue } from '../../../services/internal-api';
 import { AssertInternalError, IndexedRecord } from '../../../sys/internal-api';
-import { GridField } from '../../field/grid-field-internal-api';
+import { GridField } from '../../field/internal-api';
 
 export class RowDataArrayGridField extends GridField {
     override getViewValue(_record: IndexedRecord): RenderValue {

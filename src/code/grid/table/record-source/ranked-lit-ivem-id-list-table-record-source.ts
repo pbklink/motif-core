@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { AdiService, RankedLitIvemId } from '../../../adi/adi-internal-api';
+import { AdiService, RankedLitIvemId } from '../../../adi/internal-api';
 import {
     LitIvemIdArrayRankedLitIvemIdListDefinition,
     LitIvemIdExecuteScanRankedLitIvemIdListDefinition,
@@ -12,18 +12,18 @@ import {
     RankedLitIvemIdListDefinition,
     RankedLitIvemIdListFactoryService,
     ScanIdRankedLitIvemIdListDefinition
-} from "../../../ranked-lit-ivem-id-list/ranked-lit-ivem-id-list-internal-api";
+} from "../../../ranked-lit-ivem-id-list/internal-api";
 import { SymbolDetailCacheService } from '../../../services/symbol-detail-cache-service';
 import { AssertInternalError, CorrectnessBadness, ErrorCode, Integer, LockOpenListItem, NotImplementedError, Ok, Result, UnreachableCaseError } from '../../../sys/internal-api';
-import { TextFormatterService } from '../../../text-format/text-format-internal-api';
-import { GridFieldCustomHeadingsService } from '../../field/grid-field-internal-api';
+import { TextFormatterService } from '../../../text-format/internal-api';
+import { GridFieldCustomHeadingsService } from '../../field/internal-api';
 import {
     TypedTableFieldSourceDefinition, TypedTableFieldSourceDefinitionCachingFactoryService
-} from "../field-source/grid-table-field-source-internal-api";
-import { RankedLitIvemIdTableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
-import { TableRecord } from '../record/grid-table-record-internal-api';
+} from "../field-source/internal-api";
+import { RankedLitIvemIdTableRecordDefinition } from '../record-definition/internal-api';
+import { TableRecord } from '../record/internal-api';
 import { LitIvemBaseDetailTableValueSource, RankedLitIvemIdTableValueSource, SecurityDataItemTableValueSource } from '../value-source/internal-api';
-import { RankedLitIvemIdListTableRecordSourceDefinition, ScanTestTableRecordSourceDefinition, WatchlistTableRecordSourceDefinition } from './definition/grid-table-record-source-definition-internal-api';
+import { RankedLitIvemIdListTableRecordSourceDefinition, ScanTestTableRecordSourceDefinition, WatchlistTableRecordSourceDefinition } from './definition/internal-api';
 import { PromisedLitIvemBaseDetail } from './promised-lit-ivem-base-detail';
 import { SubscribeBadnessListTableRecordSource } from './subscribe-badness-list-table-record-source';
 

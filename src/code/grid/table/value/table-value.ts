@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { IvemId, LitIvemId } from '../../../adi/adi-internal-api';
+import { IvemId, LitIvemId } from '../../../adi/internal-api';
 import {
     BooleanRenderValue,
     DateRenderValue,
@@ -25,7 +25,7 @@ import {
     SourceTzOffsetDateTimeRenderValue,
     StringArrayRenderValue,
     StringRenderValue
-} from '../../../services/services-internal-api';
+} from '../../../services/internal-api';
 import {
     CorrectnessId,
     Decimal,

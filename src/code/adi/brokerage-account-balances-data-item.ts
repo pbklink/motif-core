@@ -18,7 +18,7 @@ import {
 } from "../sys/internal-api";
 import { Balances } from './balances';
 import { BrokerageAccountGroupRecordList } from './brokerage-account-group-record-list';
-import { BalancesDataMessage, CurrencyId, DataMessage, DataMessageTypeId } from './common/adi-common-internal-api';
+import { BalancesDataMessage, CurrencyId, DataMessage, DataMessageTypeId } from './common/internal-api';
 import { RecordsBrokerageAccountSubscriptionDataItem } from './records-brokerage-account-subscription-data-item';
 
 export class BrokerageAccountBalancesDataItem

@@ -4,16 +4,16 @@
  * License: motionite.trade/license/motif
  */
 
-import { RankedLitIvemIdListDirectory } from '../../../../ranked-lit-ivem-id-list/ranked-lit-ivem-id-list-internal-api';
-import { RankedLitIvemIdListDirectoryItem } from '../../../../services/services-internal-api';
+import { RankedLitIvemIdListDirectory } from '../../../../ranked-lit-ivem-id-list/internal-api';
+import { RankedLitIvemIdListDirectoryItem } from '../../../../services/internal-api';
 import { PickEnum } from '../../../../sys/internal-api';
-import { GridFieldCustomHeadingsService } from '../../../field/grid-field-internal-api';
-import { GridLayoutDefinition } from '../../../layout/grid-layout-internal-api';
+import { GridFieldCustomHeadingsService } from '../../../field/internal-api';
+import { GridLayoutDefinition } from '../../../layout/internal-api';
 import {
     RankedLitIvemIdListDirectoryItemTableFieldSourceDefinition,
     TypedTableFieldSourceDefinition,
     TypedTableFieldSourceDefinitionCachingFactoryService,
-} from '../../field-source/grid-table-field-source-internal-api';
+} from '../../field-source/internal-api';
 import { TypedTableRecordSourceDefinition } from './typed-table-record-source-definition';
 
 /** @public */

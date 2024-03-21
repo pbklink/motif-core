@@ -4,8 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
-import { ExchangeId, IvemClassId, LitIvemAlternateCodes, LitIvemBaseDetail, LitIvemId, MarketId, PublisherSubscriptionDataTypeId } from '../../../adi/adi-internal-api';
-import { StringId, Strings } from '../../../res/res-internal-api';
+import { ExchangeId, IvemClassId, LitIvemAlternateCodes, LitIvemBaseDetail, LitIvemId, MarketId, PublisherSubscriptionDataTypeId } from '../../../adi/internal-api';
+import { StringId, Strings } from '../../../res/internal-api';
 import { SymbolDetailCacheService } from '../../../services/symbol-detail-cache-service';
 import { AssertInternalError, MultiEvent, isArrayEqualUniquely } from '../../../sys/internal-api';
 

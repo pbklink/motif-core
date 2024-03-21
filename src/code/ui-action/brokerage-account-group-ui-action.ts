@@ -5,7 +5,7 @@
  */
 
 import { UiAction } from '@xilytix/ui-action';
-import { AllBrokerageAccountGroup, BrokerageAccountGroup } from '../adi/adi-internal-api';
+import { AllBrokerageAccountGroup, BrokerageAccountGroup } from '../adi/internal-api';
 import { MultiEvent } from '../sys/internal-api';
 
 export class BrokerageAccountGroupUiAction extends UiAction {

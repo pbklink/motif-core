@@ -5,7 +5,7 @@
  */
 
 import { Integer, LockOpenListItem } from '../../sys/internal-api';
-import { ReferenceableGridLayoutDefinition } from './definition/grid-layout-definition-internal-api';
+import { ReferenceableGridLayoutDefinition } from './definition/internal-api';
 import { GridLayout } from './grid-layout';
 
 /** @public */

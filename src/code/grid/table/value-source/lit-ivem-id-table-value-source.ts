@@ -4,10 +4,10 @@
  * License: motionite.trade/license/motif
  */
 
-import { LitIvemId } from '../../../adi/adi-internal-api';
+import { LitIvemId } from '../../../adi/internal-api';
 import { Integer, UnreachableCaseError } from '../../../sys/internal-api';
 import { LitIvemIdTableFieldSourceDefinition } from '../field-source/definition/internal-api';
-import { DataEnvironmentIdTableValue, LitIvemIdTableValue, MarketIdTableValue, StringTableValue, TableValue } from '../value/grid-table-value-internal-api';
+import { DataEnvironmentIdTableValue, LitIvemIdTableValue, MarketIdTableValue, StringTableValue, TableValue } from '../value/internal-api';
 import { TableValueSource } from './table-value-source';
 
 export class LitIvemIdTableValueSource extends TableValueSource {

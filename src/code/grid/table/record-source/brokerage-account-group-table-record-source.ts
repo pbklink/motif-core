@@ -8,14 +8,14 @@ import {
     BrokerageAccountGroup,
     BrokerageAccountGroupRecordList,
     BrokerageAccountRecord
-} from "../../../adi/adi-internal-api";
+} from "../../../adi/internal-api";
 import { CorrectnessBadness } from '../../../sys/internal-api';
-import { TextFormatterService } from '../../../text-format/text-format-internal-api';
-import { GridFieldCustomHeadingsService } from '../../field/grid-field-internal-api';
+import { TextFormatterService } from '../../../text-format/internal-api';
+import { GridFieldCustomHeadingsService } from '../../field/internal-api';
 import {
     TypedTableFieldSourceDefinition, TypedTableFieldSourceDefinitionCachingFactoryService
-} from "../field-source/grid-table-field-source-internal-api";
-import { BrokerageAccountGroupTableRecordSourceDefinition } from './definition/grid-table-record-source-definition-internal-api';
+} from "../field-source/internal-api";
+import { BrokerageAccountGroupTableRecordSourceDefinition } from './definition/internal-api';
 import { SingleDataItemRecordTableRecordSource } from './single-data-item-record-table-record-source';
 
 export abstract class BrokerageAccountGroupTableRecordSource<

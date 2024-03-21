@@ -5,7 +5,7 @@
  */
 
 import { Badness, Correctness, CorrectnessId, MultiEvent } from '../sys/internal-api';
-import { MarketId, MarketInfo, TradingStates, TradingStatesDataDefinition } from './common/adi-common-internal-api';
+import { MarketId, MarketInfo, TradingStates, TradingStatesDataDefinition } from './common/internal-api';
 import { DataItem } from './data-item/internal-api';
 import { TradingStatesDataItem } from './trading-states-data-item';
 

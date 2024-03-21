@@ -4,8 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
-import { ActiveFaultedStatusId, NotificationChannel, NotificationDistributionMethodId, ZenithProtocolCommon } from '../adi/adi-internal-api';
-import { StringId, Strings } from '../res/res-internal-api';
+import { ActiveFaultedStatusId, NotificationChannel, NotificationDistributionMethodId, ZenithProtocolCommon } from '../adi/internal-api';
+import { StringId, Strings } from '../res/internal-api';
 import { AssertInternalError, EnumInfoOutOfOrderError, FieldDataTypeId, Integer, LockOpenListItem, LockOpenManager, MapKey, MultiEvent, Ok, Result, ValueRecentChangeTypeId } from '../sys/internal-api';
 
 export class LockOpenNotificationChannel implements LockOpenListItem<LockOpenNotificationChannel> {

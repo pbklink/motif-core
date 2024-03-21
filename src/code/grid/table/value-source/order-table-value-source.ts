@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { Order } from '../../../adi/adi-internal-api';
+import { Order } from '../../../adi/internal-api';
 import { Integer, MultiEvent, UnreachableCaseError } from '../../../sys/internal-api';
 import { OrderTableFieldSourceDefinition } from '../field-source/definition/internal-api';
 import {
@@ -20,7 +20,7 @@ import {
     StringArrayCorrectnessTableValue,
     StringCorrectnessTableValue,
     TableValue
-} from '../value/grid-table-value-internal-api';
+} from '../value/internal-api';
 import { CorrectnessTableValueSource } from './correctness-table-value-source';
 import { TableValueSource } from './table-value-source';
 

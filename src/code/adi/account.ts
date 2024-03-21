@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { StringId, Strings } from '../res/res-internal-api';
+import { StringId, Strings } from '../res/internal-api';
 import {
     Correctness,
     CorrectnessId,
@@ -29,7 +29,7 @@ import {
     FeedStatus,
     TradingEnvironment,
     TradingEnvironmentId
-} from './common/adi-common-internal-api';
+} from './common/internal-api';
 import { TradingFeed } from './feed/internal-api';
 
 export class Account implements KeyedCorrectnessListItem {

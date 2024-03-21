@@ -5,10 +5,10 @@
  */
 
 import { CellPainter, DatalessViewCell } from '@xilytix/revgrid';
-import { RenderValue } from '../../../services/services-internal-api';
-import { GridField } from '../../field/grid-field-internal-api';
-import { RecordGridDataServer } from '../record-grid/grid-revgrid-record-grid-internal-api';
-import { AdaptedRevgridBehavioredColumnSettings } from '../settings/grid-revgrid-settings-internal-api';
+import { RenderValue } from '../../../services/internal-api';
+import { GridField } from '../../field/internal-api';
+import { RecordGridDataServer } from '../record-grid/internal-api';
+import { AdaptedRevgridBehavioredColumnSettings } from '../settings/internal-api';
 import { RenderValueCellPainter } from './render-value/render-value-cell-painter';
 
 export class RenderValueRecordGridCellPainter<RVCP extends RenderValueCellPainter> implements CellPainter<AdaptedRevgridBehavioredColumnSettings, GridField> {

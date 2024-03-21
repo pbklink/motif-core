@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { StringId, Strings } from '../../../../res/res-internal-api';
+import { StringId, Strings } from '../../../../res/internal-api';
 import {
     EnumInfoOutOfOrderError,
     Err,
@@ -16,8 +16,8 @@ import {
     Result,
     compareNumber
 } from "../../../../sys/internal-api";
-import { GridFieldCustomHeadingsService } from '../../../field/grid-field-internal-api';
-import { TypedTableFieldSourceDefinition, TypedTableFieldSourceDefinitionCachingFactoryService } from '../../field-source/grid-table-field-source-internal-api';
+import { GridFieldCustomHeadingsService } from '../../../field/internal-api';
+import { TypedTableFieldSourceDefinition, TypedTableFieldSourceDefinitionCachingFactoryService } from '../../field-source/internal-api';
 import { TableRecordSourceDefinition } from './table-record-source-definition';
 
 export abstract class TypedTableRecordSourceDefinition extends TableRecordSourceDefinition<TypedTableRecordSourceDefinition.TypeId, TypedTableFieldSourceDefinition.TypeId> {

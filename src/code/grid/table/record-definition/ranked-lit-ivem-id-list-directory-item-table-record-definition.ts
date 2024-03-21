@@ -4,8 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
-import { RankedLitIvemIdListDirectoryItem } from '../../../services/services-internal-api';
-import { TypedTableFieldSourceDefinition } from '../field-source/grid-table-field-source-internal-api';
+import { RankedLitIvemIdListDirectoryItem } from '../../../services/internal-api';
+import { TypedTableFieldSourceDefinition } from '../field-source/internal-api';
 import { PayloadTableRecordDefinition } from './payload-table-record-definition';
 import { TypedTableRecordDefinition } from './typed-table-record-definition';
 

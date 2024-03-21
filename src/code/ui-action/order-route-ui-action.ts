@@ -5,7 +5,7 @@
  */
 
 import { UiAction } from '@xilytix/ui-action';
-import { FixOrderRoute, OrderRoute } from '../adi/adi-internal-api';
+import { FixOrderRoute, OrderRoute } from '../adi/internal-api';
 import { MultiEvent } from '../sys/internal-api';
 
 export class OrderRouteUiAction extends UiAction {

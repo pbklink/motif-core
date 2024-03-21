@@ -5,7 +5,7 @@
  */
 
 import { AssertInternalError, Badness, Integer, MultiEvent, UnreachableCaseError, UsableListChangeTypeId } from '../../sys/internal-api';
-import { ClassFeedsDataDefinition, DataDefinition, FeedClassId, FeedId, FeedsDataDefinition } from '../common/adi-common-internal-api';
+import { ClassFeedsDataDefinition, DataDefinition, FeedClassId, FeedId, FeedsDataDefinition } from '../common/internal-api';
 import { DataItem } from '../data-item/internal-api';
 import { Feed } from './feed';
 import { FeedsDataItem } from './feeds-data-item';

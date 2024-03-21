@@ -5,7 +5,7 @@
  */
 
 import { AssertInternalError, Guid, UnreachableCaseError, parseIntStrict } from '../../../../sys/internal-api';
-import { LitIvemId, MarketId, ScanAttachedNotificationChannel, ScanTargetTypeId } from '../../../common/adi-common-internal-api';
+import { LitIvemId, MarketId, ScanAttachedNotificationChannel, ScanTargetTypeId } from '../../../common/internal-api';
 import { ZenithProtocolCommon } from '../../../common/zenith-protocol/internal-api';
 import { ZenithProtocol } from './protocol/zenith-protocol';
 import { ZenithConvert } from './zenith-convert';

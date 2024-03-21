@@ -5,11 +5,11 @@
  */
 
 import { ClickBoxCellPainter, DatalessViewCell, Rectangle } from '@xilytix/revgrid';
-import { RenderValue } from '../../../services/services-internal-api';
-import { GridField } from '../../field/grid-field-internal-api';
-import { RecordGridDataServer } from '../record-grid/grid-revgrid-record-grid-internal-api';
-import { AdaptedRevgridBehavioredColumnSettings } from '../settings/grid-revgrid-settings-internal-api';
-import { CheckboxRenderValueCellPainter } from './render-value/grid-revgrid-cell-painters-render-value-internal-api';
+import { RenderValue } from '../../../services/internal-api';
+import { GridField } from '../../field/internal-api';
+import { RecordGridDataServer } from '../record-grid/internal-api';
+import { AdaptedRevgridBehavioredColumnSettings } from '../settings/internal-api';
+import { CheckboxRenderValueCellPainter } from './render-value/internal-api';
 
 export class CheckboxRenderValueRecordGridCellPainter implements ClickBoxCellPainter<AdaptedRevgridBehavioredColumnSettings, GridField> {
     private readonly _dataServer: RecordGridDataServer;

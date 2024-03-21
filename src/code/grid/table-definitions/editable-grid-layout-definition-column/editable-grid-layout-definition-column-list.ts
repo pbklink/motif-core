@@ -5,8 +5,8 @@
  */
 
 import { AssertInternalError, Integer, moveElementsInArray, MultiEvent, RecordList, UsableListChangeTypeId } from '../../../sys/internal-api';
-import { GridField } from '../../field/grid-field-internal-api';
-import { GridLayoutDefinition } from '../../layout/grid-layout-internal-api';
+import { GridField } from '../../field/internal-api';
+import { GridLayoutDefinition } from '../../layout/internal-api';
 import { EditableGridLayoutDefinitionColumn } from './editable-grid-layout-definition-column';
 
 export class EditableGridLayoutDefinitionColumnList implements RecordList<EditableGridLayoutDefinitionColumn> {

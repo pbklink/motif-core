@@ -4,8 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
-import { AdiService, HigherLowerId, LitIvemId, SecurityDataDefinition, SecurityDataItem } from '../../../adi/adi-internal-api';
-import { RenderValue } from '../../../services/services-internal-api';
+import { AdiService, HigherLowerId, LitIvemId, SecurityDataDefinition, SecurityDataItem } from '../../../adi/internal-api';
+import { RenderValue } from '../../../services/internal-api';
 import {
     AssertInternalError,
     Decimal,
@@ -31,7 +31,7 @@ import {
     StringArrayCorrectnessTableValue,
     StringCorrectnessTableValue,
     TableValue
-} from '../value/grid-table-value-internal-api';
+} from '../value/internal-api';
 import { TableValueSource } from './table-value-source';
 
 export class SecurityDataItemTableValueSource extends TableValueSource {

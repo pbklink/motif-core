@@ -8,6 +8,6 @@ export * from './depth-record';
 export * from './depth-record-render-value';
 export * from './depth-side-grid-field';
 export * from './depth-side-grid-record-store';
-export * from './full/grid-record-depth-full-internal-api';
-export * from './short/grid-record-depth-short-internal-api';
+export * from './full/internal-api';
+export * from './short/internal-api';
 

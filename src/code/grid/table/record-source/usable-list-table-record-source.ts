@@ -5,10 +5,10 @@
  */
 
 import { CorrectnessBadness, Integer, LockOpenListItem, MultiEvent, UsableList, UsableListChangeTypeId } from '../../../sys/internal-api';
-import { TextFormatterService } from '../../../text-format/text-format-internal-api';
-import { GridFieldCustomHeadingsService } from '../../field/grid-field-internal-api';
-import { TypedTableFieldSourceDefinitionCachingFactoryService } from '../field-source/grid-table-field-source-internal-api';
-import { UsableListTableRecordSourceDefinition } from './definition/grid-table-record-source-definition-internal-api';
+import { TextFormatterService } from '../../../text-format/internal-api';
+import { GridFieldCustomHeadingsService } from '../../field/internal-api';
+import { TypedTableFieldSourceDefinitionCachingFactoryService } from '../field-source/internal-api';
+import { UsableListTableRecordSourceDefinition } from './definition/internal-api';
 import { TypedTableRecordSource } from './typed-table-record-source';
 
 export abstract class UsableListTableRecordSource<Record> extends TypedTableRecordSource {

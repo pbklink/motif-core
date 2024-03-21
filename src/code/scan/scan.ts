@@ -18,9 +18,9 @@ import {
     ScanStatusedDescriptorInterface,
     ScanTargetTypeId,
     ZenithEncodedScanFormula
-} from '../adi/adi-internal-api';
-import { StringId, Strings } from '../res/res-internal-api';
-import { EnumRenderValue, RankedLitIvemIdListDirectoryItem, RenderValue } from '../services/services-internal-api';
+} from '../adi/internal-api';
+import { StringId, Strings } from '../res/internal-api';
+import { EnumRenderValue, RankedLitIvemIdListDirectoryItem, RenderValue } from '../services/internal-api';
 import {
     AssertInternalError,
     Correctness,

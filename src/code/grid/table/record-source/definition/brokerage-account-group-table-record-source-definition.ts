@@ -4,10 +4,10 @@
  * License: motionite.trade/license/motif
  */
 
-import { AllBrokerageAccountGroup, BrokerageAccountGroup } from '../../../../adi/adi-internal-api';
+import { AllBrokerageAccountGroup, BrokerageAccountGroup } from '../../../../adi/internal-api';
 import { JsonElement } from '../../../../sys/internal-api';
-import { GridFieldCustomHeadingsService } from '../../../field/grid-field-internal-api';
-import { TypedTableFieldSourceDefinition, TypedTableFieldSourceDefinitionCachingFactoryService } from "../../field-source/grid-table-field-source-internal-api";
+import { GridFieldCustomHeadingsService } from '../../../field/internal-api';
+import { TypedTableFieldSourceDefinition, TypedTableFieldSourceDefinitionCachingFactoryService } from "../../field-source/internal-api";
 import { TypedTableRecordSourceDefinition } from './typed-table-record-source-definition';
 
 export abstract class BrokerageAccountGroupTableRecordSourceDefinition extends TypedTableRecordSourceDefinition {

@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { DataMessage, DataMessageTypeId, NotificationDistributionMethodId, QueryNotificationDistributionMethodDataMessage, ZenithProtocolCommon } from '../common/adi-common-internal-api';
+import { DataMessage, DataMessageTypeId, NotificationDistributionMethodId, QueryNotificationDistributionMethodDataMessage, ZenithProtocolCommon } from '../common/internal-api';
 import { NotificationChannelPublishDataItem } from './notification-channel-publish-data-item';
 
 export class QueryNotificationDistributionMethodDataItem extends NotificationChannelPublishDataItem {

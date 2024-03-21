@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { RankedLitIvemIdListDirectoryItem } from '../services/services-internal-api';
+import { RankedLitIvemIdListDirectoryItem } from '../services/internal-api';
 import {
     AssertInternalError,
     Badness,

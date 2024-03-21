@@ -4,18 +4,18 @@
  * License: motionite.trade/license/motif
  */
 
-import { RankedLitIvemIdListDirectory } from '../../../ranked-lit-ivem-id-list/ranked-lit-ivem-id-list-internal-api';
-import { RankedLitIvemIdListDirectoryItem } from '../../../services/services-internal-api';
+import { RankedLitIvemIdListDirectory } from '../../../ranked-lit-ivem-id-list/internal-api';
+import { RankedLitIvemIdListDirectoryItem } from '../../../services/internal-api';
 import { CorrectnessBadness, Integer, LockOpenListItem, Ok, Result, UnreachableCaseError } from '../../../sys/internal-api';
-import { TextFormatterService } from '../../../text-format/text-format-internal-api';
-import { GridFieldCustomHeadingsService } from '../../field/grid-field-internal-api';
+import { TextFormatterService } from '../../../text-format/internal-api';
+import { GridFieldCustomHeadingsService } from '../../field/internal-api';
 import {
     TypedTableFieldSourceDefinition, TypedTableFieldSourceDefinitionCachingFactoryService
-} from "../field-source/grid-table-field-source-internal-api";
-import { RankedLitIvemIdListDirectoryItemTableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
-import { TableRecord } from '../record/grid-table-record-internal-api';
+} from "../field-source/internal-api";
+import { RankedLitIvemIdListDirectoryItemTableRecordDefinition } from '../record-definition/internal-api';
+import { TableRecord } from '../record/internal-api';
 import { RankedLitIvemIdListDirectoryItemTableValueSource } from '../value-source/internal-api';
-import { RankedLitIvemIdListDirectoryItemTableRecordSourceDefinition } from './definition/grid-table-record-source-definition-internal-api';
+import { RankedLitIvemIdListDirectoryItemTableRecordSourceDefinition } from './definition/internal-api';
 import { SubscribeBadnessListTableRecordSource } from './subscribe-badness-list-table-record-source';
 
 export class RankedLitIvemIdListDirectoryItemTableRecordSource extends SubscribeBadnessListTableRecordSource<RankedLitIvemIdListDirectoryItem, RankedLitIvemIdListDirectory> {

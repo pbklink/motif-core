@@ -5,7 +5,7 @@
  */
 
 import { ErrorCode, Integer, JsonElement, JsonElementErr, MapKey, Ok, Result } from '../sys/internal-api';
-import { IvemId, OrderExtendedSideId, OrderRoute, OrderTriggerTypeId, OrderTypeId, TimeInForceId } from './common/adi-common-internal-api';
+import { IvemId, OrderExtendedSideId, OrderRoute, OrderTriggerTypeId, OrderTypeId, TimeInForceId } from './common/internal-api';
 
 export class RoutedIvemId {
     private _mapKey: MapKey | undefined;

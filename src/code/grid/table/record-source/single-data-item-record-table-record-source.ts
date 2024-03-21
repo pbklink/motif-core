@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { DataItem } from '../../../adi/adi-internal-api';
+import { DataItem } from '../../../adi/internal-api';
 import { KeyedCorrectnessList, KeyedCorrectnessListItem } from '../../../sys/internal-api';
 import { KeyedCorrectnessRecordTableRecordSource } from './keyed-correctness-record-table-record-source';
 

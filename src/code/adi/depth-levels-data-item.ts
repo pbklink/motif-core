@@ -22,7 +22,7 @@ import {
     DepthLevelsDataDefinition,
     DepthLevelsDataMessage,
     MarketId, OrderSideId
-} from './common/adi-common-internal-api';
+} from './common/internal-api';
 import { MarketSubscriptionDataItem } from './market-subscription-data-item';
 
 export class DepthLevelsDataItem extends MarketSubscriptionDataItem {

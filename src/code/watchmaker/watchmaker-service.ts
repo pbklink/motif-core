@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { AdiService, WatchmakerListDescriptorsDataDefinition, WatchmakerListDescriptorsDataItem } from '../adi/adi-internal-api';
+import { AdiService, WatchmakerListDescriptorsDataDefinition, WatchmakerListDescriptorsDataItem } from '../adi/internal-api';
 import {
     AssertInternalError,
     Integer,

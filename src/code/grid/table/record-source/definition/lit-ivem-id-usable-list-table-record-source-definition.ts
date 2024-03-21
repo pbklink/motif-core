@@ -4,9 +4,9 @@
  * License: motionite.trade/license/motif
  */
 
-import { LitIvemId } from '../../../../adi/adi-internal-api';
+import { LitIvemId } from '../../../../adi/internal-api';
 import { ChangeSubscribableComparableList, ErrorCode, JsonElement, JsonElementErr, Ok, PickEnum, Result } from '../../../../sys/internal-api';
-import { TypedTableFieldSourceDefinition } from '../../field-source/grid-table-field-source-internal-api';
+import { TypedTableFieldSourceDefinition } from '../../field-source/internal-api';
 import { UsableListTableRecordSourceDefinition } from './usable-list-table-record-source-definition';
 
 /** @public */

@@ -4,17 +4,17 @@
  * License: motionite.trade/license/motif
  */
 
-import { LitIvemId } from '../../../../adi/adi-internal-api';
+import { LitIvemId } from '../../../../adi/internal-api';
 import { ErrorCode, JsonElement, JsonElementErr, Ok, PickEnum, Result, UiComparableList } from '../../../../sys/internal-api';
-import { GridFieldCustomHeadingsService } from '../../../field/grid-field-internal-api';
-import { GridLayoutDefinition } from '../../../layout/grid-layout-internal-api';
+import { GridFieldCustomHeadingsService } from '../../../field/internal-api';
+import { GridLayoutDefinition } from '../../../layout/internal-api';
 import {
     LitIvemBaseDetailTableFieldSourceDefinition,
     LitIvemIdTableFieldSourceDefinition,
     SecurityDataItemTableFieldSourceDefinition,
     TypedTableFieldSourceDefinition,
     TypedTableFieldSourceDefinitionCachingFactoryService
-} from "../../field-source/grid-table-field-source-internal-api";
+} from "../../field-source/internal-api";
 import { BadnessListTableRecordSourceDefinition } from './badness-list-table-record-source-definition';
 import { TypedTableRecordSourceDefinition } from './typed-table-record-source-definition';
 

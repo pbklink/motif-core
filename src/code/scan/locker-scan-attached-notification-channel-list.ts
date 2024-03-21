@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { NotificationChannel, ScanAttachedNotificationChannel } from '../adi/adi-internal-api';
+import { NotificationChannel, ScanAttachedNotificationChannel } from '../adi/internal-api';
 import { NotificationChannelsService } from '../notification-channel/internal-api';
 import { AssertInternalError, Integer, LockOpenListItem, MultiEvent, UsableListChangeTypeId } from '../sys/internal-api';
 import { ModifierComparableList } from '../sys/modifier-comparable-list';

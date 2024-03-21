@@ -5,7 +5,7 @@
  */
 
 import { DataRowArrayDataServer } from '@xilytix/revgrid';
-import { GridField } from '../../field/grid-field-internal-api';
+import { GridField } from '../../field/internal-api';
 
 export class RowDataArrayGridDataServer extends DataRowArrayDataServer<GridField> {
 }

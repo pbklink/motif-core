@@ -5,7 +5,7 @@
  */
 
 import { ErrorCode, Guid, JsonElement, JsonElementErr, Ok, Result } from '../../../sys/internal-api';
-import { GridLayoutOrReferenceDefinition } from '../../layout/grid-layout-internal-api';
+import { GridLayoutOrReferenceDefinition } from '../../layout/internal-api';
 import {
     TableRecordSourceDefinition,
     TableRecordSourceDefinitionFromJsonFactory

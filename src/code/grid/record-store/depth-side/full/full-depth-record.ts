@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { DepthDataItem, MarketId, MarketInfo, OrderSideId } from '../../../../adi/adi-internal-api';
+import { DepthDataItem, MarketId, MarketInfo, OrderSideId } from '../../../../adi/internal-api';
 import {
     CountAndXrefsRenderValue,
     IntegerRenderValue,
@@ -15,7 +15,7 @@ import {
     RenderValue,
     StringArrayRenderValue,
     StringRenderValue
-} from '../../../../services/services-internal-api';
+} from '../../../../services/internal-api';
 import {
     AssertInternalError,
     Decimal,

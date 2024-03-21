@@ -4,12 +4,12 @@
  * License: motionite.trade/license/motif
  */
 
-import { AdiService } from '../adi/adi-internal-api';
+import { AdiService } from '../adi/internal-api';
 import { ScansService } from '../scan/internal-api';
-import { AppStorageService, IdleService, KeyValueStore } from '../services/services-internal-api';
+import { AppStorageService, IdleService, KeyValueStore } from '../services/internal-api';
 import { AssertInternalError, JsonElement, LockOpenList, UnexpectedCaseError, UnreachableCaseError } from '../sys/internal-api';
-import { WatchmakerService } from '../watchmaker/watchmaker-internal-api';
-import { RankedLitIvemIdListDefinition } from './definition/ranked-lit-ivem-id-list-definition-internal-api';
+import { WatchmakerService } from '../watchmaker/internal-api';
+import { RankedLitIvemIdListDefinition } from './definition/internal-api';
 import { RankedLitIvemIdListReferential } from './ranked-lit-ivem-id-list-referential';
 
 export class RankedLitIvemIdListReferentialsService extends LockOpenList<RankedLitIvemIdListReferential> {

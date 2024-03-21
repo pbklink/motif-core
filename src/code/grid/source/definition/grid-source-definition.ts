@@ -5,8 +5,8 @@
  */
 
 import { ErrorCode, JsonElement, JsonElementErr, Ok, Result } from '../../../sys/internal-api';
-import { GridLayoutOrReferenceDefinition } from '../../layout/grid-layout-internal-api';
-import { TableRecordSourceDefinition, TableRecordSourceDefinitionFromJsonFactory } from '../../table/record-source/definition/grid-table-record-source-definition-internal-api';
+import { GridLayoutOrReferenceDefinition } from '../../layout/internal-api';
+import { TableRecordSourceDefinition, TableRecordSourceDefinitionFromJsonFactory } from '../../table/record-source/definition/internal-api';
 import { GridRowOrderDefinition } from './grid-row-order-definition';
 
 /** @public */

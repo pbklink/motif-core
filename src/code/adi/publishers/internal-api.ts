@@ -5,5 +5,5 @@
  */
 
 export { PublishersStaticInitialise } from './publishers-static-initialise';
-export * from './zenith/adi-publishers-zenith-internal-api';
+export * from './zenith/internal-api';
 

@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { StringId, Strings } from '../../../res/res-internal-api';
+import { StringId, Strings } from '../../../res/internal-api';
 import {
     AssertInternalError,
     ErrorCode,
@@ -17,6 +17,7 @@ import {
     logger,
     newNowDate
 } from "../../../sys/internal-api";
+import { AdiPublisherSubscriptionManager } from '../../common/adi-publisher-subscription-manager';
 import {
     AdiPublisherRequest,
     AdiPublisherSubscription,
@@ -27,8 +28,7 @@ import {
     ErrorPublisherSubscriptionDataMessage_SubRequestError,
     ErrorPublisherSubscriptionDataMessage_UserNotAuthorised,
     WarningPublisherSubscriptionDataMessage
-} from "../../common/adi-common-internal-api";
-import { AdiPublisherSubscriptionManager } from '../../common/adi-publisher-subscription-manager';
+} from "../../common/internal-api";
 import { ZenithProtocol } from './physical-message/protocol/zenith-protocol';
 import { ZenithConvert } from './physical-message/zenith-convert';
 import { ZenithMessageConvert } from './physical-message/zenith-message-convert';

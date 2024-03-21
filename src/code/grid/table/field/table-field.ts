@@ -4,8 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
-import { IvemId, LitIvemId } from '../../../adi/adi-internal-api';
-import { RenderValue } from '../../../services/services-internal-api';
+import { IvemId, LitIvemId } from '../../../adi/internal-api';
+import { RenderValue } from '../../../services/internal-api';
 import {
     GridFieldHorizontalAlign,
     GridRevRecordField,
@@ -18,8 +18,8 @@ import {
     compareString,
     compareValue
 } from "../../../sys/internal-api";
-import { TextFormatterService } from '../../../text-format/text-format-internal-api';
-import { GridField, GridFieldDefinition, GridFieldSourceDefinition } from '../../field/grid-field-internal-api';
+import { TextFormatterService } from '../../../text-format/internal-api';
+import { GridField, GridFieldDefinition, GridFieldSourceDefinition } from '../../field/internal-api';
 import {
     BaseSourceTzOffsetDateTimeCorrectnessTableValue,
     CorrectnessTableValue,
@@ -45,7 +45,7 @@ import {
     StringTableValue,
     TableValue,
     TableValuesRecord
-} from '../value/grid-table-value-internal-api';
+} from '../value/internal-api';
 
 export abstract class TableField extends GridField implements GridRevRecordField {
     private _valueTypeId: RenderValue.TypeId;

@@ -5,7 +5,7 @@
  */
 
 import { CorrectnessState } from '../../../sys/internal-api';
-import { TableRecordSourceDefinition } from './definition/grid-table-record-source-definition-internal-api';
+import { TableRecordSourceDefinition } from './definition/internal-api';
 import { TableRecordSource } from './table-record-source';
 
 export interface TableRecordSourceFactory<TypeId, TableFieldSourceDefinitionTypeId, Badness> {

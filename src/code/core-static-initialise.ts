@@ -4,16 +4,16 @@
  * License: motionite.trade/license/motif
  */
 
-import { AdiStaticInitialise } from './adi/adi-internal-api';
-import { CommandStaticInitialise } from './command/command-internal-api';
+import { AdiStaticInitialise } from './adi/internal-api';
+import { CommandStaticInitialise } from './command/internal-api';
 import { GridStaticInitialise } from './grid/internal-api';
 import { NotificationChannelStaticInitialise } from './notification-channel/internal-api';
-import { PublisherStaticInitialise } from './publisher/publisher-internal-api';
-import { RankedLitIvemIdListStaticInitialise } from './ranked-lit-ivem-id-list/ranked-lit-ivem-id-list-internal-api';
-import { ResStaticInitialise } from './res/res-internal-api';
+import { PublisherStaticInitialise } from './publisher/internal-api';
+import { RankedLitIvemIdListStaticInitialise } from './ranked-lit-ivem-id-list/internal-api';
+import { ResStaticInitialise } from './res/internal-api';
 import { ScanStaticInitialise } from './scan/internal-api';
-import { SequenceHistoryStaticInitialise } from './sequence-history/sequence-history-internal-api';
-import { ServicesStaticInitialise, SettingsStaticInitialise } from './services/services-internal-api';
+import { SequenceHistoryStaticInitialise } from './sequence-history/internal-api';
+import { ServicesStaticInitialise, SettingsStaticInitialise } from './services/internal-api';
 import { SysStaticInitialise } from './sys/internal-api';
 
 export namespace CoreStaticInitialise {

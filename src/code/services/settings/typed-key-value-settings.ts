@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { OrderType, OrderTypeId, TimeInForce, TimeInForceId } from '../../adi/adi-internal-api';
+import { OrderType, OrderTypeId, TimeInForce, TimeInForceId } from '../../adi/internal-api';
 import { AssertInternalError, Integer, parseIntStrict, parseNumberStrict } from '../../sys/internal-api';
 
 export namespace TypedKeyValueSettings {

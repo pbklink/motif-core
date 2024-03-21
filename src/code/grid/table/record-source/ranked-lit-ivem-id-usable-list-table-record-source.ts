@@ -4,21 +4,21 @@
  * License: motionite.trade/license/motif
  */
 
-import { AdiService, LitIvemBaseDetail, RankedLitIvemId } from '../../../adi/adi-internal-api';
+import { AdiService, LitIvemBaseDetail, RankedLitIvemId } from '../../../adi/internal-api';
 import { SymbolDetailCacheService } from '../../../services/symbol-detail-cache-service';
 import { Badness, BadnessComparableList, CorrectnessBadness, Integer, NotImplementedError, UnreachableCaseError, UsableListChangeType, UsableListChangeTypeId, moveElementsInArray } from '../../../sys/internal-api';
-import { TextFormatterService } from '../../../text-format/text-format-internal-api';
-import { GridFieldCustomHeadingsService } from '../../field/grid-field-internal-api';
+import { TextFormatterService } from '../../../text-format/internal-api';
+import { GridFieldCustomHeadingsService } from '../../field/internal-api';
 import {
     TypedTableFieldSourceDefinition, TypedTableFieldSourceDefinitionCachingFactoryService
-} from "../field-source/grid-table-field-source-internal-api";
-import { RankedLitIvemIdTableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
-import { TableRecord } from '../record/grid-table-record-internal-api';
+} from "../field-source/internal-api";
+import { RankedLitIvemIdTableRecordDefinition } from '../record-definition/internal-api';
+import { TableRecord } from '../record/internal-api';
 import { LitIvemBaseDetailTableValueSource, RankedLitIvemIdTableValueSource, SecurityDataItemTableValueSource } from '../value-source/internal-api';
 import {
     RankedLitIvemIdUsableListTableRecordSourceDefinition,
     TypedTableRecordSourceDefinition
-} from './definition/grid-table-record-source-definition-internal-api';
+} from './definition/internal-api';
 import { PromisedLitIvemBaseDetail } from './promised-lit-ivem-base-detail';
 import { UsableListTableRecordSource } from './usable-list-table-record-source';
 

@@ -12,7 +12,7 @@ import {
     DepthDataDefinition,
     DepthDataMessage,
     QueryDepthDataDefinition
-} from "../../../common/adi-common-internal-api";
+} from "../../../common/internal-api";
 import { ZenithProtocol } from './protocol/zenith-protocol';
 import { ZenithConvert } from './zenith-convert';
 

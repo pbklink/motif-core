@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { DepthStyleId, OrderSideId } from '../../../adi/adi-internal-api';
+import { DepthStyleId, OrderSideId } from '../../../adi/internal-api';
 import {
     Decimal,
     GridRecordIndex,

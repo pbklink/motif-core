@@ -5,7 +5,7 @@
  */
 
 import { AssertInternalError, MultiEvent } from '../sys/internal-api';
-import { DataMessage, DataMessageTypeId, ZenithServerInfoDataMessage } from './common/adi-common-internal-api';
+import { DataMessage, DataMessageTypeId, ZenithServerInfoDataMessage } from './common/internal-api';
 import { PublisherSubscriptionDataItem } from './publish-subscribe/internal-api';
 
 export class ZenithServerInfoDataItem extends PublisherSubscriptionDataItem {

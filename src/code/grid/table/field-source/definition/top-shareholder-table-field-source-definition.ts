@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { TopShareholder } from '../../../../adi/adi-internal-api';
+import { TopShareholder } from '../../../../adi/internal-api';
 import {
     AssertInternalError,
     FieldDataType,
@@ -12,13 +12,13 @@ import {
     Integer,
     UnreachableCaseError
 } from "../../../../sys/internal-api";
-import { TableField } from '../../field/grid-table-field-internal-api';
+import { TableField } from '../../field/internal-api';
 import { CorrectnessTableField, IntegerCorrectnessTableField, StringCorrectnessTableField } from '../../field/table-field';
 import {
     CorrectnessTableValue,
     IntegerCorrectnessTableValue,
     StringCorrectnessTableValue
-} from '../../value/grid-table-value-internal-api';
+} from '../../value/internal-api';
 import { TypedTableFieldSourceDefinition } from './typed-table-field-source-definition';
 import { TypedTableFieldSourceDefinitionCachingFactoryService } from './typed-table-field-source-definition-caching-factory-service';
 

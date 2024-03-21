@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { PublisherId } from '../publisher/publisher-internal-api';
+import { PublisherId } from '../publisher/internal-api';
 import { ErrorCode, JsonElement, JsonElementErr, Ok, Result } from '../sys/internal-api';
 
 /** @public */

@@ -15,7 +15,7 @@ import {
     IntegerCorrectnessTableField,
     StringCorrectnessTableField,
     TableField
-} from "../../field/grid-table-field-internal-api";
+} from "../../field/internal-api";
 import {
     ActiveFaultedStatusIdCorrectnessTableValue,
     CorrectnessTableValue,
@@ -27,7 +27,7 @@ import {
     ScanTargetTypeIdCorrectnessTableValue,
     StringCorrectnessTableValue,
     WritableCorrectnessTableValue
-} from '../../value/grid-table-value-internal-api';
+} from '../../value/internal-api';
 import { TypedTableFieldSourceDefinition } from './typed-table-field-source-definition';
 import { TypedTableFieldSourceDefinitionCachingFactoryService } from './typed-table-field-source-definition-caching-factory-service';
 

@@ -5,10 +5,10 @@
  */
 
 import { BadnessList, CorrectnessBadness, LockOpenListItem } from '../../../sys/internal-api';
-import { TextFormatterService } from '../../../text-format/text-format-internal-api';
-import { GridFieldCustomHeadingsService } from '../../field/grid-field-internal-api';
-import { TypedTableFieldSourceDefinition, TypedTableFieldSourceDefinitionCachingFactoryService } from '../field-source/grid-table-field-source-internal-api';
-import { BadnessListTableRecordSourceDefinition } from './definition/grid-table-record-source-definition-internal-api';
+import { TextFormatterService } from '../../../text-format/internal-api';
+import { GridFieldCustomHeadingsService } from '../../field/internal-api';
+import { TypedTableFieldSourceDefinition, TypedTableFieldSourceDefinitionCachingFactoryService } from '../field-source/internal-api';
+import { BadnessListTableRecordSourceDefinition } from './definition/internal-api';
 import { SubscribeBadnessListTableRecordSource } from './subscribe-badness-list-table-record-source';
 
 export abstract class BadnessListTableRecordSource<Record> extends SubscribeBadnessListTableRecordSource<Record, BadnessList<Record>> {

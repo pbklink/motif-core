@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { NotificationChannel } from '../adi/adi-internal-api';
+import { NotificationChannel } from '../adi/internal-api';
 import { LockOpenList } from '../sys/internal-api';
 import { LockOpenNotificationChannel } from './lock-open-notification-channel';
 

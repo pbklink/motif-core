@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { StringId, Strings } from '../../res/res-internal-api';
+import { StringId, Strings } from '../../res/internal-api';
 import {
     AssertInternalError,
     Badness,
@@ -28,7 +28,7 @@ import {
     PublisherSubscriptionDataDefinition,
     SynchronisedPublisherSubscriptionDataMessage,
     WarningPublisherSubscriptionDataMessage
-} from "../common/adi-common-internal-api";
+} from "../common/internal-api";
 import { DataItem } from '../data-item/internal-api';
 
 export abstract class PublisherSubscriptionDataItem extends DataItem {

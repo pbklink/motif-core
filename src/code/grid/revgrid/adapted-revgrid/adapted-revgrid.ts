@@ -6,10 +6,10 @@
 
 // import { ColorScheme, GridField, MultiEvent, SettingsService } from '@motifmarkets/motif-core';
 import { Revgrid, ViewLayout } from '@xilytix/revgrid';
-import { ColorScheme, SettingsService } from '../../../services/services-internal-api';
+import { ColorScheme, SettingsService } from '../../../services/internal-api';
 import { MultiEvent } from '../../../sys/internal-api';
-import { AllowedGridField, GridField } from '../../field/grid-field-internal-api';
-import { AllowedFieldsGridLayoutDefinition, GridLayoutDefinition } from '../../layout/definition/grid-layout-definition-internal-api';
+import { AllowedGridField, GridField } from '../../field/internal-api';
+import { AllowedFieldsGridLayoutDefinition, GridLayoutDefinition } from '../../layout/definition/internal-api';
 import {
     AdaptedRevgridBehavioredColumnSettings,
     AdaptedRevgridBehavioredGridSettings,
@@ -17,7 +17,7 @@ import {
     InMemoryAdaptedRevgridBehavioredColumnSettings,
     InMemoryAdaptedRevgridBehavioredGridSettings,
     defaultAdaptedRevgridGridSettings
-} from '../settings/grid-revgrid-settings-internal-api';
+} from '../settings/internal-api';
 
 export abstract class AdaptedRevgrid extends Revgrid<AdaptedRevgridBehavioredGridSettings, AdaptedRevgridBehavioredColumnSettings, GridField> {
     // resizedEventer: AdaptedRevgrid.ResizedEventer | undefined;

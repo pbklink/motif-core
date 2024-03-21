@@ -4,19 +4,19 @@
  * License: motionite.trade/license/motif
  */
 
-import { AdiService, LitIvemId } from '../../../adi/adi-internal-api';
-import { SymbolDetailCacheService } from '../../../services/services-internal-api';
+import { AdiService, LitIvemId } from '../../../adi/internal-api';
+import { SymbolDetailCacheService } from '../../../services/internal-api';
 import { CorrectnessBadness, Integer, UiComparableList, UnreachableCaseError } from '../../../sys/internal-api';
-import { TextFormatterService } from '../../../text-format/text-format-internal-api';
-import { GridFieldCustomHeadingsService } from '../../field/grid-field-internal-api';
+import { TextFormatterService } from '../../../text-format/internal-api';
+import { GridFieldCustomHeadingsService } from '../../field/internal-api';
 import {
     TypedTableFieldSourceDefinition, TypedTableFieldSourceDefinitionCachingFactoryService
-} from "../field-source/grid-table-field-source-internal-api";
-import { LitIvemIdTableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
-import { TableRecord } from '../record/grid-table-record-internal-api';
+} from "../field-source/internal-api";
+import { LitIvemIdTableRecordDefinition } from '../record-definition/internal-api';
+import { TableRecord } from '../record/internal-api';
 import { LitIvemBaseDetailTableValueSource, LitIvemIdTableValueSource, SecurityDataItemTableValueSource } from '../value-source/internal-api';
 import { BadnessListTableRecordSource } from './badness-comparable-list-table-record-source';
-import { LitIvemIdComparableListTableRecordSourceDefinition } from './definition/grid-table-record-source-definition-internal-api';
+import { LitIvemIdComparableListTableRecordSourceDefinition } from './definition/internal-api';
 import { PromisedLitIvemBaseDetail } from './promised-lit-ivem-base-detail';
 
 export class LitIvemIdComparableListTableRecordSource extends BadnessListTableRecordSource<LitIvemId> {

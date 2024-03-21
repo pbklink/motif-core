@@ -7,13 +7,13 @@
 import {
     RankedLitIvemIdListDefinition,
     RankedLitIvemIdListDefinitionFactoryService
-} from "../../../../ranked-lit-ivem-id-list/ranked-lit-ivem-id-list-internal-api";
+} from "../../../../ranked-lit-ivem-id-list/internal-api";
 import { ErrorCode, JsonElement, JsonElementErr, PickEnum, Result } from '../../../../sys/internal-api';
-import { GridFieldCustomHeadingsService } from '../../../field/grid-field-internal-api';
+import { GridFieldCustomHeadingsService } from '../../../field/internal-api';
 import {
     TypedTableFieldSourceDefinition,
     TypedTableFieldSourceDefinitionCachingFactoryService
-} from "../../field-source/grid-table-field-source-internal-api";
+} from "../../field-source/internal-api";
 import { TypedTableRecordSourceDefinition } from './typed-table-record-source-definition';
 
 /** @public */

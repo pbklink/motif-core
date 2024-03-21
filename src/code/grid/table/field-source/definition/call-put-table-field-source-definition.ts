@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { CallPut } from '../../../../services/services-internal-api';
+import { CallPut } from '../../../../services/internal-api';
 import {
     AssertInternalError,
     FieldDataType,
@@ -21,7 +21,7 @@ import {
     LitIvemIdTableField,
     NumberTableField,
     TableField
-} from "../../field/grid-table-field-internal-api";
+} from "../../field/internal-api";
 import {
     DateTableValue,
     ExerciseTypeIdTableValue,
@@ -32,7 +32,7 @@ import {
     NumberTableValue,
     PriceTableValue,
     TableValue
-} from '../../value/grid-table-value-internal-api';
+} from '../../value/internal-api';
 import { TableFieldSourceDefinition } from './table-field-source-definition';
 import { TypedTableFieldSourceDefinition } from './typed-table-field-source-definition';
 import { TypedTableFieldSourceDefinitionCachingFactoryService } from './typed-table-field-source-definition-caching-factory-service';

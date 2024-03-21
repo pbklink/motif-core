@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { AdiService, CreateNotificationChannelDataDefinition, CreateNotificationChannelDataItem, DataItemIncubator, DeleteNotificationChannelDataDefinition, DeleteNotificationChannelDataItem, NotificationChannel, NotificationDistributionMethodId, QueryNotificationChannelDataDefinition, QueryNotificationChannelDataItem, QueryNotificationChannelsDataDefinition, QueryNotificationChannelsDataItem, QueryNotificationDistributionMethodsDataDefinition, QueryNotificationDistributionMethodsDataItem } from '../adi/adi-internal-api';
+import { AdiService, CreateNotificationChannelDataDefinition, CreateNotificationChannelDataItem, DataItemIncubator, DeleteNotificationChannelDataDefinition, DeleteNotificationChannelDataItem, NotificationChannel, NotificationDistributionMethodId, QueryNotificationChannelDataDefinition, QueryNotificationChannelDataItem, QueryNotificationChannelsDataDefinition, QueryNotificationChannelsDataItem, QueryNotificationDistributionMethodsDataDefinition, QueryNotificationDistributionMethodsDataItem } from '../adi/internal-api';
 import { AssertInternalError, Badness, Err, Integer, LockOpenListItem, Ok, Result } from '../sys/internal-api';
 import { LockOpenNotificationChannel } from './lock-open-notification-channel';
 import { LockOpenNotificationChannelList } from './lock-open-notification-channel-list';

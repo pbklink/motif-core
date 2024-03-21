@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { DataEnvironmentId, LitIvemId, PublisherSessionTerminatedReasonId } from '../adi/adi-internal-api';
+import { DataEnvironmentId, LitIvemId, PublisherSessionTerminatedReasonId } from '../adi/internal-api';
 import { Integer, MultiEvent, ServiceOperatorId } from '../sys/internal-api';
 import { SessionStateId } from './session-state';
 

@@ -5,7 +5,7 @@
  */
 
 import { AssertInternalError, ChangeSubscribableComparableList, Integer, MultiEvent, RecordList, UnreachableCaseError, UsableListChangeTypeId } from '../../sys/internal-api';
-import { DataDefinition, DataMessage, DataMessageTypeId, LitIvemId, LitIvemIdMatchesDataMessage, MarketInfo } from '../common/adi-common-internal-api';
+import { DataDefinition, DataMessage, DataMessageTypeId, LitIvemId, LitIvemIdMatchesDataMessage, MarketInfo } from '../common/internal-api';
 import { RankScoredLitIvemId, RankScoredLitIvemIdList } from '../rank-scored-lit-ivem-id/internal-api';
 import { LitIvemIdScanMatch } from './lit-ivem-id-scan-match';
 import { ScanMatch } from './scan-match';

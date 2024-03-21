@@ -5,10 +5,10 @@
  */
 
 import { Badness, CorrectnessBadness, MultiEvent } from '../../../sys/internal-api';
-import { TextFormatterService } from '../../../text-format/text-format-internal-api';
-import { GridFieldCustomHeadingsService } from '../../field/grid-field-internal-api';
-import { TypedTableFieldSourceDefinition, TypedTableFieldSourceDefinitionCachingFactoryService } from '../field-source/grid-table-field-source-internal-api';
-import { TypedTableRecordSourceDefinition } from './definition/grid-table-record-source-definition-internal-api';
+import { TextFormatterService } from '../../../text-format/internal-api';
+import { GridFieldCustomHeadingsService } from '../../field/internal-api';
+import { TypedTableFieldSourceDefinition, TypedTableFieldSourceDefinitionCachingFactoryService } from '../field-source/internal-api';
+import { TypedTableRecordSourceDefinition } from './definition/internal-api';
 import { TableRecordSource } from './table-record-source';
 
 export abstract class TypedTableRecordSource extends TableRecordSource<TypedTableRecordSourceDefinition.TypeId, TypedTableFieldSourceDefinition.TypeId, Badness> {

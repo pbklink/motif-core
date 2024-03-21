@@ -5,15 +5,15 @@
  */
 
 import { AssertInternalError, FieldDataType, FieldDataTypeId, Integer } from '../../../../sys/internal-api';
-import { GridField } from '../../../field/grid-field-internal-api';
+import { GridField } from '../../../field/internal-api';
 import {
     StringTableField,
     TableField
-} from "../../field/grid-table-field-internal-api";
+} from "../../field/internal-api";
 import {
     StringTableValue,
     TableValue
-} from '../../value/grid-table-value-internal-api';
+} from '../../value/internal-api';
 import { TypedTableFieldSourceDefinition } from './typed-table-field-source-definition';
 import { TypedTableFieldSourceDefinitionCachingFactoryService } from './typed-table-field-source-definition-caching-factory-service';
 

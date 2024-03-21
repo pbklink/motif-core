@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { LitIvemBaseDetail } from '../../../../adi/adi-internal-api';
+import { LitIvemBaseDetail } from '../../../../adi/internal-api';
 import {
     AssertInternalError,
     FieldDataType,
@@ -19,7 +19,7 @@ import {
     LitIvemIdCorrectnessTableField,
     StringCorrectnessTableField,
     TableField
-} from '../../field/grid-table-field-internal-api';
+} from '../../field/internal-api';
 import {
     CorrectnessTableValue,
     ExchangeIdCorrectnessTableValue,
@@ -29,7 +29,7 @@ import {
     MarketIdCorrectnessTableValue,
     PublisherSubscriptionDataTypeIdArrayCorrectnessTableValue,
     StringCorrectnessTableValue
-} from '../../value/grid-table-value-internal-api';
+} from '../../value/internal-api';
 import { TypedTableFieldSourceDefinition } from './typed-table-field-source-definition';
 import { TypedTableFieldSourceDefinitionCachingFactoryService } from './typed-table-field-source-definition-caching-factory-service';
 

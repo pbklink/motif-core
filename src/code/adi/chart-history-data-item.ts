@@ -13,7 +13,7 @@ import {
     DataMessageTypeId,
     LitIvemId,
     QueryChartHistoryDataDefinition
-} from './common/adi-common-internal-api';
+} from './common/internal-api';
 import { PublisherSubscriptionDataItem } from './publish-subscribe/internal-api';
 
 export class ChartHistoryDataItem extends PublisherSubscriptionDataItem {

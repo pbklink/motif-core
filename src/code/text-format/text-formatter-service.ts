@@ -66,8 +66,8 @@ import {
     TradingState,
     TrailingStopLossOrderConditionType,
     TrailingStopLossOrderConditionTypeId
-} from "../adi/adi-internal-api";
-import { StringId, Strings } from '../res/res-internal-api';
+} from "../adi/internal-api";
+import { StringId, Strings } from '../res/internal-api';
 import { Scan, ScanField } from '../scan/internal-api';
 import {
     BigIntRenderValue,
@@ -103,7 +103,7 @@ import {
     TimeRenderValue,
     TradeAffectsIdArrayRenderValue,
     TradeFlagIdArrayRenderValue
-} from '../services/services-internal-api';
+} from '../services/internal-api';
 import {
     CommaText,
     Decimal,

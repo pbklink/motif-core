@@ -5,7 +5,7 @@
  */
 
 import { CorrectnessId } from '../../sys/internal-api';
-import { DataEnvironment, DataEnvironmentId, FeedId, FeedStatusId } from '../common/adi-common-internal-api';
+import { DataEnvironment, DataEnvironmentId, FeedId, FeedStatusId } from '../common/internal-api';
 import { Feed } from './feed';
 
 export class DataFeed extends Feed {

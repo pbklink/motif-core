@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { DataMessage, DataMessageTypeId, WatchmakerListLitIvemIdsDataMessage } from '../common/adi-common-internal-api';
+import { DataMessage, DataMessageTypeId, WatchmakerListLitIvemIdsDataMessage } from '../common/internal-api';
 import { LitIvemIdKeyedCorrectnessListItem } from '../lit-ivem-id-keyed-correctness-list-item';
 import { WatchmakerListMembersDataItem } from './watchmaker-list-members-data-item';
 

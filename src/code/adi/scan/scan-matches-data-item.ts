@@ -21,7 +21,7 @@ import {
     FeedId,
     LitIvemIdMatchesDataMessage,
     MatchesDataMessage,
-} from '../common/adi-common-internal-api';
+} from '../common/internal-api';
 import { FeedSubscriptionDataItem } from '../feed/internal-api';
 import { ScanMatch } from './scan-match';
 

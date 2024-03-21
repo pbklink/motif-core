@@ -30,7 +30,7 @@ import {
     DepthDataDefinition,
     DepthDataMessage,
     MarketId, OrderSideId
-} from './common/adi-common-internal-api';
+} from './common/internal-api';
 import { MarketSubscriptionDataItem } from './market-subscription-data-item';
 
 export class DepthDataItem extends MarketSubscriptionDataItem {

@@ -6,7 +6,7 @@
 
 import { Scan } from '../../../scan/internal-api';
 import { AssertInternalError, Correctness, Integer, MultiEvent, UnreachableCaseError } from '../../../sys/internal-api';
-import { ScanTableFieldSourceDefinition } from '../field-source/grid-table-field-source-internal-api';
+import { ScanTableFieldSourceDefinition } from '../field-source/internal-api';
 import {
     ActiveFaultedStatusIdCorrectnessTableValue,
     BooleanCorrectnessTableValue,
@@ -18,7 +18,7 @@ import {
     ScanTargetTypeIdCorrectnessTableValue,
     StringCorrectnessTableValue,
     TableValue
-} from '../value/grid-table-value-internal-api';
+} from '../value/internal-api';
 import { CorrectnessTableValueSource } from './correctness-table-value-source';
 import { TableValueSource } from './table-value-source';
 

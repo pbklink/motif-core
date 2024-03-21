@@ -5,7 +5,7 @@
  */
 
 import { SingleHeadingDataServer } from '@xilytix/revgrid';
-import { GridField } from '../../field/grid-field-internal-api';
+import { GridField } from '../../field/internal-api';
 
 export class SingleHeadingGridDataServer extends SingleHeadingDataServer<GridField> {
 }

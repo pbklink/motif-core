@@ -6,8 +6,8 @@
 
 import { BalancesModule } from './balances';
 import { BrokerageAccountGroupModule } from './brokerage-account-group';
-import { CommonStaticInitialise } from './common/adi-common-internal-api';
 import { AdiPublisherSubscriptionManagerModule } from './common/adi-publisher-subscription-manager';
+import { CommonStaticInitialise } from './common/internal-api';
 import { MyxLitIvemAttributesModule } from './common/myx-lit-ivem-attributes';
 import { DataItemModule } from './data-item/internal-api';
 import { DayTradesDataItemModule } from './day-trades-data-item';
@@ -15,7 +15,7 @@ import { FeedModule } from './feed/internal-api';
 import { HoldingModule } from './holding';
 import { OrderModule } from './order';
 import { PublisherSubscriptionDataItemModule } from './publish-subscribe/internal-api';
-import { PublishersStaticInitialise } from './publishers/adi-publishers-internal-api';
+import { PublishersStaticInitialise } from './publishers/internal-api';
 import { ScanDescriptorModule } from './scan/scan-statused-descriptor';
 import { LitIvemDetailModule } from './search-symbols-lit-ivem-base-detail';
 import { FullLitIvemDetailModule } from './search-symbols-lit-ivem-full-detail';

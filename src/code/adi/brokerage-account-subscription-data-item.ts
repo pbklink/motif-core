@@ -21,7 +21,7 @@ import {
     DataDefinition,
     FeedInfo,
     SubscribabilityExtentId
-} from './common/adi-common-internal-api';
+} from './common/internal-api';
 import { SubscribabilityExtentSubscriptionDataItem } from './publish-subscribe/internal-api';
 
 export class BrokerageAccountSubscriptionDataItem extends SubscribabilityExtentSubscriptionDataItem {

@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { DataEnvironmentId, MarketBoardId, TradingState } from './common/adi-common-internal-api';
+import { DataEnvironmentId, MarketBoardId, TradingState } from './common/internal-api';
 
 export interface TradingMarketBoard {
     id: MarketBoardId;

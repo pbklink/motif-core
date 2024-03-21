@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { IntegerRenderValue, RenderValue } from '../../../services/services-internal-api';
+import { IntegerRenderValue, RenderValue } from '../../../services/internal-api';
 import { IndexedRecord, Integer } from '../../../sys/internal-api';
 
 /** @public */

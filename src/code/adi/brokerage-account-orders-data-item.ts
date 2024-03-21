@@ -6,7 +6,7 @@
 
 import { assert, AssertInternalError, ErrorCodeLogger, Integer, UnreachableCaseError, UsableListChangeTypeId } from '../sys/internal-api';
 import { BrokerageAccountGroupOrderList } from './brokerage-account-group-order-list';
-import { AurcChangeTypeId, DataMessage, DataMessageTypeId, OrdersDataMessage } from './common/adi-common-internal-api';
+import { AurcChangeTypeId, DataMessage, DataMessageTypeId, OrdersDataMessage } from './common/internal-api';
 import { Order } from './order';
 import { RecordsBrokerageAccountSubscriptionDataItem } from './records-brokerage-account-subscription-data-item';
 

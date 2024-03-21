@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { TableFieldSourceStaticInitialise } from './field-source/grid-table-field-source-internal-api';
+import { TableFieldSourceStaticInitialise } from './field-source/internal-api';
 import { TableRecordSourceStaticInitialise } from './record-source/internal-api';
 
 /** @internal */

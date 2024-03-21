@@ -5,12 +5,12 @@
  */
 
 import { AssertInternalError, Integer, UnreachableCaseError } from '../../../sys/internal-api';
-import { GridField } from '../../field/grid-field-internal-api';
-import { GridFieldTableFieldSourceDefinition } from '../field-source/grid-table-field-source-internal-api';
+import { GridField } from '../../field/internal-api';
+import { GridFieldTableFieldSourceDefinition } from '../field-source/internal-api';
 import {
     StringTableValue,
     TableValue
-} from '../value/grid-table-value-internal-api';
+} from '../value/internal-api';
 import { TableValueSource } from './table-value-source';
 
 export class GridFieldTableValueSource extends TableValueSource {

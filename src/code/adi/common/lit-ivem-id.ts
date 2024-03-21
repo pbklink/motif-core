@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { StringId, Strings } from '../../res/res-internal-api';
+import { StringId, Strings } from '../../res/internal-api';
 import { ComparableList, EnumInfoOutOfOrderError, Err, ErrorCode, FieldDataTypeId, JsonElement, JsonElementErr, Mappable, Ok, Result, compareString } from '../../sys/internal-api';
 import { DataEnvironment, DataEnvironmentId, ExchangeId, ExchangeInfo, MarketId, MarketInfo } from './data-types';
 import { IvemId } from './ivem-id';

@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { CommandContext } from '../command-context/command-context-internal-api';
+import { CommandContext } from '../command-context/internal-api';
 import { Command } from '../command/command';
 import { extStrings } from '../res/ext-strings';
 import { ExtensionOrInternalError } from '../sys/external-error';

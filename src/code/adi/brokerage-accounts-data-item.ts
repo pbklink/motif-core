@@ -14,7 +14,7 @@ import {
     FeedClassId,
     FeedId,
     TradingEnvironment
-} from './common/adi-common-internal-api';
+} from './common/internal-api';
 import { KeyedCorrectnessSettableListFeedSubscriptionDataItem, TradingFeed } from './feed/internal-api';
 
 export class BrokerageAccountsDataItem extends KeyedCorrectnessSettableListFeedSubscriptionDataItem<Account> {

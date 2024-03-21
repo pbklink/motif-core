@@ -4,8 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
-import { Currency, CurrencyId, ExchangeId, MarketBoardId, MarketId, ZenithConvert, ZenithEncodedScanFormula, ZenithProtocolCommon } from '../../adi/adi-internal-api';
-import { StringId, Strings } from '../../res/res-internal-api';
+import { Currency, CurrencyId, ExchangeId, MarketBoardId, MarketId, ZenithConvert, ZenithEncodedScanFormula, ZenithProtocolCommon } from '../../adi/internal-api';
+import { StringId, Strings } from '../../res/internal-api';
 import {
     AssertInternalError,
     EnumInfoOutOfOrderError,

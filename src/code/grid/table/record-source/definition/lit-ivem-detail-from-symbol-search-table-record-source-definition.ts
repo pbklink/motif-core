@@ -4,10 +4,10 @@
  * License: motionite.trade/license/motif
  */
 
-import { ExchangeId, LitIvemAlternateCodes, LitIvemBaseDetail, MarketInfo, MyxLitIvemAttributes, SearchSymbolsDataDefinition, SearchSymbolsLitIvemFullDetail } from '../../../../adi/adi-internal-api';
+import { ExchangeId, LitIvemAlternateCodes, LitIvemBaseDetail, MarketInfo, MyxLitIvemAttributes, SearchSymbolsDataDefinition, SearchSymbolsLitIvemFullDetail } from '../../../../adi/internal-api';
 import { ErrorCode, JsonElement, JsonElementErr, Ok, PickEnum, Result } from '../../../../sys/internal-api';
-import { GridFieldCustomHeadingsService } from '../../../field/grid-field-internal-api';
-import { GridLayoutDefinition } from '../../../layout/grid-layout-internal-api';
+import { GridFieldCustomHeadingsService } from '../../../field/internal-api';
+import { GridLayoutDefinition } from '../../../layout/internal-api';
 import {
     LitIvemAlternateCodesTableFieldSourceDefinition,
     LitIvemBaseDetailTableFieldSourceDefinition,
@@ -15,7 +15,7 @@ import {
     MyxLitIvemAttributesTableFieldSourceDefinition,
     TypedTableFieldSourceDefinition,
     TypedTableFieldSourceDefinitionCachingFactoryService
-} from '../../field-source/grid-table-field-source-internal-api';
+} from '../../field-source/internal-api';
 import { TypedTableRecordSourceDefinition } from './typed-table-record-source-definition';
 
 export class LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition extends TypedTableRecordSourceDefinition {

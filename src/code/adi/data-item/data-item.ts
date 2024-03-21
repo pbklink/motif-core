@@ -15,7 +15,7 @@ import {
     DataMessage,
     firstDataItemId,
     firstDataItemRequestNr
-} from '../common/adi-common-internal-api';
+} from '../common/internal-api';
 
 export abstract class DataItem extends CorrectnessBadness {
     private static readonly _firstValidDataItemId: DataItemId = firstDataItemId;

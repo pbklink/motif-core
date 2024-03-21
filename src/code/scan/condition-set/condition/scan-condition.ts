@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { CurrencyId, ExchangeId, MarketBoardId, MarketId } from '../../../adi/adi-internal-api';
+import { CurrencyId, ExchangeId, MarketBoardId, MarketId } from '../../../adi/internal-api';
 import { PickEnum, SourceTzOffsetDate, UnreachableCaseError, isArrayEqualUniquely } from '../../../sys/internal-api';
 import { ScanFormula } from '../../formula/internal-api';
 

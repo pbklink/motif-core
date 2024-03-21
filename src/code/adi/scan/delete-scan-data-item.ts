@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { DataMessage, DataMessageTypeId } from '../common/adi-common-internal-api';
+import { DataMessage, DataMessageTypeId } from '../common/internal-api';
 import { ScanPublishDataItem } from './scan-publish-data-item';
 
 export class DeleteScanDataItem extends ScanPublishDataItem {

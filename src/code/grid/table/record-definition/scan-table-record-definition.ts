@@ -5,7 +5,7 @@
  */
 
 import { Scan } from '../../../scan/internal-api';
-import { TypedTableFieldSourceDefinition } from '../field-source/grid-table-field-source-internal-api';
+import { TypedTableFieldSourceDefinition } from '../field-source/internal-api';
 import { PayloadTableRecordDefinition } from './payload-table-record-definition';
 import { TypedTableRecordDefinition } from './typed-table-record-definition';
 

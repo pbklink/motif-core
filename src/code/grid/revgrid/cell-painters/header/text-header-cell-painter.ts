@@ -5,9 +5,9 @@
  */
 
 import { DataServer, DatalessViewCell, IndexSignatureHack, StandardTextPainter } from '@xilytix/revgrid';
-import { ColorScheme, SettingsService } from '../../../../services/services-internal-api';
-import { GridField } from '../../../field/grid-field-internal-api';
-import { AdaptedRevgrid } from '../../adapted-revgrid/grid-revgrid-adapted-revgrid-internal-api';
+import { ColorScheme, SettingsService } from '../../../../services/internal-api';
+import { GridField } from '../../../field/internal-api';
+import { AdaptedRevgrid } from '../../adapted-revgrid/internal-api';
 import { AdaptedRevgridBehavioredColumnSettings } from '../../settings/adapted-revgrid-behaviored-column-settings';
 import { HeaderCellPainter } from './header-cell-painter';
 

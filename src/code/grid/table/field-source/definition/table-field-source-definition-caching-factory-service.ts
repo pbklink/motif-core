@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { GridLayoutDefinition } from '../../../layout/grid-layout-internal-api';
+import { GridLayoutDefinition } from '../../../layout/internal-api';
 // import { BalancesTableFieldSourceDefinition } from './balances-table-field-source-definition';
 // import { BrokerageAccountTableFieldSourceDefinition } from './brokerage-account-table-field-source-definition';
 // import { CallPutSecurityDataItemTableFieldSourceDefinition } from './call-put-security-data-item-table-field-source-definition';

@@ -5,7 +5,7 @@
  */
 
 import { ErrorCodeLogger, parseIntStrict, parseNumberStrict, UnreachableCaseError } from '../../../../sys/internal-api';
-import { LitIvemAlternateCodes, ZenithProtocolCommon } from '../../../common/adi-common-internal-api';
+import { LitIvemAlternateCodes, ZenithProtocolCommon } from '../../../common/internal-api';
 import { MyxLitIvemAttributes } from '../../../common/myx-lit-ivem-attributes';
 import { ZenithMarketMyx } from './zenith-market-myx';
 

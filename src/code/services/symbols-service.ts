@@ -20,8 +20,8 @@ import {
     RoutedIvemId,
     SearchSymbolsLitIvemBaseDetail,
     SymbolField, SymbolFieldId
-} from '../adi/adi-internal-api';
-import { StringId, Strings } from '../res/res-internal-api';
+} from '../adi/internal-api';
+import { StringId, Strings } from '../res/internal-api';
 import {
     AssertInternalError,
     EnumInfoOutOfOrderError,
@@ -37,7 +37,7 @@ import {
     isArrayEqualUniquely,
     isDigitCharCode
 } from "../sys/internal-api";
-import { ExchangeSettings, ScalarSettings, SettingsService, TypedKeyValueScalarSettingsGroup, TypedKeyValueSettings } from './settings/settings-internal-api';
+import { ExchangeSettings, ScalarSettings, SettingsService, TypedKeyValueScalarSettingsGroup, TypedKeyValueSettings } from './settings/internal-api';
 
 export class SymbolsService {
     private _finalised = false;

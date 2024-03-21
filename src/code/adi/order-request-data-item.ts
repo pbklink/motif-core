@@ -12,7 +12,7 @@ import {
     OrderRequestTypeId,
     OrderResponseDataMessage,
     OrdersDataMessage
-} from './common/adi-common-internal-api';
+} from './common/internal-api';
 import { PublisherSubscriptionDataItem } from './publish-subscribe/internal-api';
 
 export abstract class OrderRequestDataItem extends PublisherSubscriptionDataItem {
