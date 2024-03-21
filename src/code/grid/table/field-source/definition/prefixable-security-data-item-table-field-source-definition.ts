@@ -7,7 +7,6 @@
 import { SecurityDataItem } from '../../../../adi/adi-internal-api';
 import {
     AssertInternalError,
-    CommaText,
     FieldDataType,
     FieldDataTypeId,
     Integer,
@@ -48,13 +47,13 @@ import {
     TradingStateReasonIdCorrectnessTableValue,
     UndisclosedCorrectnessTableValue
 } from '../../value/grid-table-value-internal-api';
-import { TableFieldSourceDefinition } from './table-field-source-definition';
+import { TypedTableFieldSourceDefinition } from './typed-table-field-source-definition';
 
-export abstract class PrefixableSecurityDataItemTableFieldSourceDefinition extends TableFieldSourceDefinition {
+export abstract class PrefixableSecurityDataItemTableFieldSourceDefinition extends TypedTableFieldSourceDefinition {
     override readonly fieldDefinitions: TableField.Definition[];
 
     constructor(
-        typeId: TableFieldSourceDefinition.TypeId,
+        typeId: TypedTableFieldSourceDefinition.TypeId,
         protected readonly _prefix: string
     ) {
         super(typeId);
@@ -68,7 +67,7 @@ export abstract class PrefixableSecurityDataItemTableFieldSourceDefinition exten
 
     getFieldNameById(id: SecurityDataItem.FieldId) {
         const sourcelessFieldName = this._prefix + PrefixableSecurityDataItemTableFieldSourceDefinition.Field.getNameById(id);
-        return CommaText.from2Values(this.name, sourcelessFieldName);
+        return this.encodeFieldName(sourcelessFieldName);
     }
 
     getSupportedFieldNameById(id: SecurityDataItem.FieldId) {
@@ -117,7 +116,7 @@ export namespace PrefixableSecurityDataItemTableFieldSourceDefinition {
         const infos = new Array<Info>(count);
         const idFieldIndices = new Array<Integer>(SecurityDataItem.Field.idCount);
 
-        function idToTableGridConstructors(id: SecurityDataItem.FieldId): TableFieldSourceDefinition.CorrectnessTableGridConstructors {
+        function idToTableGridConstructors(id: SecurityDataItem.FieldId): TypedTableFieldSourceDefinition.CorrectnessTableGridConstructors {
             switch (id) {
                 case SecurityDataItem.FieldId.LitIvemId:
                     return [LitIvemIdCorrectnessTableField, LitIvemIdCorrectnessTableValue];
@@ -245,7 +244,7 @@ export namespace PrefixableSecurityDataItemTableFieldSourceDefinition {
         }
     }
 
-    export interface FieldId extends TableFieldSourceDefinition.FieldId {
+    export interface FieldId extends TypedTableFieldSourceDefinition.FieldId {
         id: SecurityDataItem.FieldId;
     }
 

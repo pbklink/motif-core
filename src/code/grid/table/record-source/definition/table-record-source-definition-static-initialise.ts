@@ -4,11 +4,11 @@
  * License: motionite.trade/license/motif
  */
 
-import { TableRecordSourceDefinitionModule } from './table-record-source-definition';
+import { TypedTableRecordSourceDefinitionModule } from './typed-table-record-source-definition';
 
 /** @internal */
 export namespace TableRecordSourceDefinitionStaticInitialise {
     export function initialise() {
-        TableRecordSourceDefinitionModule.initialiseStatic();
+        TypedTableRecordSourceDefinitionModule.initialiseStatic();
     }
 }

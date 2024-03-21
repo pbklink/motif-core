@@ -7,7 +7,6 @@
 import { Account } from '../../../../adi/adi-internal-api';
 import {
     AssertInternalError,
-    CommaText,
     FieldDataType,
     FieldDataTypeId,
     Integer,
@@ -24,13 +23,14 @@ import {
     DataEnvironmentIdCorrectnessTableValue,
     StringCorrectnessTableValue
 } from '../../value/grid-table-value-internal-api';
-import { TableFieldSourceDefinition } from './table-field-source-definition';
+import { TypedTableFieldSourceDefinition } from './typed-table-field-source-definition';
+import { TypedTableFieldSourceDefinitionCachingFactoryService } from './typed-table-field-source-definition-caching-factory-service';
 
-export class BrokerageAccountTableFieldSourceDefinition extends TableFieldSourceDefinition {
+export class BrokerageAccountTableFieldSourceDefinition extends TypedTableFieldSourceDefinition {
     override readonly fieldDefinitions: TableField.Definition[];
 
     constructor() {
-        super(TableFieldSourceDefinition.TypeId.BrokerageAccount);
+        super(BrokerageAccountTableFieldSourceDefinition.typeId);
 
         this.fieldDefinitions = this.createFieldDefinitions();
     }
@@ -41,7 +41,7 @@ export class BrokerageAccountTableFieldSourceDefinition extends TableFieldSource
 
     getFieldNameById(id: Account.FieldId) {
         const sourcelessFieldName = BrokerageAccountTableFieldSourceDefinition.Field.getNameById(id);
-        return CommaText.from2Values(this.name, sourcelessFieldName);
+        return this.encodeFieldName(sourcelessFieldName);
     }
 
     getSupportedFieldNameById(id: Account.FieldId) {
@@ -77,6 +77,9 @@ export class BrokerageAccountTableFieldSourceDefinition extends TableFieldSource
 }
 
 export namespace BrokerageAccountTableFieldSourceDefinition {
+    export const typeId = TypedTableFieldSourceDefinition.TypeId.BrokerageAccount;
+    export type TypeId = typeof typeId;
+
     export namespace Field {
         const unsupportedIds = [Account.FieldId.EnvironmentId];
         export const count = Account.Field.idCount - unsupportedIds.length;
@@ -91,7 +94,7 @@ export namespace BrokerageAccountTableFieldSourceDefinition {
         const idFieldIndices = new Array<Integer>(Account.Field.idCount);
 
         function idToTableGridConstructors(id: Account.FieldId):
-            TableFieldSourceDefinition.CorrectnessTableGridConstructors {
+            TypedTableFieldSourceDefinition.CorrectnessTableGridConstructors {
             switch (id) {
                 case Account.FieldId.Id:
                     return [StringCorrectnessTableField, StringCorrectnessTableValue];
@@ -165,9 +168,13 @@ export namespace BrokerageAccountTableFieldSourceDefinition {
         }
     }
 
-    export interface FieldId extends TableFieldSourceDefinition.FieldId {
-        sourceTypeId: TableFieldSourceDefinition.TypeId.BrokerageAccount;
+    export interface FieldId extends TypedTableFieldSourceDefinition.FieldId {
+        sourceTypeId: BrokerageAccountTableFieldSourceDefinition.TypeId;
         id: Account.FieldId;
+    }
+
+    export function get(cachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService): BrokerageAccountTableFieldSourceDefinition {
+        return cachingFactoryService.get(typeId) as BrokerageAccountTableFieldSourceDefinition;
     }
 
     export function initialiseStatic() {

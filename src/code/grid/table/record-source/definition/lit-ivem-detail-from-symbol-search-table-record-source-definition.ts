@@ -13,24 +13,24 @@ import {
     LitIvemBaseDetailTableFieldSourceDefinition,
     LitIvemExtendedDetailTableFieldSourceDefinition,
     MyxLitIvemAttributesTableFieldSourceDefinition,
-    TableFieldSourceDefinition,
-    TableFieldSourceDefinitionCachedFactoryService
+    TypedTableFieldSourceDefinition,
+    TypedTableFieldSourceDefinitionCachingFactoryService
 } from '../../field-source/grid-table-field-source-internal-api';
-import { TableRecordSourceDefinition } from './table-record-source-definition';
+import { TypedTableRecordSourceDefinition } from './typed-table-record-source-definition';
 
-export class LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition extends TableRecordSourceDefinition {
+export class LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition extends TypedTableRecordSourceDefinition {
     readonly exchangeId: ExchangeId | undefined;
     readonly isFullDetail: boolean;
 
     constructor(
         customHeadingsService: GridFieldCustomHeadingsService,
-        tableFieldSourceDefinitionCachedFactoryService: TableFieldSourceDefinitionCachedFactoryService,
+        tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService,
         readonly dataDefinition: SearchSymbolsDataDefinition
     ) {
         super(
             customHeadingsService,
-            tableFieldSourceDefinitionCachedFactoryService,
-            TableRecordSourceDefinition.TypeId.LitIvemDetailsFromSearchSymbols,
+            tableFieldSourceDefinitionCachingFactoryService,
+            TypedTableRecordSourceDefinition.TypeId.LitIvemDetailsFromSearchSymbols,
             LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
         );
 
@@ -65,17 +65,17 @@ export class LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition extends T
 
     getDefaultFieldSourceDefinitionTypeIds(): LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition.FieldSourceDefinitionTypeId[] {
         const result: LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition.FieldSourceDefinitionTypeId[] =
-            [TableFieldSourceDefinition.TypeId.LitIvemBaseDetail];
+            [TypedTableFieldSourceDefinition.TypeId.LitIvemBaseDetail];
 
         if (this.dataDefinition.fullSymbol) {
-            result.push(TableFieldSourceDefinition.TypeId.LitIvemExtendedDetail);
+            result.push(TypedTableFieldSourceDefinition.TypeId.LitIvemExtendedDetail);
             switch (this.exchangeId) {
                 case ExchangeId.Myx:
-                    result.push(TableFieldSourceDefinition.TypeId.MyxLitIvemAttributes);
+                    result.push(TypedTableFieldSourceDefinition.TypeId.MyxLitIvemAttributes);
                     break;
             }
             // AlternateCodesFix: Currently this actually is part of FullDetail.  Will be in BaseDetail in future
-            result.push(TableFieldSourceDefinition.TypeId.LitIvemAlternateCodes);
+            result.push(TypedTableFieldSourceDefinition.TypeId.LitIvemAlternateCodes);
         }
         return result;
     }
@@ -134,7 +134,7 @@ export class LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition extends T
     }
 
     private addLitIvemBaseDetailToDefaultGridLayout(fieldNames: string[]) {
-        const fieldSourceDefinition = this.tableFieldSourceDefinitionCachedFactoryService.litIvemBaseDetail;
+        const fieldSourceDefinition = LitIvemBaseDetailTableFieldSourceDefinition.get(this.tableFieldSourceDefinitionCachingFactoryService);
 
         fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(LitIvemBaseDetail.Field.Id.Id));
         fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(LitIvemBaseDetail.Field.Id.Name));
@@ -145,7 +145,7 @@ export class LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition extends T
     }
 
     private addLitIvemExtendedDetailFieldDefinitionSource(fieldNames: string[]) {
-        const fieldSourceDefinition = this.tableFieldSourceDefinitionCachedFactoryService.litIvemExtendedDetail;
+        const fieldSourceDefinition = LitIvemExtendedDetailTableFieldSourceDefinition.get(this.tableFieldSourceDefinitionCachingFactoryService);
 
         fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(SearchSymbolsLitIvemFullDetail.ExtendedField.Id.IsIndex));
         fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(SearchSymbolsLitIvemFullDetail.ExtendedField.Id.Categories));
@@ -158,7 +158,7 @@ export class LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition extends T
     }
 
     private addMyxLitIvemAttributesFieldDefinitionSource(fieldNames: string[]) {
-        const fieldSourceDefinition = this.tableFieldSourceDefinitionCachedFactoryService.myxLitIvemAttributes;
+        const fieldSourceDefinition = MyxLitIvemAttributesTableFieldSourceDefinition.get(this.tableFieldSourceDefinitionCachingFactoryService);
 
         fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(MyxLitIvemAttributes.Field.Id.MarketClassification));
         fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(MyxLitIvemAttributes.Field.Id.Category));
@@ -167,7 +167,7 @@ export class LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition extends T
     }
 
     private addLitIvemAlternateCodesFieldDefinitionSource(fieldNames: string[]) {
-        const fieldSourceDefinition = this.tableFieldSourceDefinitionCachedFactoryService.litIvemAlternateCodes;
+        const fieldSourceDefinition = LitIvemAlternateCodesTableFieldSourceDefinition.get(this.tableFieldSourceDefinitionCachingFactoryService);
 
         fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(LitIvemAlternateCodes.Field.Id.Ticker));
         fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(LitIvemAlternateCodes.Field.Id.Isin));
@@ -176,18 +176,18 @@ export class LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition extends T
 }
 
 export namespace LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition {
-    export type FieldSourceDefinitionTypeId = PickEnum<TableFieldSourceDefinition.TypeId,
-        TableFieldSourceDefinition.TypeId.LitIvemBaseDetail |
-        TableFieldSourceDefinition.TypeId.LitIvemExtendedDetail |
-        TableFieldSourceDefinition.TypeId.LitIvemAlternateCodes |
-        TableFieldSourceDefinition.TypeId.MyxLitIvemAttributes
+    export type FieldSourceDefinitionTypeId = PickEnum<TypedTableFieldSourceDefinition.TypeId,
+        TypedTableFieldSourceDefinition.TypeId.LitIvemBaseDetail |
+        TypedTableFieldSourceDefinition.TypeId.LitIvemExtendedDetail |
+        TypedTableFieldSourceDefinition.TypeId.LitIvemAlternateCodes |
+        TypedTableFieldSourceDefinition.TypeId.MyxLitIvemAttributes
     >;
 
     export const allowedFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[] = [
-        TableFieldSourceDefinition.TypeId.LitIvemBaseDetail,
-        TableFieldSourceDefinition.TypeId.LitIvemExtendedDetail,
-        TableFieldSourceDefinition.TypeId.LitIvemAlternateCodes,
-        TableFieldSourceDefinition.TypeId.MyxLitIvemAttributes,
+        TypedTableFieldSourceDefinition.TypeId.LitIvemBaseDetail,
+        TypedTableFieldSourceDefinition.TypeId.LitIvemExtendedDetail,
+        TypedTableFieldSourceDefinition.TypeId.LitIvemAlternateCodes,
+        TypedTableFieldSourceDefinition.TypeId.MyxLitIvemAttributes,
     ];
 
     export type FieldId =
@@ -219,13 +219,13 @@ export namespace LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition {
     }
 
     export function createLayoutDefinition(
-        fieldSourceDefinitionRegistryService: TableFieldSourceDefinitionCachedFactoryService,
+        fieldSourceDefinitionRegistryService: TypedTableFieldSourceDefinitionCachingFactoryService,
         fieldIds: FieldId[],
     ): GridLayoutDefinition {
         return fieldSourceDefinitionRegistryService.createLayoutDefinition(fieldIds);
     }
 
-    export function is(definition: TableRecordSourceDefinition): definition is LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition {
-        return definition.typeId === TableRecordSourceDefinition.TypeId.LitIvemDetailsFromSearchSymbols;
+    export function is(definition: TypedTableRecordSourceDefinition): definition is LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition {
+        return definition.typeId === TypedTableRecordSourceDefinition.TypeId.LitIvemDetailsFromSearchSymbols;
     }
 }

@@ -5,7 +5,7 @@
  */
 
 import { RenderValue } from '../../services/render-value';
-import { AssertInternalError, BidAskPair, IndexedRecord } from '../../sys/internal-api';
+import { AssertInternalError, IndexedRecord } from '../../sys/internal-api';
 import { GridField } from './grid-field';
 
 // AllowedGridField is used in Column selector
@@ -14,5 +14,3 @@ export class AllowedGridField extends GridField {
         throw new AssertInternalError('AGFGVV34340'); // never used to get data
     }
 }
-
-export type BidAskAllowedGridFields = BidAskPair<readonly AllowedGridField[]>;

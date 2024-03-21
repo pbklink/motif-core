@@ -7,7 +7,6 @@
 import { SearchSymbolsLitIvemFullDetail } from '../../../../adi/adi-internal-api';
 import {
     AssertInternalError,
-    CommaText,
     FieldDataType,
     FieldDataTypeId,
     Integer,
@@ -37,13 +36,14 @@ import {
     StringArrayCorrectnessTableValue,
     StringCorrectnessTableValue
 } from '../../value/grid-table-value-internal-api';
-import { TableFieldSourceDefinition } from './table-field-source-definition';
+import { TypedTableFieldSourceDefinition } from './typed-table-field-source-definition';
+import { TypedTableFieldSourceDefinitionCachingFactoryService } from './typed-table-field-source-definition-caching-factory-service';
 
-export class LitIvemExtendedDetailTableFieldSourceDefinition extends TableFieldSourceDefinition {
+export class LitIvemExtendedDetailTableFieldSourceDefinition extends TypedTableFieldSourceDefinition {
     override readonly fieldDefinitions: TableField.Definition[];
 
     constructor() {
-        super(TableFieldSourceDefinition.TypeId.LitIvemExtendedDetail);
+        super(LitIvemExtendedDetailTableFieldSourceDefinition.typeId);
 
         this.fieldDefinitions = this.createFieldDefinitions();
     }
@@ -54,7 +54,7 @@ export class LitIvemExtendedDetailTableFieldSourceDefinition extends TableFieldS
 
     getFieldNameById(id: SearchSymbolsLitIvemFullDetail.ExtendedField.Id) {
         const sourcelessFieldName = LitIvemExtendedDetailTableFieldSourceDefinition.Field.getNameById(id);
-        return CommaText.from2Values(this.name, sourcelessFieldName);
+        return this.encodeFieldName(sourcelessFieldName);
     }
 
     getSupportedFieldNameById(id: SearchSymbolsLitIvemFullDetail.ExtendedField.Id) {
@@ -90,6 +90,9 @@ export class LitIvemExtendedDetailTableFieldSourceDefinition extends TableFieldS
 }
 
 export namespace LitIvemExtendedDetailTableFieldSourceDefinition {
+    export const typeId = TypedTableFieldSourceDefinition.TypeId.LitIvemExtendedDetail;
+    export type TypeId = typeof typeId;
+
     export namespace Field {
         const unsupportedIds: SearchSymbolsLitIvemFullDetail.ExtendedField.Id[] = [
             SearchSymbolsLitIvemFullDetail.ExtendedField.Id.Attributes,
@@ -107,7 +110,7 @@ export namespace LitIvemExtendedDetailTableFieldSourceDefinition {
         const idFieldIndices = new Array<Integer>(SearchSymbolsLitIvemFullDetail.ExtendedField.idCount);
 
         function idToTableGridConstructors(id: SearchSymbolsLitIvemFullDetail.ExtendedField.Id):
-            TableFieldSourceDefinition.CorrectnessTableGridConstructors {
+            TypedTableFieldSourceDefinition.CorrectnessTableGridConstructors {
             switch (id) {
                 case SearchSymbolsLitIvemFullDetail.ExtendedField.Id.Cfi:
                     return [StringCorrectnessTableField, StringCorrectnessTableValue];
@@ -192,9 +195,13 @@ export namespace LitIvemExtendedDetailTableFieldSourceDefinition {
         }
     }
 
-    export interface FieldId extends TableFieldSourceDefinition.FieldId {
-        sourceTypeId: TableFieldSourceDefinition.TypeId.LitIvemExtendedDetail;
+    export interface FieldId extends TypedTableFieldSourceDefinition.FieldId {
+        sourceTypeId: LitIvemExtendedDetailTableFieldSourceDefinition.TypeId;
         id: SearchSymbolsLitIvemFullDetail.ExtendedField.Id;
+    }
+
+    export function get(cachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService): LitIvemExtendedDetailTableFieldSourceDefinition {
+        return cachingFactoryService.get(typeId) as LitIvemExtendedDetailTableFieldSourceDefinition;
     }
 
     export function initialiseStatic() {

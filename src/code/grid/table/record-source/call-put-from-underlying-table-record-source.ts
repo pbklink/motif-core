@@ -28,14 +28,14 @@ import {
     newDecimal
 } from '../../../sys/internal-api';
 import { TextFormatterService } from '../../../text-format/text-format-internal-api';
+import { GridFieldCustomHeadingsService } from '../../field/grid-field-internal-api';
 import {
-    TableFieldSourceDefinition
+    TypedTableFieldSourceDefinition, TypedTableFieldSourceDefinitionCachingFactoryService
 } from "../field-source/grid-table-field-source-internal-api";
 import { CallPutTableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
 import { TableRecord } from '../record/grid-table-record-internal-api';
 import { CallPutTableValueSource, SecurityDataItemTableValueSource } from '../value-source/internal-api';
 import { CallPutFromUnderlyingTableRecordSourceDefinition } from './definition/call-put-from-underlying-table-record-source-definition';
-import { TableRecordSourceDefinitionFactoryService } from './definition/grid-table-record-source-definition-internal-api';
 import { SingleDataItemTableRecordSource } from './single-data-item-table-record-source';
 
 /** @public */
@@ -54,13 +54,15 @@ export class CallPutFromUnderlyingTableRecordSource extends SingleDataItemTableR
     constructor(
         private readonly _adiService: AdiService,
         textFormatterService: TextFormatterService,
-        tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService,
+        gridFieldCustomHeadingsService: GridFieldCustomHeadingsService,
+        tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService,
         correctnessBadness: CorrectnessBadness,
         definition: CallPutFromUnderlyingTableRecordSourceDefinition,
     ) {
         super(
             textFormatterService,
-            tableRecordSourceDefinitionFactoryService,
+            gridFieldCustomHeadingsService,
+            tableFieldSourceDefinitionCachingFactoryService,
             correctnessBadness,
             definition,
             CallPutFromUnderlyingTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
@@ -69,13 +71,17 @@ export class CallPutFromUnderlyingTableRecordSource extends SingleDataItemTableR
     }
 
     override createDefinition(): CallPutFromUnderlyingTableRecordSourceDefinition {
-        return this.tableRecordSourceDefinitionFactoryService.createCallPutFromUnderlying(this._underlyingIvemId.createCopy());
+        return new CallPutFromUnderlyingTableRecordSourceDefinition(
+            this._gridFieldCustomHeadingsService,
+            this._tableFieldSourceDefinitionCachingFactoryService,
+            this._underlyingIvemId.createCopy(),
+        );
     }
 
     override createRecordDefinition(idx: Integer): CallPutTableRecordDefinition {
         const record = this._recordList[idx];
         return {
-            typeId: TableFieldSourceDefinition.TypeId.CallPut,
+            typeId: TypedTableFieldSourceDefinition.TypeId.CallPut,
             mapKey: record.createKey().mapKey,
             record,
         };
@@ -93,12 +99,12 @@ export class CallPutFromUnderlyingTableRecordSource extends SingleDataItemTableR
             const fieldSourceDefinitionTypeId =
                 fieldSourceDefinition.typeId as CallPutFromUnderlyingTableRecordSourceDefinition.FieldSourceDefinitionTypeId;
             switch (fieldSourceDefinitionTypeId) {
-                case TableFieldSourceDefinition.TypeId.CallPut: {
+                case TypedTableFieldSourceDefinition.TypeId.CallPut: {
                     const valueSource = new CallPutTableValueSource(result.fieldCount, callPut);
                     result.addSource(valueSource);
                     break;
                 }
-                case TableFieldSourceDefinition.TypeId.CallSecurityDataItem: {
+                case TypedTableFieldSourceDefinition.TypeId.CallSecurityDataItem: {
                     const litIvemId = callPut.callLitIvemId;
                     if (litIvemId === undefined) {
                         throw new AssertInternalError('CPFUTRSCTRC68409');
@@ -109,7 +115,7 @@ export class CallPutFromUnderlyingTableRecordSource extends SingleDataItemTableR
                     }
                     break;
                 }
-                case TableFieldSourceDefinition.TypeId.PutSecurityDataItem: {
+                case TypedTableFieldSourceDefinition.TypeId.PutSecurityDataItem: {
                     const litIvemId = callPut.putLitIvemId;
                     if (litIvemId === undefined) {
                         throw new AssertInternalError('CPFUTRSCTRC68409');

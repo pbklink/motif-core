@@ -7,8 +7,9 @@
 import { Account, AdiService, BrokerageAccountsDataDefinition, BrokerageAccountsDataItem } from '../../../adi/adi-internal-api';
 import { CorrectnessBadness, Integer, KeyedCorrectnessList, LockOpenListItem, UnreachableCaseError } from '../../../sys/internal-api';
 import { TextFormatterService } from '../../../text-format/text-format-internal-api';
+import { GridFieldCustomHeadingsService } from '../../field/grid-field-internal-api';
 import {
-    TableFieldSourceDefinition
+    TypedTableFieldSourceDefinition, TypedTableFieldSourceDefinitionCachingFactoryService
 } from "../field-source/grid-table-field-source-internal-api";
 import {
     BrokerageAccountTableRecordDefinition
@@ -16,7 +17,6 @@ import {
 import { TableRecord } from '../record/grid-table-record-internal-api';
 import { BrokerageAccountTableValueSource, FeedTableValueSource } from '../value-source/internal-api';
 import { BrokerageAccountTableRecordSourceDefinition } from './definition/brokerage-account-table-record-source-definition';
-import { TableRecordSourceDefinitionFactoryService } from './definition/grid-table-record-source-definition-internal-api';
 import { SingleDataItemRecordTableRecordSource } from './single-data-item-record-table-record-source';
 
 /** @public */
@@ -26,13 +26,15 @@ export class BrokerageAccountTableRecordSource
     constructor(
         private readonly _adiService: AdiService,
         textFormatterService: TextFormatterService,
-        tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService,
+        gridFieldCustomHeadingsService: GridFieldCustomHeadingsService,
+        tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService,
         correctnessBadness: CorrectnessBadness,
         definition: BrokerageAccountTableRecordSourceDefinition,
     ) {
         super(
             textFormatterService,
-            tableRecordSourceDefinitionFactoryService,
+            gridFieldCustomHeadingsService,
+            tableFieldSourceDefinitionCachingFactoryService,
             correctnessBadness,
             definition,
             BrokerageAccountTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
@@ -40,13 +42,16 @@ export class BrokerageAccountTableRecordSource
     }
 
     override createDefinition(): BrokerageAccountTableRecordSourceDefinition {
-        return this.tableRecordSourceDefinitionFactoryService.createBrokerageAccount();
+        return new BrokerageAccountTableRecordSourceDefinition(
+            this._gridFieldCustomHeadingsService,
+            this._tableFieldSourceDefinitionCachingFactoryService,
+        );
     }
 
     override createRecordDefinition(idx: Integer): BrokerageAccountTableRecordDefinition {
         const record = this.recordList.records[idx];
         return {
-            typeId: TableFieldSourceDefinition.TypeId.BrokerageAccount,
+            typeId: TypedTableFieldSourceDefinition.TypeId.BrokerageAccount,
             mapKey: record.mapKey,
             record,
         };
@@ -64,12 +69,12 @@ export class BrokerageAccountTableRecordSource
             const fieldSourceDefinitionTypeId =
                 fieldSourceDefinition.typeId as BrokerageAccountTableRecordSourceDefinition.FieldSourceDefinitionTypeId;
             switch (fieldSourceDefinitionTypeId) {
-                case TableFieldSourceDefinition.TypeId.BrokerageAccount: {
+                case TypedTableFieldSourceDefinition.TypeId.BrokerageAccount: {
                     const valueSource = new BrokerageAccountTableValueSource(result.fieldCount, brokerageAccount);
                     result.addSource(valueSource);
                     break;
                 }
-                case TableFieldSourceDefinition.TypeId.Feed: {
+                case TypedTableFieldSourceDefinition.TypeId.Feed: {
                     const valueSource = new FeedTableValueSource(result.fieldCount, brokerageAccount.tradingFeed);
                     result.addSource(valueSource);
                     break;

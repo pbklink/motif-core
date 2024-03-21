@@ -7,18 +7,18 @@
 import { AllBrokerageAccountGroup, BrokerageAccountGroup } from '../../../../adi/adi-internal-api';
 import { JsonElement } from '../../../../sys/internal-api';
 import { GridFieldCustomHeadingsService } from '../../../field/grid-field-internal-api';
-import { TableFieldSourceDefinition, TableFieldSourceDefinitionCachedFactoryService } from "../../field-source/grid-table-field-source-internal-api";
-import { TableRecordSourceDefinition } from './table-record-source-definition';
+import { TypedTableFieldSourceDefinition, TypedTableFieldSourceDefinitionCachingFactoryService } from "../../field-source/grid-table-field-source-internal-api";
+import { TypedTableRecordSourceDefinition } from './typed-table-record-source-definition';
 
-export abstract class BrokerageAccountGroupTableRecordSourceDefinition extends TableRecordSourceDefinition {
+export abstract class BrokerageAccountGroupTableRecordSourceDefinition extends TypedTableRecordSourceDefinition {
     constructor(
         customHeadingsService: GridFieldCustomHeadingsService,
-        tableFieldSourceDefinitionCachedFactoryService: TableFieldSourceDefinitionCachedFactoryService,
-        typeId: TableRecordSourceDefinition.TypeId,
-        allowedFieldSourceDefinitionTypeIds: TableFieldSourceDefinition.TypeId[],
+        tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService,
+        typeId: TypedTableRecordSourceDefinition.TypeId,
+        allowedFieldSourceDefinitionTypeIds: TypedTableFieldSourceDefinition.TypeId[],
         public readonly brokerageAccountGroup: BrokerageAccountGroup
     ) {
-        super(customHeadingsService, tableFieldSourceDefinitionCachedFactoryService, typeId, allowedFieldSourceDefinitionTypeIds);
+        super(customHeadingsService, tableFieldSourceDefinitionCachingFactoryService, typeId, allowedFieldSourceDefinitionTypeIds);
     }
 
     override saveToJson(element: JsonElement) {

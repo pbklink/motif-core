@@ -8,22 +8,22 @@ import { LitIvemId, TopShareholder } from '../../../../adi/adi-internal-api';
 import { ErrorCode, JsonElement, Ok, PickEnum, Result } from '../../../../sys/internal-api';
 import { GridFieldCustomHeadingsService } from '../../../field/grid-field-internal-api';
 import { GridLayoutDefinition } from '../../../layout/grid-layout-internal-api';
-import { TableFieldSourceDefinition, TableFieldSourceDefinitionCachedFactoryService } from '../../field-source/grid-table-field-source-internal-api';
-import { TableRecordSourceDefinition } from './table-record-source-definition';
+import { TopShareholderTableFieldSourceDefinition, TypedTableFieldSourceDefinition, TypedTableFieldSourceDefinitionCachingFactoryService } from '../../field-source/grid-table-field-source-internal-api';
+import { TypedTableRecordSourceDefinition } from './typed-table-record-source-definition';
 
 /** @public */
-export class TopShareholderTableRecordSourceDefinition extends TableRecordSourceDefinition {
+export class TopShareholderTableRecordSourceDefinition extends TypedTableRecordSourceDefinition {
     constructor(
         customHeadingsService: GridFieldCustomHeadingsService,
-        tableFieldSourceDefinitionCachedFactoryService: TableFieldSourceDefinitionCachedFactoryService,
+        tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService,
         readonly litIvemId: LitIvemId,
         readonly tradingDate: Date | undefined,
         readonly compareToTradingDate: Date | undefined,
     ) {
         super(
             customHeadingsService,
-            tableFieldSourceDefinitionCachedFactoryService,
-            TableRecordSourceDefinition.TypeId.TopShareholder,
+            tableFieldSourceDefinitionCachingFactoryService,
+            TypedTableRecordSourceDefinition.TypeId.TopShareholder,
             TopShareholderTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
         );
     }
@@ -42,7 +42,7 @@ export class TopShareholderTableRecordSourceDefinition extends TableRecordSource
     }
 
     override createDefaultLayoutDefinition() {
-        const topShareholdersFieldSourceDefinition = this.tableFieldSourceDefinitionCachedFactoryService.topShareholdersDataItem;
+        const topShareholdersFieldSourceDefinition = TopShareholderTableFieldSourceDefinition.get(this.tableFieldSourceDefinitionCachingFactoryService);
 
         const fieldNames = new Array<string>();
 
@@ -59,14 +59,14 @@ export class TopShareholderTableRecordSourceDefinition extends TableRecordSource
 
 /** @public */
 export namespace TopShareholderTableRecordSourceDefinition {
-    export type FieldSourceDefinitionTypeId = PickEnum<TableFieldSourceDefinition.TypeId,
-        TableFieldSourceDefinition.TypeId.TopShareholder
+    export type FieldSourceDefinitionTypeId = PickEnum<TypedTableFieldSourceDefinition.TypeId,
+        TypedTableFieldSourceDefinition.TypeId.TopShareholder
     >;
     export const allowedFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[] = [
-        TableFieldSourceDefinition.TypeId.TopShareholder,
+        TypedTableFieldSourceDefinition.TypeId.TopShareholder,
     ];
     export const defaultFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[] = [
-        TableFieldSourceDefinition.TypeId.TopShareholder,
+        TypedTableFieldSourceDefinition.TypeId.TopShareholder,
     ];
 
     export namespace JsonTag {

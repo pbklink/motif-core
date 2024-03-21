@@ -7,7 +7,6 @@
 import { Order } from '../../../../adi/adi-internal-api';
 import {
     AssertInternalError,
-    CommaText,
     FieldDataType,
     FieldDataTypeId,
     Integer,
@@ -51,13 +50,14 @@ import {
     StringCorrectnessTableValue,
     TimeInForceIdCorrectnessTableValue
 } from '../../value/grid-table-value-internal-api';
-import { TableFieldSourceDefinition } from './table-field-source-definition';
+import { TypedTableFieldSourceDefinition } from './typed-table-field-source-definition';
+import { TypedTableFieldSourceDefinitionCachingFactoryService } from './typed-table-field-source-definition-caching-factory-service';
 
-export class OrderTableFieldSourceDefinition extends TableFieldSourceDefinition {
+export class OrderTableFieldSourceDefinition extends TypedTableFieldSourceDefinition {
     override readonly fieldDefinitions: TableField.Definition[];
 
     constructor() {
-        super(TableFieldSourceDefinition.TypeId.Order);
+        super(OrderTableFieldSourceDefinition.typeId);
 
         this.fieldDefinitions = this.createFieldDefinitions();
     }
@@ -68,7 +68,7 @@ export class OrderTableFieldSourceDefinition extends TableFieldSourceDefinition 
 
     getFieldNameById(id: Order.FieldId) {
         const sourcelessFieldName = OrderTableFieldSourceDefinition.Field.getNameById(id);
-        return CommaText.from2Values(this.name, sourcelessFieldName);
+        return this.encodeFieldName(sourcelessFieldName);
     }
 
     getSupportedFieldNameById(id: Order.FieldId) {
@@ -104,6 +104,9 @@ export class OrderTableFieldSourceDefinition extends TableFieldSourceDefinition 
 }
 
 export namespace OrderTableFieldSourceDefinition {
+    export const typeId = TypedTableFieldSourceDefinition.TypeId.Order;
+    export type TypeId = typeof typeId;
+
     export namespace Field {
         const unsupportedIds: Order.FieldId[] = [];
         export const count = Order.Field.count - unsupportedIds.length;
@@ -118,7 +121,7 @@ export namespace OrderTableFieldSourceDefinition {
         const idFieldIndices = new Array<Integer>(Order.Field.count);
 
         function idToTableGridConstructors(id: Order.FieldId):
-            TableFieldSourceDefinition.CorrectnessTableGridConstructors {
+            TypedTableFieldSourceDefinition.CorrectnessTableGridConstructors {
             switch (id) {
                 case Order.FieldId.Id:
                     return [StringCorrectnessTableField, StringCorrectnessTableValue];
@@ -271,9 +274,13 @@ export namespace OrderTableFieldSourceDefinition {
         }
     }
 
-    export interface FieldId extends TableFieldSourceDefinition.FieldId {
-        sourceTypeId: TableFieldSourceDefinition.TypeId.Order;
+    export interface FieldId extends TypedTableFieldSourceDefinition.FieldId {
+        sourceTypeId: OrderTableFieldSourceDefinition.TypeId;
         id: Order.FieldId;
+    }
+
+    export function get(cachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService): OrderTableFieldSourceDefinition {
+        return cachingFactoryService.get(typeId) as OrderTableFieldSourceDefinition;
     }
 
     export function initialiseStatic() {

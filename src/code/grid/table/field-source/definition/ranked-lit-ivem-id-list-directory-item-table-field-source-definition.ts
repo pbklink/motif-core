@@ -5,7 +5,7 @@
  */
 
 import { RankedLitIvemIdListDirectoryItem } from '../../../../services/services-internal-api';
-import { AssertInternalError, CommaText, FieldDataType, FieldDataTypeId, Integer } from '../../../../sys/internal-api';
+import { AssertInternalError, FieldDataType, FieldDataTypeId, Integer } from '../../../../sys/internal-api';
 import {
     BooleanCorrectnessTableField,
     CorrectnessTableField,
@@ -19,14 +19,15 @@ import {
     StringCorrectnessTableValue,
     WritableCorrectnessTableValue
 } from '../../value/grid-table-value-internal-api';
-import { TableFieldSourceDefinition } from './table-field-source-definition';
+import { TypedTableFieldSourceDefinition } from './typed-table-field-source-definition';
+import { TypedTableFieldSourceDefinitionCachingFactoryService } from './typed-table-field-source-definition-caching-factory-service';
 
 /** @public */
-export class RankedLitIvemIdListDirectoryItemTableFieldSourceDefinition extends TableFieldSourceDefinition {
+export class RankedLitIvemIdListDirectoryItemTableFieldSourceDefinition extends TypedTableFieldSourceDefinition {
     override readonly fieldDefinitions: TableField.Definition[];
 
     constructor() {
-        super(TableFieldSourceDefinition.TypeId.RankedLitIvemIdListDirectoryItem);
+        super(RankedLitIvemIdListDirectoryItemTableFieldSourceDefinition.typeId);
 
         this.fieldDefinitions = this.createFieldDefinitions();
     }
@@ -37,7 +38,7 @@ export class RankedLitIvemIdListDirectoryItemTableFieldSourceDefinition extends 
 
     getFieldNameById(id: RankedLitIvemIdListDirectoryItem.FieldId) {
         const sourcelessFieldName = RankedLitIvemIdListDirectoryItem.Field.idToName(id);
-        return CommaText.from2Values(this.name, sourcelessFieldName);
+        return this.encodeFieldName(sourcelessFieldName);
     }
 
     getSupportedFieldNameById(id: RankedLitIvemIdListDirectoryItem.FieldId) {
@@ -76,6 +77,9 @@ export class RankedLitIvemIdListDirectoryItemTableFieldSourceDefinition extends 
 
 /** @public */
 export namespace RankedLitIvemIdListDirectoryItemTableFieldSourceDefinition {
+    export const typeId = TypedTableFieldSourceDefinition.TypeId.RankedLitIvemIdListDirectoryItem;
+    export type TypeId = typeof typeId;
+
     export namespace Field {
         const unsupportedIds: RankedLitIvemIdListDirectoryItem.FieldId[] = [];
         export const count = RankedLitIvemIdListDirectoryItem.Field.idCount - unsupportedIds.length;
@@ -163,9 +167,13 @@ export namespace RankedLitIvemIdListDirectoryItemTableFieldSourceDefinition {
         }
     }
 
-    export interface FieldId extends TableFieldSourceDefinition.FieldId {
-        sourceTypeId: TableFieldSourceDefinition.TypeId.RankedLitIvemIdListDirectoryItem;
+    export interface FieldId extends TypedTableFieldSourceDefinition.FieldId {
+        sourceTypeId: RankedLitIvemIdListDirectoryItemTableFieldSourceDefinition.TypeId;
         id: RankedLitIvemIdListDirectoryItem.FieldId;
+    }
+
+    export function get(cachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService): RankedLitIvemIdListDirectoryItemTableFieldSourceDefinition {
+        return cachingFactoryService.get(typeId) as RankedLitIvemIdListDirectoryItemTableFieldSourceDefinition;
     }
 
     export function initialiseStatic() {

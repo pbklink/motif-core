@@ -9,20 +9,26 @@ import { CallPut } from '../../../../services/services-internal-api';
 import { ErrorCode, JsonElement, JsonElementErr, Ok, PickEnum, Result } from '../../../../sys/internal-api';
 import { GridFieldCustomHeadingsService } from '../../../field/grid-field-internal-api';
 import { GridLayoutDefinition } from '../../../layout/grid-layout-internal-api';
-import { TableFieldSourceDefinition, TableFieldSourceDefinitionCachedFactoryService } from '../../field-source/grid-table-field-source-internal-api';
-import { TableRecordSourceDefinition } from './table-record-source-definition';
+import {
+    CallPutTableFieldSourceDefinition,
+    CallSecurityDataItemTableFieldSourceDefinition,
+    PutSecurityDataItemTableFieldSourceDefinition,
+    TypedTableFieldSourceDefinition,
+    TypedTableFieldSourceDefinitionCachingFactoryService
+} from '../../field-source/grid-table-field-source-internal-api';
+import { TypedTableRecordSourceDefinition } from './typed-table-record-source-definition';
 
 /** @public */
-export class CallPutFromUnderlyingTableRecordSourceDefinition extends TableRecordSourceDefinition {
+export class CallPutFromUnderlyingTableRecordSourceDefinition extends TypedTableRecordSourceDefinition {
     constructor(
         customHeadingsService: GridFieldCustomHeadingsService,
-        tableFieldSourceDefinitionCachedFactoryService: TableFieldSourceDefinitionCachedFactoryService,
+        tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService,
         readonly underlyingIvemId: IvemId
     ) {
         super(
             customHeadingsService,
-            tableFieldSourceDefinitionCachedFactoryService,
-            TableRecordSourceDefinition.TypeId.CallPutFromUnderlying,
+            tableFieldSourceDefinitionCachingFactoryService,
+            TypedTableRecordSourceDefinition.TypeId.CallPutFromUnderlying,
             CallPutFromUnderlyingTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
         );
     }
@@ -34,9 +40,9 @@ export class CallPutFromUnderlyingTableRecordSourceDefinition extends TableRecor
     }
 
     override createDefaultLayoutDefinition() {
-        const callPutFieldSourceDefinition = this.tableFieldSourceDefinitionCachedFactoryService.callPut;
-        const callSecurityDataItemFieldSourceDefinition = this.tableFieldSourceDefinitionCachedFactoryService.callSecurityDataItem;
-        const putSecurityDataItemFieldSourceDefinition = this.tableFieldSourceDefinitionCachedFactoryService.putSecurityDataItem;
+        const callPutFieldSourceDefinition = CallPutTableFieldSourceDefinition.get(this.tableFieldSourceDefinitionCachingFactoryService);
+        const callSecurityDataItemFieldSourceDefinition = CallSecurityDataItemTableFieldSourceDefinition.get(this.tableFieldSourceDefinitionCachingFactoryService);
+        const putSecurityDataItemFieldSourceDefinition = PutSecurityDataItemTableFieldSourceDefinition.get(this.tableFieldSourceDefinitionCachingFactoryService);
 
         const fieldNames = new Array<string>();
 
@@ -71,22 +77,22 @@ export class CallPutFromUnderlyingTableRecordSourceDefinition extends TableRecor
 
 /** @public */
 export namespace CallPutFromUnderlyingTableRecordSourceDefinition {
-    export type FieldSourceDefinitionTypeId = PickEnum<TableFieldSourceDefinition.TypeId,
-        TableFieldSourceDefinition.TypeId.CallPut |
-        TableFieldSourceDefinition.TypeId.CallSecurityDataItem |
-        TableFieldSourceDefinition.TypeId.PutSecurityDataItem
+    export type FieldSourceDefinitionTypeId = PickEnum<TypedTableFieldSourceDefinition.TypeId,
+        TypedTableFieldSourceDefinition.TypeId.CallPut |
+        TypedTableFieldSourceDefinition.TypeId.CallSecurityDataItem |
+        TypedTableFieldSourceDefinition.TypeId.PutSecurityDataItem
     >;
 
     export const allowedFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[] = [
-        TableFieldSourceDefinition.TypeId.CallPut,
-        TableFieldSourceDefinition.TypeId.CallSecurityDataItem,
-        TableFieldSourceDefinition.TypeId.PutSecurityDataItem,
+        TypedTableFieldSourceDefinition.TypeId.CallPut,
+        TypedTableFieldSourceDefinition.TypeId.CallSecurityDataItem,
+        TypedTableFieldSourceDefinition.TypeId.PutSecurityDataItem,
     ];
 
     export const defaultFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[] = [
-        TableFieldSourceDefinition.TypeId.CallPut,
-        TableFieldSourceDefinition.TypeId.CallSecurityDataItem,
-        TableFieldSourceDefinition.TypeId.PutSecurityDataItem,
+        TypedTableFieldSourceDefinition.TypeId.CallPut,
+        TypedTableFieldSourceDefinition.TypeId.CallSecurityDataItem,
+        TypedTableFieldSourceDefinition.TypeId.PutSecurityDataItem,
     ];
 
     export namespace JsonTag {

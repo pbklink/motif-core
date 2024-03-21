@@ -12,41 +12,44 @@ import {
     ReferenceableGridLayout,
     ReferenceableGridLayoutsService
 } from "../layout/grid-layout-internal-api";
-import { Table, TableFieldSourceDefinition, TableRecordSource, TableRecordSourceDefinition, TableRecordSourceFactory } from '../table/internal-api';
+import { Table, TableFieldSourceDefinition, TableFieldSourceDefinitionFactory, TableRecordSource, TableRecordSourceDefinition, TableRecordSourceFactory } from '../table/internal-api';
 import { GridRowOrderDefinition, GridSourceDefinition } from './definition/grid-source-definition-internal-api';
 
 /** @public */
-export class GridSource<Badness> implements LockOpenListItem<GridSource<Badness>>, IndexedRecord {
+export class GridSource<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, Badness>
+    implements LockOpenListItem<GridSource<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, Badness>>, IndexedRecord {
+
     readonly id: Guid;
     readonly mapKey: MapKey;
 
     public index: number;
 
-    private readonly _lockOpenManager: LockOpenManager<GridSource<Badness>>;
+    private readonly _lockOpenManager: LockOpenManager<GridSource<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, Badness>>;
 
-    private readonly _tableRecordSourceDefinition: TableRecordSourceDefinition;
+    private readonly _tableRecordSourceDefinition: TableRecordSourceDefinition<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId>;
     private _gridLayoutOrReferenceDefinition: GridLayoutOrReferenceDefinition | undefined;
-    private _initialRowOrderDefinition: GridRowOrderDefinition | undefined;
+    private _initialRowOrderDefinition: GridRowOrderDefinition<TableFieldSourceDefinitionTypeId> | undefined;
 
-    private _lockedTableRecordSource: TableRecordSource<Badness> | undefined;
+    private _lockedTableRecordSource: TableRecordSource<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, Badness> | undefined;
     private _lockedGridLayout: GridLayout | undefined;
     private _lockedReferenceableGridLayout: ReferenceableGridLayout | undefined;
 
-    private _table: Table<Badness> | undefined;
+    private _table: Table<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, Badness> | undefined;
 
     private _gridLayoutSetMultiEvent = new MultiEvent<GridSource.GridLayoutSetEventHandler>();
 
     constructor(
         private readonly _referenceableGridLayoutsService: ReferenceableGridLayoutsService,
-        private readonly _tableRecordSourceFactory: TableRecordSourceFactory<Badness>,
-        definition: GridSourceDefinition,
+        private readonly _tableFieldSourceDefinitionFactory: TableFieldSourceDefinitionFactory<TableFieldSourceDefinitionTypeId>,
+        private readonly _tableRecordSourceFactory: TableRecordSourceFactory<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, Badness>,
+        definition: GridSourceDefinition<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId>,
         id?: Guid,
         mapKey?: MapKey,
     ) {
         this.id = id ?? newGuid();
         this.mapKey = mapKey ?? this.id;
 
-        this._lockOpenManager = new LockOpenManager<GridSource<Badness>>(
+        this._lockOpenManager = new LockOpenManager<GridSource<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, Badness>>(
             (locker) => this.tryProcessFirstLock(locker),
             (locker) => { this.processLastUnlock(locker); },
             (opener) => { this.processFirstOpen(opener); },
@@ -90,24 +93,22 @@ export class GridSource<Badness> implements LockOpenListItem<GridSource<Badness>
         return this._lockOpenManager.isLocked(ignoreOnlyLocker);
     }
 
-    equals(other: GridSource<Badness>): boolean {
+    equals(other: GridSource<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, Badness>): boolean {
         return this.mapKey === other.mapKey;
     }
 
-    createDefinition(
-        rowOrderDefinition: GridRowOrderDefinition | undefined,
-    ): GridSourceDefinition {
+    createDefinition(rowOrderDefinition: GridRowOrderDefinition<TableFieldSourceDefinitionTypeId> | undefined): GridSourceDefinition<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId> {
         const tableRecordSourceDefinition = this.createTableRecordSourceDefinition();
         const gridLayoutOrReferenceDefinition = this.createGridLayoutOrReferenceDefinition();
 
-        return new GridSourceDefinition(
+        return new GridSourceDefinition<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId>(
             tableRecordSourceDefinition,
             gridLayoutOrReferenceDefinition,
             rowOrderDefinition,
         );
     }
 
-    createTableRecordSourceDefinition(): TableRecordSourceDefinition {
+    createTableRecordSourceDefinition(): TableRecordSourceDefinition<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId> {
         if (this._lockedTableRecordSource === undefined) {
             throw new AssertInternalError('GSCDTR23008');
         } else {
@@ -257,7 +258,11 @@ export class GridSource<Badness> implements LockOpenListItem<GridSource<Badness>
             throw new AssertInternalError('GSOLT23008');
         } else {
             const tableFieldSourceDefinitionTypeIds = this.getTableFieldSourceDefinitionTypeIdsFromLayout(this._lockedGridLayout);
-            this._table = new Table<Badness>(this._lockedTableRecordSource, this._tableRecordSourceFactory.createCorrectnessState(), tableFieldSourceDefinitionTypeIds);
+            this._table = new Table<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, Badness>(
+                this._lockedTableRecordSource,
+                this._tableRecordSourceFactory.createCorrectnessState(),
+                tableFieldSourceDefinitionTypeIds
+            );
             this._table.open(opener);
         }
     }
@@ -300,14 +305,17 @@ export class GridSource<Badness> implements LockOpenListItem<GridSource<Badness>
 
     private getTableFieldSourceDefinitionTypeIdsFromLayout(layout: GridLayout) {
         const columns = layout.columns;
-        const typeIds = new Array<TableFieldSourceDefinition.TypeId>();
+        const typeIds = new Array<TableFieldSourceDefinitionTypeId>();
         for (const column of columns) {
             const fieldName = column.fieldName;
-            const decodeResult = TableFieldSourceDefinition.decodeCommaTextFieldName(fieldName);
+
+            const decodeResult = TableFieldSourceDefinition.getSourceNameFromEncodedFieldName(fieldName);
             if (decodeResult.isOk()) {
-                const typeId = decodeResult.value.sourceTypeId;
-                if (!typeIds.includes(typeId)) {
-                    typeIds.push(typeId);
+                const sourceTypeId = this._tableFieldSourceDefinitionFactory.tryNameToId(decodeResult.value);
+                if (sourceTypeId !== undefined) {
+                    if (!typeIds.includes(sourceTypeId)) {
+                        typeIds.push(sourceTypeId);
+                    }
                 }
             }
         }

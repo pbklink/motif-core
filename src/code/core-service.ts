@@ -11,11 +11,10 @@ import {
     GridFieldCustomHeadingsService,
     ReferenceableGridLayoutsService,
     ReferenceableGridSourceDefinitionsStoreService,
-    TableFieldSourceDefinitionCachedFactoryService,
-    TableFieldSourceDefinitionFactory,
-    TableRecordSourceDefinitionFactoryService,
     TypedReferenceableGridSourcesService,
-    TypedTableRecordSourceFactory,
+    TypedTableFieldSourceDefinitionCachingFactoryService,
+    TypedTableFieldSourceDefinitionFactory,
+    TypedTableRecordSourceFactory
 } from "./grid/internal-api";
 import { KeyboardService } from "./keyboard/keyboard-internal-api";
 import { NotificationChannelsService } from './notification-channel/internal-api';
@@ -61,8 +60,7 @@ export class CoreService {
 
     private _finalised = false;
 
-    private _tableFieldSourceDefinitionCachedFactoryService: TableFieldSourceDefinitionCachedFactoryService;
-    private _tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService;
+    private _tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService;
     private _referenceableGridSourcesService: TypedReferenceableGridSourcesService;
     private _activeColorSchemeName: string;
 
@@ -97,23 +95,17 @@ export class CoreService {
         this.keyboardService = new KeyboardService();
     }
 
-    get tableFieldSourceDefinitionCachedFactoryService() { return this._tableFieldSourceDefinitionCachedFactoryService; }
-    get tableRecordSourceDefinitionFactoryService() { return this._tableRecordSourceDefinitionFactoryService; }
+    get tableFieldSourceDefinitionCachingFactoryService() { return this._tableFieldSourceDefinitionCachingFactoryService; }
     get referenceableGridSourcesService() { return this._referenceableGridSourcesService; }
 
-    setTableFieldSourceDefinitionFactory(tableFieldSourceDefinitionFactory: TableFieldSourceDefinitionFactory) {
-        this._tableFieldSourceDefinitionCachedFactoryService = new TableFieldSourceDefinitionCachedFactoryService(tableFieldSourceDefinitionFactory);
-
-        this._tableRecordSourceDefinitionFactoryService = new TableRecordSourceDefinitionFactoryService(
-            this.rankedLitIvemIdListDefinitionFactoryService,
-            this.gridFieldCustomHeadingsService,
-            this._tableFieldSourceDefinitionCachedFactoryService,
-        );
+    setTableFieldSourceDefinitionFactory(tableFieldSourceDefinitionFactory: TypedTableFieldSourceDefinitionFactory) {
+        this._tableFieldSourceDefinitionCachingFactoryService = new TypedTableFieldSourceDefinitionCachingFactoryService(tableFieldSourceDefinitionFactory);
     }
 
-    setTableRecordSourceFactory(tableRecordSourceFactory: TypedTableRecordSourceFactory) {
+    setTableRecordSourceFactory(tableRecordSourceFactory: TypedTableRecordSourceFactory, tableFieldSourceDefinitionFactory: TypedTableFieldSourceDefinitionFactory) {
         this._referenceableGridSourcesService = new TypedReferenceableGridSourcesService(
             this.referenceableGridLayoutsService,
+            tableFieldSourceDefinitionFactory,
             tableRecordSourceFactory,
         );
     }

@@ -7,22 +7,22 @@
 import { PickEnum } from '../../../sys/internal-api';
 import { GridFieldCustomHeadingsService } from '../../field/grid-field-internal-api';
 import { GridLayoutDefinition } from '../../layout/grid-layout-internal-api';
-import { TableFieldSourceDefinition, TableFieldSourceDefinitionCachedFactoryService, TableRecordSourceDefinition } from '../../table/internal-api';
+import { TypedTableFieldSourceDefinition, TypedTableFieldSourceDefinitionCachingFactoryService, TypedTableRecordSourceDefinition } from '../../table/internal-api';
 import { EditableGridLayoutDefinitionColumn } from './editable-grid-layout-definition-column';
 import { EditableGridLayoutDefinitionColumnList } from './editable-grid-layout-definition-column-list';
 import { EditableGridLayoutDefinitionColumnTableFieldSourceDefinition } from './editable-grid-layout-definition-column-table-field-source-definition';
 
 /** @public */
-export class EditableGridLayoutDefinitionColumnTableRecordSourceDefinition extends TableRecordSourceDefinition {
+export class EditableGridLayoutDefinitionColumnTableRecordSourceDefinition extends TypedTableRecordSourceDefinition {
     constructor(
         customHeadingsService: GridFieldCustomHeadingsService,
-        tableFieldSourceDefinitionCachedFactoryService: TableFieldSourceDefinitionCachedFactoryService,
+        tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService,
         readonly list: EditableGridLayoutDefinitionColumnList,
     ) {
         super(
             customHeadingsService,
-            tableFieldSourceDefinitionCachedFactoryService,
-            TableRecordSourceDefinition.TypeId.EditableGridLayoutDefinitionColumn,
+            tableFieldSourceDefinitionCachingFactoryService,
+            TypedTableRecordSourceDefinition.TypeId.EditableGridLayoutDefinitionColumn,
             EditableGridLayoutDefinitionColumnTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
         );
     }
@@ -30,7 +30,7 @@ export class EditableGridLayoutDefinitionColumnTableRecordSourceDefinition exten
     // no override for saveToJson()
 
     override createDefaultLayoutDefinition() {
-        const fieldSourceDefinition = EditableGridLayoutDefinitionColumnTableFieldSourceDefinition.getRegistered(this.tableFieldSourceDefinitionCachedFactoryService);
+        const fieldSourceDefinition = EditableGridLayoutDefinitionColumnTableFieldSourceDefinition.get(this.tableFieldSourceDefinitionCachingFactoryService);
 
         const fieldNames = new Array<string>();
 
@@ -45,15 +45,15 @@ export class EditableGridLayoutDefinitionColumnTableRecordSourceDefinition exten
 
 /** @public */
 export namespace EditableGridLayoutDefinitionColumnTableRecordSourceDefinition {
-    export type FieldSourceDefinitionTypeId = PickEnum<TableFieldSourceDefinition.TypeId,
-        TableFieldSourceDefinition.TypeId.EditableGridLayoutDefinitionColumn
+    export type FieldSourceDefinitionTypeId = PickEnum<TypedTableFieldSourceDefinition.TypeId,
+        TypedTableFieldSourceDefinition.TypeId.EditableGridLayoutDefinitionColumn
     >;
 
     export const allowedFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[] = [
-        TableFieldSourceDefinition.TypeId.EditableGridLayoutDefinitionColumn,
+        TypedTableFieldSourceDefinition.TypeId.EditableGridLayoutDefinitionColumn,
     ];
 
     export const defaultFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[] = [
-        TableFieldSourceDefinition.TypeId.EditableGridLayoutDefinitionColumn,
+        TypedTableFieldSourceDefinition.TypeId.EditableGridLayoutDefinitionColumn,
     ];
 }

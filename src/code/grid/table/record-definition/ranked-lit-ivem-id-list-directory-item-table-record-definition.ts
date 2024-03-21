@@ -5,16 +5,16 @@
  */
 
 import { RankedLitIvemIdListDirectoryItem } from '../../../services/services-internal-api';
-import { TableFieldSourceDefinition } from '../field-source/grid-table-field-source-internal-api';
+import { TypedTableFieldSourceDefinition } from '../field-source/grid-table-field-source-internal-api';
 import { PayloadTableRecordDefinition } from './payload-table-record-definition';
-import { TableRecordDefinition } from './table-record-definition';
+import { TypedTableRecordDefinition } from './typed-table-record-definition';
 
 export interface RankedLitIvemIdListDirectoryItemTableRecordDefinition extends PayloadTableRecordDefinition<RankedLitIvemIdListDirectoryItem> {
-    readonly typeId: TableFieldSourceDefinition.TypeId.RankedLitIvemIdListDirectoryItem;
+    readonly typeId: TypedTableFieldSourceDefinition.TypeId.RankedLitIvemIdListDirectoryItem;
 }
 
 export namespace RankedLitIvemIdListDirectoryItemTableRecordDefinition {
-    export function is(definition: TableRecordDefinition): definition is RankedLitIvemIdListDirectoryItemTableRecordDefinition {
-        return definition.typeId === TableFieldSourceDefinition.TypeId.RankedLitIvemIdListDirectoryItem;
+    export function is(definition: TypedTableRecordDefinition): definition is RankedLitIvemIdListDirectoryItemTableRecordDefinition {
+        return definition.typeId === TypedTableFieldSourceDefinition.TypeId.RankedLitIvemIdListDirectoryItem;
     }
 }

@@ -7,7 +7,6 @@
 import { RankedLitIvemId } from '../../../../adi/adi-internal-api';
 import {
     AssertInternalError,
-    CommaText,
     FieldDataType,
     FieldDataTypeId,
     Integer,
@@ -26,14 +25,15 @@ import {
     LitIvemIdCorrectnessTableValue,
     NumberCorrectnessTableValue
 } from "../../value/grid-table-value-internal-api";
-import { TableFieldSourceDefinition } from './table-field-source-definition';
+import { TypedTableFieldSourceDefinition } from './typed-table-field-source-definition';
+import { TypedTableFieldSourceDefinitionCachingFactoryService } from './typed-table-field-source-definition-caching-factory-service';
 
 /** @public */
-export class RankedLitIvemIdTableFieldSourceDefinition extends TableFieldSourceDefinition {
+export class RankedLitIvemIdTableFieldSourceDefinition extends TypedTableFieldSourceDefinition {
     override readonly fieldDefinitions: TableField.Definition[];
 
     constructor() {
-        super(TableFieldSourceDefinition.TypeId.RankedLitIvemId);
+        super(RankedLitIvemIdTableFieldSourceDefinition.typeId);
 
         this.fieldDefinitions = this.createFieldDefinitions();
     }
@@ -44,7 +44,7 @@ export class RankedLitIvemIdTableFieldSourceDefinition extends TableFieldSourceD
 
     getFieldNameById(id: RankedLitIvemId.FieldId) {
         const sourcelessFieldName = RankedLitIvemIdTableFieldSourceDefinition.Field.getNameById(id);
-        return CommaText.from2Values(this.name, sourcelessFieldName);
+        return this.encodeFieldName(sourcelessFieldName);
     }
 
     getSupportedFieldNameById(id: RankedLitIvemId.FieldId) {
@@ -83,6 +83,9 @@ export class RankedLitIvemIdTableFieldSourceDefinition extends TableFieldSourceD
 
 /** @public */
 export namespace RankedLitIvemIdTableFieldSourceDefinition {
+    export const typeId = TypedTableFieldSourceDefinition.TypeId.RankedLitIvemId;
+    export type TypeId = typeof typeId;
+
     export namespace Field {
         const unsupportedIds: RankedLitIvemId.FieldId[] = [];
         export const count = RankedLitIvemId.Field.idCount - unsupportedIds.length;
@@ -97,7 +100,7 @@ export namespace RankedLitIvemIdTableFieldSourceDefinition {
         const idFieldIndices = new Array<Integer>(RankedLitIvemId.Field.idCount);
 
         function idToTableGridConstructors(id: RankedLitIvemId.FieldId):
-            TableFieldSourceDefinition.CorrectnessTableGridConstructors {
+            TypedTableFieldSourceDefinition.CorrectnessTableGridConstructors {
             switch (id) {
                 case RankedLitIvemId.FieldId.LitIvemId:
                     return [LitIvemIdCorrectnessTableField, LitIvemIdCorrectnessTableValue];
@@ -165,9 +168,13 @@ export namespace RankedLitIvemIdTableFieldSourceDefinition {
         }
     }
 
-    export interface FieldId extends TableFieldSourceDefinition.FieldId {
-        sourceTypeId: TableFieldSourceDefinition.TypeId.RankedLitIvemId;
+    export interface FieldId extends TypedTableFieldSourceDefinition.FieldId {
+        sourceTypeId: RankedLitIvemIdTableFieldSourceDefinition.TypeId;
         id: RankedLitIvemId.FieldId;
+    }
+
+    export function get(cachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService): RankedLitIvemIdTableFieldSourceDefinition {
+        return cachingFactoryService.get(typeId) as RankedLitIvemIdTableFieldSourceDefinition;
     }
 
     export function initialiseStatic() {

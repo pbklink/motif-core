@@ -5,15 +5,14 @@
  */
 
 import { MapKey } from '../../../sys/internal-api';
-import { TableFieldSourceDefinition } from '../field-source/grid-table-field-source-internal-api';
 
-export interface TableRecordDefinition {
-    readonly typeId: TableFieldSourceDefinition.TypeId;
+export interface TableRecordDefinition<TableFieldSourceDefinitionTypeId> {
+    readonly typeId: TableFieldSourceDefinitionTypeId;
     readonly mapKey: MapKey;
 }
 
 export namespace TableRecordDefinition {
-    export function same(left: TableRecordDefinition, right: TableRecordDefinition) {
+    export function same<TableFieldSourceDefinitionTypeId>(left: TableRecordDefinition<TableFieldSourceDefinitionTypeId>, right: TableRecordDefinition<TableFieldSourceDefinitionTypeId>) {
         return left.typeId === right.typeId && left.mapKey === right.mapKey;
     }
 }

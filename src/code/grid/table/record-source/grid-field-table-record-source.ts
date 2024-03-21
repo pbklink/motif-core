@@ -6,14 +6,14 @@
 
 import { Badness, CorrectnessBadness, Integer, LockOpenListItem, Ok, Result, UnreachableCaseError, UsableListChangeTypeId } from '../../../sys/internal-api';
 import { TextFormatterService } from '../../../text-format/text-format-internal-api';
-import { GridField } from '../../field/grid-field-internal-api';
+import { GridField, GridFieldCustomHeadingsService } from '../../field/grid-field-internal-api';
 import {
-    TableFieldSourceDefinition
+    TypedTableFieldSourceDefinition, TypedTableFieldSourceDefinitionCachingFactoryService
 } from "../field-source/grid-table-field-source-internal-api";
 import { GridFieldTableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
 import { TableRecord } from '../record/grid-table-record-internal-api';
 import { GridFieldTableValueSource } from '../value-source/internal-api';
-import { GridFieldTableRecordSourceDefinition, TableRecordSourceDefinitionFactoryService } from './definition/grid-table-record-source-definition-internal-api';
+import { GridFieldTableRecordSourceDefinition } from './definition/grid-table-record-source-definition-internal-api';
 import { TypedTableRecordSource } from './typed-table-record-source';
 
 /** @public */
@@ -22,13 +22,15 @@ export class GridFieldTableRecordSource extends TypedTableRecordSource {
 
     constructor(
         textFormatterService: TextFormatterService,
-        tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService,
+        gridFieldCustomHeadingsService: GridFieldCustomHeadingsService,
+        tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService,
         correctnessBadness: CorrectnessBadness,
         definition: GridFieldTableRecordSourceDefinition,
     ) {
         super(
             textFormatterService,
-            tableRecordSourceDefinitionFactoryService,
+            gridFieldCustomHeadingsService,
+            tableFieldSourceDefinitionCachingFactoryService,
             correctnessBadness,
             definition,
             GridFieldTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
@@ -40,7 +42,11 @@ export class GridFieldTableRecordSource extends TypedTableRecordSource {
     get records(): readonly GridField[] { return this._records; }
 
     override createDefinition(): GridFieldTableRecordSourceDefinition {
-        return this.tableRecordSourceDefinitionFactoryService.createGridField(this._records.slice());
+        return new GridFieldTableRecordSourceDefinition(
+            this._gridFieldCustomHeadingsService,
+            this._tableFieldSourceDefinitionCachingFactoryService,
+            this._records.slice(),
+        );
     }
 
     override tryLock(_locker: LockOpenListItem.Locker): Promise<Result<void>> {
@@ -71,7 +77,7 @@ export class GridFieldTableRecordSource extends TypedTableRecordSource {
     override createRecordDefinition(idx: Integer): GridFieldTableRecordDefinition {
         const gridField = this._records[idx];
         return {
-            typeId: TableFieldSourceDefinition.TypeId.GridField,
+            typeId: TypedTableFieldSourceDefinition.TypeId.GridField,
             mapKey: gridField.name,
             record: gridField,
         };
@@ -89,7 +95,7 @@ export class GridFieldTableRecordSource extends TypedTableRecordSource {
             const fieldSourceDefinitionTypeId =
                 fieldSourceDefinition.typeId as GridFieldTableRecordSourceDefinition.FieldSourceDefinitionTypeId;
             switch (fieldSourceDefinitionTypeId) {
-                case TableFieldSourceDefinition.TypeId.GridField: {
+                case TypedTableFieldSourceDefinition.TypeId.GridField: {
                     const valueSource = new GridFieldTableValueSource(result.fieldCount, scan);
                     result.addSource(valueSource);
                     break;

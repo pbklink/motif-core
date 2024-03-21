@@ -8,13 +8,14 @@ import { RankedLitIvemIdListDirectory } from '../../../ranked-lit-ivem-id-list/r
 import { RankedLitIvemIdListDirectoryItem } from '../../../services/services-internal-api';
 import { CorrectnessBadness, Integer, LockOpenListItem, Ok, Result, UnreachableCaseError } from '../../../sys/internal-api';
 import { TextFormatterService } from '../../../text-format/text-format-internal-api';
+import { GridFieldCustomHeadingsService } from '../../field/grid-field-internal-api';
 import {
-    TableFieldSourceDefinition
+    TypedTableFieldSourceDefinition, TypedTableFieldSourceDefinitionCachingFactoryService
 } from "../field-source/grid-table-field-source-internal-api";
 import { RankedLitIvemIdListDirectoryItemTableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
 import { TableRecord } from '../record/grid-table-record-internal-api';
 import { RankedLitIvemIdListDirectoryItemTableValueSource } from '../value-source/internal-api';
-import { RankedLitIvemIdListDirectoryItemTableRecordSourceDefinition, TableRecordSourceDefinitionFactoryService } from './definition/grid-table-record-source-definition-internal-api';
+import { RankedLitIvemIdListDirectoryItemTableRecordSourceDefinition } from './definition/grid-table-record-source-definition-internal-api';
 import { SubscribeBadnessListTableRecordSource } from './subscribe-badness-list-table-record-source';
 
 export class RankedLitIvemIdListDirectoryItemTableRecordSource extends SubscribeBadnessListTableRecordSource<RankedLitIvemIdListDirectoryItem, RankedLitIvemIdListDirectory> {
@@ -22,13 +23,15 @@ export class RankedLitIvemIdListDirectoryItemTableRecordSource extends Subscribe
 
     constructor(
         textFormatterService: TextFormatterService,
-        tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService,
+        gridFieldCustomHeadingsService: GridFieldCustomHeadingsService,
+        tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService,
         correctnessBadness: CorrectnessBadness,
         definition: RankedLitIvemIdListDirectoryItemTableRecordSourceDefinition,
     ) {
         super(
             textFormatterService,
-            tableRecordSourceDefinitionFactoryService,
+            gridFieldCustomHeadingsService,
+            tableFieldSourceDefinitionCachingFactoryService,
             correctnessBadness,
             definition,
             RankedLitIvemIdListDirectoryItemTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
@@ -38,7 +41,11 @@ export class RankedLitIvemIdListDirectoryItemTableRecordSource extends Subscribe
     }
 
     override createDefinition(): RankedLitIvemIdListDirectoryItemTableRecordSourceDefinition {
-        return this.tableRecordSourceDefinitionFactoryService.createRankedLitIvemIdListDirectoryItem(this._listDirectory);
+        return new RankedLitIvemIdListDirectoryItemTableRecordSourceDefinition(
+            this._gridFieldCustomHeadingsService,
+            this._tableFieldSourceDefinitionCachingFactoryService,
+            this._listDirectory,
+        );
     }
 
     override tryLock(_locker: LockOpenListItem.Locker): Promise<Result<void>> {
@@ -61,7 +68,7 @@ export class RankedLitIvemIdListDirectoryItemTableRecordSource extends Subscribe
     override createRecordDefinition(idx: Integer): RankedLitIvemIdListDirectoryItemTableRecordDefinition {
         const rankedLitIvemIdListDirectoryItem = this._listDirectory.getAt(idx);
         return {
-            typeId: TableFieldSourceDefinition.TypeId.RankedLitIvemIdListDirectoryItem,
+            typeId: TypedTableFieldSourceDefinition.TypeId.RankedLitIvemIdListDirectoryItem,
             mapKey: RankedLitIvemIdListDirectoryItem.createMapKey(rankedLitIvemIdListDirectoryItem),
             record: rankedLitIvemIdListDirectoryItem,
         };
@@ -79,7 +86,7 @@ export class RankedLitIvemIdListDirectoryItemTableRecordSource extends Subscribe
             const fieldSourceDefinitionTypeId =
                 fieldSourceDefinition.typeId as RankedLitIvemIdListDirectoryItemTableRecordSourceDefinition.FieldSourceDefinitionTypeId;
             switch (fieldSourceDefinitionTypeId) {
-                case TableFieldSourceDefinition.TypeId.RankedLitIvemIdListDirectoryItem: {
+                case TypedTableFieldSourceDefinition.TypeId.RankedLitIvemIdListDirectoryItem: {
                     const valueSource = new RankedLitIvemIdListDirectoryItemTableValueSource(result.fieldCount, rankedLitIvemIdListDirectoryItem);
                     result.addSource(valueSource);
                     break;

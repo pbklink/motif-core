@@ -8,16 +8,16 @@ import { AdiService, LitIvemBaseDetail, RankedLitIvemId } from '../../../adi/adi
 import { SymbolDetailCacheService } from '../../../services/symbol-detail-cache-service';
 import { Badness, BadnessComparableList, CorrectnessBadness, Integer, NotImplementedError, UnreachableCaseError, UsableListChangeType, UsableListChangeTypeId, moveElementsInArray } from '../../../sys/internal-api';
 import { TextFormatterService } from '../../../text-format/text-format-internal-api';
+import { GridFieldCustomHeadingsService } from '../../field/grid-field-internal-api';
 import {
-    TableFieldSourceDefinition
+    TypedTableFieldSourceDefinition, TypedTableFieldSourceDefinitionCachingFactoryService
 } from "../field-source/grid-table-field-source-internal-api";
 import { RankedLitIvemIdTableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
 import { TableRecord } from '../record/grid-table-record-internal-api';
 import { LitIvemBaseDetailTableValueSource, RankedLitIvemIdTableValueSource, SecurityDataItemTableValueSource } from '../value-source/internal-api';
 import {
     RankedLitIvemIdUsableListTableRecordSourceDefinition,
-    TableRecordSourceDefinition,
-    TableRecordSourceDefinitionFactoryService
+    TypedTableRecordSourceDefinition
 } from './definition/grid-table-record-source-definition-internal-api';
 import { PromisedLitIvemBaseDetail } from './promised-lit-ivem-base-detail';
 import { UsableListTableRecordSource } from './usable-list-table-record-source';
@@ -32,13 +32,15 @@ export class RankedLitIvemIdUsableListTableRecordSource extends UsableListTableR
         private readonly _adiService: AdiService,
         private readonly _symbolDetailCacheService: SymbolDetailCacheService,
         textFormatterService: TextFormatterService,
-        tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService,
+        gridFieldCustomHeadingsService: GridFieldCustomHeadingsService,
+        tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService,
         correctnessBadness: CorrectnessBadness,
         definition: RankedLitIvemIdUsableListTableRecordSourceDefinition,
     ) {
         super(
             textFormatterService,
-            tableRecordSourceDefinitionFactoryService,
+            gridFieldCustomHeadingsService,
+            tableFieldSourceDefinitionCachingFactoryService,
             correctnessBadness,
             definition,
         );
@@ -51,7 +53,7 @@ export class RankedLitIvemIdUsableListTableRecordSource extends UsableListTableR
         }
     }
 
-    override createDefinition(): TableRecordSourceDefinition {
+    override createDefinition(): TypedTableRecordSourceDefinition {
         throw new NotImplementedError('RLIIULTRS31311');
     }
 
@@ -59,7 +61,7 @@ export class RankedLitIvemIdUsableListTableRecordSource extends UsableListTableR
         const record = this.records[recordIdx];
         const rankedLitIvemId = record.rankedLitIvemId.createCopy();
         return {
-            typeId: TableFieldSourceDefinition.TypeId.RankedLitIvemId,
+            typeId: TypedTableFieldSourceDefinition.TypeId.RankedLitIvemId,
             mapKey: RankedLitIvemIdTableRecordDefinition.createMapKey(rankedLitIvemId),
             rankedLitIvemId,
         };
@@ -78,7 +80,7 @@ export class RankedLitIvemIdUsableListTableRecordSource extends UsableListTableR
             const fieldSourceDefinitionTypeId = fieldSourceDefinition.typeId as RankedLitIvemIdUsableListTableRecordSourceDefinition.FieldSourceDefinitionTypeId;
             if (this.allowedFieldSourceDefinitionTypeIds.includes(fieldSourceDefinitionTypeId)) {
                 switch (fieldSourceDefinitionTypeId) {
-                    case TableFieldSourceDefinition.TypeId.LitIvemBaseDetail: {
+                    case TypedTableFieldSourceDefinition.TypeId.LitIvemBaseDetail: {
                         let litIvemBaseDetail: LitIvemBaseDetail;
                         if (record.litIvemBaseDetail !== undefined) {
                             litIvemBaseDetail = record.litIvemBaseDetail;
@@ -95,20 +97,20 @@ export class RankedLitIvemIdUsableListTableRecordSource extends UsableListTableR
                         break;
                     }
 
-                    case TableFieldSourceDefinition.TypeId.RankedLitIvemId: {
+                    case TypedTableFieldSourceDefinition.TypeId.RankedLitIvemId: {
                         const valueSource = new RankedLitIvemIdTableValueSource(result.fieldCount, rankedLitIvemId);
                         result.addSource(valueSource);
                         break;
                     }
 
-                    case TableFieldSourceDefinition.TypeId.SecurityDataItem: {
+                    case TypedTableFieldSourceDefinition.TypeId.SecurityDataItem: {
                         const valueSource = new SecurityDataItemTableValueSource(result.fieldCount, rankedLitIvemId.litIvemId, this._adiService);
                         result.addSource(valueSource);
                         break;
                     }
 
                     // AlternateCodesFix: Currently this actually is part of FullDetail.  Will be in BaseDetail in future
-                    // case TableFieldSourceDefinition.TypeId.LitIvemAlternateCodes: {
+                    // case TypedTableFieldSourceDefinition.TypeId.LitIvemAlternateCodes: {
                     //     const altCodesSource =
                     //         new LitIvemAlternateCodesTableValueSource(
                     //             result.fieldCount,
@@ -131,7 +133,7 @@ export class RankedLitIvemIdUsableListTableRecordSource extends UsableListTableR
         return this.records.length;
     }
 
-    protected override getDefaultFieldSourceDefinitionTypeIds(): TableFieldSourceDefinition.TypeId[] {
+    protected override getDefaultFieldSourceDefinitionTypeIds(): TypedTableFieldSourceDefinition.TypeId[] {
         return this.definition.defaultFieldSourceDefinitionTypeIds;
     }
 

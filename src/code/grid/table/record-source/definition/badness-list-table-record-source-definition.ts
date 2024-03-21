@@ -6,21 +6,21 @@
 
 import { BadnessList } from '../../../../sys/internal-api';
 import { GridFieldCustomHeadingsService } from '../../../field/grid-field-internal-api';
-import { TableFieldSourceDefinition, TableFieldSourceDefinitionCachedFactoryService } from '../../field-source/grid-table-field-source-internal-api';
-import { TableRecordSourceDefinition } from './table-record-source-definition';
+import { TypedTableFieldSourceDefinition, TypedTableFieldSourceDefinitionCachingFactoryService } from '../../field-source/grid-table-field-source-internal-api';
+import { TypedTableRecordSourceDefinition } from './typed-table-record-source-definition';
 
 /** @public */
-export abstract class BadnessListTableRecordSourceDefinition<T> extends TableRecordSourceDefinition {
+export abstract class BadnessListTableRecordSourceDefinition<T> extends TypedTableRecordSourceDefinition {
     constructor(
         customHeadingsService: GridFieldCustomHeadingsService,
-        tableFieldSourceDefinitionCachedFactoryService: TableFieldSourceDefinitionCachedFactoryService,
-        typeId: TableRecordSourceDefinition.TypeId,
-        allowedFieldSourceDefinitionTypeIds: TableFieldSourceDefinition.TypeId[],
+        tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService,
+        typeId: TypedTableRecordSourceDefinition.TypeId,
+        allowedFieldSourceDefinitionTypeIds: TypedTableFieldSourceDefinition.TypeId[],
         readonly list: BadnessList<T>,
     ) {
         super(
             customHeadingsService,
-            tableFieldSourceDefinitionCachedFactoryService,
+            tableFieldSourceDefinitionCachingFactoryService,
             typeId,
             allowedFieldSourceDefinitionTypeIds,
         );

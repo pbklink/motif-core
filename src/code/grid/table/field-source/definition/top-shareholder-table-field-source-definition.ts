@@ -7,7 +7,6 @@
 import { TopShareholder } from '../../../../adi/adi-internal-api';
 import {
     AssertInternalError,
-    CommaText,
     FieldDataType,
     FieldDataTypeId,
     Integer,
@@ -20,13 +19,14 @@ import {
     IntegerCorrectnessTableValue,
     StringCorrectnessTableValue
 } from '../../value/grid-table-value-internal-api';
-import { TableFieldSourceDefinition } from './table-field-source-definition';
+import { TypedTableFieldSourceDefinition } from './typed-table-field-source-definition';
+import { TypedTableFieldSourceDefinitionCachingFactoryService } from './typed-table-field-source-definition-caching-factory-service';
 
-export class TopShareholderTableFieldSourceDefinition extends TableFieldSourceDefinition {
+export class TopShareholderTableFieldSourceDefinition extends TypedTableFieldSourceDefinition {
     override readonly fieldDefinitions: TableField.Definition[];
 
     constructor() {
-        super(TableFieldSourceDefinition.TypeId.TopShareholder);
+        super(TopShareholderTableFieldSourceDefinition.typeId);
 
         this.fieldDefinitions = this.createFieldDefinitions();
     }
@@ -37,7 +37,7 @@ export class TopShareholderTableFieldSourceDefinition extends TableFieldSourceDe
 
     getFieldNameById(id: TopShareholder.FieldId) {
         const sourcelessFieldName = TopShareholderTableFieldSourceDefinition.Field.getNameById(id);
-        return CommaText.from2Values(this.name, sourcelessFieldName);
+        return this.encodeFieldName(sourcelessFieldName);
     }
 
     getSupportedFieldNameById(id: TopShareholder.FieldId) {
@@ -74,6 +74,9 @@ export class TopShareholderTableFieldSourceDefinition extends TableFieldSourceDe
 }
 
 export namespace TopShareholderTableFieldSourceDefinition {
+    export const typeId = TypedTableFieldSourceDefinition.TypeId.TopShareholder;
+    export type TypeId = typeof typeId;
+
     export namespace Field {
         const unsupportedIds: TopShareholder.FieldId[] = [];
         export const count = TopShareholder.Field.count - unsupportedIds.length;
@@ -88,7 +91,7 @@ export namespace TopShareholderTableFieldSourceDefinition {
         const idFieldIndices = new Array<Integer>(TopShareholder.Field.count);
 
         function idToTableGridConstructors(id: TopShareholder.FieldId):
-            TableFieldSourceDefinition.CorrectnessTableGridConstructors {
+            TypedTableFieldSourceDefinition.CorrectnessTableGridConstructors {
             switch (id) {
                 case TopShareholder.FieldId.Name:
                 case TopShareholder.FieldId.Designation:
@@ -158,9 +161,13 @@ export namespace TopShareholderTableFieldSourceDefinition {
         }
     }
 
-    export interface FieldId extends TableFieldSourceDefinition.FieldId {
-        sourceTypeId: TableFieldSourceDefinition.TypeId.TopShareholder;
+    export interface FieldId extends TypedTableFieldSourceDefinition.FieldId {
+        sourceTypeId: TopShareholderTableFieldSourceDefinition.TypeId;
         id: TopShareholder.FieldId;
+    }
+
+    export function get(cachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService): TopShareholderTableFieldSourceDefinition {
+        return cachingFactoryService.get(typeId) as TopShareholderTableFieldSourceDefinition;
     }
 
     export function initialiseStatic() {

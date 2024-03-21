@@ -7,7 +7,6 @@
 import { Balances } from '../../../../adi/adi-internal-api';
 import {
     AssertInternalError,
-    CommaText,
     FieldDataType,
     FieldDataTypeId,
     Integer,
@@ -26,13 +25,16 @@ import {
     DecimalCorrectnessTableValue,
     StringCorrectnessTableValue
 } from '../../value/grid-table-value-internal-api';
-import { TableFieldSourceDefinition } from './table-field-source-definition';
+import { TypedTableFieldSourceDefinition } from './typed-table-field-source-definition';
+import { TypedTableFieldSourceDefinitionCachingFactoryService } from './typed-table-field-source-definition-caching-factory-service';
 
-export class BalancesTableFieldSourceDefinition extends TableFieldSourceDefinition {
+export class BalancesTableFieldSourceDefinition extends TypedTableFieldSourceDefinition {
+    declare readonly typeId: BalancesTableFieldSourceDefinition.TypeId;
+
     override readonly fieldDefinitions: TableField.Definition[];
 
     constructor() {
-        super(TableFieldSourceDefinition.TypeId.Balances);
+        super(BalancesTableFieldSourceDefinition.typeId);
 
         this.fieldDefinitions = this.createFieldDefinitions();
     }
@@ -43,7 +45,7 @@ export class BalancesTableFieldSourceDefinition extends TableFieldSourceDefiniti
 
     getFieldNameById(id: Balances.FieldId) {
         const sourcelessFieldName = BalancesTableFieldSourceDefinition.Field.getNameById(id);
-        return CommaText.from2Values(this.name, sourcelessFieldName);
+        return this.encodeFieldName(sourcelessFieldName);
     }
 
     getSupportedFieldNameById(id: Balances.FieldId) {
@@ -79,6 +81,9 @@ export class BalancesTableFieldSourceDefinition extends TableFieldSourceDefiniti
 }
 
 export namespace BalancesTableFieldSourceDefinition {
+    export const typeId = TypedTableFieldSourceDefinition.TypeId.Balances;
+    export type TypeId = typeof typeId;
+
     export namespace Field {
         const unsupportedIds: Balances.FieldId[] = [];
         export const count = Balances.Field.idCount - unsupportedIds.length;
@@ -93,7 +98,7 @@ export namespace BalancesTableFieldSourceDefinition {
         const idFieldIndices = new Array<Integer>(Balances.Field.idCount);
 
         function idToTableGridConstructors(id: Balances.FieldId):
-            TableFieldSourceDefinition.CorrectnessTableGridConstructors {
+            TypedTableFieldSourceDefinition.CorrectnessTableGridConstructors {
             switch (id) {
                 case Balances.FieldId.AccountId:
                     return [StringCorrectnessTableField, StringCorrectnessTableValue];
@@ -169,9 +174,13 @@ export namespace BalancesTableFieldSourceDefinition {
         }
     }
 
-    export interface FieldId extends TableFieldSourceDefinition.FieldId {
-        sourceTypeId: TableFieldSourceDefinition.TypeId.Balances;
+    export interface FieldId extends TypedTableFieldSourceDefinition.FieldId {
+        sourceTypeId: BalancesTableFieldSourceDefinition.TypeId;
         id: Balances.FieldId;
+    }
+
+    export function get(cachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService): BalancesTableFieldSourceDefinition {
+        return cachingFactoryService.get(typeId) as BalancesTableFieldSourceDefinition;
     }
 
     export function initialiseStatic() {

@@ -14,22 +14,22 @@ import {
     LitIvemBaseDetailTableFieldSourceDefinition,
     RankedLitIvemIdTableFieldSourceDefinition,
     SecurityDataItemTableFieldSourceDefinition,
-    TableFieldSourceDefinition,
-    TableFieldSourceDefinitionCachedFactoryService
+    TypedTableFieldSourceDefinition,
+    TypedTableFieldSourceDefinitionCachingFactoryService
 } from "../../field-source/grid-table-field-source-internal-api";
 import { RankedLitIvemIdListTableRecordSourceDefinition } from './ranked-lit-ivem-id-list-table-record-source-definition';
-import { TableRecordSourceDefinition } from './table-record-source-definition';
+import { TypedTableRecordSourceDefinition } from './typed-table-record-source-definition';
 
 /** @public */
 export class WatchlistTableRecordSourceDefinition extends RankedLitIvemIdListTableRecordSourceDefinition {
     constructor(
         customHeadingsService: GridFieldCustomHeadingsService,
-        tableFieldSourceDefinitionCachedFactoryService: TableFieldSourceDefinitionCachedFactoryService,
+        tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService,
         rankedLitIvemIdListDefinition: LitIvemIdArrayRankedLitIvemIdListDefinition | ScanIdRankedLitIvemIdListDefinition,
     ) {
         super(
             customHeadingsService,
-            tableFieldSourceDefinitionCachedFactoryService,
+            tableFieldSourceDefinitionCachingFactoryService,
             WatchlistTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
             rankedLitIvemIdListDefinition,
         );
@@ -38,7 +38,7 @@ export class WatchlistTableRecordSourceDefinition extends RankedLitIvemIdListTab
     override get defaultFieldSourceDefinitionTypeIds() { return WatchlistTableRecordSourceDefinition.defaultFieldSourceDefinitionTypeIds; }
 
     override createDefaultLayoutDefinition() {
-        const fieldSourceDefinition = this.tableFieldSourceDefinitionCachedFactoryService.securityDataItem;
+        const fieldSourceDefinition = SecurityDataItemTableFieldSourceDefinition.get(this.tableFieldSourceDefinitionCachingFactoryService);
 
         const fieldNames = new Array<string>();
 
@@ -86,16 +86,16 @@ export class WatchlistTableRecordSourceDefinition extends RankedLitIvemIdListTab
 /** @public */
 export namespace WatchlistTableRecordSourceDefinition {
     export const allowedFieldSourceDefinitionTypeIds: RankedLitIvemIdListTableRecordSourceDefinition.FieldSourceDefinitionTypeId[] = [
-        TableFieldSourceDefinition.TypeId.LitIvemBaseDetail,
-        TableFieldSourceDefinition.TypeId.SecurityDataItem,
-        TableFieldSourceDefinition.TypeId.RankedLitIvemId,
+        TypedTableFieldSourceDefinition.TypeId.LitIvemBaseDetail,
+        TypedTableFieldSourceDefinition.TypeId.SecurityDataItem,
+        TypedTableFieldSourceDefinition.TypeId.RankedLitIvemId,
         // AlternateCodesFix: Currently this actually is part of FullDetail.  Will be in BaseDetail in future
-        // TableFieldSourceDefinition.TypeId.LitIvemAlternateCodes,
+        // TypedTableFieldSourceDefinition.TypeId.LitIvemAlternateCodes,
     ];
 
     export const defaultFieldSourceDefinitionTypeIds: RankedLitIvemIdListTableRecordSourceDefinition.FieldSourceDefinitionTypeId[] = [
-        TableFieldSourceDefinition.TypeId.SecurityDataItem,
-        TableFieldSourceDefinition.TypeId.RankedLitIvemId,
+        TypedTableFieldSourceDefinition.TypeId.SecurityDataItem,
+        TypedTableFieldSourceDefinition.TypeId.RankedLitIvemId,
     ];
 
     export type FieldId =
@@ -107,13 +107,13 @@ export namespace WatchlistTableRecordSourceDefinition {
 
 
     export function createLayoutDefinition(
-        fieldSourceDefinitionRegistryService: TableFieldSourceDefinitionCachedFactoryService,
+        fieldSourceDefinitionRegistryService: TypedTableFieldSourceDefinitionCachingFactoryService,
         fieldIds: FieldId[],
     ): GridLayoutDefinition {
         return fieldSourceDefinitionRegistryService.createLayoutDefinition(fieldIds);
     }
 
-    export function is(definition: TableRecordSourceDefinition): definition is WatchlistTableRecordSourceDefinition {
-        return definition.typeId === TableRecordSourceDefinition.TypeId.RankedLitIvemIdList;
+    export function is(definition: TypedTableRecordSourceDefinition): definition is WatchlistTableRecordSourceDefinition {
+        return definition.typeId === TypedTableRecordSourceDefinition.TypeId.RankedLitIvemIdList;
     }
 }

@@ -8,19 +8,24 @@ import { LitIvemBaseDetail, RankedLitIvemId } from '../../../../adi/adi-internal
 import { LitIvemIdExecuteScanRankedLitIvemIdListDefinition } from '../../../../ranked-lit-ivem-id-list/ranked-lit-ivem-id-list-internal-api';
 import { GridFieldCustomHeadingsService } from '../../../field/grid-field-internal-api';
 import { GridLayoutDefinition } from '../../../layout/grid-layout-internal-api';
-import { TableFieldSourceDefinition, TableFieldSourceDefinitionCachedFactoryService } from '../../field-source/grid-table-field-source-internal-api';
+import {
+    LitIvemBaseDetailTableFieldSourceDefinition,
+    RankedLitIvemIdTableFieldSourceDefinition,
+    TypedTableFieldSourceDefinition,
+    TypedTableFieldSourceDefinitionCachingFactoryService,
+} from '../../field-source/grid-table-field-source-internal-api';
 import { RankedLitIvemIdListTableRecordSourceDefinition } from './ranked-lit-ivem-id-list-table-record-source-definition';
 
 /** @public */
 export class ScanTestTableRecordSourceDefinition extends RankedLitIvemIdListTableRecordSourceDefinition {
     constructor(
         customHeadingsService: GridFieldCustomHeadingsService,
-        tableFieldSourceDefinitionCachedFactoryService: TableFieldSourceDefinitionCachedFactoryService,
+        tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService,
         rankedLitIvemIdListDefinition: LitIvemIdExecuteScanRankedLitIvemIdListDefinition,
     ) {
         super(
             customHeadingsService,
-            tableFieldSourceDefinitionCachedFactoryService,
+            tableFieldSourceDefinitionCachingFactoryService,
             ScanTestTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
             rankedLitIvemIdListDefinition,
         );
@@ -29,8 +34,8 @@ export class ScanTestTableRecordSourceDefinition extends RankedLitIvemIdListTabl
     override get defaultFieldSourceDefinitionTypeIds() { return ScanTestTableRecordSourceDefinition.defaultFieldSourceDefinitionTypeIds; }
 
     override createDefaultLayoutDefinition(): GridLayoutDefinition {
-        const rankedLitIvemIdFieldSourceDefinition = this.tableFieldSourceDefinitionCachedFactoryService.rankedLitIvemId;
-        const litIvemBaseDetailFieldSourceDefinition = this.tableFieldSourceDefinitionCachedFactoryService.litIvemBaseDetail;
+        const rankedLitIvemIdFieldSourceDefinition = RankedLitIvemIdTableFieldSourceDefinition.get(this.tableFieldSourceDefinitionCachingFactoryService);
+        const litIvemBaseDetailFieldSourceDefinition = LitIvemBaseDetailTableFieldSourceDefinition.get(this.tableFieldSourceDefinitionCachingFactoryService);
 
         const fieldNames = new Array<string>();
 
@@ -46,14 +51,14 @@ export class ScanTestTableRecordSourceDefinition extends RankedLitIvemIdListTabl
 /** @public */
 export namespace ScanTestTableRecordSourceDefinition {
     export const allowedFieldSourceDefinitionTypeIds: RankedLitIvemIdListTableRecordSourceDefinition.FieldSourceDefinitionTypeId[] = [
-        TableFieldSourceDefinition.TypeId.LitIvemBaseDetail,
-        TableFieldSourceDefinition.TypeId.RankedLitIvemId,
+        TypedTableFieldSourceDefinition.TypeId.LitIvemBaseDetail,
+        TypedTableFieldSourceDefinition.TypeId.RankedLitIvemId,
         // AlternateCodesFix: Currently this actually is part of FullDetail.  Will be in BaseDetail in future
-        // TableFieldSourceDefinition.TypeId.LitIvemAlternateCodes,
+        // TypedTableFieldSourceDefinition.TypeId.LitIvemAlternateCodes,
     ];
 
     export const defaultFieldSourceDefinitionTypeIds: RankedLitIvemIdListTableRecordSourceDefinition.FieldSourceDefinitionTypeId[] = [
-        TableFieldSourceDefinition.TypeId.LitIvemBaseDetail,
-        TableFieldSourceDefinition.TypeId.RankedLitIvemId,
+        TypedTableFieldSourceDefinition.TypeId.LitIvemBaseDetail,
+        TypedTableFieldSourceDefinition.TypeId.RankedLitIvemId,
     ];
 }

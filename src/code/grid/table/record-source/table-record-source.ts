@@ -17,18 +17,15 @@ import {
 import { TextFormatterService } from '../../../text-format/text-format-internal-api';
 import { GridFieldCustomHeadingsService } from '../../field/grid-field-custom-headings-service';
 import { AllowedGridField } from '../../field/grid-field-internal-api';
-import { TableFieldSource, TableFieldSourceDefinition, TableFieldSourceDefinitionCachedFactoryService } from '../field-source/grid-table-field-source-internal-api';
+import { TableFieldSource, TableFieldSourceDefinitionCachingFactoryService } from '../field-source/grid-table-field-source-internal-api';
 import { TableField } from '../field/grid-table-field-internal-api';
 import { TableRecordDefinition } from '../record-definition/table-record-definition';
 import { TableRecord } from '../record/grid-table-record-internal-api';
-import { TableRecordSourceDefinition, TableRecordSourceDefinitionFactoryService } from './definition/grid-table-record-source-definition-internal-api';
+import { TableRecordSourceDefinition } from './definition/grid-table-record-source-definition-internal-api';
 
 /** @public */
-export abstract class TableRecordSource<Badness> implements CorrectnessState<Badness> {
-    protected readonly _gridFieldCustomHeadingsService: GridFieldCustomHeadingsService;
-    protected readonly _tableFieldSourceDefinitionCachedFactoryService: TableFieldSourceDefinitionCachedFactoryService;
-
-    private _activeFieldSources: readonly TableFieldSource[] = [];
+export abstract class TableRecordSource<TypeId, TableFieldSourceDefinitionTypeId, Badness> implements CorrectnessState<Badness> {
+    private _activeFieldSources: readonly TableFieldSource<TableFieldSourceDefinitionTypeId>[] = [];
     private _fields: readonly TableField[] = [];
 
     private _opened = false;
@@ -39,13 +36,12 @@ export abstract class TableRecordSource<Badness> implements CorrectnessState<Bad
 
     constructor(
         private readonly _textFormatterService: TextFormatterService,
-        protected readonly tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService,
+        protected readonly _gridFieldCustomHeadingsService: GridFieldCustomHeadingsService,
+        protected readonly _tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService<TableFieldSourceDefinitionTypeId>,
         private readonly _correctnessState: CorrectnessState<Badness>,
-        protected readonly definition: TableRecordSourceDefinition,
-        readonly allowedFieldSourceDefinitionTypeIds: readonly TableFieldSourceDefinition.TypeId[],
+        protected readonly definition: TableRecordSourceDefinition<TypeId, TableFieldSourceDefinitionTypeId>,
+        readonly allowedFieldSourceDefinitionTypeIds: readonly TableFieldSourceDefinitionTypeId[],
     ) {
-        this._gridFieldCustomHeadingsService = tableRecordSourceDefinitionFactoryService.gridFieldCustomHeadingsService;
-        this._tableFieldSourceDefinitionCachedFactoryService = tableRecordSourceDefinitionFactoryService.tableFieldSourceDefinitionCachedFactoryService;
     }
 
     get usable() { return this._correctnessState.usable; }
@@ -57,7 +53,7 @@ export abstract class TableRecordSource<Badness> implements CorrectnessState<Bad
     get activated(): boolean { return this._opened; }
 
     get count(): Integer { return this.getCount(); }
-    get AsArray(): TableRecordDefinition[] { return this.getAsArray(); }
+    get AsArray(): TableRecordDefinition<TableFieldSourceDefinitionTypeId>[] { return this.getAsArray(); }
 
     finalise() {
         // descendants can override
@@ -82,7 +78,7 @@ export abstract class TableRecordSource<Badness> implements CorrectnessState<Bad
     // get changeDefinitionOrderAllowed(): boolean { return this._changeDefinitionOrderAllowed; }
     // get addDeleteDefinitionsAllowed(): boolean { return this.getAddDeleteDefinitionsAllowed(); }
 
-    setActiveFieldSources(fieldSourceTypeIds: readonly TableFieldSourceDefinition.TypeId[]) {
+    setActiveFieldSources(fieldSourceTypeIds: readonly TableFieldSourceDefinitionTypeId[]) {
         // The following could be improved.  Faster if work out differences and then subtract and add
         if (fieldSourceTypeIds.length === 0) {
             this._activeFieldSources = [];
@@ -110,7 +106,7 @@ export abstract class TableRecordSource<Badness> implements CorrectnessState<Bad
         this._opened = false;
     }
 
-    indexOf(value: TableRecordDefinition): Integer {
+    indexOf(value: TableRecordDefinition<TableFieldSourceDefinitionTypeId>): Integer {
         for (let i = 0; i < this.count; i++) {
             const definition = this.createRecordDefinition(i);
             if (TableRecordDefinition.same(definition, value)) {
@@ -198,20 +194,20 @@ export abstract class TableRecordSource<Badness> implements CorrectnessState<Bad
         return result;
     }
 
-    protected getAsArray(): TableRecordDefinition[] {
-        const result: TableRecordDefinition[] = [];
+    protected getAsArray(): TableRecordDefinition<TableFieldSourceDefinitionTypeId>[] {
+        const result: TableRecordDefinition<TableFieldSourceDefinitionTypeId>[] = [];
         for (let i = 0; i < this.getCount(); i++) {
             result.push(this.createRecordDefinition(i));
         }
         return result;
     }
 
-    private createActiveSources(fieldSourceTypeIds: readonly TableFieldSourceDefinition.TypeId[]): readonly TableFieldSource[] {
+    private createActiveSources(fieldSourceTypeIds: readonly TableFieldSourceDefinitionTypeId[]): readonly TableFieldSource<TableFieldSourceDefinitionTypeId>[] {
         const maxCount = this.allowedFieldSourceDefinitionTypeIds.length;
         if (fieldSourceTypeIds.length > maxCount) {
             throw new AssertInternalError('TRSCFSC34424');
         } else {
-            const sources = new Array<TableFieldSource>(maxCount);
+            const sources = new Array<TableFieldSource<TableFieldSourceDefinitionTypeId>>(maxCount);
             let sourceCount = 0;
             let fieldCount = 0;
             for (const fieldSourceTypeId of fieldSourceTypeIds) {
@@ -230,26 +226,29 @@ export abstract class TableRecordSource<Badness> implements CorrectnessState<Bad
         }
     }
 
-    private createFieldSource(fieldSourceTypeId: TableFieldSourceDefinition.TypeId, fieldCount: Integer) {
-        const definition = this._tableFieldSourceDefinitionCachedFactoryService.get(fieldSourceTypeId);
+    private createFieldSource(fieldSourceTypeId: TableFieldSourceDefinitionTypeId, fieldCount: Integer) {
+        const definition = this._tableFieldSourceDefinitionCachingFactoryService.get(fieldSourceTypeId);
         const source = new TableFieldSource(this._textFormatterService, this._gridFieldCustomHeadingsService, definition, '');
         source.fieldIndexOffset = fieldCount;
         source.nextFieldIndexOffset = source.fieldIndexOffset + source.fieldCount;
         return source;
     }
 
-    abstract createDefinition(): TableRecordSourceDefinition;
+    abstract createDefinition(): TableRecordSourceDefinition<TypeId, TableFieldSourceDefinitionTypeId>;
     abstract createTableRecord(recordIndex: Integer, eventHandlers: TableRecord.EventHandlers): TableRecord;
-    abstract createRecordDefinition(recordIdx: Integer): TableRecordDefinition;
+    abstract createRecordDefinition(recordIdx: Integer): TableRecordDefinition<TableFieldSourceDefinitionTypeId>;
 
     protected abstract getCount(): Integer;
-    protected abstract getDefaultFieldSourceDefinitionTypeIds(): TableFieldSourceDefinition.TypeId[];
+    protected abstract getDefaultFieldSourceDefinitionTypeIds(): TableFieldSourceDefinitionTypeId[];
 
 }
 
 /** @public */
 export namespace TableRecordSource {
-    export type FactoryClosure<Badness> = (this: void, definition: TableRecordSourceDefinition) => TableRecordSource<Badness>;
+    export type FactoryClosure<TypeId, TableFieldSourceDefinitionTypeId, Badness> = (
+        this: void,
+        definition: TableRecordSourceDefinition<TypeId, TableFieldSourceDefinitionTypeId>
+    ) => TableRecordSource<TypeId, TableFieldSourceDefinitionTypeId, Badness>;
 
     export type ListChangeEventHandler = (
         this: void,
@@ -259,7 +258,7 @@ export namespace TableRecordSource {
     ) => void;
     export type RecDefinitionChangeEventHandler = (this: void, itemIdx: Integer) => void;
     export type badnessChangedEventHandler = (this: void) => void;
-    export type ModifiedEventHandler<Badness> = (this: void, list: TableRecordSource<Badness>) => void;
+    export type ModifiedEventHandler<TypeId, TableFieldSourceDefinitionTypeId, Badness> = (this: void, list: TableRecordSource<TypeId, TableFieldSourceDefinitionTypeId, Badness>) => void;
     export type RequestIsGroupSaveEnabledEventHandler = (this: void) => boolean;
 
 }

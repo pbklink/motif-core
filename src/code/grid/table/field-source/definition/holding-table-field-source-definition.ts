@@ -7,7 +7,6 @@
 import { Holding } from '../../../../adi/adi-internal-api';
 import {
     AssertInternalError,
-    CommaText,
     FieldDataType,
     FieldDataTypeId,
     Integer,
@@ -30,13 +29,14 @@ import {
     PriceCorrectnessTableValue,
     StringCorrectnessTableValue
 } from '../../value/grid-table-value-internal-api';
-import { TableFieldSourceDefinition } from './table-field-source-definition';
+import { TypedTableFieldSourceDefinition } from './typed-table-field-source-definition';
+import { TypedTableFieldSourceDefinitionCachingFactoryService } from './typed-table-field-source-definition-caching-factory-service';
 
-export class HoldingTableFieldSourceDefinition extends TableFieldSourceDefinition {
+export class HoldingTableFieldSourceDefinition extends TypedTableFieldSourceDefinition {
     override readonly fieldDefinitions: TableField.Definition[];
 
     constructor() {
-        super(TableFieldSourceDefinition.TypeId.Holding);
+        super(HoldingTableFieldSourceDefinition.typeId);
 
         this.fieldDefinitions = this.createFieldDefinitions();
     }
@@ -47,7 +47,7 @@ export class HoldingTableFieldSourceDefinition extends TableFieldSourceDefinitio
 
     getFieldNameById(id: Holding.FieldId) {
         const sourcelessFieldName = HoldingTableFieldSourceDefinition.Field.getNameById(id);
-        return CommaText.from2Values(this.name, sourcelessFieldName);
+        return this.encodeFieldName(sourcelessFieldName);
     }
 
     getSupportedFieldNameById(id: Holding.FieldId) {
@@ -84,6 +84,9 @@ export class HoldingTableFieldSourceDefinition extends TableFieldSourceDefinitio
 }
 
 export namespace HoldingTableFieldSourceDefinition {
+    export const typeId = TypedTableFieldSourceDefinition.TypeId.Holding;
+    export type TypeId = typeof typeId;
+
     export namespace Field {
         const unsupportedIds: Holding.FieldId[] = [];
         export const count = Holding.Field.idCount - unsupportedIds.length;
@@ -98,7 +101,7 @@ export namespace HoldingTableFieldSourceDefinition {
         const idFieldIndices = new Array<Integer>(Holding.Field.idCount);
 
         function idToTableGridConstructors(id: Holding.FieldId):
-            TableFieldSourceDefinition.CorrectnessTableGridConstructors {
+            TypedTableFieldSourceDefinition.CorrectnessTableGridConstructors {
             switch (id) {
                 case Holding.FieldId.ExchangeId:
                     return [EnumCorrectnessTableField, ExchangeIdCorrectnessTableValue];
@@ -178,9 +181,13 @@ export namespace HoldingTableFieldSourceDefinition {
         }
     }
 
-    export interface FieldId extends TableFieldSourceDefinition.FieldId {
-        sourceTypeId: TableFieldSourceDefinition.TypeId.Holding;
+    export interface FieldId extends TypedTableFieldSourceDefinition.FieldId {
+        sourceTypeId: HoldingTableFieldSourceDefinition.TypeId;
         id: Holding.FieldId;
+    }
+
+    export function get(cachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService): HoldingTableFieldSourceDefinition {
+        return cachingFactoryService.get(typeId) as HoldingTableFieldSourceDefinition;
     }
 
     export function initialiseStatic() {

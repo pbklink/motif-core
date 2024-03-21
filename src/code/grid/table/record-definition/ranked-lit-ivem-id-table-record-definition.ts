@@ -5,17 +5,17 @@
  */
 
 import { LitIvemId, RankedLitIvemId } from '../../../adi/adi-internal-api';
-import { TableFieldSourceDefinition } from '../field-source/grid-table-field-source-internal-api';
-import { TableRecordDefinition } from './table-record-definition';
+import { TypedTableFieldSourceDefinition } from '../field-source/grid-table-field-source-internal-api';
+import { TypedTableRecordDefinition } from './typed-table-record-definition';
 
-export interface RankedLitIvemIdTableRecordDefinition extends TableRecordDefinition {
-    readonly typeId: TableFieldSourceDefinition.TypeId.RankedLitIvemId;
+export interface RankedLitIvemIdTableRecordDefinition extends TypedTableRecordDefinition {
+    readonly typeId: TypedTableFieldSourceDefinition.TypeId.RankedLitIvemId;
     readonly rankedLitIvemId: RankedLitIvemId;
 }
 
 export namespace RankedLitIvemIdTableRecordDefinition {
-    export function is(definition: TableRecordDefinition): definition is RankedLitIvemIdTableRecordDefinition {
-        return definition.typeId === TableFieldSourceDefinition.TypeId.RankedLitIvemId;
+    export function is(definition: TypedTableRecordDefinition): definition is RankedLitIvemIdTableRecordDefinition {
+        return definition.typeId === TypedTableFieldSourceDefinition.TypeId.RankedLitIvemId;
     }
 
     export function createMapKey(rankedLitIvemId: RankedLitIvemId) {

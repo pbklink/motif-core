@@ -5,7 +5,7 @@
  */
 
 import { Scan } from '../../../../scan/internal-api';
-import { AssertInternalError, CommaText, FieldDataType, FieldDataTypeId, Integer } from '../../../../sys/internal-api';
+import { AssertInternalError, FieldDataType, FieldDataTypeId, Integer } from '../../../../sys/internal-api';
 import {
     BooleanCorrectnessTableField,
     CorrectnessTableField,
@@ -28,14 +28,15 @@ import {
     StringCorrectnessTableValue,
     WritableCorrectnessTableValue
 } from '../../value/grid-table-value-internal-api';
-import { TableFieldSourceDefinition } from './table-field-source-definition';
+import { TypedTableFieldSourceDefinition } from './typed-table-field-source-definition';
+import { TypedTableFieldSourceDefinitionCachingFactoryService } from './typed-table-field-source-definition-caching-factory-service';
 
 /** @public */
-export class ScanTableFieldSourceDefinition extends TableFieldSourceDefinition {
+export class ScanTableFieldSourceDefinition extends TypedTableFieldSourceDefinition {
     override readonly fieldDefinitions: TableField.Definition[];
 
     constructor() {
-        super(TableFieldSourceDefinition.TypeId.Scan);
+        super(ScanTableFieldSourceDefinition.typeId);
 
         this.fieldDefinitions = this.createFieldDefinitions();
     }
@@ -46,7 +47,7 @@ export class ScanTableFieldSourceDefinition extends TableFieldSourceDefinition {
 
     getFieldNameById(id: Scan.FieldId) {
         const sourcelessFieldName = Scan.Field.idToName(id);
-        return CommaText.from2Values(this.name, sourcelessFieldName);
+        return this.encodeFieldName(sourcelessFieldName);
     }
 
     getSupportedFieldNameById(id: Scan.FieldId) {
@@ -85,6 +86,9 @@ export class ScanTableFieldSourceDefinition extends TableFieldSourceDefinition {
 
 /** @public */
 export namespace ScanTableFieldSourceDefinition {
+    export const typeId = TypedTableFieldSourceDefinition.TypeId.Scan;
+    export type TypeId = typeof typeId;
+
     export namespace Field {
         const unsupportedIds: Scan.FieldId[] = [
             Scan.FieldId.Index,
@@ -212,9 +216,13 @@ export namespace ScanTableFieldSourceDefinition {
         }
     }
 
-    export interface FieldId extends TableFieldSourceDefinition.FieldId {
-        sourceTypeId: TableFieldSourceDefinition.TypeId.Scan;
+    export interface FieldId extends TypedTableFieldSourceDefinition.FieldId {
+        sourceTypeId: ScanTableFieldSourceDefinition.TypeId;
         id: Scan.FieldId;
+    }
+
+    export function get(cachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService): ScanTableFieldSourceDefinition {
+        return cachingFactoryService.get(typeId) as ScanTableFieldSourceDefinition;
     }
 
     export function initialiseStatic() {

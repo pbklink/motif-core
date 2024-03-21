@@ -4,15 +4,15 @@
  * License: motionite.trade/license/motif
  */
 
-import { IndexedTableRecordDefinition, TableFieldSourceDefinition, TableRecordDefinition } from '../../table/internal-api';
+import { IndexedTableRecordDefinition, TypedTableFieldSourceDefinition, TypedTableRecordDefinition } from '../../table/internal-api';
 import { EditableGridLayoutDefinitionColumn } from './editable-grid-layout-definition-column';
 
 export interface EditableGridLayoutDefinitionColumnTableRecordDefinition extends IndexedTableRecordDefinition<EditableGridLayoutDefinitionColumn> {
-    readonly typeId: TableFieldSourceDefinition.TypeId.EditableGridLayoutDefinitionColumn;
+    readonly typeId: TypedTableFieldSourceDefinition.TypeId.EditableGridLayoutDefinitionColumn;
 }
 
 export namespace EditableGridLayoutDefinitionColumnTableRecordDefinition {
-    export function is(definition: TableRecordDefinition): definition is EditableGridLayoutDefinitionColumnTableRecordDefinition {
-        return definition.typeId === TableFieldSourceDefinition.TypeId.EditableGridLayoutDefinitionColumn;
+    export function is(definition: TypedTableRecordDefinition): definition is EditableGridLayoutDefinitionColumnTableRecordDefinition {
+        return definition.typeId === TypedTableFieldSourceDefinition.TypeId.EditableGridLayoutDefinitionColumn;
     }
 }

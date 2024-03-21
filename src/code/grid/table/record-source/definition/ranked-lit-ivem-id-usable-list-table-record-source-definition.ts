@@ -7,8 +7,8 @@
 import { RankedLitIvemId } from '../../../../adi/adi-internal-api';
 import { PickEnum, UsableList } from '../../../../sys/internal-api';
 import { GridFieldCustomHeadingsService } from '../../../field/grid-field-internal-api';
-import { TableFieldSourceDefinition, TableFieldSourceDefinitionCachedFactoryService } from '../../field-source/grid-table-field-source-internal-api';
-import { TableRecordSourceDefinition } from './table-record-source-definition';
+import { TypedTableFieldSourceDefinition, TypedTableFieldSourceDefinitionCachingFactoryService } from '../../field-source/grid-table-field-source-internal-api';
+import { TypedTableRecordSourceDefinition } from './typed-table-record-source-definition';
 import { UsableListTableRecordSourceDefinition } from './usable-list-table-record-source-definition';
 
 /** @public */
@@ -16,12 +16,12 @@ export abstract class RankedLitIvemIdUsableListTableRecordSourceDefinition exten
     // eslint-disable-next-line @typescript-eslint/no-useless-constructor
     constructor(
         customHeadingsService: GridFieldCustomHeadingsService,
-        tableFieldSourceDefinitionCachedFactoryService: TableFieldSourceDefinitionCachedFactoryService,
-        typeId: TableRecordSourceDefinition.TypeId,
+        tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService,
+        typeId: TypedTableRecordSourceDefinition.TypeId,
         allowedFieldSourceDefinitionTypeIds: RankedLitIvemIdUsableListTableRecordSourceDefinition.FieldSourceDefinitionTypeId[],
         list: UsableList<RankedLitIvemId>,
     ) {
-        super(customHeadingsService, tableFieldSourceDefinitionCachedFactoryService, typeId, allowedFieldSourceDefinitionTypeIds, list);
+        super(customHeadingsService, tableFieldSourceDefinitionCachingFactoryService, typeId, allowedFieldSourceDefinitionTypeIds, list);
     }
 
     abstract get defaultFieldSourceDefinitionTypeIds(): RankedLitIvemIdUsableListTableRecordSourceDefinition.FieldSourceDefinitionTypeId[];
@@ -30,19 +30,19 @@ export abstract class RankedLitIvemIdUsableListTableRecordSourceDefinition exten
 
 /** @public */
 export namespace RankedLitIvemIdUsableListTableRecordSourceDefinition {
-    export type FieldSourceDefinitionTypeId = PickEnum<TableFieldSourceDefinition.TypeId,
-        TableFieldSourceDefinition.TypeId.LitIvemBaseDetail |
-        TableFieldSourceDefinition.TypeId.RankedLitIvemId |
-        TableFieldSourceDefinition.TypeId.SecurityDataItem
+    export type FieldSourceDefinitionTypeId = PickEnum<TypedTableFieldSourceDefinition.TypeId,
+        TypedTableFieldSourceDefinition.TypeId.LitIvemBaseDetail |
+        TypedTableFieldSourceDefinition.TypeId.RankedLitIvemId |
+        TypedTableFieldSourceDefinition.TypeId.SecurityDataItem
         // AlternateCodesFix: Currently this actually is part of FullDetail.  Will be in BaseDetail in future
-        // TableFieldSourceDefinition.TypeId.LitIvemAlternateCodes
+        // TypedTableFieldSourceDefinition.TypeId.LitIvemAlternateCodes
     >;
 
     export const allowedFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[] = [
-        TableFieldSourceDefinition.TypeId.LitIvemBaseDetail,
-        TableFieldSourceDefinition.TypeId.RankedLitIvemId,
-        TableFieldSourceDefinition.TypeId.SecurityDataItem
+        TypedTableFieldSourceDefinition.TypeId.LitIvemBaseDetail,
+        TypedTableFieldSourceDefinition.TypeId.RankedLitIvemId,
+        TypedTableFieldSourceDefinition.TypeId.SecurityDataItem
         // AlternateCodesFix: Currently this actually is part of FullDetail.  Will be in BaseDetail in future
-        // TableFieldSourceDefinition.TypeId.LitIvemAlternateCodes,
+        // TypedTableFieldSourceDefinition.TypeId.LitIvemAlternateCodes,
     ];
 }

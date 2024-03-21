@@ -9,10 +9,10 @@ import { GridSortDefinition } from '../../layout/definition/grid-layout-definiti
 import { TableRecordDefinition } from '../../table/internal-api';
 
 /* @public */
-export class GridRowOrderDefinition {
+export class GridRowOrderDefinition<TableFieldSourceDefinitionTypeId> {
     constructor(
         readonly sortFields: GridSortDefinition.Field[] | undefined,
-        readonly recordDefinitions: TableRecordDefinition[] | undefined,
+        readonly recordDefinitions: TableRecordDefinition<TableFieldSourceDefinitionTypeId>[] | undefined,
     ) {
         if (recordDefinitions !== undefined) {
             throw new AssertInternalError('GRODC45552'); // currently not supported
@@ -72,8 +72,8 @@ export namespace GridRowOrderDefinition {
         element.setElementArray(JsonName.sortFields, sortFieldElements);
     }
 
-    export function createFromJson(element: JsonElement): GridRowOrderDefinition {
+    export function createFromJson<TableFieldSourceDefinitionTypeId>(element: JsonElement): GridRowOrderDefinition<TableFieldSourceDefinitionTypeId> {
         const sortFields = tryCreateSortFieldsFromJson(element);
-        return new GridRowOrderDefinition(sortFields, undefined);
+        return new GridRowOrderDefinition<TableFieldSourceDefinitionTypeId>(sortFields, undefined);
     }
 }

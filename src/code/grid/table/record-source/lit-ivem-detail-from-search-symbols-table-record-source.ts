@@ -25,8 +25,9 @@ import {
     UsableListChangeTypeId
 } from '../../../sys/internal-api';
 import { TextFormatterService } from '../../../text-format/text-format-internal-api';
+import { GridFieldCustomHeadingsService } from '../../field/grid-field-internal-api';
 import {
-    TableFieldSourceDefinition
+    TypedTableFieldSourceDefinition, TypedTableFieldSourceDefinitionCachingFactoryService
 } from "../field-source/grid-table-field-source-internal-api";
 import { LitIvemBaseDetailTableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
 import { TableRecord } from '../record/grid-table-record-internal-api';
@@ -36,10 +37,9 @@ import {
     LitIvemExtendedDetailTableValueSource,
     MyxLitIvemAttributesTableValueSource
 } from "../value-source/internal-api";
-import { TableRecordSourceDefinitionFactoryService } from './definition/grid-table-record-source-definition-internal-api';
 import {
     LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition
-} from "./definition/lit-ivem-detail-from-symbol-search-table-record-source-definition";
+} from './definition/grid-table-record-source-definition-internal-api';
 import { SingleDataItemTableRecordSource } from './single-data-item-table-record-source';
 
 export class LitIvemDetailFromSearchSymbolsTableRecordSource extends SingleDataItemTableRecordSource {
@@ -60,13 +60,15 @@ export class LitIvemDetailFromSearchSymbolsTableRecordSource extends SingleDataI
     constructor(
         private readonly _adiService: AdiService,
         textFormatterService: TextFormatterService,
-        tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService,
+        gridFieldCustomHeadingsService: GridFieldCustomHeadingsService,
+        tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService,
         correctnessBadness: CorrectnessBadness,
         definition: LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition
     ) {
         super(
             textFormatterService,
-            tableRecordSourceDefinitionFactoryService,
+            gridFieldCustomHeadingsService,
+            tableFieldSourceDefinitionCachingFactoryService,
             correctnessBadness,
             definition,
             definition.allowedFieldSourceDefinitionTypeIds,
@@ -79,13 +81,17 @@ export class LitIvemDetailFromSearchSymbolsTableRecordSource extends SingleDataI
     get dataDefinition() { return this._dataDefinition; }
 
     override createDefinition(): LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition {
-        return this.tableRecordSourceDefinitionFactoryService.createLitIvemIdFromSearchSymbols(this._dataDefinition.createCopy());
+        return new LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition(
+            this._gridFieldCustomHeadingsService,
+            this._tableFieldSourceDefinitionCachingFactoryService,
+            this._dataDefinition.createCopy(),
+        );
     }
 
     override createRecordDefinition(idx: Integer): LitIvemBaseDetailTableRecordDefinition {
         const litIvemBaseDetail = this.recordList[idx];
         return {
-            typeId: TableFieldSourceDefinition.TypeId.LitIvemBaseDetail,
+            typeId: TypedTableFieldSourceDefinition.TypeId.LitIvemBaseDetail,
             mapKey: litIvemBaseDetail.key.mapKey,
             litIvemBaseDetail,
         };
@@ -103,7 +109,7 @@ export class LitIvemDetailFromSearchSymbolsTableRecordSource extends SingleDataI
             const fieldSourceDefinitionTypeId =
                 fieldSourceDefinition.typeId as LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition.FieldSourceDefinitionTypeId;
             switch (fieldSourceDefinitionTypeId) {
-                case TableFieldSourceDefinition.TypeId.LitIvemBaseDetail: {
+                case TypedTableFieldSourceDefinition.TypeId.LitIvemBaseDetail: {
                     const valueSource = new LitIvemBaseDetailTableValueSource(
                         result.fieldCount,
                         litIvemDetail,
@@ -112,7 +118,7 @@ export class LitIvemDetailFromSearchSymbolsTableRecordSource extends SingleDataI
                     result.addSource(valueSource);
                     break;
                 }
-                case TableFieldSourceDefinition.TypeId.LitIvemAlternateCodes: {
+                case TypedTableFieldSourceDefinition.TypeId.LitIvemAlternateCodes: {
                     // AlternateCodesFix: Currently this actually is part of FullDetail.  In future will be part of BaseDetail
                     if (this._isFullDetail) {
                         const altCodesSource = new LitIvemAlternateCodesTableValueSource(
@@ -124,7 +130,7 @@ export class LitIvemDetailFromSearchSymbolsTableRecordSource extends SingleDataI
                     }
                     break;
                 }
-                case TableFieldSourceDefinition.TypeId.LitIvemExtendedDetail: {
+                case TypedTableFieldSourceDefinition.TypeId.LitIvemExtendedDetail: {
                     if (this._isFullDetail) {
                         const litIvemFullDetail = litIvemDetail as SearchSymbolsLitIvemFullDetail;
                         const valueSource = new LitIvemExtendedDetailTableValueSource(
@@ -136,7 +142,7 @@ export class LitIvemDetailFromSearchSymbolsTableRecordSource extends SingleDataI
                     }
                     break;
                 }
-                case TableFieldSourceDefinition.TypeId.MyxLitIvemAttributes: {
+                case TypedTableFieldSourceDefinition.TypeId.MyxLitIvemAttributes: {
                     if (this._isFullDetail) {
                         const litIvemFullDetail = litIvemDetail as SearchSymbolsLitIvemFullDetail;
                         switch (this._exchangeId) {

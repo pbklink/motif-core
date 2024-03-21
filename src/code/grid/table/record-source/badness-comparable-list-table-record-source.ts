@@ -6,8 +6,9 @@
 
 import { BadnessList, CorrectnessBadness, LockOpenListItem } from '../../../sys/internal-api';
 import { TextFormatterService } from '../../../text-format/text-format-internal-api';
-import { TableFieldSourceDefinition } from '../field-source/grid-table-field-source-internal-api';
-import { BadnessListTableRecordSourceDefinition, TableRecordSourceDefinitionFactoryService } from './definition/grid-table-record-source-definition-internal-api';
+import { GridFieldCustomHeadingsService } from '../../field/grid-field-internal-api';
+import { TypedTableFieldSourceDefinition, TypedTableFieldSourceDefinitionCachingFactoryService } from '../field-source/grid-table-field-source-internal-api';
+import { BadnessListTableRecordSourceDefinition } from './definition/grid-table-record-source-definition-internal-api';
 import { SubscribeBadnessListTableRecordSource } from './subscribe-badness-list-table-record-source';
 
 export abstract class BadnessListTableRecordSource<Record> extends SubscribeBadnessListTableRecordSource<Record, BadnessList<Record>> {
@@ -15,14 +16,16 @@ export abstract class BadnessListTableRecordSource<Record> extends SubscribeBadn
 
     constructor(
         textFormatterService: TextFormatterService,
-        tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService,
+        gridFieldCustomHeadingsService: GridFieldCustomHeadingsService,
+        tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService,
         correctnessBadness: CorrectnessBadness,
         definition: BadnessListTableRecordSourceDefinition<Record>,
-        allowedFieldSourceDefinitionTypeIds: readonly TableFieldSourceDefinition.TypeId[],
+        allowedFieldSourceDefinitionTypeIds: readonly TypedTableFieldSourceDefinition.TypeId[],
     ) {
         super(
             textFormatterService,
-            tableRecordSourceDefinitionFactoryService,
+            gridFieldCustomHeadingsService,
+            tableFieldSourceDefinitionCachingFactoryService,
             correctnessBadness,
             definition,
             allowedFieldSourceDefinitionTypeIds,

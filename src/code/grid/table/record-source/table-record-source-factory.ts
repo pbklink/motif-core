@@ -8,7 +8,7 @@ import { CorrectnessState } from '../../../sys/internal-api';
 import { TableRecordSourceDefinition } from './definition/grid-table-record-source-definition-internal-api';
 import { TableRecordSource } from './table-record-source';
 
-export interface TableRecordSourceFactory<Badness> {
-    create(definition: TableRecordSourceDefinition): TableRecordSource<Badness>;
+export interface TableRecordSourceFactory<TypeId, TableFieldSourceDefinitionTypeId, Badness> {
+    create(definition: TableRecordSourceDefinition<TypeId, TableFieldSourceDefinitionTypeId>): TableRecordSource<TypeId, TableFieldSourceDefinitionTypeId, Badness>;
     createCorrectnessState(): CorrectnessState<Badness>;
 }

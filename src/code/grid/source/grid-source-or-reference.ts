@@ -6,25 +6,26 @@
 
 import { AssertInternalError, Err, ErrorCode, Guid, LockOpenListItem, Ok, Result } from '../../sys/internal-api';
 import { ReferenceableGridLayoutsService } from '../layout/grid-layout-internal-api';
-import { TableRecordSourceFactory } from '../table/internal-api';
+import { TableFieldSourceDefinitionFactory, TableRecordSourceFactory } from '../table/internal-api';
 import { GridRowOrderDefinition, GridSourceDefinition, GridSourceOrReferenceDefinition } from './definition/grid-source-definition-internal-api';
 import { GridSource } from './grid-source';
 import { ReferenceableGridSource } from './referenceable-grid-source';
 import { ReferenceableGridSourcesService } from './referenceable-grid-sources-service';
 
 /** @public */
-export class GridSourceOrReference<Badness> {
+export class GridSourceOrReference<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, Badness> {
     private readonly _referenceId: Guid | undefined;
-    private readonly _gridSourceDefinition: GridSourceDefinition | undefined;
+    private readonly _gridSourceDefinition: GridSourceDefinition<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId> | undefined;
 
-    private _lockedGridSource: GridSource<Badness> | undefined;
-    private _lockedReferenceableGridSource: ReferenceableGridSource<Badness> | undefined;
+    private _lockedGridSource: GridSource<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, Badness> | undefined;
+    private _lockedReferenceableGridSource: ReferenceableGridSource<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, Badness> | undefined;
 
     constructor(
         private readonly _referenceableGridLayoutsService: ReferenceableGridLayoutsService,
-        private readonly _tableRecordSourceFactory: TableRecordSourceFactory<Badness>,
-        private readonly _referenceableGridSourcesService: ReferenceableGridSourcesService<Badness>,
-        definition: GridSourceOrReferenceDefinition
+        private readonly _tableFieldSourceDefinitionFactory: TableFieldSourceDefinitionFactory<TableFieldSourceDefinitionTypeId>,
+        private readonly _tableRecordSourceFactory: TableRecordSourceFactory<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, Badness>,
+        private readonly _referenceableGridSourcesService: ReferenceableGridSourcesService<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, Badness>,
+        definition: GridSourceOrReferenceDefinition<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId>
     ) {
         if (definition.referenceId !== undefined ) {
             this._referenceId = definition.referenceId;
@@ -40,13 +41,13 @@ export class GridSourceOrReference<Badness> {
     get lockedGridSource() { return this._lockedGridSource;}
     get lockedReferenceableGridSource() { return this._lockedReferenceableGridSource;}
 
-    createDefinition(rowOrderDefinition: GridRowOrderDefinition | undefined) {
+    createDefinition(rowOrderDefinition: GridRowOrderDefinition<TableFieldSourceDefinitionTypeId> | undefined) {
         if (this._lockedReferenceableGridSource !== undefined) {
-            return new GridSourceOrReferenceDefinition(this._lockedReferenceableGridSource.id);
+            return new GridSourceOrReferenceDefinition<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId>(this._lockedReferenceableGridSource.id);
         } else {
             if (this.lockedGridSource !== undefined) {
                 const gridSourceDefinition = this.lockedGridSource.createDefinition(rowOrderDefinition);
-                return new GridSourceOrReferenceDefinition(gridSourceDefinition);
+                return new GridSourceOrReferenceDefinition<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId>(gridSourceDefinition);
             } else {
                 throw new AssertInternalError('GSONRCDU59923');
             }
@@ -55,8 +56,9 @@ export class GridSourceOrReference<Badness> {
 
     async tryLock(locker: LockOpenListItem.Locker): Promise<Result<void>> {
         if (this._gridSourceDefinition !== undefined) {
-            const gridSource = new GridSource(
+            const gridSource = new GridSource<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, Badness>(
                 this._referenceableGridLayoutsService,
+                this._tableFieldSourceDefinitionFactory,
                 this._tableRecordSourceFactory,
                 this._gridSourceDefinition
             );

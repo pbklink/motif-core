@@ -7,13 +7,14 @@
 import { Scan, ScanList, ScansService } from '../../../scan/internal-api';
 import { CorrectnessBadness, Integer, LockOpenListItem, UnreachableCaseError } from '../../../sys/internal-api';
 import { TextFormatterService } from '../../../text-format/text-format-internal-api';
+import { GridFieldCustomHeadingsService } from '../../field/grid-field-internal-api';
 import {
-    TableFieldSourceDefinition
+    TypedTableFieldSourceDefinition, TypedTableFieldSourceDefinitionCachingFactoryService
 } from "../field-source/grid-table-field-source-internal-api";
 import { ScanTableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
 import { TableRecord } from '../record/grid-table-record-internal-api';
 import { ScanTableValueSource } from '../value-source/internal-api';
-import { ScanTableRecordSourceDefinition, TableRecordSourceDefinitionFactoryService } from './definition/grid-table-record-source-definition-internal-api';
+import { ScanTableRecordSourceDefinition } from './definition/grid-table-record-source-definition-internal-api';
 import { LockOpenListTableRecordSource } from './lock-open-list-table-record-source';
 
 export class ScanTableRecordSource extends LockOpenListTableRecordSource<Scan, ScanList> {
@@ -22,13 +23,15 @@ export class ScanTableRecordSource extends LockOpenListTableRecordSource<Scan, S
     constructor(
         private readonly _scansService: ScansService,
         textFormatterService: TextFormatterService,
-        tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService,
+        gridFieldCustomHeadingsService: GridFieldCustomHeadingsService,
+        tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService,
         correctnessBadness: CorrectnessBadness,
         definition: ScanTableRecordSourceDefinition,
     ) {
         super(
             textFormatterService,
-            tableRecordSourceDefinitionFactoryService,
+            gridFieldCustomHeadingsService,
+            tableFieldSourceDefinitionCachingFactoryService,
             correctnessBadness,
             definition,
             ScanTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
@@ -37,13 +40,16 @@ export class ScanTableRecordSource extends LockOpenListTableRecordSource<Scan, S
     }
 
     override createDefinition(): ScanTableRecordSourceDefinition {
-        return this.tableRecordSourceDefinitionFactoryService.createScan();
+        return new ScanTableRecordSourceDefinition(
+            this._gridFieldCustomHeadingsService,
+            this._tableFieldSourceDefinitionCachingFactoryService,
+        );
     }
 
     override createRecordDefinition(idx: Integer): ScanTableRecordDefinition {
         const scan = this._scanList.getAt(idx);
         return {
-            typeId: TableFieldSourceDefinition.TypeId.Scan,
+            typeId: TypedTableFieldSourceDefinition.TypeId.Scan,
             mapKey: scan.mapKey,
             record: scan,
         };
@@ -61,7 +67,7 @@ export class ScanTableRecordSource extends LockOpenListTableRecordSource<Scan, S
             const fieldSourceDefinitionTypeId =
                 fieldSourceDefinition.typeId as ScanTableRecordSourceDefinition.FieldSourceDefinitionTypeId;
             switch (fieldSourceDefinitionTypeId) {
-                case TableFieldSourceDefinition.TypeId.Scan: {
+                case TypedTableFieldSourceDefinition.TypeId.Scan: {
                     const valueSource = new ScanTableValueSource(result.fieldCount, scan);
                     result.addSource(valueSource);
                     break;

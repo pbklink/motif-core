@@ -6,21 +6,23 @@
 
 import { Badness, CorrectnessBadness, MultiEvent } from '../../../sys/internal-api';
 import { TextFormatterService } from '../../../text-format/text-format-internal-api';
-import { TableFieldSourceDefinition } from '../field-source/grid-table-field-source-internal-api';
-import { TableRecordSourceDefinition, TableRecordSourceDefinitionFactoryService } from './definition/grid-table-record-source-definition-internal-api';
+import { GridFieldCustomHeadingsService } from '../../field/grid-field-internal-api';
+import { TypedTableFieldSourceDefinition, TypedTableFieldSourceDefinitionCachingFactoryService } from '../field-source/grid-table-field-source-internal-api';
+import { TypedTableRecordSourceDefinition } from './definition/grid-table-record-source-definition-internal-api';
 import { TableRecordSource } from './table-record-source';
 
-export abstract class TypedTableRecordSource extends TableRecordSource<Badness> {
+export abstract class TypedTableRecordSource extends TableRecordSource<TypedTableRecordSourceDefinition.TypeId, TypedTableFieldSourceDefinition.TypeId, Badness> {
     private _correctnessBadnessUsableChangedSubscriptionId: MultiEvent.SubscriptionId;
 
     constructor(
         textFormatterService: TextFormatterService,
-        tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService,
+        gridFieldCustomHeadingsService: GridFieldCustomHeadingsService,
+        tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService,
         private readonly _correctnessBadness: CorrectnessBadness,
-        definition: TableRecordSourceDefinition,
-        allowedFieldSourceDefinitionTypeIds: readonly TableFieldSourceDefinition.TypeId[],
+        definition: TypedTableRecordSourceDefinition,
+        allowedFieldSourceDefinitionTypeIds: readonly TypedTableFieldSourceDefinition.TypeId[],
     ) {
-        super(textFormatterService, tableRecordSourceDefinitionFactoryService, _correctnessBadness, definition, allowedFieldSourceDefinitionTypeIds);
+        super(textFormatterService, gridFieldCustomHeadingsService, tableFieldSourceDefinitionCachingFactoryService, _correctnessBadness, definition, allowedFieldSourceDefinitionTypeIds);
         this._correctnessBadnessUsableChangedSubscriptionId = this._correctnessBadness.subscribeUsableChangedEvent(() => this.processUsableChanged());
     }
 

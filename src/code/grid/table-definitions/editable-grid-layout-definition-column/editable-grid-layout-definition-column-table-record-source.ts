@@ -6,11 +6,12 @@
 
 import { Badness, CorrectnessBadness, Integer, LockOpenListItem, MultiEvent, UnreachableCaseError, UsableListChangeTypeId } from '../../../sys/internal-api';
 import { TextFormatterService } from '../../../text-format/text-format-internal-api';
+import { GridFieldCustomHeadingsService } from '../../field/grid-field-internal-api';
 import {
     TableField,
-    TableFieldSourceDefinition,
     TableRecord,
-    TableRecordSourceDefinitionFactoryService,
+    TypedTableFieldSourceDefinition,
+    TypedTableFieldSourceDefinitionCachingFactoryService,
     TypedTableRecordSource
 } from '../../table/internal-api';
 import { EditableGridLayoutDefinitionColumn } from './editable-grid-layout-definition-column';
@@ -27,13 +28,15 @@ export class EditableGridLayoutDefinitionColumnTableRecordSource extends TypedTa
 
     constructor(
         textFormatterService: TextFormatterService,
-        tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService,
+        gridFieldCustomHeadingsService: GridFieldCustomHeadingsService,
+        tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService,
         correctnessBadness: CorrectnessBadness,
         definition: EditableGridLayoutDefinitionColumnTableRecordSourceDefinition,
     ) {
         super(
             textFormatterService,
-            tableRecordSourceDefinitionFactoryService,
+            gridFieldCustomHeadingsService,
+            tableFieldSourceDefinitionCachingFactoryService,
             correctnessBadness,
             definition,
             EditableGridLayoutDefinitionColumnTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
@@ -76,7 +79,7 @@ export class EditableGridLayoutDefinitionColumnTableRecordSource extends TypedTa
     override createDefinition(): EditableGridLayoutDefinitionColumnTableRecordSourceDefinition {
         return new EditableGridLayoutDefinitionColumnTableRecordSourceDefinition(
             this._gridFieldCustomHeadingsService,
-            this._tableFieldSourceDefinitionCachedFactoryService,
+            this._tableFieldSourceDefinitionCachingFactoryService,
             this._list,
         );
     }
@@ -84,7 +87,7 @@ export class EditableGridLayoutDefinitionColumnTableRecordSource extends TypedTa
     override createRecordDefinition(idx: Integer): EditableGridLayoutDefinitionColumnTableRecordDefinition {
         const record = this._records[idx];
         return {
-            typeId: TableFieldSourceDefinition.TypeId.EditableGridLayoutDefinitionColumn,
+            typeId: TypedTableFieldSourceDefinition.TypeId.EditableGridLayoutDefinitionColumn,
             mapKey: record.fieldName,
             record,
         };
@@ -101,7 +104,7 @@ export class EditableGridLayoutDefinitionColumnTableRecordSource extends TypedTa
             const fieldSourceDefinition = fieldSource.definition;
             const fieldSourceDefinitionTypeId = fieldSourceDefinition.typeId as EditableGridLayoutDefinitionColumnTableRecordSourceDefinition.FieldSourceDefinitionTypeId;
             switch (fieldSourceDefinitionTypeId) {
-                case TableFieldSourceDefinition.TypeId.EditableGridLayoutDefinitionColumn: {
+                case TypedTableFieldSourceDefinition.TypeId.EditableGridLayoutDefinitionColumn: {
                     const valueSource = new EditableGridLayoutDefinitionColumnTableValueSource(result.fieldCount, record);
                     result.addSource(valueSource);
                     break;

@@ -17,8 +17,9 @@ import {
 } from "../../../adi/adi-internal-api";
 import { CorrectnessBadness, Integer, LockOpenListItem, UnreachableCaseError } from '../../../sys/internal-api';
 import { TextFormatterService } from '../../../text-format/text-format-internal-api';
+import { GridFieldCustomHeadingsService } from '../../field/grid-field-internal-api';
 import {
-    TableFieldSourceDefinition
+    TypedTableFieldSourceDefinition, TypedTableFieldSourceDefinitionCachingFactoryService
 } from "../field-source/grid-table-field-source-internal-api";
 import { OrderTableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
 import { TableRecord } from '../record/grid-table-record-internal-api';
@@ -26,7 +27,6 @@ import { BrokerageAccountTableValueSource, OrderTableValueSource } from '../valu
 import {
     BrokerageAccountGroupTableRecordSource
 } from './brokerage-account-group-table-record-source';
-import { TableRecordSourceDefinitionFactoryService } from './definition/grid-table-record-source-definition-internal-api';
 import { OrderTableRecordSourceDefinition } from './definition/order-table-record-source-definition';
 
 /** @public */
@@ -36,13 +36,15 @@ export class OrderTableRecordSource
     constructor(
         private readonly _adiService: AdiService,
         textFormatterService: TextFormatterService,
-        tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService,
+        gridFieldCustomHeadingsService: GridFieldCustomHeadingsService,
+        tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService,
         correctnessBadness: CorrectnessBadness,
         definition: OrderTableRecordSourceDefinition,
     ) {
         super(
             textFormatterService,
-            tableRecordSourceDefinitionFactoryService,
+            gridFieldCustomHeadingsService,
+            tableFieldSourceDefinitionCachingFactoryService,
             correctnessBadness,
             definition,
             OrderTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
@@ -50,13 +52,17 @@ export class OrderTableRecordSource
     }
 
     override createDefinition(): OrderTableRecordSourceDefinition {
-        return this.tableRecordSourceDefinitionFactoryService.createOrder(this.brokerageAccountGroup);
+        return new OrderTableRecordSourceDefinition(
+            this._gridFieldCustomHeadingsService,
+            this._tableFieldSourceDefinitionCachingFactoryService,
+            this.brokerageAccountGroup,
+        );
     }
 
     override createRecordDefinition(idx: Integer): OrderTableRecordDefinition {
         const record = this.recordList.records[idx];
         return {
-            typeId: TableFieldSourceDefinition.TypeId.Order,
+            typeId: TypedTableFieldSourceDefinition.TypeId.Order,
             mapKey: record.mapKey,
             record,
         }
@@ -74,12 +80,12 @@ export class OrderTableRecordSource
             const fieldSourceDefinitionTypeId =
                 fieldSourceDefinition.typeId as OrderTableRecordSourceDefinition.FieldSourceDefinitionTypeId;
             switch (fieldSourceDefinitionTypeId) {
-                case TableFieldSourceDefinition.TypeId.Order: {
+                case TypedTableFieldSourceDefinition.TypeId.Order: {
                     const valueSource = new OrderTableValueSource(result.fieldCount, order);
                     result.addSource(valueSource);
                     break;
                 }
-                case TableFieldSourceDefinition.TypeId.BrokerageAccount: {
+                case TypedTableFieldSourceDefinition.TypeId.BrokerageAccount: {
                     const valueSource = new BrokerageAccountTableValueSource(result.fieldCount, order.account);
                     result.addSource(valueSource);
                     break;

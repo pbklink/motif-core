@@ -33,7 +33,7 @@ import {
     GridLayoutDefinition,
     GridSortDefinition,
 } from '../../layout/grid-layout-internal-api';
-import { GridRowOrderDefinition } from '../../source/grid-source-internal-api';
+import { TypedGridRowOrderDefinition } from '../../typed/internal-api';
 import { AdaptedRevgrid, SingleHeadingGridDataServer } from '../adapted-revgrid/grid-revgrid-adapted-revgrid-internal-api';
 import { AdaptedRevgridBehavioredColumnSettings } from '../settings/grid-revgrid-settings-internal-api';
 import { RecordGridDataServer } from './record-grid-data-server';
@@ -174,7 +174,7 @@ export class RecordGrid extends AdaptedRevgrid implements GridLayout.ChangeIniti
         this._allowedFields = fields;
     }
 
-    applyFirstUsable(rowOrderDefinition: GridRowOrderDefinition | undefined, viewAnchor: RecordGrid.ViewAnchor | undefined, gridLayout: GridLayout | undefined) {
+    applyFirstUsable(rowOrderDefinition: TypedGridRowOrderDefinition | undefined, viewAnchor: RecordGrid.ViewAnchor | undefined, gridLayout: GridLayout | undefined) {
         this._beenUsable = true;
 
         this._firstUsableRenderViewAnchor = viewAnchor;
@@ -283,9 +283,9 @@ export class RecordGrid extends AdaptedRevgrid implements GridLayout.ChangeIniti
         this.mainDataServer.clearSort();
     }
 
-    getRowOrderDefinition(): GridRowOrderDefinition {
+    getRowOrderDefinition(): TypedGridRowOrderDefinition {
         const sortColumns = this.getSortFields();
-        return new GridRowOrderDefinition(sortColumns, undefined);
+        return new TypedGridRowOrderDefinition(sortColumns, undefined);
     }
 
     getFieldByName(fieldName: string): RevRecordField {

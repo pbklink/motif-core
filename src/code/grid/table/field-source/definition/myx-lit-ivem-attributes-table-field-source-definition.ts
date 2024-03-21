@@ -7,7 +7,6 @@
 import { MyxLitIvemAttributes } from '../../../../adi/adi-internal-api';
 import {
     AssertInternalError,
-    CommaText,
     FieldDataType,
     FieldDataTypeId,
     Integer,
@@ -29,13 +28,14 @@ import {
     PercentageCorrectnessTableValue,
     ShortSellTypeIdArrayMyxLitIvemAttributeCorrectnessTableValue
 } from '../../value/grid-table-value-internal-api';
-import { TableFieldSourceDefinition } from './table-field-source-definition';
+import { TypedTableFieldSourceDefinition } from './typed-table-field-source-definition';
+import { TypedTableFieldSourceDefinitionCachingFactoryService } from './typed-table-field-source-definition-caching-factory-service';
 
-export class MyxLitIvemAttributesTableFieldSourceDefinition extends TableFieldSourceDefinition {
+export class MyxLitIvemAttributesTableFieldSourceDefinition extends TypedTableFieldSourceDefinition {
     override readonly fieldDefinitions: TableField.Definition[];
 
     constructor() {
-        super(TableFieldSourceDefinition.TypeId.MyxLitIvemAttributes);
+        super(MyxLitIvemAttributesTableFieldSourceDefinition.typeId);
 
         this.fieldDefinitions = this.createFieldDefinitions();
     }
@@ -46,7 +46,7 @@ export class MyxLitIvemAttributesTableFieldSourceDefinition extends TableFieldSo
 
     getFieldNameById(id: MyxLitIvemAttributes.Field.Id) {
         const sourcelessFieldName = MyxLitIvemAttributesTableFieldSourceDefinition.Field.getNameById(id);
-        return CommaText.from2Values(this.name, sourcelessFieldName);
+        return this.encodeFieldName(sourcelessFieldName);
     }
 
     getSupportedFieldNameById(id: MyxLitIvemAttributes.Field.Id) {
@@ -82,6 +82,9 @@ export class MyxLitIvemAttributesTableFieldSourceDefinition extends TableFieldSo
 }
 
 export namespace MyxLitIvemAttributesTableFieldSourceDefinition {
+    export const typeId = TypedTableFieldSourceDefinition.TypeId.MyxLitIvemAttributes;
+    export type TypeId = typeof typeId;
+
     export namespace Field {
         const unsupportedIds: MyxLitIvemAttributes.Field.Id[] = [];
         export const count = MyxLitIvemAttributes.Field.idCount - unsupportedIds.length;
@@ -96,7 +99,7 @@ export namespace MyxLitIvemAttributesTableFieldSourceDefinition {
         const idFieldIndices = new Array<Integer>(MyxLitIvemAttributes.Field.idCount);
 
         function idToTableGridConstructors(id: MyxLitIvemAttributes.Field.Id):
-            TableFieldSourceDefinition.CorrectnessTableGridConstructors {
+            TypedTableFieldSourceDefinition.CorrectnessTableGridConstructors {
             switch (id) {
                 case MyxLitIvemAttributes.Field.Id.Category:
                     return [IntegerCorrectnessTableField, IntegerCorrectnessTableValue];
@@ -174,9 +177,13 @@ export namespace MyxLitIvemAttributesTableFieldSourceDefinition {
         }
     }
 
-    export interface FieldId extends TableFieldSourceDefinition.FieldId {
-        sourceTypeId: TableFieldSourceDefinition.TypeId.MyxLitIvemAttributes;
+    export interface FieldId extends TypedTableFieldSourceDefinition.FieldId {
+        sourceTypeId: MyxLitIvemAttributesTableFieldSourceDefinition.TypeId;
         id: MyxLitIvemAttributes.Field.Id;
+    }
+
+    export function get(cachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService): MyxLitIvemAttributesTableFieldSourceDefinition {
+        return cachingFactoryService.get(typeId) as MyxLitIvemAttributesTableFieldSourceDefinition;
     }
 
     export function initialiseStatic() {

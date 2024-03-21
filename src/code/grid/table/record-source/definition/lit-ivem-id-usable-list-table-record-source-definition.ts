@@ -6,7 +6,7 @@
 
 import { LitIvemId } from '../../../../adi/adi-internal-api';
 import { ChangeSubscribableComparableList, ErrorCode, JsonElement, JsonElementErr, Ok, PickEnum, Result } from '../../../../sys/internal-api';
-import { TableFieldSourceDefinition } from '../../field-source/grid-table-field-source-internal-api';
+import { TypedTableFieldSourceDefinition } from '../../field-source/grid-table-field-source-internal-api';
 import { UsableListTableRecordSourceDefinition } from './usable-list-table-record-source-definition';
 
 /** @public */
@@ -20,20 +20,20 @@ export abstract class LitIvemIdUsableListTableRecordSourceDefinition extends Usa
 
 /** @public */
 export namespace LitIvemIdUsableListTableRecordSourceDefinition {
-    export type FieldSourceDefinitionTypeId = PickEnum<TableFieldSourceDefinition.TypeId,
-        TableFieldSourceDefinition.TypeId.LitIvemBaseDetail |
-        TableFieldSourceDefinition.TypeId.RankedLitIvemId |
-        TableFieldSourceDefinition.TypeId.SecurityDataItem
+    export type FieldSourceDefinitionTypeId = PickEnum<TypedTableFieldSourceDefinition.TypeId,
+        TypedTableFieldSourceDefinition.TypeId.LitIvemBaseDetail |
+        TypedTableFieldSourceDefinition.TypeId.RankedLitIvemId |
+        TypedTableFieldSourceDefinition.TypeId.SecurityDataItem
         // AlternateCodesFix: Currently this actually is part of FullDetail.  Will be in BaseDetail in future
-        // TableFieldSourceDefinition.TypeId.LitIvemAlternateCodes
+        // TypedTableFieldSourceDefinition.TypeId.LitIvemAlternateCodes
     >;
 
     export const allowedFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[] = [
-        TableFieldSourceDefinition.TypeId.LitIvemBaseDetail,
-        TableFieldSourceDefinition.TypeId.RankedLitIvemId,
-        TableFieldSourceDefinition.TypeId.SecurityDataItem
+        TypedTableFieldSourceDefinition.TypeId.LitIvemBaseDetail,
+        TypedTableFieldSourceDefinition.TypeId.RankedLitIvemId,
+        TypedTableFieldSourceDefinition.TypeId.SecurityDataItem
         // AlternateCodesFix: Currently this actually is part of FullDetail.  Will be in BaseDetail in future
-        // TableFieldSourceDefinition.TypeId.LitIvemAlternateCodes,
+        // TypedTableFieldSourceDefinition.TypeId.LitIvemAlternateCodes,
     ];
 
     export namespace JsonName {

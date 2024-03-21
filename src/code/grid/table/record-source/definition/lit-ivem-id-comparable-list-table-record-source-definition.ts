@@ -12,11 +12,11 @@ import {
     LitIvemBaseDetailTableFieldSourceDefinition,
     LitIvemIdTableFieldSourceDefinition,
     SecurityDataItemTableFieldSourceDefinition,
-    TableFieldSourceDefinition,
-    TableFieldSourceDefinitionCachedFactoryService
+    TypedTableFieldSourceDefinition,
+    TypedTableFieldSourceDefinitionCachingFactoryService
 } from "../../field-source/grid-table-field-source-internal-api";
 import { BadnessListTableRecordSourceDefinition } from './badness-list-table-record-source-definition';
-import { TableRecordSourceDefinition } from './table-record-source-definition';
+import { TypedTableRecordSourceDefinition } from './typed-table-record-source-definition';
 
 /** @public */
 export class LitIvemIdComparableListTableRecordSourceDefinition extends BadnessListTableRecordSourceDefinition<LitIvemId> {
@@ -24,13 +24,13 @@ export class LitIvemIdComparableListTableRecordSourceDefinition extends BadnessL
 
     constructor(
         customHeadingsService: GridFieldCustomHeadingsService,
-        tableFieldSourceDefinitionCachedFactoryService: TableFieldSourceDefinitionCachedFactoryService,
+        tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService,
         list: UiComparableList<LitIvemId>,
     ) {
         super(
             customHeadingsService,
-            tableFieldSourceDefinitionCachedFactoryService,
-            TableRecordSourceDefinition.TypeId.LitIvemIdComparableList,
+            tableFieldSourceDefinitionCachingFactoryService,
+            TypedTableRecordSourceDefinition.TypeId.LitIvemIdComparableList,
             LitIvemIdComparableListTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
             list,
         );
@@ -43,7 +43,7 @@ export class LitIvemIdComparableListTableRecordSourceDefinition extends BadnessL
     }
 
     override createDefaultLayoutDefinition(): GridLayoutDefinition {
-        const litIvemIdFieldSourceDefinition = this.tableFieldSourceDefinitionCachedFactoryService.litIvemId;
+        const litIvemIdFieldSourceDefinition = LitIvemIdTableFieldSourceDefinition.get(this.tableFieldSourceDefinitionCachingFactoryService);
 
         const fieldNames = new Array<string>();
 
@@ -55,24 +55,24 @@ export class LitIvemIdComparableListTableRecordSourceDefinition extends BadnessL
 
 /** @public */
 export namespace LitIvemIdComparableListTableRecordSourceDefinition {
-    export type FieldSourceDefinitionTypeId = PickEnum<TableFieldSourceDefinition.TypeId,
-        TableFieldSourceDefinition.TypeId.LitIvemId |
-        TableFieldSourceDefinition.TypeId.LitIvemBaseDetail |
-        TableFieldSourceDefinition.TypeId.SecurityDataItem
+    export type FieldSourceDefinitionTypeId = PickEnum<TypedTableFieldSourceDefinition.TypeId,
+        TypedTableFieldSourceDefinition.TypeId.LitIvemId |
+        TypedTableFieldSourceDefinition.TypeId.LitIvemBaseDetail |
+        TypedTableFieldSourceDefinition.TypeId.SecurityDataItem
         // AlternateCodesFix: Currently this actually is part of FullDetail.  Will be in BaseDetail in future
-        // TableFieldSourceDefinition.TypeId.LitIvemAlternateCodes
+        // TypedTableFieldSourceDefinition.TypeId.LitIvemAlternateCodes
     >;
 
     export const allowedFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[] = [
-        TableFieldSourceDefinition.TypeId.LitIvemId,
-        TableFieldSourceDefinition.TypeId.LitIvemBaseDetail,
-        TableFieldSourceDefinition.TypeId.SecurityDataItem,
+        TypedTableFieldSourceDefinition.TypeId.LitIvemId,
+        TypedTableFieldSourceDefinition.TypeId.LitIvemBaseDetail,
+        TypedTableFieldSourceDefinition.TypeId.SecurityDataItem,
         // AlternateCodesFix: Currently this actually is part of FullDetail.  Will be in BaseDetail in future
-        // TableFieldSourceDefinition.TypeId.LitIvemAlternateCodes,
+        // TypedTableFieldSourceDefinition.TypeId.LitIvemAlternateCodes,
     ];
 
     export const defaultFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[] = [
-        TableFieldSourceDefinition.TypeId.LitIvemId,
+        TypedTableFieldSourceDefinition.TypeId.LitIvemId,
     ];
 
     export type FieldId =
@@ -108,7 +108,7 @@ export namespace LitIvemIdComparableListTableRecordSourceDefinition {
 
     export function tryCreateDefinition(
         customHeadingsService: GridFieldCustomHeadingsService,
-        tableFieldSourceDefinitionCachedFactoryService: TableFieldSourceDefinitionCachedFactoryService,
+        tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService,
         element: JsonElement,
     ): Result<LitIvemIdComparableListTableRecordSourceDefinition> {
         const listCreateResult = tryCreateListFromElement(element);
@@ -117,19 +117,19 @@ export namespace LitIvemIdComparableListTableRecordSourceDefinition {
             return listCreateResult.createOuter(errorCode);
         } else {
             const list = listCreateResult.value;
-            const definition = new LitIvemIdComparableListTableRecordSourceDefinition(customHeadingsService, tableFieldSourceDefinitionCachedFactoryService, list);
+            const definition = new LitIvemIdComparableListTableRecordSourceDefinition(customHeadingsService, tableFieldSourceDefinitionCachingFactoryService, list);
             return new Ok(definition);
         }
     }
 
     export function createLayoutDefinition(
-        fieldSourceDefinitionRegistryService: TableFieldSourceDefinitionCachedFactoryService,
+        fieldSourceDefinitionRegistryService: TypedTableFieldSourceDefinitionCachingFactoryService,
         fieldIds: FieldId[],
     ): GridLayoutDefinition {
         return fieldSourceDefinitionRegistryService.createLayoutDefinition(fieldIds);
     }
 
-    export function is(definition: TableRecordSourceDefinition): definition is LitIvemIdComparableListTableRecordSourceDefinition {
-        return definition.typeId === TableRecordSourceDefinition.TypeId.LitIvemIdComparableList;
+    export function is(definition: TypedTableRecordSourceDefinition): definition is LitIvemIdComparableListTableRecordSourceDefinition {
+        return definition.typeId === TypedTableRecordSourceDefinition.TypeId.LitIvemIdComparableList;
     }
 }

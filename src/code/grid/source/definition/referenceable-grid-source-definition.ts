@@ -8,19 +8,19 @@ import { ErrorCode, Guid, JsonElement, JsonElementErr, Ok, Result } from '../../
 import { GridLayoutOrReferenceDefinition } from '../../layout/grid-layout-internal-api';
 import {
     TableRecordSourceDefinition,
-    TableRecordSourceDefinitionFactoryService
+    TableRecordSourceDefinitionFromJsonFactory
 } from "../../table/record-source/internal-api";
 import { GridRowOrderDefinition } from './grid-row-order-definition';
 import { GridSourceDefinition } from './grid-source-definition';
 
 /** @public */
-export class ReferenceableGridSourceDefinition extends GridSourceDefinition {
+export class ReferenceableGridSourceDefinition<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId> extends GridSourceDefinition<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId> {
     constructor(
         readonly id: Guid,
         readonly name: string,
-        tableRecordSourceDefinition: TableRecordSourceDefinition,
+        tableRecordSourceDefinition: TableRecordSourceDefinition<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId>,
         gridLayoutDefinitionOrReference: GridLayoutOrReferenceDefinition | undefined,
-        rowOrderDefinition: GridRowOrderDefinition | undefined,
+        rowOrderDefinition: GridRowOrderDefinition<TableFieldSourceDefinitionTypeId> | undefined,
     ) {
         super(tableRecordSourceDefinition, gridLayoutDefinitionOrReference, rowOrderDefinition);
     }
@@ -39,10 +39,10 @@ export namespace ReferenceableGridSourceDefinition {
         export const name = 'name';
     }
 
-    export function tryCreateFromJson(
-        tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService,
+    export function tryCreateFromJson<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId>(
+        tableRecordSourceDefinitionFactory: TableRecordSourceDefinitionFromJsonFactory<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId>,
         element: JsonElement,
-    ): Result<ReferenceableGridSourceDefinition> {
+    ): Result<ReferenceableGridSourceDefinition<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId>> {
         const idResult = element.tryGetString(ReferenceableJsonName.id);
         if (idResult.isErr()) {
             return JsonElementErr.createOuter(idResult.error, ErrorCode.ReferenceableGridSourceDefinition_IdNotSpecified);
@@ -52,7 +52,7 @@ export namespace ReferenceableGridSourceDefinition {
                 return JsonElementErr.createOuter(nameResult.error, ErrorCode.ReferenceableGridSourceDefinition_NameNotSpecified);
             } else {
                 const tableRecordSourceDefinitionResult = GridSourceDefinition.tryGetTableRecordSourceDefinitionFromJson(
-                    tableRecordSourceDefinitionFactoryService,
+                    tableRecordSourceDefinitionFactory,
                     element,
                 );
                 if (tableRecordSourceDefinitionResult.isErr()) {
@@ -67,9 +67,9 @@ export namespace ReferenceableGridSourceDefinition {
                         gridLayoutOrReferenceDefinition = gridLayoutDefinitionOrReferenceDefinitionResult.value;
                     }
 
-                    const rowOrderDefinition = GridSourceDefinition.tryGetRowOrderFromJson(element);
+                    const rowOrderDefinition = GridSourceDefinition.tryGetRowOrderFromJson<TableFieldSourceDefinitionTypeId>(element);
 
-                    const referenceableGridSourceDefinition = new ReferenceableGridSourceDefinition(
+                    const referenceableGridSourceDefinition = new ReferenceableGridSourceDefinition<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId>(
                         idResult.value,
                         nameResult.value,
                         tableRecordSourceDefinitionResult.value,
@@ -82,7 +82,9 @@ export namespace ReferenceableGridSourceDefinition {
         }
     }
 
-    export function is(definition: GridSourceDefinition): definition is ReferenceableGridSourceDefinition {
+    export function is<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId>(
+        definition: GridSourceDefinition<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId>
+    ): definition is ReferenceableGridSourceDefinition<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId> {
         return definition instanceof ReferenceableGridSourceDefinition;
     }
 }

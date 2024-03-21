@@ -6,15 +6,15 @@
 
 import { ErrorCode, JsonElement, JsonElementErr, Ok, Result } from '../../../sys/internal-api';
 import { GridLayoutOrReferenceDefinition } from '../../layout/grid-layout-internal-api';
-import { TableRecordSourceDefinition, TableRecordSourceDefinitionFactoryService } from '../../table/record-source/definition/grid-table-record-source-definition-internal-api';
+import { TableRecordSourceDefinition, TableRecordSourceDefinitionFromJsonFactory } from '../../table/record-source/definition/grid-table-record-source-definition-internal-api';
 import { GridRowOrderDefinition } from './grid-row-order-definition';
 
 /** @public */
-export class GridSourceDefinition {
+export class GridSourceDefinition<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId> {
     constructor(
-        public readonly tableRecordSourceDefinition: TableRecordSourceDefinition,
+        public readonly tableRecordSourceDefinition: TableRecordSourceDefinition<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId>,
         public gridLayoutOrReferenceDefinition: GridLayoutOrReferenceDefinition | undefined,
-        public rowOrderDefinition: GridRowOrderDefinition | undefined,
+        public rowOrderDefinition: GridRowOrderDefinition<TableFieldSourceDefinitionTypeId> | undefined,
     ) {
     }
 
@@ -40,10 +40,10 @@ export namespace GridSourceDefinition {
         export const rowOrder = 'rowOrder';
     }
 
-    export function tryGetTableRecordSourceDefinitionFromJson(
-        tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService,
+    export function tryGetTableRecordSourceDefinitionFromJson<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId>(
+        tableRecordSourceDefinitionFromJsonFactory: TableRecordSourceDefinitionFromJsonFactory<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId>,
         element: JsonElement
-    ): Result<TableRecordSourceDefinition> {
+    ): Result<TableRecordSourceDefinition<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId>> {
         const tableRecordSourceDefinitionElementResult = element.tryGetElement(JsonName.tableRecordSource);
         if (tableRecordSourceDefinitionElementResult.isErr()) {
             const errorCode = ErrorCode.GridSourceDefinition_TableRecordSourceDefinitionNotSpecified;
@@ -51,7 +51,7 @@ export namespace GridSourceDefinition {
         } else {
             const tableRecordSourceDefinitionElement = tableRecordSourceDefinitionElementResult.value;
             const tableRecordSourceDefinitionResult =
-                tableRecordSourceDefinitionFactoryService.tryCreateFromJson(tableRecordSourceDefinitionElement);
+                tableRecordSourceDefinitionFromJsonFactory.tryCreateFromJson(tableRecordSourceDefinitionElement);
             if (tableRecordSourceDefinitionResult.isErr()) {
                 const errorCode = ErrorCode.GridSourceDefinition_TableRecordSourceDefinitionIsInvalid;
                 return tableRecordSourceDefinitionResult.createOuter(errorCode);
@@ -82,7 +82,7 @@ export namespace GridSourceDefinition {
         }
     }
 
-    export function tryGetRowOrderFromJson(element: JsonElement): GridRowOrderDefinition | undefined {
+    export function tryGetRowOrderFromJson<TableFieldSourceDefinitionTypeId>(element: JsonElement): GridRowOrderDefinition<TableFieldSourceDefinitionTypeId> | undefined {
         const rowOrderDefinitionElementResult = element.tryGetElement(JsonName.rowOrder);
         if (rowOrderDefinitionElementResult.isErr()) {
             return undefined;
@@ -92,12 +92,12 @@ export namespace GridSourceDefinition {
         }
     }
 
-    export function tryCreateFromJson(
-        tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService,
+    export function tryCreateFromJson<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId>(
+        tableRecordSourceDefinitionFromJsonFactory: TableRecordSourceDefinitionFromJsonFactory<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId>,
         element: JsonElement
-    ): Result<GridSourceDefinition> {
+    ): Result<GridSourceDefinition<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId>> {
         const tableRecordSourceDefinitionResult = GridSourceDefinition.tryGetTableRecordSourceDefinitionFromJson(
-            tableRecordSourceDefinitionFactoryService,
+            tableRecordSourceDefinitionFromJsonFactory,
             element,
         );
         if (tableRecordSourceDefinitionResult.isErr()) {
@@ -115,9 +115,9 @@ export namespace GridSourceDefinition {
                 gridLayoutOrReferenceDefinition = gridLayoutOReferenceDefinitionResult.value;
             }
 
-            const rowOrderDefinition = tryGetRowOrderFromJson(element);
+            const rowOrderDefinition = tryGetRowOrderFromJson<TableFieldSourceDefinitionTypeId>(element);
 
-            const gridSourceDefinition = new GridSourceDefinition(
+            const gridSourceDefinition = new GridSourceDefinition<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId>(
                 tableRecordSourceDefinition,
                 gridLayoutOrReferenceDefinition,
                 rowOrderDefinition,

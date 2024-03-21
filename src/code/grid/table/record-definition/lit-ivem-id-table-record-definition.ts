@@ -5,11 +5,11 @@
  */
 
 import { LitIvemId } from '../../../adi/adi-internal-api';
-import { TableFieldSourceDefinition } from '../field-source/grid-table-field-source-internal-api';
-import { TableRecordDefinition } from './table-record-definition';
+import { TypedTableFieldSourceDefinition } from '../field-source/grid-table-field-source-internal-api';
+import { TypedTableRecordDefinition } from './typed-table-record-definition';
 
-export interface LitIvemIdTableRecordDefinition extends TableRecordDefinition {
-    readonly typeId: TableFieldSourceDefinition.TypeId.LitIvemId;
+export interface LitIvemIdTableRecordDefinition extends TypedTableRecordDefinition {
+    readonly typeId: TypedTableFieldSourceDefinition.TypeId.LitIvemId;
     readonly litIvemId: LitIvemId;
 }
 

@@ -4,9 +4,9 @@
  * License: motionite.trade/license/motif
  */
 
-import { TableRecordDefinition } from './table-record-definition';
+import { TypedTableRecordDefinition } from './typed-table-record-definition';
 
-export interface PayloadTableRecordDefinition<Record> extends TableRecordDefinition {
+export interface PayloadTableRecordDefinition<Record> extends TypedTableRecordDefinition {
     readonly record: Record;
 }
 

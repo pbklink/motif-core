@@ -7,7 +7,6 @@
 import { LitIvemId } from '../../../../adi/adi-internal-api';
 import {
     AssertInternalError,
-    CommaText,
     FieldDataType,
     FieldDataTypeId,
     Integer
@@ -25,14 +24,15 @@ import {
     StringTableValue,
     TableValue
 } from "../../value/grid-table-value-internal-api";
-import { TableFieldSourceDefinition } from './table-field-source-definition';
+import { TypedTableFieldSourceDefinition } from './typed-table-field-source-definition';
+import { TypedTableFieldSourceDefinitionCachingFactoryService } from './typed-table-field-source-definition-caching-factory-service';
 
 /** @public */
-export class LitIvemIdTableFieldSourceDefinition extends TableFieldSourceDefinition {
+export class LitIvemIdTableFieldSourceDefinition extends TypedTableFieldSourceDefinition {
     override readonly fieldDefinitions: TableField.Definition[];
 
     constructor() {
-        super(TableFieldSourceDefinition.TypeId.LitIvemId);
+        super(LitIvemIdTableFieldSourceDefinition.typeId);
 
         this.fieldDefinitions = this.createFieldDefinitions();
     }
@@ -43,7 +43,7 @@ export class LitIvemIdTableFieldSourceDefinition extends TableFieldSourceDefinit
 
     getFieldNameById(id: LitIvemId.FieldId) {
         const sourcelessFieldName = LitIvemId.Field.idToName(id);
-        return CommaText.from2Values(this.name, sourcelessFieldName);
+        return this.encodeFieldName(sourcelessFieldName);
     }
 
     getSupportedFieldNameById(id: LitIvemId.FieldId) {
@@ -82,6 +82,9 @@ export class LitIvemIdTableFieldSourceDefinition extends TableFieldSourceDefinit
 
 /** @public */
 export namespace LitIvemIdTableFieldSourceDefinition {
+    export const typeId = TypedTableFieldSourceDefinition.TypeId.LitIvemId;
+    export type TypeId = typeof typeId;
+
     export namespace Field {
         const unsupportedIds: LitIvemId.FieldId[] = [];
         export const count = LitIvemId.Field.idCount - unsupportedIds.length;
@@ -165,9 +168,13 @@ export namespace LitIvemIdTableFieldSourceDefinition {
         }
     }
 
-    export interface FieldId extends TableFieldSourceDefinition.FieldId {
-        sourceTypeId: TableFieldSourceDefinition.TypeId.LitIvemId;
+    export interface FieldId extends TypedTableFieldSourceDefinition.FieldId {
+        sourceTypeId: LitIvemIdTableFieldSourceDefinition.TypeId;
         id: LitIvemId.FieldId;
+    }
+
+    export function get(cachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService): LitIvemIdTableFieldSourceDefinition {
+        return cachingFactoryService.get(typeId) as LitIvemIdTableFieldSourceDefinition;
     }
 
     export function initialiseStatic() {

@@ -7,7 +7,7 @@
 import { CallOrPutId } from '../../../../adi/adi-internal-api';
 import { UnreachableCaseError } from '../../../../sys/internal-api';
 import { PrefixableSecurityDataItemTableFieldSourceDefinition } from './prefixable-security-data-item-table-field-source-definition';
-import { TableFieldSourceDefinition } from './table-field-source-definition';
+import { TypedTableFieldSourceDefinition } from './typed-table-field-source-definition';
 
 export class CallPutSecurityDataItemTableFieldSourceDefinition extends PrefixableSecurityDataItemTableFieldSourceDefinition {
 
@@ -25,7 +25,7 @@ export namespace CallPutSecurityDataItemTableFieldSourceDefinition {
     }
 
     export interface TypeIdAndPrefix {
-        readonly typeId: TableFieldSourceDefinition.TypeId;
+        readonly typeId: TypedTableFieldSourceDefinition.TypeId;
         readonly prefix: string;
     }
 
@@ -33,12 +33,12 @@ export namespace CallPutSecurityDataItemTableFieldSourceDefinition {
         switch (callOrPutId) {
             case CallOrPutId.Call:
                 return {
-                    typeId: TableFieldSourceDefinition.TypeId.CallSecurityDataItem,
+                    typeId: TypedTableFieldSourceDefinition.TypeId.CallSecurityDataItem,
                     prefix: FieldNameHeaderPrefix.Call,
                 };
             case CallOrPutId.Put:
                 return {
-                    typeId: TableFieldSourceDefinition.TypeId.PutSecurityDataItem,
+                    typeId: TypedTableFieldSourceDefinition.TypeId.PutSecurityDataItem,
                     prefix: FieldNameHeaderPrefix.Put,
                 };
             default:
@@ -46,11 +46,7 @@ export namespace CallPutSecurityDataItemTableFieldSourceDefinition {
         }
     }
 
-    export interface CallFieldId extends PrefixableSecurityDataItemTableFieldSourceDefinition.FieldId {
-        sourceTypeId: TableFieldSourceDefinition.TypeId.CallSecurityDataItem;
-    }
-
     export interface PutFieldId extends PrefixableSecurityDataItemTableFieldSourceDefinition.FieldId {
-        sourceTypeId: TableFieldSourceDefinition.TypeId.PutSecurityDataItem;
+        sourceTypeId: TypedTableFieldSourceDefinition.TypeId.PutSecurityDataItem;
     }
 }

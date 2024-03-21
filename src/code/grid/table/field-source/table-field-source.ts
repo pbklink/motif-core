@@ -11,14 +11,14 @@ import { GridField, GridFieldCustomHeadingsService } from '../../field/grid-fiel
 import { TableField } from '../field/grid-table-field-internal-api';
 import { TableFieldSourceDefinition } from './definition/internal-api';
 
-export class TableFieldSource {
+export class TableFieldSource<TypeId> {
     fieldIndexOffset: Integer;
     nextFieldIndexOffset: Integer;
 
     constructor(
         private readonly _textFormatterService: TextFormatterService,
         private readonly _customHeadingsService: GridFieldCustomHeadingsService,
-        public readonly definition: TableFieldSourceDefinition,
+        public readonly definition: TableFieldSourceDefinition<TypeId>,
         private _headingPrefix: string // This might be for call/put
     ) { }
 

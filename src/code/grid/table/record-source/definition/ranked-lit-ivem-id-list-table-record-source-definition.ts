@@ -11,23 +11,23 @@ import {
 import { ErrorCode, JsonElement, JsonElementErr, PickEnum, Result } from '../../../../sys/internal-api';
 import { GridFieldCustomHeadingsService } from '../../../field/grid-field-internal-api';
 import {
-    TableFieldSourceDefinition,
-    TableFieldSourceDefinitionCachedFactoryService
+    TypedTableFieldSourceDefinition,
+    TypedTableFieldSourceDefinitionCachingFactoryService
 } from "../../field-source/grid-table-field-source-internal-api";
-import { TableRecordSourceDefinition } from './table-record-source-definition';
+import { TypedTableRecordSourceDefinition } from './typed-table-record-source-definition';
 
 /** @public */
-export abstract class RankedLitIvemIdListTableRecordSourceDefinition extends TableRecordSourceDefinition {
+export abstract class RankedLitIvemIdListTableRecordSourceDefinition extends TypedTableRecordSourceDefinition {
     constructor(
         customHeadingsService: GridFieldCustomHeadingsService,
-        tableFieldSourceDefinitionCachedFactoryService: TableFieldSourceDefinitionCachedFactoryService,
+        tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService,
         allowedFieldSourceDefinitionTypeIds: RankedLitIvemIdListTableRecordSourceDefinition.FieldSourceDefinitionTypeId[],
         readonly rankedLitIvemIdListDefinition: RankedLitIvemIdListDefinition
     ) {
         super(
             customHeadingsService,
-            tableFieldSourceDefinitionCachedFactoryService,
-            TableRecordSourceDefinition.TypeId.RankedLitIvemIdList,
+            tableFieldSourceDefinitionCachingFactoryService,
+            TypedTableRecordSourceDefinition.TypeId.RankedLitIvemIdList,
             allowedFieldSourceDefinitionTypeIds,
         );
     }
@@ -44,12 +44,12 @@ export abstract class RankedLitIvemIdListTableRecordSourceDefinition extends Tab
 
 /** @public */
 export namespace RankedLitIvemIdListTableRecordSourceDefinition {
-    export type FieldSourceDefinitionTypeId = PickEnum<TableFieldSourceDefinition.TypeId,
-        TableFieldSourceDefinition.TypeId.LitIvemBaseDetail |
-        TableFieldSourceDefinition.TypeId.SecurityDataItem |
-        TableFieldSourceDefinition.TypeId.RankedLitIvemId
+    export type FieldSourceDefinitionTypeId = PickEnum<TypedTableFieldSourceDefinition.TypeId,
+        TypedTableFieldSourceDefinition.TypeId.LitIvemBaseDetail |
+        TypedTableFieldSourceDefinition.TypeId.SecurityDataItem |
+        TypedTableFieldSourceDefinition.TypeId.RankedLitIvemId
         // AlternateCodesFix: Currently this actually is part of FullDetail.  Will be in BaseDetail in future
-        // TableFieldSourceDefinition.TypeId.LitIvemAlternateCodes
+        // TypedTableFieldSourceDefinition.TypeId.LitIvemAlternateCodes
     >;
 
     export namespace JsonName {

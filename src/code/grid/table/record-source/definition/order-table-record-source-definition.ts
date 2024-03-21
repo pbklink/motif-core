@@ -8,29 +8,29 @@ import { Account, BrokerageAccountGroup, Order } from '../../../../adi/adi-inter
 import { PickEnum } from '../../../../sys/internal-api';
 import { GridFieldCustomHeadingsService } from '../../../field/grid-field-internal-api';
 import { GridLayoutDefinition } from '../../../layout/grid-layout-internal-api';
-import { TableFieldSourceDefinition, TableFieldSourceDefinitionCachedFactoryService } from '../../field-source/grid-table-field-source-internal-api';
+import { BrokerageAccountTableFieldSourceDefinition, OrderTableFieldSourceDefinition, TypedTableFieldSourceDefinition, TypedTableFieldSourceDefinitionCachingFactoryService } from '../../field-source/grid-table-field-source-internal-api';
 import { BrokerageAccountGroupTableRecordSourceDefinition } from './brokerage-account-group-table-record-source-definition';
-import { TableRecordSourceDefinition } from './table-record-source-definition';
+import { TypedTableRecordSourceDefinition } from './typed-table-record-source-definition';
 
 /** @public */
 export class OrderTableRecordSourceDefinition extends BrokerageAccountGroupTableRecordSourceDefinition {
     constructor(
         customHeadingsService: GridFieldCustomHeadingsService,
-        tableFieldSourceDefinitionCachedFactoryService: TableFieldSourceDefinitionCachedFactoryService,
+        tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService,
         brokerageAccountGroup: BrokerageAccountGroup
     ) {
         super(
             customHeadingsService,
-            tableFieldSourceDefinitionCachedFactoryService,
-            TableRecordSourceDefinition.TypeId.Order,
+            tableFieldSourceDefinitionCachingFactoryService,
+            TypedTableRecordSourceDefinition.TypeId.Order,
             OrderTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
             brokerageAccountGroup,
         );
     }
 
     override createDefaultLayoutDefinition() {
-        const ordersDataItemFieldSourceDefinition = this.tableFieldSourceDefinitionCachedFactoryService.ordersDataItem;
-        const brokerageAccountsFieldSourceDefinition = this.tableFieldSourceDefinitionCachedFactoryService.brokerageAccounts;
+        const ordersDataItemFieldSourceDefinition = OrderTableFieldSourceDefinition.get(this.tableFieldSourceDefinitionCachingFactoryService);
+        const brokerageAccountsFieldSourceDefinition = BrokerageAccountTableFieldSourceDefinition.get(this.tableFieldSourceDefinitionCachingFactoryService);
 
         const fieldNames = new Array<string>();
 
@@ -57,18 +57,18 @@ export class OrderTableRecordSourceDefinition extends BrokerageAccountGroupTable
 
 /** @public */
 export namespace OrderTableRecordSourceDefinition {
-    export type FieldSourceDefinitionTypeId = PickEnum<TableFieldSourceDefinition.TypeId,
-        TableFieldSourceDefinition.TypeId.Order |
-        TableFieldSourceDefinition.TypeId.BrokerageAccount
+    export type FieldSourceDefinitionTypeId = PickEnum<TypedTableFieldSourceDefinition.TypeId,
+        TypedTableFieldSourceDefinition.TypeId.Order |
+        TypedTableFieldSourceDefinition.TypeId.BrokerageAccount
     >;
 
     export const allowedFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[] = [
-        TableFieldSourceDefinition.TypeId.Order,
-        TableFieldSourceDefinition.TypeId.BrokerageAccount,
+        TypedTableFieldSourceDefinition.TypeId.Order,
+        TypedTableFieldSourceDefinition.TypeId.BrokerageAccount,
     ];
 
     export const defaultFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[] = [
-        TableFieldSourceDefinition.TypeId.Order,
-        TableFieldSourceDefinition.TypeId.BrokerageAccount,
+        TypedTableFieldSourceDefinition.TypeId.Order,
+        TypedTableFieldSourceDefinition.TypeId.BrokerageAccount,
     ];
 }

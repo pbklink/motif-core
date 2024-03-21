@@ -5,6 +5,7 @@
  */
 
 import { Badness } from '../../sys/internal-api';
+import { TypedTableFieldSourceDefinition, TypedTableRecordSourceDefinition } from '../table/internal-api';
 import { Table } from '../table/table';
 
-export class TypedTable extends Table<Badness> {}
+export class TypedTable extends Table<TypedTableRecordSourceDefinition.TypeId, TypedTableFieldSourceDefinition.TypeId, Badness> {}

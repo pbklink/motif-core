@@ -8,29 +8,34 @@ import { Account, BrokerageAccountGroup, Holding } from '../../../../adi/adi-int
 import { PickEnum } from '../../../../sys/internal-api';
 import { GridFieldCustomHeadingsService } from '../../../field/grid-field-internal-api';
 import { GridLayoutDefinition } from '../../../layout/grid-layout-internal-api';
-import { TableFieldSourceDefinition, TableFieldSourceDefinitionCachedFactoryService } from '../../field-source/grid-table-field-source-internal-api';
+import {
+    BrokerageAccountTableFieldSourceDefinition,
+    HoldingTableFieldSourceDefinition,
+    TypedTableFieldSourceDefinition,
+    TypedTableFieldSourceDefinitionCachingFactoryService,
+} from '../../field-source/grid-table-field-source-internal-api';
 import { BrokerageAccountGroupTableRecordSourceDefinition } from './brokerage-account-group-table-record-source-definition';
-import { TableRecordSourceDefinition } from './table-record-source-definition';
+import { TypedTableRecordSourceDefinition } from './typed-table-record-source-definition';
 
 /** @public */
 export class HoldingTableRecordSourceDefinition extends BrokerageAccountGroupTableRecordSourceDefinition {
     constructor(
         customHeadingsService: GridFieldCustomHeadingsService,
-        tableFieldSourceDefinitionCachedFactoryService: TableFieldSourceDefinitionCachedFactoryService,
+        tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService,
         brokerageAccountGroup: BrokerageAccountGroup
     ) {
         super(
             customHeadingsService,
-            tableFieldSourceDefinitionCachedFactoryService,
-            TableRecordSourceDefinition.TypeId.Holding,
+            tableFieldSourceDefinitionCachingFactoryService,
+            TypedTableRecordSourceDefinition.TypeId.Holding,
             HoldingTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
             brokerageAccountGroup
         );
     }
 
     override createDefaultLayoutDefinition() {
-        const holdingsDataItemFieldSourceDefinition = this.tableFieldSourceDefinitionCachedFactoryService.holdingsDataItem;
-        const brokerageAccountFieldSourceDefinition = this.tableFieldSourceDefinitionCachedFactoryService.brokerageAccounts;
+        const holdingsDataItemFieldSourceDefinition = HoldingTableFieldSourceDefinition.get(this.tableFieldSourceDefinitionCachingFactoryService);
+        const brokerageAccountFieldSourceDefinition = BrokerageAccountTableFieldSourceDefinition.get(this.tableFieldSourceDefinitionCachingFactoryService);
 
         const fieldNames = new Array<string>();
 
@@ -52,20 +57,20 @@ export class HoldingTableRecordSourceDefinition extends BrokerageAccountGroupTab
 
 /** @public */
 export namespace HoldingTableRecordSourceDefinition {
-    export type FieldSourceDefinitionTypeId = PickEnum<TableFieldSourceDefinition.TypeId,
-        TableFieldSourceDefinition.TypeId.Holding |
-        TableFieldSourceDefinition.TypeId.BrokerageAccount |
-        TableFieldSourceDefinition.TypeId.SecurityDataItem
+    export type FieldSourceDefinitionTypeId = PickEnum<TypedTableFieldSourceDefinition.TypeId,
+        TypedTableFieldSourceDefinition.TypeId.Holding |
+        TypedTableFieldSourceDefinition.TypeId.BrokerageAccount |
+        TypedTableFieldSourceDefinition.TypeId.SecurityDataItem
     >;
 
     export const allowedFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[] = [
-        TableFieldSourceDefinition.TypeId.Holding,
-        TableFieldSourceDefinition.TypeId.BrokerageAccount,
-        TableFieldSourceDefinition.TypeId.SecurityDataItem,
+        TypedTableFieldSourceDefinition.TypeId.Holding,
+        TypedTableFieldSourceDefinition.TypeId.BrokerageAccount,
+        TypedTableFieldSourceDefinition.TypeId.SecurityDataItem,
     ];
 
     export const defaultFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[] = [
-        TableFieldSourceDefinition.TypeId.Holding,
-        TableFieldSourceDefinition.TypeId.BrokerageAccount,
+        TypedTableFieldSourceDefinition.TypeId.Holding,
+        TypedTableFieldSourceDefinition.TypeId.BrokerageAccount,
     ];
 }

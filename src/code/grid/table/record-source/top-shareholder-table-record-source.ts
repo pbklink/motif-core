@@ -22,13 +22,13 @@ import {
     newUndefinableDate
 } from "../../../sys/internal-api";
 import { TextFormatterService } from '../../../text-format/text-format-internal-api';
+import { GridFieldCustomHeadingsService } from '../../field/grid-field-internal-api';
 import {
-    TableFieldSourceDefinition
+    TypedTableFieldSourceDefinition, TypedTableFieldSourceDefinitionCachingFactoryService
 } from "../field-source/grid-table-field-source-internal-api";
 import { TopShareholderTableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
 import { TableRecord } from '../record/grid-table-record-internal-api';
 import { TopShareholderTableValueSource } from '../value-source/internal-api';
-import { TableRecordSourceDefinitionFactoryService } from './definition/grid-table-record-source-definition-internal-api';
 import { TopShareholderTableRecordSourceDefinition } from './definition/top-shareholder-table-record-source-definition';
 import { SingleDataItemTableRecordSource } from './single-data-item-table-record-source';
 
@@ -48,13 +48,15 @@ export class TopShareholderTableRecordSource extends SingleDataItemTableRecordSo
     constructor(
         private readonly _adiService: AdiService,
         textFormatterService: TextFormatterService,
-        tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService,
+        gridFieldCustomHeadingsService: GridFieldCustomHeadingsService,
+        tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService,
         correctnessBadness: CorrectnessBadness,
         definition: TopShareholderTableRecordSourceDefinition,
     ) {
         super(
             textFormatterService,
-            tableRecordSourceDefinitionFactoryService,
+            gridFieldCustomHeadingsService,
+            tableFieldSourceDefinitionCachingFactoryService,
             correctnessBadness,
             definition,
             TopShareholderTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
@@ -66,7 +68,9 @@ export class TopShareholderTableRecordSource extends SingleDataItemTableRecordSo
     }
 
     override createDefinition(): TopShareholderTableRecordSourceDefinition {
-        return this.tableRecordSourceDefinitionFactoryService.createTopShareholder(
+        return new TopShareholderTableRecordSourceDefinition(
+            this._gridFieldCustomHeadingsService,
+            this._tableFieldSourceDefinitionCachingFactoryService,
             this._litIvemId.createCopy(),
             newUndefinableDate(this._tradingDate),
             newUndefinableDate(this._compareToTradingDate),
@@ -76,7 +80,7 @@ export class TopShareholderTableRecordSource extends SingleDataItemTableRecordSo
     override createRecordDefinition(idx: Integer): TopShareholderTableRecordDefinition {
         const record = this.recordList[idx];
         return {
-            typeId: TableFieldSourceDefinition.TypeId.TopShareholder,
+            typeId: TypedTableFieldSourceDefinition.TypeId.TopShareholder,
             mapKey: record.createKey().mapKey,
             record,
         };
@@ -94,7 +98,7 @@ export class TopShareholderTableRecordSource extends SingleDataItemTableRecordSo
             const fieldSourceDefinitionTypeId =
                 fieldSourceDefinition.typeId as TopShareholderTableRecordSourceDefinition.FieldSourceDefinitionTypeId;
             switch (fieldSourceDefinitionTypeId) {
-                case TableFieldSourceDefinition.TypeId.TopShareholder: {
+                case TypedTableFieldSourceDefinition.TypeId.TopShareholder: {
                     const valueSource = new TopShareholderTableValueSource(result.fieldCount, topShareholder, this._dataItem);
                     result.addSource(valueSource);
                     break;

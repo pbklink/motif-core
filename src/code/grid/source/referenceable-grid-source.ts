@@ -6,34 +6,36 @@
 
 import { IndexedRecord, LockOpenListItem } from '../../sys/internal-api';
 import { ReferenceableGridLayoutsService } from '../layout/grid-layout-internal-api';
-import { TableRecordSourceFactory } from '../table/internal-api';
+import { TableFieldSourceDefinitionFactory, TableRecordSourceFactory } from '../table/internal-api';
 import { GridRowOrderDefinition, ReferenceableGridSourceDefinition } from './definition/grid-source-definition-internal-api';
 import { GridSource } from './grid-source';
 
-export class ReferenceableGridSource<Badness> extends GridSource<Badness> implements LockOpenListItem<ReferenceableGridSource<Badness>>, IndexedRecord {
+export class ReferenceableGridSource<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, Badness>
+    extends GridSource<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, Badness>
+    implements LockOpenListItem<ReferenceableGridSource<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, Badness>>, IndexedRecord {
+
     readonly name: string;
     readonly upperCaseName: string;
 
     constructor(
         referenceableGridLayoutsService: ReferenceableGridLayoutsService,
-        tableRecordSourceFactory: TableRecordSourceFactory<Badness>,
-        lockedDefinition: ReferenceableGridSourceDefinition,
+        tableFieldSourceDefinitionFactory: TableFieldSourceDefinitionFactory<TableFieldSourceDefinitionTypeId>,
+        tableRecordSourceFactory: TableRecordSourceFactory<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, Badness>,
+        lockedDefinition: ReferenceableGridSourceDefinition<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId>,
         index: number,
     ) {
         const id = lockedDefinition.id;
-        super(referenceableGridLayoutsService, tableRecordSourceFactory, lockedDefinition, id, id);
+        super(referenceableGridLayoutsService, tableFieldSourceDefinitionFactory, tableRecordSourceFactory, lockedDefinition, id, id);
 
         this.name = lockedDefinition.name;
         this.upperCaseName = this.name.toUpperCase();
     }
 
-    override createDefinition(
-        rowOrderDefinition: GridRowOrderDefinition,
-    ): ReferenceableGridSourceDefinition {
+    override createDefinition(rowOrderDefinition: GridRowOrderDefinition<TableFieldSourceDefinitionTypeId>): ReferenceableGridSourceDefinition<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId> {
         const tableRecordSourceDefinition = this.createTableRecordSourceDefinition();
         const gridLayoutOrReferenceDefinition = this.createGridLayoutOrReferenceDefinition();
 
-        return new ReferenceableGridSourceDefinition(
+        return new ReferenceableGridSourceDefinition<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId>(
             this.id,
             this.name,
             tableRecordSourceDefinition,

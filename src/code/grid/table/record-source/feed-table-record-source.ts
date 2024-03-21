@@ -7,14 +7,14 @@
 import { AdiService, Feed, FeedsDataDefinition, FeedsDataItem } from '../../../adi/adi-internal-api';
 import { CorrectnessBadness, Integer, KeyedCorrectnessList, LockOpenListItem, UnreachableCaseError } from '../../../sys/internal-api';
 import { TextFormatterService } from '../../../text-format/text-format-internal-api';
+import { GridFieldCustomHeadingsService } from '../../field/grid-field-internal-api';
 import {
-    TableFieldSourceDefinition
+    TypedTableFieldSourceDefinition, TypedTableFieldSourceDefinitionCachingFactoryService
 } from "../field-source/grid-table-field-source-internal-api";
 import { FeedTableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
 import { TableRecord } from '../record/grid-table-record-internal-api';
 import { FeedTableValueSource } from '../value-source/internal-api';
 import { FeedTableRecordSourceDefinition } from './definition/feed-table-record-source-definition';
-import { TableRecordSourceDefinitionFactoryService } from './definition/grid-table-record-source-definition-internal-api';
 import { SingleDataItemRecordTableRecordSource } from './single-data-item-record-table-record-source';
 
 /** @public */
@@ -22,13 +22,15 @@ export class FeedTableRecordSource extends SingleDataItemRecordTableRecordSource
     constructor(
         private readonly _adiService: AdiService,
         textFormatterService: TextFormatterService,
-        tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService,
+        gridFieldCustomHeadingsService: GridFieldCustomHeadingsService,
+        tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService,
         correctnessBadness: CorrectnessBadness,
         definition: FeedTableRecordSourceDefinition,
     ) {
         super(
             textFormatterService,
-            tableRecordSourceDefinitionFactoryService,
+            gridFieldCustomHeadingsService,
+            tableFieldSourceDefinitionCachingFactoryService,
             correctnessBadness,
             definition,
             FeedTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds
@@ -36,13 +38,16 @@ export class FeedTableRecordSource extends SingleDataItemRecordTableRecordSource
     }
 
     override createDefinition(): FeedTableRecordSourceDefinition {
-        return this.tableRecordSourceDefinitionFactoryService.createFeed();
+        return new FeedTableRecordSourceDefinition(
+            this._gridFieldCustomHeadingsService,
+            this._tableFieldSourceDefinitionCachingFactoryService,
+        );
     }
 
     override createRecordDefinition(idx: Integer): FeedTableRecordDefinition {
         const record = this.recordList.records[idx];
         return {
-            typeId: TableFieldSourceDefinition.TypeId.Feed,
+            typeId: TypedTableFieldSourceDefinition.TypeId.Feed,
             mapKey: record.mapKey,
             record,
         };
@@ -59,7 +64,7 @@ export class FeedTableRecordSource extends SingleDataItemRecordTableRecordSource
             const fieldSourceDefinition = fieldSource.definition;
             const fieldSourceDefinitionTypeId = fieldSourceDefinition.typeId as FeedTableRecordSourceDefinition.FieldSourceDefinitionTypeId;
             switch (fieldSourceDefinitionTypeId) {
-                case TableFieldSourceDefinition.TypeId.Feed: {
+                case TypedTableFieldSourceDefinition.TypeId.Feed: {
                     const valueSource = new FeedTableValueSource(result.fieldCount, feed);
                     result.addSource(valueSource);
                     break;

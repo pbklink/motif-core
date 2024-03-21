@@ -6,6 +6,7 @@
 
 import { TableFieldSourceDefinition } from './table-field-source-definition';
 
-export interface TableFieldSourceDefinitionFactory {
-    create(typeId: TableFieldSourceDefinition.TypeId): TableFieldSourceDefinition;
+export interface TableFieldSourceDefinitionFactory<TypeId> {
+    create(typeId: TypeId): TableFieldSourceDefinition<TypeId>;
+    tryNameToId(name: string): TypeId | undefined;
 }

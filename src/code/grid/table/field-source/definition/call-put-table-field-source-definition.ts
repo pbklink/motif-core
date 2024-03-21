@@ -7,7 +7,6 @@
 import { CallPut } from '../../../../services/services-internal-api';
 import {
     AssertInternalError,
-    CommaText,
     FieldDataType,
     FieldDataTypeId,
     Integer,
@@ -35,12 +34,14 @@ import {
     TableValue
 } from '../../value/grid-table-value-internal-api';
 import { TableFieldSourceDefinition } from './table-field-source-definition';
+import { TypedTableFieldSourceDefinition } from './typed-table-field-source-definition';
+import { TypedTableFieldSourceDefinitionCachingFactoryService } from './typed-table-field-source-definition-caching-factory-service';
 
-export class CallPutTableFieldSourceDefinition extends TableFieldSourceDefinition {
+export class CallPutTableFieldSourceDefinition extends TypedTableFieldSourceDefinition {
     override readonly fieldDefinitions: TableField.Definition[];
 
     constructor() {
-        super(TableFieldSourceDefinition.TypeId.CallPut);
+        super(CallPutTableFieldSourceDefinition.typeId);
 
         this.fieldDefinitions = this.createFieldDefinitions();
     }
@@ -51,7 +52,7 @@ export class CallPutTableFieldSourceDefinition extends TableFieldSourceDefinitio
 
     getFieldNameById(id: CallPut.FieldId) {
         const sourcelessFieldName = CallPutTableFieldSourceDefinition.Field.getNameById(id);
-        return CommaText.from2Values(this.name, sourcelessFieldName);
+        return this.encodeFieldName(sourcelessFieldName);
     }
 
     getSupportedFieldNameById(id: CallPut.FieldId) {
@@ -88,6 +89,9 @@ export class CallPutTableFieldSourceDefinition extends TableFieldSourceDefinitio
 }
 
 export namespace CallPutTableFieldSourceDefinition {
+    export const typeId = TypedTableFieldSourceDefinition.TypeId.CallPut;
+    export type TypeId = typeof typeId;
+
     export namespace Field {
         const unsupportedIds = [CallPut.FieldId.UnderlyingIvemId, CallPut.FieldId.UnderlyingIsIndex];
         export const count = CallPut.Field.count - unsupportedIds.length;
@@ -182,18 +186,14 @@ export namespace CallPutTableFieldSourceDefinition {
         }
     }
 
-    export interface FieldId extends TableFieldSourceDefinition.FieldId {
+    export interface FieldId extends TypedTableFieldSourceDefinition.FieldId {
         id: CallPut.FieldId;
-        sourceTypeId: TableFieldSourceDefinition.TypeId.CallPut;
+        sourceTypeId: CallPutTableFieldSourceDefinition.TypeId;
     }
 
-    // export interface CallFieldId extends CallPutFieldId {
-    //     sourceTypeId: TableFieldSourceDefinition.TypeId.CallSecurityDataItem;
-    // }
-
-    // export interface PutFieldId extends CallPutFieldId {
-    //     sourceTypeId: TableFieldSourceDefinition.TypeId.PutSecurityDataItem;
-    // }
+    export function get(cachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService): CallPutTableFieldSourceDefinition {
+        return cachingFactoryService.get(typeId) as CallPutTableFieldSourceDefinition;
+    }
 
     export function initialiseStatic() {
         Field.initialiseFieldStatic();

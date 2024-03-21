@@ -22,4 +22,5 @@ export * from './ranked-lit-ivem-id-table-record-definition';
 export * from './scan-table-record-definition';
 export * from './table-record-definition';
 export * from './top-shareholder-table-record-definition';
+export * from './typed-table-record-definition';
 

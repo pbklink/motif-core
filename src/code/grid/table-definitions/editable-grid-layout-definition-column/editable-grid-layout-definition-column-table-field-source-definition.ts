@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { CommaText, EnumInfoOutOfOrderError, FieldDataType } from '../../../sys/internal-api';
+import { EnumInfoOutOfOrderError, FieldDataType } from '../../../sys/internal-api';
 import {
     BooleanTableField,
     IntegerTableField,
@@ -12,15 +12,15 @@ import {
     StringTableField,
     StringTableValue,
     TableField,
-    TableFieldSourceDefinition,
-    TableFieldSourceDefinitionCachedFactoryService,
     TableValue,
-    VisibleTableValue,
+    TypedTableFieldSourceDefinition,
+    TypedTableFieldSourceDefinitionCachingFactoryService,
+    VisibleTableValue
 } from '../../table/internal-api';
 import { EditableGridLayoutDefinitionColumn } from './editable-grid-layout-definition-column';
 
 /** @public */
-export class EditableGridLayoutDefinitionColumnTableFieldSourceDefinition extends TableFieldSourceDefinition {
+export class EditableGridLayoutDefinitionColumnTableFieldSourceDefinition extends TypedTableFieldSourceDefinition {
     declare readonly typeId: EditableGridLayoutDefinitionColumnTableFieldSourceDefinition.TypeId;
 
     override readonly fieldDefinitions: TableField.Definition[];
@@ -33,7 +33,7 @@ export class EditableGridLayoutDefinitionColumnTableFieldSourceDefinition extend
 
     getFieldNameById(id: EditableGridLayoutDefinitionColumn.FieldId) {
         const sourcelessFieldName = EditableGridLayoutDefinitionColumn.Field.idToName(id);
-        return CommaText.from2Values(this.name, sourcelessFieldName);
+        return this.encodeFieldName(sourcelessFieldName);
     }
 
     private createFieldDefinitions() {
@@ -65,7 +65,7 @@ export class EditableGridLayoutDefinitionColumnTableFieldSourceDefinition extend
 
 /** @public */
 export namespace EditableGridLayoutDefinitionColumnTableFieldSourceDefinition {
-    export const typeId = TableFieldSourceDefinition.TypeId.EditableGridLayoutDefinitionColumn;
+    export const typeId = TypedTableFieldSourceDefinition.TypeId.EditableGridLayoutDefinitionColumn;
     export type TypeId = typeof typeId;
 
     export namespace Field {
@@ -128,13 +128,13 @@ export namespace EditableGridLayoutDefinitionColumnTableFieldSourceDefinition {
         }
     }
 
-    export interface FieldId extends TableFieldSourceDefinition.FieldId {
-        sourceTypeId: TableFieldSourceDefinition.TypeId.EditableGridLayoutDefinitionColumn;
+    export interface FieldId extends TypedTableFieldSourceDefinition.FieldId {
+        sourceTypeId: EditableGridLayoutDefinitionColumnTableFieldSourceDefinition.TypeId;
         id: EditableGridLayoutDefinitionColumn.FieldId;
     }
 
-    export function getRegistered(cachedFactoryService: TableFieldSourceDefinitionCachedFactoryService): EditableGridLayoutDefinitionColumnTableFieldSourceDefinition {
-        return cachedFactoryService.get(typeId) as EditableGridLayoutDefinitionColumnTableFieldSourceDefinition;
+    export function get(cachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService): EditableGridLayoutDefinitionColumnTableFieldSourceDefinition {
+        return cachingFactoryService.get(typeId) as EditableGridLayoutDefinitionColumnTableFieldSourceDefinition;
     }
 
     export function initialiseStatic() {

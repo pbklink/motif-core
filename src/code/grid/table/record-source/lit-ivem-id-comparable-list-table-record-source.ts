@@ -8,14 +8,15 @@ import { AdiService, LitIvemId } from '../../../adi/adi-internal-api';
 import { SymbolDetailCacheService } from '../../../services/services-internal-api';
 import { CorrectnessBadness, Integer, UiComparableList, UnreachableCaseError } from '../../../sys/internal-api';
 import { TextFormatterService } from '../../../text-format/text-format-internal-api';
+import { GridFieldCustomHeadingsService } from '../../field/grid-field-internal-api';
 import {
-    TableFieldSourceDefinition
+    TypedTableFieldSourceDefinition, TypedTableFieldSourceDefinitionCachingFactoryService
 } from "../field-source/grid-table-field-source-internal-api";
 import { LitIvemIdTableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
 import { TableRecord } from '../record/grid-table-record-internal-api';
 import { LitIvemBaseDetailTableValueSource, LitIvemIdTableValueSource, SecurityDataItemTableValueSource } from '../value-source/internal-api';
 import { BadnessListTableRecordSource } from './badness-comparable-list-table-record-source';
-import { LitIvemIdComparableListTableRecordSourceDefinition, TableRecordSourceDefinitionFactoryService } from './definition/grid-table-record-source-definition-internal-api';
+import { LitIvemIdComparableListTableRecordSourceDefinition } from './definition/grid-table-record-source-definition-internal-api';
 import { PromisedLitIvemBaseDetail } from './promised-lit-ivem-base-detail';
 
 export class LitIvemIdComparableListTableRecordSource extends BadnessListTableRecordSource<LitIvemId> {
@@ -26,13 +27,15 @@ export class LitIvemIdComparableListTableRecordSource extends BadnessListTableRe
         private readonly _adiService: AdiService,
         private readonly _symbolDetailCacheService: SymbolDetailCacheService,
         textFormatterService: TextFormatterService,
-        tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService,
+        gridFieldCustomHeadingsService: GridFieldCustomHeadingsService,
+        tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService,
         correctnessBadness: CorrectnessBadness,
         definition: LitIvemIdComparableListTableRecordSourceDefinition,
     ) {
         super(
             textFormatterService,
-            tableRecordSourceDefinitionFactoryService,
+            gridFieldCustomHeadingsService,
+            tableFieldSourceDefinitionCachingFactoryService,
             correctnessBadness,
             definition,
             definition.allowedFieldSourceDefinitionTypeIds,
@@ -43,13 +46,17 @@ export class LitIvemIdComparableListTableRecordSource extends BadnessListTableRe
 
     override createDefinition(): LitIvemIdComparableListTableRecordSourceDefinition {
         const list = this.list.clone();
-        return this.tableRecordSourceDefinitionFactoryService.createLitIvemIdComparableList(list);
+        return new LitIvemIdComparableListTableRecordSourceDefinition(
+            this._gridFieldCustomHeadingsService,
+            this._tableFieldSourceDefinitionCachingFactoryService,
+            list,
+        );
     }
 
     override createRecordDefinition(idx: Integer): LitIvemIdTableRecordDefinition {
         const litIvemId = this.list.getAt(idx);
         return {
-            typeId: TableFieldSourceDefinition.TypeId.LitIvemId,
+            typeId: TypedTableFieldSourceDefinition.TypeId.LitIvemId,
             mapKey: litIvemId.mapKey,
             litIvemId,
         };
@@ -67,7 +74,7 @@ export class LitIvemIdComparableListTableRecordSource extends BadnessListTableRe
             const fieldSourceDefinitionTypeId = fieldSourceDefinition.typeId as LitIvemIdComparableListTableRecordSourceDefinition.FieldSourceDefinitionTypeId;
             if (this.allowedFieldSourceDefinitionTypeIds.includes(fieldSourceDefinitionTypeId)) {
                 switch (fieldSourceDefinitionTypeId) {
-                    case TableFieldSourceDefinition.TypeId.LitIvemBaseDetail: {
+                    case TypedTableFieldSourceDefinition.TypeId.LitIvemBaseDetail: {
                         const litIvemBaseDetail = new PromisedLitIvemBaseDetail(this._symbolDetailCacheService, litIvemId);
                         const valueSource = new LitIvemBaseDetailTableValueSource(
                             result.fieldCount,
@@ -78,12 +85,12 @@ export class LitIvemIdComparableListTableRecordSource extends BadnessListTableRe
                         break;
                     }
 
-                    case TableFieldSourceDefinition.TypeId.SecurityDataItem: {
+                    case TypedTableFieldSourceDefinition.TypeId.SecurityDataItem: {
                         const valueSource = new SecurityDataItemTableValueSource(result.fieldCount, litIvemId, this._adiService);
                         result.addSource(valueSource);
                         break;
                     }
-                    case TableFieldSourceDefinition.TypeId.LitIvemId: {
+                    case TypedTableFieldSourceDefinition.TypeId.LitIvemId: {
                         const valueSource = new LitIvemIdTableValueSource(result.fieldCount, litIvemId);
                         result.addSource(valueSource);
                         break;

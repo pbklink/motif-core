@@ -6,19 +6,24 @@
 
 import { AdiService, RankedLitIvemId } from '../../../adi/adi-internal-api';
 import {
+    LitIvemIdArrayRankedLitIvemIdListDefinition,
+    LitIvemIdExecuteScanRankedLitIvemIdListDefinition,
     RankedLitIvemIdList,
-    RankedLitIvemIdListFactoryService
+    RankedLitIvemIdListDefinition,
+    RankedLitIvemIdListFactoryService,
+    ScanIdRankedLitIvemIdListDefinition
 } from "../../../ranked-lit-ivem-id-list/ranked-lit-ivem-id-list-internal-api";
 import { SymbolDetailCacheService } from '../../../services/symbol-detail-cache-service';
-import { AssertInternalError, CorrectnessBadness, ErrorCode, Integer, LockOpenListItem, Ok, Result, UnreachableCaseError } from '../../../sys/internal-api';
+import { AssertInternalError, CorrectnessBadness, ErrorCode, Integer, LockOpenListItem, NotImplementedError, Ok, Result, UnreachableCaseError } from '../../../sys/internal-api';
 import { TextFormatterService } from '../../../text-format/text-format-internal-api';
+import { GridFieldCustomHeadingsService } from '../../field/grid-field-internal-api';
 import {
-    TableFieldSourceDefinition
+    TypedTableFieldSourceDefinition, TypedTableFieldSourceDefinitionCachingFactoryService
 } from "../field-source/grid-table-field-source-internal-api";
 import { RankedLitIvemIdTableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
 import { TableRecord } from '../record/grid-table-record-internal-api';
 import { LitIvemBaseDetailTableValueSource, RankedLitIvemIdTableValueSource, SecurityDataItemTableValueSource } from '../value-source/internal-api';
-import { RankedLitIvemIdListTableRecordSourceDefinition, TableRecordSourceDefinitionFactoryService } from './definition/grid-table-record-source-definition-internal-api';
+import { RankedLitIvemIdListTableRecordSourceDefinition, ScanTestTableRecordSourceDefinition, WatchlistTableRecordSourceDefinition } from './definition/grid-table-record-source-definition-internal-api';
 import { PromisedLitIvemBaseDetail } from './promised-lit-ivem-base-detail';
 import { SubscribeBadnessListTableRecordSource } from './subscribe-badness-list-table-record-source';
 
@@ -31,13 +36,15 @@ export class RankedLitIvemIdListTableRecordSource extends SubscribeBadnessListTa
         private readonly _symbolDetailCacheService: SymbolDetailCacheService,
         private readonly _rankedLitIvemIdListFactoryService: RankedLitIvemIdListFactoryService,
         textFormatterService: TextFormatterService,
-        tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService,
+        gridFieldCustomHeadingsService: GridFieldCustomHeadingsService,
+        tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService,
         correctnessBadness: CorrectnessBadness,
         definition: RankedLitIvemIdListTableRecordSourceDefinition,
     ) {
         super(
             textFormatterService,
-            tableRecordSourceDefinitionFactoryService,
+            gridFieldCustomHeadingsService,
+            tableFieldSourceDefinitionCachingFactoryService,
             correctnessBadness,
             definition,
             definition.allowedFieldSourceDefinitionTypeIds,
@@ -53,7 +60,30 @@ export class RankedLitIvemIdListTableRecordSource extends SubscribeBadnessListTa
             throw new AssertInternalError('RLIILORCD50091');
         } else {
             const listDefinition = list.createDefinition();
-            return this.tableRecordSourceDefinitionFactoryService.createRankedLitIvemIdList(listDefinition);
+
+            switch (listDefinition.typeId) {
+                case RankedLitIvemIdListDefinition.TypeId.LitIvemIdExecuteScan:
+                    if (listDefinition instanceof LitIvemIdExecuteScanRankedLitIvemIdListDefinition) {
+                        return new ScanTestTableRecordSourceDefinition(
+                            this._gridFieldCustomHeadingsService,
+                            this._tableFieldSourceDefinitionCachingFactoryService,
+                            listDefinition,
+                        );
+                    } else {
+                        throw new AssertInternalError('RLIILTRSCDLIIES44456', listDefinition.typeId.toString());
+                    }
+                case RankedLitIvemIdListDefinition.TypeId.ScanId:
+                case RankedLitIvemIdListDefinition.TypeId.LitIvemIdArray:
+                    return new WatchlistTableRecordSourceDefinition(
+                        this._gridFieldCustomHeadingsService,
+                        this._tableFieldSourceDefinitionCachingFactoryService,
+                        listDefinition as (LitIvemIdArrayRankedLitIvemIdListDefinition | ScanIdRankedLitIvemIdListDefinition),
+                    );
+                case RankedLitIvemIdListDefinition.TypeId.WatchmakerListId:
+                    throw new NotImplementedError('RLIILTRSCDWLI44456');
+                default:
+                    throw new UnreachableCaseError('RLIILTRSCDD44456', listDefinition.typeId);
+            }
         }
     }
 
@@ -76,7 +106,7 @@ export class RankedLitIvemIdListTableRecordSource extends SubscribeBadnessListTa
     override createRecordDefinition(idx: Integer): RankedLitIvemIdTableRecordDefinition {
         const rankedLitIvemId = this._lockedRankedLitIvemIdList.getAt(idx);
         return {
-            typeId: TableFieldSourceDefinition.TypeId.RankedLitIvemId,
+            typeId: TypedTableFieldSourceDefinition.TypeId.RankedLitIvemId,
             mapKey: RankedLitIvemIdTableRecordDefinition.createMapKey(rankedLitIvemId),
             rankedLitIvemId,
         };
@@ -94,7 +124,7 @@ export class RankedLitIvemIdListTableRecordSource extends SubscribeBadnessListTa
             const fieldSourceDefinitionTypeId = fieldSourceDefinition.typeId as RankedLitIvemIdListTableRecordSourceDefinition.FieldSourceDefinitionTypeId;
             if (this.allowedFieldSourceDefinitionTypeIds.includes(fieldSourceDefinitionTypeId)) {
                 switch (fieldSourceDefinitionTypeId) {
-                    case TableFieldSourceDefinition.TypeId.LitIvemBaseDetail: {
+                    case TypedTableFieldSourceDefinition.TypeId.LitIvemBaseDetail: {
                         const litIvemBaseDetail = new PromisedLitIvemBaseDetail(this._symbolDetailCacheService, rankedLitIvemId.litIvemId);
                         const valueSource = new LitIvemBaseDetailTableValueSource(
                             result.fieldCount,
@@ -105,12 +135,12 @@ export class RankedLitIvemIdListTableRecordSource extends SubscribeBadnessListTa
                         break;
                     }
 
-                    case TableFieldSourceDefinition.TypeId.SecurityDataItem: {
+                    case TypedTableFieldSourceDefinition.TypeId.SecurityDataItem: {
                         const valueSource = new SecurityDataItemTableValueSource(result.fieldCount, rankedLitIvemId.litIvemId, this._adiService);
                         result.addSource(valueSource);
                         break;
                     }
-                    case TableFieldSourceDefinition.TypeId.RankedLitIvemId: {
+                    case TypedTableFieldSourceDefinition.TypeId.RankedLitIvemId: {
                         const valueSource = new RankedLitIvemIdTableValueSource(result.fieldCount, rankedLitIvemId);
                         result.addSource(valueSource);
                         break;

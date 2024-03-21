@@ -14,14 +14,13 @@ import {
     moveElementsInArray
 } from "../../sys/internal-api";
 import { AllowedGridField } from '../field/allowed-grid-field';
-import { TableFieldSourceDefinition } from './field-source/grid-table-field-source-internal-api';
 import { TableField } from './field/grid-table-field-internal-api';
 // import { TableFieldAndStateArrays } from './field/grid-table-field-internal-api';
 import { TableRecordDefinition } from './record-definition/grid-table-record-definition-internal-api';
 import { TableRecordSource } from './record-source/internal-api';
 import { TableRecord } from './record/grid-table-record-internal-api';
 
-export class Table<Badness> {
+export class Table<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, Badness> {
     // openEvent: Table.OpenEventHandler;
     // openChangeEvent: Table.OpenChangeEventHandler;
     // badnessChangedEvent: Table.badnessChangedEventHandler;
@@ -49,7 +48,7 @@ export class Table<Badness> {
 
     private _fieldsChangedMultiEvent = new MultiEvent<Table.FieldsChangedEventHandler>();
 
-    private _openMultiEvent = new MultiEvent<Table.OpenEventHandler<Badness>>();
+    private _openMultiEvent = new MultiEvent<Table.OpenEventHandler<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, Badness>>();
     private _openChangeMultiEvent = new MultiEvent<Table.OpenChangeEventHandler>();
     private _recordsLoadedMultiEvent = new MultiEvent<Table.RecordsLoadedEventHandler>();
     private _recordsInsertedMultiEvent = new MultiEvent<Table.RecordsInsertedEventHandler>();
@@ -67,9 +66,9 @@ export class Table<Badness> {
     private _recordDisplayOrderSetMultiEvent = new MultiEvent<Table.RecordDisplayOrderSetEventHandler>();
 
     constructor(
-        readonly recordSource: TableRecordSource<Badness>,
+        readonly recordSource: TableRecordSource<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, Badness>,
         private readonly _correctnessState: CorrectnessState<Badness>,
-        initialActiveFieldSources: TableFieldSourceDefinition.TypeId[],
+        initialActiveFieldSources: TableFieldSourceDefinitionTypeId[],
     ) {
         this.setActiveFieldSources(initialActiveFieldSources, false);
     }
@@ -84,7 +83,7 @@ export class Table<Badness> {
     get beenUsable() { return this._beenUsable; }
 
     setActiveFieldSources(
-        fieldSourceTypeIds: readonly TableFieldSourceDefinition.TypeId[],
+        fieldSourceTypeIds: readonly TableFieldSourceDefinitionTypeId[],
         suppressGridSchemaUpdate: boolean
     ) {
         if (!this.isFieldSourcesArrayEqual(fieldSourceTypeIds)) {
@@ -350,7 +349,7 @@ export class Table<Badness> {
         return this.recordSource.createRecordDefinition(index);
     }
 
-    findRecord(recordDefinition: TableRecordDefinition): Integer | undefined {
+    findRecord(recordDefinition: TableRecordDefinition<TableFieldSourceDefinitionTypeId>): Integer | undefined {
         for (let i = 0; i < this.recordCount; i++) {
             const sourceRecordDefinition = this.recordSource.createRecordDefinition(i);
             if (TableRecordDefinition.same(sourceRecordDefinition, recordDefinition)) {
@@ -517,7 +516,7 @@ export class Table<Badness> {
         this._fieldsChangedMultiEvent.unsubscribe(subscriptionId);
     }
 
-    subscribeOpenEvent(handler: Table.OpenEventHandler<Badness>) {
+    subscribeOpenEvent(handler: Table.OpenEventHandler<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, Badness>) {
         return this._openMultiEvent.subscribe(handler);
     }
     unsubscribeOpenEvent(subscriptionId: MultiEvent.SubscriptionId) {
@@ -688,7 +687,7 @@ export class Table<Badness> {
         }
     }
 
-    private notifyOpen(recordDefinitionList: TableRecordSource<Badness>) {
+    private notifyOpen(recordDefinitionList: TableRecordSource<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, Badness>) {
         const handlers = this._openMultiEvent.copyHandlers();
         for (let i = 0; i < handlers.length; i++) {
             handlers[i](recordDefinitionList);
@@ -916,7 +915,7 @@ export class Table<Badness> {
         // return true;
     }
 
-    private isFieldSourcesArrayEqual(fieldSourceTypeIds: readonly TableFieldSourceDefinition.TypeId[]) {
+    private isFieldSourcesArrayEqual(fieldSourceTypeIds: readonly TableFieldSourceDefinitionTypeId[]) {
         const count = fieldSourceTypeIds.length;
         const activeFieldSources = this.recordSource.activeFieldSources;
         if (count !== activeFieldSources.length) {
@@ -1103,7 +1102,9 @@ export namespace Table {
 
     export type ExclusiveUnlockedEventer = (this: void) => void;
 
-    export type OpenEventHandler<Badness> = (this: void, recordDefinitionList: TableRecordSource<Badness>) => void;
+    export type OpenEventHandler<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, Badness> = (
+        this: void, recordDefinitionList: TableRecordSource<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, Badness>
+    ) => void;
     export type OpenChangeEventHandler = (this: void, opened: boolean) => void;
     export type BadnessChangedEventHandler = (this: void) => void;
     export type RecordsLoadedEventHandler = (this: void) => void;

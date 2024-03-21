@@ -11,10 +11,11 @@ import {
 } from "../../../adi/adi-internal-api";
 import { CorrectnessBadness } from '../../../sys/internal-api';
 import { TextFormatterService } from '../../../text-format/text-format-internal-api';
+import { GridFieldCustomHeadingsService } from '../../field/grid-field-internal-api';
 import {
-    TableFieldSourceDefinition
+    TypedTableFieldSourceDefinition, TypedTableFieldSourceDefinitionCachingFactoryService
 } from "../field-source/grid-table-field-source-internal-api";
-import { BrokerageAccountGroupTableRecordSourceDefinition, TableRecordSourceDefinitionFactoryService } from './definition/grid-table-record-source-definition-internal-api';
+import { BrokerageAccountGroupTableRecordSourceDefinition } from './definition/grid-table-record-source-definition-internal-api';
 import { SingleDataItemRecordTableRecordSource } from './single-data-item-record-table-record-source';
 
 export abstract class BrokerageAccountGroupTableRecordSource<
@@ -27,14 +28,16 @@ export abstract class BrokerageAccountGroupTableRecordSource<
 
     constructor(
         textFormatterService: TextFormatterService,
-        tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService,
+        gridFieldCustomHeadingsService: GridFieldCustomHeadingsService,
+        tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService,
         correctnessBadness: CorrectnessBadness,
         definition: BrokerageAccountGroupTableRecordSourceDefinition,
-        allowedFieldSourceDefinitionTypeIds: TableFieldSourceDefinition.TypeId[],
+        allowedFieldSourceDefinitionTypeIds: TypedTableFieldSourceDefinition.TypeId[],
     ) {
         super(
             textFormatterService,
-            tableRecordSourceDefinitionFactoryService,
+            gridFieldCustomHeadingsService,
+            tableFieldSourceDefinitionCachingFactoryService,
             correctnessBadness,
             definition,
             allowedFieldSourceDefinitionTypeIds,

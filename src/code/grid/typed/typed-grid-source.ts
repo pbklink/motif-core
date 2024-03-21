@@ -6,5 +6,6 @@
 
 import { Badness } from '../../sys/internal-api';
 import { GridSource } from '../source/grid-source-internal-api';
+import { TypedTableFieldSourceDefinition, TypedTableRecordSourceDefinition } from '../table/internal-api';
 
-export class TypedGridSource extends GridSource<Badness> {}
+export class TypedGridSource extends GridSource<TypedTableRecordSourceDefinition.TypeId, TypedTableFieldSourceDefinition.TypeId, Badness> {}
