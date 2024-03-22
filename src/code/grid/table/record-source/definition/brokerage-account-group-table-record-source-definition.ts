@@ -6,13 +6,13 @@
 
 import { AllBrokerageAccountGroup, BrokerageAccountGroup } from '../../../../adi/internal-api';
 import { JsonElement } from '../../../../sys/internal-api';
-import { GridFieldCustomHeadingsService } from '../../../field/internal-api';
+import { RevFieldCustomHeadingsService } from '../../../field/internal-api';
 import { TypedTableFieldSourceDefinition, TypedTableFieldSourceDefinitionCachingFactoryService } from "../../field-source/internal-api";
 import { TypedTableRecordSourceDefinition } from './typed-table-record-source-definition';
 
 export abstract class BrokerageAccountGroupTableRecordSourceDefinition extends TypedTableRecordSourceDefinition {
     constructor(
-        customHeadingsService: GridFieldCustomHeadingsService,
+        customHeadingsService: RevFieldCustomHeadingsService,
         tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService,
         typeId: TypedTableRecordSourceDefinition.TypeId,
         allowedFieldSourceDefinitionTypeIds: TypedTableFieldSourceDefinition.TypeId[],

@@ -7,7 +7,7 @@
 import { RankedLitIvemIdListDirectory } from '../../../../ranked-lit-ivem-id-list/internal-api';
 import { RankedLitIvemIdListDirectoryItem } from '../../../../services/internal-api';
 import { PickEnum } from '../../../../sys/internal-api';
-import { GridFieldCustomHeadingsService } from '../../../field/internal-api';
+import { RevFieldCustomHeadingsService } from '../../../field/internal-api';
 import { GridLayoutDefinition } from '../../../layout/internal-api';
 import {
     RankedLitIvemIdListDirectoryItemTableFieldSourceDefinition,
@@ -19,7 +19,7 @@ import { TypedTableRecordSourceDefinition } from './typed-table-record-source-de
 /** @public */
 export class RankedLitIvemIdListDirectoryItemTableRecordSourceDefinition extends TypedTableRecordSourceDefinition {
     constructor(
-        customHeadingsService: GridFieldCustomHeadingsService,
+        customHeadingsService: RevFieldCustomHeadingsService,
         tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService,
         readonly listDirectory: RankedLitIvemIdListDirectory,
     ) {

@@ -8,7 +8,7 @@ import { AdiService, LitIvemBaseDetail, RankedLitIvemId } from '../../../adi/int
 import { SymbolDetailCacheService } from '../../../services/symbol-detail-cache-service';
 import { Badness, BadnessComparableList, CorrectnessBadness, Integer, NotImplementedError, UnreachableCaseError, UsableListChangeType, UsableListChangeTypeId, moveElementsInArray } from '../../../sys/internal-api';
 import { TextFormatterService } from '../../../text-format/internal-api';
-import { GridFieldCustomHeadingsService } from '../../field/internal-api';
+import { RevFieldCustomHeadingsService } from '../../field/internal-api';
 import {
     TypedTableFieldSourceDefinition, TypedTableFieldSourceDefinitionCachingFactoryService
 } from "../field-source/internal-api";
@@ -32,7 +32,7 @@ export class RankedLitIvemIdUsableListTableRecordSource extends UsableListTableR
         private readonly _adiService: AdiService,
         private readonly _symbolDetailCacheService: SymbolDetailCacheService,
         textFormatterService: TextFormatterService,
-        gridFieldCustomHeadingsService: GridFieldCustomHeadingsService,
+        gridFieldCustomHeadingsService: RevFieldCustomHeadingsService,
         tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService,
         correctnessBadness: CorrectnessBadness,
         definition: RankedLitIvemIdUsableListTableRecordSourceDefinition,

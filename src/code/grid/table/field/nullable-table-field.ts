@@ -81,8 +81,8 @@ export abstract class NullableBooleanDataItemTableField extends NullableDataItem
     protected compareNonNull(left: NullableCorrectnessTableValue, right: NullableCorrectnessTableValue): number {
         const leftRenderValue = left.renderValue;
         const rightRenderValue = right.renderValue;
-        const leftFormattedText = this._textFormatterService.formatRenderValue(leftRenderValue);
-        const rightFormattedText = this._textFormatterService.formatRenderValue(rightRenderValue);
+        const leftFormattedText = this.textFormatter.formatRenderValue(leftRenderValue);
+        const rightFormattedText = this.textFormatter.formatRenderValue(rightRenderValue);
 
         return compareString(leftFormattedText, rightFormattedText);
     }
@@ -92,8 +92,8 @@ export abstract class NullableEnumDataItemTableField extends NullableDataItemTab
     protected compareNonNull(left: NullableCorrectnessTableValue, right: NullableCorrectnessTableValue): number {
         const leftRenderValue = left.renderValue;
         const rightRenderValue = right.renderValue;
-        const leftFormattedText = this._textFormatterService.formatRenderValue(leftRenderValue);
-        const rightFormattedText = this._textFormatterService.formatRenderValue(rightRenderValue);
+        const leftFormattedText = this.textFormatter.formatRenderValue(leftRenderValue);
+        const rightFormattedText = this.textFormatter.formatRenderValue(rightRenderValue);
 
         return compareString(leftFormattedText, rightFormattedText);
     }

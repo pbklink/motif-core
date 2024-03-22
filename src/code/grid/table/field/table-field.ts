@@ -5,10 +5,9 @@
  */
 
 import { IvemId, LitIvemId } from '../../../adi/internal-api';
+import { RevRenderValue, RevTableField } from '../../../rev/internal-api';
 import { RenderValue } from '../../../services/internal-api';
 import {
-    GridFieldHorizontalAlign,
-    GridRevRecordField,
     Integer,
     SourceTzOffsetDate,
     SourceTzOffsetDateTime,
@@ -18,8 +17,6 @@ import {
     compareString,
     compareValue
 } from "../../../sys/internal-api";
-import { TextFormatterService } from '../../../text-format/internal-api';
-import { GridField, GridFieldDefinition, GridFieldSourceDefinition } from '../../field/internal-api';
 import {
     BaseSourceTzOffsetDateTimeCorrectnessTableValue,
     CorrectnessTableValue,
@@ -43,105 +40,16 @@ import {
     StringArrayCorrectnessTableValue,
     StringCorrectnessTableValue,
     StringTableValue,
-    TableValue,
-    TableValuesRecord
+    TableValue
 } from '../value/internal-api';
 
-export abstract class TableField extends GridField implements GridRevRecordField {
-    private _valueTypeId: RenderValue.TypeId;
+export abstract class TableField extends RevTableField<RenderValue.TypeId, RenderValue.Attribute.TypeId> {
 
-    constructor(
-        protected readonly _textFormatterService: TextFormatterService,
-        definition: TableField.Definition,
-        heading: string,
-    ) {
-        super(definition, heading);
-    }
-
-    get valueTypeId() { return this._valueTypeId; }
-
-    compare(left: TableValuesRecord, right: TableValuesRecord): number {
-        const leftValue = left.values[this.index];
-        const rightValue = right.values[this.index];
-        if (leftValue === rightValue) {
-            return 0;
-        } else {
-            if (leftValue.isUndefined()) {
-                if (rightValue.isUndefined()) {
-                    return 0;
-                } else {
-                    return this.compareUndefinedToDefinedField(rightValue);
-                }
-            } else {
-                if (rightValue.isUndefined()) {
-                    return -this.compareUndefinedToDefinedField(leftValue);
-                } else {
-                    return this.compareDefined(leftValue, rightValue);
-                }
-            }
-        }
-    }
-
-    compareDesc(left: TableValuesRecord, right: TableValuesRecord): number {
-        const leftValue = left.values[this.index];
-        const rightValue = right.values[this.index];
-        if (leftValue === rightValue) {
-            return 0;
-        } else {
-            if (leftValue.isUndefined()) {
-                if (rightValue.isUndefined()) {
-                    return 0;
-                } else {
-                    return -this.compareUndefinedToDefinedField(rightValue);
-                }
-            } else {
-                if (rightValue.isUndefined()) {
-                    return this.compareUndefinedToDefinedField(leftValue);
-                } else {
-                    return this.compareDefined(rightValue, leftValue);
-                }
-            }
-        }
-    }
-
-    override getViewValue(record: TableValuesRecord): RenderValue {
-        const tableGridValue = record.values[this.index];
-        return tableGridValue.renderValue;
-    }
-
-    protected setValueTypeId(value: RenderValue.TypeId) {
-        this._valueTypeId = value;
-    }
-
-    protected compareUndefinedToDefinedField(definedValue: TableValue) {
-        // left is undefined, right is defined (parameter)
-        return -1;
-    }
-
-    protected abstract compareDefined(left: TableValue, right: TableValue): number;
 }
 
 export namespace TableField {
-    export class Definition extends GridFieldDefinition {
-        constructor(
-            source: GridFieldSourceDefinition,
-            sourcelessName: string,
-            defaultHeading: string,
-            defaultTextAlign: GridFieldHorizontalAlign,
-            readonly gridFieldConstructor: TableField.Constructor,
-            readonly gridValueConstructor: TableValue.Constructor,
-
-        ) {
-            super(source, sourcelessName, defaultHeading, defaultTextAlign);
-        }
-    }
-
-    export type Constructor = new(
-        textFormatterService: TextFormatterService,
-        definition: TableField.Definition,
-        heading: string,
-        index: Integer,
-    ) => TableField;
+    export type Definition = RevTableField.Definition<RenderValue.TypeId, RenderValue.Attribute.TypeId>;
+    export type Constructor = RevTableField.Constructor<RenderValue.TypeId, RenderValue.Attribute.TypeId>;
 }
 
 // eslint-disable-next-line max-len
@@ -183,8 +91,8 @@ export class BooleanTableField extends TableField {
     protected compareDefined(left: TableValue, right: TableValue): number {
         const leftRenderValue = left.renderValue;
         const rightRenderValue = right.renderValue;
-        const leftFormattedText = this._textFormatterService.formatRenderValue(leftRenderValue);
-        const rightFormattedText = this._textFormatterService.formatRenderValue(rightRenderValue);
+        const leftFormattedText = this.textFormatter.formatRenderValue(leftRenderValue);
+        const rightFormattedText = this.textFormatter.formatRenderValue(rightRenderValue);
 
         return compareString(leftFormattedText, rightFormattedText);
     }
@@ -193,8 +101,8 @@ export class EnumTableField extends TableField {
     protected compareDefined(left: TableValue, right: TableValue): number {
         const leftRenderValue = left.renderValue;
         const rightRenderValue = right.renderValue;
-        const leftFormattedText = this._textFormatterService.formatRenderValue(leftRenderValue);
-        const rightFormattedText = this._textFormatterService.formatRenderValue(rightRenderValue);
+        const leftFormattedText = this.textFormatter.formatRenderValue(leftRenderValue);
+        const rightFormattedText = this.textFormatter.formatRenderValue(rightRenderValue);
 
         return compareString(leftFormattedText, rightFormattedText);
     }
@@ -212,7 +120,7 @@ export abstract class CorrectnessTableField extends TableField {
 
 export namespace CorrectnessTableField {
     export type Constructor = new(
-        textFormatterService: TextFormatterService,
+        textFormatter: RevRenderValue.TextFormatter<RenderValue.TypeId, RenderValue.Attribute.TypeId>,
         definition: TableField.Definition,
         heading: string,
     ) => CorrectnessTableField;
@@ -274,8 +182,8 @@ export class BooleanCorrectnessTableField extends CorrectnessTableField {
     protected compareDefined(left: CorrectnessTableValue, right: CorrectnessTableValue): number {
         const leftRenderValue = left.renderValue;
         const rightRenderValue = right.renderValue;
-        const leftFormattedText = this._textFormatterService.formatRenderValue(leftRenderValue);
-        const rightFormattedText = this._textFormatterService.formatRenderValue(rightRenderValue);
+        const leftFormattedText = this.textFormatter.formatRenderValue(leftRenderValue);
+        const rightFormattedText = this.textFormatter.formatRenderValue(rightRenderValue);
 
         return compareString(leftFormattedText, rightFormattedText);
     }
@@ -284,8 +192,8 @@ export class EnumCorrectnessTableField extends CorrectnessTableField {
     protected compareDefined(left: CorrectnessTableValue, right: CorrectnessTableValue): number {
         const leftRenderValue = left.renderValue;
         const rightRenderValue = right.renderValue;
-        const leftFormattedText = this._textFormatterService.formatRenderValue(leftRenderValue);
-        const rightFormattedText = this._textFormatterService.formatRenderValue(rightRenderValue);
+        const leftFormattedText = this.textFormatter.formatRenderValue(leftRenderValue);
+        const rightFormattedText = this.textFormatter.formatRenderValue(rightRenderValue);
 
         return compareString(leftFormattedText, rightFormattedText);
     }

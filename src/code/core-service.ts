@@ -8,9 +8,9 @@ import { AdiService } from './adi/internal-api';
 import { CommandRegisterService } from "./command/internal-api";
 import {
     CellPainterFactoryService,
-    GridFieldCustomHeadingsService,
     ReferenceableGridLayoutsService,
     ReferenceableGridSourceDefinitionsStoreService,
+    RevFieldCustomHeadingsService,
     TypedReferenceableGridSourcesService,
     TypedTableFieldSourceDefinitionCachingFactoryService,
     TypedTableFieldSourceDefinitionFactory,
@@ -51,7 +51,7 @@ export class CoreService {
     readonly rankedLitIvemIdListDefinitionFactoryService: RankedLitIvemIdListDefinitionFactoryService;
     readonly rankedLitIvemIdListFactoryService: RankedLitIvemIdListFactoryService;
     readonly textFormatterService: TextFormatterService;
-    readonly gridFieldCustomHeadingsService: GridFieldCustomHeadingsService;
+    readonly gridFieldCustomHeadingsService: RevFieldCustomHeadingsService;
     readonly referenceableGridLayoutsService: ReferenceableGridLayoutsService;
     readonly referenceableGridSourceDefinitionsStoreService: ReferenceableGridSourceDefinitionsStoreService;
     readonly cellPainterFactoryService: CellPainterFactoryService;
@@ -83,7 +83,7 @@ export class CoreService {
             this.watchmakerService,
         );
         this.textFormatterService = new TextFormatterService(this.symbolsService, this.settingsService);
-        this.gridFieldCustomHeadingsService = new GridFieldCustomHeadingsService();
+        this.gridFieldCustomHeadingsService = new RevFieldCustomHeadingsService();
         this.referenceableGridLayoutsService = new ReferenceableGridLayoutsService();
         this.referenceableGridSourceDefinitionsStoreService = new ReferenceableGridSourceDefinitionsStoreService(
         );

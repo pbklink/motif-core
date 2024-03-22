@@ -6,7 +6,7 @@
 
 import { RankedLitIvemId } from '../../../../adi/internal-api';
 import { PickEnum, UsableList } from '../../../../sys/internal-api';
-import { GridFieldCustomHeadingsService } from '../../../field/internal-api';
+import { RevFieldCustomHeadingsService } from '../../../field/internal-api';
 import { TypedTableFieldSourceDefinition, TypedTableFieldSourceDefinitionCachingFactoryService } from '../../field-source/internal-api';
 import { TypedTableRecordSourceDefinition } from './typed-table-record-source-definition';
 import { UsableListTableRecordSourceDefinition } from './usable-list-table-record-source-definition';
@@ -15,7 +15,7 @@ import { UsableListTableRecordSourceDefinition } from './usable-list-table-recor
 export abstract class RankedLitIvemIdUsableListTableRecordSourceDefinition extends UsableListTableRecordSourceDefinition<RankedLitIvemId> {
     // eslint-disable-next-line @typescript-eslint/no-useless-constructor
     constructor(
-        customHeadingsService: GridFieldCustomHeadingsService,
+        customHeadingsService: RevFieldCustomHeadingsService,
         tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService,
         typeId: TypedTableRecordSourceDefinition.TypeId,
         allowedFieldSourceDefinitionTypeIds: RankedLitIvemIdUsableListTableRecordSourceDefinition.FieldSourceDefinitionTypeId[],

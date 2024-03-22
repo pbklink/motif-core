@@ -9,7 +9,7 @@ import { AllowedGridField } from '../../field/internal-api';
 import { GridLayoutDefinition } from './grid-layout-definition';
 
 export class AllowedFieldsGridLayoutDefinition extends GridLayoutDefinition {
-    // Uses AllowedGridField instead of GridFieldDefinition as heading can be changed at runtime
+    // Uses AllowedGridField instead of RevFieldDefinition as heading can be changed at runtime
     constructor(
         columns: readonly GridLayoutDefinition.Column[],
         readonly allowedFields: readonly AllowedGridField[],

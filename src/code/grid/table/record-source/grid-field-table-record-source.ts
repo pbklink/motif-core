@@ -6,7 +6,7 @@
 
 import { Badness, CorrectnessBadness, Integer, LockOpenListItem, Ok, Result, UnreachableCaseError, UsableListChangeTypeId } from '../../../sys/internal-api';
 import { TextFormatterService } from '../../../text-format/internal-api';
-import { GridField, GridFieldCustomHeadingsService } from '../../field/internal-api';
+import { GridField, RevFieldCustomHeadingsService } from '../../field/internal-api';
 import {
     TypedTableFieldSourceDefinition, TypedTableFieldSourceDefinitionCachingFactoryService
 } from "../field-source/internal-api";
@@ -22,7 +22,7 @@ export class GridFieldTableRecordSource extends TypedTableRecordSource {
 
     constructor(
         textFormatterService: TextFormatterService,
-        gridFieldCustomHeadingsService: GridFieldCustomHeadingsService,
+        gridFieldCustomHeadingsService: RevFieldCustomHeadingsService,
         tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService,
         correctnessBadness: CorrectnessBadness,
         definition: GridFieldTableRecordSourceDefinition,

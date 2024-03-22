@@ -9,7 +9,7 @@ import {
     RankedLitIvemIdListDefinitionFactoryService
 } from "../../../../ranked-lit-ivem-id-list/internal-api";
 import { ErrorCode, JsonElement, JsonElementErr, PickEnum, Result } from '../../../../sys/internal-api';
-import { GridFieldCustomHeadingsService } from '../../../field/internal-api';
+import { RevFieldCustomHeadingsService } from '../../../field/internal-api';
 import {
     TypedTableFieldSourceDefinition,
     TypedTableFieldSourceDefinitionCachingFactoryService
@@ -19,7 +19,7 @@ import { TypedTableRecordSourceDefinition } from './typed-table-record-source-de
 /** @public */
 export abstract class RankedLitIvemIdListTableRecordSourceDefinition extends TypedTableRecordSourceDefinition {
     constructor(
-        customHeadingsService: GridFieldCustomHeadingsService,
+        customHeadingsService: RevFieldCustomHeadingsService,
         tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService,
         allowedFieldSourceDefinitionTypeIds: RankedLitIvemIdListTableRecordSourceDefinition.FieldSourceDefinitionTypeId[],
         readonly rankedLitIvemIdListDefinition: RankedLitIvemIdListDefinition

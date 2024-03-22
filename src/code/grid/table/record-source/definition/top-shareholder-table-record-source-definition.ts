@@ -6,7 +6,7 @@
 
 import { LitIvemId, TopShareholder } from '../../../../adi/internal-api';
 import { ErrorCode, JsonElement, Ok, PickEnum, Result } from '../../../../sys/internal-api';
-import { GridFieldCustomHeadingsService } from '../../../field/internal-api';
+import { RevFieldCustomHeadingsService } from '../../../field/internal-api';
 import { GridLayoutDefinition } from '../../../layout/internal-api';
 import { TopShareholderTableFieldSourceDefinition, TypedTableFieldSourceDefinition, TypedTableFieldSourceDefinitionCachingFactoryService } from '../../field-source/internal-api';
 import { TypedTableRecordSourceDefinition } from './typed-table-record-source-definition';
@@ -14,7 +14,7 @@ import { TypedTableRecordSourceDefinition } from './typed-table-record-source-de
 /** @public */
 export class TopShareholderTableRecordSourceDefinition extends TypedTableRecordSourceDefinition {
     constructor(
-        customHeadingsService: GridFieldCustomHeadingsService,
+        customHeadingsService: RevFieldCustomHeadingsService,
         tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService,
         readonly litIvemId: LitIvemId,
         readonly tradingDate: Date | undefined,

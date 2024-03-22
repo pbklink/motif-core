@@ -7,8 +7,7 @@
 import { OrderSideId } from '../../../../adi/internal-api';
 import { RenderValue } from '../../../../services/internal-api';
 import { CorrectnessId, UnreachableCaseError } from '../../../../sys/internal-api';
-import { AllowedGridField } from '../../../field/allowed-grid-field';
-import { GridFieldDefinition } from '../../../field/grid-field-definition';
+import { AllowedGridField, RevFieldDefinition } from '../../../field/internal-api';
 import { GridLayoutDefinition } from '../../../layout/internal-api';
 import { DepthSideGridField } from '../depth-side-grid-field';
 import { FullDepthRecord } from './full-depth-record';
@@ -20,7 +19,7 @@ export class FullDepthSideGridField extends DepthSideGridField {
         private _sideId: OrderSideId,
         private _getDataItemCorrectnessIdEvent: FullDepthSideGridField.GetDataItemCorrectnessIdEventHandler
     ) {
-        const definition = FullDepthSideGridField.createGridFieldDefinition(_id);
+        const definition = FullDepthSideGridField.createRevFieldDefinition(_id);
         super(definition);
     }
 
@@ -77,7 +76,7 @@ export namespace FullDepthSideGridField {
         const fields = new Array<AllowedGridField>(idCount);
 
         for (let id = 0; id < idCount; id++) {
-            const definition = createGridFieldDefinition(id);
+            const definition = createRevFieldDefinition(id);
             const field = new AllowedGridField(definition);
             fields[id] = field;
         }
@@ -85,8 +84,8 @@ export namespace FullDepthSideGridField {
         return fields;
     }
 
-    export function createGridFieldDefinition(id: FullDepthSideFieldId): GridFieldDefinition {
-        return new GridFieldDefinition(
+    export function createRevFieldDefinition(id: FullDepthSideFieldId): RevFieldDefinition {
+        return new RevFieldDefinition(
             DepthSideGridField.sourceDefinition,
             FullDepthSideField.idToName(id),
             FullDepthSideField.idToDefaultHeading(id),
@@ -107,7 +106,7 @@ export namespace FullDepthSideGridField {
             const sourceName = DepthSideGridField.sourceDefinition.name;
             const fieldId = fieldIds[i];
             const sourcelessFieldName = FullDepthSideField.idToName(fieldId);
-            const fieldName = GridFieldDefinition.composeName(sourceName, sourcelessFieldName);
+            const fieldName = RevFieldDefinition.composeName(sourceName, sourcelessFieldName);
             const layoutDefinitionColumn: GridLayoutDefinition.Column = {
                 fieldName,
                 visible: undefined,

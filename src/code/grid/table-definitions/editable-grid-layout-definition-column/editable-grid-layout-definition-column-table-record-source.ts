@@ -6,7 +6,7 @@
 
 import { Badness, CorrectnessBadness, Integer, LockOpenListItem, MultiEvent, UnreachableCaseError, UsableListChangeTypeId } from '../../../sys/internal-api';
 import { TextFormatterService } from '../../../text-format/internal-api';
-import { GridFieldCustomHeadingsService } from '../../field/internal-api';
+import { RevFieldCustomHeadingsService } from '../../field/internal-api';
 import {
     TableField,
     TableRecord,
@@ -28,7 +28,7 @@ export class EditableGridLayoutDefinitionColumnTableRecordSource extends TypedTa
 
     constructor(
         textFormatterService: TextFormatterService,
-        gridFieldCustomHeadingsService: GridFieldCustomHeadingsService,
+        gridFieldCustomHeadingsService: RevFieldCustomHeadingsService,
         tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService,
         correctnessBadness: CorrectnessBadness,
         definition: EditableGridLayoutDefinitionColumnTableRecordSourceDefinition,

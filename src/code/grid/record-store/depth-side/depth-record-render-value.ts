@@ -12,7 +12,7 @@ import { DepthRecord } from './depth-record';
 /** @public */
 export namespace DepthRecordRenderValue {
     export interface Attribute extends GridRecordStoreRenderValue.Attribute {
-        readonly id: RenderValue.AttributeId.DepthRecord;
+        readonly typeId: RenderValue.Attribute.TypeId.DepthRecord;
         orderSideId: OrderSideId;
         depthRecordTypeId: DepthRecord.TypeId;
         ownOrder: boolean;

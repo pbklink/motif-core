@@ -16,13 +16,13 @@ import {
     Result,
     compareNumber
 } from "../../../../sys/internal-api";
-import { GridFieldCustomHeadingsService } from '../../../field/internal-api';
+import { RevFieldCustomHeadingsService } from '../../../field/internal-api';
 import { TypedTableFieldSourceDefinition, TypedTableFieldSourceDefinitionCachingFactoryService } from '../../field-source/internal-api';
 import { TableRecordSourceDefinition } from './table-record-source-definition';
 
 export abstract class TypedTableRecordSourceDefinition extends TableRecordSourceDefinition<TypedTableRecordSourceDefinition.TypeId, TypedTableFieldSourceDefinition.TypeId> {
     constructor(
-        customHeadingsService: GridFieldCustomHeadingsService,
+        customHeadingsService: RevFieldCustomHeadingsService,
         tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService,
         typeId: TypedTableRecordSourceDefinition.TypeId,
         allowedFieldSourceDefinitionTypeIds: readonly TypedTableFieldSourceDefinition.TypeId[],

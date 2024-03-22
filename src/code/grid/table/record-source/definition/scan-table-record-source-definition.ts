@@ -6,7 +6,7 @@
 
 import { Scan } from '../../../../scan/internal-api';
 import { PickEnum } from '../../../../sys/internal-api';
-import { GridFieldCustomHeadingsService } from '../../../field/internal-api';
+import { RevFieldCustomHeadingsService } from '../../../field/internal-api';
 import { GridLayoutDefinition } from '../../../layout/internal-api';
 import { ScanTableFieldSourceDefinition, TypedTableFieldSourceDefinition, TypedTableFieldSourceDefinitionCachingFactoryService } from '../../field-source/internal-api';
 import { TypedTableRecordSourceDefinition } from './typed-table-record-source-definition';
@@ -14,7 +14,7 @@ import { TypedTableRecordSourceDefinition } from './typed-table-record-source-de
 /** @public */
 export class ScanTableRecordSourceDefinition extends TypedTableRecordSourceDefinition {
     constructor(
-        customHeadingsService: GridFieldCustomHeadingsService,
+        customHeadingsService: RevFieldCustomHeadingsService,
         tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService    ) {
         super(
             customHeadingsService,

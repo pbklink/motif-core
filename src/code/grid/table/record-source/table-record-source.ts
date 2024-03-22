@@ -15,8 +15,7 @@ import {
     UsableListChangeTypeId,
 } from '../../../sys/internal-api';
 import { TextFormatterService } from '../../../text-format/internal-api';
-import { GridFieldCustomHeadingsService } from '../../field/grid-field-custom-headings-service';
-import { AllowedGridField } from '../../field/internal-api';
+import { AllowedGridField, RevFieldCustomHeadingsService } from '../../field/internal-api';
 import { TableFieldSource, TableFieldSourceDefinitionCachingFactoryService } from '../field-source/internal-api';
 import { TableField } from '../field/internal-api';
 import { TableRecordDefinition } from '../record-definition/table-record-definition';
@@ -36,7 +35,7 @@ export abstract class TableRecordSource<TypeId, TableFieldSourceDefinitionTypeId
 
     constructor(
         private readonly _textFormatterService: TextFormatterService,
-        protected readonly _gridFieldCustomHeadingsService: GridFieldCustomHeadingsService,
+        protected readonly _gridFieldCustomHeadingsService: RevFieldCustomHeadingsService,
         protected readonly _tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService<TableFieldSourceDefinitionTypeId>,
         private readonly _correctnessState: CorrectnessState<Badness>,
         protected readonly definition: TableRecordSourceDefinition<TypeId, TableFieldSourceDefinitionTypeId>,

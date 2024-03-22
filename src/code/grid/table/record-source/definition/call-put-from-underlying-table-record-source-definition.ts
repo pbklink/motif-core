@@ -7,7 +7,7 @@
 import { IvemId, SecurityDataItem } from '../../../../adi/internal-api';
 import { CallPut } from '../../../../services/internal-api';
 import { ErrorCode, JsonElement, JsonElementErr, Ok, PickEnum, Result } from '../../../../sys/internal-api';
-import { GridFieldCustomHeadingsService } from '../../../field/internal-api';
+import { RevFieldCustomHeadingsService } from '../../../field/internal-api';
 import { GridLayoutDefinition } from '../../../layout/internal-api';
 import {
     CallPutTableFieldSourceDefinition,
@@ -21,7 +21,7 @@ import { TypedTableRecordSourceDefinition } from './typed-table-record-source-de
 /** @public */
 export class CallPutFromUnderlyingTableRecordSourceDefinition extends TypedTableRecordSourceDefinition {
     constructor(
-        customHeadingsService: GridFieldCustomHeadingsService,
+        customHeadingsService: RevFieldCustomHeadingsService,
         tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService,
         readonly underlyingIvemId: IvemId
     ) {

@@ -6,7 +6,7 @@
 
 import { Account, Balances, BrokerageAccountGroup } from '../../../../adi/internal-api';
 import { PickEnum } from '../../../../sys/internal-api';
-import { GridFieldCustomHeadingsService } from '../../../field/internal-api';
+import { RevFieldCustomHeadingsService } from '../../../field/internal-api';
 import { GridLayoutDefinition } from '../../../layout/internal-api';
 import {
     BalancesTableFieldSourceDefinition,
@@ -19,7 +19,7 @@ import { TypedTableRecordSourceDefinition } from './typed-table-record-source-de
 
 export class BalancesTableRecordSourceDefinition extends BrokerageAccountGroupTableRecordSourceDefinition {
     constructor(
-        customHeadingsService: GridFieldCustomHeadingsService,
+        customHeadingsService: RevFieldCustomHeadingsService,
         tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService,
         brokerageAccountGroup: BrokerageAccountGroup
     ) {

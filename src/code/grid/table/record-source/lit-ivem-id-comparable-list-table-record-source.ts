@@ -8,7 +8,7 @@ import { AdiService, LitIvemId } from '../../../adi/internal-api';
 import { SymbolDetailCacheService } from '../../../services/internal-api';
 import { CorrectnessBadness, Integer, UiComparableList, UnreachableCaseError } from '../../../sys/internal-api';
 import { TextFormatterService } from '../../../text-format/internal-api';
-import { GridFieldCustomHeadingsService } from '../../field/internal-api';
+import { RevFieldCustomHeadingsService } from '../../field/internal-api';
 import {
     TypedTableFieldSourceDefinition, TypedTableFieldSourceDefinitionCachingFactoryService
 } from "../field-source/internal-api";
@@ -27,7 +27,7 @@ export class LitIvemIdComparableListTableRecordSource extends BadnessListTableRe
         private readonly _adiService: AdiService,
         private readonly _symbolDetailCacheService: SymbolDetailCacheService,
         textFormatterService: TextFormatterService,
-        gridFieldCustomHeadingsService: GridFieldCustomHeadingsService,
+        gridFieldCustomHeadingsService: RevFieldCustomHeadingsService,
         tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService,
         correctnessBadness: CorrectnessBadness,
         definition: LitIvemIdComparableListTableRecordSourceDefinition,

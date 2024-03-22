@@ -5,7 +5,7 @@
  */
 
 import { PickEnum } from '../../../sys/internal-api';
-import { GridFieldCustomHeadingsService } from '../../field/internal-api';
+import { RevFieldCustomHeadingsService } from '../../field/internal-api';
 import { GridLayoutDefinition } from '../../layout/internal-api';
 import { TypedTableFieldSourceDefinition, TypedTableFieldSourceDefinitionCachingFactoryService, TypedTableRecordSourceDefinition } from '../../table/internal-api';
 import { EditableGridLayoutDefinitionColumn } from './editable-grid-layout-definition-column';
@@ -15,7 +15,7 @@ import { EditableGridLayoutDefinitionColumnTableFieldSourceDefinition } from './
 /** @public */
 export class EditableGridLayoutDefinitionColumnTableRecordSourceDefinition extends TypedTableRecordSourceDefinition {
     constructor(
-        customHeadingsService: GridFieldCustomHeadingsService,
+        customHeadingsService: RevFieldCustomHeadingsService,
         tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService,
         readonly list: EditableGridLayoutDefinitionColumnList,
     ) {

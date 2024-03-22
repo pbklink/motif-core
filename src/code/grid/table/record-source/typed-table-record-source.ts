@@ -6,7 +6,7 @@
 
 import { Badness, CorrectnessBadness, MultiEvent } from '../../../sys/internal-api';
 import { TextFormatterService } from '../../../text-format/internal-api';
-import { GridFieldCustomHeadingsService } from '../../field/internal-api';
+import { RevFieldCustomHeadingsService } from '../../field/internal-api';
 import { TypedTableFieldSourceDefinition, TypedTableFieldSourceDefinitionCachingFactoryService } from '../field-source/internal-api';
 import { TypedTableRecordSourceDefinition } from './definition/internal-api';
 import { TableRecordSource } from './table-record-source';
@@ -16,7 +16,7 @@ export abstract class TypedTableRecordSource extends TableRecordSource<TypedTabl
 
     constructor(
         textFormatterService: TextFormatterService,
-        gridFieldCustomHeadingsService: GridFieldCustomHeadingsService,
+        gridFieldCustomHeadingsService: RevFieldCustomHeadingsService,
         tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService,
         private readonly _correctnessBadness: CorrectnessBadness,
         definition: TypedTableRecordSourceDefinition,

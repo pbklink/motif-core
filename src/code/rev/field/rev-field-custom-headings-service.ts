@@ -1,12 +1,8 @@
-/**
- * %license Motif
- * (c) 2021 Paritech Wealth Technology
- * License: motionite.trade/license/motif
- */
+// (c) 2024 Xilytix Pty Ltd / Paul Klink
 
-import { JsonElement } from '../../sys/internal-api';
+import { JsonElement } from '@xilytix/sysutils';
 
-export class GridFieldCustomHeadingsService {
+export class RevFieldCustomHeadingsService {
     // private cachedHeadingIniFile: TMemIniFile;
     // private headingIniFileCachingEnabled: boolean;
     private saveRequired = false;

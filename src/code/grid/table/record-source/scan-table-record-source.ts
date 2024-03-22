@@ -7,7 +7,7 @@
 import { Scan, ScanList, ScansService } from '../../../scan/internal-api';
 import { CorrectnessBadness, Integer, LockOpenListItem, UnreachableCaseError } from '../../../sys/internal-api';
 import { TextFormatterService } from '../../../text-format/internal-api';
-import { GridFieldCustomHeadingsService } from '../../field/internal-api';
+import { RevFieldCustomHeadingsService } from '../../field/internal-api';
 import {
     TypedTableFieldSourceDefinition, TypedTableFieldSourceDefinitionCachingFactoryService
 } from "../field-source/internal-api";
@@ -23,7 +23,7 @@ export class ScanTableRecordSource extends LockOpenListTableRecordSource<Scan, S
     constructor(
         private readonly _scansService: ScansService,
         textFormatterService: TextFormatterService,
-        gridFieldCustomHeadingsService: GridFieldCustomHeadingsService,
+        gridFieldCustomHeadingsService: RevFieldCustomHeadingsService,
         tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService,
         correctnessBadness: CorrectnessBadness,
         definition: ScanTableRecordSourceDefinition,

@@ -7,7 +7,7 @@
 import { Account, AdiService, BrokerageAccountsDataDefinition, BrokerageAccountsDataItem } from '../../../adi/internal-api';
 import { CorrectnessBadness, Integer, KeyedCorrectnessList, LockOpenListItem, UnreachableCaseError } from '../../../sys/internal-api';
 import { TextFormatterService } from '../../../text-format/internal-api';
-import { GridFieldCustomHeadingsService } from '../../field/internal-api';
+import { RevFieldCustomHeadingsService } from '../../field/internal-api';
 import {
     TypedTableFieldSourceDefinition, TypedTableFieldSourceDefinitionCachingFactoryService
 } from "../field-source/internal-api";
@@ -26,7 +26,7 @@ export class BrokerageAccountTableRecordSource
     constructor(
         private readonly _adiService: AdiService,
         textFormatterService: TextFormatterService,
-        gridFieldCustomHeadingsService: GridFieldCustomHeadingsService,
+        gridFieldCustomHeadingsService: RevFieldCustomHeadingsService,
         tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService,
         correctnessBadness: CorrectnessBadness,
         definition: BrokerageAccountTableRecordSourceDefinition,

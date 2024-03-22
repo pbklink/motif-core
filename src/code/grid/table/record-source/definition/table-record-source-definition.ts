@@ -11,7 +11,7 @@ import {
     Ok,
     Result
 } from "../../../../sys/internal-api";
-import { AllowedGridField, GridField, GridFieldCustomHeadingsService } from '../../../field/internal-api';
+import { AllowedGridField, GridField, RevFieldCustomHeadingsService } from '../../../field/internal-api';
 import { GridLayoutDefinition } from '../../../layout/internal-api';
 import {
     TableFieldSourceDefinitionCachingFactoryService
@@ -19,7 +19,7 @@ import {
 
 export abstract class TableRecordSourceDefinition<TypeId, TableFieldSourceDefinitionTypeId> {
     constructor(
-        private readonly _customHeadingsService: GridFieldCustomHeadingsService,
+        private readonly _customHeadingsService: RevFieldCustomHeadingsService,
         readonly tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService<TableFieldSourceDefinitionTypeId>,
         readonly typeId: TypeId,
         readonly name: string,

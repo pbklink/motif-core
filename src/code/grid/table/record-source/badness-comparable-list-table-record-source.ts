@@ -6,7 +6,7 @@
 
 import { BadnessList, CorrectnessBadness, LockOpenListItem } from '../../../sys/internal-api';
 import { TextFormatterService } from '../../../text-format/internal-api';
-import { GridFieldCustomHeadingsService } from '../../field/internal-api';
+import { RevFieldCustomHeadingsService } from '../../field/internal-api';
 import { TypedTableFieldSourceDefinition, TypedTableFieldSourceDefinitionCachingFactoryService } from '../field-source/internal-api';
 import { BadnessListTableRecordSourceDefinition } from './definition/internal-api';
 import { SubscribeBadnessListTableRecordSource } from './subscribe-badness-list-table-record-source';
@@ -16,7 +16,7 @@ export abstract class BadnessListTableRecordSource<Record> extends SubscribeBadn
 
     constructor(
         textFormatterService: TextFormatterService,
-        gridFieldCustomHeadingsService: GridFieldCustomHeadingsService,
+        gridFieldCustomHeadingsService: RevFieldCustomHeadingsService,
         tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService,
         correctnessBadness: CorrectnessBadness,
         definition: BadnessListTableRecordSourceDefinition<Record>,

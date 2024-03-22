@@ -5,6 +5,7 @@
  */
 
 import { IvemId, LitIvemId } from '../../../adi/internal-api';
+import { RevTableValue } from '../../../rev/internal-api';
 import {
     BooleanRenderValue,
     DateRenderValue,
@@ -36,29 +37,7 @@ import {
     newUndefinableDecimal
 } from '../../../sys/internal-api';
 
-export abstract class TableValue {
-    private _renderValue: RenderValue | undefined;
-    private _renderAttributes: RenderValue.Attribute[] = [];
-
-    get renderValue() {
-        if (this._renderValue === undefined) {
-            this._renderValue = this.createRenderValue();
-            this._renderValue.setAttributes(this._renderAttributes);
-        }
-        return this._renderValue;
-    }
-
-    addRenderAttribute(value: RenderValue.Attribute) {
-        this._renderAttributes.push(value);
-    }
-
-    clearRendering() {
-        this._renderValue = undefined;
-    }
-
-    abstract isUndefined(): boolean;
-
-    protected abstract createRenderValue(): RenderValue;
+export abstract class TableValue extends RevTableValue<RenderValue.TypeId, RenderValue.Attribute.TypeId> {
 }
 
 export namespace TableValue {

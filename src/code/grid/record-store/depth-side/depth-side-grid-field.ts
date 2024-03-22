@@ -6,7 +6,7 @@
 
 import { RenderValue } from '../../../services/internal-api';
 import { CorrectnessId, GridRevRecordField } from '../../../sys/internal-api';
-import { GridField, GridFieldSourceDefinition } from '../../field/internal-api';
+import { GridField, RevFieldSourceDefinition } from '../../field/internal-api';
 import { DepthRecord } from './depth-record';
 
 /** @public */
@@ -23,5 +23,5 @@ export namespace DepthSideGridField {
     //     defaultVisibles: boolean[];
     // }
 
-    export const sourceDefinition = new GridFieldSourceDefinition('DepthSide');
+    export const sourceDefinition = new RevFieldSourceDefinition('DepthSide');
 }

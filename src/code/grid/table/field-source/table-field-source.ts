@@ -6,7 +6,7 @@
 
 import { Integer } from '../../../sys/internal-api';
 import { TextFormatterService } from '../../../text-format/internal-api';
-import { GridField, GridFieldCustomHeadingsService } from '../../field/internal-api';
+import { GridField, RevFieldCustomHeadingsService } from '../../field/internal-api';
 // import { GridRecordFieldState } from '../../record/grid-record-internal-api';
 import { TableField } from '../field/internal-api';
 import { TableFieldSourceDefinition } from './definition/internal-api';
@@ -17,7 +17,7 @@ export class TableFieldSource<TypeId> {
 
     constructor(
         private readonly _textFormatterService: TextFormatterService,
-        private readonly _customHeadingsService: GridFieldCustomHeadingsService,
+        private readonly _customHeadingsService: RevFieldCustomHeadingsService,
         public readonly definition: TableFieldSourceDefinition<TypeId>,
         private _headingPrefix: string // This might be for call/put
     ) { }

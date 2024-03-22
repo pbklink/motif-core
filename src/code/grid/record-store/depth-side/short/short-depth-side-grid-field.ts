@@ -7,7 +7,7 @@
 import { OrderSideId } from '../../../../adi/internal-api';
 import { RenderValue } from '../../../../services/internal-api';
 import { CorrectnessId, UnreachableCaseError } from '../../../../sys/internal-api';
-import { AllowedGridField, GridFieldDefinition } from '../../../field/internal-api';
+import { AllowedGridField, RevFieldDefinition } from '../../../field/internal-api';
 import { GridLayoutDefinition } from '../../../layout/internal-api';
 import { DepthSideGridField } from '../depth-side-grid-field';
 import { ShortDepthRecord } from './short-depth-record';
@@ -19,7 +19,7 @@ export class ShortDepthSideGridField extends DepthSideGridField {
         private _sideId: OrderSideId,
         private _getDataItemCorrectnessIdEvent: ShortDepthSideGridField.GetDataItemCorrectnessIdEventHandler
     ) {
-        const definition = ShortDepthSideGridField.createGridFieldDefinition(_id);
+        const definition = ShortDepthSideGridField.createRevFieldDefinition(_id);
         super(definition);
     }
 
@@ -76,7 +76,7 @@ export namespace ShortDepthSideGridField {
         const fields = new Array<AllowedGridField>(idCount);
 
         for (let id = 0; id < idCount; id++) {
-            const definition = createGridFieldDefinition(id);
+            const definition = createRevFieldDefinition(id);
             const field = new AllowedGridField(definition);
             fields[id] = field;
         }
@@ -84,8 +84,8 @@ export namespace ShortDepthSideGridField {
         return fields;
     }
 
-    export function createGridFieldDefinition(id: ShortDepthSideFieldId): GridFieldDefinition {
-        return new GridFieldDefinition(
+    export function createRevFieldDefinition(id: ShortDepthSideFieldId): RevFieldDefinition {
+        return new RevFieldDefinition(
             DepthSideGridField.sourceDefinition,
             ShortDepthSideField.idToName(id),
             ShortDepthSideField.idToDefaultHeading(id),
@@ -106,7 +106,7 @@ export namespace ShortDepthSideGridField {
             const sourceName = DepthSideGridField.sourceDefinition.name;
             const fieldId = fieldIds[i];
             const sourcelessFieldName = ShortDepthSideField.idToName(fieldId);
-            const fieldName = GridFieldDefinition.composeName(sourceName, sourcelessFieldName);
+            const fieldName = RevFieldDefinition.composeName(sourceName, sourcelessFieldName);
             const layoutDefinitionColumn: GridLayoutDefinition.Column = {
                 fieldName,
                 visible: undefined,

@@ -6,7 +6,7 @@
 
 import { LitIvemBaseDetail, RankedLitIvemId } from '../../../../adi/internal-api';
 import { LitIvemIdExecuteScanRankedLitIvemIdListDefinition } from '../../../../ranked-lit-ivem-id-list/internal-api';
-import { GridFieldCustomHeadingsService } from '../../../field/internal-api';
+import { RevFieldCustomHeadingsService } from '../../../field/internal-api';
 import { GridLayoutDefinition } from '../../../layout/internal-api';
 import {
     LitIvemBaseDetailTableFieldSourceDefinition,
@@ -19,7 +19,7 @@ import { RankedLitIvemIdListTableRecordSourceDefinition } from './ranked-lit-ive
 /** @public */
 export class ScanTestTableRecordSourceDefinition extends RankedLitIvemIdListTableRecordSourceDefinition {
     constructor(
-        customHeadingsService: GridFieldCustomHeadingsService,
+        customHeadingsService: RevFieldCustomHeadingsService,
         tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService,
         rankedLitIvemIdListDefinition: LitIvemIdExecuteScanRankedLitIvemIdListDefinition,
     ) {

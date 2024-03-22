@@ -4,15 +4,9 @@
  * License: motionite.trade/license/motif
  */
 
-import { IndexedRecord, Integer } from '../../../sys/internal-api';
-import { TableValue } from './table-value';
+import { RevTableValuesRecord } from '../../../rev/internal-api';
+import { RenderValue } from '../../../services/internal-api';
 
-export class TableValuesRecord implements IndexedRecord {
-    protected _values: TableValue[];
+export class TableValuesRecord extends RevTableValuesRecord<RenderValue.TypeId, RenderValue.Attribute.TypeId> {
 
-    constructor(public index: Integer) {
-        // no code
-    }
-
-    get values(): readonly TableValue[] { return this._values; }
 }

@@ -6,7 +6,7 @@
 
 import { LitIvemId } from '../../../../adi/internal-api';
 import { ErrorCode, JsonElement, JsonElementErr, Ok, PickEnum, Result, UiComparableList } from '../../../../sys/internal-api';
-import { GridFieldCustomHeadingsService } from '../../../field/internal-api';
+import { RevFieldCustomHeadingsService } from '../../../field/internal-api';
 import { GridLayoutDefinition } from '../../../layout/internal-api';
 import {
     LitIvemBaseDetailTableFieldSourceDefinition,
@@ -23,7 +23,7 @@ export class LitIvemIdComparableListTableRecordSourceDefinition extends BadnessL
     declare list: UiComparableList<LitIvemId>;
 
     constructor(
-        customHeadingsService: GridFieldCustomHeadingsService,
+        customHeadingsService: RevFieldCustomHeadingsService,
         tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService,
         list: UiComparableList<LitIvemId>,
     ) {
@@ -107,7 +107,7 @@ export namespace LitIvemIdComparableListTableRecordSourceDefinition {
     }
 
     export function tryCreateDefinition(
-        customHeadingsService: GridFieldCustomHeadingsService,
+        customHeadingsService: RevFieldCustomHeadingsService,
         tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService,
         element: JsonElement,
     ): Result<LitIvemIdComparableListTableRecordSourceDefinition> {

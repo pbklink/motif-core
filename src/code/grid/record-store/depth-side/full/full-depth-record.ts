@@ -61,7 +61,7 @@ export abstract class FullDepthRecord extends DepthRecord {
             attributes[attributeIdx++] = extraAttribute;
         }
         const recordAttribute: DepthRecordRenderValue.Attribute = {
-            id: RenderValue.AttributeId.DepthRecord,
+            typeId: RenderValue.Attribute.TypeId.DepthRecord,
             orderSideId: sideId,
             depthRecordTypeId: this.typeId,
             ownOrder: this.isOwnOrder(),
@@ -285,7 +285,7 @@ export class OrderFullDepthRecord extends FullDepthRecord {
     private createCountXrefRenderValue(): DepthRecord.CreateRenderValueResult {
         const renderValue = new StringRenderValue(this.order.crossRef);
         const extraAttribute: RenderValue.DepthCountXRefFieldAttribute = {
-            id: RenderValue.AttributeId.DepthCountXRefField,
+            typeId: RenderValue.Attribute.TypeId.DepthCountXRefField,
             isCountAndXrefs: false,
         };
         return { renderValue, extraAttribute };
@@ -692,7 +692,7 @@ export class PriceLevelFullDepthRecord extends FullDepthRecord {
     private createCountXrefRenderValue(): DepthRecord.CreateRenderValueResult {
         const renderValue = new CountAndXrefsRenderValue( { count: this._count, xrefs: this._xrefs });
         const extraAttribute: RenderValue.DepthCountXRefFieldAttribute = {
-            id: RenderValue.AttributeId.DepthCountXRefField,
+            typeId: RenderValue.Attribute.TypeId.DepthCountXRefField,
             isCountAndXrefs: true,
         };
         return { renderValue, extraAttribute };

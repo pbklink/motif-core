@@ -14,7 +14,7 @@ import {
 } from '@xilytix/revgrid';
 import { SettingsService } from '../../../services/internal-api';
 import { GridFieldHorizontalAlign } from '../../../sys/internal-api';
-import { GridField, GridFieldDefinition, GridFieldSourceDefinition } from '../../field/internal-api';
+import { GridField, RevFieldDefinition, RevFieldSourceDefinition } from '../../field/internal-api';
 import { AdaptedRevgrid, SingleHeadingGridDataServer } from '../adapted-revgrid/internal-api';
 import { AdaptedRevgridBehavioredColumnSettings } from '../settings/internal-api';
 import { RowDataArrayGridDataServer } from './row-data-array-grid-data-server';
@@ -143,8 +143,8 @@ export namespace RowDataArrayGrid {
         defaultTextAlign: GridFieldHorizontalAlign,
         defaultWidth?:number,
     ) {
-        const definition = new GridFieldDefinition(
-            new GridFieldSourceDefinition(''),
+        const definition = new RevFieldDefinition(
+            new RevFieldSourceDefinition(''),
             sourcelessName,
             defaultHeading,
             defaultTextAlign,

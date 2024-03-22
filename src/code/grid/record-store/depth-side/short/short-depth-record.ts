@@ -126,7 +126,7 @@ export class ShortDepthRecord extends DepthRecord {
             attributes[attributeIdx++] = extraAttribute;
         }
         const recordAttribute: DepthRecordRenderValue.Attribute = {
-            id: RenderValue.AttributeId.DepthRecord,
+            typeId: RenderValue.Attribute.TypeId.DepthRecord,
             orderSideId: sideId,
             depthRecordTypeId: DepthRecord.TypeId.PriceLevel,
             ownOrder: false,

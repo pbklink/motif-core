@@ -16,7 +16,7 @@ import {
 import { SymbolDetailCacheService } from '../../../services/symbol-detail-cache-service';
 import { AssertInternalError, CorrectnessBadness, ErrorCode, Integer, LockOpenListItem, NotImplementedError, Ok, Result, UnreachableCaseError } from '../../../sys/internal-api';
 import { TextFormatterService } from '../../../text-format/internal-api';
-import { GridFieldCustomHeadingsService } from '../../field/internal-api';
+import { RevFieldCustomHeadingsService } from '../../field/internal-api';
 import {
     TypedTableFieldSourceDefinition, TypedTableFieldSourceDefinitionCachingFactoryService
 } from "../field-source/internal-api";
@@ -36,7 +36,7 @@ export class RankedLitIvemIdListTableRecordSource extends SubscribeBadnessListTa
         private readonly _symbolDetailCacheService: SymbolDetailCacheService,
         private readonly _rankedLitIvemIdListFactoryService: RankedLitIvemIdListFactoryService,
         textFormatterService: TextFormatterService,
-        gridFieldCustomHeadingsService: GridFieldCustomHeadingsService,
+        gridFieldCustomHeadingsService: RevFieldCustomHeadingsService,
         tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService,
         correctnessBadness: CorrectnessBadness,
         definition: RankedLitIvemIdListTableRecordSourceDefinition,

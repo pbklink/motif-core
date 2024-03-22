@@ -90,7 +90,7 @@ export abstract class DepthRecord implements IndexedRecord {
                 partialAuctionProportion = this.partialAuctionQuantity / this.getVolume();
             }
             extraAttribute = {
-                id: RenderValue.AttributeId.DepthRecordInAuction,
+                typeId: RenderValue.Attribute.TypeId.DepthRecordInAuction,
                 partialAuctionProportion,
             };
         }
