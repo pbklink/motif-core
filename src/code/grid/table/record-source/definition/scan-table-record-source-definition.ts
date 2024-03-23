@@ -7,7 +7,7 @@
 import { Scan } from '../../../../scan/internal-api';
 import { PickEnum } from '../../../../sys/internal-api';
 import { RevFieldCustomHeadingsService } from '../../../field/internal-api';
-import { GridLayoutDefinition } from '../../../layout/internal-api';
+import { RevGridLayoutDefinition } from '../../../layout/internal-api';
 import { ScanTableFieldSourceDefinition, TypedTableFieldSourceDefinition, TypedTableFieldSourceDefinitionCachingFactoryService } from '../../field-source/internal-api';
 import { TypedTableRecordSourceDefinition } from './typed-table-record-source-definition';
 
@@ -35,7 +35,7 @@ export class ScanTableRecordSourceDefinition extends TypedTableRecordSourceDefin
         fieldNames.push(scanFieldSourceDefinition.getSupportedFieldNameById(Scan.FieldId.StatusId));
         fieldNames.push(scanFieldSourceDefinition.getSupportedFieldNameById(Scan.FieldId.SymbolListEnabled));
 
-        return GridLayoutDefinition.createFromFieldNames(fieldNames);
+        return RevGridLayoutDefinition.createFromFieldNames(fieldNames);
     }
 }
 

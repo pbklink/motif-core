@@ -8,7 +8,7 @@ import { OrderSideId } from '../../../../adi/internal-api';
 import { RenderValue } from '../../../../services/internal-api';
 import { CorrectnessId, UnreachableCaseError } from '../../../../sys/internal-api';
 import { AllowedGridField, RevFieldDefinition } from '../../../field/internal-api';
-import { GridLayoutDefinition } from '../../../layout/internal-api';
+import { RevGridLayoutDefinition } from '../../../layout/internal-api';
 import { DepthSideGridField } from '../depth-side-grid-field';
 import { ShortDepthRecord } from './short-depth-record';
 import { ShortDepthSideField, ShortDepthSideFieldId } from './short-depth-side-field';
@@ -101,13 +101,13 @@ export namespace ShortDepthSideGridField {
         ];
 
         const fieldCount = fieldIds.length;
-        const layoutDefinitionColumns = new Array<GridLayoutDefinition.Column>(fieldCount);
+        const layoutDefinitionColumns = new Array<RevGridLayoutDefinition.Column>(fieldCount);
         for (let i = 0; i < fieldCount; i++) {
             const sourceName = DepthSideGridField.sourceDefinition.name;
             const fieldId = fieldIds[i];
             const sourcelessFieldName = ShortDepthSideField.idToName(fieldId);
-            const fieldName = RevFieldDefinition.composeName(sourceName, sourcelessFieldName);
-            const layoutDefinitionColumn: GridLayoutDefinition.Column = {
+            const fieldName = RevFieldDefinition.Name.compose(sourceName, sourcelessFieldName);
+            const layoutDefinitionColumn: RevGridLayoutDefinition.Column = {
                 fieldName,
                 visible: undefined,
                 autoSizableWidth: undefined,
@@ -120,7 +120,7 @@ export namespace ShortDepthSideGridField {
             layoutDefinitionColumns.reverse();
         }
 
-        return new GridLayoutDefinition(layoutDefinitionColumns);
+        return new RevGridLayoutDefinition(layoutDefinitionColumns);
     }
     // export function createAllFields(
     //     sideId: OrderSideId,

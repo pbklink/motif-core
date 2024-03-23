@@ -36,7 +36,7 @@ import {
     compareUndefinableString
 } from "../../../sys/internal-api";
 import { AllowedGridField, GridField, RevFieldDefinition, RevFieldSourceDefinition } from '../../field/internal-api';
-import { GridLayoutDefinition } from '../../layout/internal-api';
+import { RevGridLayoutDefinition } from '../../layout/internal-api';
 
 /** @public */
 export abstract class DayTradesGridField extends GridField implements GridRevRecordField {
@@ -193,20 +193,20 @@ export namespace DayTradesGridField {
         ];
 
         const count = fieldIds.length;
-        const columns = new Array<GridLayoutDefinition.Column>(count);
+        const columns = new Array<RevGridLayoutDefinition.Column>(count);
         for (let i = 0; i < count; i++) {
             const sourceName = DayTradesGridField.sourceDefinition.name;
             const fieldId = fieldIds[i];
             const sourcelessFieldName = DayTradesDataItem.Field.idToName(fieldId);
-            const fieldName = RevFieldDefinition.composeName(sourceName, sourcelessFieldName);
-            const column: GridLayoutDefinition.Column = {
+            const fieldName = RevFieldDefinition.Name.compose(sourceName, sourcelessFieldName);
+            const column: RevGridLayoutDefinition.Column = {
                 fieldName,
                 visible: undefined,
                 autoSizableWidth: undefined,
             };
             columns[i] = column;
         }
-        return new GridLayoutDefinition(columns);
+        return new RevGridLayoutDefinition(columns);
     }
 
     export function createAllowedFields(): readonly AllowedGridField[] {

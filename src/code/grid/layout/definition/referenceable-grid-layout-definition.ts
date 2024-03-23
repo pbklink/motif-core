@@ -4,58 +4,20 @@
  * License: motionite.trade/license/motif
  */
 
-import { ErrorCode, Guid, Integer, JsonElement, JsonElementErr, Ok, Result } from '../../../sys/internal-api';
-import { GridLayoutDefinition } from './grid-layout-definition';
-
-/** @public */
-export class ReferenceableGridLayoutDefinition extends GridLayoutDefinition {
-    constructor(
-        public id: Guid,
-        public name: string,
-        initialColumns: GridLayoutDefinition.Column[]
-    ) {
-        super(initialColumns);
-    }
-
-    override saveToJson(element: JsonElement) {
-        super.saveToJson(element);
-        element.setGuid(ReferenceableGridLayoutDefinition.ReferenceableJsonName.id, this.id);
-        element.setString(ReferenceableGridLayoutDefinition.ReferenceableJsonName.name, this.name);
-    }
-}
+import { RevReferenceableGridLayoutDefinition } from '../../../rev/internal-api';
+import { Err, ErrorCode, Integer, JsonElement, Ok, Result } from '../../../sys/internal-api';
 
 export namespace ReferenceableGridLayoutDefinition {
-    export namespace ReferenceableJsonName {
-        export const id = 'id';
-        export const name = 'name';
-    }
-
     export function tryCreateReferenceableFromJson(
         element: JsonElement,
         initialIndex: Integer,
-    ): Result<ReferenceableGridLayoutDefinition> {
-        const idResult = element.tryGetGuid(ReferenceableJsonName.id);
-        if (idResult.isErr()) {
-            return JsonElementErr.createOuter(idResult.error, ErrorCode.ReferenceableGridLayoutDefinition_JsonId);
+    ): Result<RevReferenceableGridLayoutDefinition> {
+        const createResult = RevReferenceableGridLayoutDefinition.tryCreateReferenceableFromJson(element, initialIndex);
+        if (createResult.isErr()) {
+            const errorIds = createResult.error;
+            return new Err(`${ErrorCode.ReferenceableGridLayoutDefinition_TryCreateReferenceableFromJson}: (${errorIds.errorId}, ${errorIds.jsonElementErrorId})`);
         } else {
-            const nameResult = element.tryGetString(ReferenceableJsonName.name);
-            if (nameResult.isErr()) {
-                return JsonElementErr.createOuter(nameResult.error, ErrorCode.ReferenceableGridLayoutDefinition_JsonName)
-            } else {
-                let columns: GridLayoutDefinition.Column[] | undefined;
-                const columnsResult = GridLayoutDefinition.tryCreateColumnsFromJson(element);
-                if (columnsResult.isErr()) {
-                    return columnsResult.createOuter(ErrorCode.ReferenceableGridLayoutDefinition_JsonColumns);
-                } else {
-                    columns = columnsResult.value;
-                }
-                const definition = new ReferenceableGridLayoutDefinition(idResult.value, nameResult.value, columns);
-                return new Ok(definition);
-            }
+            return new Ok(createResult.value);
         }
-    }
-
-    export function is(definition: GridLayoutDefinition): definition is ReferenceableGridLayoutDefinition {
-        return 'name' in definition;
     }
 }

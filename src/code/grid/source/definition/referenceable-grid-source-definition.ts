@@ -5,7 +5,7 @@
  */
 
 import { ErrorCode, Guid, JsonElement, JsonElementErr, Ok, Result } from '../../../sys/internal-api';
-import { GridLayoutOrReferenceDefinition } from '../../layout/internal-api';
+import { RevGridLayoutOrReferenceDefinition } from '../../layout/internal-api';
 import {
     TableRecordSourceDefinition,
     TableRecordSourceDefinitionFromJsonFactory
@@ -19,7 +19,7 @@ export class ReferenceableGridSourceDefinition<TableRecordSourceDefinitionTypeId
         readonly id: Guid,
         readonly name: string,
         tableRecordSourceDefinition: TableRecordSourceDefinition<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId>,
-        gridLayoutDefinitionOrReference: GridLayoutOrReferenceDefinition | undefined,
+        gridLayoutDefinitionOrReference: RevGridLayoutOrReferenceDefinition | undefined,
         rowOrderDefinition: GridRowOrderDefinition<TableFieldSourceDefinitionTypeId> | undefined,
     ) {
         super(tableRecordSourceDefinition, gridLayoutDefinitionOrReference, rowOrderDefinition);
@@ -58,7 +58,7 @@ export namespace ReferenceableGridSourceDefinition {
                 if (tableRecordSourceDefinitionResult.isErr()) {
                     return tableRecordSourceDefinitionResult.createOuter(ErrorCode.ReferenceableGridSourceDefinition_TableRecordSourceDefinition);
                 } else {
-                    let gridLayoutOrReferenceDefinition: GridLayoutOrReferenceDefinition | undefined;
+                    let gridLayoutOrReferenceDefinition: RevGridLayoutOrReferenceDefinition | undefined;
                     const gridLayoutDefinitionOrReferenceDefinitionResult =
                         GridSourceDefinition.tryGetGridLayoutOrReferenceDefinitionFromJson(element);
                     if (gridLayoutDefinitionOrReferenceDefinitionResult.isErr()) {

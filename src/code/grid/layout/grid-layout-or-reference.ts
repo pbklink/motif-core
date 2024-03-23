@@ -4,11 +4,11 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, Err, ErrorCode, Guid, LockOpenListItem, Ok, Result } from '../../sys/internal-api';
 import {
-    GridLayoutDefinition,
-    GridLayoutOrReferenceDefinition
-} from "./definition/internal-api";
+    RevGridLayoutDefinition,
+    RevGridLayoutOrReferenceDefinition
+} from '../../rev/internal-api';
+import { AssertInternalError, Err, ErrorCode, Guid, LockOpenListItem, Ok, Result } from '../../sys/internal-api';
 import { GridLayout } from './grid-layout';
 import { ReferenceableGridLayout } from './referenceable-grid-layout';
 import { ReferenceableGridLayoutsService } from './referenceable-grid-layouts-service';
@@ -16,14 +16,14 @@ import { ReferenceableGridLayoutsService } from './referenceable-grid-layouts-se
 /** @public */
 export class GridLayoutOrReference {
     private readonly _referenceId: Guid | undefined;
-    private readonly _gridLayoutDefinition: GridLayoutDefinition | undefined;
+    private readonly _gridLayoutDefinition: RevGridLayoutDefinition | undefined;
 
     private _lockedGridLayout: GridLayout | undefined;
     private _lockedReferenceableGridLayout: ReferenceableGridLayout | undefined;
 
     constructor(
         private readonly _referenceableGridLayoutsService: ReferenceableGridLayoutsService,
-        definition: GridLayoutOrReferenceDefinition,
+        definition: RevGridLayoutOrReferenceDefinition,
     ) {
         if (definition.referenceId !== undefined) {
             this._referenceId = definition.referenceId;
@@ -41,11 +41,11 @@ export class GridLayoutOrReference {
 
     createDefinition() {
         if (this._lockedReferenceableGridLayout !== undefined) {
-            return new GridLayoutOrReferenceDefinition(this._lockedReferenceableGridLayout.id);
+            return new RevGridLayoutOrReferenceDefinition(this._lockedReferenceableGridLayout.id);
         } else {
             if (this.lockedGridLayout !== undefined) {
                 const gridSourceDefinition = this.lockedGridLayout.createDefinition();
-                return new GridLayoutOrReferenceDefinition(gridSourceDefinition);
+                return new RevGridLayoutOrReferenceDefinition(gridSourceDefinition);
             } else {
                 throw new AssertInternalError('GLONRCDU59923');
             }

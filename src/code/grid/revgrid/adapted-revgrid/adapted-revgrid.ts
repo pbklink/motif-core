@@ -9,7 +9,7 @@ import { Revgrid, ViewLayout } from '@xilytix/revgrid';
 import { ColorScheme, SettingsService } from '../../../services/internal-api';
 import { MultiEvent } from '../../../sys/internal-api';
 import { AllowedGridField, GridField } from '../../field/internal-api';
-import { AllowedFieldsGridLayoutDefinition, GridLayoutDefinition } from '../../layout/definition/internal-api';
+import { AllowedFieldsGridLayoutDefinition, RevGridLayoutDefinition } from '../../layout/definition/internal-api';
 import {
     AdaptedRevgridBehavioredColumnSettings,
     AdaptedRevgridBehavioredGridSettings,
@@ -77,7 +77,7 @@ export abstract class AdaptedRevgrid extends Revgrid<AdaptedRevgridBehavioredGri
 
     createGridLayoutDefinition() {
         const definitionColumns = this.createGridLayoutDefinitionColumns();
-        return new GridLayoutDefinition(definitionColumns);
+        return new RevGridLayoutDefinition(definitionColumns);
     }
 
     // autoSizeColumnWidth(columnIndex: number): void {
@@ -155,12 +155,12 @@ export abstract class AdaptedRevgrid extends Revgrid<AdaptedRevgridBehavioredGri
     private createGridLayoutDefinitionColumns() {
         const activeColumns = this.activeColumns;
         const activeCount = activeColumns.length;
-        const definitionColumns = new Array<GridLayoutDefinition.Column>(activeCount);
+        const definitionColumns = new Array<RevGridLayoutDefinition.Column>(activeCount);
 
         for (let i = 0; i < activeCount; i++) {
             const activeColumn = activeColumns[i];
             const autoSizableWidth = activeColumn.autoSizing ? undefined : activeColumn.width;
-            const definitionColumn: GridLayoutDefinition.Column = {
+            const definitionColumn: RevGridLayoutDefinition.Column = {
                 fieldName: activeColumn.field.name,
                 visible: true,
                 autoSizableWidth,

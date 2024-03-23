@@ -7,7 +7,7 @@
 import { LitIvemId, TopShareholder } from '../../../../adi/internal-api';
 import { ErrorCode, JsonElement, Ok, PickEnum, Result } from '../../../../sys/internal-api';
 import { RevFieldCustomHeadingsService } from '../../../field/internal-api';
-import { GridLayoutDefinition } from '../../../layout/internal-api';
+import { RevGridLayoutDefinition } from '../../../layout/internal-api';
 import { TopShareholderTableFieldSourceDefinition, TypedTableFieldSourceDefinition, TypedTableFieldSourceDefinitionCachingFactoryService } from '../../field-source/internal-api';
 import { TypedTableRecordSourceDefinition } from './typed-table-record-source-definition';
 
@@ -53,7 +53,7 @@ export class TopShareholderTableRecordSourceDefinition extends TypedTableRecordS
         fieldNames.push(topShareholdersFieldSourceDefinition.getSupportedFieldNameById(TopShareholder.FieldId.HolderKey));
         fieldNames.push(topShareholdersFieldSourceDefinition.getSupportedFieldNameById(TopShareholder.FieldId.SharesChanged));
 
-        return GridLayoutDefinition.createFromFieldNames(fieldNames);
+        return RevGridLayoutDefinition.createFromFieldNames(fieldNames);
     }
 }
 

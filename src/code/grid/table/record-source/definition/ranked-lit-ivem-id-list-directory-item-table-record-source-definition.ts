@@ -8,7 +8,7 @@ import { RankedLitIvemIdListDirectory } from '../../../../ranked-lit-ivem-id-lis
 import { RankedLitIvemIdListDirectoryItem } from '../../../../services/internal-api';
 import { PickEnum } from '../../../../sys/internal-api';
 import { RevFieldCustomHeadingsService } from '../../../field/internal-api';
-import { GridLayoutDefinition } from '../../../layout/internal-api';
+import { RevGridLayoutDefinition } from '../../../layout/internal-api';
 import {
     RankedLitIvemIdListDirectoryItemTableFieldSourceDefinition,
     TypedTableFieldSourceDefinition,
@@ -39,7 +39,7 @@ export class RankedLitIvemIdListDirectoryItemTableRecordSourceDefinition extends
         fieldNames.push(rankedLitIvemIdListDirectoryItemFieldSourceDefinition.getSupportedFieldNameById(RankedLitIvemIdListDirectoryItem.FieldId.Name));
         fieldNames.push(rankedLitIvemIdListDirectoryItemFieldSourceDefinition.getSupportedFieldNameById(RankedLitIvemIdListDirectoryItem.FieldId.TypeId));
 
-        return GridLayoutDefinition.createFromFieldNames(fieldNames);
+        return RevGridLayoutDefinition.createFromFieldNames(fieldNames);
     }
 }
 

@@ -7,7 +7,7 @@
 import { LitIvemBaseDetail, RankedLitIvemId } from '../../../../adi/internal-api';
 import { LitIvemIdExecuteScanRankedLitIvemIdListDefinition } from '../../../../ranked-lit-ivem-id-list/internal-api';
 import { RevFieldCustomHeadingsService } from '../../../field/internal-api';
-import { GridLayoutDefinition } from '../../../layout/internal-api';
+import { RevGridLayoutDefinition } from '../../../layout/internal-api';
 import {
     LitIvemBaseDetailTableFieldSourceDefinition,
     RankedLitIvemIdTableFieldSourceDefinition,
@@ -33,7 +33,7 @@ export class ScanTestTableRecordSourceDefinition extends RankedLitIvemIdListTabl
 
     override get defaultFieldSourceDefinitionTypeIds() { return ScanTestTableRecordSourceDefinition.defaultFieldSourceDefinitionTypeIds; }
 
-    override createDefaultLayoutDefinition(): GridLayoutDefinition {
+    override createDefaultLayoutDefinition(): RevGridLayoutDefinition {
         const rankedLitIvemIdFieldSourceDefinition = RankedLitIvemIdTableFieldSourceDefinition.get(this.tableFieldSourceDefinitionCachingFactoryService);
         const litIvemBaseDetailFieldSourceDefinition = LitIvemBaseDetailTableFieldSourceDefinition.get(this.tableFieldSourceDefinitionCachingFactoryService);
 
@@ -44,7 +44,7 @@ export class ScanTestTableRecordSourceDefinition extends RankedLitIvemIdListTabl
         fieldNames.push(rankedLitIvemIdFieldSourceDefinition.getFieldNameById(RankedLitIvemId.FieldId.RankScore));
         fieldNames.push(rankedLitIvemIdFieldSourceDefinition.getFieldNameById(RankedLitIvemId.FieldId.Rank));
 
-        return GridLayoutDefinition.createFromFieldNames(fieldNames);
+        return RevGridLayoutDefinition.createFromFieldNames(fieldNames);
     }
 }
 

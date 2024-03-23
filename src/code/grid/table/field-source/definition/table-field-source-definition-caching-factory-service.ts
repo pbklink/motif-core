@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { GridLayoutDefinition } from '../../../layout/internal-api';
+import { RevGridLayoutDefinition } from '../../../layout/internal-api';
 // import { BalancesTableFieldSourceDefinition } from './balances-table-field-source-definition';
 // import { BrokerageAccountTableFieldSourceDefinition } from './brokerage-account-table-field-source-definition';
 // import { CallPutSecurityDataItemTableFieldSourceDefinition } from './call-put-security-data-item-table-field-source-definition';
@@ -101,7 +101,7 @@ export class TableFieldSourceDefinitionCachingFactoryService<TypeId> {
         return definition;
     }
 
-    createLayoutDefinition(fieldIds: TableFieldSourceDefinition.FieldId<TypeId>[]): GridLayoutDefinition {
+    createLayoutDefinition(fieldIds: TableFieldSourceDefinition.FieldId<TypeId>[]): RevGridLayoutDefinition {
         const count = fieldIds.length;
         const fieldNames = new Array<string>(count);
         for (let i = 0; i < count; i++) {
@@ -110,6 +110,6 @@ export class TableFieldSourceDefinitionCachingFactoryService<TypeId> {
             fieldNames[i] = fieldName;
         }
 
-        return GridLayoutDefinition.createFromFieldNames(fieldNames);
+        return RevGridLayoutDefinition.createFromFieldNames(fieldNames);
     }
 }

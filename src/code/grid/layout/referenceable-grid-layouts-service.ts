@@ -4,12 +4,12 @@
  * License: motionite.trade/license/motif
  */
 
+import { RevReferenceableGridLayoutDefinition } from '../../rev/internal-api';
 import { LockOpenList } from '../../sys/internal-api';
-import { ReferenceableGridLayoutDefinition } from './definition/internal-api';
 import { ReferenceableGridLayout } from './referenceable-grid-layout';
 
 export class ReferenceableGridLayoutsService extends LockOpenList<ReferenceableGridLayout> {
-    getOrNew(definition: ReferenceableGridLayoutDefinition): ReferenceableGridLayout {
+    getOrNew(definition: RevReferenceableGridLayoutDefinition): ReferenceableGridLayout {
         let source = this.getItemByKey(definition.id);
         if (source === undefined) {
             source = this.createReferenceableGridLayout(definition);
@@ -18,7 +18,7 @@ export class ReferenceableGridLayoutsService extends LockOpenList<ReferenceableG
         return source;
     }
 
-    private createReferenceableGridLayout(definition: ReferenceableGridLayoutDefinition) {
+    private createReferenceableGridLayout(definition: RevReferenceableGridLayoutDefinition) {
         const index = this.count;
         const result = new ReferenceableGridLayout(definition, index);
         return result;

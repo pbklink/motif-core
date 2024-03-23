@@ -5,13 +5,13 @@
  */
 
 import { AssertInternalError, JsonElement } from '../../../sys/internal-api';
-import { GridSortDefinition } from '../../layout/definition/internal-api';
+import { RevGridSortDefinition } from '../../layout/definition/internal-api';
 import { TableRecordDefinition } from '../../table/internal-api';
 
 /* @public */
 export class GridRowOrderDefinition<TableFieldSourceDefinitionTypeId> {
     constructor(
-        readonly sortFields: GridSortDefinition.Field[] | undefined,
+        readonly sortFields: RevGridSortDefinition.Field[] | undefined,
         readonly recordDefinitions: TableRecordDefinition<TableFieldSourceDefinitionTypeId>[] | undefined,
     ) {
         if (recordDefinitions !== undefined) {
@@ -32,18 +32,18 @@ export namespace GridRowOrderDefinition {
         export const sortFields = 'sortFields';
     }
 
-    export function tryCreateSortFieldsFromJson(element: JsonElement): GridSortDefinition.Field[] | undefined {
+    export function tryCreateSortFieldsFromJson(element: JsonElement): RevGridSortDefinition.Field[] | undefined {
         const sortFieldElementsResult = element.tryGetElementArray(JsonName.sortFields);
         if (sortFieldElementsResult.isErr()) {
             return undefined;
         } else {
             const sortFieldElements = sortFieldElementsResult.value;
             const maxCount = sortFieldElements.length;
-            const sortFields = new Array<GridSortDefinition.Field>(maxCount);
+            const sortFields = new Array<RevGridSortDefinition.Field>(maxCount);
             let count = 0;
             for (let i = 0; i < maxCount; i++) {
                 const sortFieldElement = sortFieldElements[i];
-                const sortField = GridSortDefinition.Field.tryCreateFromJson(sortFieldElement);
+                const sortField = RevGridSortDefinition.Field.tryCreateFromJson(sortFieldElement);
                 if (sortField === undefined) {
                     break;
                 } else {
@@ -60,13 +60,13 @@ export namespace GridRowOrderDefinition {
         }
     }
 
-    export function saveSortFieldsToJson(sortFields: GridSortDefinition.Field[], element: JsonElement) {
+    export function saveSortFieldsToJson(sortFields: RevGridSortDefinition.Field[], element: JsonElement) {
         const count = sortFields.length;
         const sortFieldElements = new Array<JsonElement>(count);
         for (let i = 0; i < count; i++) {
             const sortField = sortFields[i];
             const sortFieldElement = new JsonElement();
-            GridSortDefinition.Field.saveToJson(sortField, sortFieldElement);
+            RevGridSortDefinition.Field.saveToJson(sortField, sortFieldElement);
             sortFieldElements[i] = sortFieldElement;
         }
         element.setElementArray(JsonName.sortFields, sortFieldElements);

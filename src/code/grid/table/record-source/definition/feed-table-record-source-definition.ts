@@ -7,7 +7,7 @@
 import { Feed } from '../../../../adi/internal-api';
 import { PickEnum } from '../../../../sys/internal-api';
 import { RevFieldCustomHeadingsService } from '../../../field/internal-api';
-import { GridLayoutDefinition } from '../../../layout/internal-api';
+import { RevGridLayoutDefinition } from '../../../layout/internal-api';
 import { FeedTableFieldSourceDefinition, TypedTableFieldSourceDefinition, TypedTableFieldSourceDefinitionCachingFactoryService } from '../../field-source/internal-api';
 import { TypedTableRecordSourceDefinition } from './typed-table-record-source-definition';
 
@@ -36,7 +36,7 @@ export class FeedTableRecordSourceDefinition extends TypedTableRecordSourceDefin
         fieldNames.push(feedFieldSourceDefinition.getSupportedFieldNameById(Feed.FieldId.ClassId));
         fieldNames.push(feedFieldSourceDefinition.getSupportedFieldNameById(Feed.FieldId.StatusId));
 
-        return GridLayoutDefinition.createFromFieldNames(fieldNames);
+        return RevGridLayoutDefinition.createFromFieldNames(fieldNames);
     }
 }
 

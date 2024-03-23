@@ -6,7 +6,7 @@
 
 import { PickEnum } from '../../../sys/internal-api';
 import { RevFieldCustomHeadingsService } from '../../field/internal-api';
-import { GridLayoutDefinition } from '../../layout/internal-api';
+import { RevGridLayoutDefinition } from '../../layout/internal-api';
 import { TypedTableFieldSourceDefinition, TypedTableFieldSourceDefinitionCachingFactoryService, TypedTableRecordSourceDefinition } from '../../table/internal-api';
 import { EditableGridLayoutDefinitionColumn } from './editable-grid-layout-definition-column';
 import { EditableGridLayoutDefinitionColumnList } from './editable-grid-layout-definition-column-list';
@@ -39,7 +39,7 @@ export class EditableGridLayoutDefinitionColumnTableRecordSourceDefinition exten
         fieldNames.push(fieldSourceDefinition.getFieldNameById(EditableGridLayoutDefinitionColumn.FieldId.Width));
         fieldNames.push(fieldSourceDefinition.getFieldNameById(EditableGridLayoutDefinitionColumn.FieldId.Visible));
 
-        return GridLayoutDefinition.createFromFieldNames(fieldNames);
+        return RevGridLayoutDefinition.createFromFieldNames(fieldNames);
     }
 }
 

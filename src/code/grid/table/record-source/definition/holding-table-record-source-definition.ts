@@ -7,7 +7,7 @@
 import { Account, BrokerageAccountGroup, Holding } from '../../../../adi/internal-api';
 import { PickEnum } from '../../../../sys/internal-api';
 import { RevFieldCustomHeadingsService } from '../../../field/internal-api';
-import { GridLayoutDefinition } from '../../../layout/internal-api';
+import { RevGridLayoutDefinition } from '../../../layout/internal-api';
 import {
     BrokerageAccountTableFieldSourceDefinition,
     HoldingTableFieldSourceDefinition,
@@ -51,7 +51,7 @@ export class HoldingTableRecordSourceDefinition extends BrokerageAccountGroupTab
         fieldNames.push(brokerageAccountFieldSourceDefinition.getSupportedFieldNameById(Account.FieldId.BranchCode));
         fieldNames.push(brokerageAccountFieldSourceDefinition.getSupportedFieldNameById(Account.FieldId.AdvisorCode));
 
-        return GridLayoutDefinition.createFromFieldNames(fieldNames);
+        return RevGridLayoutDefinition.createFromFieldNames(fieldNames);
     }
 }
 

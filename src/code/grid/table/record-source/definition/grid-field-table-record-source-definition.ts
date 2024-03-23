@@ -6,7 +6,7 @@
 
 import { PickEnum } from '../../../../sys/internal-api';
 import { GridField, RevFieldCustomHeadingsService } from '../../../field/internal-api';
-import { GridLayoutDefinition } from '../../../layout/internal-api';
+import { RevGridLayoutDefinition } from '../../../layout/internal-api';
 import { GridFieldTableFieldSourceDefinition, TypedTableFieldSourceDefinition, TypedTableFieldSourceDefinitionCachingFactoryService } from '../../field-source/internal-api';
 import { TypedTableRecordSourceDefinition } from './typed-table-record-source-definition';
 
@@ -35,7 +35,7 @@ export class GridFieldTableRecordSourceDefinition extends TypedTableRecordSource
         fieldNames.push(gridFieldFieldSourceDefinition.getSupportedFieldNameById(GridField.FieldId.Heading));
         fieldNames.push(gridFieldFieldSourceDefinition.getSupportedFieldNameById(GridField.FieldId.SourceName));
 
-        return GridLayoutDefinition.createFromFieldNames(fieldNames);
+        return RevGridLayoutDefinition.createFromFieldNames(fieldNames);
     }
 }
 

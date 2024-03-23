@@ -8,7 +8,7 @@ import { IvemId, SecurityDataItem } from '../../../../adi/internal-api';
 import { CallPut } from '../../../../services/internal-api';
 import { ErrorCode, JsonElement, JsonElementErr, Ok, PickEnum, Result } from '../../../../sys/internal-api';
 import { RevFieldCustomHeadingsService } from '../../../field/internal-api';
-import { GridLayoutDefinition } from '../../../layout/internal-api';
+import { RevGridLayoutDefinition } from '../../../layout/internal-api';
 import {
     CallPutTableFieldSourceDefinition,
     CallSecurityDataItemTableFieldSourceDefinition,
@@ -70,7 +70,7 @@ export class CallPutFromUnderlyingTableRecordSourceDefinition extends TypedTable
         fieldNames.push(putSecurityDataItemFieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.Close));
         fieldNames.push(putSecurityDataItemFieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.Volume));
 
-        return GridLayoutDefinition.createFromFieldNames(fieldNames);
+        return RevGridLayoutDefinition.createFromFieldNames(fieldNames);
     }
 
 }

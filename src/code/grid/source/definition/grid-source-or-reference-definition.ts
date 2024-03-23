@@ -5,7 +5,7 @@
  */
 
 import { AssertInternalError, ErrorCode, Guid, JsonElement, JsonElementErr, Ok, Result } from '../../../sys/internal-api';
-import { GridLayoutOrReferenceDefinition } from '../../layout/internal-api';
+import { RevGridLayoutOrReferenceDefinition } from '../../layout/internal-api';
 import { TableRecordSourceDefinitionFromJsonFactory } from '../../table/internal-api';
 import { GridSourceDefinition } from './grid-source-definition';
 
@@ -39,7 +39,7 @@ export class GridSourceOrReferenceDefinition<TableRecordSourceDefinitionTypeId, 
         return this.gridSourceDefinition !== undefined;
     }
 
-    updateGridLayoutDefinitionOrReference(value: GridLayoutOrReferenceDefinition) {
+    updateGridLayoutDefinitionOrReference(value: RevGridLayoutOrReferenceDefinition) {
         if (this.gridSourceDefinition === undefined) {
             throw new AssertInternalError('GSDONRS45000');
         } else {

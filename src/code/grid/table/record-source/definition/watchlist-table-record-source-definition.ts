@@ -9,7 +9,7 @@ import {
     LitIvemIdArrayRankedLitIvemIdListDefinition, ScanIdRankedLitIvemIdListDefinition
 } from "../../../../ranked-lit-ivem-id-list/internal-api";
 import { RevFieldCustomHeadingsService } from '../../../field/internal-api';
-import { GridLayoutDefinition } from '../../../layout/internal-api';
+import { RevGridLayoutDefinition } from '../../../layout/internal-api';
 import {
     LitIvemBaseDetailTableFieldSourceDefinition,
     RankedLitIvemIdTableFieldSourceDefinition,
@@ -79,7 +79,7 @@ export class WatchlistTableRecordSourceDefinition extends RankedLitIvemIdListTab
         // fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.Trend));
         fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.ValueTraded));
 
-        return GridLayoutDefinition.createFromFieldNames(fieldNames);
+        return RevGridLayoutDefinition.createFromFieldNames(fieldNames);
     }
 }
 
@@ -109,7 +109,7 @@ export namespace WatchlistTableRecordSourceDefinition {
     export function createLayoutDefinition(
         fieldSourceDefinitionRegistryService: TypedTableFieldSourceDefinitionCachingFactoryService,
         fieldIds: FieldId[],
-    ): GridLayoutDefinition {
+    ): RevGridLayoutDefinition {
         return fieldSourceDefinitionRegistryService.createLayoutDefinition(fieldIds);
     }
 

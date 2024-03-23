@@ -1,15 +1,9 @@
-/**
- * %license Motif
- * (c) 2021 Paritech Wealth Technology
- * License: motionite.trade/license/motif
- */
+// (c) 2024 Xilytix Pty Ltd / Paul Klink
 
-import { JsonElement } from '../../../sys/internal-api';
+import { JsonElement } from '@xilytix/sysutils';
 
 /* @public */
-export type GridSortDefinition = GridSortDefinition.Field[];
-
-export namespace GridSortDefinition {
+export namespace RevGridSortDefinition {
     export interface Field {
         name: string;
         ascending: boolean;

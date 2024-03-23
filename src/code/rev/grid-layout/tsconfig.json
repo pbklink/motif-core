@@ -7,16 +7,12 @@
 {
   "extends": "../../tsconfig.code.json",
   "compilerOptions": {
-    "tsBuildInfoFile": "../../../../tsbuildinfo/grid-layout.tsbuildinfo"
+    "tsBuildInfoFile": "../../../../tsbuildinfo/rev-layout.tsbuildinfo"
   },
   "include": [
     "*.ts"
   ],
   "references": [
     { "path": "./definition/tsconfig.json" },
-    { "path": "../../services/tsconfig.json" },
-    { "path": "../../sys/tsconfig.json" },
-    { "path": "../../res/tsconfig.json" },
-    { "path": "../../rev/tsconfig.json" },
   ]
 }

@@ -8,9 +8,9 @@ import { AssertInternalError, Err, ErrorCode, Guid, IndexedRecord, LockOpenListI
 import {
     GridLayout,
     GridLayoutOrReference,
-    GridLayoutOrReferenceDefinition,
     ReferenceableGridLayout,
-    ReferenceableGridLayoutsService
+    ReferenceableGridLayoutsService,
+    RevGridLayoutOrReferenceDefinition
 } from "../layout/internal-api";
 import { Table, TableFieldSourceDefinition, TableFieldSourceDefinitionFactory, TableRecordSource, TableRecordSourceDefinition, TableRecordSourceFactory } from '../table/internal-api';
 import { GridRowOrderDefinition, GridSourceDefinition } from './definition/internal-api';
@@ -27,7 +27,7 @@ export class GridSource<TableRecordSourceDefinitionTypeId, TableFieldSourceDefin
     private readonly _lockOpenManager: LockOpenManager<GridSource<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, Badness>>;
 
     private readonly _tableRecordSourceDefinition: TableRecordSourceDefinition<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId>;
-    private _gridLayoutOrReferenceDefinition: GridLayoutOrReferenceDefinition | undefined;
+    private _gridLayoutOrReferenceDefinition: RevGridLayoutOrReferenceDefinition | undefined;
     private _initialRowOrderDefinition: GridRowOrderDefinition<TableFieldSourceDefinitionTypeId> | undefined;
 
     private _lockedTableRecordSource: TableRecordSource<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, Badness> | undefined;
@@ -116,13 +116,13 @@ export class GridSource<TableRecordSourceDefinitionTypeId, TableFieldSourceDefin
         }
     }
 
-    createGridLayoutOrReferenceDefinition(): GridLayoutOrReferenceDefinition {
+    createGridLayoutOrReferenceDefinition(): RevGridLayoutOrReferenceDefinition {
         if (this._lockedReferenceableGridLayout !== undefined) {
-            return new GridLayoutOrReferenceDefinition(this._lockedReferenceableGridLayout.id);
+            return new RevGridLayoutOrReferenceDefinition(this._lockedReferenceableGridLayout.id);
         } else {
             if (this._lockedGridLayout !== undefined) {
                 const gridLayoutDefinition = this._lockedGridLayout.createDefinition();
-                return new GridLayoutOrReferenceDefinition(gridLayoutDefinition);
+                return new RevGridLayoutOrReferenceDefinition(gridLayoutDefinition);
             } else {
                 throw new AssertInternalError('GSCGLONRD23008');
             }
@@ -131,7 +131,7 @@ export class GridSource<TableRecordSourceDefinitionTypeId, TableFieldSourceDefin
 
     /** Can only call if a GridSource is already opened */
     async tryOpenGridLayoutOrReferenceDefinition(
-        definition: GridLayoutOrReferenceDefinition,
+        definition: RevGridLayoutOrReferenceDefinition,
         opener: LockOpenListItem.Opener
     ): Promise<Result<void>> {
         const lockResult = await this.tryCreateAndLockGridLayoutFromDefinition(definition, opener);
@@ -177,19 +177,19 @@ export class GridSource<TableRecordSourceDefinitionTypeId, TableFieldSourceDefin
     }
 
     private async tryLockGridLayout(locker: LockOpenListItem.Locker): Promise<Result<GridSource.LockedGridLayouts>> {
-        let gridLayoutOrReferenceDefinition: GridLayoutOrReferenceDefinition;
+        let gridLayoutOrReferenceDefinition: RevGridLayoutOrReferenceDefinition;
         if (this._gridLayoutOrReferenceDefinition !== undefined) {
             gridLayoutOrReferenceDefinition = this._gridLayoutOrReferenceDefinition;
         } else {
             const gridLayoutDefinition = this._tableRecordSourceDefinition.createDefaultLayoutDefinition();
-            gridLayoutOrReferenceDefinition = new GridLayoutOrReferenceDefinition(gridLayoutDefinition);
+            gridLayoutOrReferenceDefinition = new RevGridLayoutOrReferenceDefinition(gridLayoutDefinition);
         }
         const result = await this.tryCreateAndLockGridLayoutFromDefinition(gridLayoutOrReferenceDefinition, locker);
         return result;
     }
 
     private async tryCreateAndLockGridLayoutFromDefinition(
-        gridLayoutOrReferenceDefinition: GridLayoutOrReferenceDefinition,
+        gridLayoutOrReferenceDefinition: RevGridLayoutOrReferenceDefinition,
         locker: LockOpenListItem.Locker
     ): Promise<Result<GridSource.LockedGridLayouts>> {
         const gridLayoutOrReference = new GridLayoutOrReference(

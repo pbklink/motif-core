@@ -7,7 +7,7 @@
 import { LitIvemId } from '../../../../adi/internal-api';
 import { ErrorCode, JsonElement, JsonElementErr, Ok, PickEnum, Result, UiComparableList } from '../../../../sys/internal-api';
 import { RevFieldCustomHeadingsService } from '../../../field/internal-api';
-import { GridLayoutDefinition } from '../../../layout/internal-api';
+import { RevGridLayoutDefinition } from '../../../layout/internal-api';
 import {
     LitIvemBaseDetailTableFieldSourceDefinition,
     LitIvemIdTableFieldSourceDefinition,
@@ -42,14 +42,14 @@ export class LitIvemIdComparableListTableRecordSourceDefinition extends BadnessL
         element.setElementArray(LitIvemIdComparableListTableRecordSourceDefinition.JsonName.list, listElementArray);
     }
 
-    override createDefaultLayoutDefinition(): GridLayoutDefinition {
+    override createDefaultLayoutDefinition(): RevGridLayoutDefinition {
         const litIvemIdFieldSourceDefinition = LitIvemIdTableFieldSourceDefinition.get(this.tableFieldSourceDefinitionCachingFactoryService);
 
         const fieldNames = new Array<string>();
 
         fieldNames.push(litIvemIdFieldSourceDefinition.getFieldNameById(LitIvemId.FieldId.LitIvemId));
 
-        return GridLayoutDefinition.createFromFieldNames(fieldNames);
+        return RevGridLayoutDefinition.createFromFieldNames(fieldNames);
     }
 }
 
@@ -125,7 +125,7 @@ export namespace LitIvemIdComparableListTableRecordSourceDefinition {
     export function createLayoutDefinition(
         fieldSourceDefinitionRegistryService: TypedTableFieldSourceDefinitionCachingFactoryService,
         fieldIds: FieldId[],
-    ): GridLayoutDefinition {
+    ): RevGridLayoutDefinition {
         return fieldSourceDefinitionRegistryService.createLayoutDefinition(fieldIds);
     }
 

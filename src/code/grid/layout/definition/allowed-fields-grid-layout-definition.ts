@@ -4,19 +4,12 @@
  * License: motionite.trade/license/motif
  */
 
-import { BidAskPair, Integer } from '../../../sys/internal-api';
-import { AllowedGridField } from '../../field/internal-api';
-import { GridLayoutDefinition } from './grid-layout-definition';
+import { RevAllowedFieldsGridLayoutDefinition } from '../../../rev/internal-api';
+import { RenderValue } from '../../../services/internal-api';
+import { BidAskPair } from '../../../sys/internal-api';
 
-export class AllowedFieldsGridLayoutDefinition extends GridLayoutDefinition {
+export class AllowedFieldsGridLayoutDefinition extends RevAllowedFieldsGridLayoutDefinition<RenderValue.TypeId, RenderValue.Attribute.TypeId> {
     // Uses AllowedGridField instead of RevFieldDefinition as heading can be changed at runtime
-    constructor(
-        columns: readonly GridLayoutDefinition.Column[],
-        readonly allowedFields: readonly AllowedGridField[],
-        readonly fixedColumnCount: Integer,
-    ) {
-        super(columns);
-    }
 }
 
 export type BidAskAllowedFieldsGridLayoutDefinitions = BidAskPair<AllowedFieldsGridLayoutDefinition>;

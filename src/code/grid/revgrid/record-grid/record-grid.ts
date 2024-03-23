@@ -20,6 +20,7 @@ import {
     Subgrid,
     ViewCell
 } from '@xilytix/revgrid';
+import { RevGridLayout } from '../../../rev/internal-api';
 import { SettingsService } from '../../../services/internal-api';
 import {
     AssertInternalError,
@@ -30,8 +31,8 @@ import {
 import { GridField } from '../../field/internal-api';
 import {
     GridLayout,
-    GridLayoutDefinition,
-    GridSortDefinition,
+    RevGridLayoutDefinition,
+    RevGridSortDefinition,
 } from '../../layout/internal-api';
 import { TypedGridRowOrderDefinition } from '../../typed/internal-api';
 import { AdaptedRevgrid, SingleHeadingGridDataServer } from '../adapted-revgrid/internal-api';
@@ -40,7 +41,7 @@ import { RecordGridDataServer } from './record-grid-data-server';
 import { RecordGridSchemaServer } from './record-grid-schema-server';
 
 /** @public */
-export class RecordGrid extends AdaptedRevgrid implements GridLayout.ChangeInitiator {
+export class RecordGrid extends AdaptedRevgrid implements RevGridLayout.ChangeInitiator {
     declare schemaServer: RecordGridSchemaServer;
     declare mainDataServer: RecordGridDataServer;
     readonly headerDataServer: SingleHeadingGridDataServer;
@@ -224,7 +225,7 @@ export class RecordGrid extends AdaptedRevgrid implements GridLayout.ChangeIniti
         }
     }
 
-    applyGridLayoutDefinition(value: GridLayoutDefinition) {
+    applyGridLayoutDefinition(value: RevGridLayoutDefinition) {
         if (this._gridLayout === undefined) {
             throw new AssertInternalError('RGSLD34488');
         } else {
@@ -232,13 +233,13 @@ export class RecordGrid extends AdaptedRevgrid implements GridLayout.ChangeIniti
         }
     }
 
-    getSortFields(): GridSortDefinition.Field[] | undefined {
+    getSortFields(): RevGridSortDefinition.Field[] | undefined {
         const specifiers = this.mainDataServer.sortFieldSpecifiers;
         const count = specifiers.length;
         if (count === 0) {
             return undefined;
         } else {
-            const fieldDefinitions = new Array<GridSortDefinition.Field>(count);
+            const fieldDefinitions = new Array<RevGridSortDefinition.Field>(count);
             const fieldCount = this.fieldCount;
             for (let i = 0; i < count; i++) {
                 const specifier = specifiers[i];
@@ -247,7 +248,7 @@ export class RecordGrid extends AdaptedRevgrid implements GridLayout.ChangeIniti
                     throw new AssertInternalError('RCGSC81899');
                 } else {
                     const field = this.getField(fieldIndex);
-                    const fieldDefinition: GridSortDefinition.Field = {
+                    const fieldDefinition: RevGridSortDefinition.Field = {
                         name: field.name,
                         ascending: specifier.ascending,
                     };
@@ -496,7 +497,7 @@ export class RecordGrid extends AdaptedRevgrid implements GridLayout.ChangeIniti
         this.mainDataServer.invalidateAll();
     }
 
-    private applySortFields(sortFields: GridSortDefinition.Field[] | undefined) {
+    private applySortFields(sortFields: RevGridSortDefinition.Field[] | undefined) {
         if (sortFields === undefined) {
             this.mainDataServer.clearSort();
         } else {
@@ -527,7 +528,7 @@ export class RecordGrid extends AdaptedRevgrid implements GridLayout.ChangeIniti
     }
 
 
-    private processGridLayoutChangedEvent(initiator: GridLayout.ChangeInitiator) {
+    private processGridLayoutChangedEvent(initiator: RevGridLayout.ChangeInitiator) {
         if (initiator !== this) {
             if (this._allowedFields !== undefined) {
                 if (this._gridLayout === undefined) {
@@ -539,7 +540,7 @@ export class RecordGrid extends AdaptedRevgrid implements GridLayout.ChangeIniti
         }
     }
 
-    private processGridLayoutWidthsChangedEvent(initiator: GridLayout.ChangeInitiator) {
+    private processGridLayoutWidthsChangedEvent(initiator: RevGridLayout.ChangeInitiator) {
         if (initiator !== this) {
             const columnNameWidths = this.createColumnNameWidths();
             this.setColumnWidthsByName(columnNameWidths);

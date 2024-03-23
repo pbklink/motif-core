@@ -23,7 +23,7 @@ import {
     UnreachableCaseError
 } from "../../../sys/internal-api";
 import { GridField, RevFieldDefinition, RevFieldSourceDefinition } from '../../field/internal-api';
-import { GridLayoutDefinition } from '../../layout/internal-api';
+import { RevGridLayoutDefinition } from '../../layout/internal-api';
 import { ColorSchemeGridRecordStore } from './color-scheme-grid-record-store';
 
 export abstract class ColorSchemeGridField extends GridField implements GridRevRecordField {
@@ -112,19 +112,19 @@ export namespace ColorSchemeGridField {
         ];
 
         const count = sourcelessFieldNames.length;
-        const columns = new Array<GridLayoutDefinition.Column>(count);
+        const columns = new Array<RevGridLayoutDefinition.Column>(count);
         for (let i = 0; i < count; i++) {
             const sourceName = ColorSchemeGridField.sourceDefinition.name;
             const sourcelessFieldName = sourcelessFieldNames[i];
-            const fieldName = RevFieldDefinition.composeName(sourceName, sourcelessFieldName);
-            const column: GridLayoutDefinition.Column = {
+            const fieldName = RevFieldDefinition.Name.compose(sourceName, sourcelessFieldName);
+            const column: RevGridLayoutDefinition.Column = {
                 fieldName,
                 visible: undefined,
                 autoSizableWidth: undefined,
             };
             columns[i] = column;
         }
-        return new GridLayoutDefinition(columns);
+        return new RevGridLayoutDefinition(columns);
     }
 }
 

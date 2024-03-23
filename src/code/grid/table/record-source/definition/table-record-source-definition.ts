@@ -12,7 +12,7 @@ import {
     Result
 } from "../../../../sys/internal-api";
 import { AllowedGridField, GridField, RevFieldCustomHeadingsService } from '../../../field/internal-api';
-import { GridLayoutDefinition } from '../../../layout/internal-api';
+import { RevGridLayoutDefinition } from '../../../layout/internal-api';
 import {
     TableFieldSourceDefinitionCachingFactoryService
 } from "../../field-source/internal-api";
@@ -69,7 +69,7 @@ export abstract class TableRecordSourceDefinition<TypeId, TableFieldSourceDefini
         element.setString(TableRecordSourceDefinition.jsonTag_TypeId, this.name);
     }
 
-    abstract createDefaultLayoutDefinition(): GridLayoutDefinition;
+    abstract createDefaultLayoutDefinition(): RevGridLayoutDefinition;
 }
 
 export namespace TableRecordSourceDefinition {

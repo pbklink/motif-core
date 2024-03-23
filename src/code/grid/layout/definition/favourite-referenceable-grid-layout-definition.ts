@@ -4,11 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
-import { Guid, IndexedRecord } from '../../../sys/internal-api';
+import { RevFavouriteReferenceableGridLayoutDefinition } from '../../../rev/internal-api';
 
 /** @public */
-export class FavouriteReferenceableGridLayoutDefinition implements IndexedRecord {
-    name: string;
-    id: Guid;
-    index: number;
+export class FavouriteReferenceableGridLayoutDefinition extends RevFavouriteReferenceableGridLayoutDefinition {
 }

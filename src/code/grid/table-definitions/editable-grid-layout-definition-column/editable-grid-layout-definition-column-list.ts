@@ -6,7 +6,7 @@
 
 import { AssertInternalError, Integer, moveElementsInArray, MultiEvent, RecordList, UsableListChangeTypeId } from '../../../sys/internal-api';
 import { GridField } from '../../field/internal-api';
-import { GridLayoutDefinition } from '../../layout/internal-api';
+import { RevGridLayoutDefinition } from '../../layout/internal-api';
 import { EditableGridLayoutDefinitionColumn } from './editable-grid-layout-definition-column';
 
 export class EditableGridLayoutDefinitionColumnList implements RecordList<EditableGridLayoutDefinitionColumn> {
@@ -47,7 +47,7 @@ export class EditableGridLayoutDefinitionColumnList implements RecordList<Editab
         return -1;
     }
 
-    load(allowedFields: readonly GridField[], layoutDefinition: GridLayoutDefinition, fixedColumnCount: Integer) {
+    load(allowedFields: readonly GridField[], layoutDefinition: RevGridLayoutDefinition, fixedColumnCount: Integer) {
         const oldCount = this._records.length;
         if (oldCount > 0) {
             this.notifyListChange(UsableListChangeTypeId.Clear, 0, oldCount);
@@ -84,10 +84,10 @@ export class EditableGridLayoutDefinitionColumnList implements RecordList<Editab
 
     createGridLayoutDefinition() {
         const count = this._records.length;
-        const columns = new Array<GridLayoutDefinition.Column>(count);
+        const columns = new Array<RevGridLayoutDefinition.Column>(count);
         for (let i = 0; i < count; i++) {
             const record = this._records[i];
-            const column: GridLayoutDefinition.Column = {
+            const column: RevGridLayoutDefinition.Column = {
                 fieldName: record.fieldName,
                 autoSizableWidth: record.width,
                 visible: record.visible,
@@ -95,7 +95,7 @@ export class EditableGridLayoutDefinitionColumnList implements RecordList<Editab
             columns[i] = column;
         }
 
-        return new GridLayoutDefinition(columns);
+        return new RevGridLayoutDefinition(columns);
     }
 
     insert(index: Integer, records: EditableGridLayoutDefinitionColumn[]) {

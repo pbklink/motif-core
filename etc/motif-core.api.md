@@ -453,7 +453,7 @@ export abstract class AdaptedRevgrid extends Revgrid<AdaptedRevgridBehavioredGri
     // (undocumented)
     createAllowedFieldsGridLayoutDefinition(allowedFields: readonly AllowedGridField[]): AllowedFieldsGridLayoutDefinition;
     // (undocumented)
-    createGridLayoutDefinition(): GridLayoutDefinition;
+    createGridLayoutDefinition(): RevGridLayoutDefinition;
     // (undocumented)
     customiseSettingsForNewColumnEventer: AdaptedRevgrid.CustomiseSettingsForNewColumnEventer;
     // (undocumented)
@@ -1179,15 +1179,11 @@ export class AllowedExchangesExplicitElementsArrayUiAction extends EnumExplicitE
     getElementPropertiesArray(): TypedExplicitElementsArrayUiAction.ElementProperties<ExchangeId>[];
 }
 
+// Warning: (ae-forgotten-export) The symbol "RevAllowedFieldsGridLayoutDefinition" needs to be exported by the entry point public-api.d.ts
 // Warning: (ae-missing-release-tag) "AllowedFieldsGridLayoutDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class AllowedFieldsGridLayoutDefinition extends GridLayoutDefinition {
-    constructor(columns: readonly GridLayoutDefinition.Column[], allowedFields: readonly AllowedGridField[], fixedColumnCount: Integer);
-    // (undocumented)
-    readonly allowedFields: readonly AllowedGridField[];
-    // (undocumented)
-    readonly fixedColumnCount: Integer;
+export class AllowedFieldsGridLayoutDefinition extends RevAllowedFieldsGridLayoutDefinition<RenderValue.TypeId, RenderValue.Attribute.TypeId> {
 }
 
 // Warning: (ae-forgotten-export) The symbol "RevAllowedField" needs to be exported by the entry point public-api.d.ts
@@ -2216,7 +2212,7 @@ export class BalancesTableRecordSource extends BrokerageAccountGroupTableRecordS
 export class BalancesTableRecordSourceDefinition extends BrokerageAccountGroupTableRecordSourceDefinition {
     constructor(customHeadingsService: RevFieldCustomHeadingsService, tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService, brokerageAccountGroup: BrokerageAccountGroup);
     // (undocumented)
-    createDefaultLayoutDefinition(): GridLayoutDefinition;
+    createDefaultLayoutDefinition(): RevGridLayoutDefinition;
 }
 
 // @public (undocumented)
@@ -2559,7 +2555,7 @@ export type BidAskAllowedFieldsGridLayoutDefinitions = BidAskPair<AllowedFieldsG
 // Warning: (ae-missing-release-tag) "BidAskGridLayoutDefinitions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export type BidAskGridLayoutDefinitions = BidAskPair<GridLayoutDefinition>;
+export type BidAskGridLayoutDefinitions = BidAskPair<RevGridLayoutDefinition>;
 
 // @public (undocumented)
 export interface BidAskPair<T> {
@@ -3177,7 +3173,7 @@ export class BrokerageAccountTableRecordSource extends SingleDataItemRecordTable
 export class BrokerageAccountTableRecordSourceDefinition extends TypedTableRecordSourceDefinition {
     constructor(customHeadingsService: RevFieldCustomHeadingsService, tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService);
     // (undocumented)
-    createDefaultLayoutDefinition(): GridLayoutDefinition;
+    createDefaultLayoutDefinition(): RevGridLayoutDefinition;
 }
 
 // @public (undocumented)
@@ -3444,7 +3440,7 @@ export class CallPutFromUnderlyingTableRecordSource extends SingleDataItemTableR
 export class CallPutFromUnderlyingTableRecordSourceDefinition extends TypedTableRecordSourceDefinition {
     constructor(customHeadingsService: RevFieldCustomHeadingsService, tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService, underlyingIvemId: IvemId);
     // (undocumented)
-    createDefaultLayoutDefinition(): GridLayoutDefinition;
+    createDefaultLayoutDefinition(): RevGridLayoutDefinition;
     // (undocumented)
     saveToJson(element: JsonElement): void;
     // (undocumented)
@@ -4590,7 +4586,7 @@ export abstract class ColorSchemeGridField extends GridField implements GridRevR
 // @public (undocumented)
 export namespace ColorSchemeGridField {
     // (undocumented)
-    export function createDefaultGridLayoutDefinition(): GridLayoutDefinition;
+    export function createDefaultGridLayoutDefinition(): RevGridLayoutDefinition;
     const // (undocumented)
     allFieldNames: FieldName[];
     const // (undocumented)
@@ -6948,7 +6944,7 @@ export namespace DayTradesGridField {
     const // (undocumented)
     idCount: number;
     // (undocumented)
-    export function createDefaultGridLayoutDefinition(): GridLayoutDefinition;
+    export function createDefaultGridLayoutDefinition(): RevGridLayoutDefinition;
     const // (undocumented)
     sourceDefinition: RevFieldSourceDefinition;
     // (undocumented)
@@ -7894,7 +7890,7 @@ export class EditableGridLayoutDefinitionColumnList implements RecordList<Editab
     // (undocumented)
     get count(): number;
     // (undocumented)
-    createGridLayoutDefinition(): GridLayoutDefinition;
+    createGridLayoutDefinition(): RevGridLayoutDefinition;
     // (undocumented)
     get fixedColumnCount(): number;
     // (undocumented)
@@ -7908,7 +7904,7 @@ export class EditableGridLayoutDefinitionColumnList implements RecordList<Editab
     // (undocumented)
     insert(index: Integer, records: EditableGridLayoutDefinitionColumn[]): void;
     // (undocumented)
-    load(allowedFields: readonly GridField[], layoutDefinition: GridLayoutDefinition, fixedColumnCount: Integer): void;
+    load(allowedFields: readonly GridField[], layoutDefinition: RevGridLayoutDefinition, fixedColumnCount: Integer): void;
     // (undocumented)
     move(fromIndex: Integer, toIndex: Integer, count: Integer): void;
     // (undocumented)
@@ -8028,7 +8024,7 @@ export class EditableGridLayoutDefinitionColumnTableRecordSource extends TypedTa
 export class EditableGridLayoutDefinitionColumnTableRecordSourceDefinition extends TypedTableRecordSourceDefinition {
     constructor(customHeadingsService: RevFieldCustomHeadingsService, tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService, list: EditableGridLayoutDefinitionColumnList);
     // (undocumented)
-    createDefaultLayoutDefinition(): GridLayoutDefinition;
+    createDefaultLayoutDefinition(): RevGridLayoutDefinition;
     // (undocumented)
     readonly list: EditableGridLayoutDefinitionColumnList;
 }
@@ -8430,13 +8426,9 @@ export const enum ErrorCode {
     // (undocumented)
     GridLayoutColumnNotFoundForField = "GLCNFFF95224",
     // (undocumented)
-    GridLayoutDefinition_ColumnsElementNotSpecified = "GLDCENS10883",
+    GridLayoutDefinition_TryCreateFromJson = "GLDTCFJ10883",
     // (undocumented)
-    GridLayoutDefinition_TryCreateFromJsonColumns = "GLDTCFJC10883",
-    // (undocumented)
-    GridLayoutDefinitionOrReference_BothDefinitionAndReferenceAreNotSpecified = "GLDORBDARANS66334",
-    // (undocumented)
-    GridLayoutDefinitionOrReference_GridLayoutDefinitionIsInvalid = "GLDORGSDII66334",
+    GridLayoutDefinitionOrReference_TryCreateFromJson = "GLDORTCFJ66334",
     // (undocumented)
     GridLayoutDefinitionOrReferenceFactoryService_IsReferenceNotSpecified = "GLDORFSIRNS55509",
     // (undocumented)
@@ -8650,11 +8642,7 @@ export const enum ErrorCode {
     // (undocumented)
     RankedLitIvemIdListTableRecordSourceDefinition_DefinitionJsonNotSpecified = "RLIILTRSDJNS12209",
     // (undocumented)
-    ReferenceableGridLayoutDefinition_JsonColumns = "RGLDJC10883",
-    // (undocumented)
-    ReferenceableGridLayoutDefinition_JsonId = "RGLDJI10883",
-    // (undocumented)
-    ReferenceableGridLayoutDefinition_JsonName = "RGLDJN10883",
+    ReferenceableGridLayoutDefinition_TryCreateReferenceableFromJson = "RGLDTCRFJ10883",
     // (undocumented)
     ReferenceableGridSourceDefinition_IdNotSpecified = "RGSDINS30899",
     // (undocumented)
@@ -9719,20 +9707,10 @@ export class FaultedTableValue extends BooleanTableValue {
     constructor();
 }
 
+// Warning: (ae-forgotten-export) The symbol "RevFavouriteReferenceableGridLayoutDefinition" needs to be exported by the entry point public-api.d.ts
+//
 // @public (undocumented)
-export class FavouriteReferenceableGridLayoutDefinition implements IndexedRecord {
-    // (undocumented)
-    id: Guid;
-    // (undocumented)
-    index: number;
-    // (undocumented)
-    name: string;
-}
-
-// @public (undocumented)
-export class FavouriteReferenceableGridLayoutDefinitionsStoreService {
-    // (undocumented)
-    name: string;
+export class FavouriteReferenceableGridLayoutDefinition extends RevFavouriteReferenceableGridLayoutDefinition {
 }
 
 // Warning: (ae-missing-release-tag) "Feed" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -10270,7 +10248,7 @@ export class FeedTableRecordSource extends SingleDataItemRecordTableRecordSource
 export class FeedTableRecordSourceDefinition extends TypedTableRecordSourceDefinition {
     constructor(customHeadingsService: RevFieldCustomHeadingsService, tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService);
     // (undocumented)
-    createDefaultLayoutDefinition(): GridLayoutDefinition;
+    createDefaultLayoutDefinition(): RevGridLayoutDefinition;
 }
 
 // @public (undocumented)
@@ -10563,7 +10541,7 @@ export namespace FullDepthSideGridField {
     // (undocumented)
     export function createAllowedFields(): readonly AllowedGridField[];
     // (undocumented)
-    export function createDefaultGridLayoutDefinition(sideId: OrderSideId): GridLayoutDefinition;
+    export function createDefaultGridLayoutDefinition(sideId: OrderSideId): RevGridLayoutDefinition;
     // (undocumented)
     export function createRevFieldDefinition(id: FullDepthSideFieldId): RevFieldDefinition;
     // (undocumented)
@@ -10921,7 +10899,7 @@ export class GridFieldTableRecordSource extends TypedTableRecordSource {
 export class GridFieldTableRecordSourceDefinition extends TypedTableRecordSourceDefinition {
     constructor(customHeadingsService: RevFieldCustomHeadingsService, tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService, _gridFieldArray: GridField[]);
     // (undocumented)
-    createDefaultLayoutDefinition(): GridLayoutDefinition;
+    createDefaultLayoutDefinition(): RevGridLayoutDefinition;
     // (undocumented)
     get gridFieldArray(): GridField[];
 }
@@ -10956,49 +10934,17 @@ export class GridFieldTableValueSource extends TableValueSource {
     protected getfieldCount(): Integer;
 }
 
+// Warning: (ae-forgotten-export) The symbol "RevGridLayout" needs to be exported by the entry point public-api.d.ts
+//
 // @public
-export class GridLayout implements LockOpenListItem<GridLayout>, IndexedRecord {
-    constructor(definition?: GridLayoutDefinition, id?: Guid, mapKey?: MapKey);
+export class GridLayout extends RevGridLayout implements LockOpenListItem<GridLayout> {
+    constructor(definition?: RevGridLayoutDefinition, id?: Guid, mapKey?: MapKey);
     // (undocumented)
-    addColumn(initiator: GridLayout.ChangeInitiator, columnOrName: string | GridLayoutDefinition.Column): void;
-    // (undocumented)
-    addColumns(initiator: GridLayout.ChangeInitiator, columnsNames: (string | GridLayoutDefinition.Column)[]): void;
-    // (undocumented)
-    applyDefinition(initiator: GridLayout.ChangeInitiator, definition: GridLayoutDefinition): void;
-    // (undocumented)
-    beginChange(initiator: GridLayout.ChangeInitiator): void;
-    // (undocumented)
-    clearColumns(initiator: GridLayout.ChangeInitiator): void;
+    protected assign(other: GridLayout): void;
     // (undocumented)
     closeLocked(opener: LockOpenListItem.Opener): void;
     // (undocumented)
-    get columnCount(): number;
-    // (undocumented)
-    get columns(): readonly GridLayout.Column[];
-    // (undocumented)
     createCopy(): GridLayout;
-    // (undocumented)
-    createDefinition(): GridLayoutDefinition;
-    // (undocumented)
-    protected createDefinitionColumns(): GridLayoutDefinition.Column[];
-    // (undocumented)
-    endChange(): void;
-    // (undocumented)
-    equals(other: GridLayout): boolean;
-    // (undocumented)
-    findColumn(fieldName: string): GridLayout.Column | undefined;
-    // (undocumented)
-    getColumn(columnIndex: number): GridLayout.Column;
-    // (undocumented)
-    readonly id: Guid;
-    // (undocumented)
-    index: number;
-    // (undocumented)
-    indexOfColumn(column: GridLayout.Column): number;
-    // (undocumented)
-    indexOfColumnByFieldName(fieldName: string): number;
-    // (undocumented)
-    insertColumns(initiator: GridLayout.ChangeInitiator, index: Integer, columnOrFieldNames: (string | GridLayoutDefinition.Column)[]): void;
     // (undocumented)
     isLocked(ignoreOnlyLocker: LockOpenListItem.Locker | undefined): boolean;
     // (undocumented)
@@ -11006,202 +10952,21 @@ export class GridLayout implements LockOpenListItem<GridLayout>, IndexedRecord {
     // (undocumented)
     get lockers(): readonly LockOpenListItem.Locker[];
     // (undocumented)
-    readonly mapKey: MapKey;
-    // (undocumented)
-    moveColumn(initiator: GridLayout.ChangeInitiator, fromColumnIndex: Integer, toColumnIndex: Integer): boolean;
-    // (undocumented)
-    moveColumns(initiator: GridLayout.ChangeInitiator, fromColumnIndex: Integer, toColumnIndex: Integer, count: Integer): boolean;
-    // (undocumented)
     get openCount(): number;
     // (undocumented)
     get openers(): readonly LockOpenListItem.Opener[];
     // (undocumented)
     openLocked(opener: LockOpenListItem.Opener): void;
     // (undocumented)
-    removeColumn(initiator: GridLayout.ChangeInitiator, index: Integer): void;
-    // (undocumented)
-    removeColumns(initiator: GridLayout.ChangeInitiator, index: Integer, count: Integer): void;
-    // (undocumented)
-    setColumns(initiator: GridLayout.ChangeInitiator, columns: readonly GridLayout.Column[]): void;
-    // (undocumented)
-    setColumnWidth(initiator: GridLayout.ChangeInitiator, fieldName: string, width: Integer | undefined): void;
-    // (undocumented)
-    subscribeChangedEvent(handler: GridLayout.ChangedEventHandler): number;
-    // (undocumented)
-    subscribeWidthsChangedEvent(handler: GridLayout.WidthsChangedEventHandler): number;
-    // (undocumented)
     tryLock(locker: LockOpenListItem.Locker): Promise<Result<void>>;
     // (undocumented)
     unlock(locker: LockOpenListItem.Locker): void;
-    // (undocumented)
-    unsubscribeChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
-    // (undocumented)
-    unsubscribeWidthsChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
-}
-
-// @public (undocumented)
-export namespace GridLayout {
-    // (undocumented)
-    export type ChangedEventHandler = (this: void, initiator: ChangeInitiator) => void;
-    // (undocumented)
-    export interface ChangeInitiator {
-    }
-    // (undocumented)
-    export interface Column {
-        // (undocumented)
-        autoSizableWidth: Integer | undefined;
-        // (undocumented)
-        fieldName: string;
-        // (undocumented)
-        visible: boolean | undefined;
-    }
-    // (undocumented)
-    export namespace Column {
-        // (undocumented)
-        export function createCopy(column: Column): Column;
-    }
-    // (undocumented)
-    export type WidthsChangedEventHandler = (this: void, initiator: ChangeInitiator) => void;
-    const // (undocumented)
-    forceChangeInitiator: ChangeInitiator;
-}
-
-// Warning: (ae-missing-release-tag) "GridLayoutChange" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export namespace GridLayoutChange {
-    // (undocumented)
-    export type Action = MoveUp | MoveTop | MoveDown | MoveBottom | SetVisible | SetWidth;
-    // (undocumented)
-    export interface ActionBase {
-        // (undocumented)
-        id: ActionId;
-    }
-    // (undocumented)
-    export enum ActionId {
-        // (undocumented)
-        MoveBottom = 3,
-        // (undocumented)
-        MoveDown = 2,
-        // (undocumented)
-        MoveTop = 1,
-        // (undocumented)
-        MoveUp = 0,
-        // (undocumented)
-        SetVisible = 4,
-        // (undocumented)
-        SetWidth = 5
-    }
-    // (undocumented)
-    export interface MoveBottom extends ActionBase {
-        // (undocumented)
-        columnIndex: Integer;
-        // (undocumented)
-        id: ActionId.MoveBottom;
-    }
-    // (undocumented)
-    export interface MoveDown extends ActionBase {
-        // (undocumented)
-        columnIndex: Integer;
-        // (undocumented)
-        id: ActionId.MoveDown;
-    }
-    // (undocumented)
-    export interface MoveTop extends ActionBase {
-        // (undocumented)
-        columnIndex: Integer;
-        // (undocumented)
-        id: ActionId.MoveTop;
-    }
-    // (undocumented)
-    export interface MoveUp extends ActionBase {
-        // (undocumented)
-        columnIndex: Integer;
-        // (undocumented)
-        id: ActionId.MoveUp;
-    }
-    // (undocumented)
-    export interface SetVisible extends ActionBase {
-        // (undocumented)
-        columnIndex: Integer;
-        // (undocumented)
-        id: ActionId.SetVisible;
-        // (undocumented)
-        visible: boolean;
-    }
-    // (undocumented)
-    export interface SetWidth extends ActionBase {
-        // (undocumented)
-        columnIndex: Integer;
-        // (undocumented)
-        id: ActionId.SetWidth;
-        // (undocumented)
-        width: Integer;
-    }
-}
-
-// @public (undocumented)
-export class GridLayoutDefinition {
-    constructor(_columns: readonly GridLayoutDefinition.Column[]);
-    // (undocumented)
-    get columnCount(): number;
-    // (undocumented)
-    get columns(): readonly GridLayoutDefinition.Column[];
-    // (undocumented)
-    createCopy(): GridLayoutDefinition;
-    // (undocumented)
-    saveToJson(element: JsonElement): void;
 }
 
 // @public (undocumented)
 export namespace GridLayoutDefinition {
     // (undocumented)
-    export interface Column {
-        // (undocumented)
-        readonly autoSizableWidth: Integer | undefined;
-        // (undocumented)
-        readonly fieldName: string;
-        // (undocumented)
-        readonly visible: boolean | undefined;
-    }
-    // (undocumented)
-    export namespace Column {
-    }
-    // (undocumented)
-    export namespace Column {
-        // (undocumented)
-        export function createCopy(column: Column): Column;
-        // (undocumented)
-        export namespace JsonTag {
-            const // (undocumented)
-            fieldName = "fieldName";
-            const // (undocumented)
-            name = "name";
-            const // (undocumented)
-            visible = "visible";
-            const // (undocumented)
-            show = "show";
-            const // (undocumented)
-            width = "width";
-        }
-        // (undocumented)
-        export function saveToJson(column: Column, element: JsonElement): void;
-        // (undocumented)
-        export function tryCreateFromJson(element: JsonElement): Column | undefined;
-    }
-    // (undocumented)
-    export function createColumnsFromFieldNames(fieldNames: readonly string[]): Column[];
-    // (undocumented)
-    export function createFromFieldNames(fieldNames: readonly string[]): GridLayoutDefinition;
-    // (undocumented)
-    export namespace JsonName {
-        const // (undocumented)
-        columns = "columns";
-    }
-    // (undocumented)
-    export function tryCreateColumnsFromJson(element: JsonElement): Result<GridLayoutDefinition.Column[]>;
-    // (undocumented)
-    export function tryCreateFromJson(element: JsonElement): Result<GridLayoutDefinition>;
+    export function tryCreateFromJson(element: JsonElement): Result<RevGridLayoutDefinition>;
 }
 
 // @public (undocumented)
@@ -11211,9 +10976,9 @@ export class GridLayoutError extends ExternalError {
 
 // @public (undocumented)
 export class GridLayoutOrReference {
-    constructor(_referenceableGridLayoutsService: ReferenceableGridLayoutsService, definition: GridLayoutOrReferenceDefinition);
+    constructor(_referenceableGridLayoutsService: ReferenceableGridLayoutsService, definition: RevGridLayoutOrReferenceDefinition);
     // (undocumented)
-    createDefinition(): GridLayoutOrReferenceDefinition;
+    createDefinition(): RevGridLayoutOrReferenceDefinition;
     // (undocumented)
     get lockedGridLayout(): GridLayout | undefined;
     // (undocumented)
@@ -11225,27 +10990,9 @@ export class GridLayoutOrReference {
 }
 
 // @public (undocumented)
-export class GridLayoutOrReferenceDefinition {
-    constructor(definitionOrReferenceId: GridLayoutDefinition | Guid);
-    // (undocumented)
-    readonly gridLayoutDefinition: GridLayoutDefinition | undefined;
-    // (undocumented)
-    readonly referenceId: Guid | undefined;
-    // (undocumented)
-    saveToJson(element: JsonElement): void;
-}
-
-// @public (undocumented)
 export namespace GridLayoutOrReferenceDefinition {
     // (undocumented)
-    export namespace JsonName {
-        const // (undocumented)
-        referenceId = "referenceId";
-        const // (undocumented)
-        gridLayoutDefinition = "gridLayoutDefinition";
-    }
-    // (undocumented)
-    export function tryCreateFromJson(element: JsonElement): Result<GridLayoutOrReferenceDefinition>;
+    export function tryCreateFromJson(element: JsonElement): Result<RevGridLayoutOrReferenceDefinition>;
 }
 
 // Warning: (ae-missing-release-tag) "GridOrderTriggerTypeIdCorrectnessTableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -11287,13 +11034,13 @@ export type GridRevRecordField = RevRecordField;
 //
 // @public (undocumented)
 export class GridRowOrderDefinition<TableFieldSourceDefinitionTypeId> {
-    constructor(sortFields: GridSortDefinition.Field[] | undefined, recordDefinitions: TableRecordDefinition<TableFieldSourceDefinitionTypeId>[] | undefined);
+    constructor(sortFields: RevGridSortDefinition.Field[] | undefined, recordDefinitions: TableRecordDefinition<TableFieldSourceDefinitionTypeId>[] | undefined);
     // (undocumented)
     readonly recordDefinitions: TableRecordDefinition<TableFieldSourceDefinitionTypeId>[] | undefined;
     // (undocumented)
     saveToJson(element: JsonElement): void;
     // (undocumented)
-    readonly sortFields: GridSortDefinition.Field[] | undefined;
+    readonly sortFields: RevGridSortDefinition.Field[] | undefined;
 }
 
 // @public (undocumented)
@@ -11306,33 +11053,9 @@ export namespace GridRowOrderDefinition {
         sortFields = "sortFields";
     }
     // (undocumented)
-    export function saveSortFieldsToJson(sortFields: GridSortDefinition.Field[], element: JsonElement): void;
+    export function saveSortFieldsToJson(sortFields: RevGridSortDefinition.Field[], element: JsonElement): void;
     // (undocumented)
-    export function tryCreateSortFieldsFromJson(element: JsonElement): GridSortDefinition.Field[] | undefined;
-}
-
-// Warning: (ae-missing-release-tag) "GridSortDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "GridSortDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export type GridSortDefinition = GridSortDefinition.Field[];
-
-// @public (undocumented)
-export namespace GridSortDefinition {
-    // (undocumented)
-    export interface Field {
-        // (undocumented)
-        ascending: boolean;
-        // (undocumented)
-        name: string;
-    }
-    // (undocumented)
-    export namespace Field {
-        // (undocumented)
-        export function saveToJson(definition: Field, element: JsonElement): void;
-        // (undocumented)
-        export function tryCreateFromJson(element: JsonElement): Field | undefined;
-    }
+    export function tryCreateSortFieldsFromJson(element: JsonElement): RevGridSortDefinition.Field[] | undefined;
 }
 
 // @public (undocumented)
@@ -11348,7 +11071,7 @@ export class GridSource<TableRecordSourceDefinitionTypeId, TableFieldSourceDefin
     // (undocumented)
     createDefinition(rowOrderDefinition: GridRowOrderDefinition<TableFieldSourceDefinitionTypeId> | undefined): GridSourceDefinition<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId>;
     // (undocumented)
-    createGridLayoutOrReferenceDefinition(): GridLayoutOrReferenceDefinition;
+    createGridLayoutOrReferenceDefinition(): RevGridLayoutOrReferenceDefinition;
     // (undocumented)
     createTableRecordSourceDefinition(): TableRecordSourceDefinition<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId>;
     // (undocumented)
@@ -11385,7 +11108,7 @@ export class GridSource<TableRecordSourceDefinitionTypeId, TableFieldSourceDefin
     get table(): Table<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, Badness> | undefined;
     // (undocumented)
     tryLock(locker: LockOpenListItem.Locker): Promise<Result<void>>;
-    tryOpenGridLayoutOrReferenceDefinition(definition: GridLayoutOrReferenceDefinition, opener: LockOpenListItem.Opener): Promise<Result<void>>;
+    tryOpenGridLayoutOrReferenceDefinition(definition: RevGridLayoutOrReferenceDefinition, opener: LockOpenListItem.Opener): Promise<Result<void>>;
     // (undocumented)
     unlock(locker: LockOpenListItem.Locker): void;
     // (undocumented)
@@ -11407,9 +11130,9 @@ export namespace GridSource {
 
 // @public (undocumented)
 export class GridSourceDefinition<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId> {
-    constructor(tableRecordSourceDefinition: TableRecordSourceDefinition<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId>, gridLayoutOrReferenceDefinition: GridLayoutOrReferenceDefinition | undefined, rowOrderDefinition: GridRowOrderDefinition<TableFieldSourceDefinitionTypeId> | undefined);
+    constructor(tableRecordSourceDefinition: TableRecordSourceDefinition<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId>, gridLayoutOrReferenceDefinition: RevGridLayoutOrReferenceDefinition | undefined, rowOrderDefinition: GridRowOrderDefinition<TableFieldSourceDefinitionTypeId> | undefined);
     // (undocumented)
-    gridLayoutOrReferenceDefinition: GridLayoutOrReferenceDefinition | undefined;
+    gridLayoutOrReferenceDefinition: RevGridLayoutOrReferenceDefinition | undefined;
     // (undocumented)
     rowOrderDefinition: GridRowOrderDefinition<TableFieldSourceDefinitionTypeId> | undefined;
     // (undocumented)
@@ -11432,7 +11155,7 @@ export namespace GridSourceDefinition {
     // (undocumented)
     export function tryCreateFromJson<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId>(tableRecordSourceDefinitionFromJsonFactory: TableRecordSourceDefinitionFromJsonFactory<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId>, element: JsonElement): Result<GridSourceDefinition<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId>>;
     // (undocumented)
-    export function tryGetGridLayoutOrReferenceDefinitionFromJson(element: JsonElement): Result<GridLayoutOrReferenceDefinition>;
+    export function tryGetGridLayoutOrReferenceDefinitionFromJson(element: JsonElement): Result<RevGridLayoutOrReferenceDefinition>;
     // (undocumented)
     export function tryGetRowOrderFromJson<TableFieldSourceDefinitionTypeId>(element: JsonElement): GridRowOrderDefinition<TableFieldSourceDefinitionTypeId> | undefined;
     // (undocumented)
@@ -11466,7 +11189,7 @@ export class GridSourceOrReferenceDefinition<TableRecordSourceDefinitionTypeId, 
     // (undocumented)
     saveToJson(element: JsonElement): void;
     // (undocumented)
-    updateGridLayoutDefinitionOrReference(value: GridLayoutOrReferenceDefinition): void;
+    updateGridLayoutDefinitionOrReference(value: RevGridLayoutOrReferenceDefinition): void;
 }
 
 // @public (undocumented)
@@ -12073,7 +11796,7 @@ export class HoldingTableRecordSource extends BrokerageAccountGroupTableRecordSo
 export class HoldingTableRecordSourceDefinition extends BrokerageAccountGroupTableRecordSourceDefinition {
     constructor(customHeadingsService: RevFieldCustomHeadingsService, tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService, brokerageAccountGroup: BrokerageAccountGroup);
     // (undocumented)
-    createDefaultLayoutDefinition(): GridLayoutDefinition;
+    createDefaultLayoutDefinition(): RevGridLayoutDefinition;
 }
 
 // @public (undocumented)
@@ -14514,7 +14237,7 @@ export namespace LitIvemDetailFromSearchSymbolsTableRecordSource {
 export class LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition extends TypedTableRecordSourceDefinition {
     constructor(customHeadingsService: RevFieldCustomHeadingsService, tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService, dataDefinition: SearchSymbolsDataDefinition);
     // (undocumented)
-    createDefaultLayoutDefinition(): GridLayoutDefinition;
+    createDefaultLayoutDefinition(): RevGridLayoutDefinition;
     // (undocumented)
     readonly dataDefinition: SearchSymbolsDataDefinition;
     // (undocumented)
@@ -14534,7 +14257,7 @@ export namespace LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition {
     const // (undocumented)
     allowedFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[];
     // (undocumented)
-    export function createLayoutDefinition(fieldSourceDefinitionRegistryService: TypedTableFieldSourceDefinitionCachingFactoryService, fieldIds: FieldId[]): GridLayoutDefinition;
+    export function createLayoutDefinition(fieldSourceDefinitionRegistryService: TypedTableFieldSourceDefinitionCachingFactoryService, fieldIds: FieldId[]): RevGridLayoutDefinition;
     // (undocumented)
     export type FieldId = LitIvemBaseDetailTableFieldSourceDefinition.FieldId | LitIvemExtendedDetailTableFieldSourceDefinition.FieldId | LitIvemAlternateCodesTableFieldSourceDefinition.FieldId | MyxLitIvemAttributesTableFieldSourceDefinition.FieldId;
     // (undocumented)
@@ -14894,7 +14617,7 @@ export class LitIvemIdComparableListTableRecordSource extends BadnessListTableRe
 export class LitIvemIdComparableListTableRecordSourceDefinition extends BadnessListTableRecordSourceDefinition<LitIvemId> {
     constructor(customHeadingsService: RevFieldCustomHeadingsService, tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService, list: UiComparableList<LitIvemId>);
     // (undocumented)
-    createDefaultLayoutDefinition(): GridLayoutDefinition;
+    createDefaultLayoutDefinition(): RevGridLayoutDefinition;
     // (undocumented)
     list: UiComparableList<LitIvemId>;
     // (undocumented)
@@ -14904,7 +14627,7 @@ export class LitIvemIdComparableListTableRecordSourceDefinition extends BadnessL
 // @public (undocumented)
 export namespace LitIvemIdComparableListTableRecordSourceDefinition {
     // (undocumented)
-    export function createLayoutDefinition(fieldSourceDefinitionRegistryService: TypedTableFieldSourceDefinitionCachingFactoryService, fieldIds: FieldId[]): GridLayoutDefinition;
+    export function createLayoutDefinition(fieldSourceDefinitionRegistryService: TypedTableFieldSourceDefinitionCachingFactoryService, fieldIds: FieldId[]): RevGridLayoutDefinition;
     const // (undocumented)
     allowedFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[];
     const // (undocumented)
@@ -20600,7 +20323,7 @@ export class OrderTableRecordSource extends BrokerageAccountGroupTableRecordSour
 export class OrderTableRecordSourceDefinition extends BrokerageAccountGroupTableRecordSourceDefinition {
     constructor(customHeadingsService: RevFieldCustomHeadingsService, tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService, brokerageAccountGroup: BrokerageAccountGroup);
     // (undocumented)
-    createDefaultLayoutDefinition(): GridLayoutDefinition;
+    createDefaultLayoutDefinition(): RevGridLayoutDefinition;
 }
 
 // @public (undocumented)
@@ -22562,7 +22285,7 @@ export class RankedLitIvemIdListDirectoryItemTableRecordSource extends Subscribe
 export class RankedLitIvemIdListDirectoryItemTableRecordSourceDefinition extends TypedTableRecordSourceDefinition {
     constructor(customHeadingsService: RevFieldCustomHeadingsService, tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService, listDirectory: RankedLitIvemIdListDirectory);
     // (undocumented)
-    createDefaultLayoutDefinition(): GridLayoutDefinition;
+    createDefaultLayoutDefinition(): RevGridLayoutDefinition;
     // (undocumented)
     readonly listDirectory: RankedLitIvemIdListDirectory;
 }
@@ -22886,14 +22609,14 @@ export class ReadonlyRenderValue extends BooleanRenderValue {
 }
 
 // @public (undocumented)
-export class RecordGrid extends AdaptedRevgrid implements GridLayout.ChangeInitiator {
+export class RecordGrid extends AdaptedRevgrid implements RevGridLayout.ChangeInitiator {
     constructor(settingsService: SettingsService, gridHostElement: HTMLElement, recordStore: RevRecordStore, customGridSettings: AdaptedRevgrid.CustomGridSettings, customiseSettingsForNewColumnEventer: AdaptedRevgrid.CustomiseSettingsForNewColumnEventer, getMainCellPainterEventer: Subgrid.GetCellPainterEventer<AdaptedRevgridBehavioredColumnSettings, GridField>, getHeaderCellPainterEventer: Subgrid.GetCellPainterEventer<AdaptedRevgridBehavioredColumnSettings, GridField>, externalParent: unknown);
     // (undocumented)
     applyFilter(filter?: RevRecordDataServer.RecordFilterCallback): void;
     // (undocumented)
     applyFirstUsable(rowOrderDefinition: TypedGridRowOrderDefinition | undefined, viewAnchor: RecordGrid.ViewAnchor | undefined, gridLayout: GridLayout | undefined): void;
     // (undocumented)
-    applyGridLayoutDefinition(value: GridLayoutDefinition): void;
+    applyGridLayoutDefinition(value: RevGridLayoutDefinition): void;
     // (undocumented)
     protected applySettings(): boolean;
     // (undocumented)
@@ -22945,7 +22668,7 @@ export class RecordGrid extends AdaptedRevgrid implements GridLayout.ChangeIniti
     // (undocumented)
     getRowOrderDefinition(): TypedGridRowOrderDefinition;
     // (undocumented)
-    getSortFields(): GridSortDefinition.Field[] | undefined;
+    getSortFields(): RevGridSortDefinition.Field[] | undefined;
     // (undocumented)
     getSortSpecifier(index: number): RevRecordDataServer.SortFieldSpecifier;
     // (undocumented)
@@ -23161,9 +22884,9 @@ export { Rect }
 
 // @public (undocumented)
 export class ReferenceableGridLayout extends GridLayout implements LockOpenListItem<ReferenceableGridLayout> {
-    constructor(definition: ReferenceableGridLayoutDefinition, index: Integer);
+    constructor(definition: RevReferenceableGridLayoutDefinition, index: Integer);
     // (undocumented)
-    createDefinition(): ReferenceableGridLayoutDefinition;
+    createDefinition(): RevReferenceableGridLayoutDefinition;
     // (undocumented)
     readonly name: string;
     // (undocumented)
@@ -23173,29 +22896,9 @@ export class ReferenceableGridLayout extends GridLayout implements LockOpenListI
 // Warning: (ae-missing-release-tag) "ReferenceableGridLayoutDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class ReferenceableGridLayoutDefinition extends GridLayoutDefinition {
-    constructor(id: Guid, name: string, initialColumns: GridLayoutDefinition.Column[]);
-    // (undocumented)
-    id: Guid;
-    // (undocumented)
-    name: string;
-    // (undocumented)
-    saveToJson(element: JsonElement): void;
-}
-
-// @public (undocumented)
 export namespace ReferenceableGridLayoutDefinition {
     // (undocumented)
-    export function is(definition: GridLayoutDefinition): definition is ReferenceableGridLayoutDefinition;
-    // (undocumented)
-    export namespace ReferenceableJsonName {
-        const // (undocumented)
-        id = "id";
-        const // (undocumented)
-        name = "name";
-    }
-    // (undocumented)
-    export function tryCreateReferenceableFromJson(element: JsonElement, initialIndex: Integer): Result<ReferenceableGridLayoutDefinition>;
+    export function tryCreateReferenceableFromJson(element: JsonElement, initialIndex: Integer): Result<RevReferenceableGridLayoutDefinition>;
 }
 
 // Warning: (ae-missing-release-tag) "ReferenceableGridLayoutsService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -23203,7 +22906,7 @@ export namespace ReferenceableGridLayoutDefinition {
 // @public (undocumented)
 export class ReferenceableGridLayoutsService extends LockOpenList<ReferenceableGridLayout> {
     // (undocumented)
-    getOrNew(definition: ReferenceableGridLayoutDefinition): ReferenceableGridLayout;
+    getOrNew(definition: RevReferenceableGridLayoutDefinition): ReferenceableGridLayout;
 }
 
 // Warning: (ae-missing-release-tag) "ReferenceableGridSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -23221,7 +22924,7 @@ export class ReferenceableGridSource<TableRecordSourceDefinitionTypeId, TableFie
 
 // @public (undocumented)
 export class ReferenceableGridSourceDefinition<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId> extends GridSourceDefinition<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId> {
-    constructor(id: Guid, name: string, tableRecordSourceDefinition: TableRecordSourceDefinition<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId>, gridLayoutDefinitionOrReference: GridLayoutOrReferenceDefinition | undefined, rowOrderDefinition: GridRowOrderDefinition<TableFieldSourceDefinitionTypeId> | undefined);
+    constructor(id: Guid, name: string, tableRecordSourceDefinition: TableRecordSourceDefinition<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId>, gridLayoutDefinitionOrReference: RevGridLayoutOrReferenceDefinition | undefined, rowOrderDefinition: GridRowOrderDefinition<TableFieldSourceDefinitionTypeId> | undefined);
     // (undocumented)
     readonly id: Guid;
     // (undocumented)
@@ -23802,6 +23505,12 @@ export namespace ResStaticInitialise {
 
 export { Result }
 
+// @public (undocumented)
+export class RevFavouriteReferenceableGridLayoutDefinitionsStoreService {
+    // (undocumented)
+    name: string;
+}
+
 // Warning: (ae-missing-release-tag) "RevFieldCustomHeadingsService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -23841,11 +23550,34 @@ export class RevFieldDefinition {
 // @public (undocumented)
 export namespace RevFieldDefinition {
     // (undocumented)
-    export function composeName(sourceName: string, sourcelessName: string): string;
-    // (undocumented)
-    export type DecomposedName = [sourceName: string, sourcelessName: string];
-    // (undocumented)
-    export function decomposeName(name: string): DecomposedName;
+    export namespace Name {
+        // (undocumented)
+        export function compose(sourceName: string, sourcelessName: string): string;
+        // (undocumented)
+        export type DecomposedArray = [sourceName: string, sourcelessName: string];
+        // (undocumented)
+        export const enum DecomposeErrorId {
+            // (undocumented)
+            CommaTextIntegerParseStringArray = 2,
+            // (undocumented)
+            CommaTextInvalidIntegerString = 3,
+            // (undocumented)
+            CommaTextNotHas2Elements = 4,
+            // (undocumented)
+            CommaTextQuotesNotClosedInLastElement = 1,
+            // (undocumented)
+            CommaTextUnexpectedCharAfterQuotedElement = 0
+        }
+        // (undocumented)
+        export interface DecomposeErrorIdPlusExtra {
+            // (undocumented)
+            readonly errorId: DecomposeErrorId;
+            // (undocumented)
+            readonly extraInfo: string;
+        }
+        // (undocumented)
+        export function tryDecompose(name: string): Result<DecomposedArray, DecomposeErrorIdPlusExtra>;
+    }
 }
 
 // Warning: (ae-missing-release-tag) "RevFieldSourceDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -23855,6 +23587,260 @@ export class RevFieldSourceDefinition {
     constructor(name: string);
     // (undocumented)
     readonly name: string;
+}
+
+// Warning: (ae-missing-release-tag) "RevGridLayoutChange" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export namespace RevGridLayoutChange {
+    // (undocumented)
+    export type Action = MoveUp | MoveTop | MoveDown | MoveBottom | SetVisible | SetWidth;
+    // (undocumented)
+    export interface ActionBase {
+        // (undocumented)
+        id: ActionId;
+    }
+    // (undocumented)
+    export enum ActionId {
+        // (undocumented)
+        MoveBottom = 3,
+        // (undocumented)
+        MoveDown = 2,
+        // (undocumented)
+        MoveTop = 1,
+        // (undocumented)
+        MoveUp = 0,
+        // (undocumented)
+        SetVisible = 4,
+        // (undocumented)
+        SetWidth = 5
+    }
+    // (undocumented)
+    export interface MoveBottom extends ActionBase {
+        // (undocumented)
+        columnIndex: Integer;
+        // (undocumented)
+        id: ActionId.MoveBottom;
+    }
+    // (undocumented)
+    export interface MoveDown extends ActionBase {
+        // (undocumented)
+        columnIndex: Integer;
+        // (undocumented)
+        id: ActionId.MoveDown;
+    }
+    // (undocumented)
+    export interface MoveTop extends ActionBase {
+        // (undocumented)
+        columnIndex: Integer;
+        // (undocumented)
+        id: ActionId.MoveTop;
+    }
+    // (undocumented)
+    export interface MoveUp extends ActionBase {
+        // (undocumented)
+        columnIndex: Integer;
+        // (undocumented)
+        id: ActionId.MoveUp;
+    }
+    // (undocumented)
+    export interface SetVisible extends ActionBase {
+        // (undocumented)
+        columnIndex: Integer;
+        // (undocumented)
+        id: ActionId.SetVisible;
+        // (undocumented)
+        visible: boolean;
+    }
+    // (undocumented)
+    export interface SetWidth extends ActionBase {
+        // (undocumented)
+        columnIndex: Integer;
+        // (undocumented)
+        id: ActionId.SetWidth;
+        // (undocumented)
+        width: Integer;
+    }
+}
+
+// @public (undocumented)
+export class RevGridLayoutDefinition {
+    constructor(columns: readonly RevGridLayoutDefinition.Column[]);
+    // (undocumented)
+    get columnCount(): number;
+    // (undocumented)
+    readonly columns: readonly RevGridLayoutDefinition.Column[];
+    // (undocumented)
+    createCopy(): RevGridLayoutDefinition;
+    // (undocumented)
+    saveToJson(element: JsonElement): void;
+}
+
+// @public (undocumented)
+export namespace RevGridLayoutDefinition {
+    // (undocumented)
+    export interface Column {
+        // (undocumented)
+        readonly autoSizableWidth: Integer | undefined;
+        // (undocumented)
+        readonly fieldName: string;
+        // (undocumented)
+        readonly visible: boolean | undefined;
+    }
+    // (undocumented)
+    export namespace Column {
+    }
+    // (undocumented)
+    export namespace Column {
+        // (undocumented)
+        export function createCopy(column: Column): Column;
+        // (undocumented)
+        export namespace JsonTag {
+            const // (undocumented)
+            fieldName = "fieldName";
+            const // (undocumented)
+            name = "name";
+            const // (undocumented)
+            visible = "visible";
+            const // (undocumented)
+            show = "show";
+            const // (undocumented)
+            width = "width";
+        }
+        // (undocumented)
+        export function saveToJson(column: Column, element: JsonElement): void;
+        // (undocumented)
+        export function tryCreateFromJson(element: JsonElement): Column | undefined;
+    }
+    // (undocumented)
+    export function createColumnsFromFieldNames(fieldNames: readonly string[]): Column[];
+    // (undocumented)
+    export function createFromFieldNames(fieldNames: readonly string[]): RevGridLayoutDefinition;
+    // (undocumented)
+    export const enum CreateFromJsonErrorId {
+        // (undocumented)
+        CreateColumns = 1,
+        // (undocumented)
+        GetElementArray = 0
+    }
+    // (undocumented)
+    export interface CreateFromJsonErrorIds {
+        // (undocumented)
+        readonly errorId: CreateFromJsonErrorId;
+        // (undocumented)
+        readonly jsonElementErrorId: JsonElement.ErrorId;
+    }
+    // (undocumented)
+    export namespace JsonName {
+        const // (undocumented)
+        columns = "columns";
+    }
+    // (undocumented)
+    export function tryCreateColumnsFromJson(element: JsonElement): Result<RevGridLayoutDefinition.Column[], CreateFromJsonErrorIds>;
+    // (undocumented)
+    export function tryCreateFromJson(element: JsonElement): Result<RevGridLayoutDefinition, CreateFromJsonErrorIds>;
+}
+
+// @public (undocumented)
+export class RevGridLayoutOrReferenceDefinition {
+    constructor(definitionOrReferenceId: RevGridLayoutDefinition | Guid);
+    // (undocumented)
+    readonly gridLayoutDefinition: RevGridLayoutDefinition | undefined;
+    // (undocumented)
+    readonly referenceId: Guid | undefined;
+    // (undocumented)
+    saveToJson(element: JsonElement): void;
+}
+
+// @public (undocumented)
+export namespace RevGridLayoutOrReferenceDefinition {
+    // (undocumented)
+    export const enum CreateFromJsonErrorId {
+        // (undocumented)
+        CreateDefinition = 1,
+        // (undocumented)
+        GetElement = 0
+    }
+    // (undocumented)
+    export interface CreateFromJsonErrorIds {
+        // (undocumented)
+        readonly errorId: CreateFromJsonErrorId;
+        // (undocumented)
+        readonly jsonElementErrorId: JsonElement.ErrorId;
+    }
+    // (undocumented)
+    export namespace JsonName {
+        const // (undocumented)
+        referenceId = "referenceId";
+        const // (undocumented)
+        gridLayoutDefinition = "gridLayoutDefinition";
+    }
+    // (undocumented)
+    export function tryCreateFromJson(element: JsonElement): Result<RevGridLayoutOrReferenceDefinition, CreateFromJsonErrorIds>;
+}
+
+// Warning: (ae-missing-release-tag) "RevGridSortDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export namespace RevGridSortDefinition {
+    // (undocumented)
+    export interface Field {
+        // (undocumented)
+        ascending: boolean;
+        // (undocumented)
+        name: string;
+    }
+    // (undocumented)
+    export namespace Field {
+        // (undocumented)
+        export function saveToJson(definition: Field, element: JsonElement): void;
+        // (undocumented)
+        export function tryCreateFromJson(element: JsonElement): Field | undefined;
+    }
+}
+
+// Warning: (ae-missing-release-tag) "RevReferenceableGridLayoutDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class RevReferenceableGridLayoutDefinition extends RevGridLayoutDefinition {
+    constructor(id: Guid, name: string, initialColumns: RevGridLayoutDefinition.Column[]);
+    // (undocumented)
+    id: Guid;
+    // (undocumented)
+    name: string;
+    // (undocumented)
+    saveToJson(element: JsonElement): void;
+}
+
+// @public (undocumented)
+export namespace RevReferenceableGridLayoutDefinition {
+    // (undocumented)
+    export function is(definition: RevGridLayoutDefinition): definition is RevReferenceableGridLayoutDefinition;
+    // (undocumented)
+    export const enum ReferenceableCreateFromJsonErrorId {
+        // (undocumented)
+        CreateDefinition = 2,
+        // (undocumented)
+        GetId = 0,
+        // (undocumented)
+        GetName = 1
+    }
+    // (undocumented)
+    export interface ReferenceableCreateFromJsonErrorIds {
+        // (undocumented)
+        readonly errorId: ReferenceableCreateFromJsonErrorId;
+        // (undocumented)
+        readonly jsonElementErrorId: JsonElement.ErrorId;
+    }
+    // (undocumented)
+    export namespace ReferenceableJsonName {
+        const // (undocumented)
+        id = "id";
+        const // (undocumented)
+        name = "name";
+    }
+    // (undocumented)
+    export function tryCreateReferenceableFromJson(element: JsonElement, initialIndex: Integer): Result<RevReferenceableGridLayoutDefinition, ReferenceableCreateFromJsonErrorIds>;
 }
 
 export { RGB }
@@ -27430,7 +27416,7 @@ export class ScanTableRecordSource extends LockOpenListTableRecordSource<Scan, S
 export class ScanTableRecordSourceDefinition extends TypedTableRecordSourceDefinition {
     constructor(customHeadingsService: RevFieldCustomHeadingsService, tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService);
     // (undocumented)
-    createDefaultLayoutDefinition(): GridLayoutDefinition;
+    createDefaultLayoutDefinition(): RevGridLayoutDefinition;
 }
 
 // @public (undocumented)
@@ -27502,7 +27488,7 @@ export class ScanTargetTypeIdCorrectnessTableValue extends EnumCorrectnessTableV
 export class ScanTestTableRecordSourceDefinition extends RankedLitIvemIdListTableRecordSourceDefinition {
     constructor(customHeadingsService: RevFieldCustomHeadingsService, tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService, rankedLitIvemIdListDefinition: LitIvemIdExecuteScanRankedLitIvemIdListDefinition);
     // (undocumented)
-    createDefaultLayoutDefinition(): GridLayoutDefinition;
+    createDefaultLayoutDefinition(): RevGridLayoutDefinition;
     // (undocumented)
     get defaultFieldSourceDefinitionTypeIds(): RankedLitIvemIdListTableRecordSourceDefinition.FieldSourceDefinitionTypeId[];
 }
@@ -28786,7 +28772,7 @@ export namespace ShortDepthSideGridField {
     // (undocumented)
     export function createAllowedFields(): readonly AllowedGridField[];
     // (undocumented)
-    export function createDefaultGridLayoutDefinition(sideId: OrderSideId): GridLayoutDefinition;
+    export function createDefaultGridLayoutDefinition(sideId: OrderSideId): RevGridLayoutDefinition;
     // (undocumented)
     export function createRevFieldDefinition(id: ShortDepthSideFieldId): RevFieldDefinition;
     // (undocumented)
@@ -35073,7 +35059,7 @@ export namespace TableFieldSourceDefinition {
 export class TableFieldSourceDefinitionCachingFactoryService<TypeId> {
     constructor(definitionFactory: TableFieldSourceDefinitionFactory<TypeId>);
     // (undocumented)
-    createLayoutDefinition(fieldIds: TableFieldSourceDefinition.FieldId<TypeId>[]): GridLayoutDefinition;
+    createLayoutDefinition(fieldIds: TableFieldSourceDefinition.FieldId<TypeId>[]): RevGridLayoutDefinition;
     // (undocumented)
     readonly definitionFactory: TableFieldSourceDefinitionFactory<TypeId>;
     // (undocumented)
@@ -35318,7 +35304,7 @@ export abstract class TableRecordSourceDefinition<TypeId, TableFieldSourceDefini
     // (undocumented)
     createAllowedFields(): readonly AllowedGridField[];
     // (undocumented)
-    abstract createDefaultLayoutDefinition(): GridLayoutDefinition;
+    abstract createDefaultLayoutDefinition(): RevGridLayoutDefinition;
     // (undocumented)
     readonly name: string;
     // (undocumented)
@@ -37034,7 +37020,7 @@ export class TopShareholderTableRecordSourceDefinition extends TypedTableRecordS
     // (undocumented)
     readonly compareToTradingDate: Date | undefined;
     // (undocumented)
-    createDefaultLayoutDefinition(): GridLayoutDefinition;
+    createDefaultLayoutDefinition(): RevGridLayoutDefinition;
     // (undocumented)
     readonly litIvemId: LitIvemId;
     // (undocumented)
@@ -39040,7 +39026,7 @@ export class WarningPublisherSubscriptionDataMessage extends PublisherSubscripti
 export class WatchlistTableRecordSourceDefinition extends RankedLitIvemIdListTableRecordSourceDefinition {
     constructor(customHeadingsService: RevFieldCustomHeadingsService, tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService, rankedLitIvemIdListDefinition: LitIvemIdArrayRankedLitIvemIdListDefinition | ScanIdRankedLitIvemIdListDefinition);
     // (undocumented)
-    createDefaultLayoutDefinition(): GridLayoutDefinition;
+    createDefaultLayoutDefinition(): RevGridLayoutDefinition;
     // (undocumented)
     get defaultFieldSourceDefinitionTypeIds(): RankedLitIvemIdListTableRecordSourceDefinition.FieldSourceDefinitionTypeId[];
 }
@@ -39052,7 +39038,7 @@ export namespace WatchlistTableRecordSourceDefinition {
     const // (undocumented)
     defaultFieldSourceDefinitionTypeIds: RankedLitIvemIdListTableRecordSourceDefinition.FieldSourceDefinitionTypeId[];
     // (undocumented)
-    export function createLayoutDefinition(fieldSourceDefinitionRegistryService: TypedTableFieldSourceDefinitionCachingFactoryService, fieldIds: FieldId[]): GridLayoutDefinition;
+    export function createLayoutDefinition(fieldSourceDefinitionRegistryService: TypedTableFieldSourceDefinitionCachingFactoryService, fieldIds: FieldId[]): RevGridLayoutDefinition;
     // (undocumented)
     export type FieldId = LitIvemBaseDetailTableFieldSourceDefinition.FieldId | SecurityDataItemTableFieldSourceDefinition.FieldId | RankedLitIvemIdTableFieldSourceDefinition.FieldId;
     // (undocumented)

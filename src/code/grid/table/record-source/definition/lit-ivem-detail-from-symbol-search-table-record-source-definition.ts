@@ -7,7 +7,7 @@
 import { ExchangeId, LitIvemAlternateCodes, LitIvemBaseDetail, MarketInfo, MyxLitIvemAttributes, SearchSymbolsDataDefinition, SearchSymbolsLitIvemFullDetail } from '../../../../adi/internal-api';
 import { ErrorCode, JsonElement, JsonElementErr, Ok, PickEnum, Result } from '../../../../sys/internal-api';
 import { RevFieldCustomHeadingsService } from '../../../field/internal-api';
-import { GridLayoutDefinition } from '../../../layout/internal-api';
+import { RevGridLayoutDefinition } from '../../../layout/internal-api';
 import {
     LitIvemAlternateCodesTableFieldSourceDefinition,
     LitIvemBaseDetailTableFieldSourceDefinition,
@@ -60,7 +60,7 @@ export class LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition extends T
             this.addLitIvemAlternateCodesFieldDefinitionSource(fieldNames);
         }
 
-        return GridLayoutDefinition.createFromFieldNames(fieldNames);
+        return RevGridLayoutDefinition.createFromFieldNames(fieldNames);
     }
 
     getDefaultFieldSourceDefinitionTypeIds(): LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition.FieldSourceDefinitionTypeId[] {
@@ -221,7 +221,7 @@ export namespace LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition {
     export function createLayoutDefinition(
         fieldSourceDefinitionRegistryService: TypedTableFieldSourceDefinitionCachingFactoryService,
         fieldIds: FieldId[],
-    ): GridLayoutDefinition {
+    ): RevGridLayoutDefinition {
         return fieldSourceDefinitionRegistryService.createLayoutDefinition(fieldIds);
     }
 
