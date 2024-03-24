@@ -4,16 +4,17 @@
  * License: motionite.trade/license/motif
  */
 
+import { RevFieldDefinition } from '../../rev/internal-api';
 import { AssertInternalError, Err, ErrorCode, Guid, IndexedRecord, LockOpenListItem, LockOpenManager, MapKey, MultiEvent, Ok, Result, newGuid } from '../../sys/internal-api';
 import {
-    GridLayout,
     GridLayoutOrReference,
     ReferenceableGridLayout,
     ReferenceableGridLayoutsService,
+    RevGridLayout,
     RevGridLayoutOrReferenceDefinition
 } from "../layout/internal-api";
-import { Table, TableFieldSourceDefinition, TableFieldSourceDefinitionFactory, TableRecordSource, TableRecordSourceDefinition, TableRecordSourceFactory } from '../table/internal-api';
-import { GridRowOrderDefinition, GridSourceDefinition } from './definition/internal-api';
+import { RevTableFieldSourceDefinitionFactory, RevTableRecordSource, RevTableRecordSourceDefinition, RevTableRecordSourceFactory, Table } from '../table/internal-api';
+import { RevGridRowOrderDefinition, RevGridSourceDefinition } from './definition/internal-api';
 
 /** @public */
 export class GridSource<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, Badness>
@@ -26,12 +27,12 @@ export class GridSource<TableRecordSourceDefinitionTypeId, TableFieldSourceDefin
 
     private readonly _lockOpenManager: LockOpenManager<GridSource<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, Badness>>;
 
-    private readonly _tableRecordSourceDefinition: TableRecordSourceDefinition<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId>;
+    private readonly _tableRecordSourceDefinition: RevTableRecordSourceDefinition<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId>;
     private _gridLayoutOrReferenceDefinition: RevGridLayoutOrReferenceDefinition | undefined;
-    private _initialRowOrderDefinition: GridRowOrderDefinition<TableFieldSourceDefinitionTypeId> | undefined;
+    private _initialRowOrderDefinition: RevGridRowOrderDefinition<TableFieldSourceDefinitionTypeId> | undefined;
 
-    private _lockedTableRecordSource: TableRecordSource<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, Badness> | undefined;
-    private _lockedGridLayout: GridLayout | undefined;
+    private _lockedTableRecordSource: RevTableRecordSource<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, Badness> | undefined;
+    private _lockedGridLayout: RevGridLayout | undefined;
     private _lockedReferenceableGridLayout: ReferenceableGridLayout | undefined;
 
     private _table: Table<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, Badness> | undefined;
@@ -40,9 +41,9 @@ export class GridSource<TableRecordSourceDefinitionTypeId, TableFieldSourceDefin
 
     constructor(
         private readonly _referenceableGridLayoutsService: ReferenceableGridLayoutsService,
-        private readonly _tableFieldSourceDefinitionFactory: TableFieldSourceDefinitionFactory<TableFieldSourceDefinitionTypeId>,
-        private readonly _tableRecordSourceFactory: TableRecordSourceFactory<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, Badness>,
-        definition: GridSourceDefinition<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId>,
+        private readonly _tableFieldSourceDefinitionFactory: RevTableFieldSourceDefinitionFactory<TableFieldSourceDefinitionTypeId>,
+        private readonly _tableRecordSourceFactory: RevTableRecordSourceFactory<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, Badness>,
+        definition: RevGridSourceDefinition<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId>,
         id?: Guid,
         mapKey?: MapKey,
     ) {
@@ -97,18 +98,18 @@ export class GridSource<TableRecordSourceDefinitionTypeId, TableFieldSourceDefin
         return this.mapKey === other.mapKey;
     }
 
-    createDefinition(rowOrderDefinition: GridRowOrderDefinition<TableFieldSourceDefinitionTypeId> | undefined): GridSourceDefinition<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId> {
+    createDefinition(rowOrderDefinition: RevGridRowOrderDefinition<TableFieldSourceDefinitionTypeId> | undefined): RevGridSourceDefinition<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId> {
         const tableRecordSourceDefinition = this.createTableRecordSourceDefinition();
         const gridLayoutOrReferenceDefinition = this.createGridLayoutOrReferenceDefinition();
 
-        return new GridSourceDefinition<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId>(
+        return new RevGridSourceDefinition<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId>(
             tableRecordSourceDefinition,
             gridLayoutOrReferenceDefinition,
             rowOrderDefinition,
         );
     }
 
-    createTableRecordSourceDefinition(): TableRecordSourceDefinition<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId> {
+    createTableRecordSourceDefinition(): RevTableRecordSourceDefinition<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId> {
         if (this._lockedTableRecordSource === undefined) {
             throw new AssertInternalError('GSCDTR23008');
         } else {
@@ -303,15 +304,17 @@ export class GridSource<TableRecordSourceDefinitionTypeId, TableFieldSourceDefin
         }
     }
 
-    private getTableFieldSourceDefinitionTypeIdsFromLayout(layout: GridLayout) {
+    private getTableFieldSourceDefinitionTypeIdsFromLayout(layout: RevGridLayout) {
         const columns = layout.columns;
         const typeIds = new Array<TableFieldSourceDefinitionTypeId>();
         for (const column of columns) {
             const fieldName = column.fieldName;
 
-            const decodeResult = TableFieldSourceDefinition.getSourceNameFromEncodedFieldName(fieldName);
-            if (decodeResult.isOk()) {
-                const sourceTypeId = this._tableFieldSourceDefinitionFactory.tryNameToId(decodeResult.value);
+            const decomposeResult = RevFieldDefinition.Name.tryDecompose(fieldName);
+            if (decomposeResult.isOk()) {
+                const decomposedFieldName = decomposeResult.value;
+                const sourceName = decomposedFieldName[0];
+                const sourceTypeId = this._tableFieldSourceDefinitionFactory.tryNameToId(sourceName);
                 if (sourceTypeId !== undefined) {
                     if (!typeIds.includes(sourceTypeId)) {
                         typeIds.push(sourceTypeId);
@@ -327,7 +330,7 @@ export namespace GridSource {
     export type GridLayoutSetEventHandler = (this: void) => void;
 
     export interface LockedGridLayouts {
-        readonly gridLayout: GridLayout;
+        readonly gridLayout: RevGridLayout;
         readonly referenceableGridLayout: ReferenceableGridLayout | undefined;
     }
 }

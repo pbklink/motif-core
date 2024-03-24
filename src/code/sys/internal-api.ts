@@ -14,7 +14,6 @@ export * from './correctness-badness';
 export * from './correctness-list';
 export * from './correctness-record';
 export * from './correctness-settable-list-item';
-export * from './correctness-state';
 export * from './date-text';
 export * from './disposable-record';
 export * from './error-code';
@@ -31,8 +30,6 @@ export * from './keyed-correctness-settable-list';
 export * from './keyed-correctness-settable-list-item';
 export * from './keyed-record';
 export * from './lock-open-list';
-export * from './lock-open-list-item';
-export * from './lock-open-manager';
 export * from './mapped-comparable-list';
 export * from './modifier-comparable-list';
 export * from './resource-badness';
@@ -53,6 +50,7 @@ export {
     CommaText,
     ComparableList,
     ComparisonResult,
+    CorrectnessState,
     DateOrDateTime,
     DayOfWeek,
     Decimal,
@@ -69,8 +67,11 @@ export {
     JsonValueArray,
     Line,
     ListChangeTypeId,
+    LockOpenListItem,
+    LockOpenManager,
     Logger,
     MapKey,
+    MapKeyed,
     Mappable,
     ModifierKey,
     ModifierKeyId,

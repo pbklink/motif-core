@@ -1,10 +1,10 @@
 // (c) 2024 Xilytix Pty Ltd / Paul Klink
 
-import { Err, Integer, JsonElement, Ok, Result } from '@xilytix/sysutils';
+import { Err, Integer, JsonElement, Ok, Result, UnreachableCaseError } from '@xilytix/sysutils';
 
 /** @public */
 export class RevGridLayoutDefinition {
-    constructor(readonly columns: readonly RevGridLayoutDefinition.Column[]) {
+    constructor(readonly columns: readonly RevGridLayoutDefinition.Column[], readonly columnCreateErrorCount: Integer) {
     }
 
     get columnCount() { return this.columns.length; }
@@ -29,7 +29,7 @@ export class RevGridLayoutDefinition {
             const newColumn = RevGridLayoutDefinition.Column.createCopy(column);
             newColumns[i] = newColumn;
         }
-        return new RevGridLayoutDefinition(newColumns);
+        return new RevGridLayoutDefinition(newColumns, 0);
     }
 }
 
@@ -129,47 +129,73 @@ export namespace RevGridLayoutDefinition {
 
     export function createFromFieldNames(fieldNames: readonly string[]): RevGridLayoutDefinition {
         const columns = createColumnsFromFieldNames(fieldNames);
-        return new RevGridLayoutDefinition(columns);
+        return new RevGridLayoutDefinition(columns, 0);
     }
 
     export const enum CreateFromJsonErrorId {
-        GetElementArray,
-        CreateColumns
+        ColumnsElementIsNotDefined,
+        ColumnsElementIsNotAnArray,
+        ColumnElementIsNotAnObject,
+        AllColumnElementsAreInvalid,
     }
 
-    export interface CreateFromJsonErrorIds {
-        readonly errorId: CreateFromJsonErrorId;
-        readonly jsonElementErrorId: JsonElement.ErrorId;
+    export interface ColumnsCreatedFromJson {
+        readonly columns: RevGridLayoutDefinition.Column[];
+        readonly columnCreateErrorCount: Integer;
     }
 
-    export function tryCreateFromJson(element: JsonElement): Result<RevGridLayoutDefinition, CreateFromJsonErrorIds> {
+    export function tryCreateFromJson(element: JsonElement): Result<RevGridLayoutDefinition, CreateFromJsonErrorId> {
         const columnsResult = tryCreateColumnsFromJson(element);
         if (columnsResult.isErr()) {
-            return new Err( { errorId: CreateFromJsonErrorId.GetElementArray, jsonElementErrorId: columnsResult.error.jsonElementErrorId } );
+            return columnsResult.createType();
         } else {
-            const definition = new RevGridLayoutDefinition(columnsResult.value);
+            const columnsCreatedFromJson = columnsResult.value;
+            const definition = new RevGridLayoutDefinition(columnsCreatedFromJson.columns, columnsCreatedFromJson.columnCreateErrorCount);
             return new Ok(definition);
         }
     }
 
-    export function tryCreateColumnsFromJson(element: JsonElement): Result<RevGridLayoutDefinition.Column[], CreateFromJsonErrorIds> {
-        const columnElementsResult = element.tryGetElementArray(JsonName.columns);
-        if (columnElementsResult.isErr()) {
-            return new Err( { errorId: CreateFromJsonErrorId.GetElementArray, jsonElementErrorId: columnElementsResult.error } );
+    export function tryCreateColumnsFromJson(element: JsonElement): Result<ColumnsCreatedFromJson, CreateFromJsonErrorId> {
+        const getElementResult = element.tryGetElementArray(JsonName.columns);
+        if (getElementResult.isErr()) {
+            const getElementErrorId = getElementResult.error;
+            let createFromJsonErrorId: CreateFromJsonErrorId;
+            switch (getElementErrorId) {
+                case JsonElement.ErrorId.JsonValueIsNotDefined:
+                    createFromJsonErrorId = CreateFromJsonErrorId.ColumnsElementIsNotDefined;
+                    break;
+                case JsonElement.ErrorId.JsonValueIsNotAnArray:
+                    createFromJsonErrorId = CreateFromJsonErrorId.ColumnsElementIsNotAnArray;
+                    break;
+                case JsonElement.ErrorId.JsonValueArrayElementIsNotAnObject:
+                    createFromJsonErrorId = CreateFromJsonErrorId.ColumnElementIsNotAnObject;
+                    break;
+                default:
+                    throw new UnreachableCaseError('RGLDTCCFJ82834', getElementErrorId);
+            }
+            return new Err(createFromJsonErrorId);
         } else {
-            const columnElements = columnElementsResult.value;
+            const columnElements = getElementResult.value;
             const maxCount = columnElements.length;
             const columns = new Array<RevGridLayoutDefinition.Column>(maxCount);
             let count = 0;
+            let columnCreateErrorCount = 0;
             for (let i = 0; i < maxCount; i++ ) {
                 const columnElement = columnElements[i];
                 const column = RevGridLayoutDefinition.Column.tryCreateFromJson(columnElement);
-                if (column !== undefined) {
+                if (column === undefined) {
+                    columnCreateErrorCount++;
+                } else {
                     columns[count++] = column;
                 }
             }
             columns.length = count;
-            return new Ok(columns);
+
+            if (count === 0 && columnCreateErrorCount > 0) {
+                return new Err(CreateFromJsonErrorId.AllColumnElementsAreInvalid);
+            } else {
+                return new Ok({ columns, columnCreateErrorCount });
+            }
         }
     }
 }

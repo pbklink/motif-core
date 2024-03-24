@@ -4,13 +4,16 @@
  * License: motionite.trade/license/motif
  */
 
+import { RevTableRecordSourceDefinitionFromJsonFactory } from '../../../../rev/internal-api';
+import { RenderValue } from '../../../../services/internal-api';
 import { TypedTableFieldSourceDefinition } from '../../field-source/internal-api';
-import { TableRecordSourceDefinitionFromJsonFactory } from './table-record-source-definition-from-json-factory';
 import { TypedTableRecordSourceDefinition } from './typed-table-record-source-definition';
 
 /** @public */
-export interface TypedTableRecordSourceDefinitionFromJsonFactory extends TableRecordSourceDefinitionFromJsonFactory<
+export interface TypedTableRecordSourceDefinitionFromJsonFactory extends RevTableRecordSourceDefinitionFromJsonFactory<
     TypedTableRecordSourceDefinition.TypeId,
-    TypedTableFieldSourceDefinition.TypeId
+    TypedTableFieldSourceDefinition.TypeId,
+    RenderValue.TypeId,
+    RenderValue.Attribute.TypeId
 > {
 }

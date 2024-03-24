@@ -23,6 +23,6 @@ export class RevReferenceableGridLayout extends RevGridLayout {
 
     override createDefinition(): RevReferenceableGridLayoutDefinition {
         const definitionColumns = this.createDefinitionColumns();
-        return new RevReferenceableGridLayoutDefinition(this.id, this.name, definitionColumns);
+        return new RevReferenceableGridLayoutDefinition(this.id, this.name, definitionColumns, 0);
     }
 }

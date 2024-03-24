@@ -4,9 +4,18 @@
  * License: motionite.trade/license/motif
  */
 
-import { Badness } from '../../../sys/internal-api';
+import { RevTableRecordSourceFactory } from '../../../rev/internal-api';
+import { RenderValue } from '../../../services/internal-api';
+import { Badness, CorrectnessState } from '../../../sys/internal-api';
 import { TypedTableFieldSourceDefinition } from '../field-source/internal-api';
 import { TypedTableRecordSourceDefinition } from './definition/internal-api';
-import { TableRecordSourceFactory } from './table-record-source-factory';
 
-export type TypedTableRecordSourceFactory = TableRecordSourceFactory<TypedTableRecordSourceDefinition.TypeId, TypedTableFieldSourceDefinition.TypeId, Badness>;
+export interface TypedTableRecordSourceFactory extends RevTableRecordSourceFactory<
+    TypedTableRecordSourceDefinition.TypeId,
+    TypedTableFieldSourceDefinition.TypeId,
+    RenderValue.TypeId,
+    RenderValue.Attribute.TypeId,
+    Badness
+> {
+    createCorrectnessState(): CorrectnessState<Badness>;
+}

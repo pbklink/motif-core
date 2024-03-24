@@ -6,8 +6,8 @@
 
 import { JsonElement, LockOpenList, mSecsPerSec, SysTick } from '../../sys/internal-api';
 import { ReferenceableGridLayoutsService } from '../layout/internal-api';
-import { TableFieldSourceDefinitionFactory, TableRecordSourceFactory } from '../table/internal-api';
-import { ReferenceableGridSourceDefinition } from './definition/internal-api';
+import { RevTableFieldSourceDefinitionFactory, RevTableRecordSourceFactory } from '../table/internal-api';
+import { RevReferenceableGridSourceDefinition } from './definition/internal-api';
 import { ReferenceableGridSource } from './referenceable-grid-source';
 
 export class ReferenceableGridSourcesService<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, Badness> extends LockOpenList<ReferenceableGridSource<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, Badness>> {
@@ -18,8 +18,8 @@ export class ReferenceableGridSourcesService<TableRecordSourceDefinitionTypeId, 
 
     constructor(
         private readonly _referenceableGridLayoutsService: ReferenceableGridLayoutsService,
-        private readonly _tableFieldSourceDefinitionFactory: TableFieldSourceDefinitionFactory<TableFieldSourceDefinitionTypeId>,
-        private readonly _tableRecordSourceFactory: TableRecordSourceFactory<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, Badness>,
+        private readonly _tableFieldSourceDefinitionFactory: RevTableFieldSourceDefinitionFactory<TableFieldSourceDefinitionTypeId>,
+        private readonly _tableRecordSourceFactory: RevTableRecordSourceFactory<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, Badness>,
     ) {
         super();
     }
@@ -33,7 +33,7 @@ export class ReferenceableGridSourcesService<TableRecordSourceDefinitionTypeId, 
     }
 
     getOrNew(
-        definition: ReferenceableGridSourceDefinition<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId>
+        definition: RevReferenceableGridSourceDefinition<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId>
     ): ReferenceableGridSource<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, Badness> {
         let source = this.getItemByKey(definition.id);
         if (source === undefined) {
@@ -70,7 +70,7 @@ export class ReferenceableGridSourcesService<TableRecordSourceDefinitionTypeId, 
         }
     }
 
-    private createReferenceableGridSource(definition: ReferenceableGridSourceDefinition<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId>) {
+    private createReferenceableGridSource(definition: RevReferenceableGridSourceDefinition<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId>) {
         const index = this.count;
         const result = new ReferenceableGridSource<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, Badness>(
             this._referenceableGridLayoutsService,

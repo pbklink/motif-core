@@ -5,15 +5,32 @@
  */
 
 import { RevGridLayoutDefinition } from '../../../rev/internal-api';
-import { BidAskPair, Err, ErrorCode, JsonElement, Ok, Result } from '../../../sys/internal-api';
+import { BidAskPair, Err, ErrorCode, JsonElement, Ok, Result, UnreachableCaseError } from '../../../sys/internal-api';
 
 /** @public */
 export namespace GridLayoutDefinition {
     export function tryCreateFromJson(element: JsonElement): Result<RevGridLayoutDefinition> {
         const createResult = RevGridLayoutDefinition.tryCreateFromJson(element);
         if (createResult.isErr()) {
-            const errorIds = createResult.error;
-            return new Err(`${ErrorCode.GridLayoutDefinition_TryCreateFromJson}: (${errorIds.errorId}, ${errorIds.jsonElementErrorId})`);
+            const errorId = createResult.error;
+            let errorCode: string;
+            switch (errorId) {
+                case RevGridLayoutDefinition.CreateFromJsonErrorId.ColumnsElementIsNotDefined:
+                    errorCode = ErrorCode.GridLayoutDefinition_ColumnsElementIsNotDefined;
+                    break;
+                case RevGridLayoutDefinition.CreateFromJsonErrorId.ColumnsElementIsNotAnArray:
+                    errorCode = ErrorCode.GridLayoutDefinition_ColumnsElementIsNotAnArray;
+                    break;
+                case RevGridLayoutDefinition.CreateFromJsonErrorId.ColumnElementIsNotAnObject:
+                    errorCode = ErrorCode.GridLayoutDefinition_ColumnElementIsNotAnObject;
+                    break;
+                case RevGridLayoutDefinition.CreateFromJsonErrorId.AllColumnElementsAreInvalid:
+                    errorCode = ErrorCode.GridLayoutDefinition_AllColumnElementsAreInvalid;
+                    break;
+                default:
+                    throw new UnreachableCaseError('GLDTCFJ59712', errorId);
+            }
+            return new Err(errorCode);
         } else {
             return new Ok(createResult.value);
         }

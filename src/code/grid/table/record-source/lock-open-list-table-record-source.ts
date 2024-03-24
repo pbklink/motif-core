@@ -4,8 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { BadnessList } from '../../../sys/internal-api';
-import { LockOpenListItem } from '../../../sys/lock-open-list-item';
+import { BadnessList, LockOpenListItem } from '../../../sys/internal-api';
 import { SubscribeBadnessListTableRecordSource } from './subscribe-badness-list-table-record-source';
 
 export abstract class LockOpenListTableRecordSource<Item extends LockOpenListItem<Item>, List extends BadnessList<Item>>

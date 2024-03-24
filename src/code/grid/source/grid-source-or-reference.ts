@@ -6,8 +6,8 @@
 
 import { AssertInternalError, Err, ErrorCode, Guid, LockOpenListItem, Ok, Result } from '../../sys/internal-api';
 import { ReferenceableGridLayoutsService } from '../layout/internal-api';
-import { TableFieldSourceDefinitionFactory, TableRecordSourceFactory } from '../table/internal-api';
-import { GridRowOrderDefinition, GridSourceDefinition, GridSourceOrReferenceDefinition } from './definition/internal-api';
+import { RevTableFieldSourceDefinitionFactory, RevTableRecordSourceFactory } from '../table/internal-api';
+import { GridSourceOrReferenceDefinition, RevGridRowOrderDefinition, RevGridSourceDefinition } from './definition/internal-api';
 import { GridSource } from './grid-source';
 import { ReferenceableGridSource } from './referenceable-grid-source';
 import { ReferenceableGridSourcesService } from './referenceable-grid-sources-service';
@@ -15,15 +15,15 @@ import { ReferenceableGridSourcesService } from './referenceable-grid-sources-se
 /** @public */
 export class GridSourceOrReference<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, Badness> {
     private readonly _referenceId: Guid | undefined;
-    private readonly _gridSourceDefinition: GridSourceDefinition<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId> | undefined;
+    private readonly _gridSourceDefinition: RevGridSourceDefinition<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId> | undefined;
 
     private _lockedGridSource: GridSource<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, Badness> | undefined;
     private _lockedReferenceableGridSource: ReferenceableGridSource<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, Badness> | undefined;
 
     constructor(
         private readonly _referenceableGridLayoutsService: ReferenceableGridLayoutsService,
-        private readonly _tableFieldSourceDefinitionFactory: TableFieldSourceDefinitionFactory<TableFieldSourceDefinitionTypeId>,
-        private readonly _tableRecordSourceFactory: TableRecordSourceFactory<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, Badness>,
+        private readonly _tableFieldSourceDefinitionFactory: RevTableFieldSourceDefinitionFactory<TableFieldSourceDefinitionTypeId>,
+        private readonly _tableRecordSourceFactory: RevTableRecordSourceFactory<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, Badness>,
         private readonly _referenceableGridSourcesService: ReferenceableGridSourcesService<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, Badness>,
         definition: GridSourceOrReferenceDefinition<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId>
     ) {
@@ -41,7 +41,7 @@ export class GridSourceOrReference<TableRecordSourceDefinitionTypeId, TableField
     get lockedGridSource() { return this._lockedGridSource;}
     get lockedReferenceableGridSource() { return this._lockedReferenceableGridSource;}
 
-    createDefinition(rowOrderDefinition: GridRowOrderDefinition<TableFieldSourceDefinitionTypeId> | undefined) {
+    createDefinition(rowOrderDefinition: RevGridRowOrderDefinition<TableFieldSourceDefinitionTypeId> | undefined) {
         if (this._lockedReferenceableGridSource !== undefined) {
             return new GridSourceOrReferenceDefinition<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId>(this._lockedReferenceableGridSource.id);
         } else {

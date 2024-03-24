@@ -120,7 +120,7 @@ export namespace FullDepthSideGridField {
             layoutDefinitionColumns.reverse();
         }
 
-        return new RevGridLayoutDefinition(layoutDefinitionColumns);
+        return new RevGridLayoutDefinition(layoutDefinitionColumns, 0);
     }
 
     // export function createAllFields(

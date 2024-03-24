@@ -77,7 +77,7 @@ export abstract class AdaptedRevgrid extends Revgrid<AdaptedRevgridBehavioredGri
 
     createGridLayoutDefinition() {
         const definitionColumns = this.createGridLayoutDefinitionColumns();
-        return new RevGridLayoutDefinition(definitionColumns);
+        return new RevGridLayoutDefinition(definitionColumns, 0);
     }
 
     // autoSizeColumnWidth(columnIndex: number): void {

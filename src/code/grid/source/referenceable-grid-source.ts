@@ -6,8 +6,8 @@
 
 import { IndexedRecord, LockOpenListItem } from '../../sys/internal-api';
 import { ReferenceableGridLayoutsService } from '../layout/internal-api';
-import { TableFieldSourceDefinitionFactory, TableRecordSourceFactory } from '../table/internal-api';
-import { GridRowOrderDefinition, ReferenceableGridSourceDefinition } from './definition/internal-api';
+import { RevTableFieldSourceDefinitionFactory, RevTableRecordSourceFactory } from '../table/internal-api';
+import { RevGridRowOrderDefinition, RevReferenceableGridSourceDefinition } from './definition/internal-api';
 import { GridSource } from './grid-source';
 
 export class ReferenceableGridSource<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, Badness>
@@ -19,9 +19,9 @@ export class ReferenceableGridSource<TableRecordSourceDefinitionTypeId, TableFie
 
     constructor(
         referenceableGridLayoutsService: ReferenceableGridLayoutsService,
-        tableFieldSourceDefinitionFactory: TableFieldSourceDefinitionFactory<TableFieldSourceDefinitionTypeId>,
-        tableRecordSourceFactory: TableRecordSourceFactory<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, Badness>,
-        lockedDefinition: ReferenceableGridSourceDefinition<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId>,
+        tableFieldSourceDefinitionFactory: RevTableFieldSourceDefinitionFactory<TableFieldSourceDefinitionTypeId>,
+        tableRecordSourceFactory: RevTableRecordSourceFactory<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, Badness>,
+        lockedDefinition: RevReferenceableGridSourceDefinition<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId>,
         index: number,
     ) {
         const id = lockedDefinition.id;
@@ -31,11 +31,11 @@ export class ReferenceableGridSource<TableRecordSourceDefinitionTypeId, TableFie
         this.upperCaseName = this.name.toUpperCase();
     }
 
-    override createDefinition(rowOrderDefinition: GridRowOrderDefinition<TableFieldSourceDefinitionTypeId>): ReferenceableGridSourceDefinition<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId> {
+    override createDefinition(rowOrderDefinition: RevGridRowOrderDefinition<TableFieldSourceDefinitionTypeId>): RevReferenceableGridSourceDefinition<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId> {
         const tableRecordSourceDefinition = this.createTableRecordSourceDefinition();
         const gridLayoutOrReferenceDefinition = this.createGridLayoutOrReferenceDefinition();
 
-        return new ReferenceableGridSourceDefinition<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId>(
+        return new RevReferenceableGridSourceDefinition<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId>(
             this.id,
             this.name,
             tableRecordSourceDefinition,

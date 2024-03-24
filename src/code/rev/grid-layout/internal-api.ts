@@ -3,5 +3,7 @@
 export * from './definition/internal-api';
 export * from './rev-grid-layout';
 export * from './rev-grid-layout-change';
+export * from './rev-grid-layout-or-reference';
 export * from './rev-referenceable-grid-layout';
+export * from './rev-referenceable-grid-layouts-service';
 

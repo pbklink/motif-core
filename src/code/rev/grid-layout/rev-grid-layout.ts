@@ -5,8 +5,12 @@ import {
     Guid,
     IndexedRecord,
     Integer,
+    LockOpenListItem,
+    LockOpenManager,
     MapKey,
     MultiEvent,
+    Ok,
+    Result,
     moveElementInArray,
     moveElementsInArray,
     newGuid
@@ -18,12 +22,13 @@ import { RevGridLayoutDefinition } from './definition/internal-api';
  *
  * @public
  */
-export class RevGridLayout implements IndexedRecord {
+export class RevGridLayout implements LockOpenListItem<RevGridLayout>, IndexedRecord {
     readonly id: Guid;
     readonly mapKey: MapKey;
 
     public index: number;
 
+    private readonly _lockOpenManager: LockOpenManager<RevGridLayout>;
     private readonly _columns = new Array<RevGridLayout.Column>(0);
 
     private _beginChangeCount = 0;
@@ -42,13 +47,82 @@ export class RevGridLayout implements IndexedRecord {
         this.id = id ?? newGuid();
         this.mapKey = mapKey ?? this.id;
 
+        this._lockOpenManager = new LockOpenManager<RevGridLayout>(
+            () => this.tryProcessFirstLock(),
+            () => { this.processLastUnlock(); },
+            () => { this.processFirstOpen(); },
+            () => { this.processLastClose(); },
+        );
+
         if (definition !== undefined) {
             this.applyDefinition(RevGridLayout.forceChangeInitiator, definition);
         }
     }
 
+    get lockCount() { return this._lockOpenManager.lockCount; }
+    get lockers(): readonly LockOpenListItem.Locker[] { return this._lockOpenManager.lockers; }
+    get openCount() { return this._lockOpenManager.openCount; }
+    get openers(): readonly LockOpenListItem.Opener[] { return this._lockOpenManager.openers; }
+
     get columns(): readonly RevGridLayout.Column[] { return this._columns; }
     get columnCount(): number { return this._columns.length; }
+
+    async tryLock(locker: LockOpenListItem.Locker): Promise<Result<void>> {
+        return this._lockOpenManager.tryLock(locker);
+    }
+
+    unlock(locker: LockOpenListItem.Locker) {
+        this._lockOpenManager.unlock(locker);
+    }
+
+    openLocked(opener: LockOpenListItem.Opener) {
+        this._lockOpenManager.openLocked(opener);
+    }
+
+    closeLocked(opener: LockOpenListItem.Opener) {
+        this._lockOpenManager.closeLocked(opener);
+    }
+
+    isLocked(ignoreOnlyLocker: LockOpenListItem.Locker | undefined) {
+        return this._lockOpenManager.isLocked(ignoreOnlyLocker);
+    }
+
+    // open(_opener: LockOpenListItem.Opener, fieldNames: string[]) {
+    //     const fieldCount = fieldNames.length;
+    //     this._fields.length = fieldCount;
+    //     for (let i = 0; i < fieldCount; i++) {
+    //         const fieldName = fieldNames[i];
+    //         const field = new GridLayout.Field(fieldName);
+    //         this._fields[i] = field;
+    //     }
+
+    //     const maxColumnCount = this._definition.columnCount;
+    //     const definitionColumns = this._definition.columns;
+    //     let columnCount = 0;
+    //     this._columns.length = maxColumnCount;
+    //     for (let i = 0; i < maxColumnCount; i++) {
+    //         const definitionColumn = definitionColumns[i];
+    //         const definitionColumnName = definitionColumn.name;
+    //         const foundField = this._fields.find((field) => field.name === definitionColumnName);
+    //         if (foundField !== undefined) {
+    //             this._columns[columnCount] = {
+    //                 index: columnCount,
+    //                 field: foundField,
+    //                 visible: true
+    //             }
+    //             columnCount++;
+    //         }
+    //         this._columns.length = columnCount;
+    //     }
+    //     this._definitionListChangeSubscriptionId = this._definition.subscribeListChangeEvent(
+    //         (listChangeTypeId, index, count) => this.handleDefinitionListChangeEvent(listChangeTypeId, index, count)
+    //     );
+    // }
+
+    // close(opener: LockOpenListItem.Opener) {
+    //     this._definition.unsubscribeListChangeEvent(this._definitionListChangeSubscriptionId);
+    //     this._definitionListChangeSubscriptionId = undefined;
+    // }
 
     beginChange(initiator: RevGridLayout.ChangeInitiator) {
         if (this._beginChangeCount++ === 0) {
@@ -103,7 +177,7 @@ export class RevGridLayout implements IndexedRecord {
 
     createDefinition(): RevGridLayoutDefinition {
         const definitionColumns = this.createDefinitionColumns();
-        return new RevGridLayoutDefinition(definitionColumns);
+        return new RevGridLayoutDefinition(definitionColumns, 0);
     }
 
     applyDefinition(initiator: RevGridLayout.ChangeInitiator, definition: RevGridLayoutDefinition): void {
@@ -304,7 +378,7 @@ export class RevGridLayout implements IndexedRecord {
             copiedColumns[i] = copiedColumn;
         }
 
-        const definition = new RevGridLayoutDefinition(copiedColumns);
+        const definition = new RevGridLayoutDefinition(copiedColumns, 0);
         this.applyDefinition(RevGridLayout.forceChangeInitiator, definition);
     }
 
@@ -323,6 +397,22 @@ export class RevGridLayout implements IndexedRecord {
         }
 
         return definitionColumns;
+    }
+
+    private tryProcessFirstLock(): Promise<Result<void>> {
+        return Promise.resolve(new Ok(undefined));
+    }
+
+    private processLastUnlock(): void {
+        // nothing to do
+    }
+
+    private processFirstOpen(): void {
+        // nothing to do
+    }
+
+    private processLastClose(): void {
+        // nothing to do
     }
 
     private notifyChanged(initiator: RevGridLayout.ChangeInitiator) {

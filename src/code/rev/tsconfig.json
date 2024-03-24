@@ -13,8 +13,7 @@
   ],
 
   "references": [
-    { "path": "./table-value/tsconfig.json" },
-    { "path": "./table-field/tsconfig.json" },
+    { "path": "./table/tsconfig.json" },
     { "path": "./grid-layout/tsconfig.json" },
     { "path": "./field/tsconfig.json" },
     { "path": "./render-value/tsconfig.json" },

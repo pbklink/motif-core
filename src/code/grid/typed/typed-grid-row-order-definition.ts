@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { GridRowOrderDefinition } from '../source/internal-api';
+import { RevGridRowOrderDefinition } from '../source/internal-api';
 import { TypedTableFieldSourceDefinition } from '../table/internal-api';
 
-export class TypedGridRowOrderDefinition extends GridRowOrderDefinition<TypedTableFieldSourceDefinition.TypeId> {}
+export class TypedGridRowOrderDefinition extends RevGridRowOrderDefinition<TypedTableFieldSourceDefinition.TypeId> {}

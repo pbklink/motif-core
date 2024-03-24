@@ -9,7 +9,7 @@ import {
     RevGridLayoutOrReferenceDefinition
 } from '../../rev/internal-api';
 import { AssertInternalError, Err, ErrorCode, Guid, LockOpenListItem, Ok, Result } from '../../sys/internal-api';
-import { GridLayout } from './grid-layout';
+import { RevGridLayout } from './grid-layout';
 import { ReferenceableGridLayout } from './referenceable-grid-layout';
 import { ReferenceableGridLayoutsService } from './referenceable-grid-layouts-service';
 
@@ -18,7 +18,7 @@ export class GridLayoutOrReference {
     private readonly _referenceId: Guid | undefined;
     private readonly _gridLayoutDefinition: RevGridLayoutDefinition | undefined;
 
-    private _lockedGridLayout: GridLayout | undefined;
+    private _lockedGridLayout: RevGridLayout | undefined;
     private _lockedReferenceableGridLayout: ReferenceableGridLayout | undefined;
 
     constructor(
@@ -54,7 +54,7 @@ export class GridLayoutOrReference {
 
     async tryLock(locker: LockOpenListItem.Locker): Promise<Result<void>> {
         if (this._gridLayoutDefinition !== undefined) {
-            const gridLayout = new GridLayout(this._gridLayoutDefinition);
+            const gridLayout = new RevGridLayout(this._gridLayoutDefinition);
             const lockResult = await gridLayout.tryLock(locker);
             if (lockResult.isErr()) {
                 return lockResult.createOuter(ErrorCode.GridLayoutOrReference_TryLockGridLayoutDefinition);

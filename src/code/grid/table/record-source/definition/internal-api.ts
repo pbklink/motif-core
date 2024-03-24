@@ -20,8 +20,6 @@ export * from './ranked-lit-ivem-id-list-table-record-source-definition';
 export * from './ranked-lit-ivem-id-usable-list-table-record-source-definition';
 export * from './scan-table-record-source-definition';
 export * from './scan-test-table-record-source-definition';
-export * from './table-record-source-definition';
-export * from './table-record-source-definition-from-json-factory';
 export * from './table-record-source-definition-static-initialise';
 export * from './top-shareholder-table-record-source-definition';
 export * from './typed-table-record-source-definition';

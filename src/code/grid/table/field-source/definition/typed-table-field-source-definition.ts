@@ -4,13 +4,14 @@
  * License: motionite.trade/license/motif
  */
 
+import { RevTableFieldSourceDefinition } from '../../../../rev/internal-api';
+import { RenderValue } from '../../../../services/internal-api';
 import { EnumInfoOutOfOrderError, Integer } from '../../../../sys/internal-api';
 // import { GridRecordFieldState } from '../../../record/grid-record-internal-api';
-import { CorrectnessTableField } from '../../field/internal-api';
-import { CorrectnessTableValue } from '../../value/internal-api';
-import { TableFieldSourceDefinition } from './table-field-source-definition';
+import { CorrectnessTableField, TableField } from '../../field/internal-api';
+import { CorrectnessTableValue, TableValue } from '../../value/internal-api';
 
-export abstract class TypedTableFieldSourceDefinition extends TableFieldSourceDefinition<TypedTableFieldSourceDefinition.TypeId> {
+export abstract class TypedTableFieldSourceDefinition extends RevTableFieldSourceDefinition<TypedTableFieldSourceDefinition.TypeId, RenderValue.TypeId, RenderValue.Attribute.TypeId> {
     constructor(typeId: TypedTableFieldSourceDefinition.TypeId) {
         super(typeId, TypedTableFieldSourceDefinition.Type.idToName(typeId));
     }
@@ -134,6 +135,17 @@ export namespace TypedTableFieldSourceDefinition {
         }
     }
 
+    export type TableFieldValueConstructors = [
+        field: TableField.Constructor,
+        value: TableValue.Constructor
+    ];
+
+    // used by descendants
+    export type TableGridConstructors = [
+        TableField.Constructor,
+        TableValue.Constructor
+    ];
+
     // used by descendants
     export type CorrectnessTableGridConstructors = [
         CorrectnessTableField.Constructor,
@@ -144,8 +156,8 @@ export namespace TypedTableFieldSourceDefinition {
         Type.initialiseSource();
     }
 
-    export type FieldName = TableFieldSourceDefinition.FieldName<TypeId>;
-    export type FieldId = TableFieldSourceDefinition.FieldId<TypeId>;
+    export type FieldName = RevTableFieldSourceDefinition.FieldName<TypeId>;
+    export type FieldId = RevTableFieldSourceDefinition.FieldId<TypeId>;
 
     // export function decodeCommaTextFieldName(value: string): Result<FieldName> {
     //     const commaTextResult = CommaText.tryToStringArray(value, true);

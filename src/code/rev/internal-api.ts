@@ -3,6 +3,5 @@
 export * from './field/internal-api';
 export * from './grid-layout/internal-api';
 export * from './render-value/internal-api';
-export * from './table-field/internal-api';
-export * from './table-value/internal-api';
+export * from './table/internal-api';
 

@@ -8,11 +8,11 @@ import {
     Badness,
     BadnessList,
     Integer,
+    LockOpenListItem,
     MultiEvent,
     UnreachableCaseError,
     UsableListChangeTypeId
 } from "../../../sys/internal-api";
-import { LockOpenListItem } from '../../../sys/lock-open-list-item';
 import { TypedTableRecordSource } from './typed-table-record-source';
 
 /** @public */

@@ -4,87 +4,12 @@
  * License: motionite.trade/license/motif
  */
 
-import { AdiService } from '../../../adi/internal-api';
-import { Integer, ValueRecentChangeTypeId } from '../../../sys/internal-api';
-import { TableValue } from '../value/internal-api';
+import { RevTableValueSource } from '../../../rev/internal-api';
+import { RenderValue } from '../../../services/internal-api';
 
-export abstract class TableValueSource {
-    valueChangesEvent: TableValueSource.ValueChangesEvent;
-    allValuesChangeEvent: TableValueSource.AllValuesChangeEvent;
-    becomeIncubatedEventer: TableValueSource.BecomeIncubatedEventer;
-
-    protected _beenIncubated = false;
-
-    constructor(private readonly _firstFieldIndexOffset: Integer ) { }
-
-    get beenIncubated(): boolean { return this._beenIncubated; }
-    get fieldCount() { return this.getfieldCount(); }
-    get firstFieldIndexOffset() { return this._firstFieldIndexOffset; }
-
-    protected notifyValueChangesEvent(valueChanges: TableValueSource.ValueChange[]) {
-        for (let i = 0; i < valueChanges.length; i++) {
-            valueChanges[i].fieldIndex += this._firstFieldIndexOffset;
-        }
-        this.valueChangesEvent(valueChanges);
-    }
-
-    protected notifyAllValuesChangeEvent(newValues: TableValue[]) {
-        this.allValuesChangeEvent(this._firstFieldIndexOffset, newValues);
-    }
-
-    protected initialiseBeenIncubated(value: boolean) {
-        this._beenIncubated = value;
-    }
-
-    protected processDataCorrectnessChanged(allValues: TableValue[], incubated: boolean) {
-        this.allValuesChangeEvent(this._firstFieldIndexOffset, allValues);
-
-        if (incubated) {
-            this.checkNotifyBecameIncubated();
-        }
-    }
-
-    private checkNotifyBecameIncubated() {
-        if (!this._beenIncubated) {
-            this._beenIncubated = true;
-            this.becomeIncubatedEventer();
-        }
-    }
-
-    abstract activate(): TableValue[];
-    abstract deactivate(): void;
-    abstract getAllValues(): TableValue[];
-
-    protected abstract getfieldCount(): Integer;
+export abstract class TableValueSource extends RevTableValueSource<RenderValue.TypeId, RenderValue.Attribute.TypeId> {
 }
 
 export namespace TableValueSource {
-    export interface ChangedValue {
-        fieldIdx: Integer;
-        newValue: TableValue;
-    }
-
-    export interface ValueChange {
-        fieldIndex: Integer;
-        newValue: TableValue;
-        recentChangeTypeId: ValueRecentChangeTypeId | undefined;
-    }
-    export namespace ValueChange {
-        export function arrayIncludesFieldIndex(array: readonly ValueChange[], fieldIndex: Integer, end: Integer): boolean {
-            for (let i = 0; i < end; i++) {
-                const valueChange = array[i];
-                if (valueChange.fieldIndex === fieldIndex) {
-                    return true;
-                }
-            }
-            return false;
-        }
-    }
-
-    export type BeginValuesChangeEvent = (this: void) => void;
-    export type EndValuesChangeEvent = (this: void) => void;
-    export type ValueChangesEvent = (valueChanges: ValueChange[]) => void;
-    export type AllValuesChangeEvent = (firstFieldIdxOffset: Integer, newValues: TableValue[]) => void;
-    export type BecomeIncubatedEventer = (this: void) => void;
-    export type Constructor = new(firstFieldIdxOffset: Integer, recordIdx: Integer, adi: AdiService) => TableValueSource;
+    export type ValueChange = RevTableValueSource.ValueChange<RenderValue.TypeId, RenderValue.Attribute.TypeId>;
 }

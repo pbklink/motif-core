@@ -44,7 +44,6 @@ export namespace JsonElementErr {
         switch (errorId) {
             case JsonElement.ErrorId.InvalidJsonText: return ErrorCode.JsonElement_InvalidJsonText;
             case JsonElement.ErrorId.ElementIsNotDefined: return ErrorCode.JsonElement_ElementIsNotDefined;
-            case JsonElement.ErrorId.ElementIsNotAJsonObject: return ErrorCode.JsonElement_ElementIsNotAJsonObject;
             case JsonElement.ErrorId.JsonValueIsNotDefined: return ErrorCode.JsonElement_JsonValueIsNotDefined;
             case JsonElement.ErrorId.JsonValueIsNotOfTypeObject: return ErrorCode.JsonElement_JsonValueIsNotOfTypeObject;
             case JsonElement.ErrorId.JsonValueIsNotOfTypeString: return ErrorCode.JsonElement_JsonValueIsNotOfTypeString;

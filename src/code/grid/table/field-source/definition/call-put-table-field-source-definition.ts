@@ -33,7 +33,6 @@ import {
     PriceTableValue,
     TableValue
 } from '../../value/internal-api';
-import { TableFieldSourceDefinition } from './table-field-source-definition';
 import { TypedTableFieldSourceDefinition } from './typed-table-field-source-definition';
 import { TypedTableFieldSourceDefinitionCachingFactoryService } from './typed-table-field-source-definition-caching-factory-service';
 
@@ -105,8 +104,7 @@ export namespace CallPutTableFieldSourceDefinition {
         const infos = new Array<Info>(count);
         const idFieldIndices = new Array<Integer>(CallPut.Field.count);
 
-        function idToTableGridConstructors(id: CallPut.FieldId):
-            TableFieldSourceDefinition.TableGridConstructors {
+        function idToTableGridConstructors(id: CallPut.FieldId): TypedTableFieldSourceDefinition.TableGridConstructors {
             switch (id) {
                 case CallPut.FieldId.ExercisePrice:
                     return [DecimalTableField, PriceTableValue];

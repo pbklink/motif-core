@@ -4,9 +4,9 @@
  * License: motionite.trade/license/motif
  */
 
+import { RevTableRecordDefinition } from '../../../rev/internal-api';
 import { TypedTableFieldSourceDefinition } from '../field-source/internal-api';
-import { TableRecordDefinition } from './table-record-definition';
 
-export interface TypedTableRecordDefinition extends TableRecordDefinition<TypedTableFieldSourceDefinition.TypeId> {
+export interface TypedTableRecordDefinition extends RevTableRecordDefinition<TypedTableFieldSourceDefinition.TypeId> {
 
 }

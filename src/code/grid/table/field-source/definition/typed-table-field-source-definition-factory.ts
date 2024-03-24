@@ -4,8 +4,12 @@
  * License: motionite.trade/license/motif
  */
 
-import { TableFieldSourceDefinitionFactory } from './table-field-source-definition-factory';
+import { RevTableFieldSourceDefinitionFactory } from '../../../../rev/internal-api';
+import { RenderValue } from '../../../../services/internal-api';
 import { TypedTableFieldSourceDefinition } from './typed-table-field-source-definition';
 
-export interface TypedTableFieldSourceDefinitionFactory extends TableFieldSourceDefinitionFactory<TypedTableFieldSourceDefinition.TypeId> {
+export interface TypedTableFieldSourceDefinitionFactory extends RevTableFieldSourceDefinitionFactory<
+    TypedTableFieldSourceDefinition.TypeId,
+    RenderValue.TypeId,
+    RenderValue.Attribute.TypeId> {
 }

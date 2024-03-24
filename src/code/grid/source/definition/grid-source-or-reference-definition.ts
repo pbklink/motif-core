@@ -6,15 +6,15 @@
 
 import { AssertInternalError, ErrorCode, Guid, JsonElement, JsonElementErr, Ok, Result } from '../../../sys/internal-api';
 import { RevGridLayoutOrReferenceDefinition } from '../../layout/internal-api';
-import { TableRecordSourceDefinitionFromJsonFactory } from '../../table/internal-api';
-import { GridSourceDefinition } from './grid-source-definition';
+import { RevTableRecordSourceDefinitionFromJsonFactory } from '../../table/internal-api';
+import { RevGridSourceDefinition } from './rev-grid-source-definition';
 
 /** @public */
 export class GridSourceOrReferenceDefinition<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId> {
     readonly referenceId: Guid | undefined;
-    readonly gridSourceDefinition: GridSourceDefinition<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId> | undefined;
+    readonly gridSourceDefinition: RevGridSourceDefinition<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId> | undefined;
 
-    constructor(gridSourceDefinitionOrReferenceId: GridSourceDefinition<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId> | Guid) {
+    constructor(gridSourceDefinitionOrReferenceId: RevGridSourceDefinition<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId> | Guid) {
         if (typeof gridSourceDefinitionOrReferenceId === 'string') {
             this.referenceId = gridSourceDefinitionOrReferenceId;
         } else {
@@ -65,7 +65,7 @@ export namespace GridSourceOrReferenceDefinition {
     }
 
     export function tryCreateFromJson<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId>(
-        tableRecordSourceDefinitionFromJsonFactory: TableRecordSourceDefinitionFromJsonFactory<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId>,
+        tableRecordSourceDefinitionFromJsonFactory: RevTableRecordSourceDefinitionFromJsonFactory<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId>,
         element: JsonElement
     ): Result<GridSourceOrReferenceDefinition<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId>> {
         const referenceIdResult = element.tryGetString(JsonName.referenceId);
@@ -79,7 +79,7 @@ export namespace GridSourceOrReferenceDefinition {
                 return JsonElementErr.createOuter(definitionElementResult.error, ErrorCode.GridSourceOrReferenceDefinition_BothDefinitionAndReferenceAreNotSpecified);
             } else {
                 const definitionElement = definitionElementResult.value;
-                const definitionResult = GridSourceDefinition.tryCreateFromJson(
+                const definitionResult = RevGridSourceDefinition.tryCreateFromJson(
                     tableRecordSourceDefinitionFromJsonFactory,
                     definitionElement
                 );

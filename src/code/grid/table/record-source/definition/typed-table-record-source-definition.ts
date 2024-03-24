@@ -5,6 +5,8 @@
  */
 
 import { StringId, Strings } from '../../../../res/internal-api';
+import { RevTableRecordSourceDefinition } from '../../../../rev/internal-api';
+import { RenderValue } from '../../../../services/internal-api';
 import {
     EnumInfoOutOfOrderError,
     Err,
@@ -18,9 +20,13 @@ import {
 } from "../../../../sys/internal-api";
 import { RevFieldCustomHeadingsService } from '../../../field/internal-api';
 import { TypedTableFieldSourceDefinition, TypedTableFieldSourceDefinitionCachingFactoryService } from '../../field-source/internal-api';
-import { TableRecordSourceDefinition } from './table-record-source-definition';
 
-export abstract class TypedTableRecordSourceDefinition extends TableRecordSourceDefinition<TypedTableRecordSourceDefinition.TypeId, TypedTableFieldSourceDefinition.TypeId> {
+export abstract class TypedTableRecordSourceDefinition extends RevTableRecordSourceDefinition<
+    TypedTableRecordSourceDefinition.TypeId,
+    TypedTableFieldSourceDefinition.TypeId,
+    RenderValue.TypeId,
+    RenderValue.Attribute.TypeId
+> {
     constructor(
         customHeadingsService: RevFieldCustomHeadingsService,
         tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService,

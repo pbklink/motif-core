@@ -206,7 +206,7 @@ export namespace DayTradesGridField {
             };
             columns[i] = column;
         }
-        return new RevGridLayoutDefinition(columns);
+        return new RevGridLayoutDefinition(columns, 0);
     }
 
     export function createAllowedFields(): readonly AllowedGridField[] {

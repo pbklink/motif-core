@@ -4,9 +4,14 @@
  * License: motionite.trade/license/motif
  */
 
-import { TableFieldSourceDefinitionCachingFactoryService } from './table-field-source-definition-caching-factory-service';
+import { RevTableFieldSourceDefinitionCachingFactoryService } from '../../../../rev/internal-api';
+import { RenderValue } from '../../../../services/internal-api';
 import { TypedTableFieldSourceDefinition } from './typed-table-field-source-definition';
 
-export class TypedTableFieldSourceDefinitionCachingFactoryService extends TableFieldSourceDefinitionCachingFactoryService<TypedTableFieldSourceDefinition.TypeId> {
+export class TypedTableFieldSourceDefinitionCachingFactoryService extends RevTableFieldSourceDefinitionCachingFactoryService<
+    TypedTableFieldSourceDefinition.TypeId,
+    RenderValue.TypeId,
+    RenderValue.Attribute.TypeId
+> {
 
 }

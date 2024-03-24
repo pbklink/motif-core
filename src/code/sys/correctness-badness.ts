@@ -9,8 +9,7 @@
 import { Badness } from './badness';
 import { CorrectnessId } from './correctness';
 import { CorrectnessRecord } from './correctness-record';
-import { CorrectnessState } from './correctness-state';
-import { AssertInternalError, MultiEvent } from './xilytix-sysutils';
+import { AssertInternalError, CorrectnessState, MultiEvent } from './xilytix-sysutils';
 
 export class CorrectnessBadness implements CorrectnessRecord, CorrectnessState<Badness> {
     private _badness = Badness.createCopy(Badness.inactive);

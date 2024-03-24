@@ -1,6 +1,6 @@
 // (c) 2024 Xilytix Pty Ltd / Paul Klink
 
-import { AssertInternalError, Err, Guid, JsonElement, Ok, Result } from '@xilytix/sysutils';
+import { AssertInternalError, Err, Guid, JsonElement, Ok, Result, UnexpectedCaseError, UnreachableCaseError } from '@xilytix/sysutils';
 import { RevGridLayoutDefinition } from './rev-grid-layout-definition';
 
 /** @public */
@@ -38,16 +38,16 @@ export namespace RevGridLayoutOrReferenceDefinition {
     }
 
     export const enum CreateFromJsonErrorId {
-        GetElement,
-        CreateDefinition
+        NeitherReferenceOrDefinitionJsonValueIsDefined,
+        BothReferenceAndDefinitionJsonValuesAreOfWrongType,
+        DefinitionJsonValueIsNotOfTypeObject,
+        DefinitionColumnsElementIsNotDefined,
+        DefinitionColumnsElementIsNotAnArray,
+        DefinitionColumnElementIsNotAnObject,
+        DefinitionAllColumnElementsAreInvalid,
     }
 
-    export interface CreateFromJsonErrorIds {
-        readonly errorId: CreateFromJsonErrorId;
-        readonly jsonElementErrorId: JsonElement.ErrorId;
-    }
-
-    export function tryCreateFromJson(element: JsonElement): Result<RevGridLayoutOrReferenceDefinition, CreateFromJsonErrorIds> {
+    export function tryCreateFromJson(element: JsonElement): Result<RevGridLayoutOrReferenceDefinition, CreateFromJsonErrorId> {
         const referenceIdResult = element.tryGetString(JsonName.referenceId);
         if (referenceIdResult.isOk()) {
             const referenceId = referenceIdResult.value;
@@ -55,17 +55,66 @@ export namespace RevGridLayoutOrReferenceDefinition {
             return new Ok(gridLayoutOrReferenceDefinition);
         } else {
             const definitionElementResult = element.tryGetElement(JsonName.gridLayoutDefinition);
-            if (definitionElementResult.isErr()) {
-                return new Err({ errorId: CreateFromJsonErrorId.GetElement, jsonElementErrorId: definitionElementResult.error });
-            } else {
+            if (definitionElementResult.isOk()) {
                 const definitionElement = definitionElementResult.value;
                 const definitionResult = RevGridLayoutDefinition.tryCreateFromJson(definitionElement);
-                if (definitionResult.isErr()) {
-                    return new Err({ errorId: CreateFromJsonErrorId.CreateDefinition, jsonElementErrorId: definitionResult.error.jsonElementErrorId });
-                } else {
+                if (definitionResult.isOk()) {
                     const gridLayoutOrReferenceDefinition = new RevGridLayoutOrReferenceDefinition(definitionResult.value);
                     return new Ok(gridLayoutOrReferenceDefinition);
+                } else {
+                    const definitionErrorId = definitionResult.error;
+                    let createFromJsonErrorId: CreateFromJsonErrorId;
+                    switch (definitionErrorId) {
+                        case RevGridLayoutDefinition.CreateFromJsonErrorId.ColumnsElementIsNotDefined:
+                            createFromJsonErrorId = CreateFromJsonErrorId.DefinitionColumnsElementIsNotDefined;
+                            break;
+                        case RevGridLayoutDefinition.CreateFromJsonErrorId.ColumnsElementIsNotAnArray:
+                            createFromJsonErrorId = CreateFromJsonErrorId.DefinitionColumnsElementIsNotAnArray;
+                            break;
+                        case RevGridLayoutDefinition.CreateFromJsonErrorId.ColumnElementIsNotAnObject:
+                            createFromJsonErrorId = CreateFromJsonErrorId.DefinitionColumnElementIsNotAnObject;
+                            break;
+                        case RevGridLayoutDefinition.CreateFromJsonErrorId.AllColumnElementsAreInvalid:
+                            createFromJsonErrorId = CreateFromJsonErrorId.DefinitionAllColumnElementsAreInvalid;
+                            break;
+                        default:
+                            throw new UnreachableCaseError('RGLORDTCFDJD67112', definitionErrorId);
+                    }
+                    return new Err(createFromJsonErrorId);
                 }
+            } else {
+                const referenceIdErrorId = referenceIdResult.error;
+                const definitionElementErrorId = definitionElementResult.error;
+                let createFromJsonErrorId: CreateFromJsonErrorId;
+                switch (referenceIdErrorId) {
+                    case JsonElement.ErrorId.JsonValueIsNotDefined:
+                        switch (definitionElementErrorId) {
+                            case JsonElement.ErrorId.ElementIsNotDefined:
+                                createFromJsonErrorId = CreateFromJsonErrorId.NeitherReferenceOrDefinitionJsonValueIsDefined;
+                                break;
+                            case JsonElement.ErrorId.JsonValueIsNotOfTypeObject:
+                                createFromJsonErrorId = CreateFromJsonErrorId.DefinitionJsonValueIsNotOfTypeObject;
+                                break;
+                            default:
+                                throw new UnexpectedCaseError('RGLORDTCFDJRDD67112', definitionElementErrorId);
+                        }
+                        break;
+                    case JsonElement.ErrorId.JsonValueIsNotOfTypeString:
+                        switch (definitionElementErrorId) {
+                            case JsonElement.ErrorId.ElementIsNotDefined:
+                                createFromJsonErrorId = CreateFromJsonErrorId.NeitherReferenceOrDefinitionJsonValueIsDefined;
+                                break;
+                            case JsonElement.ErrorId.JsonValueIsNotOfTypeObject:
+                                createFromJsonErrorId = CreateFromJsonErrorId.BothReferenceAndDefinitionJsonValuesAreOfWrongType;
+                                break;
+                            default:
+                                throw new UnexpectedCaseError('RGLORDTCFDJRDS67112', definitionElementErrorId);
+                        }
+                        break;
+                    default:
+                        throw new UnexpectedCaseError('RGLORDTCFJR67112', referenceIdErrorId);
+                }
+                return new Err(createFromJsonErrorId);
             }
         }
     }
