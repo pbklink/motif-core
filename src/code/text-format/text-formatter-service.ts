@@ -593,7 +593,7 @@ export class TextFormatterService {
         this._dateTimeTimezoneModeId = this._scalarSettings.format_DateTimeTimezoneModeId;
     }
 
-    private formatDefinedRenderValue(renderValue: RenderValue) {
+    private formatDefinedRenderValue(renderValue: RenderValue): string {
         switch (renderValue.typeId) {
             case RenderValue.TypeId.String:
                 return (renderValue as StringRenderValue).definedData;

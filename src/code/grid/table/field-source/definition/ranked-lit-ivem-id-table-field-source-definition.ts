@@ -25,11 +25,11 @@ import {
     LitIvemIdCorrectnessTableValue,
     NumberCorrectnessTableValue
 } from "../../value/internal-api";
-import { TypedTableFieldSourceDefinition } from './typed-table-field-source-definition';
-import { TypedTableFieldSourceDefinitionCachingFactoryService } from './typed-table-field-source-definition-caching-factory-service';
+import { TableFieldSourceDefinition } from './table-field-source-definition';
+import { TableFieldSourceDefinitionCachingFactoryService } from './table-field-source-definition-caching-factory-service';
 
 /** @public */
-export class RankedLitIvemIdTableFieldSourceDefinition extends TypedTableFieldSourceDefinition {
+export class RankedLitIvemIdTableFieldSourceDefinition extends TableFieldSourceDefinition {
     override readonly fieldDefinitions: TableField.Definition[];
 
     constructor() {
@@ -83,7 +83,7 @@ export class RankedLitIvemIdTableFieldSourceDefinition extends TypedTableFieldSo
 
 /** @public */
 export namespace RankedLitIvemIdTableFieldSourceDefinition {
-    export const typeId = TypedTableFieldSourceDefinition.TypeId.RankedLitIvemId;
+    export const typeId = TableFieldSourceDefinition.TypeId.RankedLitIvemId;
     export type TypeId = typeof typeId;
 
     export namespace Field {
@@ -100,7 +100,7 @@ export namespace RankedLitIvemIdTableFieldSourceDefinition {
         const idFieldIndices = new Array<Integer>(RankedLitIvemId.Field.idCount);
 
         function idToTableGridConstructors(id: RankedLitIvemId.FieldId):
-            TypedTableFieldSourceDefinition.CorrectnessTableGridConstructors {
+            TableFieldSourceDefinition.CorrectnessTableGridConstructors {
             switch (id) {
                 case RankedLitIvemId.FieldId.LitIvemId:
                     return [LitIvemIdCorrectnessTableField, LitIvemIdCorrectnessTableValue];
@@ -168,12 +168,12 @@ export namespace RankedLitIvemIdTableFieldSourceDefinition {
         }
     }
 
-    export interface FieldId extends TypedTableFieldSourceDefinition.FieldId {
+    export interface FieldId extends TableFieldSourceDefinition.FieldId {
         sourceTypeId: RankedLitIvemIdTableFieldSourceDefinition.TypeId;
         id: RankedLitIvemId.FieldId;
     }
 
-    export function get(cachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService): RankedLitIvemIdTableFieldSourceDefinition {
+    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactoryService): RankedLitIvemIdTableFieldSourceDefinition {
         return cachingFactoryService.get(typeId) as RankedLitIvemIdTableFieldSourceDefinition;
     }
 

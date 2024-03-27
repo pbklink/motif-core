@@ -4,22 +4,33 @@
  * License: motionite.trade/license/motif
  */
 
-import { JsonElement, LockOpenList, mSecsPerSec, SysTick } from '../../sys/internal-api';
+import { RevDataSource, RevReferenceableDataSourcesService } from '../../rev/internal-api';
+import { RenderValue } from '../../services/internal-api';
+import { Badness, JsonElement, LockOpenList, SysTick, mSecsPerSec } from '../../sys/internal-api';
 import { ReferenceableGridLayoutsService } from '../layout/internal-api';
-import { RevTableFieldSourceDefinitionFactory, RevTableRecordSourceFactory } from '../table/internal-api';
-import { RevReferenceableGridSourceDefinition } from './definition/internal-api';
-import { ReferenceableGridSource } from './referenceable-grid-source';
+import { TableFieldSourceDefinition, TableFieldSourceDefinitionFactory, TableRecordSourceDefinition } from '../table/internal-api';
+import { ReferenceableDataSource } from './referenceable-data-source';
+import { ReferenceableDataSourceDefinition } from './referenceable-data-source-definition';
+import { TableRecordSourceFactory } from './table-record-source-factory';
 
-export class ReferenceableGridSourcesService<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, Badness> extends LockOpenList<ReferenceableGridSource<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, Badness>> {
+export class ReferenceableDataSourcesService
+    extends LockOpenList<ReferenceableDataSource, RevDataSource.LockErrorIdPlusTryError>
+    implements RevReferenceableDataSourcesService<
+        TableRecordSourceDefinition.TypeId,
+        TableFieldSourceDefinition.TypeId,
+        RenderValue.TypeId,
+        RenderValue.Attribute.TypeId,
+        Badness
+    > {
     private _saveModified: boolean;
     private nextPeriodicSaveCheckTime: SysTick.Time =
-        SysTick.now() + ReferenceableGridSourcesService.periodicSaveCheckInterval;
+        SysTick.now() + ReferenceableDataSourcesService.periodicSaveCheckInterval;
     private savePeriodicRequired: boolean;
 
     constructor(
         private readonly _referenceableGridLayoutsService: ReferenceableGridLayoutsService,
-        private readonly _tableFieldSourceDefinitionFactory: RevTableFieldSourceDefinitionFactory<TableFieldSourceDefinitionTypeId>,
-        private readonly _tableRecordSourceFactory: RevTableRecordSourceFactory<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, Badness>,
+        private readonly _tableFieldSourceDefinitionFactory: TableFieldSourceDefinitionFactory,
+        private readonly _tableRecordSourceFactory: TableRecordSourceFactory,
     ) {
         super();
     }
@@ -32,9 +43,7 @@ export class ReferenceableGridSourcesService<TableRecordSourceDefinitionTypeId, 
         //
     }
 
-    getOrNew(
-        definition: RevReferenceableGridSourceDefinition<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId>
-    ): ReferenceableGridSource<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, Badness> {
+    getOrNew(definition: ReferenceableDataSourceDefinition): ReferenceableDataSource {
         let source = this.getItemByKey(definition.id);
         if (source === undefined) {
             source = this.createReferenceableGridSource(definition);
@@ -66,13 +75,13 @@ export class ReferenceableGridSourcesService<TableRecordSourceDefinitionTypeId, 
             }
 
             this.nextPeriodicSaveCheckTime =
-                nowTime + ReferenceableGridSourcesService.periodicSaveCheckInterval;
+                nowTime + ReferenceableDataSourcesService.periodicSaveCheckInterval;
         }
     }
 
-    private createReferenceableGridSource(definition: RevReferenceableGridSourceDefinition<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId>) {
+    private createReferenceableGridSource(definition: ReferenceableDataSourceDefinition) {
         const index = this.count;
-        const result = new ReferenceableGridSource<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, Badness>(
+        const result = new ReferenceableDataSource(
             this._referenceableGridLayoutsService,
             this._tableFieldSourceDefinitionFactory,
             this._tableRecordSourceFactory,
@@ -105,15 +114,16 @@ export class ReferenceableGridSourcesService<TableRecordSourceDefinitionTypeId, 
             // table.saveToJson(watchlistElement);
             watchlistElements[i] = watchlistElement;
         }
-        element.setElementArray(ReferenceableGridSourcesService.jsonTag_Watchlists, watchlistElements);
+        element.setElementArray(ReferenceableDataSourcesService.jsonTag_Watchlists, watchlistElements);
     }
+
 }
 
 /** @public */
-export namespace ReferenceableGridSourcesService {
+export namespace ReferenceableDataSourcesService {
     export type SaveRequiredEvent = (this: void) => void;
 
-    export const jsonTag_Root = 'Watchlists';
+    // export const jsonTag_Root = 'Watchlists';
     export const jsonTag_Watchlists = 'Watchlist';
     export const periodicSaveCheckInterval = 60.0 * mSecsPerSec;
 

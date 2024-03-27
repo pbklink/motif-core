@@ -5,18 +5,17 @@
  */
 
 import { LitIvemId } from '../../../../adi/internal-api';
+import { RevFieldCustomHeadingsService, RevGridLayoutDefinition } from '../../../../rev/internal-api';
 import { ErrorCode, JsonElement, JsonElementErr, Ok, PickEnum, Result, UiComparableList } from '../../../../sys/internal-api';
-import { RevFieldCustomHeadingsService } from '../../../field/internal-api';
-import { RevGridLayoutDefinition } from '../../../layout/internal-api';
 import {
     LitIvemBaseDetailTableFieldSourceDefinition,
     LitIvemIdTableFieldSourceDefinition,
     SecurityDataItemTableFieldSourceDefinition,
-    TypedTableFieldSourceDefinition,
-    TypedTableFieldSourceDefinitionCachingFactoryService
+    TableFieldSourceDefinition,
+    TableFieldSourceDefinitionCachingFactoryService
 } from "../../field-source/internal-api";
 import { BadnessListTableRecordSourceDefinition } from './badness-list-table-record-source-definition';
-import { TypedTableRecordSourceDefinition } from './typed-table-record-source-definition';
+import { TableRecordSourceDefinition } from './table-record-source-definition';
 
 /** @public */
 export class LitIvemIdComparableListTableRecordSourceDefinition extends BadnessListTableRecordSourceDefinition<LitIvemId> {
@@ -24,13 +23,13 @@ export class LitIvemIdComparableListTableRecordSourceDefinition extends BadnessL
 
     constructor(
         customHeadingsService: RevFieldCustomHeadingsService,
-        tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService,
+        tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService,
         list: UiComparableList<LitIvemId>,
     ) {
         super(
             customHeadingsService,
             tableFieldSourceDefinitionCachingFactoryService,
-            TypedTableRecordSourceDefinition.TypeId.LitIvemIdComparableList,
+            TableRecordSourceDefinition.TypeId.LitIvemIdComparableList,
             LitIvemIdComparableListTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
             list,
         );
@@ -55,24 +54,24 @@ export class LitIvemIdComparableListTableRecordSourceDefinition extends BadnessL
 
 /** @public */
 export namespace LitIvemIdComparableListTableRecordSourceDefinition {
-    export type FieldSourceDefinitionTypeId = PickEnum<TypedTableFieldSourceDefinition.TypeId,
-        TypedTableFieldSourceDefinition.TypeId.LitIvemId |
-        TypedTableFieldSourceDefinition.TypeId.LitIvemBaseDetail |
-        TypedTableFieldSourceDefinition.TypeId.SecurityDataItem
+    export type FieldSourceDefinitionTypeId = PickEnum<TableFieldSourceDefinition.TypeId,
+        TableFieldSourceDefinition.TypeId.LitIvemId |
+        TableFieldSourceDefinition.TypeId.LitIvemBaseDetail |
+        TableFieldSourceDefinition.TypeId.SecurityDataItem
         // AlternateCodesFix: Currently this actually is part of FullDetail.  Will be in BaseDetail in future
         // TypedTableFieldSourceDefinition.TypeId.LitIvemAlternateCodes
     >;
 
     export const allowedFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[] = [
-        TypedTableFieldSourceDefinition.TypeId.LitIvemId,
-        TypedTableFieldSourceDefinition.TypeId.LitIvemBaseDetail,
-        TypedTableFieldSourceDefinition.TypeId.SecurityDataItem,
+        TableFieldSourceDefinition.TypeId.LitIvemId,
+        TableFieldSourceDefinition.TypeId.LitIvemBaseDetail,
+        TableFieldSourceDefinition.TypeId.SecurityDataItem,
         // AlternateCodesFix: Currently this actually is part of FullDetail.  Will be in BaseDetail in future
         // TypedTableFieldSourceDefinition.TypeId.LitIvemAlternateCodes,
     ];
 
     export const defaultFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[] = [
-        TypedTableFieldSourceDefinition.TypeId.LitIvemId,
+        TableFieldSourceDefinition.TypeId.LitIvemId,
     ];
 
     export type FieldId =
@@ -108,7 +107,7 @@ export namespace LitIvemIdComparableListTableRecordSourceDefinition {
 
     export function tryCreateDefinition(
         customHeadingsService: RevFieldCustomHeadingsService,
-        tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService,
+        tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService,
         element: JsonElement,
     ): Result<LitIvemIdComparableListTableRecordSourceDefinition> {
         const listCreateResult = tryCreateListFromElement(element);
@@ -123,13 +122,13 @@ export namespace LitIvemIdComparableListTableRecordSourceDefinition {
     }
 
     export function createLayoutDefinition(
-        fieldSourceDefinitionRegistryService: TypedTableFieldSourceDefinitionCachingFactoryService,
+        fieldSourceDefinitionRegistryService: TableFieldSourceDefinitionCachingFactoryService,
         fieldIds: FieldId[],
     ): RevGridLayoutDefinition {
         return fieldSourceDefinitionRegistryService.createLayoutDefinition(fieldIds);
     }
 
-    export function is(definition: TypedTableRecordSourceDefinition): definition is LitIvemIdComparableListTableRecordSourceDefinition {
-        return definition.typeId === TypedTableRecordSourceDefinition.TypeId.LitIvemIdComparableList;
+    export function is(definition: TableRecordSourceDefinition): definition is LitIvemIdComparableListTableRecordSourceDefinition {
+        return definition.typeId === TableRecordSourceDefinition.TypeId.LitIvemIdComparableList;
     }
 }

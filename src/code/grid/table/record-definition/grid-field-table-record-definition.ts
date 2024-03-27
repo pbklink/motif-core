@@ -5,16 +5,16 @@
  */
 
 import { GridField } from '../../field/internal-api';
-import { TypedTableFieldSourceDefinition } from '../field-source/internal-api';
+import { TableFieldSourceDefinition } from '../field-source/internal-api';
 import { PayloadTableRecordDefinition } from './payload-table-record-definition';
-import { TypedTableRecordDefinition } from './typed-table-record-definition';
+import { TableRecordDefinition } from './table-record-definition';
 
 export interface GridFieldTableRecordDefinition extends PayloadTableRecordDefinition<GridField> {
-    readonly typeId: TypedTableFieldSourceDefinition.TypeId.GridField;
+    readonly typeId: TableFieldSourceDefinition.TypeId.GridField;
 }
 
 export namespace GridFieldTableRecordDefinition {
-    export function is(definition: TypedTableRecordDefinition): definition is GridFieldTableRecordDefinition {
-        return definition.typeId === TypedTableFieldSourceDefinition.TypeId.GridField;
+    export function is(definition: TableRecordDefinition): definition is GridFieldTableRecordDefinition {
+        return definition.typeId === TableFieldSourceDefinition.TypeId.GridField;
     }
 }

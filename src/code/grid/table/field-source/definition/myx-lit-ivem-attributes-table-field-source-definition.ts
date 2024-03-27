@@ -28,10 +28,10 @@ import {
     PercentageCorrectnessTableValue,
     ShortSellTypeIdArrayMyxLitIvemAttributeCorrectnessTableValue
 } from '../../value/internal-api';
-import { TypedTableFieldSourceDefinition } from './typed-table-field-source-definition';
-import { TypedTableFieldSourceDefinitionCachingFactoryService } from './typed-table-field-source-definition-caching-factory-service';
+import { TableFieldSourceDefinition } from './table-field-source-definition';
+import { TableFieldSourceDefinitionCachingFactoryService } from './table-field-source-definition-caching-factory-service';
 
-export class MyxLitIvemAttributesTableFieldSourceDefinition extends TypedTableFieldSourceDefinition {
+export class MyxLitIvemAttributesTableFieldSourceDefinition extends TableFieldSourceDefinition {
     override readonly fieldDefinitions: TableField.Definition[];
 
     constructor() {
@@ -82,7 +82,7 @@ export class MyxLitIvemAttributesTableFieldSourceDefinition extends TypedTableFi
 }
 
 export namespace MyxLitIvemAttributesTableFieldSourceDefinition {
-    export const typeId = TypedTableFieldSourceDefinition.TypeId.MyxLitIvemAttributes;
+    export const typeId = TableFieldSourceDefinition.TypeId.MyxLitIvemAttributes;
     export type TypeId = typeof typeId;
 
     export namespace Field {
@@ -99,7 +99,7 @@ export namespace MyxLitIvemAttributesTableFieldSourceDefinition {
         const idFieldIndices = new Array<Integer>(MyxLitIvemAttributes.Field.idCount);
 
         function idToTableGridConstructors(id: MyxLitIvemAttributes.Field.Id):
-            TypedTableFieldSourceDefinition.CorrectnessTableGridConstructors {
+            TableFieldSourceDefinition.CorrectnessTableGridConstructors {
             switch (id) {
                 case MyxLitIvemAttributes.Field.Id.Category:
                     return [IntegerCorrectnessTableField, IntegerCorrectnessTableValue];
@@ -177,12 +177,12 @@ export namespace MyxLitIvemAttributesTableFieldSourceDefinition {
         }
     }
 
-    export interface FieldId extends TypedTableFieldSourceDefinition.FieldId {
+    export interface FieldId extends TableFieldSourceDefinition.FieldId {
         sourceTypeId: MyxLitIvemAttributesTableFieldSourceDefinition.TypeId;
         id: MyxLitIvemAttributes.Field.Id;
     }
 
-    export function get(cachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService): MyxLitIvemAttributesTableFieldSourceDefinition {
+    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactoryService): MyxLitIvemAttributesTableFieldSourceDefinition {
         return cachingFactoryService.get(typeId) as MyxLitIvemAttributesTableFieldSourceDefinition;
     }
 

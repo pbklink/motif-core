@@ -5,8 +5,8 @@
  */
 
 import { PrefixableSecurityDataItemTableFieldSourceDefinition } from './prefixable-security-data-item-table-field-source-definition';
-import { TypedTableFieldSourceDefinition } from './typed-table-field-source-definition';
-import { TypedTableFieldSourceDefinitionCachingFactoryService } from './typed-table-field-source-definition-caching-factory-service';
+import { TableFieldSourceDefinition } from './table-field-source-definition';
+import { TableFieldSourceDefinitionCachingFactoryService } from './table-field-source-definition-caching-factory-service';
 
 export class SecurityDataItemTableFieldSourceDefinition extends PrefixableSecurityDataItemTableFieldSourceDefinition {
     constructor() {
@@ -18,16 +18,16 @@ export class SecurityDataItemTableFieldSourceDefinition extends PrefixableSecuri
 }
 
 export namespace SecurityDataItemTableFieldSourceDefinition {
-    export const typeId = TypedTableFieldSourceDefinition.TypeId.SecurityDataItem;
+    export const typeId = TableFieldSourceDefinition.TypeId.SecurityDataItem;
     export type TypeId = typeof typeId;
 
     export const fieldNameHeaderPrefix = '';
 
     export interface FieldId extends PrefixableSecurityDataItemTableFieldSourceDefinition.FieldId {
-        sourceTypeId: TypedTableFieldSourceDefinition.TypeId.SecurityDataItem;
+        sourceTypeId: TableFieldSourceDefinition.TypeId.SecurityDataItem;
     }
 
-    export function get(cachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService): SecurityDataItemTableFieldSourceDefinition {
+    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactoryService): SecurityDataItemTableFieldSourceDefinition {
         return cachingFactoryService.get(typeId) as SecurityDataItemTableFieldSourceDefinition;
     }
 }

@@ -5,11 +5,11 @@
  */
 
 import { AdiService, Feed, FeedsDataDefinition, FeedsDataItem } from '../../../adi/internal-api';
+import { RevFieldCustomHeadingsService } from '../../../rev/internal-api';
 import { CorrectnessBadness, Integer, KeyedCorrectnessList, LockOpenListItem, UnreachableCaseError } from '../../../sys/internal-api';
 import { TextFormatterService } from '../../../text-format/internal-api';
-import { RevFieldCustomHeadingsService } from '../../field/internal-api';
 import {
-    TypedTableFieldSourceDefinition, TypedTableFieldSourceDefinitionCachingFactoryService
+    TableFieldSourceDefinition, TableFieldSourceDefinitionCachingFactoryService
 } from "../field-source/internal-api";
 import { FeedTableRecordDefinition } from '../record-definition/internal-api';
 import { TableRecord } from '../record/internal-api';
@@ -23,7 +23,7 @@ export class FeedTableRecordSource extends SingleDataItemRecordTableRecordSource
         private readonly _adiService: AdiService,
         textFormatterService: TextFormatterService,
         gridFieldCustomHeadingsService: RevFieldCustomHeadingsService,
-        tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService,
+        tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService,
         correctnessBadness: CorrectnessBadness,
         definition: FeedTableRecordSourceDefinition,
     ) {
@@ -47,7 +47,7 @@ export class FeedTableRecordSource extends SingleDataItemRecordTableRecordSource
     override createRecordDefinition(idx: Integer): FeedTableRecordDefinition {
         const record = this.recordList.records[idx];
         return {
-            typeId: TypedTableFieldSourceDefinition.TypeId.Feed,
+            typeId: TableFieldSourceDefinition.TypeId.Feed,
             mapKey: record.mapKey,
             record,
         };
@@ -64,7 +64,7 @@ export class FeedTableRecordSource extends SingleDataItemRecordTableRecordSource
             const fieldSourceDefinition = fieldSource.definition;
             const fieldSourceDefinitionTypeId = fieldSourceDefinition.typeId as FeedTableRecordSourceDefinition.FieldSourceDefinitionTypeId;
             switch (fieldSourceDefinitionTypeId) {
-                case TypedTableFieldSourceDefinition.TypeId.Feed: {
+                case TableFieldSourceDefinition.TypeId.Feed: {
                     const valueSource = new FeedTableValueSource(result.fieldCount, feed);
                     result.addSource(valueSource);
                     break;

@@ -33,10 +33,10 @@ import {
     PriceTableValue,
     TableValue
 } from '../../value/internal-api';
-import { TypedTableFieldSourceDefinition } from './typed-table-field-source-definition';
-import { TypedTableFieldSourceDefinitionCachingFactoryService } from './typed-table-field-source-definition-caching-factory-service';
+import { TableFieldSourceDefinition } from './table-field-source-definition';
+import { TableFieldSourceDefinitionCachingFactoryService } from './table-field-source-definition-caching-factory-service';
 
-export class CallPutTableFieldSourceDefinition extends TypedTableFieldSourceDefinition {
+export class CallPutTableFieldSourceDefinition extends TableFieldSourceDefinition {
     override readonly fieldDefinitions: TableField.Definition[];
 
     constructor() {
@@ -88,7 +88,7 @@ export class CallPutTableFieldSourceDefinition extends TypedTableFieldSourceDefi
 }
 
 export namespace CallPutTableFieldSourceDefinition {
-    export const typeId = TypedTableFieldSourceDefinition.TypeId.CallPut;
+    export const typeId = TableFieldSourceDefinition.TypeId.CallPut;
     export type TypeId = typeof typeId;
 
     export namespace Field {
@@ -104,7 +104,7 @@ export namespace CallPutTableFieldSourceDefinition {
         const infos = new Array<Info>(count);
         const idFieldIndices = new Array<Integer>(CallPut.Field.count);
 
-        function idToTableGridConstructors(id: CallPut.FieldId): TypedTableFieldSourceDefinition.TableGridConstructors {
+        function idToTableGridConstructors(id: CallPut.FieldId): TableFieldSourceDefinition.TableGridConstructors {
             switch (id) {
                 case CallPut.FieldId.ExercisePrice:
                     return [DecimalTableField, PriceTableValue];
@@ -184,12 +184,12 @@ export namespace CallPutTableFieldSourceDefinition {
         }
     }
 
-    export interface FieldId extends TypedTableFieldSourceDefinition.FieldId {
+    export interface FieldId extends TableFieldSourceDefinition.FieldId {
         id: CallPut.FieldId;
         sourceTypeId: CallPutTableFieldSourceDefinition.TypeId;
     }
 
-    export function get(cachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService): CallPutTableFieldSourceDefinition {
+    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactoryService): CallPutTableFieldSourceDefinition {
         return cachingFactoryService.get(typeId) as CallPutTableFieldSourceDefinition;
     }
 

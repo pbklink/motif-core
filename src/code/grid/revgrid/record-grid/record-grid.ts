@@ -20,7 +20,7 @@ import {
     Subgrid,
     ViewCell
 } from '@xilytix/revgrid';
-import { RevGridLayout } from '../../../rev/internal-api';
+import { RevGridLayout, RevGridLayoutDefinition, RevGridSortDefinition } from '../../../rev/internal-api';
 import { SettingsService } from '../../../services/internal-api';
 import {
     AssertInternalError,
@@ -29,11 +29,7 @@ import {
     UnreachableCaseError
 } from '../../../sys/internal-api';
 import { GridField } from '../../field/internal-api';
-import {
-    RevGridLayoutDefinition,
-    RevGridSortDefinition
-} from '../../layout/internal-api';
-import { TypedGridRowOrderDefinition } from '../../typed/internal-api';
+import { GridRowOrderDefinition } from '../../typed/internal-api';
 import { AdaptedRevgrid, SingleHeadingGridDataServer } from '../adapted-revgrid/internal-api';
 import { AdaptedRevgridBehavioredColumnSettings } from '../settings/internal-api';
 import { RecordGridDataServer } from './record-grid-data-server';
@@ -174,7 +170,7 @@ export class RecordGrid extends AdaptedRevgrid implements RevGridLayout.ChangeIn
         this._allowedFields = fields;
     }
 
-    applyFirstUsable(rowOrderDefinition: TypedGridRowOrderDefinition | undefined, viewAnchor: RecordGrid.ViewAnchor | undefined, gridLayout: RevGridLayout | undefined) {
+    applyFirstUsable(rowOrderDefinition: GridRowOrderDefinition | undefined, viewAnchor: RecordGrid.ViewAnchor | undefined, gridLayout: RevGridLayout | undefined) {
         this._beenUsable = true;
 
         this._firstUsableRenderViewAnchor = viewAnchor;
@@ -283,9 +279,9 @@ export class RecordGrid extends AdaptedRevgrid implements RevGridLayout.ChangeIn
         this.mainDataServer.clearSort();
     }
 
-    getRowOrderDefinition(): TypedGridRowOrderDefinition {
+    getRowOrderDefinition(): GridRowOrderDefinition {
         const sortColumns = this.getSortFields();
-        return new TypedGridRowOrderDefinition(sortColumns, undefined);
+        return new GridRowOrderDefinition(sortColumns, undefined);
     }
 
     getFieldByName(fieldName: string): RevRecordField {

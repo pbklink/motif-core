@@ -5,24 +5,23 @@
  */
 
 import { Account, BrokerageAccountGroup, Order } from '../../../../adi/internal-api';
+import { RevFieldCustomHeadingsService, RevGridLayoutDefinition } from '../../../../rev/internal-api';
 import { PickEnum } from '../../../../sys/internal-api';
-import { RevFieldCustomHeadingsService } from '../../../field/internal-api';
-import { RevGridLayoutDefinition } from '../../../layout/internal-api';
-import { BrokerageAccountTableFieldSourceDefinition, OrderTableFieldSourceDefinition, TypedTableFieldSourceDefinition, TypedTableFieldSourceDefinitionCachingFactoryService } from '../../field-source/internal-api';
+import { BrokerageAccountTableFieldSourceDefinition, OrderTableFieldSourceDefinition, TableFieldSourceDefinition, TableFieldSourceDefinitionCachingFactoryService } from '../../field-source/internal-api';
 import { BrokerageAccountGroupTableRecordSourceDefinition } from './brokerage-account-group-table-record-source-definition';
-import { TypedTableRecordSourceDefinition } from './typed-table-record-source-definition';
+import { TableRecordSourceDefinition } from './table-record-source-definition';
 
 /** @public */
 export class OrderTableRecordSourceDefinition extends BrokerageAccountGroupTableRecordSourceDefinition {
     constructor(
         customHeadingsService: RevFieldCustomHeadingsService,
-        tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService,
+        tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService,
         brokerageAccountGroup: BrokerageAccountGroup
     ) {
         super(
             customHeadingsService,
             tableFieldSourceDefinitionCachingFactoryService,
-            TypedTableRecordSourceDefinition.TypeId.Order,
+            TableRecordSourceDefinition.TypeId.Order,
             OrderTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
             brokerageAccountGroup,
         );
@@ -57,18 +56,18 @@ export class OrderTableRecordSourceDefinition extends BrokerageAccountGroupTable
 
 /** @public */
 export namespace OrderTableRecordSourceDefinition {
-    export type FieldSourceDefinitionTypeId = PickEnum<TypedTableFieldSourceDefinition.TypeId,
-        TypedTableFieldSourceDefinition.TypeId.Order |
-        TypedTableFieldSourceDefinition.TypeId.BrokerageAccount
+    export type FieldSourceDefinitionTypeId = PickEnum<TableFieldSourceDefinition.TypeId,
+        TableFieldSourceDefinition.TypeId.Order |
+        TableFieldSourceDefinition.TypeId.BrokerageAccount
     >;
 
     export const allowedFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[] = [
-        TypedTableFieldSourceDefinition.TypeId.Order,
-        TypedTableFieldSourceDefinition.TypeId.BrokerageAccount,
+        TableFieldSourceDefinition.TypeId.Order,
+        TableFieldSourceDefinition.TypeId.BrokerageAccount,
     ];
 
     export const defaultFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[] = [
-        TypedTableFieldSourceDefinition.TypeId.Order,
-        TypedTableFieldSourceDefinition.TypeId.BrokerageAccount,
+        TableFieldSourceDefinition.TypeId.Order,
+        TableFieldSourceDefinition.TypeId.BrokerageAccount,
     ];
 }

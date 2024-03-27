@@ -4,23 +4,23 @@
  * License: motionite.trade/license/motif
  */
 
+import { RevFieldCustomHeadingsService, RevGridLayoutDefinition } from '../../../../rev/internal-api';
 import { PickEnum } from '../../../../sys/internal-api';
-import { GridField, RevFieldCustomHeadingsService } from '../../../field/internal-api';
-import { RevGridLayoutDefinition } from '../../../layout/internal-api';
-import { GridFieldTableFieldSourceDefinition, TypedTableFieldSourceDefinition, TypedTableFieldSourceDefinitionCachingFactoryService } from '../../field-source/internal-api';
-import { TypedTableRecordSourceDefinition } from './typed-table-record-source-definition';
+import { GridField } from '../../../field/internal-api';
+import { GridFieldTableFieldSourceDefinition, TableFieldSourceDefinition, TableFieldSourceDefinitionCachingFactoryService } from '../../field-source/internal-api';
+import { TableRecordSourceDefinition } from './table-record-source-definition';
 
 /** @public */
-export class GridFieldTableRecordSourceDefinition extends TypedTableRecordSourceDefinition {
+export class GridFieldTableRecordSourceDefinition extends TableRecordSourceDefinition {
     constructor(
         customHeadingsService: RevFieldCustomHeadingsService,
-        tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService,
+        tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService,
         private readonly _gridFieldArray: GridField[],
     ) {
         super(
             customHeadingsService,
             tableFieldSourceDefinitionCachingFactoryService,
-            TypedTableRecordSourceDefinition.TypeId.GridField,
+            TableRecordSourceDefinition.TypeId.GridField,
             GridFieldTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
         );
     }
@@ -41,16 +41,16 @@ export class GridFieldTableRecordSourceDefinition extends TypedTableRecordSource
 
 /** @public */
 export namespace GridFieldTableRecordSourceDefinition {
-    export type FieldSourceDefinitionTypeId = PickEnum<TypedTableFieldSourceDefinition.TypeId,
-        TypedTableFieldSourceDefinition.TypeId.GridField
+    export type FieldSourceDefinitionTypeId = PickEnum<TableFieldSourceDefinition.TypeId,
+        TableFieldSourceDefinition.TypeId.GridField
     >;
 
     export const allowedFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[] = [
-        TypedTableFieldSourceDefinition.TypeId.GridField,
+        TableFieldSourceDefinition.TypeId.GridField,
     ];
 
     export const defaultFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[] = [
-        TypedTableFieldSourceDefinition.TypeId.GridField,
+        TableFieldSourceDefinition.TypeId.GridField,
     ];
 
     export namespace JsonName {

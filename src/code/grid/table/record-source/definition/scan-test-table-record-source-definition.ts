@@ -6,13 +6,12 @@
 
 import { LitIvemBaseDetail, RankedLitIvemId } from '../../../../adi/internal-api';
 import { LitIvemIdExecuteScanRankedLitIvemIdListDefinition } from '../../../../ranked-lit-ivem-id-list/internal-api';
-import { RevFieldCustomHeadingsService } from '../../../field/internal-api';
-import { RevGridLayoutDefinition } from '../../../layout/internal-api';
+import { RevFieldCustomHeadingsService, RevGridLayoutDefinition } from '../../../../rev/internal-api';
 import {
     LitIvemBaseDetailTableFieldSourceDefinition,
     RankedLitIvemIdTableFieldSourceDefinition,
-    TypedTableFieldSourceDefinition,
-    TypedTableFieldSourceDefinitionCachingFactoryService,
+    TableFieldSourceDefinition,
+    TableFieldSourceDefinitionCachingFactoryService,
 } from '../../field-source/internal-api';
 import { RankedLitIvemIdListTableRecordSourceDefinition } from './ranked-lit-ivem-id-list-table-record-source-definition';
 
@@ -20,7 +19,7 @@ import { RankedLitIvemIdListTableRecordSourceDefinition } from './ranked-lit-ive
 export class ScanTestTableRecordSourceDefinition extends RankedLitIvemIdListTableRecordSourceDefinition {
     constructor(
         customHeadingsService: RevFieldCustomHeadingsService,
-        tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService,
+        tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService,
         rankedLitIvemIdListDefinition: LitIvemIdExecuteScanRankedLitIvemIdListDefinition,
     ) {
         super(
@@ -51,14 +50,14 @@ export class ScanTestTableRecordSourceDefinition extends RankedLitIvemIdListTabl
 /** @public */
 export namespace ScanTestTableRecordSourceDefinition {
     export const allowedFieldSourceDefinitionTypeIds: RankedLitIvemIdListTableRecordSourceDefinition.FieldSourceDefinitionTypeId[] = [
-        TypedTableFieldSourceDefinition.TypeId.LitIvemBaseDetail,
-        TypedTableFieldSourceDefinition.TypeId.RankedLitIvemId,
+        TableFieldSourceDefinition.TypeId.LitIvemBaseDetail,
+        TableFieldSourceDefinition.TypeId.RankedLitIvemId,
         // AlternateCodesFix: Currently this actually is part of FullDetail.  Will be in BaseDetail in future
         // TypedTableFieldSourceDefinition.TypeId.LitIvemAlternateCodes,
     ];
 
     export const defaultFieldSourceDefinitionTypeIds: RankedLitIvemIdListTableRecordSourceDefinition.FieldSourceDefinitionTypeId[] = [
-        TypedTableFieldSourceDefinition.TypeId.LitIvemBaseDetail,
-        TypedTableFieldSourceDefinition.TypeId.RankedLitIvemId,
+        TableFieldSourceDefinition.TypeId.LitIvemBaseDetail,
+        TableFieldSourceDefinition.TypeId.RankedLitIvemId,
     ];
 }

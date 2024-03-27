@@ -23,8 +23,7 @@ export * from './ranked-lit-ivem-id-list-table-record-source';
 export * from './scan-table-record-source';
 export * from './single-data-item-table-record-source';
 export * from './subscribe-badness-list-table-record-source';
+export * from './table-record-source';
 export * from './table-record-source-definition-static-initialise';
 export * from './top-shareholder-table-record-source';
-export * from './typed-table-record-source';
-export * from './typed-table-record-source-factory';
 

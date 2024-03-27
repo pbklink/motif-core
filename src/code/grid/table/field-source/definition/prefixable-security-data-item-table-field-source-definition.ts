@@ -47,13 +47,13 @@ import {
     TradingStateReasonIdCorrectnessTableValue,
     UndisclosedCorrectnessTableValue
 } from '../../value/internal-api';
-import { TypedTableFieldSourceDefinition } from './typed-table-field-source-definition';
+import { TableFieldSourceDefinition } from './table-field-source-definition';
 
-export abstract class PrefixableSecurityDataItemTableFieldSourceDefinition extends TypedTableFieldSourceDefinition {
+export abstract class PrefixableSecurityDataItemTableFieldSourceDefinition extends TableFieldSourceDefinition {
     override readonly fieldDefinitions: TableField.Definition[];
 
     constructor(
-        typeId: TypedTableFieldSourceDefinition.TypeId,
+        typeId: TableFieldSourceDefinition.TypeId,
         protected readonly _prefix: string
     ) {
         super(typeId);
@@ -116,7 +116,7 @@ export namespace PrefixableSecurityDataItemTableFieldSourceDefinition {
         const infos = new Array<Info>(count);
         const idFieldIndices = new Array<Integer>(SecurityDataItem.Field.idCount);
 
-        function idToTableGridConstructors(id: SecurityDataItem.FieldId): TypedTableFieldSourceDefinition.CorrectnessTableGridConstructors {
+        function idToTableGridConstructors(id: SecurityDataItem.FieldId): TableFieldSourceDefinition.CorrectnessTableGridConstructors {
             switch (id) {
                 case SecurityDataItem.FieldId.LitIvemId:
                     return [LitIvemIdCorrectnessTableField, LitIvemIdCorrectnessTableValue];
@@ -244,7 +244,7 @@ export namespace PrefixableSecurityDataItemTableFieldSourceDefinition {
         }
     }
 
-    export interface FieldId extends TypedTableFieldSourceDefinition.FieldId {
+    export interface FieldId extends TableFieldSourceDefinition.FieldId {
         id: SecurityDataItem.FieldId;
     }
 

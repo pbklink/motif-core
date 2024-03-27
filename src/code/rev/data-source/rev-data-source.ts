@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, Err, Guid, IndexedRecord, LockOpenListItem, LockOpenManager, MapKey, MultiEvent, Ok, Result, newGuid } from '@xilytix/sysutils';
+import { AssertInternalError, Err, Guid, IndexedRecord, LockOpenListItem, LockOpenManager, MapKey, MultiEvent, Ok, Result, UnreachableCaseError, newGuid } from '@xilytix/sysutils';
 import { RevFieldDefinition } from '../field/internal-api';
 import {
     RevGridLayout,
@@ -18,14 +18,22 @@ import { RevDataSourceDefinition, RevGridRowOrderDefinition } from './definition
 
 /** @public */
 export class RevDataSource<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, RenderValueTypeId, RenderAttributeTypeId, Badness>
-    implements LockOpenListItem<RevDataSource<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, RenderValueTypeId, RenderAttributeTypeId, Badness>>, IndexedRecord {
+    implements
+        LockOpenListItem<
+            RevDataSource<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, RenderValueTypeId, RenderAttributeTypeId, Badness>,
+            RevDataSource.LockErrorIdPlusTryError
+        >,
+        IndexedRecord {
 
     readonly id: Guid;
     readonly mapKey: MapKey;
 
     public index: number;
 
-    private readonly _lockOpenManager: LockOpenManager<RevDataSource<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, RenderValueTypeId, RenderAttributeTypeId, Badness>>;
+    private readonly _lockOpenManager: LockOpenManager<
+        RevDataSource<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, RenderValueTypeId, RenderAttributeTypeId, Badness>,
+        RevDataSource.LockErrorIdPlusTryError
+    >;
 
     private readonly _tableRecordSourceDefinition: RevTableRecordSourceDefinition<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, RenderValueTypeId, RenderAttributeTypeId>;
     private _gridLayoutOrReferenceDefinition: RevGridLayoutOrReferenceDefinition | undefined;
@@ -50,7 +58,10 @@ export class RevDataSource<TableRecordSourceDefinitionTypeId, TableFieldSourceDe
         this.id = id ?? newGuid();
         this.mapKey = mapKey ?? this.id;
 
-        this._lockOpenManager = new LockOpenManager<RevDataSource<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, RenderValueTypeId, RenderAttributeTypeId, Badness>>(
+        this._lockOpenManager = new LockOpenManager<
+            RevDataSource<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, RenderValueTypeId, RenderAttributeTypeId, Badness>,
+            RevDataSource.LockErrorIdPlusTryError
+        >(
             (locker) => this.tryProcessFirstLock(locker),
             (locker) => { this.processLastUnlock(locker); },
             (opener) => { this.processFirstOpen(opener); },
@@ -74,7 +85,7 @@ export class RevDataSource<TableRecordSourceDefinitionTypeId, TableFieldSourceDe
 
     get table() { return this._table; }
 
-    async tryLock(locker: LockOpenListItem.Locker): Promise<Result<void>> {
+    tryLock(locker: LockOpenListItem.Locker): Promise<Result<void, RevDataSource.LockErrorIdPlusTryError>> {
         return this._lockOpenManager.tryLock(locker);
     }
 
@@ -132,11 +143,11 @@ export class RevDataSource<TableRecordSourceDefinitionTypeId, TableFieldSourceDe
         }
     }
 
-    /** Can only call if a GridSource is already opened */
+    /** Can only call if a DataSource is already opened */
     async tryOpenGridLayoutOrReferenceDefinition(
         definition: RevGridLayoutOrReferenceDefinition,
         opener: LockOpenListItem.Opener
-    ): Promise<Result<void>> {
+    ): Promise<Result<void, RevGridLayoutOrReference.LockErrorIdPlusTryError>> {
         const lockResult = await this.tryCreateAndLockGridLayoutFromDefinition(definition, opener);
         if (lockResult.isErr()) {
             return new Err(lockResult.error);
@@ -179,7 +190,7 @@ export class RevDataSource<TableRecordSourceDefinitionTypeId, TableFieldSourceDe
         }
     }
 
-    private async tryLockGridLayout(locker: LockOpenListItem.Locker): Promise<Result<RevDataSource.LockedGridLayouts>> {
+    private async tryLockGridLayout(locker: LockOpenListItem.Locker): Promise<Result<RevDataSource.LockedGridLayouts, RevGridLayoutOrReference.LockErrorIdPlusTryError>> {
         let gridLayoutOrReferenceDefinition: RevGridLayoutOrReferenceDefinition;
         if (this._gridLayoutOrReferenceDefinition !== undefined) {
             gridLayoutOrReferenceDefinition = this._gridLayoutOrReferenceDefinition;
@@ -194,14 +205,14 @@ export class RevDataSource<TableRecordSourceDefinitionTypeId, TableFieldSourceDe
     private async tryCreateAndLockGridLayoutFromDefinition(
         gridLayoutOrReferenceDefinition: RevGridLayoutOrReferenceDefinition,
         locker: LockOpenListItem.Locker
-    ): Promise<Result<RevDataSource.LockedGridLayouts>> {
+    ): Promise<Result<RevDataSource.LockedGridLayouts, RevGridLayoutOrReference.LockErrorIdPlusTryError>> {
         const gridLayoutOrReference = new RevGridLayoutOrReference(
             this._referenceableGridLayoutsService,
             gridLayoutOrReferenceDefinition
         );
         const gridLayoutOrReferenceLockResult = await gridLayoutOrReference.tryLock(locker);
         if (gridLayoutOrReferenceLockResult.isErr()) {
-            return gridLayoutOrReferenceLockResult.createOuter(ErrorCode.GridSource_TryLockGridLayout);
+            return gridLayoutOrReferenceLockResult.createType();
         } else {
             const gridLayout = gridLayoutOrReference.lockedGridLayout;
             if (gridLayout === undefined) {
@@ -217,18 +228,24 @@ export class RevDataSource<TableRecordSourceDefinitionTypeId, TableFieldSourceDe
         }
     }
 
-    private async tryProcessFirstLock(locker: LockOpenListItem.Locker): Promise<Result<void>> {
+    private async tryProcessFirstLock(locker: LockOpenListItem.Locker): Promise<Result<void, RevDataSource.LockErrorIdPlusTryError>> {
         const tableRecordSource = this._tableRecordSourceFactory.create(this._tableRecordSourceDefinition);
         const tableRecordSourceLockResult = await tableRecordSource.tryLock(locker);
         if (tableRecordSourceLockResult.isErr()) {
-            return tableRecordSourceLockResult.createOuter(ErrorCode.GridSource_TryLockTableRecordSource);
+            const error: RevDataSource.LockErrorIdPlusTryError = {
+                errorId: RevDataSource.LockErrorId.TableRecordSourceTry,
+                tryError: tableRecordSourceLockResult.error,
+            }
+            return new Err(error);
         } else {
             this._lockedTableRecordSource = tableRecordSource;
             const lockGridLayoutResult = await this.tryLockGridLayout(locker);
             if (lockGridLayoutResult.isErr()) {
                 this._lockedTableRecordSource.unlock(locker);
                 this._lockedTableRecordSource = undefined;
-                return new Err(lockGridLayoutResult.error);
+                const lockErrorIdPlusTryError = lockGridLayoutResult.error;
+                const errorId = RevDataSource.LockError.fromRevGridLayoutOrReference(lockErrorIdPlusTryError.errorId);
+                return new Err({ errorId, tryError: lockErrorIdPlusTryError.tryError });
             } else {
                 const lockedLayouts = lockGridLayoutResult.value;
                 this._lockedGridLayout = lockedLayouts.gridLayout;
@@ -326,6 +343,7 @@ export class RevDataSource<TableRecordSourceDefinitionTypeId, TableFieldSourceDe
         }
         return typeIds;
     }
+
 }
 
 export namespace RevDataSource {
@@ -334,5 +352,29 @@ export namespace RevDataSource {
     export interface LockedGridLayouts {
         readonly gridLayout: RevGridLayout;
         readonly referenceableGridLayout: RevReferenceableGridLayout | undefined;
+    }
+
+    export const enum LockErrorId {
+        TableRecordSourceTry,
+        LayoutDefinitionTry,
+        LayoutReferenceTry,
+        LayoutReferenceNotFound,
+    }
+
+    export namespace LockError {
+        export function fromRevGridLayoutOrReference(lockErrorId:  RevGridLayoutOrReference.LockErrorId): LockErrorId {
+            switch (lockErrorId) {
+                case RevGridLayoutOrReference.LockErrorId.DefinitionTry: return LockErrorId.LayoutDefinitionTry;
+                case RevGridLayoutOrReference.LockErrorId.ReferenceTry: return LockErrorId.LayoutReferenceTry;
+                case RevGridLayoutOrReference.LockErrorId.ReferenceNotFound: return LockErrorId.LayoutReferenceNotFound;
+                default:
+                    throw new UnreachableCaseError('RDSLEFRGLOR66643', lockErrorId);
+            }
+        }
+    }
+
+    export interface LockErrorIdPlusTryError {
+        errorId: LockErrorId,
+        tryError: string | undefined;
     }
 }

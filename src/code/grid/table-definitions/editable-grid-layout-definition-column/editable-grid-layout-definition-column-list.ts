@@ -4,9 +4,9 @@
  * License: motionite.trade/license/motif
  */
 
+import { RevGridLayoutDefinition } from '../../../rev/internal-api';
 import { AssertInternalError, Integer, moveElementsInArray, MultiEvent, RecordList, UsableListChangeTypeId } from '../../../sys/internal-api';
 import { GridField } from '../../field/internal-api';
-import { RevGridLayoutDefinition } from '../../layout/internal-api';
 import { EditableGridLayoutDefinitionColumn } from './editable-grid-layout-definition-column';
 
 export class EditableGridLayoutDefinitionColumnList implements RecordList<EditableGridLayoutDefinitionColumn> {

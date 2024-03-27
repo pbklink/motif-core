@@ -16,6 +16,7 @@ export * from './notification-channel/internal-api';
 export * from './publisher/internal-api';
 export * from './ranked-lit-ivem-id-list/internal-api';
 export * from './res/internal-api';
+export * from './rev/internal-api';
 export * from './scan/internal-api';
 export * from './sequence-history/internal-api';
 export * from './services/internal-api';

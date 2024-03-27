@@ -4,18 +4,18 @@
  * License: motionite.trade/license/motif
  */
 
+import { RevFieldCustomHeadingsService } from '../../../../rev/internal-api';
 import { UsableList } from '../../../../sys/internal-api';
-import { RevFieldCustomHeadingsService } from '../../../field/internal-api';
-import { TypedTableFieldSourceDefinition, TypedTableFieldSourceDefinitionCachingFactoryService } from '../../field-source/internal-api';
-import { TypedTableRecordSourceDefinition } from './typed-table-record-source-definition';
+import { TableFieldSourceDefinition, TableFieldSourceDefinitionCachingFactoryService } from '../../field-source/internal-api';
+import { TableRecordSourceDefinition } from './table-record-source-definition';
 
 /** @public */
-export abstract class UsableListTableRecordSourceDefinition<T> extends TypedTableRecordSourceDefinition {
+export abstract class UsableListTableRecordSourceDefinition<T> extends TableRecordSourceDefinition {
     constructor(
         customHeadingsService: RevFieldCustomHeadingsService,
-        tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService,
-        typeId: TypedTableRecordSourceDefinition.TypeId,
-        allowedFieldSourceDefinitionTypeIds: TypedTableFieldSourceDefinition.TypeId[],
+        tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService,
+        typeId: TableRecordSourceDefinition.TypeId,
+        allowedFieldSourceDefinitionTypeIds: TableFieldSourceDefinition.TypeId[],
         readonly list: UsableList<T>,
     ) {
         super(

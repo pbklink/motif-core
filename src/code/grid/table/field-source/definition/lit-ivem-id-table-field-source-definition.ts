@@ -24,11 +24,11 @@ import {
     StringTableValue,
     TableValue
 } from "../../value/internal-api";
-import { TypedTableFieldSourceDefinition } from './typed-table-field-source-definition';
-import { TypedTableFieldSourceDefinitionCachingFactoryService } from './typed-table-field-source-definition-caching-factory-service';
+import { TableFieldSourceDefinition } from './table-field-source-definition';
+import { TableFieldSourceDefinitionCachingFactoryService } from './table-field-source-definition-caching-factory-service';
 
 /** @public */
-export class LitIvemIdTableFieldSourceDefinition extends TypedTableFieldSourceDefinition {
+export class LitIvemIdTableFieldSourceDefinition extends TableFieldSourceDefinition {
     override readonly fieldDefinitions: TableField.Definition[];
 
     constructor() {
@@ -82,7 +82,7 @@ export class LitIvemIdTableFieldSourceDefinition extends TypedTableFieldSourceDe
 
 /** @public */
 export namespace LitIvemIdTableFieldSourceDefinition {
-    export const typeId = TypedTableFieldSourceDefinition.TypeId.LitIvemId;
+    export const typeId = TableFieldSourceDefinition.TypeId.LitIvemId;
     export type TypeId = typeof typeId;
 
     export namespace Field {
@@ -168,12 +168,12 @@ export namespace LitIvemIdTableFieldSourceDefinition {
         }
     }
 
-    export interface FieldId extends TypedTableFieldSourceDefinition.FieldId {
+    export interface FieldId extends TableFieldSourceDefinition.FieldId {
         sourceTypeId: LitIvemIdTableFieldSourceDefinition.TypeId;
         id: LitIvemId.FieldId;
     }
 
-    export function get(cachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService): LitIvemIdTableFieldSourceDefinition {
+    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactoryService): LitIvemIdTableFieldSourceDefinition {
         return cachingFactoryService.get(typeId) as LitIvemIdTableFieldSourceDefinition;
     }
 

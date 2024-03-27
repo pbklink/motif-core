@@ -5,22 +5,21 @@
  */
 
 import { Account, Feed } from '../../../../adi/internal-api';
+import { RevFieldCustomHeadingsService, RevGridLayoutDefinition } from '../../../../rev/internal-api';
 import { PickEnum } from '../../../../sys/internal-api';
-import { RevFieldCustomHeadingsService } from '../../../field/internal-api';
-import { RevGridLayoutDefinition } from '../../../layout/internal-api';
-import { BrokerageAccountTableFieldSourceDefinition, FeedTableFieldSourceDefinition, TypedTableFieldSourceDefinition, TypedTableFieldSourceDefinitionCachingFactoryService } from '../../field-source/internal-api';
-import { TypedTableRecordSourceDefinition } from './typed-table-record-source-definition';
+import { BrokerageAccountTableFieldSourceDefinition, FeedTableFieldSourceDefinition, TableFieldSourceDefinition, TableFieldSourceDefinitionCachingFactoryService } from '../../field-source/internal-api';
+import { TableRecordSourceDefinition } from './table-record-source-definition';
 
 /** @public */
-export class BrokerageAccountTableRecordSourceDefinition extends TypedTableRecordSourceDefinition {
+export class BrokerageAccountTableRecordSourceDefinition extends TableRecordSourceDefinition {
     constructor(
         customHeadingsService: RevFieldCustomHeadingsService,
-        tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService
+        tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService
     ) {
         super(
             customHeadingsService,
             tableFieldSourceDefinitionCachingFactoryService,
-            TypedTableRecordSourceDefinition.TypeId.BrokerageAccount,
+            TableRecordSourceDefinition.TypeId.BrokerageAccount,
             BrokerageAccountTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds
         );
     }
@@ -46,18 +45,18 @@ export class BrokerageAccountTableRecordSourceDefinition extends TypedTableRecor
 
 /** @public */
 export namespace BrokerageAccountTableRecordSourceDefinition {
-    export type FieldSourceDefinitionTypeId = PickEnum<TypedTableFieldSourceDefinition.TypeId,
-        TypedTableFieldSourceDefinition.TypeId.BrokerageAccount |
-        TypedTableFieldSourceDefinition.TypeId.Feed
+    export type FieldSourceDefinitionTypeId = PickEnum<TableFieldSourceDefinition.TypeId,
+        TableFieldSourceDefinition.TypeId.BrokerageAccount |
+        TableFieldSourceDefinition.TypeId.Feed
     >;
 
     export const allowedFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[] = [
-        TypedTableFieldSourceDefinition.TypeId.BrokerageAccount,
-        TypedTableFieldSourceDefinition.TypeId.Feed,
+        TableFieldSourceDefinition.TypeId.BrokerageAccount,
+        TableFieldSourceDefinition.TypeId.Feed,
     ];
 
     export const defaultFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[] = [
-        TypedTableFieldSourceDefinition.TypeId.BrokerageAccount,
-        TypedTableFieldSourceDefinition.TypeId.Feed,
+        TableFieldSourceDefinition.TypeId.BrokerageAccount,
+        TableFieldSourceDefinition.TypeId.Feed,
     ];
 }

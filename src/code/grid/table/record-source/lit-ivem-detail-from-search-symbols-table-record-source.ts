@@ -14,6 +14,7 @@ import {
     SymbolFieldId,
     SymbolsDataItem
 } from "../../../adi/internal-api";
+import { RevFieldCustomHeadingsService } from '../../../rev/internal-api';
 import {
     AssertInternalError,
     Badness,
@@ -25,9 +26,8 @@ import {
     UsableListChangeTypeId
 } from '../../../sys/internal-api';
 import { TextFormatterService } from '../../../text-format/internal-api';
-import { RevFieldCustomHeadingsService } from '../../field/internal-api';
 import {
-    TypedTableFieldSourceDefinition, TypedTableFieldSourceDefinitionCachingFactoryService
+    TableFieldSourceDefinition, TableFieldSourceDefinitionCachingFactoryService
 } from "../field-source/internal-api";
 import { LitIvemBaseDetailTableRecordDefinition } from '../record-definition/internal-api';
 import { TableRecord } from '../record/internal-api';
@@ -61,7 +61,7 @@ export class LitIvemDetailFromSearchSymbolsTableRecordSource extends SingleDataI
         private readonly _adiService: AdiService,
         textFormatterService: TextFormatterService,
         gridFieldCustomHeadingsService: RevFieldCustomHeadingsService,
-        tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService,
+        tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService,
         correctnessBadness: CorrectnessBadness,
         definition: LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition
     ) {
@@ -91,7 +91,7 @@ export class LitIvemDetailFromSearchSymbolsTableRecordSource extends SingleDataI
     override createRecordDefinition(idx: Integer): LitIvemBaseDetailTableRecordDefinition {
         const litIvemBaseDetail = this.recordList[idx];
         return {
-            typeId: TypedTableFieldSourceDefinition.TypeId.LitIvemBaseDetail,
+            typeId: TableFieldSourceDefinition.TypeId.LitIvemBaseDetail,
             mapKey: litIvemBaseDetail.key.mapKey,
             litIvemBaseDetail,
         };
@@ -109,7 +109,7 @@ export class LitIvemDetailFromSearchSymbolsTableRecordSource extends SingleDataI
             const fieldSourceDefinitionTypeId =
                 fieldSourceDefinition.typeId as LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition.FieldSourceDefinitionTypeId;
             switch (fieldSourceDefinitionTypeId) {
-                case TypedTableFieldSourceDefinition.TypeId.LitIvemBaseDetail: {
+                case TableFieldSourceDefinition.TypeId.LitIvemBaseDetail: {
                     const valueSource = new LitIvemBaseDetailTableValueSource(
                         result.fieldCount,
                         litIvemDetail,
@@ -118,7 +118,7 @@ export class LitIvemDetailFromSearchSymbolsTableRecordSource extends SingleDataI
                     result.addSource(valueSource);
                     break;
                 }
-                case TypedTableFieldSourceDefinition.TypeId.LitIvemAlternateCodes: {
+                case TableFieldSourceDefinition.TypeId.LitIvemAlternateCodes: {
                     // AlternateCodesFix: Currently this actually is part of FullDetail.  In future will be part of BaseDetail
                     if (this._isFullDetail) {
                         const altCodesSource = new LitIvemAlternateCodesTableValueSource(
@@ -130,7 +130,7 @@ export class LitIvemDetailFromSearchSymbolsTableRecordSource extends SingleDataI
                     }
                     break;
                 }
-                case TypedTableFieldSourceDefinition.TypeId.LitIvemExtendedDetail: {
+                case TableFieldSourceDefinition.TypeId.LitIvemExtendedDetail: {
                     if (this._isFullDetail) {
                         const litIvemFullDetail = litIvemDetail as SearchSymbolsLitIvemFullDetail;
                         const valueSource = new LitIvemExtendedDetailTableValueSource(
@@ -142,7 +142,7 @@ export class LitIvemDetailFromSearchSymbolsTableRecordSource extends SingleDataI
                     }
                     break;
                 }
-                case TypedTableFieldSourceDefinition.TypeId.MyxLitIvemAttributes: {
+                case TableFieldSourceDefinition.TypeId.MyxLitIvemAttributes: {
                     if (this._isFullDetail) {
                         const litIvemFullDetail = litIvemDetail as SearchSymbolsLitIvemFullDetail;
                         switch (this._exchangeId) {

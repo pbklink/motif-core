@@ -8,13 +8,12 @@ import { AdiService } from './adi/internal-api';
 import { CommandRegisterService } from "./command/internal-api";
 import {
     CellPainterFactoryService,
+    ReferenceableDataSourceDefinitionsStoreService,
+    ReferenceableDataSourcesService,
     ReferenceableGridLayoutsService,
-    ReferenceableGridSourceDefinitionsStoreService,
-    RevFieldCustomHeadingsService,
-    TypedReferenceableGridSourcesService,
-    TypedTableFieldSourceDefinitionCachingFactoryService,
-    TypedTableFieldSourceDefinitionFactory,
-    TypedTableRecordSourceFactory
+    TableFieldSourceDefinitionCachingFactoryService,
+    TableFieldSourceDefinitionFactory,
+    TableRecordSourceFactory
 } from "./grid/internal-api";
 import { KeyboardService } from "./keyboard/internal-api";
 import { NotificationChannelsService } from './notification-channel/internal-api';
@@ -22,6 +21,7 @@ import {
     RankedLitIvemIdListDefinitionFactoryService,
     RankedLitIvemIdListFactoryService,
 } from "./ranked-lit-ivem-id-list/internal-api";
+import { RevFieldCustomHeadingsService } from './rev/internal-api';
 import { ScansService } from './scan/internal-api';
 import {
     AppStorageService,
@@ -53,15 +53,15 @@ export class CoreService {
     readonly textFormatterService: TextFormatterService;
     readonly gridFieldCustomHeadingsService: RevFieldCustomHeadingsService;
     readonly referenceableGridLayoutsService: ReferenceableGridLayoutsService;
-    readonly referenceableGridSourceDefinitionsStoreService: ReferenceableGridSourceDefinitionsStoreService;
+    readonly referenceableDataSourceDefinitionsStoreService: ReferenceableDataSourceDefinitionsStoreService;
     readonly cellPainterFactoryService: CellPainterFactoryService;
     readonly commandRegisterService: CommandRegisterService;
     readonly keyboardService: KeyboardService;
 
     private _finalised = false;
 
-    private _tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService;
-    private _referenceableGridSourcesService: TypedReferenceableGridSourcesService;
+    private _tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService;
+    private _referenceableDataSourcesService: ReferenceableDataSourcesService;
     private _activeColorSchemeName: string;
 
     constructor() {
@@ -85,7 +85,7 @@ export class CoreService {
         this.textFormatterService = new TextFormatterService(this.symbolsService, this.settingsService);
         this.gridFieldCustomHeadingsService = new RevFieldCustomHeadingsService();
         this.referenceableGridLayoutsService = new ReferenceableGridLayoutsService();
-        this.referenceableGridSourceDefinitionsStoreService = new ReferenceableGridSourceDefinitionsStoreService(
+        this.referenceableDataSourceDefinitionsStoreService = new ReferenceableDataSourceDefinitionsStoreService(
         );
         this.cellPainterFactoryService = new CellPainterFactoryService(
             this.settingsService,
@@ -96,14 +96,14 @@ export class CoreService {
     }
 
     get tableFieldSourceDefinitionCachingFactoryService() { return this._tableFieldSourceDefinitionCachingFactoryService; }
-    get referenceableGridSourcesService() { return this._referenceableGridSourcesService; }
+    get referenceableDataSourcesService() { return this._referenceableDataSourcesService; }
 
-    setTableFieldSourceDefinitionFactory(tableFieldSourceDefinitionFactory: TypedTableFieldSourceDefinitionFactory) {
-        this._tableFieldSourceDefinitionCachingFactoryService = new TypedTableFieldSourceDefinitionCachingFactoryService(tableFieldSourceDefinitionFactory);
+    setTableFieldSourceDefinitionFactory(tableFieldSourceDefinitionFactory: TableFieldSourceDefinitionFactory) {
+        this._tableFieldSourceDefinitionCachingFactoryService = new TableFieldSourceDefinitionCachingFactoryService(tableFieldSourceDefinitionFactory);
     }
 
-    setTableRecordSourceFactory(tableRecordSourceFactory: TypedTableRecordSourceFactory, tableFieldSourceDefinitionFactory: TypedTableFieldSourceDefinitionFactory) {
-        this._referenceableGridSourcesService = new TypedReferenceableGridSourcesService(
+    setTableRecordSourceFactory(tableRecordSourceFactory: TableRecordSourceFactory, tableFieldSourceDefinitionFactory: TableFieldSourceDefinitionFactory) {
+        this._referenceableDataSourcesService = new ReferenceableDataSourcesService(
             this.referenceableGridLayoutsService,
             tableFieldSourceDefinitionFactory,
             tableRecordSourceFactory,

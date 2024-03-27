@@ -5,28 +5,27 @@
  */
 
 import { RankedLitIvemIdListDirectory } from '../../../../ranked-lit-ivem-id-list/internal-api';
+import { RevFieldCustomHeadingsService, RevGridLayoutDefinition } from '../../../../rev/internal-api';
 import { RankedLitIvemIdListDirectoryItem } from '../../../../services/internal-api';
 import { PickEnum } from '../../../../sys/internal-api';
-import { RevFieldCustomHeadingsService } from '../../../field/internal-api';
-import { RevGridLayoutDefinition } from '../../../layout/internal-api';
 import {
     RankedLitIvemIdListDirectoryItemTableFieldSourceDefinition,
-    TypedTableFieldSourceDefinition,
-    TypedTableFieldSourceDefinitionCachingFactoryService,
+    TableFieldSourceDefinition,
+    TableFieldSourceDefinitionCachingFactoryService,
 } from '../../field-source/internal-api';
-import { TypedTableRecordSourceDefinition } from './typed-table-record-source-definition';
+import { TableRecordSourceDefinition } from './table-record-source-definition';
 
 /** @public */
-export class RankedLitIvemIdListDirectoryItemTableRecordSourceDefinition extends TypedTableRecordSourceDefinition {
+export class RankedLitIvemIdListDirectoryItemTableRecordSourceDefinition extends TableRecordSourceDefinition {
     constructor(
         customHeadingsService: RevFieldCustomHeadingsService,
-        tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService,
+        tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService,
         readonly listDirectory: RankedLitIvemIdListDirectory,
     ) {
         super(
             customHeadingsService,
             tableFieldSourceDefinitionCachingFactoryService,
-            TypedTableRecordSourceDefinition.TypeId.RankedLitIvemIdListDirectoryItem,
+            TableRecordSourceDefinition.TypeId.RankedLitIvemIdListDirectoryItem,
             RankedLitIvemIdListDirectoryItemTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
         );
     }
@@ -45,15 +44,15 @@ export class RankedLitIvemIdListDirectoryItemTableRecordSourceDefinition extends
 
 /** @public */
 export namespace RankedLitIvemIdListDirectoryItemTableRecordSourceDefinition {
-    export type FieldSourceDefinitionTypeId = PickEnum<TypedTableFieldSourceDefinition.TypeId,
-        TypedTableFieldSourceDefinition.TypeId.RankedLitIvemIdListDirectoryItem
+    export type FieldSourceDefinitionTypeId = PickEnum<TableFieldSourceDefinition.TypeId,
+        TableFieldSourceDefinition.TypeId.RankedLitIvemIdListDirectoryItem
     >;
 
     export const allowedFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[] = [
-        TypedTableFieldSourceDefinition.TypeId.RankedLitIvemIdListDirectoryItem,
+        TableFieldSourceDefinition.TypeId.RankedLitIvemIdListDirectoryItem,
     ];
 
     export const defaultFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[] = [
-        TypedTableFieldSourceDefinition.TypeId.RankedLitIvemIdListDirectoryItem,
+        TableFieldSourceDefinition.TypeId.RankedLitIvemIdListDirectoryItem,
     ];
 }

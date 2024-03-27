@@ -15,11 +15,11 @@ import {
     Order,
     SingleBrokerageAccountGroup
 } from "../../../adi/internal-api";
+import { RevFieldCustomHeadingsService } from '../../../rev/internal-api';
 import { CorrectnessBadness, Integer, LockOpenListItem, UnreachableCaseError } from '../../../sys/internal-api';
 import { TextFormatterService } from '../../../text-format/internal-api';
-import { RevFieldCustomHeadingsService } from '../../field/internal-api';
 import {
-    TypedTableFieldSourceDefinition, TypedTableFieldSourceDefinitionCachingFactoryService
+    TableFieldSourceDefinition, TableFieldSourceDefinitionCachingFactoryService
 } from "../field-source/internal-api";
 import { OrderTableRecordDefinition } from '../record-definition/internal-api';
 import { TableRecord } from '../record/internal-api';
@@ -37,7 +37,7 @@ export class OrderTableRecordSource
         private readonly _adiService: AdiService,
         textFormatterService: TextFormatterService,
         gridFieldCustomHeadingsService: RevFieldCustomHeadingsService,
-        tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService,
+        tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService,
         correctnessBadness: CorrectnessBadness,
         definition: OrderTableRecordSourceDefinition,
     ) {
@@ -62,7 +62,7 @@ export class OrderTableRecordSource
     override createRecordDefinition(idx: Integer): OrderTableRecordDefinition {
         const record = this.recordList.records[idx];
         return {
-            typeId: TypedTableFieldSourceDefinition.TypeId.Order,
+            typeId: TableFieldSourceDefinition.TypeId.Order,
             mapKey: record.mapKey,
             record,
         }
@@ -80,12 +80,12 @@ export class OrderTableRecordSource
             const fieldSourceDefinitionTypeId =
                 fieldSourceDefinition.typeId as OrderTableRecordSourceDefinition.FieldSourceDefinitionTypeId;
             switch (fieldSourceDefinitionTypeId) {
-                case TypedTableFieldSourceDefinition.TypeId.Order: {
+                case TableFieldSourceDefinition.TypeId.Order: {
                     const valueSource = new OrderTableValueSource(result.fieldCount, order);
                     result.addSource(valueSource);
                     break;
                 }
-                case TypedTableFieldSourceDefinition.TypeId.BrokerageAccount: {
+                case TableFieldSourceDefinition.TypeId.BrokerageAccount: {
                     const valueSource = new BrokerageAccountTableValueSource(result.fieldCount, order.account);
                     result.addSource(valueSource);
                     break;

@@ -11,13 +11,13 @@ import { EnumInfoOutOfOrderError, Integer } from '../../../../sys/internal-api';
 import { CorrectnessTableField, TableField } from '../../field/internal-api';
 import { CorrectnessTableValue, TableValue } from '../../value/internal-api';
 
-export abstract class TypedTableFieldSourceDefinition extends RevTableFieldSourceDefinition<TypedTableFieldSourceDefinition.TypeId, RenderValue.TypeId, RenderValue.Attribute.TypeId> {
-    constructor(typeId: TypedTableFieldSourceDefinition.TypeId) {
-        super(typeId, TypedTableFieldSourceDefinition.Type.idToName(typeId));
+export abstract class TableFieldSourceDefinition extends RevTableFieldSourceDefinition<TableFieldSourceDefinition.TypeId, RenderValue.TypeId, RenderValue.Attribute.TypeId> {
+    constructor(typeId: TableFieldSourceDefinition.TypeId) {
+        super(typeId, TableFieldSourceDefinition.Type.idToName(typeId));
     }
 }
 
-export namespace TypedTableFieldSourceDefinition {
+export namespace TableFieldSourceDefinition {
     export const enum TypeId {
         Feed,
         LitIvemId,

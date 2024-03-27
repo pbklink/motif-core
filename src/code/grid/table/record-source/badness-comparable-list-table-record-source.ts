@@ -4,10 +4,10 @@
  * License: motionite.trade/license/motif
  */
 
+import { RevFieldCustomHeadingsService } from '../../../rev/internal-api';
 import { BadnessList, CorrectnessBadness, LockOpenListItem } from '../../../sys/internal-api';
 import { TextFormatterService } from '../../../text-format/internal-api';
-import { RevFieldCustomHeadingsService } from '../../field/internal-api';
-import { TypedTableFieldSourceDefinition, TypedTableFieldSourceDefinitionCachingFactoryService } from '../field-source/internal-api';
+import { TableFieldSourceDefinition, TableFieldSourceDefinitionCachingFactoryService } from '../field-source/internal-api';
 import { BadnessListTableRecordSourceDefinition } from './definition/internal-api';
 import { SubscribeBadnessListTableRecordSource } from './subscribe-badness-list-table-record-source';
 
@@ -17,10 +17,10 @@ export abstract class BadnessListTableRecordSource<Record> extends SubscribeBadn
     constructor(
         textFormatterService: TextFormatterService,
         gridFieldCustomHeadingsService: RevFieldCustomHeadingsService,
-        tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService,
+        tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService,
         correctnessBadness: CorrectnessBadness,
         definition: BadnessListTableRecordSourceDefinition<Record>,
-        allowedFieldSourceDefinitionTypeIds: readonly TypedTableFieldSourceDefinition.TypeId[],
+        allowedFieldSourceDefinitionTypeIds: readonly TableFieldSourceDefinition.TypeId[],
     ) {
         super(
             textFormatterService,

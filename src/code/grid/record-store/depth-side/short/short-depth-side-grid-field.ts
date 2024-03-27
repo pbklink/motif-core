@@ -5,10 +5,10 @@
  */
 
 import { OrderSideId } from '../../../../adi/internal-api';
+import { RevFieldDefinition, RevGridLayoutDefinition } from '../../../../rev/internal-api';
 import { RenderValue } from '../../../../services/internal-api';
 import { CorrectnessId, UnreachableCaseError } from '../../../../sys/internal-api';
-import { AllowedGridField, RevFieldDefinition } from '../../../field/internal-api';
-import { RevGridLayoutDefinition } from '../../../layout/internal-api';
+import { AllowedGridField } from '../../../field/internal-api';
 import { DepthSideGridField } from '../depth-side-grid-field';
 import { ShortDepthRecord } from './short-depth-record';
 import { ShortDepthSideField, ShortDepthSideFieldId } from './short-depth-side-field';
@@ -120,7 +120,7 @@ export namespace ShortDepthSideGridField {
             layoutDefinitionColumns.reverse();
         }
 
-        return new RevGridLayoutDefinition(layoutDefinitionColumns, 0);
+        return new RevGridLayoutDefinition(layoutDefinitionColumns);
     }
     // export function createAllFields(
     //     sideId: OrderSideId,

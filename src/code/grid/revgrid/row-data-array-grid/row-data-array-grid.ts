@@ -12,9 +12,10 @@ import {
     SingleHeadingDataRowArrayServerSet,
     Subgrid
 } from '@xilytix/revgrid';
+import { RevFieldDefinition, RevFieldSourceDefinition } from '../../../rev/internal-api';
 import { SettingsService } from '../../../services/internal-api';
 import { GridFieldHorizontalAlign } from '../../../sys/internal-api';
-import { GridField, RevFieldDefinition, RevFieldSourceDefinition } from '../../field/internal-api';
+import { GridField } from '../../field/internal-api';
 import { AdaptedRevgrid, SingleHeadingGridDataServer } from '../adapted-revgrid/internal-api';
 import { AdaptedRevgridBehavioredColumnSettings } from '../settings/internal-api';
 import { RowDataArrayGridDataServer } from './row-data-array-grid-data-server';

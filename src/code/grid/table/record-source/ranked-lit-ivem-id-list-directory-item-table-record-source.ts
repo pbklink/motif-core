@@ -5,12 +5,12 @@
  */
 
 import { RankedLitIvemIdListDirectory } from '../../../ranked-lit-ivem-id-list/internal-api';
+import { RevFieldCustomHeadingsService } from '../../../rev/internal-api';
 import { RankedLitIvemIdListDirectoryItem } from '../../../services/internal-api';
 import { CorrectnessBadness, Integer, LockOpenListItem, Ok, Result, UnreachableCaseError } from '../../../sys/internal-api';
 import { TextFormatterService } from '../../../text-format/internal-api';
-import { RevFieldCustomHeadingsService } from '../../field/internal-api';
 import {
-    TypedTableFieldSourceDefinition, TypedTableFieldSourceDefinitionCachingFactoryService
+    TableFieldSourceDefinition, TableFieldSourceDefinitionCachingFactoryService
 } from "../field-source/internal-api";
 import { RankedLitIvemIdListDirectoryItemTableRecordDefinition } from '../record-definition/internal-api';
 import { TableRecord } from '../record/internal-api';
@@ -24,7 +24,7 @@ export class RankedLitIvemIdListDirectoryItemTableRecordSource extends Subscribe
     constructor(
         textFormatterService: TextFormatterService,
         gridFieldCustomHeadingsService: RevFieldCustomHeadingsService,
-        tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService,
+        tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService,
         correctnessBadness: CorrectnessBadness,
         definition: RankedLitIvemIdListDirectoryItemTableRecordSourceDefinition,
     ) {
@@ -68,7 +68,7 @@ export class RankedLitIvemIdListDirectoryItemTableRecordSource extends Subscribe
     override createRecordDefinition(idx: Integer): RankedLitIvemIdListDirectoryItemTableRecordDefinition {
         const rankedLitIvemIdListDirectoryItem = this._listDirectory.getAt(idx);
         return {
-            typeId: TypedTableFieldSourceDefinition.TypeId.RankedLitIvemIdListDirectoryItem,
+            typeId: TableFieldSourceDefinition.TypeId.RankedLitIvemIdListDirectoryItem,
             mapKey: RankedLitIvemIdListDirectoryItem.createMapKey(rankedLitIvemIdListDirectoryItem),
             record: rankedLitIvemIdListDirectoryItem,
         };
@@ -86,7 +86,7 @@ export class RankedLitIvemIdListDirectoryItemTableRecordSource extends Subscribe
             const fieldSourceDefinitionTypeId =
                 fieldSourceDefinition.typeId as RankedLitIvemIdListDirectoryItemTableRecordSourceDefinition.FieldSourceDefinitionTypeId;
             switch (fieldSourceDefinitionTypeId) {
-                case TypedTableFieldSourceDefinition.TypeId.RankedLitIvemIdListDirectoryItem: {
+                case TableFieldSourceDefinition.TypeId.RankedLitIvemIdListDirectoryItem: {
                     const valueSource = new RankedLitIvemIdListDirectoryItemTableValueSource(result.fieldCount, rankedLitIvemIdListDirectoryItem);
                     result.addSource(valueSource);
                     break;

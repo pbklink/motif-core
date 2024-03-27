@@ -14,6 +14,7 @@ import {
     SymbolFieldId,
     SymbolsDataItem
 } from '../../../adi/internal-api';
+import { RevFieldCustomHeadingsService } from '../../../rev/internal-api';
 import { CallPut } from '../../../services/internal-api';
 import {
     AssertInternalError,
@@ -28,9 +29,8 @@ import {
     newDecimal
 } from '../../../sys/internal-api';
 import { TextFormatterService } from '../../../text-format/internal-api';
-import { RevFieldCustomHeadingsService } from '../../field/internal-api';
 import {
-    TypedTableFieldSourceDefinition, TypedTableFieldSourceDefinitionCachingFactoryService
+    TableFieldSourceDefinition, TableFieldSourceDefinitionCachingFactoryService
 } from "../field-source/internal-api";
 import { CallPutTableRecordDefinition } from '../record-definition/internal-api';
 import { TableRecord } from '../record/internal-api';
@@ -55,7 +55,7 @@ export class CallPutFromUnderlyingTableRecordSource extends SingleDataItemTableR
         private readonly _adiService: AdiService,
         textFormatterService: TextFormatterService,
         gridFieldCustomHeadingsService: RevFieldCustomHeadingsService,
-        tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService,
+        tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService,
         correctnessBadness: CorrectnessBadness,
         definition: CallPutFromUnderlyingTableRecordSourceDefinition,
     ) {
@@ -81,7 +81,7 @@ export class CallPutFromUnderlyingTableRecordSource extends SingleDataItemTableR
     override createRecordDefinition(idx: Integer): CallPutTableRecordDefinition {
         const record = this._recordList[idx];
         return {
-            typeId: TypedTableFieldSourceDefinition.TypeId.CallPut,
+            typeId: TableFieldSourceDefinition.TypeId.CallPut,
             mapKey: record.createKey().mapKey,
             record,
         };
@@ -99,12 +99,12 @@ export class CallPutFromUnderlyingTableRecordSource extends SingleDataItemTableR
             const fieldSourceDefinitionTypeId =
                 fieldSourceDefinition.typeId as CallPutFromUnderlyingTableRecordSourceDefinition.FieldSourceDefinitionTypeId;
             switch (fieldSourceDefinitionTypeId) {
-                case TypedTableFieldSourceDefinition.TypeId.CallPut: {
+                case TableFieldSourceDefinition.TypeId.CallPut: {
                     const valueSource = new CallPutTableValueSource(result.fieldCount, callPut);
                     result.addSource(valueSource);
                     break;
                 }
-                case TypedTableFieldSourceDefinition.TypeId.CallSecurityDataItem: {
+                case TableFieldSourceDefinition.TypeId.CallSecurityDataItem: {
                     const litIvemId = callPut.callLitIvemId;
                     if (litIvemId === undefined) {
                         throw new AssertInternalError('CPFUTRSCTRC68409');
@@ -115,7 +115,7 @@ export class CallPutFromUnderlyingTableRecordSource extends SingleDataItemTableR
                     }
                     break;
                 }
-                case TypedTableFieldSourceDefinition.TypeId.PutSecurityDataItem: {
+                case TableFieldSourceDefinition.TypeId.PutSecurityDataItem: {
                     const litIvemId = callPut.putLitIvemId;
                     if (litIvemId === undefined) {
                         throw new AssertInternalError('CPFUTRSCTRC68409');

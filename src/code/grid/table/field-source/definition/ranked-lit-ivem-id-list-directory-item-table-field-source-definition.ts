@@ -19,11 +19,11 @@ import {
     StringCorrectnessTableValue,
     WritableCorrectnessTableValue
 } from '../../value/internal-api';
-import { TypedTableFieldSourceDefinition } from './typed-table-field-source-definition';
-import { TypedTableFieldSourceDefinitionCachingFactoryService } from './typed-table-field-source-definition-caching-factory-service';
+import { TableFieldSourceDefinition } from './table-field-source-definition';
+import { TableFieldSourceDefinitionCachingFactoryService } from './table-field-source-definition-caching-factory-service';
 
 /** @public */
-export class RankedLitIvemIdListDirectoryItemTableFieldSourceDefinition extends TypedTableFieldSourceDefinition {
+export class RankedLitIvemIdListDirectoryItemTableFieldSourceDefinition extends TableFieldSourceDefinition {
     override readonly fieldDefinitions: TableField.Definition[];
 
     constructor() {
@@ -77,7 +77,7 @@ export class RankedLitIvemIdListDirectoryItemTableFieldSourceDefinition extends 
 
 /** @public */
 export namespace RankedLitIvemIdListDirectoryItemTableFieldSourceDefinition {
-    export const typeId = TypedTableFieldSourceDefinition.TypeId.RankedLitIvemIdListDirectoryItem;
+    export const typeId = TableFieldSourceDefinition.TypeId.RankedLitIvemIdListDirectoryItem;
     export type TypeId = typeof typeId;
 
     export namespace Field {
@@ -167,12 +167,12 @@ export namespace RankedLitIvemIdListDirectoryItemTableFieldSourceDefinition {
         }
     }
 
-    export interface FieldId extends TypedTableFieldSourceDefinition.FieldId {
+    export interface FieldId extends TableFieldSourceDefinition.FieldId {
         sourceTypeId: RankedLitIvemIdListDirectoryItemTableFieldSourceDefinition.TypeId;
         id: RankedLitIvemIdListDirectoryItem.FieldId;
     }
 
-    export function get(cachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService): RankedLitIvemIdListDirectoryItemTableFieldSourceDefinition {
+    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactoryService): RankedLitIvemIdListDirectoryItemTableFieldSourceDefinition {
         return cachingFactoryService.get(typeId) as RankedLitIvemIdListDirectoryItemTableFieldSourceDefinition;
     }
 

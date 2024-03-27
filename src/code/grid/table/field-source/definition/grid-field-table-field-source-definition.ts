@@ -14,11 +14,11 @@ import {
     StringTableValue,
     TableValue
 } from '../../value/internal-api';
-import { TypedTableFieldSourceDefinition } from './typed-table-field-source-definition';
-import { TypedTableFieldSourceDefinitionCachingFactoryService } from './typed-table-field-source-definition-caching-factory-service';
+import { TableFieldSourceDefinition } from './table-field-source-definition';
+import { TableFieldSourceDefinitionCachingFactoryService } from './table-field-source-definition-caching-factory-service';
 
 /** @public */
-export class GridFieldTableFieldSourceDefinition extends TypedTableFieldSourceDefinition {
+export class GridFieldTableFieldSourceDefinition extends TableFieldSourceDefinition {
     override readonly fieldDefinitions: TableField.Definition[];
 
     constructor() {
@@ -72,7 +72,7 @@ export class GridFieldTableFieldSourceDefinition extends TypedTableFieldSourceDe
 
 /** @public */
 export namespace GridFieldTableFieldSourceDefinition {
-    export const typeId = TypedTableFieldSourceDefinition.TypeId.GridField;
+    export const typeId = TableFieldSourceDefinition.TypeId.GridField;
     export type TypeId = typeof typeId;
 
     export namespace Field {
@@ -154,12 +154,12 @@ export namespace GridFieldTableFieldSourceDefinition {
         }
     }
 
-    export interface FieldId extends TypedTableFieldSourceDefinition.FieldId {
+    export interface FieldId extends TableFieldSourceDefinition.FieldId {
         sourceTypeId: GridFieldTableFieldSourceDefinition.TypeId;
         id: GridField.FieldId;
     }
 
-    export function get(cachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService): GridFieldTableFieldSourceDefinition {
+    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactoryService): GridFieldTableFieldSourceDefinition {
         return cachingFactoryService.get(typeId) as GridFieldTableFieldSourceDefinition;
     }
 

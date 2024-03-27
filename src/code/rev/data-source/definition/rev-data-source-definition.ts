@@ -41,12 +41,24 @@ export namespace RevDataSourceDefinition {
     }
 
     export const enum CreateFromJsonErrorId {
-        NotSpecified,
-        InvalidJson,
-        CreateFromJson
+        TableRecordSourceElementIsNotDefined,
+        TableRecordSourceJsonValueIsNotOfTypeObject,
+        TableRecordSourceTryCreate,
     }
 
-    export interface ErrorIdPlusExtra {
+    export const enum LayoutCreateFromJsonErrorId {
+        GridLayoutOrReferenceElementIsNotDefined,
+        GridLayoutOrReferenceJsonValueIsNotOfTypeObject,
+        GridLayoutNeitherReferenceOrDefinitionJsonValueIsDefined,
+        GridLayoutBothReferenceAndDefinitionJsonValuesAreOfWrongType,
+        GridLayoutOrReferenceDefinitionJsonValueIsNotOfTypeObject,
+        GridLayoutOrReferenceDefinitionColumnsElementIsNotDefined,
+        GridLayoutOrReferenceDefinitionColumnsElementIsNotAnArray,
+        GridLayoutOrReferenceDefinitionColumnElementIsNotAnObject,
+        GridLayoutOrReferenceDefinitionAllColumnElementsAreInvalid,
+    }
+
+    export interface CreateFromJsonErrorIdPlusExtra {
         readonly errorId: CreateFromJsonErrorId;
         readonly extra: string | undefined;
     }
@@ -54,25 +66,30 @@ export namespace RevDataSourceDefinition {
     export function tryCreateTableRecordSourceDefinitionFromJson<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, RenderValueTypeId, RenderAttributeTypeId>(
         tableRecordSourceDefinitionFromJsonFactory: RevTableRecordSourceDefinitionFromJsonFactory<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, RenderValueTypeId, RenderAttributeTypeId>,
         element: JsonElement
-    ): Result<RevTableRecordSourceDefinition<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, RenderValueTypeId, RenderAttributeTypeId>, ErrorIdPlusExtra> {
+    ): Result<
+        RevTableRecordSourceDefinition<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, RenderValueTypeId, RenderAttributeTypeId>,
+        CreateFromJsonErrorIdPlusExtra
+    > {
         const getElementResult = element.tryGetElement(JsonName.tableRecordSource);
         if (getElementResult.isErr()) {
             const getElementErrorId = getElementResult.error;
             let errorId: CreateFromJsonErrorId;
-            let extra: string | undefined;
-            if (getElementErrorId === JsonElement.ErrorId.ElementIsNotDefined) {
-                errorId = CreateFromJsonErrorId.NotSpecified;
-                extra = undefined;
-            } else {
-                errorId = CreateFromJsonErrorId.InvalidJson;
-                extra = JSON.stringify(element.json).substring(0, 200);
+            switch (getElementErrorId) {
+                case JsonElement.ErrorId.ElementIsNotDefined:
+                    errorId = CreateFromJsonErrorId.TableRecordSourceElementIsNotDefined;
+                    break;
+                case JsonElement.ErrorId.JsonValueIsNotOfTypeObject:
+                    errorId = CreateFromJsonErrorId.TableRecordSourceJsonValueIsNotOfTypeObject;
+                    break;
+                default:
+                    throw new UnreachableCaseError('RDSDTCTRSDFJT3344', getElementErrorId);
             }
-            return new Err({ errorId, extra });
+            return new Err({ errorId, extra: undefined });
         } else {
             const tableRecordSourceDefinitionElement = getElementResult.value;
             const createFromJsonResult = tableRecordSourceDefinitionFromJsonFactory.tryCreateFromJson(tableRecordSourceDefinitionElement);
             if (createFromJsonResult.isErr()) {
-                return new Err({ errorId: CreateFromJsonErrorId.CreateFromJson, extra: createFromJsonResult.error });
+                return new Err({ errorId: CreateFromJsonErrorId.TableRecordSourceTryCreate, extra: createFromJsonResult.error });
             } else {
                 const tableRecordSourceDefinition = createFromJsonResult.value;
                 return new Ok(tableRecordSourceDefinition);
@@ -80,45 +97,56 @@ export namespace RevDataSourceDefinition {
         }
     }
 
-    export function tryCreateGridLayoutOrReferenceDefinitionFromJson(element: JsonElement): Result<RevGridLayoutOrReferenceDefinition, ErrorIdPlusExtra> {
+    export function tryCreateGridLayoutOrReferenceDefinitionFromJson(element: JsonElement): Result<RevGridLayoutOrReferenceDefinition, LayoutCreateFromJsonErrorId> {
         const getElementResult = element.tryGetElement(JsonName.gridLayoutOrReference);
         if (getElementResult.isErr()) {
             const getElementErrorId = getElementResult.error;
-            let createFromJsonErrorId: CreateFromJsonErrorId;
+            let errorId: LayoutCreateFromJsonErrorId;
             switch (getElementErrorId) {
                 case JsonElement.ErrorId.ElementIsNotDefined:
-                    createFromJsonErrorId = CreateFromJsonErrorId.ColumnsElementIsNotDefined;
+                    errorId = LayoutCreateFromJsonErrorId.GridLayoutOrReferenceElementIsNotDefined;
                     break;
                 case JsonElement.ErrorId.JsonValueIsNotOfTypeObject:
-                    createFromJsonErrorId = CreateFromJsonErrorId.ColumnsElementIsNotAnArray;
+                    errorId = LayoutCreateFromJsonErrorId.GridLayoutOrReferenceJsonValueIsNotOfTypeObject;
                     break;
                 default:
-                    throw new UnreachableCaseError('RGLDTCCFJ82834', getElementErrorId);
+                    throw new UnreachableCaseError('RDSDTCTRSDFJL43344', getElementErrorId);
             }
-            return new Err(createFromJsonErrorId);
-
-            let errorId: CreateFromJsonErrorId;
-            let extra: string | undefined;
-            if (getElementErrorId === JsonElement.ErrorId.ElementIsNotDefined) {
-                errorId = CreateFromJsonErrorId.NotSpecified;
-                extra = undefined;
-            } else {
-                errorId = CreateFromJsonErrorId.InvalidJson;
-                extra = JSON.stringify(element.json).substring(0, 200);
-            }
-            return new Err({ errorId, extra });
+            return new Err(errorId);
         } else {
             const gridLayoutOrReferenceDefinitionElement = getElementResult.value;
             const createFromJsonResult = RevGridLayoutOrReferenceDefinition.tryCreateFromJson(
                 gridLayoutOrReferenceDefinitionElement
             );
             if (createFromJsonResult.isErr()) {
-                const createFromJsonErrorIds = createFromJsonResult.error;
-                switch (createFromJsonErrorIds.errorId) {
-                    case RevGridLayoutOrReferenceDefinition.CreateFromJsonErrorId.GetElement:
-                    case RevGridLayoutOrReferenceDefinition.CreateFromJsonErrorId.CreateDefinition:
+                const createFromJsonErrorId = createFromJsonResult.error;
+                let errorId: LayoutCreateFromJsonErrorId;
+                switch (createFromJsonErrorId) {
+                    case RevGridLayoutOrReferenceDefinition.CreateFromJsonErrorId.NeitherReferenceOrDefinitionJsonValueIsDefined:
+                        errorId = LayoutCreateFromJsonErrorId.GridLayoutNeitherReferenceOrDefinitionJsonValueIsDefined;
+                        break;
+                    case RevGridLayoutOrReferenceDefinition.CreateFromJsonErrorId.BothReferenceAndDefinitionJsonValuesAreOfWrongType:
+                        errorId = LayoutCreateFromJsonErrorId.GridLayoutBothReferenceAndDefinitionJsonValuesAreOfWrongType;
+                        break;
+                    case RevGridLayoutOrReferenceDefinition.CreateFromJsonErrorId.DefinitionJsonValueIsNotOfTypeObject:
+                        errorId = LayoutCreateFromJsonErrorId.GridLayoutOrReferenceDefinitionJsonValueIsNotOfTypeObject;
+                        break;
+                    case RevGridLayoutOrReferenceDefinition.CreateFromJsonErrorId.DefinitionColumnsElementIsNotDefined:
+                        errorId = LayoutCreateFromJsonErrorId.GridLayoutOrReferenceDefinitionColumnsElementIsNotDefined;
+                        break;
+                    case RevGridLayoutOrReferenceDefinition.CreateFromJsonErrorId.DefinitionColumnsElementIsNotAnArray:
+                        errorId = LayoutCreateFromJsonErrorId.GridLayoutOrReferenceDefinitionColumnsElementIsNotAnArray;
+                        break;
+                    case RevGridLayoutOrReferenceDefinition.CreateFromJsonErrorId.DefinitionColumnElementIsNotAnObject:
+                        errorId = LayoutCreateFromJsonErrorId.GridLayoutOrReferenceDefinitionColumnElementIsNotAnObject;
+                        break;
+                    case RevGridLayoutOrReferenceDefinition.CreateFromJsonErrorId.DefinitionAllColumnElementsAreInvalid:
+                        errorId = LayoutCreateFromJsonErrorId.GridLayoutOrReferenceDefinitionAllColumnElementsAreInvalid;
+                        break;
+                    default:
+                        throw new UnreachableCaseError('RDSDTCTRSDFJC43344', createFromJsonErrorId);
                 }
-                return new Err({ errorId: CreateFromJsonErrorId.CreateFromJson, extra: createFromJsonResult.error });
+                return new Err(errorId);
             } else {
                 const gridLayoutOrReferenceDefinition = createFromJsonResult.value;
                 return new Ok(gridLayoutOrReferenceDefinition);
@@ -136,37 +164,47 @@ export namespace RevDataSourceDefinition {
         }
     }
 
+    export interface WithLayoutError<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, RenderValueTypeId, RenderAttributeTypeId> {
+        definition: RevDataSourceDefinition<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, RenderValueTypeId, RenderAttributeTypeId>
+        layoutCreateFromJsonErrorId: LayoutCreateFromJsonErrorId | undefined;
+    }
+
     export function tryCreateFromJson<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, RenderValueTypeId, RenderAttributeTypeId>(
         tableRecordSourceDefinitionFromJsonFactory: RevTableRecordSourceDefinitionFromJsonFactory<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, RenderValueTypeId, RenderAttributeTypeId>,
         element: JsonElement
-    ): Result<RevDataSourceDefinition<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, RenderValueTypeId, RenderAttributeTypeId>> {
-        const tableRecordSourceDefinitionResult = RevDataSourceDefinition.tryCreateTableRecordSourceDefinitionFromJson(
+    ): Result<
+        WithLayoutError<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, RenderValueTypeId, RenderAttributeTypeId>,
+        CreateFromJsonErrorIdPlusExtra
+    > {
+        const tableRecordSourceDefinitionResult = tryCreateTableRecordSourceDefinitionFromJson(
             tableRecordSourceDefinitionFromJsonFactory,
             element,
         );
         if (tableRecordSourceDefinitionResult.isErr()) {
-            return tableRecordSourceDefinitionResult.createOuter(ErrorCode.GridSourceDefinition_TableRecordSourceDefinitionIsInvalid);
+            return tableRecordSourceDefinitionResult.createType();
         } else {
             const tableRecordSourceDefinition = tableRecordSourceDefinitionResult.value;
 
             let gridLayoutOrReferenceDefinition: RevGridLayoutOrReferenceDefinition | undefined;
-            const gridLayoutOReferenceDefinitionResult = RevDataSourceDefinition.tryCreateGridLayoutOrReferenceDefinitionFromJson(
-                element
-            );
-            if (gridLayoutOReferenceDefinitionResult.isErr()) {
+            const gridLayoutOrReferenceDefinitionResult = tryCreateGridLayoutOrReferenceDefinitionFromJson(element);
+
+            let layoutCreateFromJsonErrorId: LayoutCreateFromJsonErrorId | undefined;
+            if (gridLayoutOrReferenceDefinitionResult.isErr()) {
                 gridLayoutOrReferenceDefinition = undefined;
+                layoutCreateFromJsonErrorId = gridLayoutOrReferenceDefinitionResult.error;
             } else {
-                gridLayoutOrReferenceDefinition = gridLayoutOReferenceDefinitionResult.value;
+                gridLayoutOrReferenceDefinition = gridLayoutOrReferenceDefinitionResult.value;
+                layoutCreateFromJsonErrorId = undefined;
             }
 
             const rowOrderDefinition = tryGetRowOrderFromJson<TableFieldSourceDefinitionTypeId>(element);
 
-            const gridSourceDefinition = new RevDataSourceDefinition<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, RenderValueTypeId, RenderAttributeTypeId>(
+            const definition = new RevDataSourceDefinition<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, RenderValueTypeId, RenderAttributeTypeId>(
                 tableRecordSourceDefinition,
                 gridLayoutOrReferenceDefinition,
                 rowOrderDefinition,
             );
-            return new Ok(gridSourceDefinition);
+            return new Ok({ definition, layoutCreateFromJsonErrorId });
         }
     }
 }

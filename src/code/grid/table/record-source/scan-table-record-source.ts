@@ -4,12 +4,12 @@
  * License: motionite.trade/license/motif
  */
 
+import { RevFieldCustomHeadingsService } from '../../../rev/internal-api';
 import { Scan, ScanList, ScansService } from '../../../scan/internal-api';
 import { CorrectnessBadness, Integer, LockOpenListItem, UnreachableCaseError } from '../../../sys/internal-api';
 import { TextFormatterService } from '../../../text-format/internal-api';
-import { RevFieldCustomHeadingsService } from '../../field/internal-api';
 import {
-    TypedTableFieldSourceDefinition, TypedTableFieldSourceDefinitionCachingFactoryService
+    TableFieldSourceDefinition, TableFieldSourceDefinitionCachingFactoryService
 } from "../field-source/internal-api";
 import { ScanTableRecordDefinition } from '../record-definition/internal-api';
 import { TableRecord } from '../record/internal-api';
@@ -24,7 +24,7 @@ export class ScanTableRecordSource extends LockOpenListTableRecordSource<Scan, S
         private readonly _scansService: ScansService,
         textFormatterService: TextFormatterService,
         gridFieldCustomHeadingsService: RevFieldCustomHeadingsService,
-        tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService,
+        tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService,
         correctnessBadness: CorrectnessBadness,
         definition: ScanTableRecordSourceDefinition,
     ) {
@@ -49,7 +49,7 @@ export class ScanTableRecordSource extends LockOpenListTableRecordSource<Scan, S
     override createRecordDefinition(idx: Integer): ScanTableRecordDefinition {
         const scan = this._scanList.getAt(idx);
         return {
-            typeId: TypedTableFieldSourceDefinition.TypeId.Scan,
+            typeId: TableFieldSourceDefinition.TypeId.Scan,
             mapKey: scan.mapKey,
             record: scan,
         };
@@ -67,7 +67,7 @@ export class ScanTableRecordSource extends LockOpenListTableRecordSource<Scan, S
             const fieldSourceDefinitionTypeId =
                 fieldSourceDefinition.typeId as ScanTableRecordSourceDefinition.FieldSourceDefinitionTypeId;
             switch (fieldSourceDefinitionTypeId) {
-                case TypedTableFieldSourceDefinition.TypeId.Scan: {
+                case TableFieldSourceDefinition.TypeId.Scan: {
                     const valueSource = new ScanTableValueSource(result.fieldCount, scan);
                     result.addSource(valueSource);
                     break;

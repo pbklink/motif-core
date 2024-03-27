@@ -4,118 +4,41 @@
  * License: motionite.trade/license/motif
  */
 
-import { JsonElement, LockOpenList, mSecsPerSec, SysTick } from '@xilytix/sysutils';
-import { ReferenceableGridLayoutsService } from '../grid-layout/internal-api';
-import { RevTableFieldSourceDefinitionFactory, RevTableRecordSourceFactory } from '../table/internal-api';
+import { LockOpenList } from '@xilytix/sysutils';
 import { RevReferenceableDataSourceDefinition } from './definition/internal-api';
 import { RevReferenceableDataSource } from './rev-referenceable-data-source';
-
-export class RevReferenceableDataSourcesService<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, Badness> extends LockOpenList<RevReferenceableDataSource<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, Badness>> {
-    private _saveModified: boolean;
-    private nextPeriodicSaveCheckTime: SysTick.Time =
-        SysTick.now() + RevReferenceableDataSourcesService.periodicSaveCheckInterval;
-    private savePeriodicRequired: boolean;
-
-    constructor(
-        private readonly _referenceableGridLayoutsService: ReferenceableGridLayoutsService,
-        private readonly _tableFieldSourceDefinitionFactory: RevTableFieldSourceDefinitionFactory<TableFieldSourceDefinitionTypeId>,
-        private readonly _tableRecordSourceFactory: RevTableRecordSourceFactory<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, Badness>,
-    ) {
-        super();
-    }
-
-    get saveModified() {
-        return this._saveModified;
-    }
-
-    destroy() {
-        //
-    }
-
-    getOrNew(
-        definition: RevReferenceableDataSourceDefinition<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId>
-    ): RevReferenceableDataSource<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, Badness> {
-        let source = this.getItemByKey(definition.id);
-        if (source === undefined) {
-            source = this.createReferenceableGridSource(definition);
-            this.addItem(source);
-        }
-        return source;
-    }
-
-    save() {
-        const rootElement = new JsonElement();
-        this.saveToJson(rootElement);
-        const serialisedDataIgnored = rootElement.stringify();
-        // todo
-    }
-
-    checkSave(onlyIfPeriodicRequired: boolean) {
-        if (
-            this.savePeriodicRequired ||
-            (!onlyIfPeriodicRequired && this._saveModified)
-        ) {
-            this.save();
-        }
-    }
-
-    checkPeriodiSaveRequired(nowTime: SysTick.Time) {
-        if (nowTime > this.nextPeriodicSaveCheckTime) {
-            if (this._saveModified) {
-                this.savePeriodicRequired = true;
-            }
-
-            this.nextPeriodicSaveCheckTime =
-                nowTime + RevReferenceableDataSourcesService.periodicSaveCheckInterval;
-        }
-    }
-
-    private createReferenceableGridSource(definition: RevReferenceableDataSourceDefinition<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId>) {
-        const index = this.count;
-        const result = new RevReferenceableDataSource<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, Badness>(
-            this._referenceableGridLayoutsService,
-            this._tableFieldSourceDefinitionFactory,
-            this._tableRecordSourceFactory,
-            definition,
-            index
-        );
-        return result;
-    }
-
-    private handleSaveRequiredEvent() {
-        this._saveModified = true;
-    }
-
-    // private handleExclusiveTableUnlockedEvent(table: Table): void {
-    //     // this.deleteTable(table.index);
-    // }
-
-    private loadFromJson(element: JsonElement): boolean {
-        return false;
-        // todo
-    }
-
-    private saveToJson(element: JsonElement) {
-        const count = this.count;
-        const watchlistElements = new Array<JsonElement>(count);
-        // const tables = this.getAllItemsAsArray();
-        for (let i = 0; i < count; i++) {
-            // const table = tables[i];
-            const watchlistElement = new JsonElement();
-            // table.saveToJson(watchlistElement);
-            watchlistElements[i] = watchlistElement;
-        }
-        element.setElementArray(RevReferenceableDataSourcesService.jsonTag_Watchlists, watchlistElements);
-    }
-}
+import { RevDataSource } from './rev-data-source';
 
 /** @public */
-export namespace RevReferenceableDataSourcesService {
-    export type SaveRequiredEvent = (this: void) => void;
+export interface RevReferenceableDataSourcesService<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, RenderValueTypeId, RenderAttributeTypeId, Badness>
+    extends LockOpenList<
+        RevReferenceableDataSource<
+            TableRecordSourceDefinitionTypeId,
+            TableFieldSourceDefinitionTypeId,
+            RenderValueTypeId,
+            RenderAttributeTypeId,
+            Badness
+        >,
+        RevDataSource.LockErrorIdPlusTryError
+    > {
 
-    export const jsonTag_Root = 'Watchlists';
-    export const jsonTag_Watchlists = 'Watchlist';
-    export const periodicSaveCheckInterval = 60.0 * mSecsPerSec;
+    // readonly saveModified: boolean;
+
+    getOrNew(
+        definition: RevReferenceableDataSourceDefinition<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, RenderValueTypeId, RenderAttributeTypeId>
+    ): RevReferenceableDataSource<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, RenderValueTypeId, RenderAttributeTypeId, Badness>;
+
+    // save(): void;
+    // checkSave(onlyIfPeriodicRequired: boolean): void;
+    // checkPeriodicSaveRequired(nowTime: SysTick.Time): void;
+}
+/** @public */
+export namespace RevReferenceableDataSourcesService {
+    // export type SaveRequiredEvent = (this: void) => void;
+
+    // export const jsonTag_Root = 'Watchlists';
+    // export const jsonTag_Watchlists = 'Watchlist';
+    // export const periodicSaveCheckInterval = 60.0 * mSecsPerSec;
 
     // export class Entry2 {
     //     saveRequiredEvent: SaveRequiredEvent;

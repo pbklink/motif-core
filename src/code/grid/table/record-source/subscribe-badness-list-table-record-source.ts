@@ -13,10 +13,10 @@ import {
     UnreachableCaseError,
     UsableListChangeTypeId
 } from "../../../sys/internal-api";
-import { TypedTableRecordSource } from './typed-table-record-source';
+import { TableRecordSource } from './table-record-source';
 
 /** @public */
-export abstract class SubscribeBadnessListTableRecordSource<Record, RecordList extends BadnessList<Record>> extends TypedTableRecordSource {
+export abstract class SubscribeBadnessListTableRecordSource<Record, RecordList extends BadnessList<Record>> extends TableRecordSource {
     private _recordList: RecordList;
     private _recordListListChangeEventSubscriptionId: MultiEvent.SubscriptionId;
     // private _recordListBeforeRecordChangeEventSubscriptionId: MultiEvent.SubscriptionId;

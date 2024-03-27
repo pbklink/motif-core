@@ -5,7 +5,7 @@
  */
 
 import { StringId, Strings } from '../../../../res/internal-api';
-import { RevTableRecordSourceDefinition } from '../../../../rev/internal-api';
+import { RevFieldCustomHeadingsService, RevTableRecordSourceDefinition } from '../../../../rev/internal-api';
 import { RenderValue } from '../../../../services/internal-api';
 import {
     EnumInfoOutOfOrderError,
@@ -18,32 +18,31 @@ import {
     Result,
     compareNumber
 } from "../../../../sys/internal-api";
-import { RevFieldCustomHeadingsService } from '../../../field/internal-api';
-import { TypedTableFieldSourceDefinition, TypedTableFieldSourceDefinitionCachingFactoryService } from '../../field-source/internal-api';
+import { TableFieldSourceDefinition, TableFieldSourceDefinitionCachingFactoryService } from '../../field-source/internal-api';
 
-export abstract class TypedTableRecordSourceDefinition extends RevTableRecordSourceDefinition<
-    TypedTableRecordSourceDefinition.TypeId,
-    TypedTableFieldSourceDefinition.TypeId,
+export abstract class TableRecordSourceDefinition extends RevTableRecordSourceDefinition<
+    TableRecordSourceDefinition.TypeId,
+    TableFieldSourceDefinition.TypeId,
     RenderValue.TypeId,
     RenderValue.Attribute.TypeId
 > {
     constructor(
         customHeadingsService: RevFieldCustomHeadingsService,
-        tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService,
-        typeId: TypedTableRecordSourceDefinition.TypeId,
-        allowedFieldSourceDefinitionTypeIds: readonly TypedTableFieldSourceDefinition.TypeId[],
+        tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService,
+        typeId: TableRecordSourceDefinition.TypeId,
+        allowedFieldSourceDefinitionTypeIds: readonly TableFieldSourceDefinition.TypeId[],
     ) {
         super(
             customHeadingsService,
             tableFieldSourceDefinitionCachingFactoryService,
             typeId,
-            TypedTableRecordSourceDefinition.Type.idToJson(typeId),
+            TableRecordSourceDefinition.Type.idToJson(typeId),
             allowedFieldSourceDefinitionTypeIds
         );
     }
 }
 
-export namespace TypedTableRecordSourceDefinition {
+export namespace TableRecordSourceDefinition {
     export const jsonTag_Id = 'Id';
     export const jsonTag_Name = 'Name';
     export const jsonTag_TypeId = 'ListTypeId';
@@ -85,7 +84,7 @@ export namespace TypedTableRecordSourceDefinition {
     }
 
     export namespace Type {
-        export type Id = TypedTableRecordSourceDefinition.TypeId;
+        export type Id = TableRecordSourceDefinition.TypeId;
 
         interface Info {
             readonly id: Id;
@@ -98,163 +97,163 @@ export namespace TypedTableRecordSourceDefinition {
 
         const infoObjects: InfoObjects = {
             Null: {
-                id: TypedTableRecordSourceDefinition.TypeId.Null,
+                id: TableRecordSourceDefinition.TypeId.Null,
                 name: 'Null',
                 display: StringId.TableRecordDefinitionList_ListTypeDisplay_Null,
                 abbr: StringId.TableRecordDefinitionList_ListTypeAbbr_Null
             },
             LitIvemIdComparableList: {
-                id: TypedTableRecordSourceDefinition.TypeId.LitIvemIdComparableList,
+                id: TableRecordSourceDefinition.TypeId.LitIvemIdComparableList,
                 name: 'LitIvemIdList',
                 display: StringId.TableRecordDefinitionList_ListTypeDisplay_LitIvemIdList,
                 abbr: StringId.TableRecordDefinitionList_ListTypeAbbr_LitIvemIdList,
             },
             LitIvemDetailsFromSearchSymbols: {
-                id: TypedTableRecordSourceDefinition.TypeId.LitIvemDetailsFromSearchSymbols,
+                id: TableRecordSourceDefinition.TypeId.LitIvemDetailsFromSearchSymbols,
                 name: 'LitIvemDetailsFromSearchSymbols',
                 display: StringId.TableRecordDefinitionList_ListTypeDisplay_LitIvemDetailsFromSearchSymbols,
                 abbr: StringId.TableRecordDefinitionList_ListTypeAbbr_LitIvemDetailsFromSearchSymbols
             },
             RankedLitIvemIdList: {
-                id: TypedTableRecordSourceDefinition.TypeId.RankedLitIvemIdList,
+                id: TableRecordSourceDefinition.TypeId.RankedLitIvemIdList,
                 name: 'LitIvemIdArrayRankedLitIvemIdList',
                 display: StringId.TableRecordDefinitionList_ListTypeDisplay_LitIvemIdArrayRankedLitIvemIdList,
                 abbr: StringId.TableRecordDefinitionList_ListTypeAbbr_LitIvemIdArrayRankedLitIvemIdList
             },
             MarketMovers: {
-                id: TypedTableRecordSourceDefinition.TypeId.MarketMovers,
+                id: TableRecordSourceDefinition.TypeId.MarketMovers,
                 name: 'MarketMovers',
                 display: StringId.TableRecordDefinitionList_ListTypeDisplay_MarketMovers,
                 abbr: StringId.TableRecordDefinitionList_ListTypeAbbr_MarketMovers
             },
             Gics: {
-                id: TypedTableRecordSourceDefinition.TypeId.Gics,
+                id: TableRecordSourceDefinition.TypeId.Gics,
                 name: 'Gics',
                 display: StringId.TableRecordDefinitionList_ListTypeDisplay_Gics,
                 abbr: StringId.TableRecordDefinitionList_ListTypeAbbr_Gics
             },
             ProfitIvemHolding: {
-                id: TypedTableRecordSourceDefinition.TypeId.ProfitIvemHolding,
+                id: TableRecordSourceDefinition.TypeId.ProfitIvemHolding,
                 name: 'ProfitIvemHolding',
                 display: StringId.TableRecordDefinitionList_ListTypeDisplay_ProfitIvemHolding,
                 abbr: StringId.TableRecordDefinitionList_ListTypeAbbr_ProfitIvemHolding
             },
             CashItemHolding: {
-                id: TypedTableRecordSourceDefinition.TypeId.CashItemHolding,
+                id: TableRecordSourceDefinition.TypeId.CashItemHolding,
                 name: 'CashItemHolding',
                 display: StringId.TableRecordDefinitionList_ListTypeDisplay_CashItemHolding,
                 abbr: StringId.TableRecordDefinitionList_ListTypeAbbr_CashItemHolding
             },
             IntradayProfitLossSymbolRec: {
-                id: TypedTableRecordSourceDefinition.TypeId.IntradayProfitLossSymbolRec,
+                id: TableRecordSourceDefinition.TypeId.IntradayProfitLossSymbolRec,
                 name: 'IntradayProfitLossSymbolRec',
                 display: StringId.TableRecordDefinitionList_ListTypeDisplay_IntradayProfitLossSymbolRec,
                 abbr: StringId.TableRecordDefinitionList_ListTypeAbbr_IntradayProfitLossSymbolRec
             },
             TmcDefinitionLegs: {
-                id: TypedTableRecordSourceDefinition.TypeId.TmcDefinitionLegs,
+                id: TableRecordSourceDefinition.TypeId.TmcDefinitionLegs,
                 name: 'TmcDefinitionLegs',
                 display: StringId.TableRecordDefinitionList_ListTypeDisplay_TmcDefinitionLegs,
                 abbr: StringId.TableRecordDefinitionList_ListTypeAbbr_TmcDefinitionLegs
             },
             TmcLeg: {
-                id: TypedTableRecordSourceDefinition.TypeId.TmcLeg,
+                id: TableRecordSourceDefinition.TypeId.TmcLeg,
                 name: 'TmcLeg',
                 display: StringId.TableRecordDefinitionList_ListTypeDisplay_TmcLeg,
                 abbr: StringId.TableRecordDefinitionList_ListTypeAbbr_TmcLeg
             },
             TmcWithLegMatchingUnderlying: {
-                id: TypedTableRecordSourceDefinition.TypeId.TmcWithLegMatchingUnderlying,
+                id: TableRecordSourceDefinition.TypeId.TmcWithLegMatchingUnderlying,
                 name: 'TmcWithLegMatchingUnderlying',
                 display: StringId.TableRecordDefinitionList_ListTypeDisplay_TmcWithLegMatchingUnderlying,
                 abbr: StringId.TableRecordDefinitionList_ListTypeAbbr_TmcWithLegMatchingUnderlying
             },
             CallPutFromUnderlying: {
-                id: TypedTableRecordSourceDefinition.TypeId.CallPutFromUnderlying,
+                id: TableRecordSourceDefinition.TypeId.CallPutFromUnderlying,
                 name: 'EtoMatchingUnderlyingCallPut',
                 display: StringId.TableRecordDefinitionList_ListTypeDisplay_EtoMatchingUnderlyingCallPut,
                 abbr: StringId.TableRecordDefinitionList_ListTypeAbbr_EtoMatchingUnderlyingCallPut
             },
             HoldingAccountPortfolio: {
-                id: TypedTableRecordSourceDefinition.TypeId.HoldingAccountPortfolio,
+                id: TableRecordSourceDefinition.TypeId.HoldingAccountPortfolio,
                 name: 'HoldingAccountPortfolio',
                 display: StringId.TableRecordDefinitionList_ListTypeDisplay_HoldingAccountPortfolio,
                 abbr: StringId.TableRecordDefinitionList_ListTypeAbbr_HoldingAccountPortfolio
             },
             Feed: {
-                id: TypedTableRecordSourceDefinition.TypeId.Feed,
+                id: TableRecordSourceDefinition.TypeId.Feed,
                 name: 'Feed',
                 display: StringId.TableRecordDefinitionList_ListTypeDisplay_Feed,
                 abbr: StringId.TableRecordDefinitionList_ListTypeAbbr_Feed
             },
             BrokerageAccount: {
-                id: TypedTableRecordSourceDefinition.TypeId.BrokerageAccount,
+                id: TableRecordSourceDefinition.TypeId.BrokerageAccount,
                 name: 'BrokerageAccount',
                 display: StringId.TableRecordDefinitionList_ListTypeDisplay_BrokerageAccount,
                 abbr: StringId.TableRecordDefinitionList_ListTypeAbbr_BrokerageAccount
             },
             Order: {
-                id: TypedTableRecordSourceDefinition.TypeId.Order,
+                id: TableRecordSourceDefinition.TypeId.Order,
                 name: 'Order',
                 display: StringId.TableRecordDefinitionList_ListTypeDisplay_Order,
                 abbr: StringId.TableRecordDefinitionList_ListTypeAbbr_Order
             },
             Holding: {
-                id: TypedTableRecordSourceDefinition.TypeId.Holding,
+                id: TableRecordSourceDefinition.TypeId.Holding,
                 name: 'Holding',
                 display: StringId.TableRecordDefinitionList_ListTypeDisplay_Holding,
                 abbr: StringId.TableRecordDefinitionList_ListTypeAbbr_Holding
             },
             Balances: {
-                id: TypedTableRecordSourceDefinition.TypeId.Balances,
+                id: TableRecordSourceDefinition.TypeId.Balances,
                 name: 'Balances',
                 display: StringId.TableRecordDefinitionList_ListTypeDisplay_Balances,
                 abbr: StringId.TableRecordDefinitionList_ListTypeAbbr_Balances
             },
             TopShareholder: {
-                id: TypedTableRecordSourceDefinition.TypeId.TopShareholder,
+                id: TableRecordSourceDefinition.TypeId.TopShareholder,
                 name: 'TopShareholder',
                 display: StringId.TableRecordDefinitionList_ListTypeDisplay_TopShareholder,
                 abbr: StringId.TableRecordDefinitionList_ListTypeAbbr_TopShareholder
             },
             EditableGridLayoutDefinitionColumn: {
-                id: TypedTableRecordSourceDefinition.TypeId.EditableGridLayoutDefinitionColumn,
+                id: TableRecordSourceDefinition.TypeId.EditableGridLayoutDefinitionColumn,
                 name: 'GridLayoutDefinitionColumnEditRecord',
                 display: StringId.TableRecordDefinitionList_ListTypeDisplay_GridLayoutDefinitionColumnEditRecord,
                 abbr: StringId.TableRecordDefinitionList_ListTypeAbbr_GridLayoutDefinitionColumnEditRecord
             },
             Scan: {
-                id: TypedTableRecordSourceDefinition.TypeId.Scan,
+                id: TableRecordSourceDefinition.TypeId.Scan,
                 name: 'Scan',
                 display: StringId.TableRecordDefinitionList_ListTypeDisplay_Scan,
                 abbr: StringId.TableRecordDefinitionList_ListTypeAbbr_Scan
             },
             RankedLitIvemIdListDirectoryItem: {
-                id: TypedTableRecordSourceDefinition.TypeId.RankedLitIvemIdListDirectoryItem,
+                id: TableRecordSourceDefinition.TypeId.RankedLitIvemIdListDirectoryItem,
                 name: 'RankedLitIvemIdListDirectoryItem',
                 display: StringId.TableRecordDefinitionList_ListTypeDisplay_RankedLitIvemIdListDirectoryItem,
                 abbr: StringId.TableRecordDefinitionList_ListTypeAbbr_RankedLitIvemIdListDirectoryItem
             },
             GridField: {
-                id: TypedTableRecordSourceDefinition.TypeId.GridField,
+                id: TableRecordSourceDefinition.TypeId.GridField,
                 name: 'GridField',
                 display: StringId.TableRecordDefinitionList_ListTypeDisplay_GridField,
                 abbr: StringId.TableRecordDefinitionList_ListTypeAbbr_GridField
             },
             ScanFieldEditorFrame: {
-                id: TypedTableRecordSourceDefinition.TypeId.ScanFieldEditorFrame,
+                id: TableRecordSourceDefinition.TypeId.ScanFieldEditorFrame,
                 name: 'ScanFieldEditorFrame',
                 display: StringId.TableRecordDefinitionList_ListTypeDisplay_ScanFieldEditorFrame,
                 abbr: StringId.TableRecordDefinitionList_ListTypeAbbr_ScanFieldEditorFrame
             },
             ScanEditorAttachedNotificationChannel: {
-                id: TypedTableRecordSourceDefinition.TypeId.ScanEditorAttachedNotificationChannel,
+                id: TableRecordSourceDefinition.TypeId.ScanEditorAttachedNotificationChannel,
                 name: 'ScanEditorAttachedNotificationChannel',
                 display: StringId.TableRecordDefinitionList_ListTypeDisplay_ScanEditorAttachedNotificationChannel,
                 abbr: StringId.TableRecordDefinitionList_ListTypeAbbr_ScanEditorAttachedNotificationChannel
             },
             LockOpenNotificationChannelList: {
-                id: TypedTableRecordSourceDefinition.TypeId.LockOpenNotificationChannelList,
+                id: TableRecordSourceDefinition.TypeId.LockOpenNotificationChannelList,
                 name: 'LockOpenNotificationChannelList',
                 display: StringId.TableRecordDefinitionList_ListTypeDisplay_LockOpenNotificationChannelList,
                 abbr: StringId.TableRecordDefinitionList_ListTypeAbbr_LockOpenNotificationChannelList
@@ -320,6 +319,6 @@ export namespace TypedTableRecordSourceDefinition {
 
 export namespace TypedTableRecordSourceDefinitionModule {
     export function initialiseStatic() {
-        TypedTableRecordSourceDefinition.Type.initialise();
+        TableRecordSourceDefinition.Type.initialise();
     }
 }

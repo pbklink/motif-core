@@ -25,10 +25,10 @@ import {
     DecimalCorrectnessTableValue,
     StringCorrectnessTableValue
 } from '../../value/internal-api';
-import { TypedTableFieldSourceDefinition } from './typed-table-field-source-definition';
-import { TypedTableFieldSourceDefinitionCachingFactoryService } from './typed-table-field-source-definition-caching-factory-service';
+import { TableFieldSourceDefinition } from './table-field-source-definition';
+import { TableFieldSourceDefinitionCachingFactoryService } from './table-field-source-definition-caching-factory-service';
 
-export class BalancesTableFieldSourceDefinition extends TypedTableFieldSourceDefinition {
+export class BalancesTableFieldSourceDefinition extends TableFieldSourceDefinition {
     declare readonly typeId: BalancesTableFieldSourceDefinition.TypeId;
 
     override readonly fieldDefinitions: TableField.Definition[];
@@ -81,7 +81,7 @@ export class BalancesTableFieldSourceDefinition extends TypedTableFieldSourceDef
 }
 
 export namespace BalancesTableFieldSourceDefinition {
-    export const typeId = TypedTableFieldSourceDefinition.TypeId.Balances;
+    export const typeId = TableFieldSourceDefinition.TypeId.Balances;
     export type TypeId = typeof typeId;
 
     export namespace Field {
@@ -98,7 +98,7 @@ export namespace BalancesTableFieldSourceDefinition {
         const idFieldIndices = new Array<Integer>(Balances.Field.idCount);
 
         function idToTableGridConstructors(id: Balances.FieldId):
-            TypedTableFieldSourceDefinition.CorrectnessTableGridConstructors {
+            TableFieldSourceDefinition.CorrectnessTableGridConstructors {
             switch (id) {
                 case Balances.FieldId.AccountId:
                     return [StringCorrectnessTableField, StringCorrectnessTableValue];
@@ -174,12 +174,12 @@ export namespace BalancesTableFieldSourceDefinition {
         }
     }
 
-    export interface FieldId extends TypedTableFieldSourceDefinition.FieldId {
+    export interface FieldId extends TableFieldSourceDefinition.FieldId {
         sourceTypeId: BalancesTableFieldSourceDefinition.TypeId;
         id: Balances.FieldId;
     }
 
-    export function get(cachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService): BalancesTableFieldSourceDefinition {
+    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactoryService): BalancesTableFieldSourceDefinition {
         return cachingFactoryService.get(typeId) as BalancesTableFieldSourceDefinition;
     }
 

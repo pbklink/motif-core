@@ -224,7 +224,7 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
         this._targetMarketIds = value;
     }
 
-    async tryLock(locker: LockOpenListItem.Locker): Promise<Result<void>> {
+    tryLock(locker: LockOpenListItem.Locker): Promise<Result<void>> {
         return this._lockOpenManager.tryLock(locker);
     }
 

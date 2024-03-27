@@ -14,10 +14,10 @@ import {
 } from "../../../../sys/internal-api";
 import { CorrectnessTableField, StringCorrectnessTableField, TableField } from '../../field/internal-api';
 import { CorrectnessTableValue, StringCorrectnessTableValue } from '../../value/internal-api';
-import { TypedTableFieldSourceDefinition } from './typed-table-field-source-definition';
-import { TypedTableFieldSourceDefinitionCachingFactoryService } from './typed-table-field-source-definition-caching-factory-service';
+import { TableFieldSourceDefinition } from './table-field-source-definition';
+import { TableFieldSourceDefinitionCachingFactoryService } from './table-field-source-definition-caching-factory-service';
 
-export class LitIvemAlternateCodesTableFieldSourceDefinition extends TypedTableFieldSourceDefinition {
+export class LitIvemAlternateCodesTableFieldSourceDefinition extends TableFieldSourceDefinition {
     override readonly fieldDefinitions: TableField.Definition[];
 
     constructor() {
@@ -69,7 +69,7 @@ export class LitIvemAlternateCodesTableFieldSourceDefinition extends TypedTableF
 }
 
 export namespace LitIvemAlternateCodesTableFieldSourceDefinition {
-    export const typeId = TypedTableFieldSourceDefinition.TypeId.LitIvemAlternateCodes;
+    export const typeId = TableFieldSourceDefinition.TypeId.LitIvemAlternateCodes;
     export type TypeId = typeof typeId;
 
     export namespace Field {
@@ -86,7 +86,7 @@ export namespace LitIvemAlternateCodesTableFieldSourceDefinition {
         const idFieldIndices = new Array<Integer>(LitIvemAlternateCodes.Field.idCount);
 
         function idToTableGridConstructors(id: LitIvemAlternateCodes.Field.Id):
-            TypedTableFieldSourceDefinition.CorrectnessTableGridConstructors {
+            TableFieldSourceDefinition.CorrectnessTableGridConstructors {
             switch (id) {
                 case LitIvemAlternateCodes.Field.Id.Ticker:
                 case LitIvemAlternateCodes.Field.Id.Gics:
@@ -154,12 +154,12 @@ export namespace LitIvemAlternateCodesTableFieldSourceDefinition {
         }
     }
 
-    export interface FieldId extends TypedTableFieldSourceDefinition.FieldId {
+    export interface FieldId extends TableFieldSourceDefinition.FieldId {
         sourceTypeId: LitIvemAlternateCodesTableFieldSourceDefinition.TypeId;
         id: LitIvemAlternateCodes.Field.Id;
     }
 
-    export function get(cachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService): LitIvemAlternateCodesTableFieldSourceDefinition {
+    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactoryService): LitIvemAlternateCodesTableFieldSourceDefinition {
         return cachingFactoryService.get(typeId) as LitIvemAlternateCodesTableFieldSourceDefinition;
     }
 

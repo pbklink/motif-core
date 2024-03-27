@@ -5,16 +5,16 @@
  */
 
 import { Scan } from '../../../scan/internal-api';
-import { TypedTableFieldSourceDefinition } from '../field-source/internal-api';
+import { TableFieldSourceDefinition } from '../field-source/internal-api';
 import { PayloadTableRecordDefinition } from './payload-table-record-definition';
-import { TypedTableRecordDefinition } from './typed-table-record-definition';
+import { TableRecordDefinition } from './table-record-definition';
 
 export interface ScanTableRecordDefinition extends PayloadTableRecordDefinition<Scan> {
-    readonly typeId: TypedTableFieldSourceDefinition.TypeId.Scan;
+    readonly typeId: TableFieldSourceDefinition.TypeId.Scan;
 }
 
 export namespace ScanTableRecordDefinition {
-    export function is(definition: TypedTableRecordDefinition): definition is ScanTableRecordDefinition {
-        return definition.typeId === TypedTableFieldSourceDefinition.TypeId.Scan;
+    export function is(definition: TableRecordDefinition): definition is ScanTableRecordDefinition {
+        return definition.typeId === TableFieldSourceDefinition.TypeId.Scan;
     }
 }

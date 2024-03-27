@@ -4,15 +4,15 @@
  * License: motionite.trade/license/motif
  */
 
+import { RevFieldCustomHeadingsService } from '../../../rev/internal-api';
 import { Badness, CorrectnessBadness, Integer, LockOpenListItem, MultiEvent, UnreachableCaseError, UsableListChangeTypeId } from '../../../sys/internal-api';
 import { TextFormatterService } from '../../../text-format/internal-api';
-import { RevFieldCustomHeadingsService } from '../../field/internal-api';
 import {
     TableField,
+    TableFieldSourceDefinition,
+    TableFieldSourceDefinitionCachingFactoryService,
     TableRecord,
-    TypedTableFieldSourceDefinition,
-    TypedTableFieldSourceDefinitionCachingFactoryService,
-    TypedTableRecordSource
+    TableRecordSource
 } from '../../table/internal-api';
 import { EditableGridLayoutDefinitionColumn } from './editable-grid-layout-definition-column';
 import { EditableGridLayoutDefinitionColumnList } from './editable-grid-layout-definition-column-list';
@@ -21,7 +21,7 @@ import { EditableGridLayoutDefinitionColumnTableRecordSourceDefinition } from '.
 import { EditableGridLayoutDefinitionColumnTableValueSource } from './editable-grid-layout-definition-column-table-value-source';
 
 /** @public */
-export class EditableGridLayoutDefinitionColumnTableRecordSource extends TypedTableRecordSource {
+export class EditableGridLayoutDefinitionColumnTableRecordSource extends TableRecordSource {
     private readonly _list: EditableGridLayoutDefinitionColumnList;
     private readonly _records: readonly EditableGridLayoutDefinitionColumn[];
     private _listChangeEventSubscriptionId: MultiEvent.SubscriptionId;
@@ -29,7 +29,7 @@ export class EditableGridLayoutDefinitionColumnTableRecordSource extends TypedTa
     constructor(
         textFormatterService: TextFormatterService,
         gridFieldCustomHeadingsService: RevFieldCustomHeadingsService,
-        tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService,
+        tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService,
         correctnessBadness: CorrectnessBadness,
         definition: EditableGridLayoutDefinitionColumnTableRecordSourceDefinition,
     ) {
@@ -87,7 +87,7 @@ export class EditableGridLayoutDefinitionColumnTableRecordSource extends TypedTa
     override createRecordDefinition(idx: Integer): EditableGridLayoutDefinitionColumnTableRecordDefinition {
         const record = this._records[idx];
         return {
-            typeId: TypedTableFieldSourceDefinition.TypeId.EditableGridLayoutDefinitionColumn,
+            typeId: TableFieldSourceDefinition.TypeId.EditableGridLayoutDefinitionColumn,
             mapKey: record.fieldName,
             record,
         };
@@ -104,7 +104,7 @@ export class EditableGridLayoutDefinitionColumnTableRecordSource extends TypedTa
             const fieldSourceDefinition = fieldSource.definition;
             const fieldSourceDefinitionTypeId = fieldSourceDefinition.typeId as EditableGridLayoutDefinitionColumnTableRecordSourceDefinition.FieldSourceDefinitionTypeId;
             switch (fieldSourceDefinitionTypeId) {
-                case TypedTableFieldSourceDefinition.TypeId.EditableGridLayoutDefinitionColumn: {
+                case TableFieldSourceDefinition.TypeId.EditableGridLayoutDefinitionColumn: {
                     const valueSource = new EditableGridLayoutDefinitionColumnTableValueSource(result.fieldCount, record);
                     result.addSource(valueSource);
                     break;

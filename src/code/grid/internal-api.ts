@@ -9,7 +9,6 @@ export * from './grid-static-initialise';
 export * from './layout/internal-api';
 export * from './record-store/internal-api';
 export * from './revgrid/internal-api';
-export * from './source/internal-api';
 export * from './table-definitions/internal-api';
 export * from './table/internal-api';
 export * from './typed/internal-api';

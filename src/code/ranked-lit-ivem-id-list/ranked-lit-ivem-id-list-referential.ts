@@ -74,7 +74,7 @@ export class RankedLitIvemIdListReferential implements LockOpenListItem<RankedLi
         }
     }
 
-    async tryLock(locker: LockOpenListItem.Locker): Promise<Result<void>> {
+    tryLock(locker: LockOpenListItem.Locker): Promise<Result<void>> {
         return this._lockOpenManager.tryLock(locker);
     }
 

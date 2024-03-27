@@ -5,16 +5,16 @@
  */
 
 import { Order } from '../../../adi/internal-api';
-import { TypedTableFieldSourceDefinition } from '../field-source/internal-api';
+import { TableFieldSourceDefinition } from '../field-source/internal-api';
 import { BrokerageAccountRecordTableRecordDefinition } from './brokerage-account-record-table-record-definition';
-import { TypedTableRecordDefinition } from './typed-table-record-definition';
+import { TableRecordDefinition } from './table-record-definition';
 
 export interface OrderTableRecordDefinition extends BrokerageAccountRecordTableRecordDefinition<Order> {
-    readonly typeId: TypedTableFieldSourceDefinition.TypeId.Order;
+    readonly typeId: TableFieldSourceDefinition.TypeId.Order;
 }
 
 export namespace OrderTableRecordDefinition {
-    export function is(definition: TypedTableRecordDefinition): definition is OrderTableRecordDefinition {
-        return definition.typeId === TypedTableFieldSourceDefinition.TypeId.Order;
+    export function is(definition: TableRecordDefinition): definition is OrderTableRecordDefinition {
+        return definition.typeId === TableFieldSourceDefinition.TypeId.Order;
     }
 }

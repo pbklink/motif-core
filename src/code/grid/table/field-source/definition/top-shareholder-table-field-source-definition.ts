@@ -19,10 +19,10 @@ import {
     IntegerCorrectnessTableValue,
     StringCorrectnessTableValue
 } from '../../value/internal-api';
-import { TypedTableFieldSourceDefinition } from './typed-table-field-source-definition';
-import { TypedTableFieldSourceDefinitionCachingFactoryService } from './typed-table-field-source-definition-caching-factory-service';
+import { TableFieldSourceDefinition } from './table-field-source-definition';
+import { TableFieldSourceDefinitionCachingFactoryService } from './table-field-source-definition-caching-factory-service';
 
-export class TopShareholderTableFieldSourceDefinition extends TypedTableFieldSourceDefinition {
+export class TopShareholderTableFieldSourceDefinition extends TableFieldSourceDefinition {
     override readonly fieldDefinitions: TableField.Definition[];
 
     constructor() {
@@ -74,7 +74,7 @@ export class TopShareholderTableFieldSourceDefinition extends TypedTableFieldSou
 }
 
 export namespace TopShareholderTableFieldSourceDefinition {
-    export const typeId = TypedTableFieldSourceDefinition.TypeId.TopShareholder;
+    export const typeId = TableFieldSourceDefinition.TypeId.TopShareholder;
     export type TypeId = typeof typeId;
 
     export namespace Field {
@@ -91,7 +91,7 @@ export namespace TopShareholderTableFieldSourceDefinition {
         const idFieldIndices = new Array<Integer>(TopShareholder.Field.count);
 
         function idToTableGridConstructors(id: TopShareholder.FieldId):
-            TypedTableFieldSourceDefinition.CorrectnessTableGridConstructors {
+            TableFieldSourceDefinition.CorrectnessTableGridConstructors {
             switch (id) {
                 case TopShareholder.FieldId.Name:
                 case TopShareholder.FieldId.Designation:
@@ -161,12 +161,12 @@ export namespace TopShareholderTableFieldSourceDefinition {
         }
     }
 
-    export interface FieldId extends TypedTableFieldSourceDefinition.FieldId {
+    export interface FieldId extends TableFieldSourceDefinition.FieldId {
         sourceTypeId: TopShareholderTableFieldSourceDefinition.TypeId;
         id: TopShareholder.FieldId;
     }
 
-    export function get(cachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService): TopShareholderTableFieldSourceDefinition {
+    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactoryService): TopShareholderTableFieldSourceDefinition {
         return cachingFactoryService.get(typeId) as TopShareholderTableFieldSourceDefinition;
     }
 

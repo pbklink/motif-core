@@ -29,10 +29,10 @@ import {
     PriceCorrectnessTableValue,
     StringCorrectnessTableValue
 } from '../../value/internal-api';
-import { TypedTableFieldSourceDefinition } from './typed-table-field-source-definition';
-import { TypedTableFieldSourceDefinitionCachingFactoryService } from './typed-table-field-source-definition-caching-factory-service';
+import { TableFieldSourceDefinition } from './table-field-source-definition';
+import { TableFieldSourceDefinitionCachingFactoryService } from './table-field-source-definition-caching-factory-service';
 
-export class HoldingTableFieldSourceDefinition extends TypedTableFieldSourceDefinition {
+export class HoldingTableFieldSourceDefinition extends TableFieldSourceDefinition {
     override readonly fieldDefinitions: TableField.Definition[];
 
     constructor() {
@@ -84,7 +84,7 @@ export class HoldingTableFieldSourceDefinition extends TypedTableFieldSourceDefi
 }
 
 export namespace HoldingTableFieldSourceDefinition {
-    export const typeId = TypedTableFieldSourceDefinition.TypeId.Holding;
+    export const typeId = TableFieldSourceDefinition.TypeId.Holding;
     export type TypeId = typeof typeId;
 
     export namespace Field {
@@ -101,7 +101,7 @@ export namespace HoldingTableFieldSourceDefinition {
         const idFieldIndices = new Array<Integer>(Holding.Field.idCount);
 
         function idToTableGridConstructors(id: Holding.FieldId):
-            TypedTableFieldSourceDefinition.CorrectnessTableGridConstructors {
+            TableFieldSourceDefinition.CorrectnessTableGridConstructors {
             switch (id) {
                 case Holding.FieldId.ExchangeId:
                     return [EnumCorrectnessTableField, ExchangeIdCorrectnessTableValue];
@@ -181,12 +181,12 @@ export namespace HoldingTableFieldSourceDefinition {
         }
     }
 
-    export interface FieldId extends TypedTableFieldSourceDefinition.FieldId {
+    export interface FieldId extends TableFieldSourceDefinition.FieldId {
         sourceTypeId: HoldingTableFieldSourceDefinition.TypeId;
         id: Holding.FieldId;
     }
 
-    export function get(cachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService): HoldingTableFieldSourceDefinition {
+    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactoryService): HoldingTableFieldSourceDefinition {
         return cachingFactoryService.get(typeId) as HoldingTableFieldSourceDefinition;
     }
 

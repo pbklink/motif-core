@@ -13,12 +13,12 @@ import {
     RankedLitIvemIdListFactoryService,
     ScanIdRankedLitIvemIdListDefinition
 } from "../../../ranked-lit-ivem-id-list/internal-api";
+import { RevFieldCustomHeadingsService } from '../../../rev/internal-api';
 import { SymbolDetailCacheService } from '../../../services/symbol-detail-cache-service';
 import { AssertInternalError, CorrectnessBadness, ErrorCode, Integer, LockOpenListItem, NotImplementedError, Ok, Result, UnreachableCaseError } from '../../../sys/internal-api';
 import { TextFormatterService } from '../../../text-format/internal-api';
-import { RevFieldCustomHeadingsService } from '../../field/internal-api';
 import {
-    TypedTableFieldSourceDefinition, TypedTableFieldSourceDefinitionCachingFactoryService
+    TableFieldSourceDefinition, TableFieldSourceDefinitionCachingFactoryService
 } from "../field-source/internal-api";
 import { RankedLitIvemIdTableRecordDefinition } from '../record-definition/internal-api';
 import { TableRecord } from '../record/internal-api';
@@ -37,7 +37,7 @@ export class RankedLitIvemIdListTableRecordSource extends SubscribeBadnessListTa
         private readonly _rankedLitIvemIdListFactoryService: RankedLitIvemIdListFactoryService,
         textFormatterService: TextFormatterService,
         gridFieldCustomHeadingsService: RevFieldCustomHeadingsService,
-        tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService,
+        tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService,
         correctnessBadness: CorrectnessBadness,
         definition: RankedLitIvemIdListTableRecordSourceDefinition,
     ) {
@@ -106,7 +106,7 @@ export class RankedLitIvemIdListTableRecordSource extends SubscribeBadnessListTa
     override createRecordDefinition(idx: Integer): RankedLitIvemIdTableRecordDefinition {
         const rankedLitIvemId = this._lockedRankedLitIvemIdList.getAt(idx);
         return {
-            typeId: TypedTableFieldSourceDefinition.TypeId.RankedLitIvemId,
+            typeId: TableFieldSourceDefinition.TypeId.RankedLitIvemId,
             mapKey: RankedLitIvemIdTableRecordDefinition.createMapKey(rankedLitIvemId),
             rankedLitIvemId,
         };
@@ -124,7 +124,7 @@ export class RankedLitIvemIdListTableRecordSource extends SubscribeBadnessListTa
             const fieldSourceDefinitionTypeId = fieldSourceDefinition.typeId as RankedLitIvemIdListTableRecordSourceDefinition.FieldSourceDefinitionTypeId;
             if (this.allowedFieldSourceDefinitionTypeIds.includes(fieldSourceDefinitionTypeId)) {
                 switch (fieldSourceDefinitionTypeId) {
-                    case TypedTableFieldSourceDefinition.TypeId.LitIvemBaseDetail: {
+                    case TableFieldSourceDefinition.TypeId.LitIvemBaseDetail: {
                         const litIvemBaseDetail = new PromisedLitIvemBaseDetail(this._symbolDetailCacheService, rankedLitIvemId.litIvemId);
                         const valueSource = new LitIvemBaseDetailTableValueSource(
                             result.fieldCount,
@@ -135,12 +135,12 @@ export class RankedLitIvemIdListTableRecordSource extends SubscribeBadnessListTa
                         break;
                     }
 
-                    case TypedTableFieldSourceDefinition.TypeId.SecurityDataItem: {
+                    case TableFieldSourceDefinition.TypeId.SecurityDataItem: {
                         const valueSource = new SecurityDataItemTableValueSource(result.fieldCount, rankedLitIvemId.litIvemId, this._adiService);
                         result.addSource(valueSource);
                         break;
                     }
-                    case TypedTableFieldSourceDefinition.TypeId.RankedLitIvemId: {
+                    case TableFieldSourceDefinition.TypeId.RankedLitIvemId: {
                         const valueSource = new RankedLitIvemIdTableValueSource(result.fieldCount, rankedLitIvemId);
                         result.addSource(valueSource);
                         break;

@@ -4,26 +4,27 @@
  * License: motionite.trade/license/motif
  */
 
+import { RevFieldCustomHeadingsService } from '../../../rev/internal-api';
 import { Badness, CorrectnessBadness, Integer, LockOpenListItem, Ok, Result, UnreachableCaseError, UsableListChangeTypeId } from '../../../sys/internal-api';
 import { TextFormatterService } from '../../../text-format/internal-api';
-import { GridField, RevFieldCustomHeadingsService } from '../../field/internal-api';
+import { GridField } from '../../field/internal-api';
 import {
-    TypedTableFieldSourceDefinition, TypedTableFieldSourceDefinitionCachingFactoryService
+    TableFieldSourceDefinition, TableFieldSourceDefinitionCachingFactoryService
 } from "../field-source/internal-api";
 import { GridFieldTableRecordDefinition } from '../record-definition/internal-api';
 import { TableRecord } from '../record/internal-api';
 import { GridFieldTableValueSource } from '../value-source/internal-api';
 import { GridFieldTableRecordSourceDefinition } from './definition/internal-api';
-import { TypedTableRecordSource } from './typed-table-record-source';
+import { TableRecordSource } from './table-record-source';
 
 /** @public */
-export class GridFieldTableRecordSource extends TypedTableRecordSource {
+export class GridFieldTableRecordSource extends TableRecordSource {
     private readonly _records: GridField[];
 
     constructor(
         textFormatterService: TextFormatterService,
         gridFieldCustomHeadingsService: RevFieldCustomHeadingsService,
-        tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService,
+        tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService,
         correctnessBadness: CorrectnessBadness,
         definition: GridFieldTableRecordSourceDefinition,
     ) {
@@ -77,7 +78,7 @@ export class GridFieldTableRecordSource extends TypedTableRecordSource {
     override createRecordDefinition(idx: Integer): GridFieldTableRecordDefinition {
         const gridField = this._records[idx];
         return {
-            typeId: TypedTableFieldSourceDefinition.TypeId.GridField,
+            typeId: TableFieldSourceDefinition.TypeId.GridField,
             mapKey: gridField.name,
             record: gridField,
         };
@@ -95,7 +96,7 @@ export class GridFieldTableRecordSource extends TypedTableRecordSource {
             const fieldSourceDefinitionTypeId =
                 fieldSourceDefinition.typeId as GridFieldTableRecordSourceDefinition.FieldSourceDefinitionTypeId;
             switch (fieldSourceDefinitionTypeId) {
-                case TypedTableFieldSourceDefinition.TypeId.GridField: {
+                case TableFieldSourceDefinition.TypeId.GridField: {
                     const valueSource = new GridFieldTableValueSource(result.fieldCount, scan);
                     result.addSource(valueSource);
                     break;

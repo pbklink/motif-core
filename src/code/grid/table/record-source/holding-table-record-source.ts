@@ -15,11 +15,11 @@ import {
     Holding,
     SingleBrokerageAccountGroup
 } from "../../../adi/internal-api";
+import { RevFieldCustomHeadingsService } from '../../../rev/internal-api';
 import { CorrectnessBadness, Integer, LockOpenListItem, UnreachableCaseError } from '../../../sys/internal-api';
 import { TextFormatterService } from '../../../text-format/internal-api';
-import { RevFieldCustomHeadingsService } from '../../field/internal-api';
 import {
-    TypedTableFieldSourceDefinition, TypedTableFieldSourceDefinitionCachingFactoryService
+    TableFieldSourceDefinition, TableFieldSourceDefinitionCachingFactoryService
 } from '../field-source/definition/internal-api';
 import { HoldingTableRecordDefinition } from '../record-definition/internal-api';
 import { TableRecord } from '../record/internal-api';
@@ -37,7 +37,7 @@ export class HoldingTableRecordSource
         private readonly _adiService: AdiService,
         textFormatterService: TextFormatterService,
         gridFieldCustomHeadingsService: RevFieldCustomHeadingsService,
-        tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService,
+        tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService,
         correctnessBadness: CorrectnessBadness,
         definition: HoldingTableRecordSourceDefinition,
     ) {
@@ -63,7 +63,7 @@ export class HoldingTableRecordSource
         const record = this.recordList.records[idx];
 
         return {
-            typeId: TypedTableFieldSourceDefinition.TypeId.Holding,
+            typeId: TableFieldSourceDefinition.TypeId.Holding,
             mapKey:record.mapKey,
             record,
         };
@@ -81,17 +81,17 @@ export class HoldingTableRecordSource
             const fieldSourceDefinitionTypeId =
                 fieldSourceDefinition.typeId as HoldingTableRecordSourceDefinition.FieldSourceDefinitionTypeId;
             switch (fieldSourceDefinitionTypeId) {
-                case TypedTableFieldSourceDefinition.TypeId.Holding: {
+                case TableFieldSourceDefinition.TypeId.Holding: {
                     const valueSource = new HoldingTableValueSource(result.fieldCount, holding);
                     result.addSource(valueSource);
                     break;
                 }
-                case TypedTableFieldSourceDefinition.TypeId.BrokerageAccount: {
+                case TableFieldSourceDefinition.TypeId.BrokerageAccount: {
                     const valueSource = new BrokerageAccountTableValueSource(result.fieldCount, holding.account);
                     result.addSource(valueSource);
                     break;
                 }
-                case TypedTableFieldSourceDefinition.TypeId.SecurityDataItem: {
+                case TableFieldSourceDefinition.TypeId.SecurityDataItem: {
                     const valueSource = new SecurityDataItemTableValueSource(result.fieldCount, holding.defaultLitIvemId, this._adiService);
                     result.addSource(valueSource);
                     break;

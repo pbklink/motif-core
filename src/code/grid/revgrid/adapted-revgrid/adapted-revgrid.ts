@@ -6,10 +6,11 @@
 
 // import { ColorScheme, GridField, MultiEvent, SettingsService } from '@motifmarkets/motif-core';
 import { Revgrid, ViewLayout } from '@xilytix/revgrid';
+import { RevGridLayoutDefinition } from '../../../rev/internal-api';
 import { ColorScheme, SettingsService } from '../../../services/internal-api';
 import { MultiEvent } from '../../../sys/internal-api';
 import { AllowedGridField, GridField } from '../../field/internal-api';
-import { AllowedFieldsGridLayoutDefinition, RevGridLayoutDefinition } from '../../layout/definition/internal-api';
+import { AllowedFieldsGridLayoutDefinition } from '../../layout/definition/internal-api';
 import {
     AdaptedRevgridBehavioredColumnSettings,
     AdaptedRevgridBehavioredGridSettings,
@@ -77,7 +78,7 @@ export abstract class AdaptedRevgrid extends Revgrid<AdaptedRevgridBehavioredGri
 
     createGridLayoutDefinition() {
         const definitionColumns = this.createGridLayoutDefinitionColumns();
-        return new RevGridLayoutDefinition(definitionColumns, 0);
+        return new RevGridLayoutDefinition(definitionColumns);
     }
 
     // autoSizeColumnWidth(columnIndex: number): void {

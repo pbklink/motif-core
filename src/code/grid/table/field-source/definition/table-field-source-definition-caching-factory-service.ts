@@ -6,10 +6,10 @@
 
 import { RevTableFieldSourceDefinitionCachingFactoryService } from '../../../../rev/internal-api';
 import { RenderValue } from '../../../../services/internal-api';
-import { TypedTableFieldSourceDefinition } from './typed-table-field-source-definition';
+import { TableFieldSourceDefinition } from './table-field-source-definition';
 
-export class TypedTableFieldSourceDefinitionCachingFactoryService extends RevTableFieldSourceDefinitionCachingFactoryService<
-    TypedTableFieldSourceDefinition.TypeId,
+export class TableFieldSourceDefinitionCachingFactoryService extends RevTableFieldSourceDefinitionCachingFactoryService<
+    TableFieldSourceDefinition.TypeId,
     RenderValue.TypeId,
     RenderValue.Attribute.TypeId
 > {

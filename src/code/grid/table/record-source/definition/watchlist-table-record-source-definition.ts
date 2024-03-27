@@ -8,23 +8,22 @@ import { SecurityDataItem } from '../../../../adi/internal-api';
 import {
     LitIvemIdArrayRankedLitIvemIdListDefinition, ScanIdRankedLitIvemIdListDefinition
 } from "../../../../ranked-lit-ivem-id-list/internal-api";
-import { RevFieldCustomHeadingsService } from '../../../field/internal-api';
-import { RevGridLayoutDefinition } from '../../../layout/internal-api';
+import { RevFieldCustomHeadingsService, RevGridLayoutDefinition } from '../../../../rev/internal-api';
 import {
     LitIvemBaseDetailTableFieldSourceDefinition,
     RankedLitIvemIdTableFieldSourceDefinition,
     SecurityDataItemTableFieldSourceDefinition,
-    TypedTableFieldSourceDefinition,
-    TypedTableFieldSourceDefinitionCachingFactoryService
+    TableFieldSourceDefinition,
+    TableFieldSourceDefinitionCachingFactoryService
 } from "../../field-source/internal-api";
 import { RankedLitIvemIdListTableRecordSourceDefinition } from './ranked-lit-ivem-id-list-table-record-source-definition';
-import { TypedTableRecordSourceDefinition } from './typed-table-record-source-definition';
+import { TableRecordSourceDefinition } from './table-record-source-definition';
 
 /** @public */
 export class WatchlistTableRecordSourceDefinition extends RankedLitIvemIdListTableRecordSourceDefinition {
     constructor(
         customHeadingsService: RevFieldCustomHeadingsService,
-        tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService,
+        tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService,
         rankedLitIvemIdListDefinition: LitIvemIdArrayRankedLitIvemIdListDefinition | ScanIdRankedLitIvemIdListDefinition,
     ) {
         super(
@@ -86,16 +85,16 @@ export class WatchlistTableRecordSourceDefinition extends RankedLitIvemIdListTab
 /** @public */
 export namespace WatchlistTableRecordSourceDefinition {
     export const allowedFieldSourceDefinitionTypeIds: RankedLitIvemIdListTableRecordSourceDefinition.FieldSourceDefinitionTypeId[] = [
-        TypedTableFieldSourceDefinition.TypeId.LitIvemBaseDetail,
-        TypedTableFieldSourceDefinition.TypeId.SecurityDataItem,
-        TypedTableFieldSourceDefinition.TypeId.RankedLitIvemId,
+        TableFieldSourceDefinition.TypeId.LitIvemBaseDetail,
+        TableFieldSourceDefinition.TypeId.SecurityDataItem,
+        TableFieldSourceDefinition.TypeId.RankedLitIvemId,
         // AlternateCodesFix: Currently this actually is part of FullDetail.  Will be in BaseDetail in future
         // TypedTableFieldSourceDefinition.TypeId.LitIvemAlternateCodes,
     ];
 
     export const defaultFieldSourceDefinitionTypeIds: RankedLitIvemIdListTableRecordSourceDefinition.FieldSourceDefinitionTypeId[] = [
-        TypedTableFieldSourceDefinition.TypeId.SecurityDataItem,
-        TypedTableFieldSourceDefinition.TypeId.RankedLitIvemId,
+        TableFieldSourceDefinition.TypeId.SecurityDataItem,
+        TableFieldSourceDefinition.TypeId.RankedLitIvemId,
     ];
 
     export type FieldId =
@@ -107,13 +106,13 @@ export namespace WatchlistTableRecordSourceDefinition {
 
 
     export function createLayoutDefinition(
-        fieldSourceDefinitionRegistryService: TypedTableFieldSourceDefinitionCachingFactoryService,
+        fieldSourceDefinitionRegistryService: TableFieldSourceDefinitionCachingFactoryService,
         fieldIds: FieldId[],
     ): RevGridLayoutDefinition {
         return fieldSourceDefinitionRegistryService.createLayoutDefinition(fieldIds);
     }
 
-    export function is(definition: TypedTableRecordSourceDefinition): definition is WatchlistTableRecordSourceDefinition {
-        return definition.typeId === TypedTableRecordSourceDefinition.TypeId.RankedLitIvemIdList;
+    export function is(definition: TableRecordSourceDefinition): definition is WatchlistTableRecordSourceDefinition {
+        return definition.typeId === TableRecordSourceDefinition.TypeId.RankedLitIvemIdList;
     }
 }

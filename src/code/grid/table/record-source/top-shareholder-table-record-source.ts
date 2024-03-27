@@ -11,6 +11,7 @@ import {
     TopShareholdersDataDefinition,
     TopShareholdersDataItem
 } from "../../../adi/internal-api";
+import { RevFieldCustomHeadingsService } from '../../../rev/internal-api';
 import {
     AssertInternalError,
     Badness,
@@ -22,9 +23,8 @@ import {
     newUndefinableDate
 } from "../../../sys/internal-api";
 import { TextFormatterService } from '../../../text-format/internal-api';
-import { RevFieldCustomHeadingsService } from '../../field/internal-api';
 import {
-    TypedTableFieldSourceDefinition, TypedTableFieldSourceDefinitionCachingFactoryService
+    TableFieldSourceDefinition, TableFieldSourceDefinitionCachingFactoryService
 } from "../field-source/internal-api";
 import { TopShareholderTableRecordDefinition } from '../record-definition/internal-api';
 import { TableRecord } from '../record/internal-api';
@@ -49,7 +49,7 @@ export class TopShareholderTableRecordSource extends SingleDataItemTableRecordSo
         private readonly _adiService: AdiService,
         textFormatterService: TextFormatterService,
         gridFieldCustomHeadingsService: RevFieldCustomHeadingsService,
-        tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService,
+        tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService,
         correctnessBadness: CorrectnessBadness,
         definition: TopShareholderTableRecordSourceDefinition,
     ) {
@@ -80,7 +80,7 @@ export class TopShareholderTableRecordSource extends SingleDataItemTableRecordSo
     override createRecordDefinition(idx: Integer): TopShareholderTableRecordDefinition {
         const record = this.recordList[idx];
         return {
-            typeId: TypedTableFieldSourceDefinition.TypeId.TopShareholder,
+            typeId: TableFieldSourceDefinition.TypeId.TopShareholder,
             mapKey: record.createKey().mapKey,
             record,
         };
@@ -98,7 +98,7 @@ export class TopShareholderTableRecordSource extends SingleDataItemTableRecordSo
             const fieldSourceDefinitionTypeId =
                 fieldSourceDefinition.typeId as TopShareholderTableRecordSourceDefinition.FieldSourceDefinitionTypeId;
             switch (fieldSourceDefinitionTypeId) {
-                case TypedTableFieldSourceDefinition.TypeId.TopShareholder: {
+                case TableFieldSourceDefinition.TypeId.TopShareholder: {
                     const valueSource = new TopShareholderTableValueSource(result.fieldCount, topShareholder, this._dataItem);
                     result.addSource(valueSource);
                     break;

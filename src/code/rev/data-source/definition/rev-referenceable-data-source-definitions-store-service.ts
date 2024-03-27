@@ -5,6 +5,5 @@
  */
 
 /** @public */
-export class RevReferenceableDataSourceDefinitionsStoreService {
-    private _saveModified: boolean;
+export interface RevReferenceableDataSourceDefinitionsStoreService {
 }

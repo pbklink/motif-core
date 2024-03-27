@@ -5,16 +5,16 @@
  */
 
 import { Feed } from '../../../adi/internal-api';
-import { TypedTableFieldSourceDefinition } from '../field-source/internal-api';
+import { TableFieldSourceDefinition } from '../field-source/internal-api';
 import { KeyedCorrectnessTableRecordDefinition } from './keyed-correctness-table-record-definition';
-import { TypedTableRecordDefinition } from './typed-table-record-definition';
+import { TableRecordDefinition } from './table-record-definition';
 
 export interface FeedTableRecordDefinition extends KeyedCorrectnessTableRecordDefinition<Feed> {
-    readonly typeId: TypedTableFieldSourceDefinition.TypeId.Feed;
+    readonly typeId: TableFieldSourceDefinition.TypeId.Feed;
 }
 
 export namespace FeedTableRecordDefinition {
-    export function is(definition: TypedTableRecordDefinition): definition is FeedTableRecordDefinition {
-        return definition.typeId === TypedTableFieldSourceDefinition.TypeId.Feed;
+    export function is(definition: TableRecordDefinition): definition is FeedTableRecordDefinition {
+        return definition.typeId === TableFieldSourceDefinition.TypeId.Feed;
     }
 }

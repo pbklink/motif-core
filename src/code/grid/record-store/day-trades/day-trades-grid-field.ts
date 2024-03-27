@@ -6,6 +6,7 @@
 
 import { DayTradesDataItem, MovementId, TradeFlagId } from '../../../adi/internal-api';
 import { StringId, Strings } from '../../../res/internal-api';
+import { RevFieldDefinition, RevFieldSourceDefinition, RevGridLayoutDefinition } from '../../../rev/internal-api';
 import {
     DayTradesDataItemRecordTypeIdRenderValue,
     IntegerRenderValue,
@@ -35,8 +36,7 @@ import {
     compareUndefinableInteger,
     compareUndefinableString
 } from "../../../sys/internal-api";
-import { AllowedGridField, GridField, RevFieldDefinition, RevFieldSourceDefinition } from '../../field/internal-api';
-import { RevGridLayoutDefinition } from '../../layout/internal-api';
+import { AllowedGridField, GridField } from '../../field/internal-api';
 
 /** @public */
 export abstract class DayTradesGridField extends GridField implements GridRevRecordField {
@@ -206,7 +206,7 @@ export namespace DayTradesGridField {
             };
             columns[i] = column;
         }
-        return new RevGridLayoutDefinition(columns, 0);
+        return new RevGridLayoutDefinition(columns);
     }
 
     export function createAllowedFields(): readonly AllowedGridField[] {

@@ -23,10 +23,10 @@ import {
     DataEnvironmentIdCorrectnessTableValue,
     StringCorrectnessTableValue
 } from '../../value/internal-api';
-import { TypedTableFieldSourceDefinition } from './typed-table-field-source-definition';
-import { TypedTableFieldSourceDefinitionCachingFactoryService } from './typed-table-field-source-definition-caching-factory-service';
+import { TableFieldSourceDefinition } from './table-field-source-definition';
+import { TableFieldSourceDefinitionCachingFactoryService } from './table-field-source-definition-caching-factory-service';
 
-export class BrokerageAccountTableFieldSourceDefinition extends TypedTableFieldSourceDefinition {
+export class BrokerageAccountTableFieldSourceDefinition extends TableFieldSourceDefinition {
     override readonly fieldDefinitions: TableField.Definition[];
 
     constructor() {
@@ -77,7 +77,7 @@ export class BrokerageAccountTableFieldSourceDefinition extends TypedTableFieldS
 }
 
 export namespace BrokerageAccountTableFieldSourceDefinition {
-    export const typeId = TypedTableFieldSourceDefinition.TypeId.BrokerageAccount;
+    export const typeId = TableFieldSourceDefinition.TypeId.BrokerageAccount;
     export type TypeId = typeof typeId;
 
     export namespace Field {
@@ -94,7 +94,7 @@ export namespace BrokerageAccountTableFieldSourceDefinition {
         const idFieldIndices = new Array<Integer>(Account.Field.idCount);
 
         function idToTableGridConstructors(id: Account.FieldId):
-            TypedTableFieldSourceDefinition.CorrectnessTableGridConstructors {
+            TableFieldSourceDefinition.CorrectnessTableGridConstructors {
             switch (id) {
                 case Account.FieldId.Id:
                     return [StringCorrectnessTableField, StringCorrectnessTableValue];
@@ -168,12 +168,12 @@ export namespace BrokerageAccountTableFieldSourceDefinition {
         }
     }
 
-    export interface FieldId extends TypedTableFieldSourceDefinition.FieldId {
+    export interface FieldId extends TableFieldSourceDefinition.FieldId {
         sourceTypeId: BrokerageAccountTableFieldSourceDefinition.TypeId;
         id: Account.FieldId;
     }
 
-    export function get(cachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService): BrokerageAccountTableFieldSourceDefinition {
+    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactoryService): BrokerageAccountTableFieldSourceDefinition {
         return cachingFactoryService.get(typeId) as BrokerageAccountTableFieldSourceDefinition;
     }
 

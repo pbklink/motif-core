@@ -5,16 +5,16 @@
  */
 
 import { Balances } from '../../../adi/internal-api';
-import { TypedTableFieldSourceDefinition } from '../field-source/internal-api';
+import { TableFieldSourceDefinition } from '../field-source/internal-api';
 import { BrokerageAccountRecordTableRecordDefinition } from './brokerage-account-record-table-record-definition';
-import { TypedTableRecordDefinition } from './typed-table-record-definition';
+import { TableRecordDefinition } from './table-record-definition';
 
 export interface BalancesTableRecordDefinition extends BrokerageAccountRecordTableRecordDefinition<Balances> {
-    readonly typeId: TypedTableFieldSourceDefinition.TypeId.Balances;
+    readonly typeId: TableFieldSourceDefinition.TypeId.Balances;
 }
 
 export namespace BalancesTableRecordDefinition {
-    export function is(definition: TypedTableRecordDefinition): definition is BalancesTableRecordDefinition {
-        return definition.typeId === TypedTableFieldSourceDefinition.TypeId.Balances;
+    export function is(definition: TableRecordDefinition): definition is BalancesTableRecordDefinition {
+        return definition.typeId === TableFieldSourceDefinition.TypeId.Balances;
     }
 }

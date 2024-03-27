@@ -155,6 +155,7 @@ export const enum StringId {
     ErrorCreatingNew,
     ErrorUpdating,
     ErrorDeleting,
+    ErrorLoadingGridLayout,
     ValueRequired,
     CodeMissing,
     SymbolSourceDoesNotHaveDefaultMarket,
@@ -3149,6 +3150,11 @@ export namespace I18nStrings {
         ErrorDeleting: {
             id: StringId.ErrorDeleting, translations: {
                 en: 'Error deleting',
+            }
+        },
+        ErrorLoadingGridLayout: {
+            id: StringId.ErrorLoadingGridLayout, translations: {
+                en: 'Error loading grid layout',
             }
         },
         ValueRequired: {

@@ -8,26 +8,26 @@ import {
     RankedLitIvemIdListDefinition,
     RankedLitIvemIdListDefinitionFactoryService
 } from "../../../../ranked-lit-ivem-id-list/internal-api";
+import { RevFieldCustomHeadingsService } from '../../../../rev/internal-api';
 import { ErrorCode, JsonElement, JsonElementErr, PickEnum, Result } from '../../../../sys/internal-api';
-import { RevFieldCustomHeadingsService } from '../../../field/internal-api';
 import {
-    TypedTableFieldSourceDefinition,
-    TypedTableFieldSourceDefinitionCachingFactoryService
+    TableFieldSourceDefinition,
+    TableFieldSourceDefinitionCachingFactoryService
 } from "../../field-source/internal-api";
-import { TypedTableRecordSourceDefinition } from './typed-table-record-source-definition';
+import { TableRecordSourceDefinition } from './table-record-source-definition';
 
 /** @public */
-export abstract class RankedLitIvemIdListTableRecordSourceDefinition extends TypedTableRecordSourceDefinition {
+export abstract class RankedLitIvemIdListTableRecordSourceDefinition extends TableRecordSourceDefinition {
     constructor(
         customHeadingsService: RevFieldCustomHeadingsService,
-        tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService,
+        tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService,
         allowedFieldSourceDefinitionTypeIds: RankedLitIvemIdListTableRecordSourceDefinition.FieldSourceDefinitionTypeId[],
         readonly rankedLitIvemIdListDefinition: RankedLitIvemIdListDefinition
     ) {
         super(
             customHeadingsService,
             tableFieldSourceDefinitionCachingFactoryService,
-            TypedTableRecordSourceDefinition.TypeId.RankedLitIvemIdList,
+            TableRecordSourceDefinition.TypeId.RankedLitIvemIdList,
             allowedFieldSourceDefinitionTypeIds,
         );
     }
@@ -44,10 +44,10 @@ export abstract class RankedLitIvemIdListTableRecordSourceDefinition extends Typ
 
 /** @public */
 export namespace RankedLitIvemIdListTableRecordSourceDefinition {
-    export type FieldSourceDefinitionTypeId = PickEnum<TypedTableFieldSourceDefinition.TypeId,
-        TypedTableFieldSourceDefinition.TypeId.LitIvemBaseDetail |
-        TypedTableFieldSourceDefinition.TypeId.SecurityDataItem |
-        TypedTableFieldSourceDefinition.TypeId.RankedLitIvemId
+    export type FieldSourceDefinitionTypeId = PickEnum<TableFieldSourceDefinition.TypeId,
+        TableFieldSourceDefinition.TypeId.LitIvemBaseDetail |
+        TableFieldSourceDefinition.TypeId.SecurityDataItem |
+        TableFieldSourceDefinition.TypeId.RankedLitIvemId
         // AlternateCodesFix: Currently this actually is part of FullDetail.  Will be in BaseDetail in future
         // TypedTableFieldSourceDefinition.TypeId.LitIvemAlternateCodes
     >;

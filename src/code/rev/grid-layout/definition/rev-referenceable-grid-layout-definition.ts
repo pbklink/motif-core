@@ -1,6 +1,6 @@
 // (c) 2024 Xilytix Pty Ltd / Paul Klink
 
-import { AssertInternalError, Err, Guid, Integer, JsonElement, Ok, Result } from '@xilytix/sysutils';
+import { Err, Guid, Integer, JsonElement, Ok, Result, UnreachableCaseError } from '@xilytix/sysutils';
 import { RevGridLayoutDefinition } from './rev-grid-layout-definition';
 
 /** @public */
@@ -27,7 +27,7 @@ export namespace RevReferenceableGridLayoutDefinition {
         export const name = 'name';
     }
 
-    export const enum ReferenceableCreateFromJsonErrorId {
+    export const enum CreateReferenceableFromJsonErrorId {
         IdJsonValueIsNotDefined,
         IdJsonValueIsNotOfTypeString,
         NameJsonValueIsNotDefined,
@@ -38,63 +38,60 @@ export namespace RevReferenceableGridLayoutDefinition {
         AllColumnElementsAreInvalid,
     }
 
-    export interface ReferenceableCreateFromJsonErrorIds {
-        readonly errorId: ReferenceableCreateFromJsonErrorId;
-        readonly jsonElementErrorId: JsonElement.ErrorId;
-    }
-
-    export function tryCreateReferenceableFromJson(element: JsonElement): Result<RevReferenceableGridLayoutDefinition, ReferenceableCreateFromJsonErrorId> {
+    export function tryCreateReferenceableFromJson(element: JsonElement): Result<RevReferenceableGridLayoutDefinition, CreateReferenceableFromJsonErrorId> {
         const idResult = element.tryGetGuid(ReferenceableJsonName.id);
         if (idResult.isErr()) {
             const idErrorId = idResult.error;
-            let referenceableCreateFromJsonErrorId: ReferenceableCreateFromJsonErrorId;
+            let errorId: CreateReferenceableFromJsonErrorId;
             switch (idErrorId) {
                 case JsonElement.ErrorId.JsonValueIsNotDefined:
-                    referenceableCreateFromJsonErrorId = ReferenceableCreateFromJsonErrorId.IdJsonValueIsNotDefined;
+                    errorId = CreateReferenceableFromJsonErrorId.IdJsonValueIsNotDefined;
                     break;
                 case JsonElement.ErrorId.JsonValueIsNotOfTypeString:
-                    referenceableCreateFromJsonErrorId = ReferenceableCreateFromJsonErrorId.IdJsonValueIsNotOfTypeString;
+                    errorId = CreateReferenceableFromJsonErrorId.IdJsonValueIsNotOfTypeString;
                     break;
                 default:
-                    throw new AssertInternalError('RRGLDTCRFJI60872', idErrorId);
+                    throw new UnreachableCaseError('RRGLDTCRFJI60872', idErrorId);
             }
-            return new Err(referenceableCreateFromJsonErrorId);
+            return new Err(errorId);
         } else {
             const nameResult = element.tryGetString(ReferenceableJsonName.name);
             if (nameResult.isErr()) {
                 const nameErrorId = nameResult.error;
-                let referenceableCreateFromJsonErrorId: ReferenceableCreateFromJsonErrorId;
+                let errorId: CreateReferenceableFromJsonErrorId;
                 switch (nameErrorId) {
                     case JsonElement.ErrorId.JsonValueIsNotDefined:
-                        referenceableCreateFromJsonErrorId = ReferenceableCreateFromJsonErrorId.NameJsonValueIsNotDefined;
+                        errorId = CreateReferenceableFromJsonErrorId.NameJsonValueIsNotDefined;
                         break;
                     case JsonElement.ErrorId.JsonValueIsNotOfTypeString:
-                        referenceableCreateFromJsonErrorId = ReferenceableCreateFromJsonErrorId.NameJsonValueIsNotOfTypeString;
+                        errorId = CreateReferenceableFromJsonErrorId.NameJsonValueIsNotOfTypeString;
                         break;
                     default:
-                        throw new AssertInternalError('RRGLDTCRFJI60872', nameErrorId);
+                        throw new UnreachableCaseError('RRGLDTCRFJI60872', nameErrorId);
                 }
-                return new Err(referenceableCreateFromJsonErrorId);
+                return new Err(errorId);
             } else {
                 const columnsResult = RevGridLayoutDefinition.tryCreateColumnsFromJson(element);
                 if (columnsResult.isErr()) {
                     const columnsErrorId = columnsResult.error;
-                    let referenceableCreateFromJsonErrorId: ReferenceableCreateFromJsonErrorId;
+                    let errorId: CreateReferenceableFromJsonErrorId;
                     switch (columnsErrorId) {
                         case RevGridLayoutDefinition.CreateFromJsonErrorId.ColumnsElementIsNotDefined:
-                            referenceableCreateFromJsonErrorId = ReferenceableCreateFromJsonErrorId.ColumnsElementIsNotDefined;
+                            errorId = CreateReferenceableFromJsonErrorId.ColumnsElementIsNotDefined;
                             break;
                         case RevGridLayoutDefinition.CreateFromJsonErrorId.ColumnsElementIsNotAnArray:
-                            referenceableCreateFromJsonErrorId = ReferenceableCreateFromJsonErrorId.ColumnsElementIsNotAnArray;
+                            errorId = CreateReferenceableFromJsonErrorId.ColumnsElementIsNotAnArray;
                             break;
                         case RevGridLayoutDefinition.CreateFromJsonErrorId.ColumnElementIsNotAnObject:
-                            referenceableCreateFromJsonErrorId = ReferenceableCreateFromJsonErrorId.ColumnElementIsNotAnObject;
+                            errorId = CreateReferenceableFromJsonErrorId.ColumnElementIsNotAnObject;
                             break;
                         case RevGridLayoutDefinition.CreateFromJsonErrorId.AllColumnElementsAreInvalid:
-                            referenceableCreateFromJsonErrorId = ReferenceableCreateFromJsonErrorId.AllColumnElementsAreInvalid;
+                            errorId = CreateReferenceableFromJsonErrorId.AllColumnElementsAreInvalid;
                             break;
+                            default:
+                                throw new UnreachableCaseError('RRGLDTCRFJC60872', columnsErrorId);
                     }
-                    return new Err(referenceableCreateFromJsonErrorId);
+                    return new Err(errorId);
                 } else {
                     const columnsCreatedFromJson = columnsResult.value;
                     const definition = new RevReferenceableGridLayoutDefinition(idResult.value, nameResult.value, columnsCreatedFromJson.columns, columnsCreatedFromJson.columnCreateErrorCount);

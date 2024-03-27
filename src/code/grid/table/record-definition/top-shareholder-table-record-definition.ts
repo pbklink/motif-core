@@ -5,16 +5,16 @@
  */
 
 import { TopShareholder } from '../../../adi/internal-api';
-import { TypedTableFieldSourceDefinition } from '../field-source/internal-api';
-import { TypedTableRecordDefinition } from './typed-table-record-definition';
+import { TableFieldSourceDefinition } from '../field-source/internal-api';
+import { TableRecordDefinition } from './table-record-definition';
 
-export interface TopShareholderTableRecordDefinition extends TypedTableRecordDefinition {
-    readonly typeId: TypedTableFieldSourceDefinition.TypeId.TopShareholder;
+export interface TopShareholderTableRecordDefinition extends TableRecordDefinition {
+    readonly typeId: TableFieldSourceDefinition.TypeId.TopShareholder;
     readonly record: TopShareholder;
 }
 
 export namespace TopShareholderTableRecordDefinition {
-    export function is(definition: TypedTableRecordDefinition): definition is TopShareholderTableRecordDefinition {
-        return definition.typeId === TypedTableFieldSourceDefinition.TypeId.TopShareholder;
+    export function is(definition: TableRecordDefinition): definition is TopShareholderTableRecordDefinition {
+        return definition.typeId === TableFieldSourceDefinition.TypeId.TopShareholder;
     }
 }

@@ -30,9 +30,9 @@ export abstract class RevTableRecordSource<TypeId, TableFieldSourceDefinitionTyp
 
     private _opened = false;
 
-    private _listChangeMultiEvent = new MultiEvent<TableRecordSource.ListChangeEventHandler>();
-    private _beforeRecDefinitionChangeMultiEvent = new MultiEvent<TableRecordSource.RecDefinitionChangeEventHandler>();
-    private _afterRecDefinitionChangeMultiEvent = new MultiEvent<TableRecordSource.RecDefinitionChangeEventHandler>();
+    private _listChangeMultiEvent = new MultiEvent<RevTableRecordSource.ListChangeEventHandler>();
+    private _beforeRecDefinitionChangeMultiEvent = new MultiEvent<RevTableRecordSource.RecDefinitionChangeEventHandler>();
+    private _afterRecDefinitionChangeMultiEvent = new MultiEvent<RevTableRecordSource.RecDefinitionChangeEventHandler>();
 
     constructor(
         private readonly _textFormatter: RevRenderValue.TextFormatter<RenderValueTypeId, RenderAttributeTypeId>,
@@ -132,7 +132,7 @@ export abstract class RevTableRecordSource<TypeId, TableFieldSourceDefinitionTyp
         this._correctnessState.unsubscribeBadnessChangedEvent(subscriptionId);
     }
 
-    subscribeListChangeEvent(handler: TableRecordSource.ListChangeEventHandler) {
+    subscribeListChangeEvent(handler: RevTableRecordSource.ListChangeEventHandler) {
         return this._listChangeMultiEvent.subscribe(handler);
     }
 
@@ -140,7 +140,7 @@ export abstract class RevTableRecordSource<TypeId, TableFieldSourceDefinitionTyp
         this._listChangeMultiEvent.unsubscribe(subscriptionId);
     }
 
-    subscribeBeforeRecDefinitionChangeEvent(handler: TableRecordSource.RecDefinitionChangeEventHandler) {
+    subscribeBeforeRecDefinitionChangeEvent(handler: RevTableRecordSource.RecDefinitionChangeEventHandler) {
         return this._beforeRecDefinitionChangeMultiEvent.subscribe(handler);
     }
 
@@ -148,7 +148,7 @@ export abstract class RevTableRecordSource<TypeId, TableFieldSourceDefinitionTyp
         this._beforeRecDefinitionChangeMultiEvent.unsubscribe(subscriptionId);
     }
 
-    subscribeAfterRecDefinitionChangeEvent(handler: TableRecordSource.RecDefinitionChangeEventHandler) {
+    subscribeAfterRecDefinitionChangeEvent(handler: RevTableRecordSource.RecDefinitionChangeEventHandler) {
         return this._afterRecDefinitionChangeMultiEvent.subscribe(handler);
     }
 
@@ -243,7 +243,7 @@ export abstract class RevTableRecordSource<TypeId, TableFieldSourceDefinitionTyp
 }
 
 /** @public */
-export namespace TableRecordSource {
+export namespace RevTableRecordSource {
     export type FactoryClosure<TypeId, TableFieldSourceDefinitionTypeId, RenderValueTypeId, RenderAttributeTypeId, Badness> = (
         this: void,
         definition: RevTableRecordSourceDefinition<TypeId, TableFieldSourceDefinitionTypeId, RenderValueTypeId, RenderAttributeTypeId>

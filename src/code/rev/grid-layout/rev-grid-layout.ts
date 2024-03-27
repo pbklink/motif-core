@@ -67,7 +67,7 @@ export class RevGridLayout implements LockOpenListItem<RevGridLayout>, IndexedRe
     get columns(): readonly RevGridLayout.Column[] { return this._columns; }
     get columnCount(): number { return this._columns.length; }
 
-    async tryLock(locker: LockOpenListItem.Locker): Promise<Result<void>> {
+    tryLock(locker: LockOpenListItem.Locker): Promise<Result<void>> {
         return this._lockOpenManager.tryLock(locker);
     }
 
@@ -177,7 +177,7 @@ export class RevGridLayout implements LockOpenListItem<RevGridLayout>, IndexedRe
 
     createDefinition(): RevGridLayoutDefinition {
         const definitionColumns = this.createDefinitionColumns();
-        return new RevGridLayoutDefinition(definitionColumns, 0);
+        return new RevGridLayoutDefinition(definitionColumns);
     }
 
     applyDefinition(initiator: RevGridLayout.ChangeInitiator, definition: RevGridLayoutDefinition): void {
@@ -378,7 +378,7 @@ export class RevGridLayout implements LockOpenListItem<RevGridLayout>, IndexedRe
             copiedColumns[i] = copiedColumn;
         }
 
-        const definition = new RevGridLayoutDefinition(copiedColumns, 0);
+        const definition = new RevGridLayoutDefinition(copiedColumns);
         this.applyDefinition(RevGridLayout.forceChangeInitiator, definition);
     }
 

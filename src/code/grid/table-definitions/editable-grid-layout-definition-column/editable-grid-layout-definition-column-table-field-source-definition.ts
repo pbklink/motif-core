@@ -12,15 +12,15 @@ import {
     StringTableField,
     StringTableValue,
     TableField,
+    TableFieldSourceDefinition,
+    TableFieldSourceDefinitionCachingFactoryService,
     TableValue,
-    TypedTableFieldSourceDefinition,
-    TypedTableFieldSourceDefinitionCachingFactoryService,
     VisibleTableValue
 } from '../../table/internal-api';
 import { EditableGridLayoutDefinitionColumn } from './editable-grid-layout-definition-column';
 
 /** @public */
-export class EditableGridLayoutDefinitionColumnTableFieldSourceDefinition extends TypedTableFieldSourceDefinition {
+export class EditableGridLayoutDefinitionColumnTableFieldSourceDefinition extends TableFieldSourceDefinition {
     declare readonly typeId: EditableGridLayoutDefinitionColumnTableFieldSourceDefinition.TypeId;
 
     override readonly fieldDefinitions: TableField.Definition[];
@@ -65,7 +65,7 @@ export class EditableGridLayoutDefinitionColumnTableFieldSourceDefinition extend
 
 /** @public */
 export namespace EditableGridLayoutDefinitionColumnTableFieldSourceDefinition {
-    export const typeId = TypedTableFieldSourceDefinition.TypeId.EditableGridLayoutDefinitionColumn;
+    export const typeId = TableFieldSourceDefinition.TypeId.EditableGridLayoutDefinitionColumn;
     export type TypeId = typeof typeId;
 
     export namespace Field {
@@ -128,12 +128,12 @@ export namespace EditableGridLayoutDefinitionColumnTableFieldSourceDefinition {
         }
     }
 
-    export interface FieldId extends TypedTableFieldSourceDefinition.FieldId {
+    export interface FieldId extends TableFieldSourceDefinition.FieldId {
         sourceTypeId: EditableGridLayoutDefinitionColumnTableFieldSourceDefinition.TypeId;
         id: EditableGridLayoutDefinitionColumn.FieldId;
     }
 
-    export function get(cachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService): EditableGridLayoutDefinitionColumnTableFieldSourceDefinition {
+    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactoryService): EditableGridLayoutDefinitionColumnTableFieldSourceDefinition {
         return cachingFactoryService.get(typeId) as EditableGridLayoutDefinitionColumnTableFieldSourceDefinition;
     }
 

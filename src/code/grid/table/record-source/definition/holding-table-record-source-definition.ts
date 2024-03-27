@@ -5,29 +5,28 @@
  */
 
 import { Account, BrokerageAccountGroup, Holding } from '../../../../adi/internal-api';
+import { RevFieldCustomHeadingsService, RevGridLayoutDefinition } from '../../../../rev/internal-api';
 import { PickEnum } from '../../../../sys/internal-api';
-import { RevFieldCustomHeadingsService } from '../../../field/internal-api';
-import { RevGridLayoutDefinition } from '../../../layout/internal-api';
 import {
     BrokerageAccountTableFieldSourceDefinition,
     HoldingTableFieldSourceDefinition,
-    TypedTableFieldSourceDefinition,
-    TypedTableFieldSourceDefinitionCachingFactoryService,
+    TableFieldSourceDefinition,
+    TableFieldSourceDefinitionCachingFactoryService,
 } from '../../field-source/internal-api';
 import { BrokerageAccountGroupTableRecordSourceDefinition } from './brokerage-account-group-table-record-source-definition';
-import { TypedTableRecordSourceDefinition } from './typed-table-record-source-definition';
+import { TableRecordSourceDefinition } from './table-record-source-definition';
 
 /** @public */
 export class HoldingTableRecordSourceDefinition extends BrokerageAccountGroupTableRecordSourceDefinition {
     constructor(
         customHeadingsService: RevFieldCustomHeadingsService,
-        tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService,
+        tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService,
         brokerageAccountGroup: BrokerageAccountGroup
     ) {
         super(
             customHeadingsService,
             tableFieldSourceDefinitionCachingFactoryService,
-            TypedTableRecordSourceDefinition.TypeId.Holding,
+            TableRecordSourceDefinition.TypeId.Holding,
             HoldingTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
             brokerageAccountGroup
         );
@@ -57,20 +56,20 @@ export class HoldingTableRecordSourceDefinition extends BrokerageAccountGroupTab
 
 /** @public */
 export namespace HoldingTableRecordSourceDefinition {
-    export type FieldSourceDefinitionTypeId = PickEnum<TypedTableFieldSourceDefinition.TypeId,
-        TypedTableFieldSourceDefinition.TypeId.Holding |
-        TypedTableFieldSourceDefinition.TypeId.BrokerageAccount |
-        TypedTableFieldSourceDefinition.TypeId.SecurityDataItem
+    export type FieldSourceDefinitionTypeId = PickEnum<TableFieldSourceDefinition.TypeId,
+        TableFieldSourceDefinition.TypeId.Holding |
+        TableFieldSourceDefinition.TypeId.BrokerageAccount |
+        TableFieldSourceDefinition.TypeId.SecurityDataItem
     >;
 
     export const allowedFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[] = [
-        TypedTableFieldSourceDefinition.TypeId.Holding,
-        TypedTableFieldSourceDefinition.TypeId.BrokerageAccount,
-        TypedTableFieldSourceDefinition.TypeId.SecurityDataItem,
+        TableFieldSourceDefinition.TypeId.Holding,
+        TableFieldSourceDefinition.TypeId.BrokerageAccount,
+        TableFieldSourceDefinition.TypeId.SecurityDataItem,
     ];
 
     export const defaultFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[] = [
-        TypedTableFieldSourceDefinition.TypeId.Holding,
-        TypedTableFieldSourceDefinition.TypeId.BrokerageAccount,
+        TableFieldSourceDefinition.TypeId.Holding,
+        TableFieldSourceDefinition.TypeId.BrokerageAccount,
     ];
 }

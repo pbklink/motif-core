@@ -36,10 +36,10 @@ import {
     StringArrayCorrectnessTableValue,
     StringCorrectnessTableValue
 } from '../../value/internal-api';
-import { TypedTableFieldSourceDefinition } from './typed-table-field-source-definition';
-import { TypedTableFieldSourceDefinitionCachingFactoryService } from './typed-table-field-source-definition-caching-factory-service';
+import { TableFieldSourceDefinition } from './table-field-source-definition';
+import { TableFieldSourceDefinitionCachingFactoryService } from './table-field-source-definition-caching-factory-service';
 
-export class LitIvemExtendedDetailTableFieldSourceDefinition extends TypedTableFieldSourceDefinition {
+export class LitIvemExtendedDetailTableFieldSourceDefinition extends TableFieldSourceDefinition {
     override readonly fieldDefinitions: TableField.Definition[];
 
     constructor() {
@@ -90,7 +90,7 @@ export class LitIvemExtendedDetailTableFieldSourceDefinition extends TypedTableF
 }
 
 export namespace LitIvemExtendedDetailTableFieldSourceDefinition {
-    export const typeId = TypedTableFieldSourceDefinition.TypeId.LitIvemExtendedDetail;
+    export const typeId = TableFieldSourceDefinition.TypeId.LitIvemExtendedDetail;
     export type TypeId = typeof typeId;
 
     export namespace Field {
@@ -110,7 +110,7 @@ export namespace LitIvemExtendedDetailTableFieldSourceDefinition {
         const idFieldIndices = new Array<Integer>(SearchSymbolsLitIvemFullDetail.ExtendedField.idCount);
 
         function idToTableGridConstructors(id: SearchSymbolsLitIvemFullDetail.ExtendedField.Id):
-            TypedTableFieldSourceDefinition.CorrectnessTableGridConstructors {
+            TableFieldSourceDefinition.CorrectnessTableGridConstructors {
             switch (id) {
                 case SearchSymbolsLitIvemFullDetail.ExtendedField.Id.Cfi:
                     return [StringCorrectnessTableField, StringCorrectnessTableValue];
@@ -195,12 +195,12 @@ export namespace LitIvemExtendedDetailTableFieldSourceDefinition {
         }
     }
 
-    export interface FieldId extends TypedTableFieldSourceDefinition.FieldId {
+    export interface FieldId extends TableFieldSourceDefinition.FieldId {
         sourceTypeId: LitIvemExtendedDetailTableFieldSourceDefinition.TypeId;
         id: SearchSymbolsLitIvemFullDetail.ExtendedField.Id;
     }
 
-    export function get(cachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService): LitIvemExtendedDetailTableFieldSourceDefinition {
+    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactoryService): LitIvemExtendedDetailTableFieldSourceDefinition {
         return cachingFactoryService.get(typeId) as LitIvemExtendedDetailTableFieldSourceDefinition;
     }
 

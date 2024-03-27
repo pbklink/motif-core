@@ -40,44 +40,65 @@ export class RevGridLayoutOrReference {
             return new RevGridLayoutOrReferenceDefinition(this._lockedReferenceableGridLayout.id);
         } else {
             if (this.lockedGridLayout !== undefined) {
-                const gridSourceDefinition = this.lockedGridLayout.createDefinition();
-                return new RevGridLayoutOrReferenceDefinition(gridSourceDefinition);
+                const dataSourceDefinition = this.lockedGridLayout.createDefinition();
+                return new RevGridLayoutOrReferenceDefinition(dataSourceDefinition);
             } else {
                 throw new AssertInternalError('GLONRCDU59923');
             }
         }
     }
 
-    async tryLock(locker: LockOpenListItem.Locker): Promise<Result<void, RevGridLayoutOrReference.LockErrorIdPlusTryError>> {
+    tryLock(locker: LockOpenListItem.Locker): Promise<Result<void, RevGridLayoutOrReference.LockErrorIdPlusTryError>> {
+        // Replace with Promise.withResolvers when available in TypeScript (ES2023)
+        let resolve: (value: Result<void, RevGridLayoutOrReference.LockErrorIdPlusTryError>) => void;
+        const resultPromise = new Promise<Result<void, RevGridLayoutOrReference.LockErrorIdPlusTryError>>((res) => {
+            resolve = res;
+        });
+
         if (this._gridLayoutDefinition !== undefined) {
             const gridLayout = new RevGridLayout(this._gridLayoutDefinition);
-            const lockResult = await gridLayout.tryLock(locker);
-            if (lockResult.isErr()) {
-                return new Err({ errorId: RevGridLayoutOrReference.LockErrorId.DefinitionTry, tryError: lockResult.error });
-            } else {
-                this._lockedGridLayout = gridLayout;
-                this._lockedReferenceableGridLayout = undefined;
-                return new Ok(undefined);
-            }
+            const lockPromise = gridLayout.tryLock(locker);
+            lockPromise.then(
+                (lockResult) => {
+                    if (lockResult.isErr()) {
+                        const err = new Err({ errorId: RevGridLayoutOrReference.LockErrorId.DefinitionTry, tryError: lockResult.error });
+                        resolve(err);
+                    } else {
+                        this._lockedGridLayout = gridLayout;
+                        this._lockedReferenceableGridLayout = undefined;
+                        resolve(new Ok(undefined));
+                    }
+                },
+                (reason) => { throw AssertInternalError.createIfNotError(reason, 'RGLORTL54441'); }
+            );
         } else {
             if (this._referenceId !== undefined) {
-                const lockResult = await this._referenceableGridLayoutsService.tryLockItemByKey(this._referenceId, locker);
-                if (lockResult.isErr()) {
-                    return new Err({ errorId: RevGridLayoutOrReference.LockErrorId.ReferenceTry, tryError: lockResult.error });
-                } else {
-                    const referenceableGridLayout = lockResult.value;
-                    if (referenceableGridLayout === undefined) {
-                        return new Err({ errorId: RevGridLayoutOrReference.LockErrorId.ReferenceNotFound, tryError: undefined });
-                    } else {
-                        this._lockedReferenceableGridLayout = referenceableGridLayout;
-                        this._lockedGridLayout = referenceableGridLayout;
-                        return new Ok(undefined);
-                    }
-                }
+                const lockPromise = this._referenceableGridLayoutsService.tryLockItemByKey(this._referenceId, locker);
+                lockPromise.then(
+                    (lockResult) => {
+                        if (lockResult.isErr()) {
+                            const err = new Err({ errorId: RevGridLayoutOrReference.LockErrorId.ReferenceTry, tryError: lockResult.error });
+                            resolve(err);
+                        } else {
+                            const referenceableGridLayout = lockResult.value;
+                            if (referenceableGridLayout === undefined) {
+                                const err = new Err({ errorId: RevGridLayoutOrReference.LockErrorId.ReferenceNotFound, tryError: undefined });
+                                resolve(err);
+                            } else {
+                                this._lockedReferenceableGridLayout = referenceableGridLayout;
+                                this._lockedGridLayout = referenceableGridLayout;
+                                resolve(new Ok(undefined));
+                            }
+                        }
+                    },
+                    (reason) => { throw AssertInternalError.createIfNotError(reason, 'RGLORTL54441'); }
+                );
             } else {
                 throw new AssertInternalError('GLDONRTLU24498');
             }
         }
+
+        return resultPromise;
     }
 
     unlock(locker: LockOpenListItem.Locker) {

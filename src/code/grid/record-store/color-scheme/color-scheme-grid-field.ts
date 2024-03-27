@@ -6,6 +6,7 @@
 
 import { isReadable as TinyColorIsReadable, readability as TinyColorReadability } from '@ctrl/tinycolor';
 import { StringId, Strings } from '../../../res/internal-api';
+import { RevFieldDefinition, RevFieldSourceDefinition, RevGridLayoutDefinition } from '../../../rev/internal-api';
 import {
     ColorRenderValue,
     ColorScheme,
@@ -22,8 +23,7 @@ import {
     GridRevRecordField,
     UnreachableCaseError
 } from "../../../sys/internal-api";
-import { GridField, RevFieldDefinition, RevFieldSourceDefinition } from '../../field/internal-api';
-import { RevGridLayoutDefinition } from '../../layout/internal-api';
+import { GridField } from '../../field/internal-api';
 import { ColorSchemeGridRecordStore } from './color-scheme-grid-record-store';
 
 export abstract class ColorSchemeGridField extends GridField implements GridRevRecordField {
@@ -124,7 +124,7 @@ export namespace ColorSchemeGridField {
             };
             columns[i] = column;
         }
-        return new RevGridLayoutDefinition(columns, 0);
+        return new RevGridLayoutDefinition(columns);
     }
 }
 

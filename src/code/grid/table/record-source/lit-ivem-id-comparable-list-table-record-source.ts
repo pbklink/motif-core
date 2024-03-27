@@ -5,12 +5,12 @@
  */
 
 import { AdiService, LitIvemId } from '../../../adi/internal-api';
+import { RevFieldCustomHeadingsService } from '../../../rev/internal-api';
 import { SymbolDetailCacheService } from '../../../services/internal-api';
 import { CorrectnessBadness, Integer, UiComparableList, UnreachableCaseError } from '../../../sys/internal-api';
 import { TextFormatterService } from '../../../text-format/internal-api';
-import { RevFieldCustomHeadingsService } from '../../field/internal-api';
 import {
-    TypedTableFieldSourceDefinition, TypedTableFieldSourceDefinitionCachingFactoryService
+    TableFieldSourceDefinition, TableFieldSourceDefinitionCachingFactoryService
 } from "../field-source/internal-api";
 import { LitIvemIdTableRecordDefinition } from '../record-definition/internal-api';
 import { TableRecord } from '../record/internal-api';
@@ -28,7 +28,7 @@ export class LitIvemIdComparableListTableRecordSource extends BadnessListTableRe
         private readonly _symbolDetailCacheService: SymbolDetailCacheService,
         textFormatterService: TextFormatterService,
         gridFieldCustomHeadingsService: RevFieldCustomHeadingsService,
-        tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService,
+        tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService,
         correctnessBadness: CorrectnessBadness,
         definition: LitIvemIdComparableListTableRecordSourceDefinition,
     ) {
@@ -56,7 +56,7 @@ export class LitIvemIdComparableListTableRecordSource extends BadnessListTableRe
     override createRecordDefinition(idx: Integer): LitIvemIdTableRecordDefinition {
         const litIvemId = this.list.getAt(idx);
         return {
-            typeId: TypedTableFieldSourceDefinition.TypeId.LitIvemId,
+            typeId: TableFieldSourceDefinition.TypeId.LitIvemId,
             mapKey: litIvemId.mapKey,
             litIvemId,
         };
@@ -74,7 +74,7 @@ export class LitIvemIdComparableListTableRecordSource extends BadnessListTableRe
             const fieldSourceDefinitionTypeId = fieldSourceDefinition.typeId as LitIvemIdComparableListTableRecordSourceDefinition.FieldSourceDefinitionTypeId;
             if (this.allowedFieldSourceDefinitionTypeIds.includes(fieldSourceDefinitionTypeId)) {
                 switch (fieldSourceDefinitionTypeId) {
-                    case TypedTableFieldSourceDefinition.TypeId.LitIvemBaseDetail: {
+                    case TableFieldSourceDefinition.TypeId.LitIvemBaseDetail: {
                         const litIvemBaseDetail = new PromisedLitIvemBaseDetail(this._symbolDetailCacheService, litIvemId);
                         const valueSource = new LitIvemBaseDetailTableValueSource(
                             result.fieldCount,
@@ -85,12 +85,12 @@ export class LitIvemIdComparableListTableRecordSource extends BadnessListTableRe
                         break;
                     }
 
-                    case TypedTableFieldSourceDefinition.TypeId.SecurityDataItem: {
+                    case TableFieldSourceDefinition.TypeId.SecurityDataItem: {
                         const valueSource = new SecurityDataItemTableValueSource(result.fieldCount, litIvemId, this._adiService);
                         result.addSource(valueSource);
                         break;
                     }
-                    case TypedTableFieldSourceDefinition.TypeId.LitIvemId: {
+                    case TableFieldSourceDefinition.TypeId.LitIvemId: {
                         const valueSource = new LitIvemIdTableValueSource(result.fieldCount, litIvemId);
                         result.addSource(valueSource);
                         break;

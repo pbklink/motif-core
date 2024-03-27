@@ -4,9 +4,23 @@
  * License: motionite.trade/license/motif
  */
 
+import {
+    AssertInternalError,
+    EnumInfoOutOfOrderError,
+    Integer,
+    LockOpenListItem,
+    LockOpenManager,
+    MapKey,
+    MultiEvent,
+    Ok,
+    Result,
+} from '@xilytix/sysutils';
 import { ActiveFaultedStatusId, NotificationChannel, NotificationDistributionMethodId, ZenithProtocolCommon } from '../adi/internal-api';
 import { StringId, Strings } from '../res/internal-api';
-import { AssertInternalError, EnumInfoOutOfOrderError, FieldDataTypeId, Integer, LockOpenListItem, LockOpenManager, MapKey, MultiEvent, Ok, Result, ValueRecentChangeTypeId } from '../sys/internal-api';
+import {
+    FieldDataTypeId,
+    ValueRecentChangeTypeId,
+} from '../sys/internal-api';
 
 export class LockOpenNotificationChannel implements LockOpenListItem<LockOpenNotificationChannel> {
     changedEventer: LockOpenNotificationChannel.ChangedEventer | undefined; // only used by List
@@ -90,7 +104,7 @@ export class LockOpenNotificationChannel implements LockOpenListItem<LockOpenNot
         this._valid = true;
     }
 
-    async tryLock(locker: LockOpenListItem.Locker): Promise<Result<void>> {
+    tryLock(locker: LockOpenListItem.Locker): Promise<Result<void>> {
         return this._lockOpenManager.tryLock(locker);
     }
 

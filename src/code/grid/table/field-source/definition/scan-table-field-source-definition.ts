@@ -28,11 +28,11 @@ import {
     StringCorrectnessTableValue,
     WritableCorrectnessTableValue
 } from '../../value/internal-api';
-import { TypedTableFieldSourceDefinition } from './typed-table-field-source-definition';
-import { TypedTableFieldSourceDefinitionCachingFactoryService } from './typed-table-field-source-definition-caching-factory-service';
+import { TableFieldSourceDefinition } from './table-field-source-definition';
+import { TableFieldSourceDefinitionCachingFactoryService } from './table-field-source-definition-caching-factory-service';
 
 /** @public */
-export class ScanTableFieldSourceDefinition extends TypedTableFieldSourceDefinition {
+export class ScanTableFieldSourceDefinition extends TableFieldSourceDefinition {
     override readonly fieldDefinitions: TableField.Definition[];
 
     constructor() {
@@ -86,7 +86,7 @@ export class ScanTableFieldSourceDefinition extends TypedTableFieldSourceDefinit
 
 /** @public */
 export namespace ScanTableFieldSourceDefinition {
-    export const typeId = TypedTableFieldSourceDefinition.TypeId.Scan;
+    export const typeId = TableFieldSourceDefinition.TypeId.Scan;
     export type TypeId = typeof typeId;
 
     export namespace Field {
@@ -216,12 +216,12 @@ export namespace ScanTableFieldSourceDefinition {
         }
     }
 
-    export interface FieldId extends TypedTableFieldSourceDefinition.FieldId {
+    export interface FieldId extends TableFieldSourceDefinition.FieldId {
         sourceTypeId: ScanTableFieldSourceDefinition.TypeId;
         id: Scan.FieldId;
     }
 
-    export function get(cachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService): ScanTableFieldSourceDefinition {
+    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactoryService): ScanTableFieldSourceDefinition {
         return cachingFactoryService.get(typeId) as ScanTableFieldSourceDefinition;
     }
 

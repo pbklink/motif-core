@@ -5,17 +5,17 @@
  */
 
 import { CallPut } from '../../../services/internal-api';
-import { TypedTableFieldSourceDefinition } from '../field-source/internal-api';
-import { TypedTableRecordDefinition } from './typed-table-record-definition';
+import { TableFieldSourceDefinition } from '../field-source/internal-api';
+import { TableRecordDefinition } from './table-record-definition';
 
-export interface CallPutTableRecordDefinition extends TypedTableRecordDefinition {
-    readonly typeId: TypedTableFieldSourceDefinition.TypeId.CallPut;
+export interface CallPutTableRecordDefinition extends TableRecordDefinition {
+    readonly typeId: TableFieldSourceDefinition.TypeId.CallPut;
     readonly record: CallPut;
 }
 
 export namespace CallPutTableRecordDefinition {
-    export function is(definition: TypedTableRecordDefinition): definition is CallPutTableRecordDefinition {
-        return definition.typeId === TypedTableFieldSourceDefinition.TypeId.CallPut;
+    export function is(definition: TableRecordDefinition): definition is CallPutTableRecordDefinition {
+        return definition.typeId === TableFieldSourceDefinition.TypeId.CallPut;
     }
 }
 

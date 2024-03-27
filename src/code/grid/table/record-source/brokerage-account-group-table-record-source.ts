@@ -9,11 +9,11 @@ import {
     BrokerageAccountGroupRecordList,
     BrokerageAccountRecord
 } from "../../../adi/internal-api";
+import { RevFieldCustomHeadingsService } from '../../../rev/internal-api';
 import { CorrectnessBadness } from '../../../sys/internal-api';
 import { TextFormatterService } from '../../../text-format/internal-api';
-import { RevFieldCustomHeadingsService } from '../../field/internal-api';
 import {
-    TypedTableFieldSourceDefinition, TypedTableFieldSourceDefinitionCachingFactoryService
+    TableFieldSourceDefinition, TableFieldSourceDefinitionCachingFactoryService
 } from "../field-source/internal-api";
 import { BrokerageAccountGroupTableRecordSourceDefinition } from './definition/internal-api';
 import { SingleDataItemRecordTableRecordSource } from './single-data-item-record-table-record-source';
@@ -29,10 +29,10 @@ export abstract class BrokerageAccountGroupTableRecordSource<
     constructor(
         textFormatterService: TextFormatterService,
         gridFieldCustomHeadingsService: RevFieldCustomHeadingsService,
-        tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService,
+        tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService,
         correctnessBadness: CorrectnessBadness,
         definition: BrokerageAccountGroupTableRecordSourceDefinition,
-        allowedFieldSourceDefinitionTypeIds: TypedTableFieldSourceDefinition.TypeId[],
+        allowedFieldSourceDefinitionTypeIds: TableFieldSourceDefinition.TypeId[],
     ) {
         super(
             textFormatterService,

@@ -4,7 +4,7 @@ import { Err, Integer, JsonElement, Ok, Result, UnreachableCaseError } from '@xi
 
 /** @public */
 export class RevGridLayoutDefinition {
-    constructor(readonly columns: readonly RevGridLayoutDefinition.Column[], readonly columnCreateErrorCount: Integer) {
+    constructor(readonly columns: readonly RevGridLayoutDefinition.Column[], readonly columnCreateErrorCount = 0) {
     }
 
     get columnCount() { return this.columns.length; }
@@ -29,7 +29,7 @@ export class RevGridLayoutDefinition {
             const newColumn = RevGridLayoutDefinition.Column.createCopy(column);
             newColumns[i] = newColumn;
         }
-        return new RevGridLayoutDefinition(newColumns, 0);
+        return new RevGridLayoutDefinition(newColumns, this.columnCreateErrorCount);
     }
 }
 
@@ -129,7 +129,7 @@ export namespace RevGridLayoutDefinition {
 
     export function createFromFieldNames(fieldNames: readonly string[]): RevGridLayoutDefinition {
         const columns = createColumnsFromFieldNames(fieldNames);
-        return new RevGridLayoutDefinition(columns, 0);
+        return new RevGridLayoutDefinition(columns);
     }
 
     export const enum CreateFromJsonErrorId {

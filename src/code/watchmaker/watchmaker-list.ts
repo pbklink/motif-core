@@ -278,7 +278,7 @@ export class WatchmakerList implements LockOpenListItem<RankedLitIvemIdListDirec
     //     throw new Error('Method not implemented.');
     // }
 
-    async tryLock(locker: LockOpenListItem.Locker): Promise<Result<void>> {
+    tryLock(locker: LockOpenListItem.Locker): Promise<Result<void>> {
         return this._lockOpenManager.tryLock(locker);
     }
 

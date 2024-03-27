@@ -15,11 +15,11 @@ import {
     BrokerageAccountGroupRecordList,
     SingleBrokerageAccountGroup
 } from '../../../adi/internal-api';
+import { RevFieldCustomHeadingsService } from '../../../rev/internal-api';
 import { CorrectnessBadness, Integer, LockOpenListItem, UnreachableCaseError } from '../../../sys/internal-api';
 import { TextFormatterService } from '../../../text-format/internal-api';
-import { RevFieldCustomHeadingsService } from '../../field/internal-api';
 import {
-    TypedTableFieldSourceDefinition, TypedTableFieldSourceDefinitionCachingFactoryService
+    TableFieldSourceDefinition, TableFieldSourceDefinitionCachingFactoryService
 } from '../field-source/internal-api';
 import { BalancesTableRecordDefinition } from '../record-definition/internal-api';
 import { TableRecord } from '../record/internal-api';
@@ -36,7 +36,7 @@ export class BalancesTableRecordSource
         private readonly _adiService: AdiService,
         textFormatterService: TextFormatterService,
         gridFieldCustomHeadingsService: RevFieldCustomHeadingsService,
-        tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService,
+        tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService,
         correctnessBadness: CorrectnessBadness,
         definition: BalancesTableRecordSourceDefinition,
     ) {
@@ -61,7 +61,7 @@ export class BalancesTableRecordSource
     override createRecordDefinition(idx: Integer): BalancesTableRecordDefinition {
         const record = this.recordList.records[idx];
         return {
-            typeId: TypedTableFieldSourceDefinition.TypeId.Balances,
+            typeId: TableFieldSourceDefinition.TypeId.Balances,
             mapKey: record.mapKey,
             record,
         }
@@ -78,12 +78,12 @@ export class BalancesTableRecordSource
             const fieldSourceDefinition = fieldSource.definition;
             const fieldSourceDefinitionTypeId = fieldSourceDefinition.typeId as BalancesTableRecordSourceDefinition.FieldSourceDefinitionTypeId;
             switch (fieldSourceDefinitionTypeId) {
-                case TypedTableFieldSourceDefinition.TypeId.Balances: {
+                case TableFieldSourceDefinition.TypeId.Balances: {
                     const valueSource = new BalancesTableValueSource(result.fieldCount, balances);
                     result.addSource(valueSource);
                     break;
                 }
-                case TypedTableFieldSourceDefinition.TypeId.BrokerageAccount: {
+                case TableFieldSourceDefinition.TypeId.BrokerageAccount: {
                     const valueSource = new BrokerageAccountTableValueSource(result.fieldCount, balances.account);
                     result.addSource(valueSource);
                     break;

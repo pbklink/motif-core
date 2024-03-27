@@ -11,6 +11,6 @@ export class RevAllowedFieldsGridLayoutDefinition<RenderValueTypeId, RenderAttri
         readonly allowedFields: readonly RevAllowedField<RenderValueTypeId, RenderAttributeTypeId>[],
         readonly fixedColumnCount: Integer,
     ) {
-        super(columns, 0);
+        super(columns);
     }
 }

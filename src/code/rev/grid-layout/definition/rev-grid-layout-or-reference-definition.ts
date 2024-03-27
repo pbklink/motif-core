@@ -1,6 +1,6 @@
 // (c) 2024 Xilytix Pty Ltd / Paul Klink
 
-import { AssertInternalError, Err, Guid, JsonElement, Ok, Result, UnexpectedCaseError, UnreachableCaseError } from '@xilytix/sysutils';
+import { AssertInternalError, Err, Guid, JsonElement, Ok, Result, UnreachableCaseError } from '@xilytix/sysutils';
 import { RevGridLayoutDefinition } from './rev-grid-layout-definition';
 
 /** @public */
@@ -96,7 +96,7 @@ export namespace RevGridLayoutOrReferenceDefinition {
                                 createFromJsonErrorId = CreateFromJsonErrorId.DefinitionJsonValueIsNotOfTypeObject;
                                 break;
                             default:
-                                throw new UnexpectedCaseError('RGLORDTCFDJRDD67112', definitionElementErrorId);
+                                throw new UnreachableCaseError('RGLORDTCFDJRDD67112', definitionElementErrorId);
                         }
                         break;
                     case JsonElement.ErrorId.JsonValueIsNotOfTypeString:
@@ -108,11 +108,11 @@ export namespace RevGridLayoutOrReferenceDefinition {
                                 createFromJsonErrorId = CreateFromJsonErrorId.BothReferenceAndDefinitionJsonValuesAreOfWrongType;
                                 break;
                             default:
-                                throw new UnexpectedCaseError('RGLORDTCFDJRDS67112', definitionElementErrorId);
+                                throw new UnreachableCaseError('RGLORDTCFDJRDS67112', definitionElementErrorId);
                         }
                         break;
                     default:
-                        throw new UnexpectedCaseError('RGLORDTCFJR67112', referenceIdErrorId);
+                        throw new UnreachableCaseError('RGLORDTCFJR67112', referenceIdErrorId);
                 }
                 return new Err(createFromJsonErrorId);
             }

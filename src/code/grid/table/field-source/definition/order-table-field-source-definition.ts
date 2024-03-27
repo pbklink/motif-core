@@ -50,10 +50,10 @@ import {
     StringCorrectnessTableValue,
     TimeInForceIdCorrectnessTableValue
 } from '../../value/internal-api';
-import { TypedTableFieldSourceDefinition } from './typed-table-field-source-definition';
-import { TypedTableFieldSourceDefinitionCachingFactoryService } from './typed-table-field-source-definition-caching-factory-service';
+import { TableFieldSourceDefinition } from './table-field-source-definition';
+import { TableFieldSourceDefinitionCachingFactoryService } from './table-field-source-definition-caching-factory-service';
 
-export class OrderTableFieldSourceDefinition extends TypedTableFieldSourceDefinition {
+export class OrderTableFieldSourceDefinition extends TableFieldSourceDefinition {
     override readonly fieldDefinitions: TableField.Definition[];
 
     constructor() {
@@ -104,7 +104,7 @@ export class OrderTableFieldSourceDefinition extends TypedTableFieldSourceDefini
 }
 
 export namespace OrderTableFieldSourceDefinition {
-    export const typeId = TypedTableFieldSourceDefinition.TypeId.Order;
+    export const typeId = TableFieldSourceDefinition.TypeId.Order;
     export type TypeId = typeof typeId;
 
     export namespace Field {
@@ -121,7 +121,7 @@ export namespace OrderTableFieldSourceDefinition {
         const idFieldIndices = new Array<Integer>(Order.Field.count);
 
         function idToTableGridConstructors(id: Order.FieldId):
-            TypedTableFieldSourceDefinition.CorrectnessTableGridConstructors {
+            TableFieldSourceDefinition.CorrectnessTableGridConstructors {
             switch (id) {
                 case Order.FieldId.Id:
                     return [StringCorrectnessTableField, StringCorrectnessTableValue];
@@ -274,12 +274,12 @@ export namespace OrderTableFieldSourceDefinition {
         }
     }
 
-    export interface FieldId extends TypedTableFieldSourceDefinition.FieldId {
+    export interface FieldId extends TableFieldSourceDefinition.FieldId {
         sourceTypeId: OrderTableFieldSourceDefinition.TypeId;
         id: Order.FieldId;
     }
 
-    export function get(cachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService): OrderTableFieldSourceDefinition {
+    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactoryService): OrderTableFieldSourceDefinition {
         return cachingFactoryService.get(typeId) as OrderTableFieldSourceDefinition;
     }
 

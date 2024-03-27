@@ -7,8 +7,8 @@
 import { CallOrPutId } from '../../../../adi/internal-api';
 import { CallPutSecurityDataItemTableFieldSourceDefinition } from './call-put-security-data-item-table-field-source-definition';
 import { PrefixableSecurityDataItemTableFieldSourceDefinition } from './prefixable-security-data-item-table-field-source-definition';
-import { TypedTableFieldSourceDefinition } from './typed-table-field-source-definition';
-import { TypedTableFieldSourceDefinitionCachingFactoryService } from './typed-table-field-source-definition-caching-factory-service';
+import { TableFieldSourceDefinition } from './table-field-source-definition';
+import { TableFieldSourceDefinitionCachingFactoryService } from './table-field-source-definition-caching-factory-service';
 
 export class CallSecurityDataItemTableFieldSourceDefinition extends CallPutSecurityDataItemTableFieldSourceDefinition {
     constructor() {
@@ -17,14 +17,14 @@ export class CallSecurityDataItemTableFieldSourceDefinition extends CallPutSecur
 }
 
 export namespace CallSecurityDataItemTableFieldSourceDefinition {
-    export const typeId = TypedTableFieldSourceDefinition.TypeId.CallSecurityDataItem;
+    export const typeId = TableFieldSourceDefinition.TypeId.CallSecurityDataItem;
     export type TypeId = typeof typeId;
 
     export interface FieldId extends PrefixableSecurityDataItemTableFieldSourceDefinition.FieldId {
         sourceTypeId: CallSecurityDataItemTableFieldSourceDefinition.TypeId;
     }
 
-    export function get(cachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService): CallSecurityDataItemTableFieldSourceDefinition {
+    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactoryService): CallSecurityDataItemTableFieldSourceDefinition {
         return cachingFactoryService.get(typeId) as CallSecurityDataItemTableFieldSourceDefinition;
     }
 }

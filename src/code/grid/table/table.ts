@@ -7,12 +7,12 @@
 import { RevTable } from '../../rev/internal-api';
 import { RenderValue } from '../../services/internal-api';
 import { Badness } from "../../sys/internal-api";
-import { TypedTableFieldSourceDefinition } from './field-source/internal-api';
-import { TypedTableRecordSourceDefinition } from './record-source/internal-api';
+import { TableFieldSourceDefinition } from './field-source/internal-api';
+import { TableRecordSourceDefinition } from './record-source/internal-api';
 
 export class Table extends RevTable<
-    TypedTableRecordSourceDefinition.TypeId,
-    TypedTableFieldSourceDefinition.TypeId,
+    TableRecordSourceDefinition.TypeId,
+    TableFieldSourceDefinition.TypeId,
     RenderValue.TypeId,
     RenderValue.Attribute.TypeId,
     Badness

@@ -4,25 +4,24 @@
  * License: motionite.trade/license/motif
  */
 
+import { RevFieldCustomHeadingsService, RevGridLayoutDefinition } from '../../../rev/internal-api';
 import { PickEnum } from '../../../sys/internal-api';
-import { RevFieldCustomHeadingsService } from '../../field/internal-api';
-import { RevGridLayoutDefinition } from '../../layout/internal-api';
-import { TypedTableFieldSourceDefinition, TypedTableFieldSourceDefinitionCachingFactoryService, TypedTableRecordSourceDefinition } from '../../table/internal-api';
+import { TableFieldSourceDefinition, TableFieldSourceDefinitionCachingFactoryService, TableRecordSourceDefinition } from '../../table/internal-api';
 import { EditableGridLayoutDefinitionColumn } from './editable-grid-layout-definition-column';
 import { EditableGridLayoutDefinitionColumnList } from './editable-grid-layout-definition-column-list';
 import { EditableGridLayoutDefinitionColumnTableFieldSourceDefinition } from './editable-grid-layout-definition-column-table-field-source-definition';
 
 /** @public */
-export class EditableGridLayoutDefinitionColumnTableRecordSourceDefinition extends TypedTableRecordSourceDefinition {
+export class EditableGridLayoutDefinitionColumnTableRecordSourceDefinition extends TableRecordSourceDefinition {
     constructor(
         customHeadingsService: RevFieldCustomHeadingsService,
-        tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService,
+        tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService,
         readonly list: EditableGridLayoutDefinitionColumnList,
     ) {
         super(
             customHeadingsService,
             tableFieldSourceDefinitionCachingFactoryService,
-            TypedTableRecordSourceDefinition.TypeId.EditableGridLayoutDefinitionColumn,
+            TableRecordSourceDefinition.TypeId.EditableGridLayoutDefinitionColumn,
             EditableGridLayoutDefinitionColumnTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
         );
     }
@@ -45,15 +44,15 @@ export class EditableGridLayoutDefinitionColumnTableRecordSourceDefinition exten
 
 /** @public */
 export namespace EditableGridLayoutDefinitionColumnTableRecordSourceDefinition {
-    export type FieldSourceDefinitionTypeId = PickEnum<TypedTableFieldSourceDefinition.TypeId,
-        TypedTableFieldSourceDefinition.TypeId.EditableGridLayoutDefinitionColumn
+    export type FieldSourceDefinitionTypeId = PickEnum<TableFieldSourceDefinition.TypeId,
+        TableFieldSourceDefinition.TypeId.EditableGridLayoutDefinitionColumn
     >;
 
     export const allowedFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[] = [
-        TypedTableFieldSourceDefinition.TypeId.EditableGridLayoutDefinitionColumn,
+        TableFieldSourceDefinition.TypeId.EditableGridLayoutDefinitionColumn,
     ];
 
     export const defaultFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[] = [
-        TypedTableFieldSourceDefinition.TypeId.EditableGridLayoutDefinitionColumn,
+        TableFieldSourceDefinition.TypeId.EditableGridLayoutDefinitionColumn,
     ];
 }

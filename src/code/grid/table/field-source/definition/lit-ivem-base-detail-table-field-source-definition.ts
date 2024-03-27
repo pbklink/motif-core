@@ -30,10 +30,10 @@ import {
     PublisherSubscriptionDataTypeIdArrayCorrectnessTableValue,
     StringCorrectnessTableValue
 } from '../../value/internal-api';
-import { TypedTableFieldSourceDefinition } from './typed-table-field-source-definition';
-import { TypedTableFieldSourceDefinitionCachingFactoryService } from './typed-table-field-source-definition-caching-factory-service';
+import { TableFieldSourceDefinition } from './table-field-source-definition';
+import { TableFieldSourceDefinitionCachingFactoryService } from './table-field-source-definition-caching-factory-service';
 
-export class LitIvemBaseDetailTableFieldSourceDefinition extends TypedTableFieldSourceDefinition {
+export class LitIvemBaseDetailTableFieldSourceDefinition extends TableFieldSourceDefinition {
     override readonly fieldDefinitions: TableField.Definition[];
 
     constructor() {
@@ -84,7 +84,7 @@ export class LitIvemBaseDetailTableFieldSourceDefinition extends TypedTableField
 }
 
 export namespace LitIvemBaseDetailTableFieldSourceDefinition {
-    export const typeId = TypedTableFieldSourceDefinition.TypeId.LitIvemBaseDetail;
+    export const typeId = TableFieldSourceDefinition.TypeId.LitIvemBaseDetail;
     export type TypeId = typeof typeId;
 
     export namespace Field {
@@ -101,7 +101,7 @@ export namespace LitIvemBaseDetailTableFieldSourceDefinition {
         const idFieldIndices = new Array<Integer>(LitIvemBaseDetail.Field.idCount);
 
         function idToTableGridConstructors(id: LitIvemBaseDetail.Field.Id):
-            TypedTableFieldSourceDefinition.CorrectnessTableGridConstructors {
+            TableFieldSourceDefinition.CorrectnessTableGridConstructors {
             switch (id) {
                 case LitIvemBaseDetail.Field.Id.Id:
                     return [LitIvemIdCorrectnessTableField, LitIvemIdCorrectnessTableValue];
@@ -181,12 +181,12 @@ export namespace LitIvemBaseDetailTableFieldSourceDefinition {
         }
     }
 
-    export interface FieldId extends TypedTableFieldSourceDefinition.FieldId {
+    export interface FieldId extends TableFieldSourceDefinition.FieldId {
         sourceTypeId: LitIvemBaseDetailTableFieldSourceDefinition.TypeId;
         id: LitIvemBaseDetail.Field.Id;
     }
 
-    export function get(cachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService): LitIvemBaseDetailTableFieldSourceDefinition {
+    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactoryService): LitIvemBaseDetailTableFieldSourceDefinition {
         return cachingFactoryService.get(typeId) as LitIvemBaseDetailTableFieldSourceDefinition;
     }
 

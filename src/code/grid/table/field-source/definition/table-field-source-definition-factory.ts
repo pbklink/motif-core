@@ -6,10 +6,10 @@
 
 import { RevTableFieldSourceDefinitionFactory } from '../../../../rev/internal-api';
 import { RenderValue } from '../../../../services/internal-api';
-import { TypedTableFieldSourceDefinition } from './typed-table-field-source-definition';
+import { TableFieldSourceDefinition } from './table-field-source-definition';
 
-export interface TypedTableFieldSourceDefinitionFactory extends RevTableFieldSourceDefinitionFactory<
-    TypedTableFieldSourceDefinition.TypeId,
+export interface TableFieldSourceDefinitionFactory extends RevTableFieldSourceDefinitionFactory<
+    TableFieldSourceDefinition.TypeId,
     RenderValue.TypeId,
     RenderValue.Attribute.TypeId> {
 }

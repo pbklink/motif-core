@@ -5,28 +5,27 @@
  */
 
 import { Account, Balances, BrokerageAccountGroup } from '../../../../adi/internal-api';
+import { RevFieldCustomHeadingsService, RevGridLayoutDefinition } from '../../../../rev/internal-api';
 import { PickEnum } from '../../../../sys/internal-api';
-import { RevFieldCustomHeadingsService } from '../../../field/internal-api';
-import { RevGridLayoutDefinition } from '../../../layout/internal-api';
 import {
     BalancesTableFieldSourceDefinition,
     BrokerageAccountTableFieldSourceDefinition,
-    TypedTableFieldSourceDefinition,
-    TypedTableFieldSourceDefinitionCachingFactoryService
+    TableFieldSourceDefinition,
+    TableFieldSourceDefinitionCachingFactoryService
 } from "../../field-source/internal-api";
 import { BrokerageAccountGroupTableRecordSourceDefinition } from './brokerage-account-group-table-record-source-definition';
-import { TypedTableRecordSourceDefinition } from './typed-table-record-source-definition';
+import { TableRecordSourceDefinition } from './table-record-source-definition';
 
 export class BalancesTableRecordSourceDefinition extends BrokerageAccountGroupTableRecordSourceDefinition {
     constructor(
         customHeadingsService: RevFieldCustomHeadingsService,
-        tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService,
+        tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService,
         brokerageAccountGroup: BrokerageAccountGroup
     ) {
         super(
             customHeadingsService,
             tableFieldSourceDefinitionCachingFactoryService,
-            TypedTableRecordSourceDefinition.TypeId.Balances,
+            TableRecordSourceDefinition.TypeId.Balances,
             BalancesTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
             brokerageAccountGroup
         );
@@ -55,18 +54,18 @@ export class BalancesTableRecordSourceDefinition extends BrokerageAccountGroupTa
 }
 
 export namespace BalancesTableRecordSourceDefinition {
-    export type FieldSourceDefinitionTypeId = PickEnum<TypedTableFieldSourceDefinition.TypeId,
-        TypedTableFieldSourceDefinition.TypeId.Balances |
-        TypedTableFieldSourceDefinition.TypeId.BrokerageAccount
+    export type FieldSourceDefinitionTypeId = PickEnum<TableFieldSourceDefinition.TypeId,
+        TableFieldSourceDefinition.TypeId.Balances |
+        TableFieldSourceDefinition.TypeId.BrokerageAccount
     >;
 
     export const allowedFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[] = [
-        TypedTableFieldSourceDefinition.TypeId.Balances,
-        TypedTableFieldSourceDefinition.TypeId.BrokerageAccount,
+        TableFieldSourceDefinition.TypeId.Balances,
+        TableFieldSourceDefinition.TypeId.BrokerageAccount,
     ];
 
     export const defaultFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[] = [
-        TypedTableFieldSourceDefinition.TypeId.Balances,
-        TypedTableFieldSourceDefinition.TypeId.BrokerageAccount,
+        TableFieldSourceDefinition.TypeId.Balances,
+        TableFieldSourceDefinition.TypeId.BrokerageAccount,
     ];
 }

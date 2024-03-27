@@ -26,10 +26,10 @@ import {
     IntegerCorrectnessTableValue,
     StringCorrectnessTableValue
 } from '../../value/internal-api';
-import { TypedTableFieldSourceDefinition } from './typed-table-field-source-definition';
-import { TypedTableFieldSourceDefinitionCachingFactoryService } from './typed-table-field-source-definition-caching-factory-service';
+import { TableFieldSourceDefinition } from './table-field-source-definition';
+import { TableFieldSourceDefinitionCachingFactoryService } from './table-field-source-definition-caching-factory-service';
 
-export class FeedTableFieldSourceDefinition extends TypedTableFieldSourceDefinition {
+export class FeedTableFieldSourceDefinition extends TableFieldSourceDefinition {
     override readonly fieldDefinitions: TableField.Definition[];
 
     constructor() {
@@ -81,7 +81,7 @@ export class FeedTableFieldSourceDefinition extends TypedTableFieldSourceDefinit
 }
 
 export namespace FeedTableFieldSourceDefinition {
-    export const typeId = TypedTableFieldSourceDefinition.TypeId.Feed;
+    export const typeId = TableFieldSourceDefinition.TypeId.Feed;
     export type TypeId = typeof typeId;
 
     export namespace Field {
@@ -98,7 +98,7 @@ export namespace FeedTableFieldSourceDefinition {
         const idFieldIndices = new Array<Integer>(Feed.Field.idCount);
 
         function idToTableGridConstructors(id: Feed.FieldId):
-            TypedTableFieldSourceDefinition.CorrectnessTableGridConstructors {
+            TableFieldSourceDefinition.CorrectnessTableGridConstructors {
             switch (id) {
                 case Feed.FieldId.Id:
                     return [IntegerCorrectnessTableField, IntegerCorrectnessTableValue];
@@ -170,12 +170,12 @@ export namespace FeedTableFieldSourceDefinition {
         }
     }
 
-    export interface FieldId extends TypedTableFieldSourceDefinition.FieldId {
+    export interface FieldId extends TableFieldSourceDefinition.FieldId {
         sourceTypeId: FeedTableFieldSourceDefinition.TypeId;
         id: Feed.FieldId;
     }
 
-    export function get(cachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService): FeedTableFieldSourceDefinition {
+    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactoryService): FeedTableFieldSourceDefinition {
         return cachingFactoryService.get(typeId) as FeedTableFieldSourceDefinition;
     }
 

@@ -6,7 +6,7 @@
 
 import { LitIvemId } from '../../../../adi/internal-api';
 import { ChangeSubscribableComparableList, ErrorCode, JsonElement, JsonElementErr, Ok, PickEnum, Result } from '../../../../sys/internal-api';
-import { TypedTableFieldSourceDefinition } from '../../field-source/internal-api';
+import { TableFieldSourceDefinition } from '../../field-source/internal-api';
 import { UsableListTableRecordSourceDefinition } from './usable-list-table-record-source-definition';
 
 /** @public */
@@ -20,18 +20,18 @@ export abstract class LitIvemIdUsableListTableRecordSourceDefinition extends Usa
 
 /** @public */
 export namespace LitIvemIdUsableListTableRecordSourceDefinition {
-    export type FieldSourceDefinitionTypeId = PickEnum<TypedTableFieldSourceDefinition.TypeId,
-        TypedTableFieldSourceDefinition.TypeId.LitIvemBaseDetail |
-        TypedTableFieldSourceDefinition.TypeId.RankedLitIvemId |
-        TypedTableFieldSourceDefinition.TypeId.SecurityDataItem
+    export type FieldSourceDefinitionTypeId = PickEnum<TableFieldSourceDefinition.TypeId,
+        TableFieldSourceDefinition.TypeId.LitIvemBaseDetail |
+        TableFieldSourceDefinition.TypeId.RankedLitIvemId |
+        TableFieldSourceDefinition.TypeId.SecurityDataItem
         // AlternateCodesFix: Currently this actually is part of FullDetail.  Will be in BaseDetail in future
         // TypedTableFieldSourceDefinition.TypeId.LitIvemAlternateCodes
     >;
 
     export const allowedFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[] = [
-        TypedTableFieldSourceDefinition.TypeId.LitIvemBaseDetail,
-        TypedTableFieldSourceDefinition.TypeId.RankedLitIvemId,
-        TypedTableFieldSourceDefinition.TypeId.SecurityDataItem
+        TableFieldSourceDefinition.TypeId.LitIvemBaseDetail,
+        TableFieldSourceDefinition.TypeId.RankedLitIvemId,
+        TableFieldSourceDefinition.TypeId.SecurityDataItem
         // AlternateCodesFix: Currently this actually is part of FullDetail.  Will be in BaseDetail in future
         // TypedTableFieldSourceDefinition.TypeId.LitIvemAlternateCodes,
     ];

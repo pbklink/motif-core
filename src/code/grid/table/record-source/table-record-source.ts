@@ -8,12 +8,12 @@ import { RevFieldCustomHeadingsService, RevTableRecordSource } from '../../../re
 import { RenderValue } from '../../../services/internal-api';
 import { Badness, CorrectnessBadness, MultiEvent } from '../../../sys/internal-api';
 import { TextFormatterService } from '../../../text-format/internal-api';
-import { TypedTableFieldSourceDefinition, TypedTableFieldSourceDefinitionCachingFactoryService } from '../field-source/internal-api';
-import { TypedTableRecordSourceDefinition } from './definition/internal-api';
+import { TableFieldSourceDefinition, TableFieldSourceDefinitionCachingFactoryService } from '../field-source/internal-api';
+import { TableRecordSourceDefinition } from './definition/internal-api';
 
-export abstract class TypedTableRecordSource extends RevTableRecordSource<
-    TypedTableRecordSourceDefinition.TypeId,
-    TypedTableFieldSourceDefinition.TypeId,
+export abstract class TableRecordSource extends RevTableRecordSource<
+    TableRecordSourceDefinition.TypeId,
+    TableFieldSourceDefinition.TypeId,
     RenderValue.TypeId,
     RenderValue.Attribute.TypeId,
     Badness
@@ -23,10 +23,10 @@ export abstract class TypedTableRecordSource extends RevTableRecordSource<
     constructor(
         textFormatterService: TextFormatterService,
         gridFieldCustomHeadingsService: RevFieldCustomHeadingsService,
-        tableFieldSourceDefinitionCachingFactoryService: TypedTableFieldSourceDefinitionCachingFactoryService,
+        tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService,
         private readonly _correctnessBadness: CorrectnessBadness,
-        definition: TypedTableRecordSourceDefinition,
-        allowedFieldSourceDefinitionTypeIds: readonly TypedTableFieldSourceDefinition.TypeId[],
+        definition: TableRecordSourceDefinition,
+        allowedFieldSourceDefinitionTypeIds: readonly TableFieldSourceDefinition.TypeId[],
     ) {
         super(textFormatterService, gridFieldCustomHeadingsService, tableFieldSourceDefinitionCachingFactoryService, _correctnessBadness, definition, allowedFieldSourceDefinitionTypeIds);
         this._correctnessBadnessUsableChangedSubscriptionId = this._correctnessBadness.subscribeUsableChangedEvent(() => this.processUsableChanged());
