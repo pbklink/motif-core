@@ -5,10 +5,12 @@
  */
 
 import {
-    DataServer,
-    DatalessViewCell,
     RevRecordRecentChangeTypeId,
     RevRecordValueRecentChangeTypeId,
+} from '@xilytix/rev-data-source';
+import {
+    DataServer,
+    DatalessViewCell,
     StandardTextPainter
 } from '@xilytix/revgrid';
 import { HigherLowerId, OrderSideId } from '../../../../adi/internal-api';

@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevRecordValueRecentChangeTypeId } from '@xilytix/revgrid';
+import { RevRecordValueRecentChangeTypeId } from '@xilytix/rev-data-source';
 import { ComparisonResult, compareDecimal, isDecimalEqual } from '@xilytix/sysutils';
 import { ValueRecentChangeTypeId } from './grid-revgrid-types';
 import { PriceOrRemainder } from './types';
