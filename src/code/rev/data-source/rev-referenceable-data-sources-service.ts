@@ -4,14 +4,14 @@
  * License: motionite.trade/license/motif
  */
 
-import { LockOpenList } from '@xilytix/sysutils';
+import { LockItemByKeyList } from '@xilytix/sysutils';
 import { RevReferenceableDataSourceDefinition } from './definition/internal-api';
 import { RevReferenceableDataSource } from './rev-referenceable-data-source';
 import { RevDataSource } from './rev-data-source';
 
 /** @public */
 export interface RevReferenceableDataSourcesService<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, RenderValueTypeId, RenderAttributeTypeId, Badness>
-    extends LockOpenList<
+    extends LockItemByKeyList<
         RevReferenceableDataSource<
             TableRecordSourceDefinitionTypeId,
             TableFieldSourceDefinitionTypeId,

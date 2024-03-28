@@ -7,9 +7,9 @@
 import { BadnessList } from './badness-list';
 import { CorrectnessBadness } from './correctness-badness';
 import { Ok, Result } from './error-code-with-extra-err';
-import { AssertInternalError, ComparableList, Guid, Integer, LockOpenList as LockOpenListInterface, LockOpenListItem, MapKey, MultiEvent, UsableListChangeTypeId } from './xilytix-sysutils';
+import { AssertInternalError, ComparableList, Guid, Integer, LockItemByKeyList, LockOpenListItem, MapKey, MultiEvent, UsableListChangeTypeId } from './xilytix-sysutils';
 
-export abstract class LockOpenList<Item extends LockOpenListItem<Item, Error>, Error = string> extends CorrectnessBadness implements LockOpenListInterface<Item, Error>, BadnessList<Item> {
+export abstract class LockOpenList<Item extends LockOpenListItem<Item, Error>, Error = string> extends CorrectnessBadness implements LockItemByKeyList<Item, Error>, BadnessList<Item> {
     // private localFilePath = '';
     // private groupLoadFilePath = TableRecordDefinitionListDirectory.defaultGroupLoadFilePath;
     // private groupLoadFileAccessTypeId = TableRecordDefinitionListDirectory.defaultGroupLoadFileAccessTypeId;

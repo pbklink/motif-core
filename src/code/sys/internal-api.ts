@@ -66,7 +66,6 @@ export {
     JsonValue,
     JsonValueArray,
     Line,
-    ListChangeTypeId,
     LockOpenListItem,
     LockOpenManager,
     Logger,
