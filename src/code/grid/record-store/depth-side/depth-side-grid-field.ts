@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevFieldSourceDefinition } from '../../../rev/internal-api';
+import { RevFieldSourceDefinition } from '@xilytix/rev-data-source';
 import { RenderValue } from '../../../services/internal-api';
 import { CorrectnessId, GridRevRecordField } from '../../../sys/internal-api';
 import { GridField } from '../../field/internal-api';

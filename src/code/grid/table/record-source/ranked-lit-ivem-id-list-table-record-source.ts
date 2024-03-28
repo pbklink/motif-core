@@ -4,6 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
+import { RevFieldCustomHeadingsService } from '@xilytix/rev-data-source';
 import { AdiService, RankedLitIvemId } from '../../../adi/internal-api';
 import {
     LitIvemIdArrayRankedLitIvemIdListDefinition,
@@ -13,7 +14,6 @@ import {
     RankedLitIvemIdListFactoryService,
     ScanIdRankedLitIvemIdListDefinition
 } from "../../../ranked-lit-ivem-id-list/internal-api";
-import { RevFieldCustomHeadingsService } from '../../../rev/internal-api';
 import { SymbolDetailCacheService } from '../../../services/symbol-detail-cache-service';
 import { AssertInternalError, CorrectnessBadness, ErrorCode, Integer, LockOpenListItem, NotImplementedError, Ok, Result, UnreachableCaseError } from '../../../sys/internal-api';
 import { TextFormatterService } from '../../../text-format/internal-api';

@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevAllowedFieldsGridLayoutDefinition } from '../../../rev/internal-api';
+import { RevAllowedFieldsGridLayoutDefinition } from '@xilytix/rev-data-source';
 import { RenderValue } from '../../../services/internal-api';
 import { BidAskPair } from '../../../sys/internal-api';
 

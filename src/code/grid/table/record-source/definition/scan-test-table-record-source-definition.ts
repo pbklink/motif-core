@@ -4,9 +4,9 @@
  * License: motionite.trade/license/motif
  */
 
+import { RevFieldCustomHeadingsService, RevGridLayoutDefinition } from '@xilytix/rev-data-source';
 import { LitIvemBaseDetail, RankedLitIvemId } from '../../../../adi/internal-api';
 import { LitIvemIdExecuteScanRankedLitIvemIdListDefinition } from '../../../../ranked-lit-ivem-id-list/internal-api';
-import { RevFieldCustomHeadingsService, RevGridLayoutDefinition } from '../../../../rev/internal-api';
 import {
     LitIvemBaseDetailTableFieldSourceDefinition,
     RankedLitIvemIdTableFieldSourceDefinition,

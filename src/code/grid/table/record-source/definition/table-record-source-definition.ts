@@ -4,8 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
+import { RevFieldCustomHeadingsService, RevTableRecordSourceDefinition } from '@xilytix/rev-data-source';
 import { StringId, Strings } from '../../../../res/internal-api';
-import { RevFieldCustomHeadingsService, RevTableRecordSourceDefinition } from '../../../../rev/internal-api';
 import { RenderValue } from '../../../../services/internal-api';
 import {
     EnumInfoOutOfOrderError,
@@ -43,10 +43,6 @@ export abstract class TableRecordSourceDefinition extends RevTableRecordSourceDe
 }
 
 export namespace TableRecordSourceDefinition {
-    export const jsonTag_Id = 'Id';
-    export const jsonTag_Name = 'Name';
-    export const jsonTag_TypeId = 'ListTypeId';
-
     export const enum TypeId {
         Null,
         LitIvemIdComparableList,
@@ -302,7 +298,7 @@ export namespace TableRecordSourceDefinition {
     }
 
     export function tryGetTypeIdFromJson(element: JsonElement): Result<Type.Id> {
-        const typeIdResult = element.tryGetString(jsonTag_TypeId);
+        const typeIdResult = element.tryGetString(RevTableRecordSourceDefinition.jsonTag_TypeId);
         if (typeIdResult.isErr()) {
             return JsonElementErr.createOuter(typeIdResult.error, ErrorCode.TableRecordSourceDefinition_TypeIdNotSpecified);
         } else {

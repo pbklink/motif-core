@@ -4,6 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
+import { RevFieldCustomHeadingsService } from '@xilytix/rev-data-source';
 import { AdiService } from './adi/internal-api';
 import { CommandRegisterService } from "./command/internal-api";
 import {
@@ -21,7 +22,6 @@ import {
     RankedLitIvemIdListDefinitionFactoryService,
     RankedLitIvemIdListFactoryService,
 } from "./ranked-lit-ivem-id-list/internal-api";
-import { RevFieldCustomHeadingsService } from './rev/internal-api';
 import { ScansService } from './scan/internal-api';
 import {
     AppStorageService,

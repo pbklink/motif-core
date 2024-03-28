@@ -4,8 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
+import { RevFieldCustomHeadingsService } from '@xilytix/rev-data-source';
 import { RankedLitIvemIdListDirectory } from '../../../ranked-lit-ivem-id-list/internal-api';
-import { RevFieldCustomHeadingsService } from '../../../rev/internal-api';
 import { RankedLitIvemIdListDirectoryItem } from '../../../services/internal-api';
 import { CorrectnessBadness, Integer, LockOpenListItem, Ok, Result, UnreachableCaseError } from '../../../sys/internal-api';
 import { TextFormatterService } from '../../../text-format/internal-api';

@@ -26,7 +26,6 @@
     { "path": "../../../services/tsconfig.json" },
     { "path": "../../../adi/tsconfig.json" },
     { "path": "../../../sys/tsconfig.json" },
-    { "path": "../../../rev/tsconfig.json" },
     // { "path": "../../../res/tsconfig.json" },
   ]
 }

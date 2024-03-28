@@ -4,6 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
+import { RevGridLayout, RevGridLayoutDefinition, RevGridSortDefinition } from '@xilytix/rev-data-source';
 import {
     Column,
     ColumnsManager,
@@ -20,7 +21,6 @@ import {
     Subgrid,
     ViewCell
 } from '@xilytix/revgrid';
-import { RevGridLayout, RevGridLayoutDefinition, RevGridSortDefinition } from '../../../rev/internal-api';
 import { SettingsService } from '../../../services/internal-api';
 import {
     AssertInternalError,

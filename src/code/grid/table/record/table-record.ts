@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevTableRecord } from '../../../rev/internal-api';
+import { RevTableRecord } from '@xilytix/rev-data-source';
 import { RenderValue } from '../../../services/internal-api';
 
 export class TableRecord extends RevTableRecord<RenderValue.TypeId, RenderValue.Attribute.TypeId> {

@@ -4,6 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
+import { RevRenderValue } from '@xilytix/rev-data-source';
 import {
     ActiveFaultedStatusId,
     DayTradesDataItem,
@@ -16,7 +17,6 @@ import {
     TradeAffectsId,
     TradeFlagId
 } from "../adi/internal-api";
-import { RevRenderValue } from '../rev/internal-api';
 import {
     CorrectnessId,
     Decimal,

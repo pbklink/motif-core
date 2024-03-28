@@ -20,6 +20,5 @@
     { "path": "./record-store/tsconfig.json" },
     { "path": "./layout/tsconfig.json" },
     { "path": "./field/tsconfig.json" },
-    { "path": "../rev/tsconfig.json" },
   ]
 }

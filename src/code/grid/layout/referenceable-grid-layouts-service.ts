@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevReferenceableGridLayout, RevReferenceableGridLayoutDefinition, RevReferenceableGridLayoutsService } from '../../rev/internal-api';
+import { RevReferenceableGridLayout, RevReferenceableGridLayoutDefinition, RevReferenceableGridLayoutsService } from '@xilytix/rev-data-source';
 import { LockOpenList } from '../../sys/internal-api';
 
 export class ReferenceableGridLayoutsService extends LockOpenList<RevReferenceableGridLayout> implements RevReferenceableGridLayoutsService {

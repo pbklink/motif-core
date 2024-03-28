@@ -4,8 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
+import { RevFieldCustomHeadingsService } from '@xilytix/rev-data-source';
 import { AllBrokerageAccountGroup, BrokerageAccountGroup } from '../../../../adi/internal-api';
-import { RevFieldCustomHeadingsService } from '../../../../rev/internal-api';
 import { JsonElement } from '../../../../sys/internal-api';
 import { TableFieldSourceDefinition, TableFieldSourceDefinitionCachingFactoryService } from "../../field-source/internal-api";
 import { TableRecordSourceDefinition } from './table-record-source-definition';

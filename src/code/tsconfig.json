@@ -14,7 +14,6 @@
   ],
 
   "references": [
-    { "path": "./rev/tsconfig.json" },
     { "path": "./res/tsconfig.json" },
     { "path": "./sys/tsconfig.json" },
     { "path": "./publisher/tsconfig.json" },

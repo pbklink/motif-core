@@ -4,8 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
+import { RevFieldCustomHeadingsService, RevGridLayoutDefinition } from '@xilytix/rev-data-source';
 import { IvemId, SecurityDataItem } from '../../../../adi/internal-api';
-import { RevFieldCustomHeadingsService, RevGridLayoutDefinition } from '../../../../rev/internal-api';
 import { CallPut } from '../../../../services/internal-api';
 import { ErrorCode, JsonElement, JsonElementErr, Ok, PickEnum, Result } from '../../../../sys/internal-api';
 import {

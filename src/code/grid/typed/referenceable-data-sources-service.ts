@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevDataSource, RevReferenceableDataSourcesService } from '../../rev/internal-api';
+import { RevDataSource, RevReferenceableDataSourcesService } from '@xilytix/rev-data-source';
 import { RenderValue } from '../../services/internal-api';
 import { Badness, JsonElement, LockOpenList, SysTick, mSecsPerSec } from '../../sys/internal-api';
 import { ReferenceableGridLayoutsService } from '../layout/internal-api';

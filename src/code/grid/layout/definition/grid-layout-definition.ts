@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevGridLayoutDefinition } from '../../../rev/internal-api';
+import { RevGridLayoutDefinition } from '@xilytix/rev-data-source';
 import { BidAskPair, Err, ErrorCode, JsonElement, Ok, Result, UnreachableCaseError } from '../../../sys/internal-api';
 
 /** @public */

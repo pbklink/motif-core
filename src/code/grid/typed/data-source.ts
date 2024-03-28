@@ -4,10 +4,11 @@
  * License: motionite.trade/license/motif
  */
 
+import { RevDataSource, RevGridLayoutOrReferenceDefinition } from '@xilytix/rev-data-source';
 import { UnreachableCaseError } from '@xilytix/sysutils';
-import { RevDataSource } from '../../rev/internal-api';
 import { RenderValue } from '../../services/internal-api';
 import { AssertInternalError, Badness, Err, ErrorCode, LockOpenListItem, Ok, PickEnum, Result } from '../../sys/internal-api';
+import { GridLayoutOrReference } from '../layout/internal-api';
 import { TableFieldSourceDefinition, TableRecordSourceDefinition } from '../table/internal-api';
 
 export class DataSource extends RevDataSource<
@@ -29,13 +30,42 @@ export namespace DataSource {
 
         const lockPromise = dataSource.tryLock(locker);
         lockPromise.then(
-            (result) => {
-                if (result.isOk()) {
+            (lockIdPlusTryError) => {
+                if (lockIdPlusTryError.isOk()) {
                     resolve(new Ok(undefined));
                 } else {
-                    const lockErrorIdPlusTryError = result.error;
+                    const lockErrorIdPlusTryError = lockIdPlusTryError.error;
                     const lockErrorId = lockErrorIdPlusTryError.errorId;
-                    let errorText = DataSource.LockErrorCode.fromId(lockErrorId) as string;
+                    let errorText = LockErrorCode.fromId(lockErrorId) as string;
+                    const tryError = lockErrorIdPlusTryError.tryError;
+                    if (tryError === undefined) {
+                        errorText += `: ${tryError}`;
+                    }
+                    resolve(new Err(errorText));
+                }
+            },
+            (reason) => { throw AssertInternalError.createIfNotError(reason, 'DSTCL35252'); }
+        )
+
+        return resultPromise;
+    }
+
+    export function tryOpenGridLayoutOrReferenceDefinition(dataSource: DataSource, definition: RevGridLayoutOrReferenceDefinition, opener: LockOpenListItem.Opener): Promise<Result<void>> {
+        // Replace with Promise.withResolvers when available in TypeScript (ES2023)
+        let resolve: (value: Result<void>) => void;
+        const resultPromise = new Promise<Result<void>>((res) => {
+            resolve = res;
+        });
+
+        const openPromise = dataSource.tryOpenGridLayoutOrReferenceDefinition(definition, opener);
+        openPromise.then(
+            (lockIdPlusTryError) => {
+                if (lockIdPlusTryError.isOk()) {
+                    resolve(new Ok(undefined));
+                } else {
+                    const lockErrorIdPlusTryError = lockIdPlusTryError.error;
+                    const lockErrorId = lockErrorIdPlusTryError.errorId;
+                    let errorText = GridLayoutOrReference.LockErrorCode.fromId(lockErrorId) as string;
                     const tryError = lockErrorIdPlusTryError.tryError;
                     if (tryError === undefined) {
                         errorText += `: ${tryError}`;

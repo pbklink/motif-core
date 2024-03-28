@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevFieldCustomHeadingsService, RevGridLayoutDefinition } from '../../../../rev/internal-api';
+import { RevFieldCustomHeadingsService, RevGridLayoutDefinition } from '@xilytix/rev-data-source';
 import { PickEnum } from '../../../../sys/internal-api';
 import { GridField } from '../../../field/internal-api';
 import { GridFieldTableFieldSourceDefinition, TableFieldSourceDefinition, TableFieldSourceDefinitionCachingFactoryService } from '../../field-source/internal-api';

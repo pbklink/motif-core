@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevFieldCustomHeadingsService } from '../../../../rev/internal-api';
+import { RevFieldCustomHeadingsService } from '@xilytix/rev-data-source';
 import { BadnessList } from '../../../../sys/internal-api';
 import { TableFieldSourceDefinition, TableFieldSourceDefinitionCachingFactoryService } from '../../field-source/internal-api';
 import { TableRecordSourceDefinition } from './table-record-source-definition';

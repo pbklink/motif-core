@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevDataSourceOrReference } from '../../rev/internal-api';
+import { RevDataSourceOrReference } from '@xilytix/rev-data-source';
 import { RenderValue } from '../../services/internal-api';
 import { AssertInternalError, Badness, Err, ErrorCode, LockOpenListItem, Ok, PickEnum, Result, UnreachableCaseError } from '../../sys/internal-api';
 import { TableFieldSourceDefinition, TableRecordSourceDefinition } from '../table/internal-api';

@@ -4,6 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
+import { RevFieldDefinition, RevFieldSourceDefinition } from '@xilytix/rev-data-source';
 import {
     DataRowArraySchemaServer,
     DatalessSubgrid,
@@ -12,7 +13,6 @@ import {
     SingleHeadingDataRowArrayServerSet,
     Subgrid
 } from '@xilytix/revgrid';
-import { RevFieldDefinition, RevFieldSourceDefinition } from '../../../rev/internal-api';
 import { SettingsService } from '../../../services/internal-api';
 import { GridFieldHorizontalAlign } from '../../../sys/internal-api';
 import { GridField } from '../../field/internal-api';

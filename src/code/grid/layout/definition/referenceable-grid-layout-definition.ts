@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevReferenceableGridLayoutDefinition } from '../../../rev/internal-api';
+import { RevReferenceableGridLayoutDefinition } from '@xilytix/rev-data-source';
 import { Err, ErrorCode, JsonElement, Ok, PickEnum, Result, UnreachableCaseError } from '../../../sys/internal-api';
 
 export namespace ReferenceableGridLayoutDefinition {

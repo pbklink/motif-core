@@ -16,6 +16,5 @@
     { "path": "../table/tsconfig.json" },
     { "path": "../../services/tsconfig.json" },
     { "path": "../../sys/tsconfig.json" },
-    { "path": "../../rev/tsconfig.json" },
   ]
 }

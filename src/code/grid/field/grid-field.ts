@@ -4,8 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
+import { RevField } from '@xilytix/rev-data-source';
 import { StringId, Strings } from '../../res/internal-api';
-import { RevField } from '../../rev/internal-api';
 import { RenderValue } from '../../services/internal-api';
 import {
     EnumInfoOutOfOrderError,

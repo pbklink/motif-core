@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevAllowedField } from '../../rev/internal-api';
+import { RevAllowedField } from '@xilytix/rev-data-source';
 import { RenderValue } from '../../services/render-value';
 
 // AllowedGridField is used in Column selector

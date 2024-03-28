@@ -4,6 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
+import { RevFieldCustomHeadingsService } from '@xilytix/rev-data-source';
 import {
     AdiService,
     CallOrPutId,
@@ -14,7 +15,6 @@ import {
     SymbolFieldId,
     SymbolsDataItem
 } from '../../../adi/internal-api';
-import { RevFieldCustomHeadingsService } from '../../../rev/internal-api';
 import { CallPut } from '../../../services/internal-api';
 import {
     AssertInternalError,

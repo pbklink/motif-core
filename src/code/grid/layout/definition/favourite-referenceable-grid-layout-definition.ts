@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevFavouriteReferenceableGridLayoutDefinition } from '../../../rev/internal-api';
+import { RevFavouriteReferenceableGridLayoutDefinition } from '@xilytix/rev-data-source';
 
 /** @public */
 export class FavouriteReferenceableGridLayoutDefinition extends RevFavouriteReferenceableGridLayoutDefinition {

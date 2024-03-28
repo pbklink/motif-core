@@ -4,12 +4,12 @@
  * License: motionite.trade/license/motif
  */
 
+import { RevFieldCustomHeadingsService } from '@xilytix/rev-data-source';
 import {
     BrokerageAccountGroup,
     BrokerageAccountGroupRecordList,
     BrokerageAccountRecord
 } from "../../../adi/internal-api";
-import { RevFieldCustomHeadingsService } from '../../../rev/internal-api';
 import { CorrectnessBadness } from '../../../sys/internal-api';
 import { TextFormatterService } from '../../../text-format/internal-api';
 import {

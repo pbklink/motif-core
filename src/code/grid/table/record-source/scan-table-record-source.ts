@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevFieldCustomHeadingsService } from '../../../rev/internal-api';
+import { RevFieldCustomHeadingsService } from '@xilytix/rev-data-source';
 import { Scan, ScanList, ScansService } from '../../../scan/internal-api';
 import { CorrectnessBadness, Integer, LockOpenListItem, UnreachableCaseError } from '../../../sys/internal-api';
 import { TextFormatterService } from '../../../text-format/internal-api';

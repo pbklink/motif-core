@@ -4,11 +4,11 @@
  * License: motionite.trade/license/motif
  */
 
+import { RevFieldCustomHeadingsService } from '@xilytix/rev-data-source';
 import {
     RankedLitIvemIdListDefinition,
     RankedLitIvemIdListDefinitionFactoryService
 } from "../../../../ranked-lit-ivem-id-list/internal-api";
-import { RevFieldCustomHeadingsService } from '../../../../rev/internal-api';
 import { ErrorCode, JsonElement, JsonElementErr, PickEnum, Result } from '../../../../sys/internal-api';
 import {
     TableFieldSourceDefinition,

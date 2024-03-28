@@ -4,9 +4,9 @@
  * License: motionite.trade/license/motif
  */
 
+import { RevFieldDefinition, RevFieldSourceDefinition, RevGridLayoutDefinition } from '@xilytix/rev-data-source';
 import { DayTradesDataItem, MovementId, TradeFlagId } from '../../../adi/internal-api';
 import { StringId, Strings } from '../../../res/internal-api';
-import { RevFieldDefinition, RevFieldSourceDefinition, RevGridLayoutDefinition } from '../../../rev/internal-api';
 import {
     DayTradesDataItemRecordTypeIdRenderValue,
     IntegerRenderValue,

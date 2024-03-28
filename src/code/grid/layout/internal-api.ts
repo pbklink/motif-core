@@ -6,4 +6,5 @@
 
 export * from './definition/internal-api';
 export * from './referenceable-grid-layouts-service';
+export * from './grid-layout-or-reference';
 

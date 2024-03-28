@@ -4,8 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
+import { RevRenderValue, RevTableField } from '@xilytix/rev-data-source';
 import { IvemId, LitIvemId } from '../../../adi/internal-api';
-import { RevRenderValue, RevTableField } from '../../../rev/internal-api';
 import { RenderValue } from '../../../services/internal-api';
 import {
     Integer,

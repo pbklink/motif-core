@@ -4,8 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
+import { RevFieldCustomHeadingsService, RevGridLayoutDefinition } from '@xilytix/rev-data-source';
 import { Account, BrokerageAccountGroup, Holding } from '../../../../adi/internal-api';
-import { RevFieldCustomHeadingsService, RevGridLayoutDefinition } from '../../../../rev/internal-api';
 import { PickEnum } from '../../../../sys/internal-api';
 import {
     BrokerageAccountTableFieldSourceDefinition,
