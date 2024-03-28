@@ -10,7 +10,7 @@ import {
     DataServer,
     DatalessSubgrid,
     LinedHoverCell,
-    ListChangedTypeId,
+    RevListChangedTypeId,
     RevRecordDataServer,
     RevRecordField,
     RevRecordFieldIndex,
@@ -411,7 +411,7 @@ export class RecordGrid extends AdaptedRevgrid implements RevGridLayout.ChangeIn
     }
 
     protected override descendantProcessActiveColumnListChanged(
-        typeId: ListChangedTypeId,
+        typeId: RevListChangedTypeId,
         index: number,
         count: number,
         targetIndex: number | undefined,
@@ -422,7 +422,7 @@ export class RecordGrid extends AdaptedRevgrid implements RevGridLayout.ChangeIn
                 throw new AssertInternalError('RGPACLC56678');
             } else {
                 switch (typeId) {
-                    case ListChangedTypeId.Move: {
+                    case RevListChangedTypeId.Move: {
                         if (targetIndex === undefined) {
                             throw new AssertInternalError('RGPACCLCM44430');
                         } else {
@@ -430,13 +430,13 @@ export class RecordGrid extends AdaptedRevgrid implements RevGridLayout.ChangeIn
                             break;
                         }
                     }
-                    case ListChangedTypeId.Clear: {
+                    case RevListChangedTypeId.Clear: {
                         this._gridLayout.clearColumns(this);
                         break;
                     }
-                    case ListChangedTypeId.Insert:
-                    case ListChangedTypeId.Remove:
-                    case ListChangedTypeId.Set: {
+                    case RevListChangedTypeId.Insert:
+                    case RevListChangedTypeId.Remove:
+                    case RevListChangedTypeId.Set: {
                         const definition = this.createGridLayoutDefinition();
                         this._gridLayout.applyDefinition(this, definition);
                         break;

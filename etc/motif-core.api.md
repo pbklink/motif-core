@@ -89,7 +89,6 @@ import { HtmlTypes } from '@xilytix/sysutils';
 import { incDateByDays } from '@xilytix/sysutils';
 import { IndexedRecord } from '@xilytix/sysutils';
 import { IndexSignatureHack } from '@xilytix/sysutils';
-import { IndexSignatureHack as IndexSignatureHack_2 } from '@xilytix/revgrid';
 import { InMemoryBehavioredColumnSettings } from '@xilytix/revgrid';
 import { InMemoryBehavioredGridSettings } from '@xilytix/revgrid';
 import { Integer } from '@xilytix/sysutils';
@@ -124,7 +123,6 @@ import { JsonValue } from '@xilytix/sysutils';
 import { JsonValueArray } from '@xilytix/sysutils';
 import { Line } from '@xilytix/sysutils';
 import { LinedHoverCell } from '@xilytix/revgrid';
-import { ListChangedTypeId } from '@xilytix/revgrid';
 import { LockItemByKeyList } from '@xilytix/sysutils';
 import { LockOpenListItem } from '@xilytix/sysutils';
 import { LockOpenManager } from '@xilytix/sysutils';
@@ -178,6 +176,7 @@ import { Rectangle } from '@xilytix/revgrid';
 import { removeFromArray } from '@xilytix/sysutils';
 import { Result } from '@xilytix/sysutils';
 import { Revgrid } from '@xilytix/revgrid';
+import { RevListChangedTypeId } from '@xilytix/revgrid';
 import { RevRecordDataServer } from '@xilytix/revgrid';
 import { RevRecordField } from '@xilytix/revgrid';
 import { RevRecordFieldIndex } from '@xilytix/revgrid';
@@ -3983,7 +3982,7 @@ export class CheckboxRenderValueCellPainter extends RenderValueCellPainter {
 // @public (undocumented)
 export namespace CheckboxRenderValueCellPainter {
     // (undocumented)
-    export type CheckboxPaintFingerprint = IndexSignatureHack_2<CheckboxPaintFingerprintInterface>;
+    export type CheckboxPaintFingerprint = IndexSignatureHack<CheckboxPaintFingerprintInterface>;
     // (undocumented)
     export namespace CheckboxPaintFingerprint {
         // (undocumented)
@@ -22416,7 +22415,7 @@ export class RecordGrid extends AdaptedRevgrid implements RevGridLayout.ChangeIn
     // (undocumented)
     dataServersRowListChangedEventer: RecordGrid.DataServersRowListChangedEventer | undefined;
     // (undocumented)
-    protected descendantProcessActiveColumnListChanged(typeId: ListChangedTypeId, index: number, count: number, targetIndex: number | undefined, ui: boolean): void;
+    protected descendantProcessActiveColumnListChanged(typeId: RevListChangedTypeId, index: number, count: number, targetIndex: number | undefined, ui: boolean): void;
     // (undocumented)
     protected descendantProcessClick(event: MouseEvent, hoverCell: LinedHoverCell<AdaptedRevgridBehavioredColumnSettings, GridField> | null | undefined): void;
     // (undocumented)
@@ -36878,7 +36877,7 @@ export class TextHeaderCellPainter extends HeaderCellPainter {
 // @public (undocumented)
 export namespace TextHeaderCellPainter {
     // (undocumented)
-    export type PaintFingerprint = IndexSignatureHack_2<PaintFingerprintInterface>;
+    export type PaintFingerprint = IndexSignatureHack<PaintFingerprintInterface>;
     // (undocumented)
     export namespace PaintFingerprint {
         // (undocumented)

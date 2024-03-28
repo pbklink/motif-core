@@ -4,7 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
-import { DataServer, DatalessViewCell, IndexSignatureHack, Rectangle, StandardCheckboxPainter } from '@xilytix/revgrid';
+import { DataServer, DatalessViewCell, Rectangle, StandardCheckboxPainter } from '@xilytix/revgrid';
+import { IndexSignatureHack } from '@xilytix/sysutils';
 import { RenderValue, SettingsService } from '../../../../services/internal-api';
 import { AssertInternalError, Integer } from '../../../../sys/internal-api';
 import { GridField } from '../../../field/internal-api';
