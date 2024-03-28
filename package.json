@@ -28,6 +28,7 @@
     "license.txt"
   ],
   "scripts": {
+    "link-xilytix": "npm link @xilytix/sysutils @xilytix/revgrid @xilytix/rev-data-source @xilytix/ui-action",
     "lint": "eslint -c .eslintrc.json --ext .ts src/",
     "build": "tsc --build ./tsconfig.json",
     "force-build": "tsc --build --force ./tsconfig.json",
