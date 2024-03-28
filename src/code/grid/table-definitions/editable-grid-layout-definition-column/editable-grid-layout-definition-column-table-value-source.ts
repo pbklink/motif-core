@@ -89,19 +89,19 @@ export class EditableGridLayoutDefinitionColumnTableValueSource extends TableVal
         switch (id) {
             case EditableGridLayoutDefinitionColumn.FieldId.FieldName:
                 (value as StringTableValue).data = this._record.fieldName;
-                if (this._record.fixed) {
+                if (this._record.anchored) {
                     value.addRenderAttribute(RenderValue.greyedOutAttribute);
                 }
                 break;
             case EditableGridLayoutDefinitionColumn.FieldId.FieldSourceName:
                 (value as StringTableValue).data = this._record.fieldSourceName;
-                if (this._record.fixed) {
+                if (this._record.anchored) {
                     value.addRenderAttribute(RenderValue.greyedOutAttribute);
                 }
                 break;
             case EditableGridLayoutDefinitionColumn.FieldId.FieldHeading:
                 (value as StringTableValue).data = this._record.fieldHeading;
-                if (this._record.fixed) {
+                if (this._record.anchored) {
                     value.addRenderAttribute(RenderValue.greyedOutAttribute);
                 }
                 break;

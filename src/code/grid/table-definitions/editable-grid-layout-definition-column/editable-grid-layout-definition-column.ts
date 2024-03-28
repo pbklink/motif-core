@@ -24,7 +24,7 @@ export class EditableGridLayoutDefinitionColumn implements IndexedRecord {
     private _widthChangedMultiEvent = new MultiEvent<EditableGridLayoutDefinitionColumn.WidthChangedEventHandler>();
     private _visibleChangedMultiEvent = new MultiEvent<EditableGridLayoutDefinitionColumn.VisibleChangedEventHandler>();
 
-    constructor(readonly field: GridField, readonly fixed: boolean, initialIndex: Integer) {
+    constructor(readonly field: GridField, readonly anchored: boolean, initialIndex: Integer) {
         this.index = initialIndex;
     }
 

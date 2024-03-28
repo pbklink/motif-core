@@ -9,6 +9,7 @@ import { addToArrayByPush } from '@xilytix/sysutils';
 import { addToArrayUniquely } from '@xilytix/sysutils';
 import { addToCapacitisedArrayUniquely } from '@xilytix/sysutils';
 import { addToGrow15ArrayUniquely } from '@xilytix/sysutils';
+import { AnchoredRecordsList } from '@xilytix/sysutils';
 import { anyBinarySearch } from '@xilytix/sysutils';
 import { AssertInternalError } from '@xilytix/sysutils';
 import { BehavioredColumnSettings } from '@xilytix/revgrid';
@@ -124,8 +125,7 @@ import { JsonValueArray } from '@xilytix/sysutils';
 import { Line } from '@xilytix/sysutils';
 import { LinedHoverCell } from '@xilytix/revgrid';
 import { ListChangedTypeId } from '@xilytix/revgrid';
-import { ListChangeTypeId } from '@xilytix/sysutils';
-import { LockOpenList as LockOpenList_2 } from '@xilytix/sysutils';
+import { LockItemByKeyList } from '@xilytix/sysutils';
 import { LockOpenListItem } from '@xilytix/sysutils';
 import { LockOpenManager } from '@xilytix/sysutils';
 import { Logger } from '@xilytix/sysutils';
@@ -7848,7 +7848,9 @@ export { earliestBinarySearch }
 //
 // @public (undocumented)
 export class EditableGridLayoutDefinitionColumn implements IndexedRecord {
-    constructor(field: GridField, fixed: boolean, initialIndex: Integer);
+    constructor(field: GridField, anchored: boolean, initialIndex: Integer);
+    // (undocumented)
+    readonly anchored: boolean;
     // (undocumented)
     readonly field: GridField;
     // (undocumented)
@@ -7857,8 +7859,6 @@ export class EditableGridLayoutDefinitionColumn implements IndexedRecord {
     get fieldName(): string;
     // (undocumented)
     get fieldSourceName(): string;
-    // (undocumented)
-    readonly fixed: boolean;
     // (undocumented)
     index: Integer;
     // (undocumented)
@@ -7946,57 +7946,17 @@ export namespace EditableGridLayoutDefinitionColumn {
 // Warning: (ae-missing-release-tag) "EditableGridLayoutDefinitionColumnList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class EditableGridLayoutDefinitionColumnList implements RecordList<EditableGridLayoutDefinitionColumn> {
+export class EditableGridLayoutDefinitionColumnList extends AnchoredRecordsList<EditableGridLayoutDefinitionColumn> {
     // (undocumented)
     appendFields(fields: readonly GridField[]): void;
     // (undocumented)
-    areAllIndexedRecordsFixed(recordIndices: Integer[]): boolean;
-    // (undocumented)
-    areSortedIndexedRecordsAllAtEnd(sortedRecordIndices: Integer[]): boolean;
-    // (undocumented)
-    areSortedIndexedRecordsAllAtStart(sortedRecordIndices: Integer[]): boolean;
-    // (undocumented)
-    clear(): void;
-    // (undocumented)
-    get count(): number;
-    // (undocumented)
     createGridLayoutDefinition(): RevGridLayoutDefinition;
-    // (undocumented)
-    get fixedColumnCount(): number;
-    // (undocumented)
-    getAt(index: number): EditableGridLayoutDefinitionColumn;
     // (undocumented)
     includesField(field: GridField): boolean;
     // (undocumented)
-    indexOf(record: EditableGridLayoutDefinitionColumn): Integer;
-    // (undocumented)
     indexOfGridField(gridField: GridField): Integer;
     // (undocumented)
-    insert(index: Integer, records: EditableGridLayoutDefinitionColumn[]): void;
-    // (undocumented)
     load(allowedFields: readonly GridField[], layoutDefinition: RevGridLayoutDefinition, fixedColumnCount: Integer): void;
-    // (undocumented)
-    move(fromIndex: Integer, toIndex: Integer, count: Integer): void;
-    // (undocumented)
-    moveIndexedRecordsOnePositionTowardsEndWithSquash(moveIndices: Integer[]): void;
-    // (undocumented)
-    moveIndexedRecordsOnePositionTowardsStartWithSquash(moveIndices: Integer[]): void;
-    // (undocumented)
-    moveIndexedRecordsToEnd(moveIndices: Integer[]): void;
-    // (undocumented)
-    moveIndexedRecordsToStart(moveIndices: Integer[]): void;
-    // (undocumented)
-    get records(): readonly EditableGridLayoutDefinitionColumn[];
-    // (undocumented)
-    remove(index: Integer, count: Integer): void;
-    // (undocumented)
-    removeIndexedRecords(removeIndices: Integer[]): void;
-    // (undocumented)
-    subscribeListChangeEvent(handler: RecordList.ListChangeEventHandler): number;
-    // (undocumented)
-    toArray(): readonly EditableGridLayoutDefinitionColumn[];
-    // (undocumented)
-    unsubscribeListChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
 }
 
 // Warning: (ae-missing-release-tag) "EditableGridLayoutDefinitionColumnModule" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -13720,8 +13680,6 @@ export namespace LatestTradingDayTradesDataItem {
 
 export { Line }
 
-export { ListChangeTypeId }
-
 // Warning: (ae-missing-release-tag) "LitIvemAlternateCodes" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "LitIvemAlternateCodes" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -15220,7 +15178,7 @@ export namespace LockerScanAttachedNotificationChannelList {
 // Warning: (ae-missing-release-tag) "LockOpenList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export abstract class LockOpenList<Item extends LockOpenListItem<Item, Error>, Error = string> extends CorrectnessBadness implements LockOpenList_2<Item, Error>, BadnessList<Item> {
+export abstract class LockOpenList<Item extends LockOpenListItem<Item, Error>, Error = string> extends CorrectnessBadness implements LockItemByKeyList<Item, Error>, BadnessList<Item> {
     // (undocumented)
     addItem(item: Item): void;
     // (undocumented)
@@ -24232,7 +24190,7 @@ export interface RevReferenceableDataSourceDefinitionsStoreService {
 }
 
 // @public (undocumented)
-export interface RevReferenceableDataSourcesService<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, RenderValueTypeId, RenderAttributeTypeId, Badness> extends LockOpenList_2<RevReferenceableDataSource<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, RenderValueTypeId, RenderAttributeTypeId, Badness>, RevDataSource.LockErrorIdPlusTryError> {
+export interface RevReferenceableDataSourcesService<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, RenderValueTypeId, RenderAttributeTypeId, Badness> extends LockItemByKeyList<RevReferenceableDataSource<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, RenderValueTypeId, RenderAttributeTypeId, Badness>, RevDataSource.LockErrorIdPlusTryError> {
     // (undocumented)
     getOrNew(definition: RevReferenceableDataSourceDefinition<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, RenderValueTypeId, RenderAttributeTypeId>): RevReferenceableDataSource<TableRecordSourceDefinitionTypeId, TableFieldSourceDefinitionTypeId, RenderValueTypeId, RenderAttributeTypeId, Badness>;
 }
@@ -24302,7 +24260,7 @@ export namespace RevReferenceableGridLayoutDefinition {
 // Warning: (ae-missing-release-tag) "RevReferenceableGridLayoutsService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface RevReferenceableGridLayoutsService extends LockOpenList_2<RevReferenceableGridLayout> {
+export interface RevReferenceableGridLayoutsService extends LockItemByKeyList<RevReferenceableGridLayout> {
     // (undocumented)
     getOrNew(definition: RevReferenceableGridLayoutDefinition): RevReferenceableGridLayout;
 }
