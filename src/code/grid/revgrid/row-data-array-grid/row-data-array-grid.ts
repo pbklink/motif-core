@@ -4,6 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
+import { RevFieldDefinition, RevFieldSourceDefinition } from '@xilytix/rev-data-source';
 import {
     DataRowArraySchemaServer,
     DatalessSubgrid,
@@ -12,11 +13,11 @@ import {
     SingleHeadingDataRowArrayServerSet,
     Subgrid
 } from '@xilytix/revgrid';
-import { SettingsService } from '../../../services/services-internal-api';
-import { GridFieldHorizontalAlign } from '../../../sys/sys-internal-api';
-import { GridField, GridFieldDefinition, GridFieldSourceDefinition } from '../../field/grid-field-internal-api';
-import { AdaptedRevgrid, SingleHeadingGridDataServer } from '../adapted-revgrid/grid-revgrid-adapted-revgrid-internal-api';
-import { AdaptedRevgridBehavioredColumnSettings } from '../settings/grid-revgrid-settings-internal-api';
+import { SettingsService } from '../../../services/internal-api';
+import { GridFieldHorizontalAlign } from '../../../sys/internal-api';
+import { GridField } from '../../field/internal-api';
+import { AdaptedRevgrid, SingleHeadingGridDataServer } from '../adapted-revgrid/internal-api';
+import { AdaptedRevgridBehavioredColumnSettings } from '../settings/internal-api';
 import { RowDataArrayGridDataServer } from './row-data-array-grid-data-server';
 import { RowDataArrayGridField } from './row-data-array-grid-field';
 
@@ -143,8 +144,8 @@ export namespace RowDataArrayGrid {
         defaultTextAlign: GridFieldHorizontalAlign,
         defaultWidth?:number,
     ) {
-        const definition = new GridFieldDefinition(
-            new GridFieldSourceDefinition(''),
+        const definition = new RevFieldDefinition(
+            new RevFieldSourceDefinition(''),
             sourcelessName,
             defaultHeading,
             defaultTextAlign,

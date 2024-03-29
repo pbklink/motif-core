@@ -4,9 +4,11 @@
  * License: motionite.trade/license/motif
  */
 
-import { Integer, LockOpenListItem, MultiEvent, UsableList, UsableListChangeTypeId } from '../../../sys/sys-internal-api';
-import { TextFormatterService } from '../../../text-format/text-format-internal-api';
-import { TableRecordSourceDefinitionFactoryService, UsableListTableRecordSourceDefinition } from './definition/grid-table-record-source-definition-internal-api';
+import { RevFieldCustomHeadingsService } from '@xilytix/rev-data-source';
+import { CorrectnessBadness, Integer, LockOpenListItem, MultiEvent, UsableList, UsableListChangeTypeId } from '../../../sys/internal-api';
+import { TextFormatterService } from '../../../text-format/internal-api';
+import { TableFieldSourceDefinitionCachingFactoryService } from '../field-source/internal-api';
+import { UsableListTableRecordSourceDefinition } from './definition/internal-api';
 import { TableRecordSource } from './table-record-source';
 
 export abstract class UsableListTableRecordSource<Record> extends TableRecordSource {
@@ -16,12 +18,16 @@ export abstract class UsableListTableRecordSource<Record> extends TableRecordSou
 
     constructor(
         textFormatterService: TextFormatterService,
-        tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService,
+        gridFieldCustomHeadingsService: RevFieldCustomHeadingsService,
+        tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService,
+        correctnessBadness: CorrectnessBadness,
         definition: UsableListTableRecordSourceDefinition<Record>,
     ) {
         super(
             textFormatterService,
-            tableRecordSourceDefinitionFactoryService,
+            gridFieldCustomHeadingsService,
+            tableFieldSourceDefinitionCachingFactoryService,
+            correctnessBadness,
             definition,
             definition.allowedFieldSourceDefinitionTypeIds,
         );

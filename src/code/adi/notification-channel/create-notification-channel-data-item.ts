@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { CreateNotificationChannelDataMessage, DataMessage, DataMessageTypeId } from '../common/adi-common-internal-api';
+import { CreateNotificationChannelDataMessage, DataMessage, DataMessageTypeId } from '../common/internal-api';
 import { NotificationChannelPublishDataItem } from './notification-channel-publish-data-item';
 
 export class CreateNotificationChannelDataItem extends NotificationChannelPublishDataItem {

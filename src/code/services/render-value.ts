@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { Decimal } from 'decimal.js-light';
+import { RevRenderValue } from '@xilytix/rev-data-source';
 import {
     ActiveFaultedStatusId,
     DayTradesDataItem,
@@ -16,27 +16,26 @@ import {
     RoutedIvemId,
     TradeAffectsId,
     TradeFlagId
-} from "../adi/adi-internal-api";
+} from "../adi/internal-api";
 import {
     CorrectnessId,
+    Decimal,
     Integer,
     PriceOrRemainder,
     SourceTzOffsetDate,
     SourceTzOffsetDateTime,
     newUndefinableDecimal
-} from '../sys/sys-internal-api';
-import { ColorSettings } from './settings/settings-internal-api';
-// import { DepthRecord } from './depth-record';
+} from '../sys/internal-api';
+import { ColorSettings } from './settings/internal-api';
 
-export abstract class RenderValue {
+export abstract class RenderValue implements RevRenderValue<RenderValue.TypeId, RenderValue.Attribute.TypeId> {
     formattedText: string | undefined;
 
     private _attributes: RenderValue.Attribute[] = [];
 
-    constructor(private _typeId: RenderValue.TypeId) { }
+    constructor(readonly typeId: RenderValue.TypeId) { }
 
-    get typeId() { return this._typeId; }
-    get attributes() { return this._attributes; }
+    get attributes(): readonly RenderValue.Attribute[] { return this._attributes; }
 
     addAttribute(value: RenderValue.Attribute) { this._attributes.push(value); }
     setAttributes(value: RenderValue.Attribute[]) { this._attributes = value; }
@@ -86,6 +85,7 @@ export namespace RenderValue {
         Enabled,
         Readonly,
         Valid,
+        Faulted,
         Modified,
         IsIndex,
         Visible,
@@ -95,6 +95,8 @@ export namespace RenderValue {
         PhysicalDelivery,
         Matched,
         // Enum
+        // eslint-disable-next-line @typescript-eslint/no-shadow
+        ActiveFaultedStatusId,
         TradingStateReasonId,
         // eslint-disable-next-line @typescript-eslint/no-shadow
         MarketId,
@@ -128,11 +130,11 @@ export namespace RenderValue {
         DeliveryBasisIdMyxLitIvemAttribute,
         DayTradesDataItemRecordTypeId,
         // eslint-disable-next-line @typescript-eslint/no-shadow
-        ScanStatusId,
         ScanCriteriaTypeId,
         ScanTargetTypeId,
         ScanFieldBooleanOperationId,
-        NotificationChannelSourceSettingsUrgency,
+        NotificationChannelSourceSettingsUrgencyId,
+        NotificationDistributionMethodId,
 
         // Array
         StringArray,
@@ -153,134 +155,133 @@ export namespace RenderValue {
         CountAndXrefs,
     }
 
-    export const enum AttributeId {
-        Correctness,
-        HigherLower,
-        BackgroundColor,
-        // eslint-disable-next-line @typescript-eslint/no-shadow
-        DepthRecord,
-        DepthCountXRefField,
-        DepthRecordInAuction,
-        GreyedOut,
-        Cancelled,
-        Canceller,
-        OwnOrder,
-        Advert,
-    }
-
     export interface Attribute {
-        readonly id: AttributeId;
+        readonly typeId: Attribute.TypeId;
     }
 
     export namespace Attribute {
-
+        // eslint-disable-next-line @typescript-eslint/no-shadow
+        export const enum TypeId {
+            Correctness,
+            HigherLower,
+            BackgroundColor,
+            // eslint-disable-next-line @typescript-eslint/no-shadow
+            DepthRecord,
+            DepthCountXRefField,
+            DepthRecordInAuction,
+            GreyedOut,
+            Cancelled,
+            Canceller,
+            OwnOrder,
+            Advert,
+        }
     }
 
     export interface CorrectnessAttribute extends Attribute {
-        readonly id: AttributeId.Correctness;
+        readonly typeId: Attribute.TypeId.Correctness;
         correctnessId: CorrectnessId;
     }
 
     export namespace DataCorrectnessAttribute {
         export const suspect: CorrectnessAttribute = {
-            id: AttributeId.Correctness,
+            typeId: Attribute.TypeId.Correctness,
             correctnessId: CorrectnessId.Suspect
         } as const;
 
         export const error: CorrectnessAttribute = {
-            id: AttributeId.Correctness,
+            typeId: Attribute.TypeId.Correctness,
             correctnessId: CorrectnessId.Error
         } as const;
     }
 
     export interface HigherLowerAttribute extends Attribute {
-        readonly id: AttributeId.HigherLower;
+        readonly typeId: Attribute.TypeId.HigherLower;
         higherLowerId: HigherLowerId;
     }
 
     export namespace HigherLowerAttribute {
         export const higher: HigherLowerAttribute = {
-            id: AttributeId.HigherLower,
+            typeId: Attribute.TypeId.HigherLower,
             higherLowerId: HigherLowerId.Higher
         } as const;
 
         export const lower: HigherLowerAttribute = {
-            id: AttributeId.HigherLower,
+            typeId: Attribute.TypeId.HigherLower,
             higherLowerId: HigherLowerId.Lower
         } as const;
     }
 
     export const backgroundColorAttribute: Attribute = {
-        id: AttributeId.BackgroundColor
+        typeId: Attribute.TypeId.BackgroundColor
     } as const;
 
     // export interface DepthRecordAttribute extends Attribute {
-    //     readonly id: AttributeId.DepthRecord;
+    //     readonly id: Attribute.TypeId.DepthRecord;
     //     orderSideId: OrderSideId;
     //     depthRecordTypeId: DepthRecord.TypeId;
     //     ownOrder: boolean;
     // }
 
     export interface DepthCountXRefFieldAttribute extends Attribute {
-        readonly id: AttributeId.DepthCountXRefField;
+        readonly typeId: Attribute.TypeId.DepthCountXRefField;
         isCountAndXrefs: boolean;
     }
 
     export namespace DepthCountXRefFieldAttribute {
         export const countAndXrefs: DepthCountXRefFieldAttribute = {
-            id: AttributeId.DepthCountXRefField,
+            typeId: Attribute.TypeId.DepthCountXRefField,
             isCountAndXrefs: true,
         } as const;
 
         export const xref: DepthCountXRefFieldAttribute = {
-            id: AttributeId.DepthCountXRefField,
+            typeId: Attribute.TypeId.DepthCountXRefField,
             isCountAndXrefs: false,
         } as const;
     }
 
     export interface DepthRecordInAuctionAttribute extends Attribute {
-        readonly id: AttributeId.DepthRecordInAuction;
+        readonly typeId: Attribute.TypeId.DepthRecordInAuction;
         partialAuctionProportion: number | undefined;
     }
 
     export interface GreyedOutAttribute extends Attribute {
-        readonly id: AttributeId.GreyedOut;
+        readonly typeId: Attribute.TypeId.GreyedOut;
     }
 
     export const greyedOutAttribute: GreyedOutAttribute = {
-        id: AttributeId.GreyedOut
+        typeId: Attribute.TypeId.GreyedOut
     } as const;
 
     export interface CancelledAttribute extends Attribute {
-        readonly id: AttributeId.Cancelled;
+        readonly typeId: Attribute.TypeId.Cancelled;
     }
 
     export const cancelledAttribute: CancelledAttribute = {
-        id: AttributeId.Cancelled
+        typeId: Attribute.TypeId.Cancelled
     } as const;
 
     export interface CancellerAttribute extends Attribute {
-        readonly id: AttributeId.Canceller;
+        readonly typeId: Attribute.TypeId.Canceller;
     }
 
     export const cancellerAttribute: CancellerAttribute = {
-        id: AttributeId.Canceller
+        typeId: Attribute.TypeId.Canceller
     } as const;
 
     export interface OwnOrderAttribute extends Attribute {
-        readonly id: AttributeId.OwnOrder;
+        readonly typeId: Attribute.TypeId.OwnOrder;
     }
 
     export const ownOrderAttribute: OwnOrderAttribute = {
-        id: AttributeId.OwnOrder
+        typeId: Attribute.TypeId.OwnOrder
     } as const;
 
     export interface AdvertAttribute extends Attribute {
-        readonly id: AttributeId.Advert;
+        readonly typeId: Attribute.TypeId.Advert;
     }
 
     export const advertAttribute: AdvertAttribute = {
-        id: AttributeId.Advert
+        typeId: Attribute.TypeId.Advert
     } as const;
 }
 
@@ -499,6 +500,12 @@ export class MatchedRenderValue extends BooleanRenderValue {
 export class EnumRenderValue extends GenericRenderValue<Integer> {
 }
 
+export class ActiveFaultedStatusIdRenderValue extends EnumRenderValue {
+    constructor(data: ActiveFaultedStatusId | undefined) {
+        super(data, RenderValue.TypeId.ActiveFaultedStatusId);
+    }
+}
+
 export class MarketIdRenderValue extends EnumRenderValue {
     constructor(data: MarketId | undefined) {
         super(data, RenderValue.TypeId.MarketId);
@@ -532,12 +539,6 @@ export class ColorSettingsItemStateIdRenderValue extends EnumRenderValue {
 export class DayTradesDataItemRecordTypeIdRenderValue extends EnumRenderValue {
     constructor(data: DayTradesDataItem.Record.TypeId | undefined) {
         super(data, RenderValue.TypeId.DayTradesDataItemRecordTypeId);
-    }
-}
-
-export class ScanStatusIdRenderValue extends EnumRenderValue {
-    constructor(data: ActiveFaultedStatusId | undefined) {
-        super(data, RenderValue.TypeId.ScanStatusId);
     }
 }
 

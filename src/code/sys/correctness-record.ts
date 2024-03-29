@@ -5,7 +5,7 @@
  */
 
 import { CorrectnessId } from './correctness';
-import { MultiEvent } from './multi-event';
+import { MultiEvent } from './xilytix-sysutils';
 
 export interface CorrectnessRecord {
     readonly correctnessId: CorrectnessId;

@@ -4,38 +4,41 @@
  * License: motionite.trade/license/motif
  */
 
-import { RankedLitIvemIdListDirectory } from '../../../../ranked-lit-ivem-id-list/ranked-lit-ivem-id-list-internal-api';
-import { RankedLitIvemIdListDirectoryItem } from '../../../../services/services-internal-api';
-import { PickEnum } from '../../../../sys/sys-internal-api';
-import { GridFieldCustomHeadingsService } from '../../../field/grid-field-internal-api';
-import { GridLayoutDefinition } from '../../../layout/grid-layout-internal-api';
-import { TableFieldSourceDefinition, TableFieldSourceDefinitionCachedFactoryService } from '../../field-source/grid-table-field-source-internal-api';
+import { RevFieldCustomHeadingsService, RevGridLayoutDefinition } from '@xilytix/rev-data-source';
+import { RankedLitIvemIdListDirectory } from '../../../../ranked-lit-ivem-id-list/internal-api';
+import { RankedLitIvemIdListDirectoryItem } from '../../../../services/internal-api';
+import { PickEnum } from '../../../../sys/internal-api';
+import {
+    RankedLitIvemIdListDirectoryItemTableFieldSourceDefinition,
+    TableFieldSourceDefinition,
+    TableFieldSourceDefinitionCachingFactoryService,
+} from '../../field-source/internal-api';
 import { TableRecordSourceDefinition } from './table-record-source-definition';
 
 /** @public */
 export class RankedLitIvemIdListDirectoryItemTableRecordSourceDefinition extends TableRecordSourceDefinition {
     constructor(
-        customHeadingsService: GridFieldCustomHeadingsService,
-        tableFieldSourceDefinitionCachedFactoryService: TableFieldSourceDefinitionCachedFactoryService,
+        customHeadingsService: RevFieldCustomHeadingsService,
+        tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService,
         readonly listDirectory: RankedLitIvemIdListDirectory,
     ) {
         super(
             customHeadingsService,
-            tableFieldSourceDefinitionCachedFactoryService,
+            tableFieldSourceDefinitionCachingFactoryService,
             TableRecordSourceDefinition.TypeId.RankedLitIvemIdListDirectoryItem,
             RankedLitIvemIdListDirectoryItemTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
         );
     }
 
     override createDefaultLayoutDefinition() {
-        const rankedLitIvemIdListDirectoryItemFieldSourceDefinition = this.tableFieldSourceDefinitionCachedFactoryService.rankedLitIvemIdListDirectoryItem;
+        const rankedLitIvemIdListDirectoryItemFieldSourceDefinition = RankedLitIvemIdListDirectoryItemTableFieldSourceDefinition.get(this.tableFieldSourceDefinitionCachingFactoryService);
 
         const fieldNames = new Array<string>();
 
         fieldNames.push(rankedLitIvemIdListDirectoryItemFieldSourceDefinition.getSupportedFieldNameById(RankedLitIvemIdListDirectoryItem.FieldId.Name));
         fieldNames.push(rankedLitIvemIdListDirectoryItemFieldSourceDefinition.getSupportedFieldNameById(RankedLitIvemIdListDirectoryItem.FieldId.TypeId));
 
-        return GridLayoutDefinition.createFromFieldNames(fieldNames);
+        return RevGridLayoutDefinition.createFromFieldNames(fieldNames);
     }
 }
 

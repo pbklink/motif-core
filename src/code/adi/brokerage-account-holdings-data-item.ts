@@ -4,9 +4,9 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, Integer, Logger, UnreachableCaseError, UsableListChangeTypeId } from '../sys/sys-internal-api';
+import { AssertInternalError, ErrorCodeLogger, Integer, UnreachableCaseError, UsableListChangeTypeId } from '../sys/internal-api';
 import { BrokerageAccountGroupHoldingList } from './brokerage-account-group-holding-list';
-import { AurcChangeTypeId, DataMessage, DataMessageTypeId, HoldingsDataMessage } from './common/adi-common-internal-api';
+import { AurcChangeTypeId, DataMessage, DataMessageTypeId, HoldingsDataMessage } from './common/internal-api';
 import { Holding } from './holding';
 import { RecordsBrokerageAccountSubscriptionDataItem } from './records-brokerage-account-subscription-data-item';
 
@@ -79,7 +79,7 @@ export class BrokerageAccountHoldingsDataItem extends RecordsBrokerageAccountSub
                         addChangeData.code, addChangeData.accountId, addChangeData.environmentId);
                     if (this.hasRecord(addMapKey)) {
                         addStartMsgIdx = this.checkApplyAdd(msg.holdingChangeRecords, addStartMsgIdx, msgHoldingIdx);
-                        Logger.logDataError('HDIPOMA38877',
+                        ErrorCodeLogger.logDataError('HDIPOMA38877',
                             `${addChangeData.exchangeId}, ${addChangeData.code}, ${addChangeData.accountId}`);
                     } else {
                         if (addStartMsgIdx < 0) {
@@ -96,7 +96,7 @@ export class BrokerageAccountHoldingsDataItem extends RecordsBrokerageAccountSub
                     const updateHolding = this.getRecordByMapKey(updateMapKey);
 
                     if (updateHolding === undefined) {
-                        Logger.logDataError('HDIPOMAU11776', `${updateChangeData.accountId}`);
+                        ErrorCodeLogger.logDataError('HDIPOMAU11776', `${updateChangeData.accountId}`);
                     } else {
                         if (!HoldingsDataMessage.isMarketChangeData(updateChangeData)) {
                             throw new AssertInternalError('BAHDIPHM13888234235');
@@ -113,7 +113,7 @@ export class BrokerageAccountHoldingsDataItem extends RecordsBrokerageAccountSub
                         removeChangeData.accountId, removeChangeData.environmentId);
                     const holdingIdx = this.indexOfRecordByMapKey(removeMapKey);
                     if (holdingIdx < 0) {
-                        Logger.logDataError('HDIPOMR74332', `Holding not found: ${JSON.stringify(removeChangeData)}`);
+                        ErrorCodeLogger.logDataError('HDIPOMR74332', `Holding not found: ${JSON.stringify(removeChangeData)}`);
                     } else {
                         this.checkUsableNotifyListChange(UsableListChangeTypeId.Remove, holdingIdx, 1);
                         this.removeRecord(holdingIdx);

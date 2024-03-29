@@ -5,11 +5,11 @@
  */
 
 import { CachedCanvasRenderingContext2D, DataServer, DatalessViewCell, Rectangle, SelectionAreaTypeId } from '@xilytix/revgrid';
-import { ColorScheme, ColorSettings, RenderValue, ScalarSettings, SettingsService } from '../../../../services/services-internal-api';
-import { IndexSignatureHack } from '../../../../sys/sys-internal-api';
-import { GridField } from '../../../field/grid-field-internal-api';
-import { AdaptedRevgrid } from '../../adapted-revgrid/grid-revgrid-adapted-revgrid-internal-api';
-import { AdaptedRevgridBehavioredColumnSettings, AdaptedRevgridBehavioredGridSettings } from '../../settings/grid-revgrid-settings-internal-api';
+import { ColorScheme, ColorSettings, RenderValue, ScalarSettings, SettingsService } from '../../../../services/internal-api';
+import { IndexSignatureHack } from '../../../../sys/internal-api';
+import { GridField } from '../../../field/internal-api';
+import { AdaptedRevgrid } from '../../adapted-revgrid/internal-api';
+import { AdaptedRevgridBehavioredColumnSettings, AdaptedRevgridBehavioredGridSettings } from '../../settings/internal-api';
 
 /** @public */
 export abstract class RenderValueCellPainter {

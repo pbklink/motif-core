@@ -4,13 +4,13 @@
  * License: motionite.trade/license/motif
  */
 
-import { Decimal } from 'decimal.js-light';
 import {
     assert,
     Badness,
     compareInteger,
     ComparisonResult,
     CorrectnessBadness,
+    Decimal,
     Integer,
     mSecsPerMin,
     MultiEvent,
@@ -20,7 +20,7 @@ import {
     SysTick,
     UnreachableCaseError,
     UsableListChangeTypeId
-} from '../sys/sys-internal-api';
+} from '../sys/internal-api';
 import {
     AuiChangeTypeId, DataDefinition,
     DataMessage,
@@ -31,7 +31,7 @@ import {
     TradeFlagId,
     TradesDataDefinition,
     TradesDataMessage
-} from './common/adi-common-internal-api';
+} from './common/internal-api';
 import { MarketSubscriptionDataItem } from './market-subscription-data-item';
 
 export class TradesDataItem extends MarketSubscriptionDataItem implements TradesDataItem.UsableBadnessRecordAccess {
@@ -437,8 +437,8 @@ export namespace TradesDataItem {
 
         getRecord(idx: Integer): Record;
 
-        subscribeBadnessChangeEvent(handler: CorrectnessBadness.BadnessChangeEventHandler): MultiEvent.DefinedSubscriptionId;
-        unsubscribeBadnessChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+        subscribeBadnessChangedEvent(handler: CorrectnessBadness.BadnessChangedEventHandler): MultiEvent.DefinedSubscriptionId;
+        unsubscribeBadnessChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
 
         subscribeListChangeEvent(handler: TradesDataItem.ListChangeEventHandler): MultiEvent.DefinedSubscriptionId;
         unsubscribeListChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;

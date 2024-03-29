@@ -4,10 +4,10 @@
  * License: motionite.trade/license/motif
  */
 
-import { ExchangeId, IvemId } from '../adi/adi-internal-api';
-import { SymbolsService } from '../services/services-internal-api';
-import { MultiEvent } from '../sys/sys-internal-api';
-import { UiAction } from './ui-action';
+import { UiAction } from '@xilytix/ui-action';
+import { ExchangeId, IvemId } from '../adi/internal-api';
+import { SymbolsService } from '../services/internal-api';
+import { MultiEvent } from '../sys/internal-api';
 
 export class IvemIdUiAction extends UiAction {
     private _value: IvemId | undefined;

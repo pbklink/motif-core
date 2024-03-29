@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { Decimal } from 'decimal.js-light';
+import { RevFieldCustomHeadingsService } from '@xilytix/rev-data-source';
 import {
     AdiService,
     CallOrPutId,
@@ -14,26 +14,28 @@ import {
     SearchSymbolsLitIvemFullDetail,
     SymbolFieldId,
     SymbolsDataItem
-} from '../../../adi/adi-internal-api';
-import { CallPut } from '../../../services/services-internal-api';
+} from '../../../adi/internal-api';
+import { CallPut } from '../../../services/internal-api';
 import {
     AssertInternalError,
     Badness,
-    Integer, LockOpenListItem,
-    Logger,
+    CorrectnessBadness,
+    ErrorCodeLogger,
+    Integer,
+    LockOpenListItem,
     MultiEvent,
     UnreachableCaseError,
-    UsableListChangeTypeId
-} from '../../../sys/sys-internal-api';
-import { TextFormatterService } from '../../../text-format/text-format-internal-api';
+    UsableListChangeTypeId,
+    newDecimal
+} from '../../../sys/internal-api';
+import { TextFormatterService } from '../../../text-format/internal-api';
 import {
-    TableFieldSourceDefinition
-} from "../field-source/grid-table-field-source-internal-api";
-import { CallPutTableRecordDefinition, TableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
-import { TableRecord } from '../record/grid-table-record-internal-api';
+    TableFieldSourceDefinition, TableFieldSourceDefinitionCachingFactoryService
+} from "../field-source/internal-api";
+import { CallPutTableRecordDefinition } from '../record-definition/internal-api';
+import { TableRecord } from '../record/internal-api';
 import { CallPutTableValueSource, SecurityDataItemTableValueSource } from '../value-source/internal-api';
 import { CallPutFromUnderlyingTableRecordSourceDefinition } from './definition/call-put-from-underlying-table-record-source-definition';
-import { TableRecordSourceDefinitionFactoryService } from './definition/grid-table-record-source-definition-internal-api';
 import { SingleDataItemTableRecordSource } from './single-data-item-table-record-source';
 
 /** @public */
@@ -47,17 +49,21 @@ export class CallPutFromUnderlyingTableRecordSource extends SingleDataItemTableR
     private _dataItemSubscribed = false;
     // private _litIvemDetails: LitIvemDetail[];
     private _dataItemListChangeEventSubscriptionId: MultiEvent.SubscriptionId;
-    private _dataItemBadnessChangeEventSubscriptionId: MultiEvent.SubscriptionId;
+    private _dataItemBadnessChangedEventSubscriptionId: MultiEvent.SubscriptionId;
 
     constructor(
         private readonly _adiService: AdiService,
         textFormatterService: TextFormatterService,
-        tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService,
+        gridFieldCustomHeadingsService: RevFieldCustomHeadingsService,
+        tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService,
+        correctnessBadness: CorrectnessBadness,
         definition: CallPutFromUnderlyingTableRecordSourceDefinition,
     ) {
         super(
             textFormatterService,
-            tableRecordSourceDefinitionFactoryService,
+            gridFieldCustomHeadingsService,
+            tableFieldSourceDefinitionCachingFactoryService,
+            correctnessBadness,
             definition,
             CallPutFromUnderlyingTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
         );
@@ -65,13 +71,17 @@ export class CallPutFromUnderlyingTableRecordSource extends SingleDataItemTableR
     }
 
     override createDefinition(): CallPutFromUnderlyingTableRecordSourceDefinition {
-        return this.tableRecordSourceDefinitionFactoryService.createCallPutFromUnderlying(this._underlyingIvemId.createCopy());
+        return new CallPutFromUnderlyingTableRecordSourceDefinition(
+            this._gridFieldCustomHeadingsService,
+            this._tableFieldSourceDefinitionCachingFactoryService,
+            this._underlyingIvemId.createCopy(),
+        );
     }
 
     override createRecordDefinition(idx: Integer): CallPutTableRecordDefinition {
         const record = this._recordList[idx];
         return {
-            typeId: TableRecordDefinition.TypeId.CallPut,
+            typeId: TableFieldSourceDefinition.TypeId.CallPut,
             mapKey: record.createKey().mapKey,
             record,
         };
@@ -141,8 +151,8 @@ export class CallPutFromUnderlyingTableRecordSource extends SingleDataItemTableR
         this._dataItemListChangeEventSubscriptionId = this._dataItem.subscribeListChangeEvent(
             (listChangeTypeId, idx, count) => { this.handleDataItemListChangeEvent(listChangeTypeId, idx, count); }
         );
-        this._dataItemBadnessChangeEventSubscriptionId = this._dataItem.subscribeBadnessChangeEvent(
-            () => { this.handleDataItemBadnessChangeEvent(); }
+        this._dataItemBadnessChangedEventSubscriptionId = this._dataItem.subscribeBadnessChangedEvent(
+            () => { this.handleDataItemBadnessChangedEvent(); }
         );
 
         super.openLocked(opener);
@@ -169,8 +179,8 @@ export class CallPutFromUnderlyingTableRecordSource extends SingleDataItemTableR
         } else {
             this._dataItem.unsubscribeListChangeEvent(this._dataItemListChangeEventSubscriptionId);
             this._dataItemListChangeEventSubscriptionId = undefined;
-            this._dataItem.unsubscribeBadnessChangeEvent(this._dataItemBadnessChangeEventSubscriptionId);
-            this._dataItemBadnessChangeEventSubscriptionId = undefined;
+            this._dataItem.unsubscribeBadnessChangedEvent(this._dataItemBadnessChangedEventSubscriptionId);
+            this._dataItemBadnessChangedEventSubscriptionId = undefined;
 
             super.closeLocked(opener);
 
@@ -202,7 +212,7 @@ export class CallPutFromUnderlyingTableRecordSource extends SingleDataItemTableR
         this.processDataItemListChange(listChangeTypeId, idx, count);
     }
 
-    private handleDataItemBadnessChangeEvent() {
+    private handleDataItemBadnessChangedEvent() {
         this.checkSetUnusable(this._dataItem.badness);
     }
 
@@ -274,20 +284,20 @@ export class CallPutFromUnderlyingTableRecordSource extends SingleDataItemTableR
                     const existingCallPut = newRecordList[existingIndex];
                     const callOrPutId = symbolDetail.callOrPutId;
                     if (callOrPutId === undefined) {
-                        Logger.logDataError('CPFUTSUCPFSU22995', symbolDetail.litIvemId.name);
+                        ErrorCodeLogger.logDataError('CPFUTSUCPFSU22995', symbolDetail.litIvemId.name);
                     } else {
                         const litIvemId = symbolDetail.litIvemId;
                         switch (callOrPutId) {
                             case CallOrPutId.Call:
                                 if (existingCallPut.callLitIvemId !== undefined) {
-                                    Logger.logDataError('CPUATSUPCPFSC90445', `${existingCallPut.callLitIvemId.name} ${litIvemId.name}`);
+                                    ErrorCodeLogger.logDataError('CPUATSUPCPFSC90445', `${existingCallPut.callLitIvemId.name} ${litIvemId.name}`);
                                 } else {
                                     existingCallPut.callLitIvemId = litIvemId;
                                 }
                                 break;
                             case CallOrPutId.Put:
                                 if (existingCallPut.putLitIvemId !== undefined) {
-                                    Logger.logDataError('CPUATSUPCPFSP33852', `${existingCallPut.putLitIvemId.name} ${litIvemId.name}`);
+                                    ErrorCodeLogger.logDataError('CPUATSUPCPFSP33852', `${existingCallPut.putLitIvemId.name} ${litIvemId.name}`);
                                 } else {
                                     existingCallPut.putLitIvemId = litIvemId;
                                 }
@@ -307,12 +317,12 @@ export class CallPutFromUnderlyingTableRecordSource extends SingleDataItemTableR
     private createKeyFromSymbolDetail(symbolInfo: SymbolsDataItem.Record): CallPut.Key | undefined {
         const exercisePrice = symbolInfo.strikePrice;
         if (exercisePrice === undefined) {
-            Logger.logDataError('CPFUTSCKFSP28875', symbolInfo.litIvemId.name);
+            ErrorCodeLogger.logDataError('CPFUTSCKFSP28875', symbolInfo.litIvemId.name);
             return undefined;
         } else {
             const expiryDate = symbolInfo.expiryDate;
             if (expiryDate === undefined) {
-                Logger.logDataError('CPFUTSCKFSD18557', symbolInfo.litIvemId.name);
+                ErrorCodeLogger.logDataError('CPFUTSCKFSD18557', symbolInfo.litIvemId.name);
                 return undefined;
             } else {
                 const litId = symbolInfo.litIvemId.litId;
@@ -327,7 +337,7 @@ export class CallPutFromUnderlyingTableRecordSource extends SingleDataItemTableR
         const litId = key.litId;
         const callOrPutId = symbolInfo.callOrPutId;
         if (callOrPutId === undefined) {
-            Logger.logDataError('CPFUTSCCPFKASCP22887', symbolInfo.litIvemId.name);
+            ErrorCodeLogger.logDataError('CPFUTSCCPFKASCP22887', symbolInfo.litIvemId.name);
             return undefined;
         } else {
             const litIvemId = symbolInfo.litIvemId;
@@ -345,17 +355,17 @@ export class CallPutFromUnderlyingTableRecordSource extends SingleDataItemTableR
             }
             const symbolInfoExerciseTypeId = symbolInfo.exerciseTypeId;
             if (symbolInfoExerciseTypeId === undefined) {
-                Logger.logDataError('CPFUTSCCPFKASE99811', symbolInfo.name);
+                ErrorCodeLogger.logDataError('CPFUTSCCPFKASE99811', symbolInfo.name);
                 return undefined;
             } else {
                 const exerciseTypeId = symbolInfoExerciseTypeId;
 
                 const symbolInfoContractMultipler = symbolInfo.contractSize;
                 if (symbolInfoContractMultipler === undefined) {
-                    Logger.logDataError('CPFUTSCCPFKASC44477', symbolInfo.litIvemId.name);
+                    ErrorCodeLogger.logDataError('CPFUTSCCPFKASC44477', symbolInfo.litIvemId.name);
                     return undefined;
                 } else {
-                    const contractMultiplier = new Decimal(symbolInfoContractMultipler);
+                    const contractMultiplier = newDecimal(symbolInfoContractMultipler);
                     // currently do not need underlyingIvemId or underlyingIsIndex
                     return new CallPut(
                         exercisePrice,

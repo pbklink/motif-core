@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { CommaText, Integer, MapKey, UnreachableCaseError } from '../../sys/sys-internal-api';
+import { CommaText, Integer, MapKey, UnreachableCaseError } from '../../sys/internal-api';
 import { PublisherSubscriptionDataDefinition } from './data-definition';
 
 export interface AdiPublisherSubscription {

@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { KeyedCorrectnessSettableList, KeyedCorrectnessSettableListItem } from "../../../sys/sys-internal-api";
+import { KeyedCorrectnessSettableList, KeyedCorrectnessSettableListItem } from "../../../sys/internal-api";
 import { SubscribeBadnessListTableRecordSource } from './subscribe-badness-list-table-record-source';
 
 export abstract class KeyedCorrectnessSettableRecordTableRecordSource<

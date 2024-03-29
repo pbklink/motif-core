@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { StringId, Strings } from '../res/res-internal-api';
+import { StringId, Strings } from '../res/internal-api';
 import {
     AssertInternalError,
     Correctness,
@@ -19,7 +19,7 @@ import {
     SourceTzOffsetDate,
     SourceTzOffsetDateTime,
     isUndefinableArrayEqualUniquely
-} from "../sys/sys-internal-api";
+} from "../sys/internal-api";
 import {
     DataEnvironmentId,
     FeedStatusId,
@@ -28,7 +28,7 @@ import {
     MarketsDataMessage,
     TradingState,
     TradingStates
-} from './common/adi-common-internal-api';
+} from './common/internal-api';
 import { DataItem } from './data-item/internal-api';
 import { TradingMarketBoard, TradingMarketBoards } from './trading-market-board';
 import { TradingStatesFetcher } from './trading-states-fetcher';

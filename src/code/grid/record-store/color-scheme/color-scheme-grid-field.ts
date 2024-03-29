@@ -5,7 +5,8 @@
  */
 
 import { isReadable as TinyColorIsReadable, readability as TinyColorReadability } from '@ctrl/tinycolor';
-import { StringId, Strings } from '../../../res/res-internal-api';
+import { RevFieldDefinition, RevFieldSourceDefinition, RevGridLayoutDefinition } from '@xilytix/rev-data-source';
+import { StringId, Strings } from '../../../res/internal-api';
 import {
     ColorRenderValue,
     ColorScheme,
@@ -16,20 +17,19 @@ import {
     NumberRenderValue,
     RenderValue,
     StringRenderValue
-} from '../../../services/services-internal-api';
+} from '../../../services/internal-api';
 import {
     GridFieldHorizontalAlign,
     GridRevRecordField,
     UnreachableCaseError
-} from "../../../sys/sys-internal-api";
-import { GridField, GridFieldDefinition, GridFieldSourceDefinition } from '../../field/grid-field-internal-api';
-import { GridLayoutDefinition } from '../../layout/grid-layout-internal-api';
+} from "../../../sys/internal-api";
+import { GridField } from '../../field/internal-api';
 import { ColorSchemeGridRecordStore } from './color-scheme-grid-record-store';
 
 export abstract class ColorSchemeGridField extends GridField implements GridRevRecordField {
     constructor(
         private readonly _colorSettings: ColorSettings,
-        definition: GridFieldDefinition,
+        definition: RevFieldDefinition,
     ) {
         super(definition);
     }
@@ -76,7 +76,7 @@ export namespace ColorSchemeGridField {
         FieldName.IsReadable,
     ];
 
-    export const sourceDefinition = new GridFieldSourceDefinition('ColorScheme');
+    export const sourceDefinition = new RevFieldSourceDefinition('ColorScheme');
 
     export function createField(name: FieldName, colorSettings: ColorSettings) {
         switch (name) {
@@ -112,25 +112,25 @@ export namespace ColorSchemeGridField {
         ];
 
         const count = sourcelessFieldNames.length;
-        const columns = new Array<GridLayoutDefinition.Column>(count);
+        const columns = new Array<RevGridLayoutDefinition.Column>(count);
         for (let i = 0; i < count; i++) {
             const sourceName = ColorSchemeGridField.sourceDefinition.name;
             const sourcelessFieldName = sourcelessFieldNames[i];
-            const fieldName = GridFieldDefinition.composeName(sourceName, sourcelessFieldName);
-            const column: GridLayoutDefinition.Column = {
+            const fieldName = RevFieldDefinition.Name.compose(sourceName, sourcelessFieldName);
+            const column: RevGridLayoutDefinition.Column = {
                 fieldName,
                 visible: undefined,
                 autoSizableWidth: undefined,
             };
             columns[i] = column;
         }
-        return new GridLayoutDefinition(columns);
+        return new RevGridLayoutDefinition(columns);
     }
 }
 
 export class ItemIdColorSchemeGridField extends ColorSchemeGridField {
     constructor(colorSettings: ColorSettings) {
-        const definition = new GridFieldDefinition(
+        const definition = new RevFieldDefinition(
             ColorSchemeGridField.sourceDefinition,
             ColorSchemeGridField.FieldName.ItemId,
             Strings[StringId.ColorGridHeading_ItemId],
@@ -146,7 +146,7 @@ export class ItemIdColorSchemeGridField extends ColorSchemeGridField {
 
 export class NameColorSchemeGridField extends ColorSchemeGridField {
     constructor(colorSettings: ColorSettings) {
-        const definition = new GridFieldDefinition(
+        const definition = new RevFieldDefinition(
             ColorSchemeGridField.sourceDefinition,
             ColorSchemeGridField.FieldName.Name,
             Strings[StringId.ColorGridHeading_Name],
@@ -162,7 +162,7 @@ export class NameColorSchemeGridField extends ColorSchemeGridField {
 
 export class DisplayColorSchemeGridField extends ColorSchemeGridField {
     constructor(colorSettings: ColorSettings) {
-        const definition = new GridFieldDefinition(
+        const definition = new RevFieldDefinition(
             ColorSchemeGridField.sourceDefinition,
             ColorSchemeGridField.FieldName.Display,
             Strings[StringId.ColorGridHeading_Display],
@@ -178,7 +178,7 @@ export class DisplayColorSchemeGridField extends ColorSchemeGridField {
 
 export class ItemBkgdColorTextColorSchemeGridField extends ColorSchemeGridField {
     constructor(colorSettings: ColorSettings) {
-        const definition = new GridFieldDefinition(
+        const definition = new RevFieldDefinition(
             ColorSchemeGridField.sourceDefinition,
             ColorSchemeGridField.FieldName.ItemBkgdColorText,
             Strings[StringId.ColorGridHeading_ItemBkgdColorText],
@@ -194,7 +194,7 @@ export class ItemBkgdColorTextColorSchemeGridField extends ColorSchemeGridField 
 
 export class ResolvedBkgdColorTextColorSchemeGridField extends ColorSchemeGridField {
     constructor(colorSettings: ColorSettings) {
-        const definition = new GridFieldDefinition(
+        const definition = new RevFieldDefinition(
             ColorSchemeGridField.sourceDefinition,
             ColorSchemeGridField.FieldName.ResolvedBkgdColorText,
             Strings[StringId.ColorGridHeading_ResolvedBkgdColorText],
@@ -216,7 +216,7 @@ export class ResolvedBkgdColorTextColorSchemeGridField extends ColorSchemeGridFi
             case ColorSettings.ItemStateId.Inherit:
                 value = this.colorSettings.getBkgd(record.itemId);
                 attribute = {
-                    id: RenderValue.AttributeId.GreyedOut,
+                    typeId: RenderValue.Attribute.TypeId.GreyedOut,
                 };
                 break;
             case ColorSettings.ItemStateId.Value:
@@ -238,7 +238,7 @@ export class ResolvedBkgdColorTextColorSchemeGridField extends ColorSchemeGridFi
 
 export class ItemForeColorTextColorSchemeGridField extends ColorSchemeGridField {
     constructor(colorSettings: ColorSettings) {
-        const definition = new GridFieldDefinition(
+        const definition = new RevFieldDefinition(
             ColorSchemeGridField.sourceDefinition,
             ColorSchemeGridField.FieldName.ItemForeColorText,
             Strings[StringId.ColorGridHeading_ItemForeColorText],
@@ -254,7 +254,7 @@ export class ItemForeColorTextColorSchemeGridField extends ColorSchemeGridField 
 
 export class ResolvedForeColorTextColorSchemeGridField extends ColorSchemeGridField {
     constructor(colorSettings: ColorSettings) {
-        const definition = new GridFieldDefinition(
+        const definition = new RevFieldDefinition(
             ColorSchemeGridField.sourceDefinition,
             ColorSchemeGridField.FieldName.ResolvedForeColorText,
             Strings[StringId.ColorGridHeading_ResolvedForeColorText],
@@ -276,7 +276,7 @@ export class ResolvedForeColorTextColorSchemeGridField extends ColorSchemeGridFi
             case ColorSettings.ItemStateId.Inherit:
                 value = this.colorSettings.getFore(record.itemId);
                 attribute = {
-                    id: RenderValue.AttributeId.GreyedOut,
+                    typeId: RenderValue.Attribute.TypeId.GreyedOut,
                 };
                 break;
             case ColorSettings.ItemStateId.Value:
@@ -298,7 +298,7 @@ export class ResolvedForeColorTextColorSchemeGridField extends ColorSchemeGridFi
 
 export class ItemBkgdColorColorSchemeGridField extends ColorSchemeGridField {
     constructor(colorSettings: ColorSettings) {
-        const definition = new GridFieldDefinition(
+        const definition = new RevFieldDefinition(
             ColorSchemeGridField.sourceDefinition,
             ColorSchemeGridField.FieldName.ItemBkgdColor,
             Strings[StringId.ColorGridHeading_ItemBkgdColor],
@@ -314,7 +314,7 @@ export class ItemBkgdColorColorSchemeGridField extends ColorSchemeGridField {
 
 export class ResolvedBkgdColorColorSchemeGridField extends ColorSchemeGridField {
     constructor(colorSettings: ColorSettings) {
-        const definition = new GridFieldDefinition(
+        const definition = new RevFieldDefinition(
             ColorSchemeGridField.sourceDefinition,
             ColorSchemeGridField.FieldName.ResolvedBkgdColor,
             Strings[StringId.ColorGridHeading_ResolvedBkgdColor],
@@ -330,7 +330,7 @@ export class ResolvedBkgdColorColorSchemeGridField extends ColorSchemeGridField 
 
 export class ItemForeColorColorSchemeGridField extends ColorSchemeGridField {
     constructor(colorSettings: ColorSettings) {
-        const definition = new GridFieldDefinition(
+        const definition = new RevFieldDefinition(
             ColorSchemeGridField.sourceDefinition,
             ColorSchemeGridField.FieldName.ItemForeColor,
             Strings[StringId.ColorGridHeading_ItemForeColor],
@@ -346,7 +346,7 @@ export class ItemForeColorColorSchemeGridField extends ColorSchemeGridField {
 
 export class ResolvedForeColorColorSchemeGridField extends ColorSchemeGridField {
     constructor(colorSettings: ColorSettings) {
-        const definition = new GridFieldDefinition(
+        const definition = new RevFieldDefinition(
             ColorSchemeGridField.sourceDefinition,
             ColorSchemeGridField.FieldName.ResolvedForeColor,
             Strings[StringId.ColorGridHeading_ResolvedForeColor],
@@ -362,7 +362,7 @@ export class ResolvedForeColorColorSchemeGridField extends ColorSchemeGridField 
 
 export class BkgdItemStateColorSchemeGridField extends ColorSchemeGridField {
     constructor(colorSettings: ColorSettings) {
-        const definition = new GridFieldDefinition(
+        const definition = new RevFieldDefinition(
             ColorSchemeGridField.sourceDefinition,
             ColorSchemeGridField.FieldName.BkgdItemState,
             Strings[StringId.ColorGridHeading_NotHasBkgd],
@@ -379,7 +379,7 @@ export class BkgdItemStateColorSchemeGridField extends ColorSchemeGridField {
 
 export class ForeItemStateColorSchemeGridField extends ColorSchemeGridField {
     constructor(colorSettings: ColorSettings) {
-        const definition = new GridFieldDefinition(
+        const definition = new RevFieldDefinition(
             ColorSchemeGridField.sourceDefinition,
             ColorSchemeGridField.FieldName.ForeItemState,
             Strings[StringId.ColorGridHeading_NotHasFore],
@@ -396,7 +396,7 @@ export class ForeItemStateColorSchemeGridField extends ColorSchemeGridField {
 
 export class ReadabilityColorSchemeGridField extends ColorSchemeGridField {
     constructor(colorSettings: ColorSettings) {
-        const definition = new GridFieldDefinition(
+        const definition = new RevFieldDefinition(
             ColorSchemeGridField.sourceDefinition,
             ColorSchemeGridField.FieldName.Readability,
             Strings[StringId.ColorGridHeading_Readability],
@@ -419,7 +419,7 @@ export class ReadabilityColorSchemeGridField extends ColorSchemeGridField {
 
 export class IsReadableColorSchemeGridField extends ColorSchemeGridField {
     constructor(colorSettings: ColorSettings) {
-        const definition = new GridFieldDefinition(
+        const definition = new RevFieldDefinition(
             ColorSchemeGridField.sourceDefinition,
             ColorSchemeGridField.FieldName.IsReadable,
             Strings[StringId.ColorGridHeading_IsReadable],

@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { compareString, ComparisonResult, Err, ErrorCode, JsonElement, MapKey, Ok, Result } from '../../sys/sys-internal-api';
+import { compareString, ComparisonResult, Err, ErrorCode, JsonElement, JsonElementErr, MapKey, Ok, Result } from '../../sys/internal-api';
 import { ExchangeId, ExchangeInfo } from './data-types';
 
 export class IvemId {
@@ -72,7 +72,7 @@ export namespace IvemId {
 
     export function compare(left: IvemId, right: IvemId): ComparisonResult {
         let result = ExchangeInfo.compareId(left.exchangeId, right.exchangeId);
-        if (result === 0) {
+        if (result === ComparisonResult.LeftEqualsRight) {
             result = compareString(left.code, right.code);
         }
         return result;
@@ -80,7 +80,7 @@ export namespace IvemId {
 
     export function priorityExchangeCompare(left: IvemId, right: IvemId, priorityExchangeId: ExchangeId): ComparisonResult {
         let result = ExchangeInfo.priorityCompareId(left.exchangeId, right.exchangeId, priorityExchangeId);
-        if (result === 0) {
+        if (result === ComparisonResult.LeftEqualsRight) {
             result = compareString(left.code, right.code);
         }
         return result;
@@ -93,11 +93,11 @@ export namespace IvemId {
     export function tryCreateFromJson(element: JsonElement): Result<IvemId> {
         const codeResult = element.tryGetString(JsonName.code);
         if (codeResult.isErr()) {
-            return codeResult.createOuter(ErrorCode.IvemId_CodeNotSpecified);
+            return JsonElementErr.createOuter(codeResult.error, ErrorCode.IvemId_CodeNotSpecified);
         } else {
             const exchangeJsonValueResult = element.tryGetString(JsonName.exchange);
             if (exchangeJsonValueResult.isErr()) {
-                return exchangeJsonValueResult.createOuter(ErrorCode.IvemId_ExchangeNotSpecified);
+                return JsonElementErr.createOuter(exchangeJsonValueResult.error, ErrorCode.IvemId_ExchangeNotSpecified);
             } else {
                 const exchangeJsonValue = exchangeJsonValueResult.value;
                 const exchangeId = ExchangeInfo.tryJsonValueToId(exchangeJsonValue);

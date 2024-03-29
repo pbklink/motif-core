@@ -4,88 +4,50 @@
  * License: motionite.trade/license/motif
  */
 
-import { StringId, Strings } from '../../../../res/res-internal-api';
+import { RevFieldCustomHeadingsService, RevTableRecordSourceDefinition } from '@xilytix/rev-data-source';
+import { StringId, Strings } from '../../../../res/internal-api';
+import { RenderValue } from '../../../../services/internal-api';
 import {
     EnumInfoOutOfOrderError,
     Err,
     ErrorCode,
     Integer,
     JsonElement,
+    JsonElementErr,
     Ok,
     Result,
     compareNumber
-} from "../../../../sys/sys-internal-api";
-import { AllowedGridField, GridField, GridFieldCustomHeadingsService } from '../../../field/grid-field-internal-api';
-import { GridLayoutDefinition } from '../../../layout/grid-layout-internal-api';
-import {
-    TableFieldSourceDefinition,
-    TableFieldSourceDefinitionCachedFactoryService
-} from "../../field-source/grid-table-field-source-internal-api";
+} from "../../../../sys/internal-api";
+import { TableFieldSourceDefinition, TableFieldSourceDefinitionCachingFactoryService } from '../../field-source/internal-api';
 
-export abstract class TableRecordSourceDefinition {
+export abstract class TableRecordSourceDefinition extends RevTableRecordSourceDefinition<
+    TableRecordSourceDefinition.TypeId,
+    TableFieldSourceDefinition.TypeId,
+    RenderValue.TypeId,
+    RenderValue.Attribute.TypeId
+> {
     constructor(
-        private readonly _customHeadingsService: GridFieldCustomHeadingsService,
-        readonly tableFieldSourceDefinitionCachedFactoryService: TableFieldSourceDefinitionCachedFactoryService,
-        readonly typeId: TableRecordSourceDefinition.TypeId,
-        readonly allowedFieldSourceDefinitionTypeIds: TableFieldSourceDefinition.TypeId[],
+        customHeadingsService: RevFieldCustomHeadingsService,
+        tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService,
+        typeId: TableRecordSourceDefinition.TypeId,
+        allowedFieldSourceDefinitionTypeIds: readonly TableFieldSourceDefinition.TypeId[],
     ) {
+        super(
+            customHeadingsService,
+            tableFieldSourceDefinitionCachingFactoryService,
+            typeId,
+            TableRecordSourceDefinition.Type.idToJson(typeId),
+            allowedFieldSourceDefinitionTypeIds
+        );
     }
-
-    createAllowedFields(): readonly AllowedGridField[] {
-        const tableFieldSourceDefinitionCachedFactoryService = this.tableFieldSourceDefinitionCachedFactoryService;
-        const customHeadingsService = this._customHeadingsService;
-        let result: AllowedGridField[] = [];
-        for (const allowedFieldSourceDefinitionTypeId of this.allowedFieldSourceDefinitionTypeIds) {
-            const fieldSourceDefinition = tableFieldSourceDefinitionCachedFactoryService.get(allowedFieldSourceDefinitionTypeId);
-            const fieldCount = fieldSourceDefinition.fieldCount;
-            const fieldDefinitions = fieldSourceDefinition.fieldDefinitions;
-            const sourceAllowedFields = new Array<AllowedGridField>(fieldCount);
-            for (let i = 0; i < fieldCount; i++) {
-                const fieldDefinition = fieldDefinitions[i];
-                const heading = GridField.generateHeading(customHeadingsService, fieldDefinition);
-
-                sourceAllowedFields[i] = new AllowedGridField(
-                    fieldDefinition,
-                    heading,
-                );
-            }
-            result = [...result, ...sourceAllowedFields];
-        }
-        return result;
-    }
-
-    // createLayoutDefinition(fieldIds: TableFieldSourceDefinition.FieldId[]): GridLayoutDefinition {
-    //     const fieldSourceDefinitionRegistryService = this.fieldSourceDefinitionRegistryService;
-    //     const count = fieldIds.length;
-    //     const fieldNames = new Array<string>(count);
-    //     for (let i = 0; i < count; i++) {
-    //         const fieldId = fieldIds[i];
-    //         const fieldSourceDefinition = fieldSourceDefinitionRegistryService.get(fieldId.sourceTypeId);
-    //         const fieldName = fieldSourceDefinition.getFieldNameById(fieldId.id);
-    //         fieldNames[i] = fieldName;
-    //     }
-
-    //     return GridLayoutDefinition.createFromFieldNames(fieldNames);
-    // }
-
-
-    saveToJson(element: JsonElement) { // virtual;
-        element.setString(TableRecordSourceDefinition.jsonTag_TypeId, TableRecordSourceDefinition.Type.idToJson(this.typeId));
-    }
-
-    abstract createDefaultLayoutDefinition(): GridLayoutDefinition;
 }
 
 export namespace TableRecordSourceDefinition {
-    export const jsonTag_Id = 'Id';
-    export const jsonTag_Name = 'Name';
-    export const jsonTag_TypeId = 'ListTypeId';
-
     export const enum TypeId {
         Null,
         LitIvemIdComparableList,
         LitIvemDetailsFromSearchSymbols,
-        Watchlist,
+        RankedLitIvemIdList,
         MarketMovers,
         Gics,
         ProfitIvemHolding,
@@ -107,9 +69,9 @@ export namespace TableRecordSourceDefinition {
         RankedLitIvemIdListDirectoryItem,
         // eslint-disable-next-line @typescript-eslint/no-shadow
         GridField,
-        ScanTest,
         ScanFieldEditorFrame,
         ScanEditorAttachedNotificationChannel,
+        LockOpenNotificationChannelList,
     }
 
     export interface AddArrayResult {
@@ -148,11 +110,11 @@ export namespace TableRecordSourceDefinition {
                 display: StringId.TableRecordDefinitionList_ListTypeDisplay_LitIvemDetailsFromSearchSymbols,
                 abbr: StringId.TableRecordDefinitionList_ListTypeAbbr_LitIvemDetailsFromSearchSymbols
             },
-            Watchlist: {
-                id: TableRecordSourceDefinition.TypeId.Watchlist,
-                name: 'Watchlist',
-                display: StringId.TableRecordDefinitionList_ListTypeDisplay_Watchlist,
-                abbr: StringId.TableRecordDefinitionList_ListTypeAbbr_Watchlist
+            RankedLitIvemIdList: {
+                id: TableRecordSourceDefinition.TypeId.RankedLitIvemIdList,
+                name: 'LitIvemIdArrayRankedLitIvemIdList',
+                display: StringId.TableRecordDefinitionList_ListTypeDisplay_LitIvemIdArrayRankedLitIvemIdList,
+                abbr: StringId.TableRecordDefinitionList_ListTypeAbbr_LitIvemIdArrayRankedLitIvemIdList
             },
             MarketMovers: {
                 id: TableRecordSourceDefinition.TypeId.MarketMovers,
@@ -274,12 +236,6 @@ export namespace TableRecordSourceDefinition {
                 display: StringId.TableRecordDefinitionList_ListTypeDisplay_GridField,
                 abbr: StringId.TableRecordDefinitionList_ListTypeAbbr_GridField
             },
-            ScanTest: {
-                id: TableRecordSourceDefinition.TypeId.ScanTest,
-                name: 'ScanTest',
-                display: StringId.TableRecordDefinitionList_ListTypeDisplay_ScanTest,
-                abbr: StringId.TableRecordDefinitionList_ListTypeAbbr_ScanTest
-            },
             ScanFieldEditorFrame: {
                 id: TableRecordSourceDefinition.TypeId.ScanFieldEditorFrame,
                 name: 'ScanFieldEditorFrame',
@@ -291,6 +247,12 @@ export namespace TableRecordSourceDefinition {
                 name: 'ScanEditorAttachedNotificationChannel',
                 display: StringId.TableRecordDefinitionList_ListTypeDisplay_ScanEditorAttachedNotificationChannel,
                 abbr: StringId.TableRecordDefinitionList_ListTypeAbbr_ScanEditorAttachedNotificationChannel
+            },
+            LockOpenNotificationChannelList: {
+                id: TableRecordSourceDefinition.TypeId.LockOpenNotificationChannelList,
+                name: 'LockOpenNotificationChannelList',
+                display: StringId.TableRecordDefinitionList_ListTypeDisplay_LockOpenNotificationChannelList,
+                abbr: StringId.TableRecordDefinitionList_ListTypeAbbr_LockOpenNotificationChannelList
             },
         };
 
@@ -330,15 +292,15 @@ export namespace TableRecordSourceDefinition {
         export function initialise() {
             const outOfOrderIdx = infos.findIndex((infoRec: Info, index: Integer) => infoRec.id !== index as TypeId);
             if (outOfOrderIdx >= 0) {
-                throw new EnumInfoOutOfOrderError('TRDLLTINLT388', outOfOrderIdx, `${infos[outOfOrderIdx].name}`);
+                throw new EnumInfoOutOfOrderError('TRDLLTINLT388', outOfOrderIdx, infos[outOfOrderIdx].name);
             }
         }
     }
 
-    export function tryGetTypeIdFromJson(element: JsonElement): Result<TypeId> {
-        const typeIdResult = element.tryGetString(jsonTag_TypeId);
+    export function tryGetTypeIdFromJson(element: JsonElement): Result<Type.Id> {
+        const typeIdResult = element.tryGetString(RevTableRecordSourceDefinition.jsonTag_TypeId);
         if (typeIdResult.isErr()) {
-            return typeIdResult.createOuter(ErrorCode.TableRecordSourceDefinition_TypeIdNotSpecified);
+            return JsonElementErr.createOuter(typeIdResult.error, ErrorCode.TableRecordSourceDefinition_TypeIdNotSpecified);
         } else {
             const typeIdJsonValue = typeIdResult.value;
             const typeId = Type.tryJsonToId(typeIdJsonValue);
@@ -351,7 +313,7 @@ export namespace TableRecordSourceDefinition {
     }
 }
 
-export namespace TableRecordSourceDefinitionModule {
+export namespace TypedTableRecordSourceDefinitionModule {
     export function initialiseStatic() {
         TableRecordSourceDefinition.Type.initialise();
     }

@@ -4,10 +4,10 @@
  * License: motionite.trade/license/motif
  */
 
-import { NotificationChannel, ScanAttachedNotificationChannel } from '../adi/adi-internal-api';
+import { NotificationChannel, ScanAttachedNotificationChannel } from '../adi/internal-api';
 import { LockOpenNotificationChannel } from '../notification-channel/internal-api';
-import { StringId, Strings } from '../res/res-internal-api';
-import { AssertInternalError, EnumInfoOutOfOrderError, FieldDataTypeId, Integer, MultiEvent, ValueRecentChangeTypeId } from '../sys/sys-internal-api';
+import { StringId, Strings } from '../res/internal-api';
+import { AssertInternalError, EnumInfoOutOfOrderError, FieldDataTypeId, Integer, MultiEvent, ValueRecentChangeTypeId } from '../sys/internal-api';
 
 export class LockerScanAttachedNotificationChannel {
     changedEventer: LockerScanAttachedNotificationChannel.ChangedEventer | undefined; // only used by List
@@ -49,7 +49,7 @@ export class LockerScanAttachedNotificationChannel {
 
     get name() {
         const lockedNotificationChannel = this._lockedNotificationChannel;
-        return lockedNotificationChannel === undefined ? this.channelId : lockedNotificationChannel.channelName;
+        return lockedNotificationChannel === undefined ? this.channelId : lockedNotificationChannel.name;
     }
     get cultureCode() { return this._cultureCode; }
     get minimumStable() { return this._minimumStable; }

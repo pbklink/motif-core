@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError } from '../sys/sys-internal-api';
+import { AssertInternalError } from '../sys/internal-api';
 import { Command } from './command';
 
 export interface InternalCommand extends Command {
@@ -44,6 +44,7 @@ export namespace InternalCommand {
         NewDepthDitem,
         NewNewsHeadlinesDitem,
         NewNewsBodyDitem,
+        NewNotificationChannelsDitem,
         NewScansDitem,
         NewAlertsDitem,
         NewSearchDitem,
@@ -165,6 +166,8 @@ export namespace InternalCommand {
         RestoreSection,
         CollapseSection,
 
+        NotificationChannels_RefreshAll,
+
         ScanEditor_Apply,
         ScanEditor_Revert,
         ScanEditor_Delete,
@@ -211,6 +214,7 @@ export namespace InternalCommand {
         NewDepthDitem = 'NewDepthDitem',
         NewNewsHeadlinesDitem = 'NewNewsHeadlinesDitem',
         NewNewsBodyDitem = 'NewNewsBodyDitem',
+        NewNotificationChannelsDitem = 'NewNotificationChannelsDitem',
         NewScansDitem = 'NewScansDitem',
         NewAlertsDitem = 'NewAlertsDitem',
         NewSearchDitem = 'NewSearchDitem',
@@ -332,6 +336,8 @@ export namespace InternalCommand {
         RestoreSection = 'RestoreSection',
         CollapseSection = 'CollapseSection',
 
+        NotificationChannels_RefreshAll = 'NotificationChannels_RefreshAll',
+
         ScanEditor_Apply = 'ScanEditor_Apply',
         ScanEditor_Revert = 'ScanEditor_Revert',
         ScanEditor_Delete = 'ScanEditor_Delete',
@@ -381,6 +387,7 @@ export namespace InternalCommand {
         NewDepthDitem: { id: Id.NewDepthDitem, nameId: NameId.NewDepthDitem },
         NewNewsHeadlinesDitem: { id: Id.NewNewsHeadlinesDitem, nameId: NameId.NewNewsHeadlinesDitem },
         NewNewsBodyDitem: { id: Id.NewNewsBodyDitem, nameId: NameId.NewNewsBodyDitem },
+        NewNotificationChannelsDitem: { id: Id.NewNotificationChannelsDitem, nameId: NameId.NewNotificationChannelsDitem },
         NewScansDitem: { id: Id.NewScansDitem, nameId: NameId.NewScansDitem },
         NewAlertsDitem: { id: Id.NewAlertsDitem, nameId: NameId.NewAlertsDitem },
         NewSearchDitem: { id: Id.NewSearchDitem, nameId: NameId.NewSearchDitem },
@@ -480,6 +487,7 @@ export namespace InternalCommand {
         ExpandSection: { id: Id.ExpandSection, nameId: NameId.ExpandSection },
         RestoreSection: { id: Id.RestoreSection, nameId: NameId.RestoreSection },
         CollapseSection: { id: Id.CollapseSection, nameId: NameId.CollapseSection },
+        NotificationChannels_RefreshAll: { id: Id.NotificationChannels_RefreshAll, nameId: NameId.NotificationChannels_RefreshAll },
         ScanEditor_Apply: { id: Id.ScanEditor_Apply, nameId: NameId.ScanEditor_Apply },
         ScanEditor_Revert: { id: Id.ScanEditor_Revert, nameId: NameId.ScanEditor_Revert },
         ScanEditor_Delete: { id: Id.ScanEditor_Delete, nameId: NameId.ScanEditor_Delete },

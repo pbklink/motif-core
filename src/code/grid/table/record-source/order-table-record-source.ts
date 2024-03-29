@@ -4,6 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
+import { RevFieldCustomHeadingsService } from '@xilytix/rev-data-source';
 import {
     AdiService,
     AllOrdersDataDefinition,
@@ -14,19 +15,18 @@ import {
     BrokerageAccountOrdersDataItem,
     Order,
     SingleBrokerageAccountGroup
-} from "../../../adi/adi-internal-api";
-import { Integer, LockOpenListItem, UnreachableCaseError } from '../../../sys/sys-internal-api';
-import { TextFormatterService } from '../../../text-format/text-format-internal-api';
+} from "../../../adi/internal-api";
+import { CorrectnessBadness, Integer, LockOpenListItem, UnreachableCaseError } from '../../../sys/internal-api';
+import { TextFormatterService } from '../../../text-format/internal-api';
 import {
-    TableFieldSourceDefinition
-} from "../field-source/grid-table-field-source-internal-api";
-import { OrderTableRecordDefinition, TableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
-import { TableRecord } from '../record/grid-table-record-internal-api';
+    TableFieldSourceDefinition, TableFieldSourceDefinitionCachingFactoryService
+} from "../field-source/internal-api";
+import { OrderTableRecordDefinition } from '../record-definition/internal-api';
+import { TableRecord } from '../record/internal-api';
 import { BrokerageAccountTableValueSource, OrderTableValueSource } from '../value-source/internal-api';
 import {
     BrokerageAccountGroupTableRecordSource
 } from './brokerage-account-group-table-record-source';
-import { TableRecordSourceDefinitionFactoryService } from './definition/grid-table-record-source-definition-internal-api';
 import { OrderTableRecordSourceDefinition } from './definition/order-table-record-source-definition';
 
 /** @public */
@@ -36,25 +36,33 @@ export class OrderTableRecordSource
     constructor(
         private readonly _adiService: AdiService,
         textFormatterService: TextFormatterService,
-        tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService,
+        gridFieldCustomHeadingsService: RevFieldCustomHeadingsService,
+        tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService,
+        correctnessBadness: CorrectnessBadness,
         definition: OrderTableRecordSourceDefinition,
     ) {
         super(
             textFormatterService,
-            tableRecordSourceDefinitionFactoryService,
+            gridFieldCustomHeadingsService,
+            tableFieldSourceDefinitionCachingFactoryService,
+            correctnessBadness,
             definition,
             OrderTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
         );
     }
 
     override createDefinition(): OrderTableRecordSourceDefinition {
-        return this.tableRecordSourceDefinitionFactoryService.createOrder(this.brokerageAccountGroup);
+        return new OrderTableRecordSourceDefinition(
+            this._gridFieldCustomHeadingsService,
+            this._tableFieldSourceDefinitionCachingFactoryService,
+            this.brokerageAccountGroup,
+        );
     }
 
     override createRecordDefinition(idx: Integer): OrderTableRecordDefinition {
         const record = this.recordList.records[idx];
         return {
-            typeId: TableRecordDefinition.TypeId.Order,
+            typeId: TableFieldSourceDefinition.TypeId.Order,
             mapKey: record.mapKey,
             record,
         }
@@ -72,12 +80,12 @@ export class OrderTableRecordSource
             const fieldSourceDefinitionTypeId =
                 fieldSourceDefinition.typeId as OrderTableRecordSourceDefinition.FieldSourceDefinitionTypeId;
             switch (fieldSourceDefinitionTypeId) {
-                case TableFieldSourceDefinition.TypeId.OrdersDataItem: {
+                case TableFieldSourceDefinition.TypeId.Order: {
                     const valueSource = new OrderTableValueSource(result.fieldCount, order);
                     result.addSource(valueSource);
                     break;
                 }
-                case TableFieldSourceDefinition.TypeId.BrokerageAccounts: {
+                case TableFieldSourceDefinition.TypeId.BrokerageAccount: {
                     const valueSource = new BrokerageAccountTableValueSource(result.fieldCount, order.account);
                     result.addSource(valueSource);
                     break;

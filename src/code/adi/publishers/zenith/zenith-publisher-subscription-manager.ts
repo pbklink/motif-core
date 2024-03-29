@@ -4,19 +4,20 @@
  * License: motionite.trade/license/motif
  */
 
-import { StringId, Strings } from '../../../res/res-internal-api';
+import { StringId, Strings } from '../../../res/internal-api';
 import {
     AssertInternalError,
     ErrorCode,
     Integer,
-    Logger,
     MapKey,
     SysTick,
     UnexpectedCaseError,
     UnreachableCaseError,
     ZenithDataError,
+    logger,
     newNowDate
-} from "../../../sys/sys-internal-api";
+} from "../../../sys/internal-api";
+import { AdiPublisherSubscriptionManager } from '../../common/adi-publisher-subscription-manager';
 import {
     AdiPublisherRequest,
     AdiPublisherSubscription,
@@ -27,8 +28,7 @@ import {
     ErrorPublisherSubscriptionDataMessage_SubRequestError,
     ErrorPublisherSubscriptionDataMessage_UserNotAuthorised,
     WarningPublisherSubscriptionDataMessage
-} from "../../common/adi-common-internal-api";
-import { AdiPublisherSubscriptionManager } from '../../common/adi-publisher-subscription-manager';
+} from "../../common/internal-api";
 import { ZenithProtocol } from './physical-message/protocol/zenith-protocol';
 import { ZenithConvert } from './physical-message/zenith-convert';
 import { ZenithMessageConvert } from './physical-message/zenith-message-convert';
@@ -317,7 +317,7 @@ export class ZenithPublisherSubscriptionManager extends AdiPublisherSubscription
                                 if (texts !== undefined) {
                                     for (let i = 0; i < texts.length; i++) {
                                         const text = texts[i];
-                                        switch (text) {
+                                        switch (text as ZenithProtocol.ResponseUpdateMessageContainer.Error.Code) {
                                             case ZenithProtocol.ResponseUpdateMessageContainer.Error.Code.Retry:
                                                 delayRetryAllowedSpecified = true;
                                                 break;
@@ -523,14 +523,14 @@ export class ZenithPublisherSubscriptionManager extends AdiPublisherSubscription
                 const nowTime = newNowDate();
                 const nowTimeStr = ZenithPublisherSubscriptionManager.logTimeFormat.format(nowTime);
                 const directionStr = incoming ? '<-- ' : '--> ';
-                Logger.logDebug(`${nowTimeStr} Zenith ${directionStr}${message}`, 120);
+                logger.logDebug(`${nowTimeStr} Zenith ${directionStr}${message}`, 120);
                 return;
             }
             case ZenithPublisherSubscriptionManager.LogLevelId.Full: {
                 const nowTime = newNowDate();
                 const nowTimeStr = ZenithPublisherSubscriptionManager.logTimeFormat.format(nowTime);
                 const directionStr = incoming ? '<-- ' : '--> ';
-                Logger.logDebug(`${nowTimeStr} Zenith ${directionStr}${message}`);
+                logger.logDebug(`${nowTimeStr} Zenith ${directionStr}${message}`);
                 return;
             }
             default:

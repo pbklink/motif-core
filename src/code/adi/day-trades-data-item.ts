@@ -4,14 +4,14 @@
  * License: motionite.trade/license/motif
  */
 
-import { StringId, Strings } from '../res/res-internal-api';
+import { StringId, Strings } from '../res/internal-api';
 import {
     AssertInternalError,
     Badness,
     ComparisonResult,
     EnumInfoOutOfOrderError,
+    ErrorCodeLogger,
     Integer,
-    Logger,
     MultiEvent,
     SysTick,
     UnreachableCaseError,
@@ -19,12 +19,12 @@ import {
     compareInteger,
     mSecsPerMin,
     rangedEarliestBinarySearch
-} from '../sys/sys-internal-api';
+} from '../sys/internal-api';
 import {
     DataDefinition,
     DayTradesDataDefinition,
     LatestTradingDayTradesDataDefinition, LitIvemId, QueryTradesDataDefinition, TradeFlagId
-} from './common/adi-common-internal-api';
+} from './common/internal-api';
 import { DataItem } from './data-item/internal-api';
 import { LatestTradingDayTradesDataItem } from './latest-trading-day-trades-data-item';
 import { TradesDataItem } from './trades-data-item';
@@ -46,7 +46,7 @@ export class DayTradesDataItem extends DataItem {
     private _datedDataItem: TradesDataItem | undefined;
     private _dataItemRecordAccess: TradesDataItem.UsableBadnessRecordAccess;
 
-    private _badnessChangeSubscriptionId: MultiEvent.SubscriptionId;
+    private _badnessChangedSubscriptionId: MultiEvent.SubscriptionId;
     private _listChangeSubscriptionId: MultiEvent.SubscriptionId;
     private _recordChangeSubscriptionId: MultiEvent.SubscriptionId;
 
@@ -109,8 +109,8 @@ export class DayTradesDataItem extends DataItem {
         this._recordChangeSubscriptionId = this._dataItemRecordAccess.subscribeRecordChangeEvent(
             (index, oldTradeRecord) => { this.handleRecordChangeEvent(index, oldTradeRecord); }
         );
-        this._badnessChangeSubscriptionId = this._dataItemRecordAccess.subscribeBadnessChangeEvent(
-            () => { this.handleBadnessChangeEvent(); }
+        this._badnessChangedSubscriptionId = this._dataItemRecordAccess.subscribeBadnessChangedEvent(
+            () => { this.handleBadnessChangedEvent(); }
         );
 
         if (this._dataItemRecordAccess.usable) {
@@ -129,7 +129,7 @@ export class DayTradesDataItem extends DataItem {
         if (this._dataItemRecordAccess !== undefined) {
             this._dataItemRecordAccess.unsubscribeListChangeEvent(this._listChangeSubscriptionId);
             this._dataItemRecordAccess.unsubscribeRecordChangeEvent(this._recordChangeSubscriptionId);
-            this._dataItemRecordAccess.unsubscribeBadnessChangeEvent(this._badnessChangeSubscriptionId);
+            this._dataItemRecordAccess.unsubscribeBadnessChangedEvent(this._badnessChangedSubscriptionId);
             this._dataItemRecordAccess = undefined as unknown as TradesDataItem.UsableBadnessRecordAccess;
         }
 
@@ -159,7 +159,7 @@ export class DayTradesDataItem extends DataItem {
         }
     }
 
-    private handleBadnessChangeEvent() {
+    private handleBadnessChangedEvent() {
         this.checkSetUnusable(this._dataItemRecordAccess.badness);
     }
 
@@ -257,7 +257,7 @@ export class DayTradesDataItem extends DataItem {
     private updateRecordCancelled(recordId: Integer, cancelled: boolean) {
         const { found, index } = this.findRecordById(recordId);
         if (!found) {
-            Logger.logDataError('DTDIURCF8777434024', this.definition.description);
+            ErrorCodeLogger.logDataError('DTDIURCF8777434024', this.definition.description);
             return undefined;
         } else {
             const record = this._records[index];
@@ -285,7 +285,7 @@ export class DayTradesDataItem extends DataItem {
             record.typeId = DayTradesDataItem.Record.TypeId.Canceller;
             const relatedId = tradeRecord.relatedId;
             if (relatedId === undefined) {
-                Logger.logDataError('DTDICIC56694559', this.definition.description);
+                ErrorCodeLogger.logDataError('DTDICIC56694559', this.definition.description);
                 return undefined;
             } else {
                 return this.updateRecordCancelled(relatedId, true);
@@ -398,7 +398,7 @@ export class DayTradesDataItem extends DataItem {
                 }
             }
             if (newRelatedId === undefined) {
-                Logger.logDataError('DTDIPRC454500281', this.definition.description);
+                ErrorCodeLogger.logDataError('DTDIPRC454500281', this.definition.description);
             } else {
                 const changedRecordIdx = this.updateRecordCancelled(newRelatedId, newIsCancel);
                 if (changedRecordIdx !== undefined) {

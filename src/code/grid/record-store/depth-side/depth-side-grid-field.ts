@@ -4,9 +4,10 @@
  * License: motionite.trade/license/motif
  */
 
-import { RenderValue } from '../../../services/services-internal-api';
-import { CorrectnessId, GridRevRecordField } from '../../../sys/sys-internal-api';
-import { GridField, GridFieldSourceDefinition } from '../../field/grid-field-internal-api';
+import { RevFieldSourceDefinition } from '@xilytix/rev-data-source';
+import { RenderValue } from '../../../services/internal-api';
+import { CorrectnessId, GridRevRecordField } from '../../../sys/internal-api';
+import { GridField } from '../../field/internal-api';
 import { DepthRecord } from './depth-record';
 
 /** @public */
@@ -23,5 +24,5 @@ export namespace DepthSideGridField {
     //     defaultVisibles: boolean[];
     // }
 
-    export const sourceDefinition = new GridFieldSourceDefinition('DepthSide');
+    export const sourceDefinition = new RevFieldSourceDefinition('DepthSide');
 }

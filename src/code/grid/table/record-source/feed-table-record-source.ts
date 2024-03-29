@@ -4,17 +4,17 @@
  * License: motionite.trade/license/motif
  */
 
-import { AdiService, Feed, FeedsDataDefinition, FeedsDataItem } from '../../../adi/adi-internal-api';
-import { Integer, KeyedCorrectnessList, LockOpenListItem, UnreachableCaseError } from '../../../sys/sys-internal-api';
-import { TextFormatterService } from '../../../text-format/text-format-internal-api';
+import { RevFieldCustomHeadingsService } from '@xilytix/rev-data-source';
+import { AdiService, Feed, FeedsDataDefinition, FeedsDataItem } from '../../../adi/internal-api';
+import { CorrectnessBadness, Integer, KeyedCorrectnessList, LockOpenListItem, UnreachableCaseError } from '../../../sys/internal-api';
+import { TextFormatterService } from '../../../text-format/internal-api';
 import {
-    TableFieldSourceDefinition
-} from "../field-source/grid-table-field-source-internal-api";
-import { FeedTableRecordDefinition, TableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
-import { TableRecord } from '../record/grid-table-record-internal-api';
+    TableFieldSourceDefinition, TableFieldSourceDefinitionCachingFactoryService
+} from "../field-source/internal-api";
+import { FeedTableRecordDefinition } from '../record-definition/internal-api';
+import { TableRecord } from '../record/internal-api';
 import { FeedTableValueSource } from '../value-source/internal-api';
 import { FeedTableRecordSourceDefinition } from './definition/feed-table-record-source-definition';
-import { TableRecordSourceDefinitionFactoryService } from './definition/grid-table-record-source-definition-internal-api';
 import { SingleDataItemRecordTableRecordSource } from './single-data-item-record-table-record-source';
 
 /** @public */
@@ -22,25 +22,32 @@ export class FeedTableRecordSource extends SingleDataItemRecordTableRecordSource
     constructor(
         private readonly _adiService: AdiService,
         textFormatterService: TextFormatterService,
-        tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService,
+        gridFieldCustomHeadingsService: RevFieldCustomHeadingsService,
+        tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService,
+        correctnessBadness: CorrectnessBadness,
         definition: FeedTableRecordSourceDefinition,
     ) {
         super(
             textFormatterService,
-            tableRecordSourceDefinitionFactoryService,
+            gridFieldCustomHeadingsService,
+            tableFieldSourceDefinitionCachingFactoryService,
+            correctnessBadness,
             definition,
             FeedTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds
         );
     }
 
     override createDefinition(): FeedTableRecordSourceDefinition {
-        return this.tableRecordSourceDefinitionFactoryService.createFeed();
+        return new FeedTableRecordSourceDefinition(
+            this._gridFieldCustomHeadingsService,
+            this._tableFieldSourceDefinitionCachingFactoryService,
+        );
     }
 
     override createRecordDefinition(idx: Integer): FeedTableRecordDefinition {
         const record = this.recordList.records[idx];
         return {
-            typeId: TableRecordDefinition.TypeId.Feed,
+            typeId: TableFieldSourceDefinition.TypeId.Feed,
             mapKey: record.mapKey,
             record,
         };

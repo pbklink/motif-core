@@ -4,14 +4,14 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, ErrorCode, ZenithDataError } from '../../../../sys/sys-internal-api';
+import { AssertInternalError, ErrorCode, ZenithDataError } from '../../../../sys/internal-api';
 import {
     AdiPublisherRequest,
     AdiPublisherSubscription,
     CreateScanDataDefinition,
     CreateScanDataMessage,
     ErrorPublisherSubscriptionDataMessage_PublishRequestError
-} from "../../../common/adi-common-internal-api";
+} from "../../../common/internal-api";
 import { ZenithProtocol } from './protocol/zenith-protocol';
 import { ZenithConvert } from './zenith-convert';
 import { ZenithNotifyConvert } from './zenith-notify-convert';
@@ -52,7 +52,7 @@ export namespace CreateScanMessageConvert {
             Rank: definition.zenithRank,
             Type: ZenithNotifyConvert.ScanType.fromId(definition.targetTypeId),
             Target: ZenithNotifyConvert.Target.fromId(definition.targetTypeId, definition.targets),
-            MaxMatchCount: definition.maxMatchCount,
+            Count: definition.maxMatchCount,
             Notifications: definitionNotifications.length === 0 ? undefined : ZenithNotifyConvert.NotificationParameters.from(definitionNotifications),
         }
 

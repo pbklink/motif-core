@@ -4,62 +4,58 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, Err, ErrorCode, Guid, JsonElement, Ok, Result } from '../../../sys/sys-internal-api';
-import { GridLayoutDefinition } from './grid-layout-definition';
-
-/** @public */
-export class GridLayoutOrReferenceDefinition {
-    readonly referenceId: Guid | undefined;
-    readonly gridLayoutDefinition: GridLayoutDefinition | undefined;
-
-    constructor(definitionOrReferenceId: GridLayoutDefinition | Guid) {
-        if (typeof definitionOrReferenceId === 'string') {
-            this.referenceId = definitionOrReferenceId;
-        } else {
-            this.gridLayoutDefinition = definitionOrReferenceId;
-        }
-    }
-
-    saveToJson(element: JsonElement) {
-        if (this.referenceId !== undefined) {
-            element.setString(GridLayoutOrReferenceDefinition.JsonName.referenceId, this.referenceId);
-        } else {
-            if (this.gridLayoutDefinition !== undefined) {
-                const gridLayoutDefinitionElement = element.newElement(GridLayoutOrReferenceDefinition.JsonName.gridLayoutDefinition);
-                this.gridLayoutDefinition.saveToJson(gridLayoutDefinitionElement);
-            } else {
-                throw new AssertInternalError('GLDONRSTJ34445');
-            }
-        }
-    }
-}
+import { RevGridLayoutOrReferenceDefinition } from '@xilytix/rev-data-source';
+import { Err, ErrorCode, JsonElement, Ok, PickEnum, Result, UnreachableCaseError } from '../../../sys/internal-api';
 
 /** @public */
 export namespace GridLayoutOrReferenceDefinition {
-    export namespace JsonName {
-        export const referenceId = 'referenceId';
-        export const gridLayoutDefinition = 'gridLayoutDefinition';
+    export function tryCreateFromJson(element: JsonElement): Result<RevGridLayoutOrReferenceDefinition> {
+        const createResult = RevGridLayoutOrReferenceDefinition.tryCreateFromJson(element);
+        if (createResult.isErr()) {
+            const errorId = createResult.error;
+            const errorCode = LockErrorCode.fromId(errorId);
+            return new Err(errorCode);
+        } else {
+            return new Ok(createResult.value);
+        }
     }
 
-    export function tryCreateFromJson(element: JsonElement): Result<GridLayoutOrReferenceDefinition> {
-        const referenceIdResult = element.tryGetString(JsonName.referenceId);
-        if (referenceIdResult.isOk()) {
-            const referenceId = referenceIdResult.value;
-            const gridLayoutOrReferenceDefinition = new GridLayoutOrReferenceDefinition(referenceId);
-            return new Ok(gridLayoutOrReferenceDefinition);
-        } else {
-            const definitionElementResult = element.tryGetElement(JsonName.gridLayoutDefinition);
-            if (definitionElementResult.isErr()) {
-                return new Err(ErrorCode.GridLayoutDefinitionOrReference_BothDefinitionAndReferenceAreNotSpecified);
-            } else {
-                const definitionElement = definitionElementResult.value;
-                const definitionResult = GridLayoutDefinition.tryCreateFromJson(definitionElement);
-                if (definitionResult.isErr()) {
-                    return definitionResult.createOuter(ErrorCode.GridLayoutDefinitionOrReference_GridLayoutDefinitionIsInvalid);
-                } else {
-                    const gridLayoutOrReferenceDefinition = new GridLayoutOrReferenceDefinition(definitionResult.value);
-                    return new Ok(gridLayoutOrReferenceDefinition);
-                }
+    export type LockErrorCode = PickEnum<ErrorCode,
+        ErrorCode.GridLayoutDefinitionOrReference_NeitherReferenceOrDefinitionJsonValueIsDefined |
+        ErrorCode.GridLayoutDefinitionOrReference_BothReferenceAndDefinitionJsonValuesAreOfWrongType |
+        ErrorCode.GridLayoutDefinitionOrReference_DefinitionJsonValueIsNotOfTypeObject |
+        ErrorCode.GridLayoutDefinitionOrReference_DefinitionColumnsElementIsNotDefined |
+        ErrorCode.GridLayoutDefinitionOrReference_DefinitionColumnsElementIsNotAnArray |
+        ErrorCode.GridLayoutDefinitionOrReference_DefinitionColumnElementIsNotAnObject |
+        ErrorCode.GridLayoutDefinitionOrReference_DefinitionAllColumnElementsAreInvalid
+    >;
+
+    export namespace LockErrorCode {
+        export function fromId(lockErrorId: RevGridLayoutOrReferenceDefinition.CreateFromJsonErrorId): LockErrorCode {
+            switch (lockErrorId) {
+                case RevGridLayoutOrReferenceDefinition.CreateFromJsonErrorId.NeitherReferenceOrDefinitionJsonValueIsDefined:
+                    return ErrorCode.GridLayoutDefinitionOrReference_NeitherReferenceOrDefinitionJsonValueIsDefined;
+                    break;
+                case RevGridLayoutOrReferenceDefinition.CreateFromJsonErrorId.BothReferenceAndDefinitionJsonValuesAreOfWrongType:
+                    return ErrorCode.GridLayoutDefinitionOrReference_BothReferenceAndDefinitionJsonValuesAreOfWrongType;
+                    break;
+                case RevGridLayoutOrReferenceDefinition.CreateFromJsonErrorId.DefinitionJsonValueIsNotOfTypeObject:
+                    return ErrorCode.GridLayoutDefinitionOrReference_DefinitionJsonValueIsNotOfTypeObject;
+                    break;
+                case RevGridLayoutOrReferenceDefinition.CreateFromJsonErrorId.DefinitionColumnsElementIsNotDefined:
+                    return ErrorCode.GridLayoutDefinitionOrReference_DefinitionColumnsElementIsNotDefined;
+                    break;
+                case RevGridLayoutOrReferenceDefinition.CreateFromJsonErrorId.DefinitionColumnsElementIsNotAnArray:
+                    return ErrorCode.GridLayoutDefinitionOrReference_DefinitionColumnsElementIsNotAnArray;
+                    break;
+                case RevGridLayoutOrReferenceDefinition.CreateFromJsonErrorId.DefinitionColumnElementIsNotAnObject:
+                    return ErrorCode.GridLayoutDefinitionOrReference_DefinitionColumnElementIsNotAnObject;
+                    break;
+                case RevGridLayoutOrReferenceDefinition.CreateFromJsonErrorId.DefinitionAllColumnElementsAreInvalid:
+                    return ErrorCode.GridLayoutDefinitionOrReference_DefinitionAllColumnElementsAreInvalid;
+                    break;
+                default:
+                    throw new UnreachableCaseError('GLORDTCFJ59712', lockErrorId);
             }
         }
     }

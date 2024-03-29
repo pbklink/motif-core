@@ -4,16 +4,17 @@
  * License: motionite.trade/license/motif
  */
 
-import { Badness, Integer, LockOpenListItem, Ok, Result, UnreachableCaseError, UsableListChangeTypeId } from '../../../sys/sys-internal-api';
-import { TextFormatterService } from '../../../text-format/text-format-internal-api';
-import { GridField } from '../../field/grid-field-internal-api';
+import { RevFieldCustomHeadingsService } from '@xilytix/rev-data-source';
+import { Badness, CorrectnessBadness, Integer, LockOpenListItem, Ok, Result, UnreachableCaseError, UsableListChangeTypeId } from '../../../sys/internal-api';
+import { TextFormatterService } from '../../../text-format/internal-api';
+import { GridField } from '../../field/internal-api';
 import {
-    TableFieldSourceDefinition
-} from "../field-source/grid-table-field-source-internal-api";
-import { GridFieldTableRecordDefinition, TableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
-import { TableRecord } from '../record/grid-table-record-internal-api';
+    TableFieldSourceDefinition, TableFieldSourceDefinitionCachingFactoryService
+} from "../field-source/internal-api";
+import { GridFieldTableRecordDefinition } from '../record-definition/internal-api';
+import { TableRecord } from '../record/internal-api';
 import { GridFieldTableValueSource } from '../value-source/internal-api';
-import { GridFieldTableRecordSourceDefinition, TableRecordSourceDefinitionFactoryService } from './definition/grid-table-record-source-definition-internal-api';
+import { GridFieldTableRecordSourceDefinition } from './definition/internal-api';
 import { TableRecordSource } from './table-record-source';
 
 /** @public */
@@ -22,12 +23,16 @@ export class GridFieldTableRecordSource extends TableRecordSource {
 
     constructor(
         textFormatterService: TextFormatterService,
-        tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService,
+        gridFieldCustomHeadingsService: RevFieldCustomHeadingsService,
+        tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService,
+        correctnessBadness: CorrectnessBadness,
         definition: GridFieldTableRecordSourceDefinition,
     ) {
         super(
             textFormatterService,
-            tableRecordSourceDefinitionFactoryService,
+            gridFieldCustomHeadingsService,
+            tableFieldSourceDefinitionCachingFactoryService,
+            correctnessBadness,
             definition,
             GridFieldTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
         );
@@ -38,7 +43,11 @@ export class GridFieldTableRecordSource extends TableRecordSource {
     get records(): readonly GridField[] { return this._records; }
 
     override createDefinition(): GridFieldTableRecordSourceDefinition {
-        return this.tableRecordSourceDefinitionFactoryService.createGridField(this._records.slice());
+        return new GridFieldTableRecordSourceDefinition(
+            this._gridFieldCustomHeadingsService,
+            this._tableFieldSourceDefinitionCachingFactoryService,
+            this._records.slice(),
+        );
     }
 
     override tryLock(_locker: LockOpenListItem.Locker): Promise<Result<void>> {
@@ -69,7 +78,7 @@ export class GridFieldTableRecordSource extends TableRecordSource {
     override createRecordDefinition(idx: Integer): GridFieldTableRecordDefinition {
         const gridField = this._records[idx];
         return {
-            typeId: TableRecordDefinition.TypeId.GridField,
+            typeId: TableFieldSourceDefinition.TypeId.GridField,
             mapKey: gridField.name,
             record: gridField,
         };

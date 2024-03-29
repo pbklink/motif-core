@@ -4,8 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
-import { BadnessList, Integer, MultiEvent, RecordList, UnreachableCaseError, UsableListChangeTypeId } from '../../sys/sys-internal-api';
-import { InsertReplaceIrrcChange, IrrcChange, IrrcChangeTypeId, RemoveIrrcChange } from '../common/adi-common-internal-api';
+import { BadnessList, Integer, MultiEvent, RecordList, UnreachableCaseError, UsableListChangeTypeId } from '../../sys/internal-api';
+import { InsertReplaceIrrcChange, IrrcChange, IrrcChangeTypeId, RemoveIrrcChange } from '../common/internal-api';
 import { FeedSubscriptionDataItem } from './feed-subscription-data-item';
 
 export class IrrcFeedSubscriptionDataItem<T> extends FeedSubscriptionDataItem implements BadnessList<T> {

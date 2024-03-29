@@ -4,32 +4,17 @@
  * License: motionite.trade/license/motif
  */
 
-import { CommaText, EnumInfoOutOfOrderError, Err, ErrorCode, Integer, Ok, Result } from '../../../../sys/sys-internal-api';
+import { RevTableFieldSourceDefinition } from '@xilytix/rev-data-source';
+import { RenderValue } from '../../../../services/internal-api';
+import { EnumInfoOutOfOrderError, Integer } from '../../../../sys/internal-api';
 // import { GridRecordFieldState } from '../../../record/grid-record-internal-api';
-import { GridFieldSourceDefinition } from '../../../field/grid-field-internal-api';
-import { CorrectnessTableField, TableField } from '../../field/grid-table-field-internal-api';
-import { CorrectnessTableValue, TableValue } from '../../value/grid-table-value-internal-api';
+import { CorrectnessTableField, TableField } from '../../field/internal-api';
+import { CorrectnessTableValue, TableValue } from '../../value/internal-api';
 
-export abstract class TableFieldSourceDefinition extends GridFieldSourceDefinition {
-    readonly fieldDefinitions: TableField.Definition[];
-
-    constructor(readonly typeId: TableFieldSourceDefinition.TypeId) {
-        super(TableFieldSourceDefinition.Type.idToName(typeId));
+export abstract class TableFieldSourceDefinition extends RevTableFieldSourceDefinition<TableFieldSourceDefinition.TypeId, RenderValue.TypeId, RenderValue.Attribute.TypeId> {
+    constructor(typeId: TableFieldSourceDefinition.TypeId) {
+        super(typeId, TableFieldSourceDefinition.Type.idToName(typeId));
     }
-
-    get fieldCount(): Integer { return this.fieldDefinitions.length; }
-
-    getFieldName(idx: Integer): string {
-        return this.fieldDefinitions[idx].name;
-    }
-
-    findFieldByName(name: string): Integer | undefined {
-        const upperName = name.toUpperCase();
-        const idx = this.fieldDefinitions.findIndex((definition) => definition.name.toUpperCase() === upperName);
-        return idx >= 0 ? idx : undefined;
-    }
-
-    abstract getFieldNameById(id: number): string;
 }
 
 export namespace TableFieldSourceDefinition {
@@ -43,19 +28,20 @@ export namespace TableFieldSourceDefinition {
         MyxLitIvemAttributes,
         EditableGridLayoutDefinitionColumn,
         SecurityDataItem,
-        BrokerageAccounts,
-        OrdersDataItem,
-        HoldingsDataItem,
-        BalancesDataItem,
+        BrokerageAccount,
+        Order,
+        Holding,
+        Balances,
         CallPut,
         CallSecurityDataItem,
         PutSecurityDataItem,
-        TopShareholdersDataItem,
+        TopShareholder,
         Scan,
         RankedLitIvemIdListDirectoryItem,
         GridField,
         ScanFieldEditorFrame, // outside
         LockerScanAttachedNotificationChannel,
+        LockOpenNotificationChannel,
         /*LitIvemId_News,
         IvemId_Holding,
         CashItem_Holding,
@@ -65,8 +51,6 @@ export namespace TableFieldSourceDefinition {
         CallPut_SecurityDataItem,
         IvemId_CustomHolding,*/
     }
-
-    export type TableFieldValueConstructors = [field: TableField.Constructor, value: TableValue.Constructor];
 
     export namespace Type {
         export type Id = TypeId;
@@ -91,8 +75,9 @@ export namespace TableFieldSourceDefinition {
         export const scanName = 'Scn';
         export const rankedLitIvemIdListDirectoryItemName = 'RllDI';
         export const gridFieldName = 'Gf';
-        export const ScanFieldEditorFrame = 'Sfef';
-        export const LockerScanAttachedNotificationChannel = 'LSAnc';
+        export const ScanFieldEditorFrameName = 'Sfef';
+        export const LockerScanAttachedNotificationChannelName = 'LSAnc';
+        export const LockOpenNotificationChannelName = 'LONC'
 
         interface Info {
             readonly id: Id;
@@ -110,19 +95,20 @@ export namespace TableFieldSourceDefinition {
             MyxLitIvemAttributes: { id: TypeId.MyxLitIvemAttributes, name: myxLitIvemAttributesName },
             EditableGridLayoutDefinitionColumn: { id: TypeId.EditableGridLayoutDefinitionColumn, name: editableGridLayoutDefinitionColumnName },
             SecurityDataItem: { id: TypeId.SecurityDataItem, name: securityDataItemName },
-            BrokerageAccounts: { id: TypeId.BrokerageAccounts, name: brokerageAccountsName },
-            OrdersDataItem: { id: TypeId.OrdersDataItem, name: ordersDataItemName },
-            HoldingsDataItem: { id: TypeId.HoldingsDataItem, name: holdingsDataItemName },
-            BalancesDataItem: { id: TypeId.BalancesDataItem, name: balancesDataItemName },
+            BrokerageAccount: { id: TypeId.BrokerageAccount, name: brokerageAccountsName },
+            Order: { id: TypeId.Order, name: ordersDataItemName },
+            Holding: { id: TypeId.Holding, name: holdingsDataItemName },
+            Balances: { id: TypeId.Balances, name: balancesDataItemName },
             CallPut: { id: TypeId.CallPut, name: callPutName },
             CallSecurityDataItem: { id: TypeId.CallSecurityDataItem, name: callPutSecurityDataItemName },
             PutSecurityDataItem: { id: TypeId.PutSecurityDataItem, name: putSecurityDataItemName },
-            TopShareholdersDataItem: { id: TypeId.TopShareholdersDataItem, name: topShareholdersDataItemName },
+            TopShareholder: { id: TypeId.TopShareholder, name: topShareholdersDataItemName },
             Scan: { id: TypeId.Scan, name: scanName },
             RankedLitIvemIdListDirectoryItem: { id: TypeId.RankedLitIvemIdListDirectoryItem, name: rankedLitIvemIdListDirectoryItemName },
             GridField: { id: TypeId.GridField, name: gridFieldName },
-            ScanFieldEditorFrame: { id: TypeId.ScanFieldEditorFrame, name: ScanFieldEditorFrame },
-            LockerScanAttachedNotificationChannel: { id: TypeId.LockerScanAttachedNotificationChannel, name: LockerScanAttachedNotificationChannel },
+            ScanFieldEditorFrame: { id: TypeId.ScanFieldEditorFrame, name: ScanFieldEditorFrameName },
+            LockerScanAttachedNotificationChannel: { id: TypeId.LockerScanAttachedNotificationChannel, name: LockerScanAttachedNotificationChannelName },
+            LockOpenNotificationChannel: { id: TypeId.LockOpenNotificationChannel, name: LockOpenNotificationChannelName },
         };
 
         const infos: Info[] = Object.values(infoObject);
@@ -149,6 +135,11 @@ export namespace TableFieldSourceDefinition {
         }
     }
 
+    export type TableFieldValueConstructors = [
+        field: TableField.Constructor,
+        value: TableValue.Constructor
+    ];
+
     // used by descendants
     export type TableGridConstructors = [
         TableField.Constructor,
@@ -165,39 +156,32 @@ export namespace TableFieldSourceDefinition {
         Type.initialiseSource();
     }
 
-    export interface FieldName {
-        readonly sourceTypeId: TypeId;
-        readonly sourcelessName: string;
-    }
+    export type FieldName = RevTableFieldSourceDefinition.FieldName<TypeId>;
+    export type FieldId = RevTableFieldSourceDefinition.FieldId<TypeId>;
 
-    export interface FieldId {
-        sourceTypeId: TypeId;
-        id: number;
-    }
+    // export function decodeCommaTextFieldName(value: string): Result<FieldName> {
+    //     const commaTextResult = CommaText.tryToStringArray(value, true);
+    //     if (commaTextResult.isErr()) {
+    //         return CommaTextErr.createOuter(commaTextResult.error, ErrorCode.TableFieldSourceDefinition_InvalidCommaText);
+    //     } else {
+    //         const strArray = commaTextResult.value;
+    //         if (strArray.length !== 2) {
+    //             return new Err(ErrorCode.TableFieldSourceDefinition_DecodeCommaTextFieldNameNot2Elements);
+    //         } else {
+    //             const sourceName = strArray[0];
+    //             const sourceId = Type.tryNameToId(sourceName);
+    //             if (sourceId === undefined) {
+    //                 return new Err(ErrorCode.TableFieldSourceDefinition_DecodeCommaTextFieldNameUnknownSourceId);
+    //             } else {
+    //                 const decodedFieldName: FieldName = {
+    //                     sourceTypeId: sourceId,
+    //                     sourcelessName: strArray[1],
+    //                 }
 
-    export function decodeCommaTextFieldName(value: string): Result<FieldName> {
-        const commaTextResult = CommaText.tryToStringArray(value, true);
-        if (commaTextResult.isErr()) {
-            return commaTextResult.createOuter(commaTextResult.error);
-        } else {
-            const strArray = commaTextResult.value;
-            if (strArray.length !== 2) {
-                return new Err(ErrorCode.TableFieldSourceDefinition_DecodeCommaTextFieldNameNot2Elements);
-            } else {
-                const sourceName = strArray[0];
-                const sourceId = Type.tryNameToId(sourceName);
-                if (sourceId === undefined) {
-                    return new Err(ErrorCode.TableFieldSourceDefinition_DecodeCommaTextFieldNameUnknownSourceId);
-                } else {
-                    const decodedFieldName: FieldName = {
-                        sourceTypeId: sourceId,
-                        sourcelessName: strArray[1],
-                    }
-
-                    return new Ok(decodedFieldName);
-                }
-            }
-        }
-    }
+    //                 return new Ok(decodedFieldName);
+    //             }
+    //         }
+    //     }
+    // }
 
 }

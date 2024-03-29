@@ -4,8 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
-import { IntegerRenderValue, RenderValue } from '../../../services/services-internal-api';
-import { IndexedRecord, Integer } from '../../../sys/sys-internal-api';
+import { IntegerRenderValue, RenderValue } from '../../../services/internal-api';
+import { IndexedRecord, Integer } from '../../../sys/internal-api';
 
 /** @public */
 export abstract class DepthRecord implements IndexedRecord {
@@ -90,7 +90,7 @@ export abstract class DepthRecord implements IndexedRecord {
                 partialAuctionProportion = this.partialAuctionQuantity / this.getVolume();
             }
             extraAttribute = {
-                id: RenderValue.AttributeId.DepthRecordInAuction,
+                typeId: RenderValue.Attribute.TypeId.DepthRecordInAuction,
                 partialAuctionProportion,
             };
         }

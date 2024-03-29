@@ -4,9 +4,9 @@
  * License: motionite.trade/license/motif
  */
 
-import { CurrencyId, ExchangeId, MarketBoardId, MarketId } from '../../../adi/adi-internal-api';
-import { StringId, Strings } from '../../../res/res-internal-api';
-import { AssertInternalError, EnumInfoOutOfOrderError, Integer, Result, SourceTzOffsetDate, UnreachableCaseError } from '../../../sys/sys-internal-api';
+import { CurrencyId, ExchangeId, MarketBoardId, MarketId } from '../../../adi/internal-api';
+import { StringId, Strings } from '../../../res/internal-api';
+import { AssertInternalError, EnumInfoOutOfOrderError, Integer, Result, SourceTzOffsetDate, UnreachableCaseError } from '../../../sys/internal-api';
 import { ScanFormula } from '../../formula/scan-formula';
 import {
     BaseNumericScanFieldCondition,

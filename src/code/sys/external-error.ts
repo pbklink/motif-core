@@ -4,19 +4,18 @@
  * License: motionite.trade/license/motif
  */
 
-import { I18nStrings, StringId } from '../res/res-internal-api';
+import { I18nStrings, StringId } from '../res/internal-api';
 import { ErrorCode } from './error-code';
-import { Logger } from './logger';
-import { ThrowableError } from './throwable-result';
+import { logger } from './xilytix-sysutils';
 
 /** @public */
-export abstract class ExternalError extends ThrowableError {
+export abstract class ExternalError extends Error {
     constructor(errorTypeDescription: StringId, readonly code: ErrorCode, message?: string) {
         super(message === undefined || message === '' ?
             I18nStrings.getStringPlusEnglish(errorTypeDescription) + `: ${code}`
             :
             I18nStrings.getStringPlusEnglish(errorTypeDescription) + `: ${code}: ${message}`);
-        Logger.logError(this.message, 120);
+        logger.logError(this.message, 120);
     }
 }
 

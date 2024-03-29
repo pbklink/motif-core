@@ -4,24 +4,25 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, CommaText, FieldDataType, FieldDataTypeId, Integer } from '../../../../sys/sys-internal-api';
-import { GridField } from '../../../field/grid-field-internal-api';
+import { AssertInternalError, FieldDataType, FieldDataTypeId, Integer } from '../../../../sys/internal-api';
+import { GridField } from '../../../field/internal-api';
 import {
     StringTableField,
     TableField
-} from "../../field/grid-table-field-internal-api";
+} from "../../field/internal-api";
 import {
     StringTableValue,
     TableValue
-} from '../../value/grid-table-value-internal-api';
+} from '../../value/internal-api';
 import { TableFieldSourceDefinition } from './table-field-source-definition';
+import { TableFieldSourceDefinitionCachingFactoryService } from './table-field-source-definition-caching-factory-service';
 
 /** @public */
 export class GridFieldTableFieldSourceDefinition extends TableFieldSourceDefinition {
     override readonly fieldDefinitions: TableField.Definition[];
 
     constructor() {
-        super(TableFieldSourceDefinition.TypeId.GridField);
+        super(GridFieldTableFieldSourceDefinition.typeId);
 
         this.fieldDefinitions = this.createFieldDefinitions();
     }
@@ -32,7 +33,7 @@ export class GridFieldTableFieldSourceDefinition extends TableFieldSourceDefinit
 
     getFieldNameById(id: GridField.FieldId) {
         const sourcelessFieldName = GridField.Field.idToName(id);
-        return CommaText.from2Values(this.name, sourcelessFieldName);
+        return this.encodeFieldName(sourcelessFieldName);
     }
 
     getSupportedFieldNameById(id: GridField.FieldId) {
@@ -71,6 +72,9 @@ export class GridFieldTableFieldSourceDefinition extends TableFieldSourceDefinit
 
 /** @public */
 export namespace GridFieldTableFieldSourceDefinition {
+    export const typeId = TableFieldSourceDefinition.TypeId.GridField;
+    export type TypeId = typeof typeId;
+
     export namespace Field {
         const unsupportedIds: GridField.FieldId[] = [GridField.FieldId.DefaultHeading, GridField.FieldId.DefaultWidth, GridField.FieldId.DefaultTextAlign];
         export const count = GridField.Field.idCount - unsupportedIds.length;
@@ -151,8 +155,12 @@ export namespace GridFieldTableFieldSourceDefinition {
     }
 
     export interface FieldId extends TableFieldSourceDefinition.FieldId {
-        sourceTypeId: TableFieldSourceDefinition.TypeId.GridField;
+        sourceTypeId: GridFieldTableFieldSourceDefinition.TypeId;
         id: GridField.FieldId;
+    }
+
+    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactoryService): GridFieldTableFieldSourceDefinition {
+        return cachingFactoryService.get(typeId) as GridFieldTableFieldSourceDefinition;
     }
 
     export function initialiseStatic() {

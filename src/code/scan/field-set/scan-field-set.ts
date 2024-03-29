@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, Err, Integer, Ok, Result, SourceTzOffsetDate, UnreachableCaseError } from '../../sys/sys-internal-api';
+import { AssertInternalError, Err, Integer, Ok, Result, SourceTzOffsetDate, UnreachableCaseError } from '../../sys/internal-api';
 import { ScanFormula } from '../formula/internal-api';
 import { ScanFieldSetLoadError, ScanFieldSetLoadErrorTypeId } from './common/internal-api';
 import {
@@ -89,16 +89,15 @@ export namespace ScanFieldSet {
 
         let error: ScanFieldSetLoadError | undefined
         if (!ScanFormula.NoneNode.is(rootFormulaBooleanNode)) { // if None then ScanFieldSet is empty
-            let levelNodes: LevelNode[];
+            let nextLevelNodes: LevelNode[];
             if (ScanFormula.AndNode.is(rootFormulaBooleanNode)) {
-                levelNodes = [rootFormulaBooleanNode];
+                nextLevelNodes = [rootFormulaBooleanNode];
             } else {
                 const rootAndNode = new ScanFormula.AndNode();
                 rootAndNode.operands = [rootFormulaBooleanNode];
-                levelNodes = [rootAndNode];
+                nextLevelNodes = [rootAndNode];
             }
 
-            let levelNodeCount =  levelNodes.length;
             let isInFieldLevel = false;
 
             // Examines the tree of nodes one level at a time
@@ -111,18 +110,23 @@ export namespace ScanFieldSet {
             // An XOR node cannot have AND or OR or XOR children.  Other child nodes of XOR nodes are coverted to conditions and the condition is added to a corresponding XOR field (which is created if necessary)
             // Once we are at an 'inField' level, then an AND node can no longer have OR or XOR children
             // You cannot create one field of any type. For example, you cannot create an OR field of a type if an AND field of that type already exists.
-            while (levelNodeCount > 0) {
-                for (let i = 0; i < levelNodeCount; i++) {
-                    const levelNode = levelNodes[i];
+            while (nextLevelNodes.length > 0) {
+                const currentLevelNodeCount = nextLevelNodes.length;
+                const currentLevelNodes = nextLevelNodes.slice();
+                nextLevelNodes.length = 0;
+                for (let i = 0; i < currentLevelNodeCount; i++) {
+                    const levelNode = currentLevelNodes[i];
                     const processResult: Result<LevelNodesAndInField, ScanFieldSetLoadError> = processLevelNode(fieldSet, levelNode, isInFieldLevel);
                     if (processResult.isErr()) {
                         error = processResult.error;
+                        nextLevelNodes.length = 0;
                         break;
                     } else {
                         const levelNodesAndInField: LevelNodesAndInField = processResult.value;
-                        levelNodes = levelNodesAndInField.levelNodes;
-                        levelNodeCount = levelNodes.length;
-                        isInFieldLevel = levelNodesAndInField.inField;
+                        nextLevelNodes = [...nextLevelNodes, ...levelNodesAndInField.levelNodes];
+                        if (levelNodesAndInField.inField) {
+                            isInFieldLevel = true;
+                        }
                     }
                 }
             }
@@ -235,7 +239,7 @@ export namespace ScanFieldSet {
                             }
                             break;
                         default: {
-                            const error = processConditionNode(fieldSet, node, ScanField.BooleanOperationId.And, false);
+                            const error = processConditionNode(fieldSet, operand, ScanField.BooleanOperationId.And, false);
                             if (error !== undefined) {
                                 return new Err(error);
                             }
@@ -261,7 +265,7 @@ export namespace ScanFieldSet {
                         case ScanFormula.NodeTypeId.Xor:
                             return createErrResult(ScanFieldSetLoadErrorTypeId.OrFieldHasXorChild);
                         default: {
-                            const error = processConditionNode(fieldSet, node, ScanField.BooleanOperationId.Or, false);
+                            const error = processConditionNode(fieldSet, operand, ScanField.BooleanOperationId.Or, false);
                             if (error !== undefined) {
                                 return new Err(error);
                             }
@@ -273,11 +277,11 @@ export namespace ScanFieldSet {
                 return new Ok({ levelNodes: childLevelNodes, inField });
             }
             case ScanFormula.NodeTypeId.Xor: {
-                const leftError = processXorLevelNodeOperand(fieldSet, node, node.leftOperand);
+                const leftError = processXorLevelNodeOperand(fieldSet, node.leftOperand);
                 if (leftError !== undefined) {
                     return new Err(leftError);
                 } else {
-                    const rightError = processXorLevelNodeOperand(fieldSet, node, node.rightOperand);
+                    const rightError = processXorLevelNodeOperand(fieldSet, node.rightOperand);
                     if (rightError !== undefined) {
                         return new Err(rightError);
                     } else {
@@ -290,7 +294,7 @@ export namespace ScanFieldSet {
         }
     }
 
-    function processXorLevelNodeOperand(fieldSet: ScanFieldSet, node: ScanFormula.XorNode, operand: ScanFormula.BooleanNode): ScanFieldSetLoadError | undefined {
+    function processXorLevelNodeOperand(fieldSet: ScanFieldSet, operand: ScanFormula.BooleanNode): ScanFieldSetLoadError | undefined {
         switch (operand.typeId) {
             case ScanFormula.NodeTypeId.And:
                 return createError(ScanFieldSetLoadErrorTypeId.XorFieldHasAndChild);
@@ -299,7 +303,7 @@ export namespace ScanFieldSet {
             case ScanFormula.NodeTypeId.Xor:
                 return createError(ScanFieldSetLoadErrorTypeId.XorFieldHasXorChild);
             default: {
-                return processConditionNode(fieldSet, node, ScanField.BooleanOperationId.Xor, false);
+                return processConditionNode(fieldSet, operand, ScanField.BooleanOperationId.Xor, false);
             }
         }
     }
@@ -324,7 +328,7 @@ export namespace ScanFieldSet {
                     throw new AssertInternalError('SFSPCNO55598', node.typeId.toString());
                 }
             case ScanFormula.NodeTypeId.Not:
-                return processConditionNode(fieldSet, (node as ScanFormula.NotNode).operand, fieldOperationId, not);
+                return processConditionNode(fieldSet, (node as ScanFormula.NotNode).operand, fieldOperationId, !not);
             case ScanFormula.NodeTypeId.Xor:
                 if (not) {
                     return createError(ScanFieldSetLoadErrorTypeId.XorFieldOperatorCannotBeNegated);
@@ -447,12 +451,13 @@ export namespace ScanFieldSet {
                 return createErrResult(ScanFieldSetLoadErrorTypeId.FactoryCreateFieldError, error);
             } else {
                 field = fieldCreateResult.value;
+                field.conditionsOperationId = conditionsOperationId;
                 fields.add(field);
                 return new Ok(field);
             }
         } else {
             if (field.conditionsOperationId !== conditionsOperationId) {
-                return createErrResult(ScanFieldSetLoadErrorTypeId.fieldConditionsOperationIdMismatch, field.typeId.toString());
+                return createErrResult(ScanFieldSetLoadErrorTypeId.FieldConditionsOperationIdMismatch, field.typeId.toString());
             } else {
                 return new Ok(field);
             }

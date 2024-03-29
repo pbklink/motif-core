@@ -4,24 +4,28 @@
  * License: motionite.trade/license/motif
  */
 
-import { Account, BrokerageAccountGroup, Holding } from '../../../../adi/adi-internal-api';
-import { PickEnum } from '../../../../sys/sys-internal-api';
-import { GridFieldCustomHeadingsService } from '../../../field/grid-field-internal-api';
-import { GridLayoutDefinition } from '../../../layout/grid-layout-internal-api';
-import { TableFieldSourceDefinition, TableFieldSourceDefinitionCachedFactoryService } from '../../field-source/grid-table-field-source-internal-api';
+import { RevFieldCustomHeadingsService, RevGridLayoutDefinition } from '@xilytix/rev-data-source';
+import { Account, BrokerageAccountGroup, Holding } from '../../../../adi/internal-api';
+import { PickEnum } from '../../../../sys/internal-api';
+import {
+    BrokerageAccountTableFieldSourceDefinition,
+    HoldingTableFieldSourceDefinition,
+    TableFieldSourceDefinition,
+    TableFieldSourceDefinitionCachingFactoryService,
+} from '../../field-source/internal-api';
 import { BrokerageAccountGroupTableRecordSourceDefinition } from './brokerage-account-group-table-record-source-definition';
 import { TableRecordSourceDefinition } from './table-record-source-definition';
 
 /** @public */
 export class HoldingTableRecordSourceDefinition extends BrokerageAccountGroupTableRecordSourceDefinition {
     constructor(
-        customHeadingsService: GridFieldCustomHeadingsService,
-        tableFieldSourceDefinitionCachedFactoryService: TableFieldSourceDefinitionCachedFactoryService,
+        customHeadingsService: RevFieldCustomHeadingsService,
+        tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService,
         brokerageAccountGroup: BrokerageAccountGroup
     ) {
         super(
             customHeadingsService,
-            tableFieldSourceDefinitionCachedFactoryService,
+            tableFieldSourceDefinitionCachingFactoryService,
             TableRecordSourceDefinition.TypeId.Holding,
             HoldingTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
             brokerageAccountGroup
@@ -29,8 +33,8 @@ export class HoldingTableRecordSourceDefinition extends BrokerageAccountGroupTab
     }
 
     override createDefaultLayoutDefinition() {
-        const holdingsDataItemFieldSourceDefinition = this.tableFieldSourceDefinitionCachedFactoryService.holdingsDataItem;
-        const brokerageAccountFieldSourceDefinition = this.tableFieldSourceDefinitionCachedFactoryService.brokerageAccounts;
+        const holdingsDataItemFieldSourceDefinition = HoldingTableFieldSourceDefinition.get(this.tableFieldSourceDefinitionCachingFactoryService);
+        const brokerageAccountFieldSourceDefinition = BrokerageAccountTableFieldSourceDefinition.get(this.tableFieldSourceDefinitionCachingFactoryService);
 
         const fieldNames = new Array<string>();
 
@@ -46,26 +50,26 @@ export class HoldingTableRecordSourceDefinition extends BrokerageAccountGroupTab
         fieldNames.push(brokerageAccountFieldSourceDefinition.getSupportedFieldNameById(Account.FieldId.BranchCode));
         fieldNames.push(brokerageAccountFieldSourceDefinition.getSupportedFieldNameById(Account.FieldId.AdvisorCode));
 
-        return GridLayoutDefinition.createFromFieldNames(fieldNames);
+        return RevGridLayoutDefinition.createFromFieldNames(fieldNames);
     }
 }
 
 /** @public */
 export namespace HoldingTableRecordSourceDefinition {
     export type FieldSourceDefinitionTypeId = PickEnum<TableFieldSourceDefinition.TypeId,
-        TableFieldSourceDefinition.TypeId.HoldingsDataItem |
-        TableFieldSourceDefinition.TypeId.BrokerageAccounts |
+        TableFieldSourceDefinition.TypeId.Holding |
+        TableFieldSourceDefinition.TypeId.BrokerageAccount |
         TableFieldSourceDefinition.TypeId.SecurityDataItem
     >;
 
     export const allowedFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[] = [
-        TableFieldSourceDefinition.TypeId.HoldingsDataItem,
-        TableFieldSourceDefinition.TypeId.BrokerageAccounts,
+        TableFieldSourceDefinition.TypeId.Holding,
+        TableFieldSourceDefinition.TypeId.BrokerageAccount,
         TableFieldSourceDefinition.TypeId.SecurityDataItem,
     ];
 
     export const defaultFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[] = [
-        TableFieldSourceDefinition.TypeId.HoldingsDataItem,
-        TableFieldSourceDefinition.TypeId.BrokerageAccounts,
+        TableFieldSourceDefinition.TypeId.Holding,
+        TableFieldSourceDefinition.TypeId.BrokerageAccount,
     ];
 }

@@ -4,8 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
-import { CallPut } from '../../../services/services-internal-api';
-import { Integer, UnreachableCaseError } from '../../../sys/sys-internal-api';
+import { CallPut } from '../../../services/internal-api';
+import { Integer, UnreachableCaseError } from '../../../sys/internal-api';
 import { CallPutTableFieldSourceDefinition } from '../field-source/definition/internal-api';
 import {
     BooleanTableValue,
@@ -16,7 +16,7 @@ import {
     LitIvemIdTableValue,
     PriceTableValue,
     TableValue
-} from '../value/grid-table-value-internal-api';
+} from '../value/internal-api';
 import { TableValueSource } from './table-value-source';
 
 export class CallPutTableValueSource extends TableValueSource {

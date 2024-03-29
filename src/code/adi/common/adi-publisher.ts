@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, Integer, SysTick } from '../../sys/sys-internal-api';
+import { AssertInternalError, Integer, SysTick } from '../../sys/internal-api';
 import { DataDefinition, PublisherSubscriptionDataDefinition } from './data-definition';
 import { DataMessages } from './data-messages';
 import { AdiPublisherTypeId, DataItemId, DataItemRequestNr } from './data-types';

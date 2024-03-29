@@ -6,7 +6,7 @@
 
 import { AllBrokerageAccountRecordsDataItem } from './all-brokerage-account-records-data-item';
 import { BrokerageAccountGroupOrderList } from './brokerage-account-group-order-list';
-import { BrokerageAccountOrdersDataDefinition } from './common/adi-common-internal-api';
+import { BrokerageAccountOrdersDataDefinition } from './common/internal-api';
 import { Order } from './order';
 
 export class AllOrdersDataItem extends AllBrokerageAccountRecordsDataItem<Order> implements BrokerageAccountGroupOrderList {

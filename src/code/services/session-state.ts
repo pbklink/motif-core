@@ -4,8 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
-import { StringId, Strings } from '../res/res-internal-api';
-import { EnumInfoOutOfOrderError } from '../sys/sys-internal-api';
+import { StringId, Strings } from '../res/internal-api';
+import { EnumInfoOutOfOrderError } from '../sys/internal-api';
 
 export const enum SessionStateId {
     NotStarted,

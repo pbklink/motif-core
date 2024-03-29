@@ -4,29 +4,29 @@
  * License: motionite.trade/license/motif
  */
 
-import { TopShareholder } from '../../../../adi/adi-internal-api';
+import { TopShareholder } from '../../../../adi/internal-api';
 import {
     AssertInternalError,
-    CommaText,
     FieldDataType,
     FieldDataTypeId,
     Integer,
     UnreachableCaseError
-} from "../../../../sys/sys-internal-api";
-import { TableField } from '../../field/grid-table-field-internal-api';
+} from "../../../../sys/internal-api";
+import { TableField } from '../../field/internal-api';
 import { CorrectnessTableField, IntegerCorrectnessTableField, StringCorrectnessTableField } from '../../field/table-field';
 import {
     CorrectnessTableValue,
     IntegerCorrectnessTableValue,
     StringCorrectnessTableValue
-} from '../../value/grid-table-value-internal-api';
+} from '../../value/internal-api';
 import { TableFieldSourceDefinition } from './table-field-source-definition';
+import { TableFieldSourceDefinitionCachingFactoryService } from './table-field-source-definition-caching-factory-service';
 
 export class TopShareholderTableFieldSourceDefinition extends TableFieldSourceDefinition {
     override readonly fieldDefinitions: TableField.Definition[];
 
     constructor() {
-        super(TableFieldSourceDefinition.TypeId.TopShareholdersDataItem);
+        super(TopShareholderTableFieldSourceDefinition.typeId);
 
         this.fieldDefinitions = this.createFieldDefinitions();
     }
@@ -37,7 +37,7 @@ export class TopShareholderTableFieldSourceDefinition extends TableFieldSourceDe
 
     getFieldNameById(id: TopShareholder.FieldId) {
         const sourcelessFieldName = TopShareholderTableFieldSourceDefinition.Field.getNameById(id);
-        return CommaText.from2Values(this.name, sourcelessFieldName);
+        return this.encodeFieldName(sourcelessFieldName);
     }
 
     getSupportedFieldNameById(id: TopShareholder.FieldId) {
@@ -74,6 +74,9 @@ export class TopShareholderTableFieldSourceDefinition extends TableFieldSourceDe
 }
 
 export namespace TopShareholderTableFieldSourceDefinition {
+    export const typeId = TableFieldSourceDefinition.TypeId.TopShareholder;
+    export type TypeId = typeof typeId;
+
     export namespace Field {
         const unsupportedIds: TopShareholder.FieldId[] = [];
         export const count = TopShareholder.Field.count - unsupportedIds.length;
@@ -159,8 +162,12 @@ export namespace TopShareholderTableFieldSourceDefinition {
     }
 
     export interface FieldId extends TableFieldSourceDefinition.FieldId {
-        sourceTypeId: TableFieldSourceDefinition.TypeId.TopShareholdersDataItem;
+        sourceTypeId: TopShareholderTableFieldSourceDefinition.TypeId;
         id: TopShareholder.FieldId;
+    }
+
+    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactoryService): TopShareholderTableFieldSourceDefinition {
+        return cachingFactoryService.get(typeId) as TopShareholderTableFieldSourceDefinition;
     }
 
     export function initialiseStatic() {

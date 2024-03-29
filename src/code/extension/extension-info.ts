@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { ErrorCode, JsonElement, Ok, Result } from '../sys/sys-internal-api';
+import { ErrorCode, JsonElement, JsonElementErr, Ok, Result } from '../sys/internal-api';
 import { ExtensionId } from './extension-id';
 
 /** @public */
@@ -33,23 +33,23 @@ export namespace ExtensionInfo {
         } else {
             const versionResult = element.tryGetString(JsonName.version);
             if (versionResult.isErr()) {
-                return versionResult.createOuter(ErrorCode.ExtensionInfo_VersionIsNotSpecifiedOrInvalid);
+                return JsonElementErr.createOuter(versionResult.error, ErrorCode.ExtensionInfo_VersionIsNotSpecifiedOrInvalid);
             } else {
                 const apiVersionResult = element.tryGetString(JsonName.apiVersion);
                 if (apiVersionResult.isErr()) {
-                    return apiVersionResult.createOuter(ErrorCode.ExtensionInfo_ApiVersionIsNotSpecifiedOrInvalid);
+                    return JsonElementErr.createOuter(apiVersionResult.error, ErrorCode.ExtensionInfo_ApiVersionIsNotSpecifiedOrInvalid);
                 } else {
                     const shortDescriptionResult = element.tryGetString(JsonName.shortDescription);
                     if (shortDescriptionResult.isErr()) {
-                        return shortDescriptionResult.createOuter(ErrorCode.ExtensionInfo_ShortDescriptionIsNotSpecifiedOrInvalid);
+                        return JsonElementErr.createOuter(shortDescriptionResult.error, ErrorCode.ExtensionInfo_ShortDescriptionIsNotSpecifiedOrInvalid);
                     } else {
                         const longDescriptionResult = element.tryGetString(JsonName.longDescription);
                         if (longDescriptionResult.isErr()) {
-                            return longDescriptionResult.createOuter(ErrorCode.ExtensionInfo_LongDescriptionIsNotSpecifiedOrInvalid);
+                            return JsonElementErr.createOuter(longDescriptionResult.error, ErrorCode.ExtensionInfo_LongDescriptionIsNotSpecifiedOrInvalid);
                         } else {
                             const urlPathResult = element.tryGetString(JsonName.urlPath);
                             if (urlPathResult.isErr()) {
-                                return urlPathResult.createOuter(ErrorCode.ExtensionInfo_UrlPathIsNotSpecifiedOrInvalid);
+                                return JsonElementErr.createOuter(urlPathResult.error, ErrorCode.ExtensionInfo_UrlPathIsNotSpecifiedOrInvalid);
                             } else {
                                 const info: ExtensionInfo = {
                                     publisherId: extensionIdResult.value.publisherId,

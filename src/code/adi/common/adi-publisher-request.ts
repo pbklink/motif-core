@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { SysTick } from '../../sys/sys-internal-api';
+import { SysTick } from '../../sys/internal-api';
 import { AdiPublisherSubscription } from './adi-publisher-subscription';
 
 export interface AdiPublisherRequest {

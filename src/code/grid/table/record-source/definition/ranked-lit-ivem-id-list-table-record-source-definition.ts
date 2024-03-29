@@ -4,31 +4,30 @@
  * License: motionite.trade/license/motif
  */
 
+import { RevFieldCustomHeadingsService } from '@xilytix/rev-data-source';
 import {
     RankedLitIvemIdListDefinition,
     RankedLitIvemIdListDefinitionFactoryService
-} from "../../../../ranked-lit-ivem-id-list/ranked-lit-ivem-id-list-internal-api";
-import { ErrorCode, JsonElement, PickEnum, Result } from '../../../../sys/sys-internal-api';
-import { GridFieldCustomHeadingsService } from '../../../field/grid-field-internal-api';
+} from "../../../../ranked-lit-ivem-id-list/internal-api";
+import { ErrorCode, JsonElement, JsonElementErr, PickEnum, Result } from '../../../../sys/internal-api';
 import {
     TableFieldSourceDefinition,
-    TableFieldSourceDefinitionCachedFactoryService
-} from "../../field-source/grid-table-field-source-internal-api";
+    TableFieldSourceDefinitionCachingFactoryService
+} from "../../field-source/internal-api";
 import { TableRecordSourceDefinition } from './table-record-source-definition';
 
 /** @public */
 export abstract class RankedLitIvemIdListTableRecordSourceDefinition extends TableRecordSourceDefinition {
     constructor(
-        customHeadingsService: GridFieldCustomHeadingsService,
-        tableFieldSourceDefinitionCachedFactoryService: TableFieldSourceDefinitionCachedFactoryService,
-        typeId: TableRecordSourceDefinition.TypeId,
+        customHeadingsService: RevFieldCustomHeadingsService,
+        tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService,
         allowedFieldSourceDefinitionTypeIds: RankedLitIvemIdListTableRecordSourceDefinition.FieldSourceDefinitionTypeId[],
         readonly rankedLitIvemIdListDefinition: RankedLitIvemIdListDefinition
     ) {
         super(
             customHeadingsService,
-            tableFieldSourceDefinitionCachedFactoryService,
-            typeId,
+            tableFieldSourceDefinitionCachingFactoryService,
+            TableRecordSourceDefinition.TypeId.RankedLitIvemIdList,
             allowedFieldSourceDefinitionTypeIds,
         );
     }
@@ -50,7 +49,7 @@ export namespace RankedLitIvemIdListTableRecordSourceDefinition {
         TableFieldSourceDefinition.TypeId.SecurityDataItem |
         TableFieldSourceDefinition.TypeId.RankedLitIvemId
         // AlternateCodesFix: Currently this actually is part of FullDetail.  Will be in BaseDetail in future
-        // TableFieldSourceDefinition.TypeId.LitIvemAlternateCodes
+        // TypedTableFieldSourceDefinition.TypeId.LitIvemAlternateCodes
     >;
 
     export namespace JsonName {
@@ -64,13 +63,18 @@ export namespace RankedLitIvemIdListTableRecordSourceDefinition {
         const definitionElementResult = element.tryGetElement(JsonName.definition);
         if (definitionElementResult.isErr()) {
             const errorCode = ErrorCode.RankedLitIvemIdListTableRecordSourceDefinition_DefinitionElementNotSpecified;
-            return definitionElementResult.createOuter(errorCode);
+            return JsonElementErr.createOuter(definitionElementResult.error, errorCode);
         } else {
             const definitionElement = definitionElementResult.value;
 
             const definitionResult = litIvemIdListDefinitionFactoryService.tryCreateFromJson(definitionElement);
             if (definitionResult.isErr()) {
-                return definitionResult.createOuter(ErrorCode.RankedLitIvemIdListTableRecordSourceDefinition_DefinitionJsonIsInvalid);
+                const errorCode = definitionResult.error as ErrorCode;
+                if (errorCode === ErrorCode.LitIvemIdArrayRankedLitIvemIdListDefinition_JsonNotSpecified) {
+                    return definitionResult.createOuter(ErrorCode.RankedLitIvemIdListTableRecordSourceDefinition_DefinitionJsonNotSpecified);
+                } else {
+                    return definitionResult.createOuter(ErrorCode.RankedLitIvemIdListTableRecordSourceDefinition_DefinitionJsonIsInvalid);
+                }
             } else {
                 return definitionResult;
             }

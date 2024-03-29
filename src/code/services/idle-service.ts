@@ -4,9 +4,11 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, Integer, SysTick } from '../sys/sys-internal-api';
+import { AssertInternalError, Integer, SysTick } from '../sys/internal-api';
 
 export class IdleService {
+    callbackExecuteEventer: IdleService.CallbackExecuteEventer | undefined;
+
     private readonly _requestIdleCallbackAvailable: boolean;
     private readonly _requests = new Array<IdleService.Request>();
     private readonly _idleWaitingRequests = new Array<IdleService.IdleWaitingRequest>();
@@ -116,7 +118,13 @@ export class IdleService {
                 timeout,
             };
             this._callbackOrTimeoutHandle = requestIdleCallback(
-                (deadline) => { this.idleCallback(deadline); },
+                (deadline) => {
+                    if (this.callbackExecuteEventer !== undefined) {
+                        this.callbackExecuteEventer(() => { this.idleCallback(deadline) });
+                    } else {
+                        this.idleCallback(deadline);
+                    }
+                },
                 options
             );
         } else {
@@ -203,6 +211,7 @@ export class IdleService {
 export namespace IdleService {
     export type Resolve<T> = (this: void, result: T | undefined) => void;
     export type Callback<T> = (this: void, deadline: IdleDeadline) => Promise<T | undefined>;
+    export type CallbackExecuteEventer = (this: void, idleCallback: (this: void) => void) => void;
 
     export interface Request {
         readonly idleTimeout: number,

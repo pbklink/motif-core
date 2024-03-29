@@ -5,8 +5,8 @@
  */
 
 /* eslint-disable brace-style */
-import { OrderTypeId, TimeInForceId } from '../../adi/adi-internal-api';
-import { Integer, SourceTzOffsetDateTime, SysTick } from '../../sys/sys-internal-api';
+import { OrderTypeId, TimeInForceId } from '../../adi/internal-api';
+import { Integer, SourceTzOffsetDateTime, SourceTzOffsetDateTimeTimezoneMode, SysTick } from '../../sys/internal-api';
 import { TypedKeyValueScalarSettingsGroup } from './typed-key-value-scalar-settings-group';
 import { TypedKeyValueSettings } from './typed-key-value-settings';
 
@@ -385,16 +385,16 @@ export class ScalarSettings extends TypedKeyValueScalarSettingsGroup {
             name: 'format_DateTimeTimezoneModeId',
             operator: false,
             defaulter: () => TypedKeyValueSettings.formatEnumString(
-                SourceTzOffsetDateTime.TimezoneMode.idToJsonValue(ScalarSettings.Default.format_DateTimeTimezoneModeId)),
+                SourceTzOffsetDateTimeTimezoneMode.idToJsonValue(ScalarSettings.Default.format_DateTimeTimezoneModeId)),
             getter: () => {
-                const jsonValue = SourceTzOffsetDateTime.TimezoneMode.idToJsonValue(this._format_DateTimeTimezoneModeId);
+                const jsonValue = SourceTzOffsetDateTimeTimezoneMode.idToJsonValue(this._format_DateTimeTimezoneModeId);
                 return TypedKeyValueSettings.formatEnumString(jsonValue);
             },
             pusher: (value: TypedKeyValueSettings.PushValue) => {
                 if (value.value === undefined) {
                     this._format_DateTimeTimezoneModeId = ScalarSettings.Default.format_DateTimeTimezoneModeId;
                 } else {
-                    const id = SourceTzOffsetDateTime.TimezoneMode.tryJsonValueToId(value.value);
+                    const id = SourceTzOffsetDateTimeTimezoneMode.tryJsonValueToId(value.value);
                     if (id === undefined) {
                         this._format_DateTimeTimezoneModeId = ScalarSettings.Default.format_DateTimeTimezoneModeId;
                     } else {

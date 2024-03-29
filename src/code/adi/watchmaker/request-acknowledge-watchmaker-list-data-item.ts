@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { DataMessage, DataMessageTypeId } from '../common/adi-common-internal-api';
+import { DataMessage, DataMessageTypeId } from '../common/internal-api';
 import { WatchmakerPublishDataItem } from './watchmaker-publish-data-item';
 
 export abstract class RequestAcknowledgeWatchmakerListDataItem extends WatchmakerPublishDataItem {

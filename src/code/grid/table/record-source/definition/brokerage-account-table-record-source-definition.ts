@@ -4,22 +4,21 @@
  * License: motionite.trade/license/motif
  */
 
-import { Account, Feed } from '../../../../adi/adi-internal-api';
-import { PickEnum } from '../../../../sys/sys-internal-api';
-import { GridFieldCustomHeadingsService } from '../../../field/grid-field-internal-api';
-import { GridLayoutDefinition } from '../../../layout/grid-layout-internal-api';
-import { TableFieldSourceDefinition, TableFieldSourceDefinitionCachedFactoryService } from '../../field-source/grid-table-field-source-internal-api';
+import { RevFieldCustomHeadingsService, RevGridLayoutDefinition } from '@xilytix/rev-data-source';
+import { Account, Feed } from '../../../../adi/internal-api';
+import { PickEnum } from '../../../../sys/internal-api';
+import { BrokerageAccountTableFieldSourceDefinition, FeedTableFieldSourceDefinition, TableFieldSourceDefinition, TableFieldSourceDefinitionCachingFactoryService } from '../../field-source/internal-api';
 import { TableRecordSourceDefinition } from './table-record-source-definition';
 
 /** @public */
 export class BrokerageAccountTableRecordSourceDefinition extends TableRecordSourceDefinition {
     constructor(
-        customHeadingsService: GridFieldCustomHeadingsService,
-        tableFieldSourceDefinitionCachedFactoryService: TableFieldSourceDefinitionCachedFactoryService
+        customHeadingsService: RevFieldCustomHeadingsService,
+        tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService
     ) {
         super(
             customHeadingsService,
-            tableFieldSourceDefinitionCachedFactoryService,
+            tableFieldSourceDefinitionCachingFactoryService,
             TableRecordSourceDefinition.TypeId.BrokerageAccount,
             BrokerageAccountTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds
         );
@@ -28,8 +27,8 @@ export class BrokerageAccountTableRecordSourceDefinition extends TableRecordSour
     // no override for saveToJson()
 
     override createDefaultLayoutDefinition() {
-        const brokerageAccountFieldSourceDefinition = this.tableFieldSourceDefinitionCachedFactoryService.brokerageAccounts;
-        const feedFieldSourceDefinition = this.tableFieldSourceDefinitionCachedFactoryService.feed;
+        const brokerageAccountFieldSourceDefinition = BrokerageAccountTableFieldSourceDefinition.get(this.tableFieldSourceDefinitionCachingFactoryService);
+        const feedFieldSourceDefinition = FeedTableFieldSourceDefinition.get(this.tableFieldSourceDefinitionCachingFactoryService);
 
         const fieldNames = new Array<string>();
 
@@ -40,24 +39,24 @@ export class BrokerageAccountTableRecordSourceDefinition extends TableRecordSour
         fieldNames.push(brokerageAccountFieldSourceDefinition.getSupportedFieldNameById(Account.FieldId.BranchCode));
         fieldNames.push(brokerageAccountFieldSourceDefinition.getSupportedFieldNameById(Account.FieldId.AdvisorCode));
 
-        return GridLayoutDefinition.createFromFieldNames(fieldNames);
+        return RevGridLayoutDefinition.createFromFieldNames(fieldNames);
     }
 }
 
 /** @public */
 export namespace BrokerageAccountTableRecordSourceDefinition {
     export type FieldSourceDefinitionTypeId = PickEnum<TableFieldSourceDefinition.TypeId,
-        TableFieldSourceDefinition.TypeId.BrokerageAccounts |
+        TableFieldSourceDefinition.TypeId.BrokerageAccount |
         TableFieldSourceDefinition.TypeId.Feed
     >;
 
     export const allowedFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[] = [
-        TableFieldSourceDefinition.TypeId.BrokerageAccounts,
+        TableFieldSourceDefinition.TypeId.BrokerageAccount,
         TableFieldSourceDefinition.TypeId.Feed,
     ];
 
     export const defaultFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[] = [
-        TableFieldSourceDefinition.TypeId.BrokerageAccounts,
+        TableFieldSourceDefinition.TypeId.BrokerageAccount,
         TableFieldSourceDefinition.TypeId.Feed,
     ];
 }

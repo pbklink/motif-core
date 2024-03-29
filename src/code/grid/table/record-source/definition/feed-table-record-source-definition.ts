@@ -4,22 +4,21 @@
  * License: motionite.trade/license/motif
  */
 
-import { Feed } from '../../../../adi/adi-internal-api';
-import { PickEnum } from '../../../../sys/sys-internal-api';
-import { GridFieldCustomHeadingsService } from '../../../field/grid-field-internal-api';
-import { GridLayoutDefinition } from '../../../layout/grid-layout-internal-api';
-import { TableFieldSourceDefinition, TableFieldSourceDefinitionCachedFactoryService } from '../../field-source/grid-table-field-source-internal-api';
+import { RevFieldCustomHeadingsService, RevGridLayoutDefinition } from '@xilytix/rev-data-source';
+import { Feed } from '../../../../adi/internal-api';
+import { PickEnum } from '../../../../sys/internal-api';
+import { FeedTableFieldSourceDefinition, TableFieldSourceDefinition, TableFieldSourceDefinitionCachingFactoryService } from '../../field-source/internal-api';
 import { TableRecordSourceDefinition } from './table-record-source-definition';
 
 /** @public */
 export class FeedTableRecordSourceDefinition extends TableRecordSourceDefinition {
     constructor(
-        customHeadingsService: GridFieldCustomHeadingsService,
-        tableFieldSourceDefinitionCachedFactoryService: TableFieldSourceDefinitionCachedFactoryService
+        customHeadingsService: RevFieldCustomHeadingsService,
+        tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService
     ) {
         super(
             customHeadingsService,
-            tableFieldSourceDefinitionCachedFactoryService,
+            tableFieldSourceDefinitionCachingFactoryService,
             TableRecordSourceDefinition.TypeId.Feed,
             FeedTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
         );
@@ -28,7 +27,7 @@ export class FeedTableRecordSourceDefinition extends TableRecordSourceDefinition
     // no override for saveToJson()
 
     override createDefaultLayoutDefinition() {
-        const feedFieldSourceDefinition = this.tableFieldSourceDefinitionCachedFactoryService.feed;
+        const feedFieldSourceDefinition = FeedTableFieldSourceDefinition.get(this.tableFieldSourceDefinitionCachingFactoryService);
 
         const fieldNames = new Array<string>();
 
@@ -36,7 +35,7 @@ export class FeedTableRecordSourceDefinition extends TableRecordSourceDefinition
         fieldNames.push(feedFieldSourceDefinition.getSupportedFieldNameById(Feed.FieldId.ClassId));
         fieldNames.push(feedFieldSourceDefinition.getSupportedFieldNameById(Feed.FieldId.StatusId));
 
-        return GridLayoutDefinition.createFromFieldNames(fieldNames);
+        return RevGridLayoutDefinition.createFromFieldNames(fieldNames);
     }
 }
 

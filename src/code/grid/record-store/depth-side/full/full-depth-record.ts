@@ -4,8 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { Decimal } from 'decimal.js-light';
-import { DepthDataItem, MarketId, MarketInfo, OrderSideId } from '../../../../adi/adi-internal-api';
+import { DepthDataItem, MarketId, MarketInfo, OrderSideId } from '../../../../adi/internal-api';
 import {
     CountAndXrefsRenderValue,
     IntegerRenderValue,
@@ -16,19 +15,21 @@ import {
     RenderValue,
     StringArrayRenderValue,
     StringRenderValue
-} from '../../../../services/services-internal-api';
+} from '../../../../services/internal-api';
 import {
     AssertInternalError,
+    Decimal,
     GridRecordInvalidatedValue,
     Integer,
-    Logger,
     UnreachableCaseError,
     ValueRecentChangeTypeId,
     compareDecimal,
     compareInteger,
     isArrayEqualUniquely,
+    logger,
+    newDecimal,
     uniqueElementArraysOverlap
-} from "../../../../sys/sys-internal-api";
+} from "../../../../sys/internal-api";
 import { DepthRecord } from '../depth-record';
 import { DepthRecordRenderValue } from '../depth-record-render-value';
 import { FullDepthSideField, FullDepthSideFieldId } from './full-depth-side-field';
@@ -60,7 +61,7 @@ export abstract class FullDepthRecord extends DepthRecord {
             attributes[attributeIdx++] = extraAttribute;
         }
         const recordAttribute: DepthRecordRenderValue.Attribute = {
-            id: RenderValue.AttributeId.DepthRecord,
+            typeId: RenderValue.Attribute.TypeId.DepthRecord,
             orderSideId: sideId,
             depthRecordTypeId: this.typeId,
             ownOrder: this.isOwnOrder(),
@@ -284,7 +285,7 @@ export class OrderFullDepthRecord extends FullDepthRecord {
     private createCountXrefRenderValue(): DepthRecord.CreateRenderValueResult {
         const renderValue = new StringRenderValue(this.order.crossRef);
         const extraAttribute: RenderValue.DepthCountXRefFieldAttribute = {
-            id: RenderValue.AttributeId.DepthCountXRefField,
+            typeId: RenderValue.Attribute.TypeId.DepthCountXRefField,
             isCountAndXrefs: false,
         };
         return { renderValue, extraAttribute };
@@ -333,7 +334,7 @@ export class PriceLevelFullDepthRecord extends FullDepthRecord {
     constructor(index: Integer, firstOrder: DepthDataItem.Order, volumeAhead: Integer | undefined, auctionQuantity: Integer | undefined) {
         super(DepthRecord.TypeId.PriceLevel, index, volumeAhead, auctionQuantity);
 
-        this._price = new Decimal(firstOrder.price);
+        this._price = newDecimal(firstOrder.price);
         this._count = 1;
         this._volume = firstOrder.quantity;
         this._marketIds = [firstOrder.marketId];
@@ -506,7 +507,7 @@ export class PriceLevelFullDepthRecord extends FullDepthRecord {
         // in some cases, order, has been changed so we need to pass in oldQuantity and oldHasUndisclosed separately
         const orderIdx = this._orders.indexOf(order);
         if (orderIdx < 0) {
-            Logger.logInternalError('FDRPLFDRRMR38867', `Not found: ${order.orderId}`);
+            logger.logError(`FDRPLFDRRMR38867: ${order.orderId}`);
             return [];
         } else {
             const changes = new Array<GridRecordInvalidatedValue>(8); // Set to maximum possible number of elements
@@ -596,7 +597,7 @@ export class PriceLevelFullDepthRecord extends FullDepthRecord {
             switch (valueChange.fieldId) {
                 case DepthDataItem.Order.Field.Id.Price: {
                     if (this._count === 1) {
-                        this._price = new Decimal(newOrder.price);
+                        this._price = newDecimal(newOrder.price);
                         changes[changeCount++] = { fieldIndex: FullDepthSideFieldId.Price, typeId: valueChange.recentChangeTypeId };
                         priceAndHasUndisclosedChangeTypeId = valueChange.recentChangeTypeId;
                     } else {
@@ -691,7 +692,7 @@ export class PriceLevelFullDepthRecord extends FullDepthRecord {
     private createCountXrefRenderValue(): DepthRecord.CreateRenderValueResult {
         const renderValue = new CountAndXrefsRenderValue( { count: this._count, xrefs: this._xrefs });
         const extraAttribute: RenderValue.DepthCountXRefFieldAttribute = {
-            id: RenderValue.AttributeId.DepthCountXRefField,
+            typeId: RenderValue.Attribute.TypeId.DepthCountXRefField,
             isCountAndXrefs: true,
         };
         return { renderValue, extraAttribute };

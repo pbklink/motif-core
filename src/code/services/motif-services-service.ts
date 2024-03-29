@@ -4,8 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { StringId, Strings } from '../res/res-internal-api';
-import { ServiceOperator, ServiceOperatorId } from '../sys/service-operator';
+import { StringId, Strings } from '../res/internal-api';
 import {
     EnumInfoOutOfOrderError,
     Err,
@@ -16,7 +15,8 @@ import {
     Result,
     checkLimitTextLength,
     getErrorMessage
-} from '../sys/sys-internal-api';
+} from '../sys/internal-api';
+import { ServiceOperator, ServiceOperatorId } from '../sys/service-operator';
 
 export class MotifServicesService {
     private _baseUrl: string;

@@ -4,10 +4,10 @@
  * License: motionite.trade/license/motif
  */
 
-import { NotificationChannel, ScanAttachedNotificationChannel } from '../adi/adi-internal-api';
+import { NotificationChannel, ScanAttachedNotificationChannel } from '../adi/internal-api';
 import { NotificationChannelsService } from '../notification-channel/internal-api';
+import { AssertInternalError, Integer, LockOpenListItem, MultiEvent, UsableListChangeTypeId } from '../sys/internal-api';
 import { ModifierComparableList } from '../sys/modifier-comparable-list';
-import { AssertInternalError, Integer, LockOpenListItem, MultiEvent, UsableListChangeTypeId } from '../sys/sys-internal-api';
 import { LockerScanAttachedNotificationChannel } from './locker-scan-attached-notification-channel';
 
 export class LockerScanAttachedNotificationChannelList extends ModifierComparableList<LockerScanAttachedNotificationChannel, Integer | undefined> {
@@ -101,8 +101,8 @@ export class LockerScanAttachedNotificationChannelList extends ModifierComparabl
         this.remove(channel, modifier);
     }
 
-    detachChannelsAtIndices(detachIndices: Integer[]) {
-        this.removeAtIndices(detachIndices);
+    detachChannelsAtIndices(detachIndices: Integer[], modifier?: Integer) {
+        this.removeAtIndices(detachIndices, modifier);
     }
 
     detachAllChannels(modifier?: Integer) {
@@ -154,6 +154,11 @@ export class LockerScanAttachedNotificationChannelList extends ModifierComparabl
                 super.notifyListChange(listChangeTypeId, index, count);
                 break;
         }
+    }
+
+    protected override notifyAfterListChanged() {
+        super.notifyAfterListChanged();
+        this.notifyChanged(this.modifier);
     }
 
     private async tryLockChannel(

@@ -4,8 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
-import { NotImplementedError } from '../../../../sys/sys-internal-api';
-import { AdiPublisherRequest, AdiPublisherSubscription, DataMessage } from '../../../common/adi-common-internal-api';
+import { NotImplementedError } from '../../../../sys/internal-api';
+import { AdiPublisherRequest, AdiPublisherSubscription, DataMessage } from '../../../common/internal-api';
 import { ZenithProtocol } from './protocol/zenith-protocol';
 import { ZenithConvert } from './zenith-convert';
 

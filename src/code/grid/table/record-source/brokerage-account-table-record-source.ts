@@ -4,20 +4,19 @@
  * License: motionite.trade/license/motif
  */
 
-import { Account, AdiService, BrokerageAccountsDataDefinition, BrokerageAccountsDataItem } from '../../../adi/adi-internal-api';
-import { Integer, KeyedCorrectnessList, LockOpenListItem, UnreachableCaseError } from '../../../sys/sys-internal-api';
-import { TextFormatterService } from '../../../text-format/text-format-internal-api';
+import { RevFieldCustomHeadingsService } from '@xilytix/rev-data-source';
+import { Account, AdiService, BrokerageAccountsDataDefinition, BrokerageAccountsDataItem } from '../../../adi/internal-api';
+import { CorrectnessBadness, Integer, KeyedCorrectnessList, LockOpenListItem, UnreachableCaseError } from '../../../sys/internal-api';
+import { TextFormatterService } from '../../../text-format/internal-api';
 import {
-    TableFieldSourceDefinition
-} from "../field-source/grid-table-field-source-internal-api";
+    TableFieldSourceDefinition, TableFieldSourceDefinitionCachingFactoryService
+} from "../field-source/internal-api";
 import {
-    BrokerageAccountTableRecordDefinition,
-    TableRecordDefinition
-} from "../record-definition/grid-table-record-definition-internal-api";
-import { TableRecord } from '../record/grid-table-record-internal-api';
+    BrokerageAccountTableRecordDefinition
+} from "../record-definition/internal-api";
+import { TableRecord } from '../record/internal-api';
 import { BrokerageAccountTableValueSource, FeedTableValueSource } from '../value-source/internal-api';
 import { BrokerageAccountTableRecordSourceDefinition } from './definition/brokerage-account-table-record-source-definition';
-import { TableRecordSourceDefinitionFactoryService } from './definition/grid-table-record-source-definition-internal-api';
 import { SingleDataItemRecordTableRecordSource } from './single-data-item-record-table-record-source';
 
 /** @public */
@@ -27,25 +26,32 @@ export class BrokerageAccountTableRecordSource
     constructor(
         private readonly _adiService: AdiService,
         textFormatterService: TextFormatterService,
-        tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService,
+        gridFieldCustomHeadingsService: RevFieldCustomHeadingsService,
+        tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService,
+        correctnessBadness: CorrectnessBadness,
         definition: BrokerageAccountTableRecordSourceDefinition,
     ) {
         super(
             textFormatterService,
-            tableRecordSourceDefinitionFactoryService,
+            gridFieldCustomHeadingsService,
+            tableFieldSourceDefinitionCachingFactoryService,
+            correctnessBadness,
             definition,
             BrokerageAccountTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
         );
     }
 
     override createDefinition(): BrokerageAccountTableRecordSourceDefinition {
-        return this.tableRecordSourceDefinitionFactoryService.createBrokerageAccount();
+        return new BrokerageAccountTableRecordSourceDefinition(
+            this._gridFieldCustomHeadingsService,
+            this._tableFieldSourceDefinitionCachingFactoryService,
+        );
     }
 
     override createRecordDefinition(idx: Integer): BrokerageAccountTableRecordDefinition {
         const record = this.recordList.records[idx];
         return {
-            typeId: TableRecordDefinition.TypeId.BrokerageAccount,
+            typeId: TableFieldSourceDefinition.TypeId.BrokerageAccount,
             mapKey: record.mapKey,
             record,
         };
@@ -63,7 +69,7 @@ export class BrokerageAccountTableRecordSource
             const fieldSourceDefinitionTypeId =
                 fieldSourceDefinition.typeId as BrokerageAccountTableRecordSourceDefinition.FieldSourceDefinitionTypeId;
             switch (fieldSourceDefinitionTypeId) {
-                case TableFieldSourceDefinition.TypeId.BrokerageAccounts: {
+                case TableFieldSourceDefinition.TypeId.BrokerageAccount: {
                     const valueSource = new BrokerageAccountTableValueSource(result.fieldCount, brokerageAccount);
                     result.addSource(valueSource);
                     break;

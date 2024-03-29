@@ -4,14 +4,14 @@
  * License: motionite.trade/license/motif
  */
 
-import { Decimal } from 'decimal.js-light';
-import { StringId, Strings } from '../../res/res-internal-api';
+import { StringId, Strings } from '../../res/internal-api';
 import {
     AssertInternalError,
     Badness,
     CommaText,
     ComparisonResult,
     CorrectnessId,
+    Decimal,
     EnumInfoOutOfOrderError,
     Integer,
     UnreachableCaseError,
@@ -25,10 +25,11 @@ import {
     mSecsPerHour,
     mSecsPerMin,
     mSecsPerSec,
+    newDecimal,
     priorityCompareInteger,
     secsPerHour,
     secsPerMin
-} from '../../sys/sys-internal-api';
+} from '../../sys/internal-api';
 
 // No Enum value should have an external dependency or be persisted. Use exports or imports instead.
 
@@ -7709,6 +7710,70 @@ export namespace ScanTargetType {
     }
 }
 
+export namespace NotificationDistributionMethod {
+    export type Id = NotificationDistributionMethodId;
+
+    interface Info {
+        readonly id: Id;
+        readonly name: string;
+        readonly displayId: StringId;
+    }
+
+    type InfosObject = { [id in keyof typeof NotificationDistributionMethodId]: Info };
+
+    const infosObject: InfosObject = {
+        Debug: {
+            id: NotificationDistributionMethodId.Debug,
+            name: 'Debug',
+            displayId: StringId.NotificationDistributionMethodDisplay_Debug,
+        },
+        Email: {
+            id: NotificationDistributionMethodId.Email,
+            name: 'Email',
+            displayId: StringId.NotificationDistributionMethodDisplay_Email,
+        },
+        Sms: {
+            id: NotificationDistributionMethodId.Sms,
+            name: 'Sms',
+            displayId: StringId.NotificationDistributionMethodDisplay_Sms,
+        },
+        WebPush: {
+            id: NotificationDistributionMethodId.WebPush,
+            name: 'WebPush',
+            displayId: StringId.NotificationDistributionMethodDisplay_WebPush,
+        },
+        ApplePush: {
+            id: NotificationDistributionMethodId.ApplePush,
+            name: 'ApplePush',
+            displayId: StringId.NotificationDistributionMethodDisplay_ApplePush,
+        },
+        GooglePush: {
+            id: NotificationDistributionMethodId.GooglePush,
+            name: 'GooglePush',
+            displayId: StringId.NotificationDistributionMethodDisplay_GooglePush,
+        },
+    } as const;
+
+    const infos = Object.values(infosObject);
+    export const idCount = infos.length;
+
+
+    export function initialise() {
+        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as NotificationDistributionMethodId);
+        if (outOfOrderIdx >= 0) {
+            throw new EnumInfoOutOfOrderError('NotificationDistributionMethodId', outOfOrderIdx, infos[outOfOrderIdx].name);
+        }
+    }
+
+    export function idToDisplayId(id: Id): StringId {
+        return infos[id].displayId;
+    }
+
+    export function idToDisplay(id: Id): string {
+        return Strings[idToDisplayId(id)];
+    }
+}
+
 // Utility Classes
 
 export interface EnvironmentedAccountId {
@@ -7748,7 +7813,7 @@ export interface OrderRequestError {
 }
 
 export namespace AsxIndexPoint {
-    const dollarsToPointsFactor: Decimal = new Decimal(100.0);
+    const dollarsToPointsFactor: Decimal = newDecimal(100.0);
 
     export function toDollars(Value: Decimal): Decimal {
         return Value.div(dollarsToPointsFactor);

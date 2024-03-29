@@ -4,33 +4,31 @@
  * License: motionite.trade/license/motif
  */
 
-import { SecurityDataItem } from '../../../../adi/adi-internal-api';
+import { RevFieldCustomHeadingsService, RevGridLayoutDefinition } from '@xilytix/rev-data-source';
+import { SecurityDataItem } from '../../../../adi/internal-api';
 import {
-    RankedLitIvemIdListDefinition
-} from "../../../../ranked-lit-ivem-id-list/ranked-lit-ivem-id-list-internal-api";
-import { GridFieldCustomHeadingsService } from '../../../field/grid-field-internal-api';
-import { GridLayoutDefinition } from '../../../layout/grid-layout-internal-api';
+    LitIvemIdArrayRankedLitIvemIdListDefinition, ScanIdRankedLitIvemIdListDefinition
+} from "../../../../ranked-lit-ivem-id-list/internal-api";
 import {
     LitIvemBaseDetailTableFieldSourceDefinition,
     RankedLitIvemIdTableFieldSourceDefinition,
     SecurityDataItemTableFieldSourceDefinition,
     TableFieldSourceDefinition,
-    TableFieldSourceDefinitionCachedFactoryService
-} from "../../field-source/grid-table-field-source-internal-api";
+    TableFieldSourceDefinitionCachingFactoryService
+} from "../../field-source/internal-api";
 import { RankedLitIvemIdListTableRecordSourceDefinition } from './ranked-lit-ivem-id-list-table-record-source-definition';
 import { TableRecordSourceDefinition } from './table-record-source-definition';
 
 /** @public */
 export class WatchlistTableRecordSourceDefinition extends RankedLitIvemIdListTableRecordSourceDefinition {
     constructor(
-        customHeadingsService: GridFieldCustomHeadingsService,
-        tableFieldSourceDefinitionCachedFactoryService: TableFieldSourceDefinitionCachedFactoryService,
-        rankedLitIvemIdListDefinition: RankedLitIvemIdListDefinition
+        customHeadingsService: RevFieldCustomHeadingsService,
+        tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService,
+        rankedLitIvemIdListDefinition: LitIvemIdArrayRankedLitIvemIdListDefinition | ScanIdRankedLitIvemIdListDefinition,
     ) {
         super(
             customHeadingsService,
-            tableFieldSourceDefinitionCachedFactoryService,
-            TableRecordSourceDefinition.TypeId.Watchlist,
+            tableFieldSourceDefinitionCachingFactoryService,
             WatchlistTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
             rankedLitIvemIdListDefinition,
         );
@@ -39,7 +37,7 @@ export class WatchlistTableRecordSourceDefinition extends RankedLitIvemIdListTab
     override get defaultFieldSourceDefinitionTypeIds() { return WatchlistTableRecordSourceDefinition.defaultFieldSourceDefinitionTypeIds; }
 
     override createDefaultLayoutDefinition() {
-        const fieldSourceDefinition = this.tableFieldSourceDefinitionCachedFactoryService.securityDataItem;
+        const fieldSourceDefinition = SecurityDataItemTableFieldSourceDefinition.get(this.tableFieldSourceDefinitionCachingFactoryService);
 
         const fieldNames = new Array<string>();
 
@@ -80,7 +78,7 @@ export class WatchlistTableRecordSourceDefinition extends RankedLitIvemIdListTab
         // fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.Trend));
         fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(SecurityDataItem.FieldId.ValueTraded));
 
-        return GridLayoutDefinition.createFromFieldNames(fieldNames);
+        return RevGridLayoutDefinition.createFromFieldNames(fieldNames);
     }
 }
 
@@ -91,7 +89,7 @@ export namespace WatchlistTableRecordSourceDefinition {
         TableFieldSourceDefinition.TypeId.SecurityDataItem,
         TableFieldSourceDefinition.TypeId.RankedLitIvemId,
         // AlternateCodesFix: Currently this actually is part of FullDetail.  Will be in BaseDetail in future
-        // TableFieldSourceDefinition.TypeId.LitIvemAlternateCodes,
+        // TypedTableFieldSourceDefinition.TypeId.LitIvemAlternateCodes,
     ];
 
     export const defaultFieldSourceDefinitionTypeIds: RankedLitIvemIdListTableRecordSourceDefinition.FieldSourceDefinitionTypeId[] = [
@@ -108,13 +106,13 @@ export namespace WatchlistTableRecordSourceDefinition {
 
 
     export function createLayoutDefinition(
-        fieldSourceDefinitionRegistryService: TableFieldSourceDefinitionCachedFactoryService,
+        fieldSourceDefinitionRegistryService: TableFieldSourceDefinitionCachingFactoryService,
         fieldIds: FieldId[],
-    ): GridLayoutDefinition {
+    ): RevGridLayoutDefinition {
         return fieldSourceDefinitionRegistryService.createLayoutDefinition(fieldIds);
     }
 
     export function is(definition: TableRecordSourceDefinition): definition is WatchlistTableRecordSourceDefinition {
-        return definition.typeId === TableRecordSourceDefinition.TypeId.Watchlist;
+        return definition.typeId === TableRecordSourceDefinition.TypeId.RankedLitIvemIdList;
     }
 }

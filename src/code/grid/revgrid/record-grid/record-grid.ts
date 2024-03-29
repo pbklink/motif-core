@@ -5,43 +5,42 @@
  */
 
 import {
-    Column,
-    ColumnsManager,
-    DataServer,
-    DatalessSubgrid,
-    LinedHoverCell,
-    ListChangedTypeId,
+    RevGridLayout,
+    RevGridLayoutDefinition,
+    RevGridSortDefinition,
     RevRecordDataServer,
     RevRecordField,
     RevRecordFieldIndex,
     RevRecordIndex,
     RevRecordStore,
+} from '@xilytix/rev-data-source';
+import {
+    Column,
+    ColumnsManager,
+    DataServer,
+    DatalessSubgrid,
+    LinedHoverCell,
+    RevListChangedTypeId,
     Revgrid,
     Subgrid,
     ViewCell
 } from '@xilytix/revgrid';
-import { SettingsService } from '../../../services/services-internal-api';
+import { SettingsService } from '../../../services/internal-api';
 import {
     AssertInternalError,
     Integer,
     MultiEvent,
-    UnexpectedUndefinedError,
     UnreachableCaseError
-} from '../../../sys/sys-internal-api';
-import { GridField } from '../../field/grid-field-internal-api';
-import {
-    GridLayout,
-    GridLayoutDefinition,
-    GridSortDefinition,
-} from '../../layout/grid-layout-internal-api';
-import { GridRowOrderDefinition } from '../../source/grid-source-internal-api';
-import { AdaptedRevgrid, SingleHeadingGridDataServer } from '../adapted-revgrid/grid-revgrid-adapted-revgrid-internal-api';
-import { AdaptedRevgridBehavioredColumnSettings } from '../settings/grid-revgrid-settings-internal-api';
+} from '../../../sys/internal-api';
+import { GridField } from '../../field/internal-api';
+import { GridRowOrderDefinition } from '../../typed/internal-api';
+import { AdaptedRevgrid, SingleHeadingGridDataServer } from '../adapted-revgrid/internal-api';
+import { AdaptedRevgridBehavioredColumnSettings } from '../settings/internal-api';
 import { RecordGridDataServer } from './record-grid-data-server';
 import { RecordGridSchemaServer } from './record-grid-schema-server';
 
 /** @public */
-export class RecordGrid extends AdaptedRevgrid implements GridLayout.ChangeInitiator {
+export class RecordGrid extends AdaptedRevgrid implements RevGridLayout.ChangeInitiator {
     declare schemaServer: RecordGridSchemaServer;
     declare mainDataServer: RecordGridDataServer;
     readonly headerDataServer: SingleHeadingGridDataServer;
@@ -52,7 +51,7 @@ export class RecordGrid extends AdaptedRevgrid implements GridLayout.ChangeIniti
     selectionChangedEventer: RecordGrid.SelectionChangedEventer | undefined;
     dataServersRowListChangedEventer: RecordGrid.DataServersRowListChangedEventer | undefined;
 
-    private _gridLayout: GridLayout | undefined;
+    private _gridLayout: RevGridLayout | undefined;
     private _allowedFields: readonly GridField[] | undefined;
 
     private _beenUsable = false;
@@ -175,7 +174,7 @@ export class RecordGrid extends AdaptedRevgrid implements GridLayout.ChangeIniti
         this._allowedFields = fields;
     }
 
-    applyFirstUsable(rowOrderDefinition: GridRowOrderDefinition | undefined, viewAnchor: RecordGrid.ViewAnchor | undefined, gridLayout: GridLayout | undefined) {
+    applyFirstUsable(rowOrderDefinition: GridRowOrderDefinition | undefined, viewAnchor: RecordGrid.ViewAnchor | undefined, gridLayout: RevGridLayout | undefined) {
         this._beenUsable = true;
 
         this._firstUsableRenderViewAnchor = viewAnchor;
@@ -200,7 +199,7 @@ export class RecordGrid extends AdaptedRevgrid implements GridLayout.ChangeIniti
         }
     }
 
-    updateGridLayout(value: GridLayout) {
+    updateGridLayout(value: RevGridLayout) {
         if (value !== this._gridLayout) {
             if (this._gridLayout !== undefined) {
                 this._gridLayout.unsubscribeChangedEvent(this._gridLayoutChangedSubscriptionId);
@@ -221,25 +220,25 @@ export class RecordGrid extends AdaptedRevgrid implements GridLayout.ChangeIniti
                 (initiator) => { this.processGridLayoutWidthsChangedEvent(initiator); }
             );
 
-            this.processGridLayoutChangedEvent(GridLayout.forceChangeInitiator);
+            this.processGridLayoutChangedEvent(RevGridLayout.forceChangeInitiator);
         }
     }
 
-    applyGridLayoutDefinition(value: GridLayoutDefinition) {
+    applyGridLayoutDefinition(value: RevGridLayoutDefinition) {
         if (this._gridLayout === undefined) {
             throw new AssertInternalError('RGSLD34488');
         } else {
-            this._gridLayout.applyDefinition(GridLayout.forceChangeInitiator, value);
+            this._gridLayout.applyDefinition(RevGridLayout.forceChangeInitiator, value);
         }
     }
 
-    getSortFields(): GridSortDefinition.Field[] | undefined {
+    getSortFields(): RevGridSortDefinition.Field[] | undefined {
         const specifiers = this.mainDataServer.sortFieldSpecifiers;
         const count = specifiers.length;
         if (count === 0) {
             return undefined;
         } else {
-            const fieldDefinitions = new Array<GridSortDefinition.Field>(count);
+            const fieldDefinitions = new Array<RevGridSortDefinition.Field>(count);
             const fieldCount = this.fieldCount;
             for (let i = 0; i < count; i++) {
                 const specifier = specifiers[i];
@@ -248,7 +247,7 @@ export class RecordGrid extends AdaptedRevgrid implements GridLayout.ChangeIniti
                     throw new AssertInternalError('RCGSC81899');
                 } else {
                     const field = this.getField(fieldIndex);
-                    const fieldDefinition: GridSortDefinition.Field = {
+                    const fieldDefinition: RevGridSortDefinition.Field = {
                         name: field.name,
                         ascending: specifier.ascending,
                     };
@@ -324,7 +323,7 @@ export class RecordGrid extends AdaptedRevgrid implements GridLayout.ChangeIniti
         const rowIdx =
             this.mainDataServer.getRowIndexFromRecordIndex(recIdx);
         if (rowIdx === undefined) {
-            throw new UnexpectedUndefinedError('DMIRTRI34449');
+            throw new AssertInternalError('DMIRTRI34449');
         } else {
             return rowIdx;
         }
@@ -416,7 +415,7 @@ export class RecordGrid extends AdaptedRevgrid implements GridLayout.ChangeIniti
     }
 
     protected override descendantProcessActiveColumnListChanged(
-        typeId: ListChangedTypeId,
+        typeId: RevListChangedTypeId,
         index: number,
         count: number,
         targetIndex: number | undefined,
@@ -427,7 +426,7 @@ export class RecordGrid extends AdaptedRevgrid implements GridLayout.ChangeIniti
                 throw new AssertInternalError('RGPACLC56678');
             } else {
                 switch (typeId) {
-                    case ListChangedTypeId.Move: {
+                    case RevListChangedTypeId.Move: {
                         if (targetIndex === undefined) {
                             throw new AssertInternalError('RGPACCLCM44430');
                         } else {
@@ -435,13 +434,13 @@ export class RecordGrid extends AdaptedRevgrid implements GridLayout.ChangeIniti
                             break;
                         }
                     }
-                    case ListChangedTypeId.Clear: {
+                    case RevListChangedTypeId.Clear: {
                         this._gridLayout.clearColumns(this);
                         break;
                     }
-                    case ListChangedTypeId.Insert:
-                    case ListChangedTypeId.Remove:
-                    case ListChangedTypeId.Set: {
+                    case RevListChangedTypeId.Insert:
+                    case RevListChangedTypeId.Remove:
+                    case RevListChangedTypeId.Set: {
                         const definition = this.createGridLayoutDefinition();
                         this._gridLayout.applyDefinition(this, definition);
                         break;
@@ -497,7 +496,7 @@ export class RecordGrid extends AdaptedRevgrid implements GridLayout.ChangeIniti
         this.mainDataServer.invalidateAll();
     }
 
-    private applySortFields(sortFields: GridSortDefinition.Field[] | undefined) {
+    private applySortFields(sortFields: RevGridSortDefinition.Field[] | undefined) {
         if (sortFields === undefined) {
             this.mainDataServer.clearSort();
         } else {
@@ -528,7 +527,7 @@ export class RecordGrid extends AdaptedRevgrid implements GridLayout.ChangeIniti
     }
 
 
-    private processGridLayoutChangedEvent(initiator: GridLayout.ChangeInitiator) {
+    private processGridLayoutChangedEvent(initiator: RevGridLayout.ChangeInitiator) {
         if (initiator !== this) {
             if (this._allowedFields !== undefined) {
                 if (this._gridLayout === undefined) {
@@ -540,7 +539,7 @@ export class RecordGrid extends AdaptedRevgrid implements GridLayout.ChangeIniti
         }
     }
 
-    private processGridLayoutWidthsChangedEvent(initiator: GridLayout.ChangeInitiator) {
+    private processGridLayoutWidthsChangedEvent(initiator: RevGridLayout.ChangeInitiator) {
         if (initiator !== this) {
             const columnNameWidths = this.createColumnNameWidths();
             this.setColumnWidthsByName(columnNameWidths);
@@ -572,7 +571,7 @@ export class RecordGrid extends AdaptedRevgrid implements GridLayout.ChangeIniti
         }
     }
 
-    private setActiveColumnsAndWidths(allowedFields: readonly GridField[], gridLayout: GridLayout) {
+    private setActiveColumnsAndWidths(allowedFields: readonly GridField[], gridLayout: RevGridLayout) {
         const layoutColumnCount = gridLayout.columnCount;
         const layoutColumns = gridLayout.columns;
         const nameAndWidths = new Array<ColumnsManager.FieldNameAndAutoSizableWidth>(layoutColumnCount);

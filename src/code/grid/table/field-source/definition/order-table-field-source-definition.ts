@@ -4,15 +4,14 @@
  * License: motionite.trade/license/motif
  */
 
-import { Order } from '../../../../adi/adi-internal-api';
+import { Order } from '../../../../adi/internal-api';
 import {
     AssertInternalError,
-    CommaText,
     FieldDataType,
     FieldDataTypeId,
     Integer,
     UnreachableCaseError
-} from "../../../../sys/sys-internal-api";
+} from "../../../../sys/internal-api";
 import {
     BooleanCorrectnessTableField,
     CorrectnessTableField,
@@ -24,7 +23,7 @@ import {
     StringArrayCorrectnessTableField,
     StringCorrectnessTableField,
     TableField
-} from '../../field/grid-table-field-internal-api';
+} from '../../field/internal-api';
 import {
     CorrectnessTableValue,
     CurrencyIdCorrectnessTableValue,
@@ -50,14 +49,15 @@ import {
     StringArrayCorrectnessTableValue,
     StringCorrectnessTableValue,
     TimeInForceIdCorrectnessTableValue
-} from '../../value/grid-table-value-internal-api';
+} from '../../value/internal-api';
 import { TableFieldSourceDefinition } from './table-field-source-definition';
+import { TableFieldSourceDefinitionCachingFactoryService } from './table-field-source-definition-caching-factory-service';
 
 export class OrderTableFieldSourceDefinition extends TableFieldSourceDefinition {
     override readonly fieldDefinitions: TableField.Definition[];
 
     constructor() {
-        super(TableFieldSourceDefinition.TypeId.OrdersDataItem);
+        super(OrderTableFieldSourceDefinition.typeId);
 
         this.fieldDefinitions = this.createFieldDefinitions();
     }
@@ -68,7 +68,7 @@ export class OrderTableFieldSourceDefinition extends TableFieldSourceDefinition 
 
     getFieldNameById(id: Order.FieldId) {
         const sourcelessFieldName = OrderTableFieldSourceDefinition.Field.getNameById(id);
-        return CommaText.from2Values(this.name, sourcelessFieldName);
+        return this.encodeFieldName(sourcelessFieldName);
     }
 
     getSupportedFieldNameById(id: Order.FieldId) {
@@ -104,6 +104,9 @@ export class OrderTableFieldSourceDefinition extends TableFieldSourceDefinition 
 }
 
 export namespace OrderTableFieldSourceDefinition {
+    export const typeId = TableFieldSourceDefinition.TypeId.Order;
+    export type TypeId = typeof typeId;
+
     export namespace Field {
         const unsupportedIds: Order.FieldId[] = [];
         export const count = Order.Field.count - unsupportedIds.length;
@@ -272,8 +275,12 @@ export namespace OrderTableFieldSourceDefinition {
     }
 
     export interface FieldId extends TableFieldSourceDefinition.FieldId {
-        sourceTypeId: TableFieldSourceDefinition.TypeId.OrdersDataItem;
+        sourceTypeId: OrderTableFieldSourceDefinition.TypeId;
         id: Order.FieldId;
+    }
+
+    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactoryService): OrderTableFieldSourceDefinition {
+        return cachingFactoryService.get(typeId) as OrderTableFieldSourceDefinition;
     }
 
     export function initialiseStatic() {

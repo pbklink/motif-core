@@ -5,11 +5,12 @@
  */
 
 // import { ColorScheme, GridField, MultiEvent, SettingsService } from '@motifmarkets/motif-core';
+import { RevGridLayoutDefinition } from '@xilytix/rev-data-source';
 import { Revgrid, ViewLayout } from '@xilytix/revgrid';
-import { ColorScheme, SettingsService } from '../../../services/services-internal-api';
-import { MultiEvent } from '../../../sys/sys-internal-api';
-import { AllowedGridField, GridField } from '../../field/grid-field-internal-api';
-import { AllowedFieldsGridLayoutDefinition, GridLayoutDefinition } from '../../layout/definition/grid-layout-definition-internal-api';
+import { ColorScheme, SettingsService } from '../../../services/internal-api';
+import { MultiEvent } from '../../../sys/internal-api';
+import { AllowedGridField, GridField } from '../../field/internal-api';
+import { AllowedFieldsGridLayoutDefinition } from '../../layout/definition/internal-api';
 import {
     AdaptedRevgridBehavioredColumnSettings,
     AdaptedRevgridBehavioredGridSettings,
@@ -17,7 +18,7 @@ import {
     InMemoryAdaptedRevgridBehavioredColumnSettings,
     InMemoryAdaptedRevgridBehavioredGridSettings,
     defaultAdaptedRevgridGridSettings
-} from '../settings/grid-revgrid-settings-internal-api';
+} from '../settings/internal-api';
 
 export abstract class AdaptedRevgrid extends Revgrid<AdaptedRevgridBehavioredGridSettings, AdaptedRevgridBehavioredColumnSettings, GridField> {
     // resizedEventer: AdaptedRevgrid.ResizedEventer | undefined;
@@ -77,7 +78,7 @@ export abstract class AdaptedRevgrid extends Revgrid<AdaptedRevgridBehavioredGri
 
     createGridLayoutDefinition() {
         const definitionColumns = this.createGridLayoutDefinitionColumns();
-        return new GridLayoutDefinition(definitionColumns);
+        return new RevGridLayoutDefinition(definitionColumns);
     }
 
     // autoSizeColumnWidth(columnIndex: number): void {
@@ -155,12 +156,12 @@ export abstract class AdaptedRevgrid extends Revgrid<AdaptedRevgridBehavioredGri
     private createGridLayoutDefinitionColumns() {
         const activeColumns = this.activeColumns;
         const activeCount = activeColumns.length;
-        const definitionColumns = new Array<GridLayoutDefinition.Column>(activeCount);
+        const definitionColumns = new Array<RevGridLayoutDefinition.Column>(activeCount);
 
         for (let i = 0; i < activeCount; i++) {
             const activeColumn = activeColumns[i];
             const autoSizableWidth = activeColumn.autoSizing ? undefined : activeColumn.width;
-            const definitionColumn: GridLayoutDefinition.Column = {
+            const definitionColumn: RevGridLayoutDefinition.Column = {
                 fieldName: activeColumn.field.name,
                 visible: true,
                 autoSizableWidth,

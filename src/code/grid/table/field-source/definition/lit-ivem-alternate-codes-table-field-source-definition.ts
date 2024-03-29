@@ -4,24 +4,24 @@
  * License: motionite.trade/license/motif
  */
 
-import { LitIvemAlternateCodes } from '../../../../adi/adi-internal-api';
+import { LitIvemAlternateCodes } from '../../../../adi/internal-api';
 import {
     AssertInternalError,
-    CommaText,
     FieldDataType,
     FieldDataTypeId,
     Integer,
     UnreachableCaseError
-} from "../../../../sys/sys-internal-api";
-import { CorrectnessTableField, StringCorrectnessTableField, TableField } from '../../field/grid-table-field-internal-api';
-import { CorrectnessTableValue, StringCorrectnessTableValue } from '../../value/grid-table-value-internal-api';
+} from "../../../../sys/internal-api";
+import { CorrectnessTableField, StringCorrectnessTableField, TableField } from '../../field/internal-api';
+import { CorrectnessTableValue, StringCorrectnessTableValue } from '../../value/internal-api';
 import { TableFieldSourceDefinition } from './table-field-source-definition';
+import { TableFieldSourceDefinitionCachingFactoryService } from './table-field-source-definition-caching-factory-service';
 
 export class LitIvemAlternateCodesTableFieldSourceDefinition extends TableFieldSourceDefinition {
     override readonly fieldDefinitions: TableField.Definition[];
 
     constructor() {
-        super(TableFieldSourceDefinition.TypeId.LitIvemAlternateCodes);
+        super(LitIvemAlternateCodesTableFieldSourceDefinition.typeId);
 
         this.fieldDefinitions = this.createFieldDefinitions();
     }
@@ -32,7 +32,7 @@ export class LitIvemAlternateCodesTableFieldSourceDefinition extends TableFieldS
 
     getFieldNameById(id: LitIvemAlternateCodes.Field.Id) {
         const sourcelessFieldName = LitIvemAlternateCodesTableFieldSourceDefinition.Field.getNameById(id);
-        return CommaText.from2Values(this.name, sourcelessFieldName);
+        return this.encodeFieldName(sourcelessFieldName);
     }
 
     getSupportedFieldNameById(id: LitIvemAlternateCodes.Field.Id) {
@@ -69,6 +69,9 @@ export class LitIvemAlternateCodesTableFieldSourceDefinition extends TableFieldS
 }
 
 export namespace LitIvemAlternateCodesTableFieldSourceDefinition {
+    export const typeId = TableFieldSourceDefinition.TypeId.LitIvemAlternateCodes;
+    export type TypeId = typeof typeId;
+
     export namespace Field {
         const unsupportedIds: LitIvemAlternateCodes.Field.Id[] = [];
         export const count = LitIvemAlternateCodes.Field.idCount - unsupportedIds.length;
@@ -152,8 +155,12 @@ export namespace LitIvemAlternateCodesTableFieldSourceDefinition {
     }
 
     export interface FieldId extends TableFieldSourceDefinition.FieldId {
-        sourceTypeId: TableFieldSourceDefinition.TypeId.LitIvemAlternateCodes;
+        sourceTypeId: LitIvemAlternateCodesTableFieldSourceDefinition.TypeId;
         id: LitIvemAlternateCodes.Field.Id;
+    }
+
+    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactoryService): LitIvemAlternateCodesTableFieldSourceDefinition {
+        return cachingFactoryService.get(typeId) as LitIvemAlternateCodesTableFieldSourceDefinition;
     }
 
     export function initialiseStatic() {

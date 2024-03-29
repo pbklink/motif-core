@@ -7,7 +7,7 @@
 // We are trying not to use null - only undefined.  If it does become necessary to use null table grid fields, then
 // the classes below can be used.  However try to avoid this
 
-import { compareArray, compareDate, compareDecimal, compareString, compareValue, Integer } from '../../../sys/sys-internal-api';
+import { compareArray, compareDate, compareDecimal, compareString, compareValue, Integer } from '../../../sys/internal-api';
 import {
     GenericNullableCorrectnessTableValue,
     NullableCorrectnessTableValue,
@@ -18,7 +18,7 @@ import {
     NullableNumberCorrectnessTableValue,
     NullableStringCorrectnessTableValue,
     TableValue
-} from "../value/grid-table-value-internal-api";
+} from "../value/internal-api";
 import { CorrectnessTableField } from './table-field';
 
 export abstract class NullableDataItemTableField extends CorrectnessTableField {
@@ -81,8 +81,8 @@ export abstract class NullableBooleanDataItemTableField extends NullableDataItem
     protected compareNonNull(left: NullableCorrectnessTableValue, right: NullableCorrectnessTableValue): number {
         const leftRenderValue = left.renderValue;
         const rightRenderValue = right.renderValue;
-        const leftFormattedText = this._textFormatterService.formatRenderValue(leftRenderValue);
-        const rightFormattedText = this._textFormatterService.formatRenderValue(rightRenderValue);
+        const leftFormattedText = this.textFormatter.formatRenderValue(leftRenderValue);
+        const rightFormattedText = this.textFormatter.formatRenderValue(rightRenderValue);
 
         return compareString(leftFormattedText, rightFormattedText);
     }
@@ -92,8 +92,8 @@ export abstract class NullableEnumDataItemTableField extends NullableDataItemTab
     protected compareNonNull(left: NullableCorrectnessTableValue, right: NullableCorrectnessTableValue): number {
         const leftRenderValue = left.renderValue;
         const rightRenderValue = right.renderValue;
-        const leftFormattedText = this._textFormatterService.formatRenderValue(leftRenderValue);
-        const rightFormattedText = this._textFormatterService.formatRenderValue(rightRenderValue);
+        const leftFormattedText = this.textFormatter.formatRenderValue(leftRenderValue);
+        const rightFormattedText = this.textFormatter.formatRenderValue(rightRenderValue);
 
         return compareString(leftFormattedText, rightFormattedText);
     }

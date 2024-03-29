@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, ErrorCode, ZenithDataError } from '../../../../sys/sys-internal-api';
+import { AssertInternalError, ErrorCode, ZenithDataError } from '../../../../sys/internal-api';
 import {
     AdiPublisherRequest,
     AdiPublisherSubscription,
@@ -12,7 +12,7 @@ import {
     NotificationDistributionMethodId,
     QueryNotificationDistributionMethodsDataDefinition,
     QueryNotificationDistributionMethodsDataMessage
-} from "../../../common/adi-common-internal-api";
+} from "../../../common/internal-api";
 import { ZenithProtocol } from './protocol/zenith-protocol';
 import { ZenithChannelConvert } from './zenith-channel-convert';
 import { ZenithConvert } from './zenith-convert';

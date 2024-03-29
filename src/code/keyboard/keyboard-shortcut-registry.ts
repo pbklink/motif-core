@@ -4,8 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
-import { CommandContext } from '../command-context/command-context-internal-api';
-import { Command } from '../command/command-internal-api';
+import { CommandContext } from '../command-context/internal-api';
+import { Command } from '../command/internal-api';
 
 export class KeyboardShortcutRegistry {
     private readonly _shortcutEntries = new Array<KeyboardShortcutRegistry.Entry>();

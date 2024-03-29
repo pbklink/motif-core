@@ -18,9 +18,9 @@ import {
     ScanStatusedDescriptorInterface,
     ScanTargetTypeId,
     ZenithEncodedScanFormula
-} from '../adi/adi-internal-api';
-import { StringId, Strings } from '../res/res-internal-api';
-import { EnumRenderValue, RankedLitIvemIdListDirectoryItem, RenderValue } from '../services/services-internal-api';
+} from '../adi/internal-api';
+import { StringId, Strings } from '../res/internal-api';
+import { EnumRenderValue, RankedLitIvemIdListDirectoryItem, RenderValue } from '../services/internal-api';
 import {
     AssertInternalError,
     Correctness,
@@ -38,7 +38,7 @@ import {
     isUndefinableArrayEqualUniquely,
     isUndefinableDateEqual,
     isUndefinableStringNumberBooleanNestArrayEqual
-} from "../sys/sys-internal-api";
+} from "../sys/internal-api";
 
 /** @public */
 export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>, RankedLitIvemIdListDirectoryItem {
@@ -224,7 +224,7 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
         this._targetMarketIds = value;
     }
 
-    async tryLock(locker: LockOpenListItem.Locker): Promise<Result<void>> {
+    tryLock(locker: LockOpenListItem.Locker): Promise<Result<void>> {
         return this._lockOpenManager.tryLock(locker);
     }
 

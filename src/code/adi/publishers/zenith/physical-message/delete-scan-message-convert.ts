@@ -4,14 +4,14 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, ErrorCode, ZenithDataError } from '../../../../sys/sys-internal-api';
+import { AssertInternalError, ErrorCode, ZenithDataError } from '../../../../sys/internal-api';
 import {
     AdiPublisherRequest,
     AdiPublisherSubscription,
     DeleteScanDataDefinition,
     DeleteScanDataMessage,
     ErrorPublisherSubscriptionDataMessage_PublishRequestError,
-} from '../../../common/adi-common-internal-api';
+} from '../../../common/internal-api';
 import { ZenithProtocol } from './protocol/zenith-protocol';
 import { ZenithConvert } from './zenith-convert';
 

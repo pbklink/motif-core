@@ -12,7 +12,7 @@ import {
     newUndefinableDate,
     UnreachableCaseError,
     UsableListChangeTypeId
-} from '../sys/sys-internal-api';
+} from '../sys/internal-api';
 import {
     DataDefinition,
     LatestTradingDayTradesDataDefinition,
@@ -20,7 +20,7 @@ import {
     QueryTradesDataDefinition,
     TradesDataDefinition,
     TradesDataMessage
-} from './common/adi-common-internal-api';
+} from './common/internal-api';
 import { DataItem } from './data-item/internal-api';
 import { TradesDataItem } from './trades-data-item';
 
@@ -38,11 +38,11 @@ export class LatestTradingDayTradesDataItem extends DataItem implements TradesDa
 
     private _subscriptionUnprocessedUpdateChanges: TradesDataMessage.UpdateChange[] = [];
 
-    private _subscriptionBadnessChangeSubscriptionId: MultiEvent.SubscriptionId;
+    private _subscriptionBadnessChangedSubscriptionId: MultiEvent.SubscriptionId;
     private _subscriptionListChangeSubscriptionId: MultiEvent.SubscriptionId;
     private _subscriptionRecordChangeSubscriptionId: MultiEvent.SubscriptionId;
     private _subscriptionOutOfRangeUpdateChangeSubscriptionId: MultiEvent.SubscriptionId;
-    private _queryBadnessChangeSubscriptionId: MultiEvent.SubscriptionId;
+    private _queryBadnessChangedSubscriptionId: MultiEvent.SubscriptionId;
     private _queryListChangeSubscriptionId: MultiEvent.SubscriptionId;
     private _queryRecordChangeSubscriptionId: MultiEvent.SubscriptionId;
 
@@ -88,8 +88,8 @@ export class LatestTradingDayTradesDataItem extends DataItem implements TradesDa
         const subscriptionDefinition = new TradesDataDefinition();
         subscriptionDefinition.litIvemId = this._litIvemId;
         this._subscriptionDataItem = this.subscribeDataItem(subscriptionDefinition) as TradesDataItem;
-        this._subscriptionBadnessChangeSubscriptionId = this._subscriptionDataItem.subscribeBadnessChangeEvent(() => {
-            this.handleSubscriptionBadnessChangeEvent();
+        this._subscriptionBadnessChangedSubscriptionId = this._subscriptionDataItem.subscribeBadnessChangedEvent(() => {
+            this.handleSubscriptionBadnessChangedEvent();
         });
         this._subscriptionListChangeSubscriptionId = this._subscriptionDataItem.subscribeListChangeEvent(
             (listChangeTypeId, index, count) => {
@@ -117,7 +117,7 @@ export class LatestTradingDayTradesDataItem extends DataItem implements TradesDa
         this.checkUnsubscribeQueryDataItem();
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         if (this._subscriptionDataItem !== undefined) {
-            this._subscriptionDataItem.unsubscribeBadnessChangeEvent(this._subscriptionBadnessChangeSubscriptionId);
+            this._subscriptionDataItem.unsubscribeBadnessChangedEvent(this._subscriptionBadnessChangedSubscriptionId);
             this._subscriptionDataItem.unsubscribeListChangeEvent(this._subscriptionListChangeSubscriptionId);
             this._subscriptionDataItem.unsubscribeRecordChangeEvent(this._subscriptionRecordChangeSubscriptionId);
             this._subscriptionDataItem.unsubscribeOutOfRangeUpdateChangeEvent(this._subscriptionOutOfRangeUpdateChangeSubscriptionId);
@@ -149,7 +149,7 @@ export class LatestTradingDayTradesDataItem extends DataItem implements TradesDa
         }
     }
 
-    private handleSubscriptionBadnessChangeEvent() {
+    private handleSubscriptionBadnessChangedEvent() {
         const badness = this.generateSubscriptionBadness();
         if (Badness.isUnusable(badness)) {
             this.setUnusable(badness);
@@ -172,7 +172,7 @@ export class LatestTradingDayTradesDataItem extends DataItem implements TradesDa
         }
     }
 
-    private handleQueryBadnessChangeEvent() {
+    private handleQueryBadnessChangedEvent() {
         const badness = this.generateQueryBadness();
         if (Badness.isUnusable(badness)) {
             this.setUnusable(badness);
@@ -215,8 +215,8 @@ export class LatestTradingDayTradesDataItem extends DataItem implements TradesDa
 
     private checkUnsubscribeQueryDataItem() {
         if (this._queryDataItem !== undefined) {
-            this._queryDataItem.unsubscribeBadnessChangeEvent(this._queryBadnessChangeSubscriptionId);
-            this._queryBadnessChangeSubscriptionId = undefined;
+            this._queryDataItem.unsubscribeBadnessChangedEvent(this._queryBadnessChangedSubscriptionId);
+            this._queryBadnessChangedSubscriptionId = undefined;
             this._queryDataItem.unsubscribeListChangeEvent(this._queryListChangeSubscriptionId);
             this._queryListChangeSubscriptionId = undefined;
             this._queryDataItem.unsubscribeRecordChangeEvent(this._queryRecordChangeSubscriptionId);
@@ -440,8 +440,8 @@ export class LatestTradingDayTradesDataItem extends DataItem implements TradesDa
         } else {
             queryDefinition.tradingDate = this._tradingDate;
             this._queryDataItem = this.subscribeDataItem(queryDefinition) as TradesDataItem;
-            this._queryBadnessChangeSubscriptionId = this._queryDataItem.subscribeBadnessChangeEvent(() =>{
-                this.handleQueryBadnessChangeEvent();
+            this._queryBadnessChangedSubscriptionId = this._queryDataItem.subscribeBadnessChangedEvent(() =>{
+                this.handleQueryBadnessChangedEvent();
             });
             this._queryListChangeSubscriptionId = this._queryDataItem.subscribeListChangeEvent(
                 (listChangeTypeId, index, count) =>{

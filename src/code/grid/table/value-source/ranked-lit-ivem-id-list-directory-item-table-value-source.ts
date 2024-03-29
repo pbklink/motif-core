@@ -4,10 +4,10 @@
  * License: motionite.trade/license/motif
  */
 
-import { RankedLitIvemIdListDirectoryItem } from '../../../services/services-internal-api';
-import { Integer, MultiEvent, UnreachableCaseError, ValueRecentChangeTypeId } from '../../../sys/sys-internal-api';
-import { RankedLitIvemIdListDirectoryItemTableFieldSourceDefinition } from '../field-source/grid-table-field-source-internal-api';
-import { CorrectnessTableValue, RankedLitIvemIdListDirectoryItemTypeIdCorrectnessTableValue, ReadonlyCorrectnessTableValue, StringCorrectnessTableValue, TableValue } from '../value/grid-table-value-internal-api';
+import { RankedLitIvemIdListDirectoryItem } from '../../../services/internal-api';
+import { Integer, MultiEvent, UnreachableCaseError, ValueRecentChangeTypeId } from '../../../sys/internal-api';
+import { RankedLitIvemIdListDirectoryItemTableFieldSourceDefinition } from '../field-source/internal-api';
+import { CorrectnessTableValue, RankedLitIvemIdListDirectoryItemTypeIdCorrectnessTableValue, ReadonlyCorrectnessTableValue, StringCorrectnessTableValue, TableValue } from '../value/internal-api';
 import { CorrectnessTableValueSource } from './correctness-table-value-source';
 import { TableValueSource } from './table-value-source';
 

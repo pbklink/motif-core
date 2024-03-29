@@ -4,12 +4,11 @@
  * License: motionite.trade/license/motif
  */
 
-import { OrderSideId } from '../../../../adi/adi-internal-api';
-import { RenderValue } from '../../../../services/services-internal-api';
-import { CorrectnessId, UnreachableCaseError } from '../../../../sys/sys-internal-api';
-import { AllowedGridField } from '../../../field/allowed-grid-field';
-import { GridFieldDefinition } from '../../../field/grid-field-definition';
-import { GridLayoutDefinition } from '../../../layout/grid-layout-internal-api';
+import { RevFieldDefinition, RevGridLayoutDefinition } from '@xilytix/rev-data-source';
+import { OrderSideId } from '../../../../adi/internal-api';
+import { RenderValue } from '../../../../services/internal-api';
+import { CorrectnessId, UnreachableCaseError } from '../../../../sys/internal-api';
+import { AllowedGridField } from '../../../field/internal-api';
 import { DepthSideGridField } from '../depth-side-grid-field';
 import { FullDepthRecord } from './full-depth-record';
 import { FullDepthSideField, FullDepthSideFieldId } from './full-depth-side-field';
@@ -20,7 +19,7 @@ export class FullDepthSideGridField extends DepthSideGridField {
         private _sideId: OrderSideId,
         private _getDataItemCorrectnessIdEvent: FullDepthSideGridField.GetDataItemCorrectnessIdEventHandler
     ) {
-        const definition = FullDepthSideGridField.createGridFieldDefinition(_id);
+        const definition = FullDepthSideGridField.createRevFieldDefinition(_id);
         super(definition);
     }
 
@@ -77,7 +76,7 @@ export namespace FullDepthSideGridField {
         const fields = new Array<AllowedGridField>(idCount);
 
         for (let id = 0; id < idCount; id++) {
-            const definition = createGridFieldDefinition(id);
+            const definition = createRevFieldDefinition(id);
             const field = new AllowedGridField(definition);
             fields[id] = field;
         }
@@ -85,8 +84,8 @@ export namespace FullDepthSideGridField {
         return fields;
     }
 
-    export function createGridFieldDefinition(id: FullDepthSideFieldId): GridFieldDefinition {
-        return new GridFieldDefinition(
+    export function createRevFieldDefinition(id: FullDepthSideFieldId): RevFieldDefinition {
+        return new RevFieldDefinition(
             DepthSideGridField.sourceDefinition,
             FullDepthSideField.idToName(id),
             FullDepthSideField.idToDefaultHeading(id),
@@ -102,13 +101,13 @@ export namespace FullDepthSideGridField {
         ];
 
         const fieldCount = fieldIds.length;
-        const layoutDefinitionColumns = new Array<GridLayoutDefinition.Column>(fieldCount);
+        const layoutDefinitionColumns = new Array<RevGridLayoutDefinition.Column>(fieldCount);
         for (let i = 0; i < fieldCount; i++) {
             const sourceName = DepthSideGridField.sourceDefinition.name;
             const fieldId = fieldIds[i];
             const sourcelessFieldName = FullDepthSideField.idToName(fieldId);
-            const fieldName = GridFieldDefinition.composeName(sourceName, sourcelessFieldName);
-            const layoutDefinitionColumn: GridLayoutDefinition.Column = {
+            const fieldName = RevFieldDefinition.Name.compose(sourceName, sourcelessFieldName);
+            const layoutDefinitionColumn: RevGridLayoutDefinition.Column = {
                 fieldName,
                 visible: undefined,
                 autoSizableWidth: undefined,
@@ -121,7 +120,7 @@ export namespace FullDepthSideGridField {
             layoutDefinitionColumns.reverse();
         }
 
-        return new GridLayoutDefinition(layoutDefinitionColumns);
+        return new RevGridLayoutDefinition(layoutDefinitionColumns);
     }
 
     // export function createAllFields(

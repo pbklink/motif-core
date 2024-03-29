@@ -6,20 +6,28 @@
 
 import { PrefixableSecurityDataItemTableFieldSourceDefinition } from './prefixable-security-data-item-table-field-source-definition';
 import { TableFieldSourceDefinition } from './table-field-source-definition';
+import { TableFieldSourceDefinitionCachingFactoryService } from './table-field-source-definition-caching-factory-service';
 
 export class SecurityDataItemTableFieldSourceDefinition extends PrefixableSecurityDataItemTableFieldSourceDefinition {
     constructor() {
         super(
-            TableFieldSourceDefinition.TypeId.SecurityDataItem,
+            SecurityDataItemTableFieldSourceDefinition.typeId,
             SecurityDataItemTableFieldSourceDefinition.fieldNameHeaderPrefix
         );
     }
 }
 
 export namespace SecurityDataItemTableFieldSourceDefinition {
+    export const typeId = TableFieldSourceDefinition.TypeId.SecurityDataItem;
+    export type TypeId = typeof typeId;
+
     export const fieldNameHeaderPrefix = '';
 
     export interface FieldId extends PrefixableSecurityDataItemTableFieldSourceDefinition.FieldId {
         sourceTypeId: TableFieldSourceDefinition.TypeId.SecurityDataItem;
+    }
+
+    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactoryService): SecurityDataItemTableFieldSourceDefinition {
+        return cachingFactoryService.get(typeId) as SecurityDataItemTableFieldSourceDefinition;
     }
 }

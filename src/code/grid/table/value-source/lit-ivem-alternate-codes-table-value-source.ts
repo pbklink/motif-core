@@ -4,10 +4,10 @@
  * License: motionite.trade/license/motif
  */
 
-import { LitIvemAlternateCodes, LitIvemBaseDetail } from '../../../adi/adi-internal-api';
-import { CorrectnessRecord, Integer, MultiEvent, UnreachableCaseError } from '../../../sys/sys-internal-api';
-import { LitIvemAlternateCodesTableFieldSourceDefinition } from '../field-source/grid-table-field-source-internal-api';
-import { CorrectnessTableValue, StringCorrectnessTableValue, TableValue } from '../value/grid-table-value-internal-api';
+import { LitIvemAlternateCodes, LitIvemBaseDetail } from '../../../adi/internal-api';
+import { CorrectnessRecord, Integer, MultiEvent, UnreachableCaseError } from '../../../sys/internal-api';
+import { LitIvemAlternateCodesTableFieldSourceDefinition } from '../field-source/internal-api';
+import { CorrectnessTableValue, StringCorrectnessTableValue, TableValue } from '../value/internal-api';
 import { TableValueSource } from './table-value-source';
 
 export class LitIvemAlternateCodesTableValueSource extends TableValueSource {

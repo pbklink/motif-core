@@ -4,9 +4,9 @@
  * License: motionite.trade/license/motif
  */
 
-import { LitIvemId } from '../../../../adi/adi-internal-api';
-import { ChangeSubscribableComparableList, Err, ErrorCode, JsonElement, Ok, PickEnum, Result } from '../../../../sys/sys-internal-api';
-import { TableFieldSourceDefinition } from '../../field-source/grid-table-field-source-internal-api';
+import { LitIvemId } from '../../../../adi/internal-api';
+import { ChangeSubscribableComparableList, ErrorCode, JsonElement, JsonElementErr, Ok, PickEnum, Result } from '../../../../sys/internal-api';
+import { TableFieldSourceDefinition } from '../../field-source/internal-api';
 import { UsableListTableRecordSourceDefinition } from './usable-list-table-record-source-definition';
 
 /** @public */
@@ -25,7 +25,7 @@ export namespace LitIvemIdUsableListTableRecordSourceDefinition {
         TableFieldSourceDefinition.TypeId.RankedLitIvemId |
         TableFieldSourceDefinition.TypeId.SecurityDataItem
         // AlternateCodesFix: Currently this actually is part of FullDetail.  Will be in BaseDetail in future
-        // TableFieldSourceDefinition.TypeId.LitIvemAlternateCodes
+        // TypedTableFieldSourceDefinition.TypeId.LitIvemAlternateCodes
     >;
 
     export const allowedFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[] = [
@@ -33,7 +33,7 @@ export namespace LitIvemIdUsableListTableRecordSourceDefinition {
         TableFieldSourceDefinition.TypeId.RankedLitIvemId,
         TableFieldSourceDefinition.TypeId.SecurityDataItem
         // AlternateCodesFix: Currently this actually is part of FullDetail.  Will be in BaseDetail in future
-        // TableFieldSourceDefinition.TypeId.LitIvemAlternateCodes,
+        // TypedTableFieldSourceDefinition.TypeId.LitIvemAlternateCodes,
     ];
 
     export namespace JsonName {
@@ -43,11 +43,11 @@ export namespace LitIvemIdUsableListTableRecordSourceDefinition {
     export function tryCreateListFromElement(element: JsonElement): Result<ChangeSubscribableComparableList<LitIvemId>> {
         const elementArrayResult = element.tryGetElementArray(JsonName.list);
         if (elementArrayResult.isErr()) {
-            const error = elementArrayResult.error;
-            if (error === JsonElement.arrayErrorCode_NotSpecified) {
-                return new Err(ErrorCode.LitIvemIdListTableRecordSourceDefinition_JsonLitIvemIdsNotSpecified);
+            const errorId = elementArrayResult.error;
+            if (errorId === JsonElement.ErrorId.JsonValueIsNotDefined) {
+                return JsonElementErr.createOuter(elementArrayResult.error, ErrorCode.LitIvemIdListTableRecordSourceDefinition_JsonLitIvemIdsNotSpecified);
             } else {
-                return new Err(ErrorCode.LitIvemIdListTableRecordSourceDefinition_JsonLitIvemIdsIsInvalid);
+                return JsonElementErr.createOuter(elementArrayResult.error, ErrorCode.LitIvemIdListTableRecordSourceDefinition_JsonLitIvemIdsIsInvalid);
             }
         } else {
             const litIvemIdsResult = LitIvemId.tryCreateArrayFromJsonElementArray(elementArrayResult.value);

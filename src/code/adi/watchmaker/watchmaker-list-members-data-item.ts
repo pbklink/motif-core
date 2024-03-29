@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { DataDefinition, FeedId } from '../common/adi-common-internal-api';
+import { DataDefinition, FeedId } from '../common/internal-api';
 import { IrrcFeedSubscriptionDataItem } from '../feed/internal-api';
 
 export abstract class WatchmakerListMembersDataItem<T> extends IrrcFeedSubscriptionDataItem<T> {

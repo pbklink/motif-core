@@ -4,8 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
-import { StringId, Strings } from '../../res/res-internal-api';
-import { EnumInfoOutOfOrderError, FieldDataTypeId, Integer, MapKey, MultiEvent } from '../../sys/sys-internal-api';
+import { StringId, Strings } from '../../res/internal-api';
+import { EnumInfoOutOfOrderError, FieldDataTypeId, Integer, MapKey, MultiEvent } from '../../sys/internal-api';
 
 export class TopShareholder {
     name?: string;

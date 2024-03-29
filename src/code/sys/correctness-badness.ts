@@ -9,10 +9,9 @@
 import { Badness } from './badness';
 import { CorrectnessId } from './correctness';
 import { CorrectnessRecord } from './correctness-record';
-import { AssertInternalError } from './internal-error';
-import { MultiEvent } from './multi-event';
+import { AssertInternalError, CorrectnessState, MultiEvent } from './xilytix-sysutils';
 
-export class CorrectnessBadness implements CorrectnessRecord {
+export class CorrectnessBadness implements CorrectnessRecord, CorrectnessState<Badness> {
     private _badness = Badness.createCopy(Badness.inactive);
     private _correctnessId = CorrectnessId.Suspect;
     private _setGoodBadTransactionId = 0;
@@ -21,7 +20,7 @@ export class CorrectnessBadness implements CorrectnessRecord {
     private _error = false;
     private _usableChangedMultiEvent = new MultiEvent<CorrectnessBadness.UsableChangedEventHandler>();
     private _correctnessChangedMultiEvent = new MultiEvent<CorrectnessBadness.CorrectnessChangedEventHandler>();
-    private _badnessChangeMultiEvent = new MultiEvent<CorrectnessBadness.BadnessChangeEventHandler>();
+    private _badnessChangedMultiEvent = new MultiEvent<CorrectnessBadness.BadnessChangedEventHandler>();
 
     get badness() { return this._badness; }
     get correctnessId() { return this._correctnessId; }
@@ -53,13 +52,35 @@ export class CorrectnessBadness implements CorrectnessRecord {
                     this.processUsableChanged();
                 }
                 if (transactionId === this._setGoodBadTransactionId) {
-                    this.processBadnessChange();
+                    this.processBadnessChanged();
 
                     if (this._correctnessId !== oldCorrectnessId) {
                         this.processCorrectnessChanged();
                     }
                 }
             }
+        }
+    }
+
+    setUsable(badness: Badness) {
+        if (Badness.isUnusable(badness)) {
+            throw new AssertInternalError('CBSU129484'); // must always be usable
+        } else {
+            this.setBadness(badness);
+        }
+    }
+
+    setUnusable(badness: Badness) {
+        if (Badness.isUsable(badness)) {
+            throw new AssertInternalError('CBSNU29484'); // must always be unusable
+        } else {
+            this.setBadness(badness);
+        }
+    }
+
+    checkSetUnusable(badness: Badness) {
+        if (badness.reasonId !== Badness.ReasonId.NotBad) {
+            this.setBadness(badness);
         }
     }
 
@@ -79,42 +100,20 @@ export class CorrectnessBadness implements CorrectnessRecord {
         this._correctnessChangedMultiEvent.unsubscribe(subscriptionId);
     }
 
-    subscribeBadnessChangeEvent(handler: CorrectnessBadness.BadnessChangeEventHandler) {
-        return this._badnessChangeMultiEvent.subscribe(handler);
+    subscribeBadnessChangedEvent(handler: CorrectnessBadness.BadnessChangedEventHandler) {
+        return this._badnessChangedMultiEvent.subscribe(handler);
     }
 
-    unsubscribeBadnessChangeEvent(subscriptionId: MultiEvent.SubscriptionId) {
-        this._badnessChangeMultiEvent.unsubscribe(subscriptionId);
-    }
-
-    protected setUsable(badness: Badness) {
-        if (Badness.isUnusable(badness)) {
-            throw new AssertInternalError('CBSU129484'); // must always be usable
-        } else {
-            this.setBadness(badness);
-        }
-    }
-
-    protected setUnusable(badness: Badness) {
-        if (Badness.isUsable(badness)) {
-            throw new AssertInternalError('CBSNU29484'); // must always be unusable
-        } else {
-            this.setBadness(badness);
-        }
-    }
-
-    protected checkSetUnusable(badness: Badness) {
-        if (badness.reasonId !== Badness.ReasonId.NotBad) {
-            this.setBadness(badness);
-        }
+    unsubscribeBadnessChangedEvent(subscriptionId: MultiEvent.SubscriptionId) {
+        this._badnessChangedMultiEvent.unsubscribe(subscriptionId);
     }
 
     protected processUsableChanged() {
         this.notifyUsableChanged();
     }
 
-    protected processBadnessChange() {
-        this.notifyBadnessChange();
+    protected processBadnessChanged() {
+        this.notifyBadnessChanged();
     }
 
     protected processCorrectnessChanged() {
@@ -152,14 +151,14 @@ export class CorrectnessBadness implements CorrectnessRecord {
                 this.processUsableChanged();
             }
             if (transactionId === this._setGoodBadTransactionId) {
-                this.processBadnessChange();
+                this.processBadnessChanged();
                 this.processCorrectnessChanged();
             }
         }
     }
 
-    private notifyBadnessChange(): void {
-        const handlers = this._badnessChangeMultiEvent.copyHandlers();
+    private notifyBadnessChanged(): void {
+        const handlers = this._badnessChangedMultiEvent.copyHandlers();
         for (let i = 0; i < handlers.length; i++) {
             handlers[i]();
         }
@@ -183,5 +182,5 @@ export class CorrectnessBadness implements CorrectnessRecord {
 export namespace CorrectnessBadness {
     export type UsableChangedEventHandler = (this: void) => void;
     export type CorrectnessChangedEventHandler = (this: void) => void;
-    export type BadnessChangeEventHandler = (this: void) => void;
+    export type BadnessChangedEventHandler = (this: void) => void;
 }

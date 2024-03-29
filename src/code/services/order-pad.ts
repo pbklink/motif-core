@@ -4,7 +4,6 @@
  * License: motionite.trade/license/motif
  */
 
-import { Decimal } from 'decimal.js-light';
 import {
     Account,
     AdiService,
@@ -44,11 +43,12 @@ import {
     RoutedIvemId,
     TimeInForce,
     TimeInForceId
-} from "../adi/adi-internal-api";
-import { StringId, Strings } from '../res/res-internal-api';
+} from "../adi/internal-api";
+import { StringId, Strings } from '../res/internal-api';
 import {
     AssertInternalError,
     concatenateArrayUniquely,
+    Decimal,
     EnumInfoOutOfOrderError,
     getErrorMessage,
     Integer,
@@ -57,17 +57,17 @@ import {
     isUndefinableDecimalEqual,
     Json,
     JsonElement,
-    Logger,
+    logger,
     MultiEvent,
     newDate,
     newUndefinableDate,
     newUndefinableDecimal,
     NotImplementedError,
     UnreachableCaseError
-} from "../sys/sys-internal-api";
+} from "../sys/internal-api";
 import { PriceStepperIncubator } from './price-stepper-incubator';
 import { SecurityPriceStepper } from './security-price-stepper';
-import { ScalarSettings } from './settings/settings-internal-api';
+import { ScalarSettings } from './settings/internal-api';
 import { SymbolDetailCacheService } from './symbol-detail-cache-service';
 
 /* eslint-disable @typescript-eslint/naming-convention, no-underscore-dangle, id-blacklist, id-match */
@@ -1433,7 +1433,7 @@ export class OrderPad {
                     return detail;
                 }
             }
-            Logger.logWarning(`OrderPad.findBestSymbolDetail did not find a match: ${routedIvemId.name}`);
+            logger.logWarning(`OrderPad.findBestSymbolDetail did not find a match: ${routedIvemId.name}`);
             return details[0];
         }
     }
@@ -2325,7 +2325,7 @@ export class OrderPad {
                             },
                             (reason) => {
                                 const errorText = getErrorMessage(reason);
-                                Logger.logError(`OrderPad.internalSetAccountId: Unexpected reject: ${errorText}`);
+                                logger.logError(`OrderPad.internalSetAccountId: Unexpected reject: ${errorText}`);
                             }
                         );
                     }
@@ -2641,7 +2641,7 @@ export class OrderPad {
                             },
                             (reason) => {
                                 const errorText = getErrorMessage(reason);
-                                Logger.logError(`OrderPad.internalSetDestinationAccountId: Unexpected reject: ${errorText}`);
+                                logger.logError(`OrderPad.internalSetDestinationAccountId: Unexpected reject: ${errorText}`);
                             }
                         );
                     }
@@ -2723,7 +2723,7 @@ export class OrderPad {
                         this.beginChanges();
                         try {
                             const errorText = getErrorMessage(reason);
-                            Logger.logError(`OrderPad: Error retrieving price step for: ${detail.litIvemId.name} Error: ${errorText}`);
+                            logger.logError(`OrderPad: Error retrieving price step for: ${detail.litIvemId.name} Error: ${errorText}`);
                             this._priceStepperRetrieveError = errorText;
                             this.flagFieldChanged(OrderPad.FieldId.LimitValue);
                         } finally {

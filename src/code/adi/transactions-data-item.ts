@@ -8,18 +8,18 @@ import {
     assert,
     Badness,
     Integer,
-    Logger,
+    logger,
     MultiEvent,
     NotImplementedError,
     UnexpectedTypeError,
     UsableListChangeTypeId
-} from '../sys/sys-internal-api';
+} from '../sys/internal-api';
 import {
     DataMessage,
     DataMessageTypeId,
     Transaction,
     TransactionsDataMessage
-} from './common/adi-common-internal-api';
+} from './common/internal-api';
 import { PublisherSubscriptionDataItem } from './publish-subscribe/internal-api';
 
 export class TransactionsDataItem extends PublisherSubscriptionDataItem {
@@ -143,7 +143,7 @@ export class TransactionsDataItem extends PublisherSubscriptionDataItem {
             );
 
             if (index >= 0) {
-                Logger.logWarning(
+                logger.logWarning(
                     'Existing order already exists in array. ID:13522165622'
                 );
             } else {

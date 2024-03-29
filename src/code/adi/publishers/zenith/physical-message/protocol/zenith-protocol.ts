@@ -7,7 +7,7 @@
 /* eslint-disable @typescript-eslint/no-shadow */
 // Version 3
 
-import { Integer } from '../../../../../sys/sys-internal-api';
+import { Integer } from '../../../../../sys/internal-api';
 import { ZenithEncodedScanFormula, ZenithProtocolCommon } from '../../../../common/zenith-protocol/internal-api';
 
 export namespace ZenithProtocol {
@@ -15,9 +15,9 @@ export namespace ZenithProtocol {
     export type CommaString = string;
 
     // Zenith dates are provided as either ISO-8601 or `YYYY-MM-DD` formmated strings.
-    export type DateYYYYMMDD = string;
-    export type DateTimeIso8601 = string;
-    export type DateOptionalTimeIso8601 = string;
+    export type DashedYyyyMmDdDate = string;
+    export type Iso8601DateTime = string;
+    export type OptionalTimeIso8601Date = string;
 
     export type Time = string;
 
@@ -393,7 +393,7 @@ export namespace ZenithProtocol {
                 Source: string;
                 Target: unknown;
                 Fragments: Fragment[];
-                TradingDate?: DateTimeIso8601;
+                TradingDate?: Iso8601DateTime;
             }
 
             export interface PublishMessageContainer extends RequestMessageContainer {
@@ -412,7 +412,7 @@ export namespace ZenithProtocol {
                 Market: string;
                 Code: string;
                 Fragments: Fragment[];
-                TradingDate?: DateTimeIso8601;
+                TradingDate?: Iso8601DateTime;
             }
 
             export interface PublishMessageContainer extends RequestMessageContainer {
@@ -436,7 +436,7 @@ export namespace ZenithProtocol {
                     Market: string;
                     Code: string;
                     Fragments: Fragment[];
-                    TradingDate?: DateTimeIso8601;
+                    TradingDate?: Iso8601DateTime;
                 }
 
                 export interface PublishMessageContainer extends QueryFragments.PublishMessageContainer {
@@ -550,8 +550,8 @@ export namespace ZenithProtocol {
             export interface MarketState {
                 Code: string;
                 Feed: FeedStatus;
-                TradingDate?: DateYYYYMMDD;
-                MarketTime?: DateTimeIso8601;
+                TradingDate?: DashedYyyyMmDdDate;
+                MarketTime?: Iso8601DateTime;
                 Status?: string;
                 States?: TradingMarketState[];
             }
@@ -706,8 +706,8 @@ export namespace ZenithProtocol {
                 Conditions?: Condition[];
                 Count?: Integer;
                 Exchange?: string;
-                ExpiryDateMin?: DateTimeIso8601;
-                ExpiryDateMax?: DateTimeIso8601;
+                ExpiryDateMin?: Iso8601DateTime;
+                ExpiryDateMax?: Iso8601DateTime;
                 FullSymbol?: boolean;
                 Index?: boolean;
                 Market?: string;
@@ -757,7 +757,7 @@ export namespace ZenithProtocol {
                 CFI: string;
                 DepthDirection?: DepthDirection;
                 IsIndex?: boolean;
-                ExpiryDate?: DateYYYYMMDD;
+                ExpiryDate?: DashedYyyyMmDdDate;
                 StrikePrice?: Decimal;
                 ExerciseType?: FullDetail.ExerciseType;
                 CallOrPut?: CallOrPut;
@@ -816,12 +816,13 @@ export namespace ZenithProtocol {
                 TradingState?: string;
                 TradingMarkets?: string[];
                 IsIndex?: boolean;
-                ExpiryDate?: DateYYYYMMDD;
-                StrikePrice?: Decimal;
-                CallOrPut?: CallOrPut;
-                ContractSize?: Integer;
+                ExpiryDate?: DashedYyyyMmDdDate | null;
+                StrikePrice?: Decimal | null;
+                CallOrPut?: CallOrPut | null;
+                ContractSize?: Decimal | null;
                 SubscriptionData?: CommaString;
-                QuotationBasis?: string | null;
+                QuotationBasis?: string[];
+                Currency?: Currency | null;
                 Open?: Decimal | null;
                 High?: Decimal | null;
                 Low?: Decimal | null;
@@ -831,22 +832,22 @@ export namespace ZenithProtocol {
                 Trend?: Trend;
                 BestAsk?: Decimal | null;
                 AskCount?: Integer;
-                AskQuantity?: Integer;
+                AskQuantity?: Decimal;
                 AskUndisclosed?: boolean;
                 BestBid?: Decimal | null;
                 BidCount?: Integer;
-                BidQuantity?: Integer;
+                BidQuantity?: Decimal;
                 BidUndisclosed?: boolean;
                 NumberOfTrades?: Integer;
-                Volume?: Integer;
+                Volume?: Decimal;
                 AuctionPrice?: Decimal | null;
-                AuctionQuantity?: Integer | null;
-                AuctionRemainder?: Integer | null;
+                AuctionQuantity?: Decimal | null;
+                AuctionRemainder?: Decimal | null;
                 VWAP?: Decimal | null;
-                ValueTraded?: number;
+                ValueTraded?: Decimal;
                 OpenInterest?: Integer | null;
-                ShareIssue?: Integer | null;
-                StatusNote?: string | null;
+                ShareIssue?: Decimal | null;
+                StatusNote?: string[]; // This may be an array of strings
                 Extended?: Extended | null;
             }
 
@@ -964,7 +965,7 @@ export namespace ZenithProtocol {
                 Count?: Integer;
                 FirstTradeID?: Integer;
                 LastTradeID?: Integer;
-                TradingDate?: DateTimeIso8601;
+                TradingDate?: Iso8601DateTime;
             }
 
             export interface PublishMessageContainer extends RequestMessageContainer {
@@ -988,7 +989,7 @@ export namespace ZenithProtocol {
                 ID: Integer;
                 Price?: Decimal;
                 Quantity?: Integer;
-                Time?: DateTimeIso8601;
+                Time?: Iso8601DateTime;
                 Flags?: CommaString;
                 Trend?: Trend;
                 Side?: Side;
@@ -1020,8 +1021,8 @@ export namespace ZenithProtocol {
                 Code: string;
                 Count?: Integer;
                 Period?: PeriodTimeSpan;
-                FromDate?: DateTimeIso8601;
-                ToDate?: DateTimeIso8601;
+                FromDate?: Iso8601DateTime;
+                ToDate?: Iso8601DateTime;
             }
 
             export interface PublishMessageContainer extends RequestMessageContainer {
@@ -1035,7 +1036,7 @@ export namespace ZenithProtocol {
             }
 
             export interface Record {
-                Date: DateOptionalTimeIso8601;
+                Date: OptionalTimeIso8601Date;
                 Open?: Decimal;
                 High?: Decimal;
                 Low?: Decimal;
@@ -1491,8 +1492,8 @@ export namespace ZenithProtocol {
                 EstimatedFees?: OrderFees;
                 CurrentFees?: OrderFees;
                 CurrentValue: number;
-                CreatedDate: DateTimeIso8601;
-                UpdatedDate: DateTimeIso8601;
+                CreatedDate: Iso8601DateTime;
+                UpdatedDate: Iso8601DateTime;
                 Style: OrderStyle;
                 Details: PlaceOrder.Details;
                 Route: PlaceOrder.Route;
@@ -1608,8 +1609,8 @@ export namespace ZenithProtocol {
 
             export interface QueryRequest {
                 Account: string;
-                FromDate?: DateTimeIso8601;
-                ToDate?: DateTimeIso8601;
+                FromDate?: Iso8601DateTime;
+                ToDate?: Iso8601DateTime;
                 Count?: Integer;
                 TradingMarket?: string;
                 Exchange?: string;
@@ -1638,8 +1639,8 @@ export namespace ZenithProtocol {
                 TradingMarket: string;
                 Account: string;
                 Style: OrderStyle;
-                TradeDate: DateTimeIso8601;
-                SettlementDate: DateTimeIso8601;
+                TradeDate: Iso8601DateTime;
+                SettlementDate: Iso8601DateTime;
                 GrossAmount: Decimal;
                 NetAmount: Decimal;
                 SettlementAmount: Decimal;
@@ -1692,8 +1693,8 @@ export namespace ZenithProtocol {
                 Account: string;
                 OrderID: string;
                 Type: Type;
-                CreatedDate: DateTimeIso8601;
-                UpdatedDate: DateTimeIso8601;
+                CreatedDate: Iso8601DateTime;
+                UpdatedDate: Iso8601DateTime;
                 Status: Status;
                 Style: OrderStyle;
                 Details: PlaceOrder.Details;
@@ -1810,7 +1811,7 @@ export namespace ZenithProtocol {
                 HiddenQuantity?: Integer;
                 MinimumQuantity?: Integer;
                 Validity: EquityOrderValidity;
-                ExpiryDate?: DateTimeIso8601;
+                ExpiryDate?: Iso8601DateTime;
                 ShortType?: ShortSellType;
             }
 
@@ -2098,7 +2099,7 @@ export namespace ZenithProtocol {
             readonly Criteria: ZenithEncodedScanFormula.BooleanTupleNode;
             readonly Rank?: ZenithEncodedScanFormula.NumericTupleNode;
             readonly Target: Target;
-            readonly MaxMatchCount?: Integer;
+            readonly Count?: Integer;
         }
 
         export interface ScanParameters extends ScanParametersWithoutNotifications {
@@ -2113,14 +2114,14 @@ export namespace ZenithProtocol {
                 readonly MinimumElapsed?: Time;
                 readonly Settings?: Notification.SourceSettings;
             }
-    
+
             export namespace Notification {
                 export interface SourceSettings {
                     readonly ttl: number;
                     readonly urgency?: Urgency;
                     readonly topic?: string;
                 }
-            }    
+            }
         }
 
         export interface ScanChange {

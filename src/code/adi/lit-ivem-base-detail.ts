@@ -4,8 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
-import { StringId, Strings } from '../res/res-internal-api';
-import { EnumInfoOutOfOrderError, FieldDataTypeId, MultiEvent } from '../sys/sys-internal-api';
+import { StringId, Strings } from '../res/internal-api';
+import { EnumInfoOutOfOrderError, FieldDataTypeId, MultiEvent } from '../sys/internal-api';
 import {
     ExchangeId,
     IvemClassId,
@@ -13,7 +13,7 @@ import {
     LitIvemId,
     MarketId,
     PublisherSubscriptionDataTypeId
-} from './common/adi-common-internal-api';
+} from './common/internal-api';
 import { ReadonlyLitIvemIdRecord } from './readonly-lit-ivem-id-record';
 
 export interface LitIvemBaseDetail extends ReadonlyLitIvemIdRecord {

@@ -4,8 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevRecordInvalidatedValue } from '@xilytix/revgrid';
-import { DepthLevelsDataItem, OrderSideId } from '../../../../adi/adi-internal-api';
+import { RevRecordInvalidatedValue } from '@xilytix/rev-data-source';
+import { DepthLevelsDataItem, OrderSideId } from '../../../../adi/internal-api';
 import {
     IntegerRenderValue,
     MarketIdRenderValue,
@@ -13,7 +13,7 @@ import {
     PriceOrRemainderRenderValue,
     PriceRenderValue,
     RenderValue
-} from '../../../../services/services-internal-api';
+} from '../../../../services/internal-api';
 import {
     GridRecordInvalidatedValue,
     Integer,
@@ -23,7 +23,7 @@ import {
     compareBoolean,
     compareInteger,
     comparePriceOrRemainder
-} from '../../../../sys/sys-internal-api';
+} from '../../../../sys/internal-api';
 import { DepthRecord } from '../depth-record';
 import { DepthRecordRenderValue } from '../depth-record-render-value';
 import { ShortDepthSideField, ShortDepthSideFieldId } from './short-depth-side-field';
@@ -126,7 +126,7 @@ export class ShortDepthRecord extends DepthRecord {
             attributes[attributeIdx++] = extraAttribute;
         }
         const recordAttribute: DepthRecordRenderValue.Attribute = {
-            id: RenderValue.AttributeId.DepthRecord,
+            typeId: RenderValue.Attribute.TypeId.DepthRecord,
             orderSideId: sideId,
             depthRecordTypeId: DepthRecord.TypeId.PriceLevel,
             ownOrder: false,

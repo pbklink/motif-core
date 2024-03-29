@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { EnumInfoOutOfOrderError, Err, ErrorCode, Integer, JsonElement, Ok, Result } from '../../sys/sys-internal-api';
+import { EnumInfoOutOfOrderError, Err, ErrorCode, Integer, JsonElement, JsonElementErr, Ok, Result } from '../../sys/internal-api';
 
 export abstract class SettingsGroup {
     beginChangesEvent: SettingsGroup.BeginChangesEvent;
@@ -59,12 +59,12 @@ export namespace SettingsGroup {
     export function tryGetNameAndTypeId(element: JsonElement): Result<NameAndTypeId> {
         const nameResult = element.tryGetString(GroupJsonName.Name);
         if (nameResult.isErr()) {
-            return nameResult.createOuter(ErrorCode.SettingGroup_ElementMissingName);
+            return JsonElementErr.createOuter(nameResult.error, ErrorCode.SettingGroup_ElementMissingName);
         } else {
             const name = nameResult.value;
             const jsonTypeIdResult = element.tryGetString(GroupJsonName.TypeId);
             if (jsonTypeIdResult.isErr()) {
-                return jsonTypeIdResult.createOuter(`${ErrorCode.SettingGroup_ElementMissingTypeId}: ${name}`);
+                return JsonElementErr.createOuter(jsonTypeIdResult.error, `${ErrorCode.SettingGroup_ElementMissingTypeId}: ${name}`);
             } else {
                 const jsonTypeId = jsonTypeIdResult.value;
                 const typeId = Type.tryJsonValueToId(jsonTypeId);

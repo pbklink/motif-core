@@ -4,14 +4,14 @@
  * License: motionite.trade/license/motif
  */
 
-import { assert, AssertInternalError, ErrorCode, ZenithDataError } from '../../../../sys/sys-internal-api';
+import { assert, AssertInternalError, ErrorCode, ZenithDataError } from '../../../../sys/internal-api';
 import {
     AdiPublisherRequest,
     AdiPublisherSubscription,
     LowLevelTopShareholdersDataDefinition,
     TLowLevelTopShareholdersDataMessage,
     TopShareholder
-} from "../../../common/adi-common-internal-api";
+} from "../../../common/internal-api";
 import { ZenithProtocol } from './protocol/zenith-protocol';
 import { ZenithConvert } from './zenith-convert';
 
@@ -32,7 +32,7 @@ export namespace FragmentsMessageConvert {
         const dataEnvironmentId = litIvemId.environmentId;
         const zenithMarket = ZenithConvert.EnvironmentedMarket.fromId(marketId, dataEnvironmentId);
 
-        let tradingDate: ZenithProtocol.DateTimeIso8601 | undefined;
+        let tradingDate: ZenithProtocol.Iso8601DateTime | undefined;
         if (definition.tradingDate === undefined) {
             tradingDate = undefined;
         } else {

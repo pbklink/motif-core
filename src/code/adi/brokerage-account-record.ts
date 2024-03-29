@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { KeyedCorrectnessListItem, MapKey } from '../sys/sys-internal-api';
+import { KeyedCorrectnessListItem, MapKey } from '../sys/internal-api';
 
 export interface BrokerageAccountRecord extends KeyedCorrectnessListItem {
     readonly accountMapKey: MapKey;

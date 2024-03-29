@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { LitIvemId, RankScoredLitIvemIdList } from '../adi/adi-internal-api';
+import { LitIvemId, RankScoredLitIvemIdList } from '../adi/internal-api';
 import { RankedLitIvemId } from '../adi/scan/ranked-lit-ivem-id';
 import {
     AssertInternalError,
@@ -24,8 +24,8 @@ import {
     compareNumber,
     moveElementsInArray,
     rangedAnyBinarySearch
-} from "../sys/sys-internal-api";
-import { RankedLitIvemIdListDefinition } from './definition/ranked-lit-ivem-id-list-definition-internal-api';
+} from "../sys/internal-api";
+import { RankedLitIvemIdListDefinition } from './definition/internal-api';
 import { RankedLitIvemIdList } from './ranked-lit-ivem-id-list';
 
 /** @public */
@@ -38,12 +38,12 @@ export abstract class BaseRankedLitIvemIdList implements RankedLitIvemIdList {
     private _records = new Array<RankedLitIvemId>();
     private _rankSortedRecords = new Array<RankedLitIvemId>();
 
-    private _scoredListBadnessChangeSubscriptionId: MultiEvent.SubscriptionId;
+    private _scoredListbadnessChangedSubscriptionId: MultiEvent.SubscriptionId;
     private _scoredListCorrectnessChangeSubscriptionId: MultiEvent.SubscriptionId;
     private _scoredListListChangeSubscriptionId: MultiEvent.SubscriptionId;
 
     private _listChangeMultiEvent = new MultiEvent<RecordList.ListChangeEventHandler>();
-    private _badnessChangeMultiEvent = new MultiEvent<BadnessList.BadnessChangeEventHandler>();
+    private _badnessChangedMultiEvent = new MultiEvent<BadnessList.badnessChangedEventHandler>();
 
     constructor(
         readonly typeId: RankedLitIvemIdListDefinition.TypeId,
@@ -86,8 +86,8 @@ export abstract class BaseRankedLitIvemIdList implements RankedLitIvemIdList {
                 this.insertRecords(0, existingCount);
             }
 
-            this._scoredListBadnessChangeSubscriptionId = this._lockedScoredList.subscribeBadnessChangeEvent(
-                () => { this.processScoredListBadnessChange() }
+            this._scoredListbadnessChangedSubscriptionId = this._lockedScoredList.subscribeBadnessChangedEvent(
+                () => { this.processScoredListBadnessChanged() }
             );
             this._scoredListCorrectnessChangeSubscriptionId = this._lockedScoredList.subscribeCorrectnessChangedEvent(
                 () => { this.processScoredListCorrectnessChanged() }
@@ -107,8 +107,8 @@ export abstract class BaseRankedLitIvemIdList implements RankedLitIvemIdList {
             this._scoredListListChangeSubscriptionId = undefined;
             this._lockedScoredList.unsubscribeCorrectnessChangedEvent(this._scoredListCorrectnessChangeSubscriptionId);
             this._scoredListCorrectnessChangeSubscriptionId = undefined;
-            this._lockedScoredList.unsubscribeBadnessChangeEvent(this._scoredListBadnessChangeSubscriptionId);
-            this._scoredListBadnessChangeSubscriptionId = undefined;
+            this._lockedScoredList.unsubscribeBadnessChangedEvent(this._scoredListbadnessChangedSubscriptionId);
+            this._scoredListbadnessChangedSubscriptionId = undefined;
             this.unsubscribeRankScoredLitIvemIdList();
         }
     }
@@ -151,12 +151,12 @@ export abstract class BaseRankedLitIvemIdList implements RankedLitIvemIdList {
         throw new AssertInternalError('RLIILIUMA31313');
     }
 
-    subscribeBadnessChangeEvent(handler: BadnessList.BadnessChangeEventHandler) {
-        return this._badnessChangeMultiEvent.subscribe(handler);
+    subscribeBadnessChangedEvent(handler: BadnessList.badnessChangedEventHandler) {
+        return this._badnessChangedMultiEvent.subscribe(handler);
     }
 
-    unsubscribeBadnessChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void {
-        this._badnessChangeMultiEvent.unsubscribe(subscriptionId);
+    unsubscribeBadnessChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void {
+        this._badnessChangedMultiEvent.unsubscribe(subscriptionId);
     }
 
     subscribeListChangeEvent(handler: RecordList.ListChangeEventHandler) {
@@ -167,8 +167,8 @@ export abstract class BaseRankedLitIvemIdList implements RankedLitIvemIdList {
         this._listChangeMultiEvent.unsubscribe(subscriptionId);
     }
 
-    private processScoredListBadnessChange() {
-        const handlers = this._badnessChangeMultiEvent.copyHandlers();
+    private processScoredListBadnessChanged() {
+        const handlers = this._badnessChangedMultiEvent.copyHandlers();
         for (const handler of handlers) {
             handler();
         }

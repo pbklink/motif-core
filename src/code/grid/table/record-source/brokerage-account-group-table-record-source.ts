@@ -4,16 +4,18 @@
  * License: motionite.trade/license/motif
  */
 
+import { RevFieldCustomHeadingsService } from '@xilytix/rev-data-source';
 import {
     BrokerageAccountGroup,
     BrokerageAccountGroupRecordList,
     BrokerageAccountRecord
-} from "../../../adi/adi-internal-api";
-import { TextFormatterService } from '../../../text-format/text-format-internal-api';
+} from "../../../adi/internal-api";
+import { CorrectnessBadness } from '../../../sys/internal-api';
+import { TextFormatterService } from '../../../text-format/internal-api';
 import {
-    TableFieldSourceDefinition
-} from "../field-source/grid-table-field-source-internal-api";
-import { BrokerageAccountGroupTableRecordSourceDefinition, TableRecordSourceDefinitionFactoryService } from './definition/grid-table-record-source-definition-internal-api';
+    TableFieldSourceDefinition, TableFieldSourceDefinitionCachingFactoryService
+} from "../field-source/internal-api";
+import { BrokerageAccountGroupTableRecordSourceDefinition } from './definition/internal-api';
 import { SingleDataItemRecordTableRecordSource } from './single-data-item-record-table-record-source';
 
 export abstract class BrokerageAccountGroupTableRecordSource<
@@ -26,13 +28,17 @@ export abstract class BrokerageAccountGroupTableRecordSource<
 
     constructor(
         textFormatterService: TextFormatterService,
-        tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService,
+        gridFieldCustomHeadingsService: RevFieldCustomHeadingsService,
+        tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService,
+        correctnessBadness: CorrectnessBadness,
         definition: BrokerageAccountGroupTableRecordSourceDefinition,
         allowedFieldSourceDefinitionTypeIds: TableFieldSourceDefinition.TypeId[],
     ) {
         super(
             textFormatterService,
-            tableRecordSourceDefinitionFactoryService,
+            gridFieldCustomHeadingsService,
+            tableFieldSourceDefinitionCachingFactoryService,
+            correctnessBadness,
             definition,
             allowedFieldSourceDefinitionTypeIds,
         );

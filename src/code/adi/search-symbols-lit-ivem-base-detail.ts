@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { MultiEvent, isUndefinableArrayEqualUniquely } from '../sys/sys-internal-api';
+import { MultiEvent, isUndefinableArrayEqualUniquely } from '../sys/internal-api';
 import {
     DataEnvironmentId,
     ExchangeId,
@@ -14,7 +14,7 @@ import {
     MarketId,
     PublisherSubscriptionDataTypeId,
     SymbolsDataMessage
-} from './common/adi-common-internal-api';
+} from './common/internal-api';
 import { LitIvemBaseDetail } from './lit-ivem-base-detail';
 
 export class SearchSymbolsLitIvemBaseDetail implements LitIvemBaseDetail {

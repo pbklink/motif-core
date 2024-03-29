@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { DataMessage, DataMessageTypeId, QueryScanDetailDataMessage } from '../common/adi-common-internal-api';
+import { DataMessage, DataMessageTypeId, QueryScanDetailDataMessage } from '../common/internal-api';
 import { ScanDescriptorAndDetail } from './scan-descriptor-and-detail';
 import { ScanPublishDataItem } from './scan-publish-data-item';
 

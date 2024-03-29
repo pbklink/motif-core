@@ -5,17 +5,11 @@
  */
 
 import { BadnessList } from './badness-list';
-import { ComparableList } from './comparable-list';
 import { CorrectnessBadness } from './correctness-badness';
-import { ErrorCode } from './error-code';
-import { AssertInternalError } from './internal-error';
-import { LockOpenListItem } from './lock-open-list-item';
-import { MultiEvent } from './multi-event';
-import { Ok, Result } from './result';
-import { Guid, Integer, MapKey } from './types';
-import { UsableListChangeTypeId } from './usable-list-change-type';
+import { Ok, Result } from './error-code-with-extra-err';
+import { AssertInternalError, ComparableList, Guid, Integer, LockItemByKeyList, LockOpenListItem, MapKey, MultiEvent, UsableListChangeTypeId } from './xilytix-sysutils';
 
-export abstract class LockOpenList<Item extends LockOpenListItem<Item>> extends CorrectnessBadness implements BadnessList<Item> {
+export abstract class LockOpenList<Item extends LockOpenListItem<Item, Error>, Error = string> extends CorrectnessBadness implements LockItemByKeyList<Item, Error>, BadnessList<Item> {
     // private localFilePath = '';
     // private groupLoadFilePath = TableRecordDefinitionListDirectory.defaultGroupLoadFilePath;
     // private groupLoadFileAccessTypeId = TableRecordDefinitionListDirectory.defaultGroupLoadFileAccessTypeId;
@@ -210,7 +204,7 @@ export abstract class LockOpenList<Item extends LockOpenListItem<Item>> extends 
         }
     }
 
-    async tryLockItemByKey(key: MapKey, locker: LockOpenListItem.Locker): Promise<Result<Item | undefined>> {
+    async tryLockItemByKey(key: MapKey, locker: LockOpenListItem.Locker): Promise<Result<Item | undefined, Error>> {
         const idx = this.indexOfKey(key);
         if (idx < 0) {
             return new Ok(undefined);
@@ -220,12 +214,12 @@ export abstract class LockOpenList<Item extends LockOpenListItem<Item>> extends 
         }
     }
 
-    async tryLockItemAtIndex(idx: Integer, locker: LockOpenListItem.Locker): Promise<Result<Item>> {
+    async tryLockItemAtIndex(idx: Integer, locker: LockOpenListItem.Locker): Promise<Result<Item, Error>> {
         const lockResult = await this._items[idx].tryLock(locker);
         if (lockResult.isOk()) {
             return new Ok(this._items[idx]);
         } else {
-            return lockResult.createOuter(ErrorCode.LockOpenList_TryLockItemAtIndex);
+            return lockResult.createType();
         }
     }
 
@@ -279,9 +273,9 @@ export abstract class LockOpenList<Item extends LockOpenListItem<Item>> extends 
         this._items[item.index].closeLocked(opener);
     }
 
-    lockAllItems(locker: LockOpenListItem.Locker): Promise<Result<Item>[]> {
+    lockAllItems(locker: LockOpenListItem.Locker): Promise<Result<Item, Error>[]> {
         const count = this.count;
-        const lockResultPromises = new Array<Promise<Result<Item>>>(count);
+        const lockResultPromises = new Array<Promise<Result<Item, Error>>>(count);
         for (let i = 0; i < count; i++) {
             lockResultPromises[i] = this.tryLockItemAtIndex(i, locker);
         }
@@ -290,7 +284,7 @@ export abstract class LockOpenList<Item extends LockOpenListItem<Item>> extends 
 
     lockItems(items: Item[], locker: LockOpenListItem.Locker) {
         const count = items.length;
-        const lockResultPromises = new Array<Promise<Result<Item | undefined>>>(count);
+        const lockResultPromises = new Array<Promise<Result<Item | undefined, Error>>>(count);
         for (let i = 0; i < count; i++) {
             const item = items[i];
             lockResultPromises[i] = this.tryLockItemByKey(item.mapKey, locker);

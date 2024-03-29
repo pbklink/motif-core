@@ -4,94 +4,54 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, Err, ErrorCode, Guid, LockOpenListItem, Ok, Result } from '../../sys/sys-internal-api';
-import {
-    GridLayoutDefinition,
-    GridLayoutOrReferenceDefinition
-} from "./definition/grid-layout-definition-internal-api";
-import { GridLayout } from './grid-layout';
-import { ReferenceableGridLayout } from './referenceable-grid-layout';
-import { ReferenceableGridLayoutsService } from './referenceable-grid-layouts-service';
+import { RevGridLayoutOrReference } from '@xilytix/rev-data-source';
+import { UnreachableCaseError } from '@xilytix/sysutils';
+import { AssertInternalError, Err, ErrorCode, LockOpenListItem, Ok, PickEnum, Result } from '../../sys/internal-api';
 
-/** @public */
-export class GridLayoutOrReference {
-    private readonly _referenceId: Guid | undefined;
-    private readonly _gridLayoutDefinition: GridLayoutDefinition | undefined;
+export namespace GridLayoutOrReference {
+    export function tryLock(gridLayoutOrReference: RevGridLayoutOrReference, locker: LockOpenListItem.Locker): Promise<Result<void>> {
+        // Replace with Promise.withResolvers when available in TypeScript (ES2023)
+        let resolve: (value: Result<void>) => void;
+        const resultPromise = new Promise<Result<void>>((res) => {
+            resolve = res;
+        });
 
-    private _lockedGridLayout: GridLayout | undefined;
-    private _lockedReferenceableGridLayout: ReferenceableGridLayout | undefined;
-
-    constructor(
-        private readonly _referenceableGridLayoutsService: ReferenceableGridLayoutsService,
-        definition: GridLayoutOrReferenceDefinition,
-    ) {
-        if (definition.referenceId !== undefined) {
-            this._referenceId = definition.referenceId;
-        } else {
-            if (definition.gridLayoutDefinition !== undefined ) {
-                this._gridLayoutDefinition = definition.gridLayoutDefinition;
-            } else {
-                throw new AssertInternalError('GLONRC59923');
-            }
-        }
-    }
-
-    get lockedGridLayout() { return this._lockedGridLayout; }
-    get lockedReferenceableGridLayout() { return this._lockedReferenceableGridLayout; }
-
-    createDefinition() {
-        if (this._lockedReferenceableGridLayout !== undefined) {
-            return new GridLayoutOrReferenceDefinition(this._lockedReferenceableGridLayout.id);
-        } else {
-            if (this.lockedGridLayout !== undefined) {
-                const gridSourceDefinition = this.lockedGridLayout.createDefinition();
-                return new GridLayoutOrReferenceDefinition(gridSourceDefinition);
-            } else {
-                throw new AssertInternalError('GLONRCDU59923');
-            }
-        }
-    }
-
-    async tryLock(locker: LockOpenListItem.Locker): Promise<Result<void>> {
-        if (this._gridLayoutDefinition !== undefined) {
-            const gridLayout = new GridLayout(this._gridLayoutDefinition);
-            const lockResult = await gridLayout.tryLock(locker);
-            if (lockResult.isErr()) {
-                return lockResult.createOuter(ErrorCode.GridLayoutOrReference_TryLockGridLayoutDefinition);
-            } else {
-                this._lockedGridLayout = gridLayout;
-                this._lockedReferenceableGridLayout = undefined;
-                return new Ok(undefined);
-            }
-        } else {
-            if (this._referenceId !== undefined) {
-                const lockResult = await this._referenceableGridLayoutsService.tryLockItemByKey(this._referenceId, locker);
-                if (lockResult.isErr()) {
-                    return lockResult.createOuter(ErrorCode.GridLayoutOrReference_LockReference);
+        const lockPromise = gridLayoutOrReference.tryLock(locker);
+        lockPromise.then(
+            (lockIdPlusTryError) => {
+                if (lockIdPlusTryError.isOk()) {
+                    resolve(new Ok(undefined));
                 } else {
-                    const referenceableGridLayout = lockResult.value;
-                    if (referenceableGridLayout === undefined) {
-                        return new Err(ErrorCode.GridLayoutOrReference_ReferenceNotFound);
-                    } else {
-                        this._lockedReferenceableGridLayout = referenceableGridLayout;
-                        this._lockedGridLayout = referenceableGridLayout;
-                        return new Ok(undefined);
+                    const lockErrorIdPlusTryError = lockIdPlusTryError.error;
+                    const lockErrorId = lockErrorIdPlusTryError.errorId;
+                    let errorText = LockErrorCode.fromId(lockErrorId) as string;
+                    const tryError = lockErrorIdPlusTryError.tryError;
+                    if (tryError === undefined) {
+                        errorText += `: ${tryError}`;
                     }
+                    resolve(new Err(errorText));
                 }
-            } else {
-                throw new AssertInternalError('GLDONRTLU24498');
-            }
-        }
+            },
+            (reason) => { throw AssertInternalError.createIfNotError(reason, 'DSTCL35252'); }
+        )
+
+        return resultPromise;
     }
 
-    unlock(locker: LockOpenListItem.Locker) {
-        if (this._lockedGridLayout === undefined) {
-            throw new AssertInternalError('GLDONRUU23366');
-        } else {
-            this._lockedGridLayout = undefined;
-            if (this._lockedReferenceableGridLayout !== undefined) {
-                this._referenceableGridLayoutsService.unlockItem(this._lockedReferenceableGridLayout, locker);
-                this._lockedReferenceableGridLayout = undefined;
+    export type LockErrorCode = PickEnum<ErrorCode,
+        ErrorCode.GridLayoutOrReference_DefinitionTry |
+        ErrorCode.GridLayoutOrReference_ReferenceTry |
+        ErrorCode.GridLayoutOrReference_ReferenceNotFound
+    >;
+
+    export namespace LockErrorCode {
+        export function fromId(lockErrorId: RevGridLayoutOrReference.LockErrorId): LockErrorCode {
+            switch (lockErrorId) {
+                case RevGridLayoutOrReference.LockErrorId.DefinitionTry: return ErrorCode.GridLayoutOrReference_DefinitionTry;
+                case RevGridLayoutOrReference.LockErrorId.ReferenceTry: return ErrorCode.GridLayoutOrReference_ReferenceTry;
+                case RevGridLayoutOrReference.LockErrorId.ReferenceNotFound: return ErrorCode.GridLayoutOrReference_ReferenceNotFound;
+                default:
+                    throw new UnreachableCaseError('GLORLECFI35252', lockErrorId);
             }
         }
     }

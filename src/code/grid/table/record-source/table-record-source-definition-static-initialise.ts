@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { TableRecordSourceDefinitionStaticInitialise } from './definition/grid-table-record-source-definition-internal-api';
+import { TableRecordSourceDefinitionStaticInitialise } from './definition/internal-api';
 
 /** @internal */
 export namespace TableRecordSourceStaticInitialise {

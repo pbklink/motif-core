@@ -4,32 +4,34 @@
  * License: motionite.trade/license/motif
  */
 
-import { Decimal } from 'decimal.js-light';
-import { AdiService, HigherLowerId, LitIvemId, SecurityDataDefinition, SecurityDataItem } from '../../../adi/adi-internal-api';
-import { RenderValue } from '../../../services/services-internal-api';
+import { AdiService, HigherLowerId, LitIvemId, SecurityDataDefinition, SecurityDataItem } from '../../../adi/internal-api';
+import { RenderValue } from '../../../services/internal-api';
 import {
+    AssertInternalError,
+    Decimal,
     Integer,
-    InternalError,
     MultiEvent,
     SourceTzOffsetDate,
     UnexpectedCaseError,
     UnreachableCaseError
-} from "../../../sys/sys-internal-api";
+} from "../../../sys/internal-api";
 import { PrefixableSecurityDataItemTableFieldSourceDefinition } from '../field-source/definition/internal-api';
 import {
     BooleanCorrectnessTableValue,
     CorrectnessTableValue,
+    CurrencyIdCorrectnessTableValue,
+    DecimalCorrectnessTableValue,
     EnumCorrectnessTableValue,
     IntegerArrayCorrectnessTableValue,
     IntegerCorrectnessTableValue,
     LitIvemIdCorrectnessTableValue,
-    NumberCorrectnessTableValue,
     PriceCorrectnessTableValue,
     PublisherSubscriptionDataTypeIdArrayCorrectnessTableValue,
     SourceTzOffsetDateCorrectnessTableValue,
+    StringArrayCorrectnessTableValue,
     StringCorrectnessTableValue,
     TableValue
-} from '../value/grid-table-value-internal-api';
+} from '../value/internal-api';
 import { TableValueSource } from './table-value-source';
 
 export class SecurityDataItemTableValueSource extends TableValueSource {
@@ -44,7 +46,7 @@ export class SecurityDataItemTableValueSource extends TableValueSource {
     private _bestBidOldValue: Decimal | undefined;
     private _auctionPriceOldValue: Decimal | undefined;
     private _vwapOldValue: Decimal | undefined;
-    private _valueTradedOldValue: number | undefined;
+    private _valueTradedOldValue: Decimal | undefined;
 
     constructor(firstFieldIndexOffset: Integer, private readonly _litIvemId: LitIvemId, private readonly _adi: AdiService) {
         super(firstFieldIndexOffset);
@@ -63,7 +65,7 @@ export class SecurityDataItemTableValueSource extends TableValueSource {
         if (!(baseDataItem instanceof SecurityDataItem)) {
             const description = baseDataItem.definition.description;
             this._adi.unsubscribe(baseDataItem);
-            throw new InternalError('LIISWGVA438', `${description}`);
+            throw new AssertInternalError('LIISWGVA438', `${description}`);
         } else {
             this.dataItem = baseDataItem;
             this.dataItemDefined = true;
@@ -272,8 +274,8 @@ export class SecurityDataItemTableValueSource extends TableValueSource {
         return result;
     }
 
-    private calculateValueTradedHigherLowerId(newValue: number | undefined) {
-        const result = this.calculateNumberHigherLowerId(newValue, this._valueTradedOldValue);
+    private calculateValueTradedHigherLowerId(newValue: Decimal | undefined) {
+        const result = this.calculateDecimalHigherLowerId(newValue, this._valueTradedOldValue);
         this._valueTradedOldValue = newValue;
         return result;
     }
@@ -301,43 +303,46 @@ export class SecurityDataItemTableValueSource extends TableValueSource {
                 (value as EnumCorrectnessTableValue).data = this.dataItem.tradingStateReasonId;
                 break;
             case SecurityDataItem.FieldId.QuotationBasis:
-                (value as StringCorrectnessTableValue).data = this.dataItem.quotationBasis;
+                (value as StringArrayCorrectnessTableValue).data = this.dataItem.quotationBasis;
+                break;
+            case SecurityDataItem.FieldId.Currency:
+                (value as CurrencyIdCorrectnessTableValue).data = this.dataItem.currencyId;
                 break;
             case SecurityDataItem.FieldId.StatusNote:
-                (value as StringCorrectnessTableValue).data = this.dataItem.statusNote;
+                (value as StringArrayCorrectnessTableValue).data = this.dataItem.statusNote;
                 break;
             case SecurityDataItem.FieldId.AskCount:
                 (value as IntegerCorrectnessTableValue).data = this.dataItem.askCount;
                 break;
             case SecurityDataItem.FieldId.AskQuantity:
-                (value as IntegerCorrectnessTableValue).data = this.dataItem.askQuantity;
+                (value as DecimalCorrectnessTableValue).data = this.dataItem.askQuantity;
                 break;
             case SecurityDataItem.FieldId.BidCount:
                 (value as IntegerCorrectnessTableValue).data = this.dataItem.bidCount;
                 break;
             case SecurityDataItem.FieldId.BidQuantity:
-                (value as IntegerCorrectnessTableValue).data = this.dataItem.bidQuantity;
+                (value as DecimalCorrectnessTableValue).data = this.dataItem.bidQuantity;
                 break;
             case SecurityDataItem.FieldId.NumberOfTrades:
                 (value as IntegerCorrectnessTableValue).data = this.dataItem.numberOfTrades;
                 break;
             case SecurityDataItem.FieldId.ContractSize:
-                (value as IntegerCorrectnessTableValue).data = this.dataItem.contractSize;
+                (value as DecimalCorrectnessTableValue).data = this.dataItem.contractSize;
                 break;
             case SecurityDataItem.FieldId.OpenInterest:
                 (value as IntegerCorrectnessTableValue).data = this.dataItem.openInterest;
                 break;
             case SecurityDataItem.FieldId.AuctionQuantity:
-                (value as IntegerCorrectnessTableValue).data = this.dataItem.auctionQuantity;
+                (value as DecimalCorrectnessTableValue).data = this.dataItem.auctionQuantity;
                 break;
             case SecurityDataItem.FieldId.AuctionRemainder:
-                (value as IntegerCorrectnessTableValue).data = this.dataItem.auctionRemainder;
+                (value as DecimalCorrectnessTableValue).data = this.dataItem.auctionRemainder;
                 break;
             case SecurityDataItem.FieldId.Volume:
-                (value as IntegerCorrectnessTableValue).data = this.dataItem.volume;
+                (value as DecimalCorrectnessTableValue).data = this.dataItem.volume;
                 break;
             case SecurityDataItem.FieldId.ShareIssue:
-                (value as IntegerCorrectnessTableValue).data = this.dataItem.shareIssue;
+                (value as DecimalCorrectnessTableValue).data = this.dataItem.shareIssue;
                 break;
             case SecurityDataItem.FieldId.Market:
                 (value as EnumCorrectnessTableValue).data = this.dataItem.marketId;
@@ -352,7 +357,7 @@ export class SecurityDataItemTableValueSource extends TableValueSource {
                 (value as StringCorrectnessTableValue).data = this.dataItem.cfi;
                 break;
             case SecurityDataItem.FieldId.CallOrPut:
-                (value as EnumCorrectnessTableValue).data = this.dataItem.callOrPut;
+                (value as EnumCorrectnessTableValue).data = this.dataItem.callOrPutId;
                 break;
             case SecurityDataItem.FieldId.TradingMarkets:
                 (value as IntegerArrayCorrectnessTableValue).data = this.dataItem.tradingMarkets;
@@ -420,7 +425,7 @@ export class SecurityDataItemTableValueSource extends TableValueSource {
                 (value as PriceCorrectnessTableValue).data = this.dataItem.strikePrice;
                 break;
             case SecurityDataItem.FieldId.ValueTraded:
-                (value as NumberCorrectnessTableValue).data = this.dataItem.valueTraded;
+                (value as DecimalCorrectnessTableValue).data = this.dataItem.valueTraded;
                 if (changed) {
                     const valueTradedHigherLowerId = this.calculateValueTradedHigherLowerId(this.dataItem.valueTraded);
                     this.loadHigherLower(value, valueTradedHigherLowerId);

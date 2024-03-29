@@ -4,10 +4,10 @@
  * License: motionite.trade/license/motif
  */
 
-import { Decimal } from 'decimal.js-light';
-import { StringId, Strings } from '../res/res-internal-api';
+import { StringId, Strings } from '../res/internal-api';
 import {
     CorrectnessId,
+    Decimal,
     EnumInfoOutOfOrderError,
     ErrorCode,
     FieldDataTypeId,
@@ -18,8 +18,9 @@ import {
     ValueRecentChangeTypeId,
     ZenithDataError,
     isDecimalEqual,
-    isDecimalGreaterThan
-} from "../sys/sys-internal-api";
+    isDecimalGreaterThan,
+    newDecimal
+} from "../sys/internal-api";
 import { Account } from './account';
 import { BrokerageAccountRecord } from './brokerage-account-record';
 import {
@@ -34,7 +35,7 @@ import {
     LitIvemId,
     TradingEnvironment,
     TradingEnvironmentId
-} from './common/adi-common-internal-api';
+} from './common/internal-api';
 
 export class Holding implements BrokerageAccountRecord {
     private _exchangeId: ExchangeId;
@@ -454,7 +455,7 @@ export namespace Holding {
         const marketDetail: HoldingsDataMessage.MarketChangeData.Detail = {
             totalQuantity: 0,
             totalAvailableQuantity: 0,
-            averagePrice: new Decimal(0),
+            averagePrice: newDecimal(0),
         };
 
         const msgData: HoldingsDataMessage.MarketChangeData = {
@@ -463,7 +464,7 @@ export namespace Holding {
             code: key.code,
             accountId: key.accountId,
             styleId: IvemClassId.Market,
-            cost: new Decimal(0),
+            cost: newDecimal(0),
             currencyId: Currency.nullCurrencyId,
             marketDetail,
         };

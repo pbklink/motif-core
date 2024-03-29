@@ -14,9 +14,9 @@ import {
     RankScoredLitIvemId,
     RankScoredLitIvemIdList,
     WatchmakerListDescriptor
-} from '../adi/adi-internal-api';
-import { StringId, Strings } from '../res/res-internal-api';
-import { RankedLitIvemIdListDirectoryItem } from '../services/services-internal-api';
+} from '../adi/internal-api';
+import { StringId, Strings } from '../res/internal-api';
+import { RankedLitIvemIdListDirectoryItem } from '../services/internal-api';
 import {
     AssertInternalError,
     Badness,
@@ -25,19 +25,19 @@ import {
     CorrectnessId,
     EnumInfoOutOfOrderError,
     Err,
+    ErrorCodeLogger,
     FieldDataTypeId,
     Integer,
     KeyedCorrectnessSettableListItem,
     KeyedRecord,
     LockOpenListItem,
     LockOpenManager,
-    Logger,
     MultiEvent,
     Ok,
     RecordList,
     Result,
     ValueRecentChangeTypeId
-} from "../sys/sys-internal-api";
+} from "../sys/internal-api";
 
 export class WatchmakerList implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>, KeyedCorrectnessSettableListItem, RankScoredLitIvemIdList, RankedLitIvemIdListDirectoryItem {
     readonly directoryItemTypeId = RankedLitIvemIdListDirectoryItem.TypeId.WatchmakerList;
@@ -84,7 +84,7 @@ export class WatchmakerList implements LockOpenListItem<RankedLitIvemIdListDirec
 
     private _createDataItemIncubator: DataItemIncubator<LitIvemIdCreateWatchmakerListDataItem>;
 
-    private _badnessChangeMultiEvent = new MultiEvent<BadnessList.BadnessChangeEventHandler>();
+    private _badnessChangedMultiEvent = new MultiEvent<BadnessList.badnessChangedEventHandler>();
     private _correctnessChangedMultiEvent = new MultiEvent<WatchmakerList.CorrectnessChangedEventHandler>();
     private _listChangeMultiEvent = new MultiEvent<RecordList.ListChangeEventHandler>();
     private _valuesChangedMultiEvent = new MultiEvent<WatchmakerList.ValuesChangedEventHandler>();
@@ -278,7 +278,7 @@ export class WatchmakerList implements LockOpenListItem<RankedLitIvemIdListDirec
     //     throw new Error('Method not implemented.');
     // }
 
-    async tryLock(locker: LockOpenListItem.Locker): Promise<Result<void>> {
+    tryLock(locker: LockOpenListItem.Locker): Promise<Result<void>> {
         return this._lockOpenManager.tryLock(locker);
     }
 
@@ -398,12 +398,12 @@ export class WatchmakerList implements LockOpenListItem<RankedLitIvemIdListDirec
         }
     }
 
-    subscribeBadnessChangeEvent(handler: BadnessList.BadnessChangeEventHandler) {
-        return this._badnessChangeMultiEvent.subscribe(handler);
+    subscribeBadnessChangedEvent(handler: BadnessList.badnessChangedEventHandler) {
+        return this._badnessChangedMultiEvent.subscribe(handler);
     }
 
-    unsubscribeBadnessChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void {
-        this._badnessChangeMultiEvent.unsubscribe(subscriptionId);
+    unsubscribeBadnessChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void {
+        this._badnessChangedMultiEvent.unsubscribe(subscriptionId);
     }
 
     subscribeCorrectnessChangedEvent(handler: WatchmakerList.CorrectnessChangedEventHandler) {
@@ -592,7 +592,7 @@ export class WatchmakerList implements LockOpenListItem<RankedLitIvemIdListDirec
         if (dataItem.error) {
             this._errorText = dataItem.errorText;
             this.setSyncStatusId(WatchmakerList.SyncStatusId.Error);
-            Logger.logDataError('WLPCOSR60113', dataItem.errorText );
+            ErrorCodeLogger.logDataError('WLPCOSR60113', dataItem.errorText );
         } else {
             this.setSyncStatusId(WatchmakerList.SyncStatusId.Error);
 

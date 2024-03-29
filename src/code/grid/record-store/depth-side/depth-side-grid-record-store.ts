@@ -4,13 +4,14 @@
  * License: motionite.trade/license/motif
  */
 
-import { DepthStyleId, OrderSideId } from '../../../adi/adi-internal-api';
+import { DepthStyleId, OrderSideId } from '../../../adi/internal-api';
 import {
+    Decimal,
     GridRecordIndex,
     GridRecordInvalidatedValue,
     GridRecordStoreRecordsEventers,
     Integer
-} from "../../../sys/sys-internal-api";
+} from "../../../sys/internal-api";
 import { DepthRecord } from './depth-record';
 
 /** @public */
@@ -51,9 +52,10 @@ export abstract class DepthSideGridRecordStore {
         }
     }
 
-    setAuctionQuantity(value: Integer | undefined) {
-        if (value !== this._auctionVolume) {
-            this._auctionVolume = value;
+    setAuctionQuantity(value: Decimal | undefined) {
+        const valueAsInteger = value === undefined ? undefined : value.toInteger().toNumber(); // Remove this when Depth supports Decimal Auction Quantity
+        if (valueAsInteger !== this._auctionVolume) {
+            this._auctionVolume = valueAsInteger;
             if (this.getRecordCount() > 0) {
                 const lastAffectedFollowingRecordIndex = this.processAuctionAndVolumeAhead(0, true);
                 this.eventifyInvalidateRecordAndFollowingRecords(0, lastAffectedFollowingRecordIndex);

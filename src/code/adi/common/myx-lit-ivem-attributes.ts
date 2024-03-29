@@ -4,14 +4,14 @@
  * License: motionite.trade/license/motif
  */
 
-import { StringId, Strings } from '../../res/res-internal-api';
+import { StringId, Strings } from '../../res/internal-api';
 import {
     AssertInternalError,
     EnumInfoOutOfOrderError,
     FieldDataTypeId,
     Integer,
     isUndefinableArrayEqualUniquely
-} from "../../sys/sys-internal-api";
+} from "../../sys/internal-api";
 import { ExchangeId, ExchangeInfo } from './data-types';
 import { LitIvemAttributes } from './lit-ivem-attributes';
 

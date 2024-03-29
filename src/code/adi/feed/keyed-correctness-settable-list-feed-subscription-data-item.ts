@@ -12,7 +12,7 @@ import {
     MultiEvent,
     RecordList,
     UsableListChangeTypeId
-} from "../../sys/sys-internal-api";
+} from "../../sys/internal-api";
 import { FeedSubscriptionDataItem } from './feed-subscription-data-item';
 
 export class KeyedCorrectnessSettableListFeedSubscriptionDataItem<Record extends KeyedCorrectnessSettableListItem> extends FeedSubscriptionDataItem

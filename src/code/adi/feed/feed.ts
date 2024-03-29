@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { StringId, Strings } from '../../res/res-internal-api';
+import { StringId, Strings } from '../../res/internal-api';
 import {
     Correctness,
     CorrectnessId,
@@ -14,8 +14,8 @@ import {
     KeyedCorrectnessListItem,
     KeyedRecord,
     MultiEvent
-} from "../../sys/sys-internal-api";
-import { FeedClassId, FeedId, FeedInfo, FeedStatusId } from '../common/adi-common-internal-api';
+} from "../../sys/internal-api";
+import { FeedClassId, FeedId, FeedInfo, FeedStatusId } from '../common/internal-api';
 
 export class Feed implements KeyedCorrectnessListItem {
     readonly name: string;

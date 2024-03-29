@@ -74,12 +74,14 @@ export const enum StringId {
     Test,
     Search,
     Details,
+    Status,
     Acknowledge,
     Keywords,
     ContactMe,
     NotInterested,
     Interested,
     Similar,
+    Incompatible,
     // eslint-disable-next-line id-blacklist
     Undefined,
     Enabled,
@@ -118,6 +120,7 @@ export const enum StringId {
     Modified,
     Valid,
     Invalid,
+    Faulted,
     InvalidIntegerString,
     UnsupportedValue,
     NotObject,
@@ -145,6 +148,14 @@ export const enum StringId {
     LitIvemIdNotJsonObject,
     InvalidLitIvemIdJson,
     UiEntryError,
+    ErrorGetting,
+    ErrorOpening,
+    ErrorOpeningSaved,
+    ErrorCreating,
+    ErrorCreatingNew,
+    ErrorUpdating,
+    ErrorDeleting,
+    ErrorLoadingGridLayout,
     ValueRequired,
     CodeMissing,
     SymbolSourceDoesNotHaveDefaultMarket,
@@ -207,6 +218,7 @@ export const enum StringId {
     DeleteList,
     CannotDeleteList,
     NewScan,
+    Scan,
     TableJsonMissingFieldlist,
     NamedGridSource,
     List,
@@ -222,7 +234,25 @@ export const enum StringId {
     Criteria,
     Rank,
     Targets,
+    DistributionMethodIds,
+    NotificationChannel,
+    NotificationChannels,
+    NotificationChannelsGrid,
+    ScanEditorAttachedNotificationChannels,
+    ScanFieldEditorFramesGrid,
+    ScanTestMatches,
+    LitIvemIdListEditor,
+    SearchSymbols,
+    DepthAndSalesWatchlist,
+    Feeds,
     Notifications,
+    AllowedFields,
+    GridLayoutEditorColumns,
+    BrokerageAccounts,
+    OrderAuthorise,
+    Scans,
+    TopShareholders,
+    GridLayout,
     ExecuteCommandTitle,
     ApplySymbolCaption,
     ApplySymbolTitle,
@@ -310,6 +340,8 @@ export const enum StringId {
     SecurityFieldHeading_SubscriptionDataTypeIds,
     SecurityFieldDisplay_QuotationBasis,
     SecurityFieldHeading_QuotationBasis,
+    SecurityFieldDisplay_Currency,
+    SecurityFieldHeading_Currency,
     SecurityFieldDisplay_Open,
     SecurityFieldHeading_Open,
     SecurityFieldDisplay_High,
@@ -388,8 +420,8 @@ export const enum StringId {
     TableRecordDefinitionList_ListTypeAbbr_LitIvemIdList,
     TableRecordDefinitionList_ListTypeDisplay_LitIvemDetailsFromSearchSymbols,
     TableRecordDefinitionList_ListTypeAbbr_LitIvemDetailsFromSearchSymbols,
-    TableRecordDefinitionList_ListTypeDisplay_Watchlist,
-    TableRecordDefinitionList_ListTypeAbbr_Watchlist,
+    TableRecordDefinitionList_ListTypeDisplay_LitIvemIdArrayRankedLitIvemIdList,
+    TableRecordDefinitionList_ListTypeAbbr_LitIvemIdArrayRankedLitIvemIdList,
     TableRecordDefinitionList_ListTypeDisplay_MarketMovers,
     TableRecordDefinitionList_ListTypeAbbr_MarketMovers,
     TableRecordDefinitionList_ListTypeDisplay_Gics,
@@ -430,12 +462,12 @@ export const enum StringId {
     TableRecordDefinitionList_ListTypeAbbr_RankedLitIvemIdListDirectoryItem,
     TableRecordDefinitionList_ListTypeDisplay_GridField,
     TableRecordDefinitionList_ListTypeAbbr_GridField,
-    TableRecordDefinitionList_ListTypeDisplay_ScanTest,
-    TableRecordDefinitionList_ListTypeAbbr_ScanTest,
     TableRecordDefinitionList_ListTypeDisplay_ScanFieldEditorFrame,
     TableRecordDefinitionList_ListTypeAbbr_ScanFieldEditorFrame,
     TableRecordDefinitionList_ListTypeDisplay_ScanEditorAttachedNotificationChannel,
     TableRecordDefinitionList_ListTypeAbbr_ScanEditorAttachedNotificationChannel,
+    TableRecordDefinitionList_ListTypeDisplay_LockOpenNotificationChannelList,
+    TableRecordDefinitionList_ListTypeAbbr_LockOpenNotificationChannelList,
     ExchangeAbbreviatedDisplay_Asx,
     ExchangeFullDisplay_Asx,
     ExchangeAbbreviatedDisplay_Cxa,
@@ -1844,6 +1876,7 @@ export const enum StringId {
     DitemMenuDisplay_Depth,
     DitemMenuDisplay_NewsHeadlines,
     DitemMenuDisplay_NewsBody,
+    DitemMenuDisplay_NotificationChannels,
     DitemMenuDisplay_Scans,
     DitemMenuDisplay_Alerts,
     DitemMenuDisplay_Search,
@@ -2297,6 +2330,52 @@ export const enum StringId {
     ScanEditorAttachNotificationChannels_EditGridColumns,
     ScanEditorAttachNotificationChannels_DetachSelectedChannelsCaption,
     ScanEditorAttachNotificationChannels_DetachSelectedChannelsTitle,
+    LockOpenNotificationChannelHeader_Id,
+    LockOpenNotificationChannelHeader_Valid,
+    LockOpenNotificationChannelHeader_Enabled,
+    LockOpenNotificationChannelDescription_Enabled,
+    LockOpenNotificationChannelHeader_Name,
+    LockOpenNotificationChannelDescription_Name,
+    LockOpenNotificationChannelHeader_Description,
+    LockOpenNotificationChannelDescription_Description,
+    LockOpenNotificationChannelHeader_Favourite,
+    LockOpenNotificationChannelHeader_StatusId,
+    LockOpenNotificationChannelHeader_DistributionMethodId,
+    LockOpenNotificationChannelHeader_Settings,
+    LockOpenNotificationChannelHeader_Faulted,
+    NotificationDistributionMethodDisplay_Debug,
+    NotificationDistributionMethodDisplay_Email,
+    NotificationDistributionMethodDisplay_Sms,
+    NotificationDistributionMethodDisplay_WebPush,
+    NotificationDistributionMethodDisplay_ApplePush,
+    NotificationDistributionMethodDisplay_GooglePush,
+    NotificationChannels_RefreshAllCaption,
+    NotificationChannels_RefreshAllDescription,
+    NotificationChannels_AddCaption,
+    NotificationChannels_AddDescription,
+    NotificationChannels_RemoveSelectedCaption,
+    NotificationChannels_RemoveSelectedDescription,
+    NotificationChannels_SelectAllCaption,
+    NotificationChannels_SelectAllDescription,
+    ScanFieldSetLoadErrorTypeDisplay_AndFieldHasOrChild,
+    ScanFieldSetLoadErrorTypeDisplay_AndFieldHasXorChild,
+    ScanFieldSetLoadErrorTypeDisplay_OrFieldHasAndChild,
+    ScanFieldSetLoadErrorTypeDisplay_OrFieldHasXorChild,
+    ScanFieldSetLoadErrorTypeDisplay_XorFieldDoesNotHave2Children,
+    ScanFieldSetLoadErrorTypeDisplay_XorFieldHasAndChild,
+    ScanFieldSetLoadErrorTypeDisplay_XorFieldHasOrChild,
+    ScanFieldSetLoadErrorTypeDisplay_XorFieldHasXorChild,
+    ScanFieldSetLoadErrorTypeDisplay_AndFieldOperatorCannotBeNegated,
+    ScanFieldSetLoadErrorTypeDisplay_OrFieldOperatorCannotBeNegated,
+    ScanFieldSetLoadErrorTypeDisplay_XorFieldOperatorCannotBeNegated,
+    ScanFieldSetLoadErrorTypeDisplay_AllConditionNotSupported,
+    ScanFieldSetLoadErrorTypeDisplay_NoneConditionNotSupported,
+    ScanFieldSetLoadErrorTypeDisplay_FieldConditionsOperationIdMismatch,
+    ScanFieldSetLoadErrorTypeDisplay_NumericComparisonBooleanNodeDoesNotHaveANumericFieldValueGetOperand,
+    ScanFieldSetLoadErrorTypeDisplay_NumericComparisonBooleanNodeDoesNotHaveANumberOperand,
+    ScanFieldSetLoadErrorTypeDisplay_FactoryCreateFieldError,
+    ScanFieldSetLoadErrorTypeDisplay_FactoryCreateFieldConditionError,
+
 }
 
 /** @public */
@@ -2672,6 +2751,11 @@ export namespace I18nStrings {
                 en: 'Details',
             }
         },
+        Status: {
+            id: StringId.Status, translations: {
+                en: 'Status',
+            }
+        },
         Acknowledge: {
             id: StringId.Acknowledge, translations: {
                 en: 'Acknowledge',
@@ -2700,6 +2784,11 @@ export namespace I18nStrings {
         Similar: {
             id: StringId.Similar, translations: {
                 en: 'Similar',
+            }
+        },
+        Incompatible: {
+            id: StringId.Incompatible, translations: {
+                en: 'Incompatible',
             }
         },
         // eslint-disable-next-line id-blacklist
@@ -2888,6 +2977,11 @@ export namespace I18nStrings {
                 en: 'Invalid',
             }
         },
+        Faulted: {
+            id: StringId.Faulted, translations: {
+                en: 'Faulted',
+            }
+        },
         InvalidIntegerString: {
             id: StringId.InvalidIntegerString, translations: {
                 en: 'Invalid integer string',
@@ -3021,6 +3115,46 @@ export namespace I18nStrings {
         UiEntryError: {
             id: StringId.UiEntryError, translations: {
                 en: 'UI entry error',
+            }
+        },
+        ErrorGetting: {
+            id: StringId.ErrorGetting, translations: {
+                en: 'Error getting',
+            }
+        },
+        ErrorOpening: {
+            id: StringId.ErrorOpening, translations: {
+                en: 'Error opening',
+            }
+        },
+        ErrorOpeningSaved: {
+            id: StringId.ErrorOpeningSaved, translations: {
+                en: 'Error opening saved',
+            }
+        },
+        ErrorCreating: {
+            id: StringId.ErrorCreating, translations: {
+                en: 'Error creating',
+            }
+        },
+        ErrorCreatingNew: {
+            id: StringId.ErrorCreatingNew, translations: {
+                en: 'Error creating new',
+            }
+        },
+        ErrorUpdating: {
+            id: StringId.ErrorUpdating, translations: {
+                en: 'Error updating',
+            }
+        },
+        ErrorDeleting: {
+            id: StringId.ErrorDeleting, translations: {
+                en: 'Error deleting',
+            }
+        },
+        ErrorLoadingGridLayout: {
+            id: StringId.ErrorLoadingGridLayout, translations: {
+                en: 'Error loading grid layout',
             }
         },
         ValueRequired: {
@@ -3333,6 +3467,11 @@ export namespace I18nStrings {
                 en: 'New',
             }
         },
+        Scan: {
+            id: StringId.Scan, translations: {
+                en: 'Scan',
+            }
+        },
         TableJsonMissingFieldlist: {
             id: StringId.TableJsonMissingFieldlist, translations: {
                 en: 'Table JSON Missing Field List',
@@ -3408,9 +3547,99 @@ export namespace I18nStrings {
                 en: 'Targets',
             }
         },
+        DistributionMethodIds: {
+            id: StringId.DistributionMethodIds, translations: {
+                en: 'Notification channel types',
+            }
+        },
+        NotificationChannel: {
+            id: StringId.NotificationChannel, translations: {
+                en: 'Notification channel',
+            }
+        },
+        NotificationChannels: {
+            id: StringId.NotificationChannels, translations: {
+                en: 'Notification channels',
+            }
+        },
+        NotificationChannelsGrid: {
+            id: StringId.NotificationChannelsGrid, translations: {
+                en: 'Notification channels grid',
+            }
+        },
+        ScanEditorAttachedNotificationChannels: {
+            id: StringId.ScanEditorAttachedNotificationChannels, translations: {
+                en: 'Scan editor attached notification channels',
+            }
+        },
+        ScanFieldEditorFramesGrid: {
+            id: StringId.ScanFieldEditorFramesGrid, translations: {
+                en: 'Scan field editor frames grid',
+            }
+        },
+        ScanTestMatches: {
+            id: StringId.ScanTestMatches, translations: {
+                en: 'Scan test matches',
+            }
+        },
+        LitIvemIdListEditor: {
+            id: StringId.LitIvemIdListEditor, translations: {
+                en: 'Symbol list editor',
+            }
+        },
+        SearchSymbols: {
+            id: StringId.SearchSymbols, translations: {
+                en: 'Search symbols',
+            }
+        },
+        DepthAndSalesWatchlist: {
+            id: StringId.DepthAndSalesWatchlist, translations: {
+                en: 'Depth and trades watchlist',
+            }
+        },
+        Feeds: {
+            id: StringId.Feeds, translations: {
+                en: 'Feeds',
+            }
+        },
         Notifications: {
             id: StringId.Notifications, translations: {
                 en: 'Notifications',
+            }
+        },
+        AllowedFields: {
+            id: StringId.AllowedFields, translations: {
+                en: 'Allowed Fields',
+            }
+        },
+        GridLayoutEditorColumns: {
+            id: StringId.GridLayoutEditorColumns, translations: {
+                en: 'Grid Layout Editor Columns',
+            }
+        },
+        BrokerageAccounts: {
+            id: StringId.BrokerageAccounts, translations: {
+                en: 'Brokerage accounts',
+            }
+        },
+        OrderAuthorise: {
+            id: StringId.OrderAuthorise, translations: {
+                en: 'Order authorise',
+            }
+        },
+        Scans: {
+            id: StringId.Scans, translations: {
+                en: 'Scans',
+            }
+        },
+        TopShareholders: {
+            id: StringId.TopShareholders, translations: {
+                en: 'Top shareholders',
+            }
+        },
+        GridLayout: {
+            id: StringId.GridLayout, translations: {
+                en: 'Grid layout',
             }
         },
         ExecuteCommandTitle: {
@@ -3849,6 +4078,16 @@ export namespace I18nStrings {
                 en: 'Basis',
             }
         },
+        SecurityFieldDisplay_Currency: {
+            id: StringId.SecurityFieldDisplay_Currency, translations: {
+                en: 'Currency',
+            }
+        },
+        SecurityFieldHeading_Currency: {
+            id: StringId.SecurityFieldHeading_Currency, translations: {
+                en: 'Currency',
+            }
+        },
         SecurityFieldDisplay_Open: {
             id: StringId.SecurityFieldDisplay_Open, translations: {
                 en: 'Open',
@@ -4239,13 +4478,13 @@ export namespace I18nStrings {
                 en: 'SymS',
             }
         },
-        TableRecordDefinitionList_ListTypeDisplay_Watchlist: {
-            id: StringId.TableRecordDefinitionList_ListTypeDisplay_Watchlist, translations: {
+        TableRecordDefinitionList_ListTypeDisplay_LitIvemIdArrayRankedLitIvemIdList: {
+            id: StringId.TableRecordDefinitionList_ListTypeDisplay_LitIvemIdArrayRankedLitIvemIdList, translations: {
                 en: 'Watchlist',
             }
         },
-        TableRecordDefinitionList_ListTypeAbbr_Watchlist: {
-            id: StringId.TableRecordDefinitionList_ListTypeAbbr_Watchlist, translations: {
+        TableRecordDefinitionList_ListTypeAbbr_LitIvemIdArrayRankedLitIvemIdList: {
+            id: StringId.TableRecordDefinitionList_ListTypeAbbr_LitIvemIdArrayRankedLitIvemIdList, translations: {
                 en: 'WL',
             }
         },
@@ -4449,16 +4688,6 @@ export namespace I18nStrings {
                 en: 'GF',
             }
         },
-        TableRecordDefinitionList_ListTypeDisplay_ScanTest: {
-            id: StringId.TableRecordDefinitionList_ListTypeDisplay_ScanTest, translations: {
-                en: 'Scan Test',
-            }
-        },
-        TableRecordDefinitionList_ListTypeAbbr_ScanTest: {
-            id: StringId.TableRecordDefinitionList_ListTypeAbbr_ScanTest, translations: {
-                en: 'ST',
-            }
-        },
         TableRecordDefinitionList_ListTypeDisplay_ScanFieldEditorFrame: {
             id: StringId.TableRecordDefinitionList_ListTypeDisplay_ScanFieldEditorFrame, translations: {
                 en: 'Scan Field Editor Frame',
@@ -4477,6 +4706,16 @@ export namespace I18nStrings {
         TableRecordDefinitionList_ListTypeAbbr_ScanEditorAttachedNotificationChannel: {
             id: StringId.TableRecordDefinitionList_ListTypeAbbr_ScanEditorAttachedNotificationChannel, translations: {
                 en: 'SEANC',
+            }
+        },
+        TableRecordDefinitionList_ListTypeDisplay_LockOpenNotificationChannelList: {
+            id: StringId.TableRecordDefinitionList_ListTypeDisplay_LockOpenNotificationChannelList, translations: {
+                en: 'Notification channel list',
+            }
+        },
+        TableRecordDefinitionList_ListTypeAbbr_LockOpenNotificationChannelList: {
+            id: StringId.TableRecordDefinitionList_ListTypeAbbr_LockOpenNotificationChannelList, translations: {
+                en: 'LONCL',
             }
         },
         ExchangeAbbreviatedDisplay_Asx: {
@@ -11522,6 +11761,11 @@ export namespace I18nStrings {
                 en: 'News Body',
             }
         },
+        DitemMenuDisplay_NotificationChannels: {
+            id: StringId.DitemMenuDisplay_NotificationChannels, translations: {
+                en: 'Notifications',
+            }
+        },
         DitemMenuDisplay_Scans: {
             id: StringId.DitemMenuDisplay_Scans, translations: {
                 en: 'Scans',
@@ -13788,6 +14032,231 @@ export namespace I18nStrings {
         ScanEditorAttachNotificationChannels_DetachSelectedChannelsTitle: {
             id: StringId.ScanEditorAttachNotificationChannels_DetachSelectedChannelsTitle, translations: {
                 en: 'Detach selected channels from this scan',
+            }
+        },
+        LockOpenNotificationChannelHeader_Id: {
+            id: StringId.LockOpenNotificationChannelHeader_Id, translations: {
+                en: 'Id',
+            }
+        },
+        LockOpenNotificationChannelHeader_Valid: {
+            id: StringId.LockOpenNotificationChannelHeader_Valid, translations: {
+                en: 'Valid',
+            }
+        },
+        LockOpenNotificationChannelHeader_Enabled: {
+            id: StringId.LockOpenNotificationChannelHeader_Enabled, translations: {
+                en: 'Enabled',
+            }
+        },
+        LockOpenNotificationChannelDescription_Enabled: {
+            id: StringId.LockOpenNotificationChannelDescription_Enabled, translations: {
+                en: 'Enable notifications through this channel',
+            }
+        },
+        LockOpenNotificationChannelHeader_Name: {
+            id: StringId.LockOpenNotificationChannelHeader_Name, translations: {
+                en: 'Name',
+            }
+        },
+        LockOpenNotificationChannelDescription_Name: {
+            id: StringId.LockOpenNotificationChannelDescription_Name, translations: {
+                en: 'Specify name of this notification channel',
+            }
+        },
+        LockOpenNotificationChannelHeader_Description: {
+            id: StringId.LockOpenNotificationChannelHeader_Description, translations: {
+                en: 'Description',
+            }
+        },
+        LockOpenNotificationChannelDescription_Description: {
+            id: StringId.LockOpenNotificationChannelDescription_Description, translations: {
+                en: 'Specify a description of this notification channel',
+            }
+        },
+        LockOpenNotificationChannelHeader_Favourite: {
+            id: StringId.LockOpenNotificationChannelHeader_Favourite, translations: {
+                en: 'Favourite',
+            }
+        },
+        LockOpenNotificationChannelHeader_StatusId: {
+            id: StringId.LockOpenNotificationChannelHeader_StatusId, translations: {
+                en: 'Status',
+            }
+        },
+        LockOpenNotificationChannelHeader_DistributionMethodId: {
+            id: StringId.LockOpenNotificationChannelHeader_DistributionMethodId, translations: {
+                en: 'Type',
+            }
+        },
+        LockOpenNotificationChannelHeader_Settings: {
+            id: StringId.LockOpenNotificationChannelHeader_Settings, translations: {
+                en: 'Settings',
+            }
+        },
+        LockOpenNotificationChannelHeader_Faulted: {
+            id: StringId.LockOpenNotificationChannelHeader_Faulted, translations: {
+                en: 'Faulted',
+            }
+        },
+        NotificationDistributionMethodDisplay_Debug: {
+            id: StringId.NotificationDistributionMethodDisplay_Debug, translations: {
+                en: 'Debug',
+            }
+        },
+        NotificationDistributionMethodDisplay_Email: {
+            id: StringId.NotificationDistributionMethodDisplay_Email, translations: {
+                en: 'Email',
+            }
+        },
+        NotificationDistributionMethodDisplay_Sms: {
+            id: StringId.NotificationDistributionMethodDisplay_Sms, translations: {
+                en: 'SMS',
+            }
+        },
+        NotificationDistributionMethodDisplay_WebPush: {
+            id: StringId.NotificationDistributionMethodDisplay_WebPush, translations: {
+                en: 'Web push',
+            }
+        },
+        NotificationDistributionMethodDisplay_ApplePush: {
+            id: StringId.NotificationDistributionMethodDisplay_ApplePush, translations: {
+                en: 'Apple push',
+            }
+        },
+        NotificationDistributionMethodDisplay_GooglePush: {
+            id: StringId.NotificationDistributionMethodDisplay_GooglePush, translations: {
+                en: 'Google push',
+            }
+        },
+        NotificationChannels_RefreshAllCaption: {
+            id: StringId.NotificationChannels_RefreshAllCaption, translations: {
+                en: 'Refresh',
+            }
+        },
+        NotificationChannels_RefreshAllDescription: {
+            id: StringId.NotificationChannels_RefreshAllDescription, translations: {
+                en: 'Refresh list of channels',
+            }
+        },
+        NotificationChannels_AddCaption: {
+            id: StringId.NotificationChannels_AddCaption, translations: {
+                en: 'Add',
+            }
+        },
+        NotificationChannels_AddDescription: {
+            id: StringId.NotificationChannels_AddDescription, translations: {
+                en: 'Add a new channel of the selected type',
+            }
+        },
+        NotificationChannels_RemoveSelectedCaption: {
+            id: StringId.NotificationChannels_RemoveSelectedCaption, translations: {
+                en: 'Delete selected',
+            }
+        },
+        NotificationChannels_RemoveSelectedDescription: {
+            id: StringId.NotificationChannels_RemoveSelectedDescription, translations: {
+                en: 'Delete channels selected in grid',
+            }
+        },
+        NotificationChannels_SelectAllCaption: {
+            id: StringId.NotificationChannels_SelectAllCaption, translations: {
+                en: 'Select all',
+            }
+        },
+        NotificationChannels_SelectAllDescription: {
+            id: StringId.NotificationChannels_SelectAllDescription, translations: {
+                en: 'Select all channels',
+            }
+        },
+        ScanFieldSetLoadErrorTypeDisplay_AndFieldHasOrChild: {
+            id: StringId.ScanFieldSetLoadErrorTypeDisplay_AndFieldHasOrChild, translations: {
+                en: '"And" field has "Or" child',
+            }
+        },
+        ScanFieldSetLoadErrorTypeDisplay_AndFieldHasXorChild: {
+            id: StringId.ScanFieldSetLoadErrorTypeDisplay_AndFieldHasXorChild, translations: {
+                en: '"And" field has "Xor" child',
+            }
+        },
+        ScanFieldSetLoadErrorTypeDisplay_OrFieldHasAndChild: {
+            id: StringId.ScanFieldSetLoadErrorTypeDisplay_OrFieldHasAndChild, translations: {
+                en: '"Or" field has "And" child',
+            }
+        },
+        ScanFieldSetLoadErrorTypeDisplay_OrFieldHasXorChild: {
+            id: StringId.ScanFieldSetLoadErrorTypeDisplay_OrFieldHasXorChild, translations: {
+                en: '"Or" field has "Xor" child',
+            }
+        },
+        ScanFieldSetLoadErrorTypeDisplay_XorFieldDoesNotHave2Children: {
+            id: StringId.ScanFieldSetLoadErrorTypeDisplay_XorFieldDoesNotHave2Children, translations: {
+                en: '"Xor" field does not have 2 children',
+            }
+        },
+        ScanFieldSetLoadErrorTypeDisplay_XorFieldHasAndChild: {
+            id: StringId.ScanFieldSetLoadErrorTypeDisplay_XorFieldHasAndChild, translations: {
+                en: '"Xor" field has "And" child',
+            }
+        },
+        ScanFieldSetLoadErrorTypeDisplay_XorFieldHasOrChild: {
+            id: StringId.ScanFieldSetLoadErrorTypeDisplay_XorFieldHasOrChild, translations: {
+                en: '"Xor" field has "Or" child',
+            }
+        },
+        ScanFieldSetLoadErrorTypeDisplay_XorFieldHasXorChild: {
+            id: StringId.ScanFieldSetLoadErrorTypeDisplay_XorFieldHasXorChild, translations: {
+                en: '"Xor" field has "Xor" child',
+            }
+        },
+        ScanFieldSetLoadErrorTypeDisplay_AndFieldOperatorCannotBeNegated: {
+            id: StringId.ScanFieldSetLoadErrorTypeDisplay_AndFieldOperatorCannotBeNegated, translations: {
+                en: '"And" field operator cannot be negated',
+            }
+        },
+        ScanFieldSetLoadErrorTypeDisplay_OrFieldOperatorCannotBeNegated: {
+            id: StringId.ScanFieldSetLoadErrorTypeDisplay_OrFieldOperatorCannotBeNegated, translations: {
+                en: '"Or" field operator cannot be negated',
+            }
+        },
+        ScanFieldSetLoadErrorTypeDisplay_XorFieldOperatorCannotBeNegated: {
+            id: StringId.ScanFieldSetLoadErrorTypeDisplay_XorFieldOperatorCannotBeNegated, translations: {
+                en: '"Xor" field operator cannot be negated',
+            }
+        },
+        ScanFieldSetLoadErrorTypeDisplay_AllConditionNotSupported: {
+            id: StringId.ScanFieldSetLoadErrorTypeDisplay_AllConditionNotSupported, translations: {
+                en: '"All" condition not supported',
+            }
+        },
+        ScanFieldSetLoadErrorTypeDisplay_NoneConditionNotSupported: {
+            id: StringId.ScanFieldSetLoadErrorTypeDisplay_NoneConditionNotSupported, translations: {
+                en: '"None" condition not supported',
+            }
+        },
+        ScanFieldSetLoadErrorTypeDisplay_FieldConditionsOperationIdMismatch: {
+            id: StringId.ScanFieldSetLoadErrorTypeDisplay_FieldConditionsOperationIdMismatch, translations: {
+                en: 'Field conditions operation Id mismatch',
+            }
+        },
+        ScanFieldSetLoadErrorTypeDisplay_NumericComparisonBooleanNodeDoesNotHaveANumericFieldValueGetOperand: {
+            id: StringId.ScanFieldSetLoadErrorTypeDisplay_NumericComparisonBooleanNodeDoesNotHaveANumericFieldValueGetOperand, translations: {
+                en: 'Numeric comparison does not have a field operand',
+            }
+        },
+        ScanFieldSetLoadErrorTypeDisplay_NumericComparisonBooleanNodeDoesNotHaveANumberOperand: {
+            id: StringId.ScanFieldSetLoadErrorTypeDisplay_NumericComparisonBooleanNodeDoesNotHaveANumberOperand, translations: {
+                en: 'Numeric comparison does not have a number operand',
+            }
+        },
+        ScanFieldSetLoadErrorTypeDisplay_FactoryCreateFieldError: {
+            id: StringId.ScanFieldSetLoadErrorTypeDisplay_FactoryCreateFieldError, translations: {
+                en: 'Factory create field error',
+            }
+        },
+        ScanFieldSetLoadErrorTypeDisplay_FactoryCreateFieldConditionError: {
+            id: StringId.ScanFieldSetLoadErrorTypeDisplay_FactoryCreateFieldConditionError, translations: {
+                en: 'Factory create field condition error',
             }
         },
 

@@ -4,8 +4,9 @@
  * License: motionite.trade/license/motif
  */
 
-import { DayTradesDataItem, MovementId, TradeFlagId } from '../../../adi/adi-internal-api';
-import { StringId, Strings } from '../../../res/res-internal-api';
+import { RevFieldDefinition, RevFieldSourceDefinition, RevGridLayoutDefinition } from '@xilytix/rev-data-source';
+import { DayTradesDataItem, MovementId, TradeFlagId } from '../../../adi/internal-api';
+import { StringId, Strings } from '../../../res/internal-api';
 import {
     DayTradesDataItemRecordTypeIdRenderValue,
     IntegerRenderValue,
@@ -19,7 +20,7 @@ import {
     TradeAffectsIdArrayRenderValue,
     TradeFlagIdArrayRenderValue,
     TrendIdRenderValue
-} from '../../../services/services-internal-api';
+} from '../../../services/internal-api';
 import {
     ComparisonResult,
     CorrectnessId,
@@ -34,15 +35,14 @@ import {
     compareUndefinableEnum,
     compareUndefinableInteger,
     compareUndefinableString
-} from "../../../sys/sys-internal-api";
-import { AllowedGridField, GridField, GridFieldDefinition, GridFieldSourceDefinition } from '../../field/grid-field-internal-api';
-import { GridLayoutDefinition } from '../../layout/grid-layout-internal-api';
+} from "../../../sys/internal-api";
+import { AllowedGridField, GridField } from '../../field/internal-api';
 
 /** @public */
 export abstract class DayTradesGridField extends GridField implements GridRevRecordField {
     constructor(
         private readonly _id: DayTradesDataItem.Field.Id,
-        definition: GridFieldDefinition,
+        definition: RevFieldDefinition,
         private readonly _getDataItemCorrectnessIdEvent: DayTradesGridField.GetDataItemCorrectnessIdEventHandler,
     ) {
         super(definition);
@@ -130,7 +130,7 @@ export namespace DayTradesGridField {
     export const idCount = DayTradesDataItem.Field.idCount;
     export type GetDataItemCorrectnessIdEventHandler = (this: void) => CorrectnessId;
 
-    export const sourceDefinition = new GridFieldSourceDefinition('DayTrades');
+    export const sourceDefinition = new RevFieldSourceDefinition('DayTrades');
 
     export interface CreateRenderValueResult {
         renderValue: RenderValue;
@@ -143,43 +143,43 @@ export namespace DayTradesGridField {
     ): DayTradesGridField {
         switch (id) {
             case DayTradesDataItem.Field.Id.Id:
-                return new IdDayTradesGridField(id, createIdGridFieldDefinition(id), getDataItemCorrectnessIdEventHandler);
+                return new IdDayTradesGridField(id, createIdRevFieldDefinition(id), getDataItemCorrectnessIdEventHandler);
             case DayTradesDataItem.Field.Id.Price:
-                return new PriceDayTradesGridField(id, createPriceGridFieldDefinition(id), getDataItemCorrectnessIdEventHandler);
+                return new PriceDayTradesGridField(id, createPriceRevFieldDefinition(id), getDataItemCorrectnessIdEventHandler);
             case DayTradesDataItem.Field.Id.Quantity:
-                return new QuantityDayTradesGridField(id, createQuantityGridFieldDefinition(id), getDataItemCorrectnessIdEventHandler);
+                return new QuantityDayTradesGridField(id, createQuantityRevFieldDefinition(id), getDataItemCorrectnessIdEventHandler);
             case DayTradesDataItem.Field.Id.Time:
-                return new TimeDayTradesGridField(id, createTimeGridFieldDefinition(id), getDataItemCorrectnessIdEventHandler);
+                return new TimeDayTradesGridField(id, createTimeRevFieldDefinition(id), getDataItemCorrectnessIdEventHandler);
             case DayTradesDataItem.Field.Id.FlagIds:
-                return new FlagIdsDayTradesGridField(id, createFlagIdsGridFieldDefinition(id), getDataItemCorrectnessIdEventHandler);
+                return new FlagIdsDayTradesGridField(id, createFlagIdsRevFieldDefinition(id), getDataItemCorrectnessIdEventHandler);
             case DayTradesDataItem.Field.Id.TrendId:
-                return new TrendIdDayTradesGridField(id, createTrendIdGridFieldDefinition(id), getDataItemCorrectnessIdEventHandler);
+                return new TrendIdDayTradesGridField(id, createTrendIdRevFieldDefinition(id), getDataItemCorrectnessIdEventHandler);
             case DayTradesDataItem.Field.Id.OrderSideId:
-                return new OrderSideIdDayTradesGridField(id, createOrderSideIdGridFieldDefinition(id), getDataItemCorrectnessIdEventHandler);
+                return new OrderSideIdDayTradesGridField(id, createOrderSideIdRevFieldDefinition(id), getDataItemCorrectnessIdEventHandler);
             case DayTradesDataItem.Field.Id.AffectsIds:
-                return new AffectsIdsDayTradesGridField(id, createAffectsIdsGridFieldDefinition(id), getDataItemCorrectnessIdEventHandler);
+                return new AffectsIdsDayTradesGridField(id, createAffectsIdsRevFieldDefinition(id), getDataItemCorrectnessIdEventHandler);
             case DayTradesDataItem.Field.Id.ConditionCodes:
-                return new ConditionCodesDayTradesGridField(id, createConditionCodesGridFieldDefinition(id), getDataItemCorrectnessIdEventHandler);
+                return new ConditionCodesDayTradesGridField(id, createConditionCodesRevFieldDefinition(id), getDataItemCorrectnessIdEventHandler);
             case DayTradesDataItem.Field.Id.BuyDepthOrderId:
-                return new BuyDepthOrderIdDayTradesGridField(id, createBuyDepthOrderIdGridFieldDefinition(id), getDataItemCorrectnessIdEventHandler);
+                return new BuyDepthOrderIdDayTradesGridField(id, createBuyDepthOrderIdRevFieldDefinition(id), getDataItemCorrectnessIdEventHandler);
             case DayTradesDataItem.Field.Id.BuyBroker:
-                return new BuyBrokerDayTradesGridField(id, createBuyBrokerGridFieldDefinition(id), getDataItemCorrectnessIdEventHandler);
+                return new BuyBrokerDayTradesGridField(id, createBuyBrokerRevFieldDefinition(id), getDataItemCorrectnessIdEventHandler);
             case DayTradesDataItem.Field.Id.BuyCrossRef:
-                return new BuyCrossRefDayTradesGridField(id, createBuyCrossRefGridFieldDefinition(id), getDataItemCorrectnessIdEventHandler);
+                return new BuyCrossRefDayTradesGridField(id, createBuyCrossRefRevFieldDefinition(id), getDataItemCorrectnessIdEventHandler);
             case DayTradesDataItem.Field.Id.SellDepthOrderId:
-                return new SellDepthOrderIdDayTradesGridField(id, createSellDepthOrderIdGridFieldDefinition(id), getDataItemCorrectnessIdEventHandler);
+                return new SellDepthOrderIdDayTradesGridField(id, createSellDepthOrderIdRevFieldDefinition(id), getDataItemCorrectnessIdEventHandler);
             case DayTradesDataItem.Field.Id.SellBroker:
-                return new SellBrokerDayTradesGridField(id, createSellBrokerGridFieldDefinition(id), getDataItemCorrectnessIdEventHandler);
+                return new SellBrokerDayTradesGridField(id, createSellBrokerRevFieldDefinition(id), getDataItemCorrectnessIdEventHandler);
             case DayTradesDataItem.Field.Id.SellCrossRef:
-                return new SellCrossRefDayTradesGridField(id, createSellCrossRefGridFieldDefinition(id), getDataItemCorrectnessIdEventHandler);
+                return new SellCrossRefDayTradesGridField(id, createSellCrossRefRevFieldDefinition(id), getDataItemCorrectnessIdEventHandler);
             case DayTradesDataItem.Field.Id.MarketId:
-                return new MarketIdDayTradesGridField(id, createMarketIdGridFieldDefinition(id), getDataItemCorrectnessIdEventHandler);
+                return new MarketIdDayTradesGridField(id, createMarketIdRevFieldDefinition(id), getDataItemCorrectnessIdEventHandler);
             case DayTradesDataItem.Field.Id.RelatedId:
-                return new RelatedIdDayTradesGridField(id, createRelatedIdGridFieldDefinition(id), getDataItemCorrectnessIdEventHandler);
+                return new RelatedIdDayTradesGridField(id, createRelatedIdRevFieldDefinition(id), getDataItemCorrectnessIdEventHandler);
             case DayTradesDataItem.Field.Id.Attributes:
-                return new AttributesDayTradesGridField(id, createAttributesGridFieldDefinition(id), getDataItemCorrectnessIdEventHandler);
+                return new AttributesDayTradesGridField(id, createAttributesRevFieldDefinition(id), getDataItemCorrectnessIdEventHandler);
             case DayTradesDataItem.Field.Id.RecordTypeId:
-                return new RecordTypeDayTradesGridField(id, createRecordTypeIdGridFieldDefinition(id), getDataItemCorrectnessIdEventHandler);
+                return new RecordTypeDayTradesGridField(id, createRecordTypeIdRevFieldDefinition(id), getDataItemCorrectnessIdEventHandler);
             default:
                 throw new UnreachableCaseError('DTGFCF12934883446', id);
         }
@@ -193,20 +193,20 @@ export namespace DayTradesGridField {
         ];
 
         const count = fieldIds.length;
-        const columns = new Array<GridLayoutDefinition.Column>(count);
+        const columns = new Array<RevGridLayoutDefinition.Column>(count);
         for (let i = 0; i < count; i++) {
             const sourceName = DayTradesGridField.sourceDefinition.name;
             const fieldId = fieldIds[i];
             const sourcelessFieldName = DayTradesDataItem.Field.idToName(fieldId);
-            const fieldName = GridFieldDefinition.composeName(sourceName, sourcelessFieldName);
-            const column: GridLayoutDefinition.Column = {
+            const fieldName = RevFieldDefinition.Name.compose(sourceName, sourcelessFieldName);
+            const column: RevGridLayoutDefinition.Column = {
                 fieldName,
                 visible: undefined,
                 autoSizableWidth: undefined,
             };
             columns[i] = column;
         }
-        return new GridLayoutDefinition(columns);
+        return new RevGridLayoutDefinition(columns);
     }
 
     export function createAllowedFields(): readonly AllowedGridField[] {
@@ -222,50 +222,50 @@ export namespace DayTradesGridField {
     function createAllowedField(id: DayTradesDataItem.Field.Id): AllowedGridField {
         switch (id) {
             case DayTradesDataItem.Field.Id.Id:
-                return new AllowedGridField(createIdGridFieldDefinition(id));
+                return new AllowedGridField(createIdRevFieldDefinition(id));
             case DayTradesDataItem.Field.Id.Price:
-                return new AllowedGridField(createPriceGridFieldDefinition(id));
+                return new AllowedGridField(createPriceRevFieldDefinition(id));
             case DayTradesDataItem.Field.Id.Quantity:
-                return new AllowedGridField(createQuantityGridFieldDefinition(id));
+                return new AllowedGridField(createQuantityRevFieldDefinition(id));
             case DayTradesDataItem.Field.Id.Time:
-                return new AllowedGridField(createTimeGridFieldDefinition(id));
+                return new AllowedGridField(createTimeRevFieldDefinition(id));
             case DayTradesDataItem.Field.Id.FlagIds:
-                return new AllowedGridField(createFlagIdsGridFieldDefinition(id));
+                return new AllowedGridField(createFlagIdsRevFieldDefinition(id));
             case DayTradesDataItem.Field.Id.TrendId:
-                return new AllowedGridField(createTrendIdGridFieldDefinition(id));
+                return new AllowedGridField(createTrendIdRevFieldDefinition(id));
             case DayTradesDataItem.Field.Id.OrderSideId:
-                return new AllowedGridField(createOrderSideIdGridFieldDefinition(id));
+                return new AllowedGridField(createOrderSideIdRevFieldDefinition(id));
             case DayTradesDataItem.Field.Id.AffectsIds:
-                return new AllowedGridField(createAffectsIdsGridFieldDefinition(id));
+                return new AllowedGridField(createAffectsIdsRevFieldDefinition(id));
             case DayTradesDataItem.Field.Id.ConditionCodes:
-                return new AllowedGridField(createConditionCodesGridFieldDefinition(id));
+                return new AllowedGridField(createConditionCodesRevFieldDefinition(id));
             case DayTradesDataItem.Field.Id.BuyDepthOrderId:
-                return new AllowedGridField(createBuyDepthOrderIdGridFieldDefinition(id));
+                return new AllowedGridField(createBuyDepthOrderIdRevFieldDefinition(id));
             case DayTradesDataItem.Field.Id.BuyBroker:
-                return new AllowedGridField(createBuyBrokerGridFieldDefinition(id));
+                return new AllowedGridField(createBuyBrokerRevFieldDefinition(id));
             case DayTradesDataItem.Field.Id.BuyCrossRef:
-                return new AllowedGridField(createBuyCrossRefGridFieldDefinition(id));
+                return new AllowedGridField(createBuyCrossRefRevFieldDefinition(id));
             case DayTradesDataItem.Field.Id.SellDepthOrderId:
-                return new AllowedGridField(createSellDepthOrderIdGridFieldDefinition(id));
+                return new AllowedGridField(createSellDepthOrderIdRevFieldDefinition(id));
             case DayTradesDataItem.Field.Id.SellBroker:
-                return new AllowedGridField(createSellBrokerGridFieldDefinition(id));
+                return new AllowedGridField(createSellBrokerRevFieldDefinition(id));
             case DayTradesDataItem.Field.Id.SellCrossRef:
-                return new AllowedGridField(createSellCrossRefGridFieldDefinition(id));
+                return new AllowedGridField(createSellCrossRefRevFieldDefinition(id));
             case DayTradesDataItem.Field.Id.MarketId:
-                return new AllowedGridField(createMarketIdGridFieldDefinition(id));
+                return new AllowedGridField(createMarketIdRevFieldDefinition(id));
             case DayTradesDataItem.Field.Id.RelatedId:
-                return new AllowedGridField(createRelatedIdGridFieldDefinition(id));
+                return new AllowedGridField(createRelatedIdRevFieldDefinition(id));
             case DayTradesDataItem.Field.Id.Attributes:
-                return new AllowedGridField(createAttributesGridFieldDefinition(id));
+                return new AllowedGridField(createAttributesRevFieldDefinition(id));
             case DayTradesDataItem.Field.Id.RecordTypeId:
-                return new AllowedGridField(createRecordTypeIdGridFieldDefinition(id));
+                return new AllowedGridField(createRecordTypeIdRevFieldDefinition(id));
             default:
                 throw new UnreachableCaseError('DTGFCF12934883446', id);
         }
     }
 
-    function createIdGridFieldDefinition(id: DayTradesDataItem.Field.Id) {
-        return new GridFieldDefinition(
+    function createIdRevFieldDefinition(id: DayTradesDataItem.Field.Id) {
+        return new RevFieldDefinition(
             DayTradesGridField.sourceDefinition,
             DayTradesDataItem.Field.idToName(id),
             Strings[StringId.DayTradesGridHeading_Id],
@@ -273,8 +273,8 @@ export namespace DayTradesGridField {
         );
     }
 
-    function createPriceGridFieldDefinition(id: DayTradesDataItem.Field.Id.Price) {
-        return new GridFieldDefinition(
+    function createPriceRevFieldDefinition(id: DayTradesDataItem.Field.Id.Price) {
+        return new RevFieldDefinition(
             sourceDefinition,
             DayTradesDataItem.Field.idToName(id),
             Strings[StringId.DayTradesGridHeading_Price],
@@ -282,8 +282,8 @@ export namespace DayTradesGridField {
         )
     }
 
-    function createQuantityGridFieldDefinition(id: DayTradesDataItem.Field.Id.Quantity) {
-        return new GridFieldDefinition(
+    function createQuantityRevFieldDefinition(id: DayTradesDataItem.Field.Id.Quantity) {
+        return new RevFieldDefinition(
             sourceDefinition,
             DayTradesDataItem.Field.idToName(id),
             Strings[StringId.DayTradesGridHeading_Quantity],
@@ -291,8 +291,8 @@ export namespace DayTradesGridField {
         )
     }
 
-    function createTimeGridFieldDefinition(id: DayTradesDataItem.Field.Id.Time) {
-        return new GridFieldDefinition(
+    function createTimeRevFieldDefinition(id: DayTradesDataItem.Field.Id.Time) {
+        return new RevFieldDefinition(
             sourceDefinition,
             DayTradesDataItem.Field.idToName(id),
             Strings[StringId.DayTradesGridHeading_Time],
@@ -300,8 +300,8 @@ export namespace DayTradesGridField {
         )
     }
 
-    function createFlagIdsGridFieldDefinition(id: DayTradesDataItem.Field.Id.FlagIds) {
-        return new GridFieldDefinition(
+    function createFlagIdsRevFieldDefinition(id: DayTradesDataItem.Field.Id.FlagIds) {
+        return new RevFieldDefinition(
             sourceDefinition,
             DayTradesDataItem.Field.idToName(id),
             Strings[StringId.DayTradesGridHeading_FlagIds],
@@ -309,8 +309,8 @@ export namespace DayTradesGridField {
         )
     }
 
-    function createTrendIdGridFieldDefinition(id: DayTradesDataItem.Field.Id.TrendId) {
-        return new GridFieldDefinition(
+    function createTrendIdRevFieldDefinition(id: DayTradesDataItem.Field.Id.TrendId) {
+        return new RevFieldDefinition(
             sourceDefinition,
             DayTradesDataItem.Field.idToName(id),
             Strings[StringId.DayTradesGridHeading_TrendId],
@@ -318,8 +318,8 @@ export namespace DayTradesGridField {
         )
     }
 
-    function createOrderSideIdGridFieldDefinition(id: DayTradesDataItem.Field.Id.OrderSideId) {
-        return new GridFieldDefinition(
+    function createOrderSideIdRevFieldDefinition(id: DayTradesDataItem.Field.Id.OrderSideId) {
+        return new RevFieldDefinition(
             sourceDefinition,
             DayTradesDataItem.Field.idToName(id),
             Strings[StringId.DayTradesGridHeading_OrderSideId],
@@ -327,8 +327,8 @@ export namespace DayTradesGridField {
         )
     }
 
-    function createAffectsIdsGridFieldDefinition(id: DayTradesDataItem.Field.Id.AffectsIds) {
-        return new GridFieldDefinition(
+    function createAffectsIdsRevFieldDefinition(id: DayTradesDataItem.Field.Id.AffectsIds) {
+        return new RevFieldDefinition(
             sourceDefinition,
             DayTradesDataItem.Field.idToName(id),
             Strings[StringId.DayTradesGridHeading_AffectsIds],
@@ -336,8 +336,8 @@ export namespace DayTradesGridField {
         )
     }
 
-    function createConditionCodesGridFieldDefinition(id: DayTradesDataItem.Field.Id.ConditionCodes) {
-        return new GridFieldDefinition(
+    function createConditionCodesRevFieldDefinition(id: DayTradesDataItem.Field.Id.ConditionCodes) {
+        return new RevFieldDefinition(
             sourceDefinition,
             DayTradesDataItem.Field.idToName(id),
             Strings[StringId.DayTradesGridHeading_ConditionCodes],
@@ -345,8 +345,8 @@ export namespace DayTradesGridField {
         )
     }
 
-    function createBuyDepthOrderIdGridFieldDefinition(id: DayTradesDataItem.Field.Id.BuyDepthOrderId) {
-        return new GridFieldDefinition(
+    function createBuyDepthOrderIdRevFieldDefinition(id: DayTradesDataItem.Field.Id.BuyDepthOrderId) {
+        return new RevFieldDefinition(
             sourceDefinition,
             DayTradesDataItem.Field.idToName(id),
             Strings[StringId.DayTradesGridHeading_BuyDepthOrderId],
@@ -354,8 +354,8 @@ export namespace DayTradesGridField {
         )
     }
 
-    function createBuyBrokerGridFieldDefinition(id: DayTradesDataItem.Field.Id.BuyBroker) {
-        return new GridFieldDefinition(
+    function createBuyBrokerRevFieldDefinition(id: DayTradesDataItem.Field.Id.BuyBroker) {
+        return new RevFieldDefinition(
             sourceDefinition,
             DayTradesDataItem.Field.idToName(id),
             Strings[StringId.DayTradesGridHeading_BuyBroker],
@@ -363,8 +363,8 @@ export namespace DayTradesGridField {
         )
     }
 
-    function createBuyCrossRefGridFieldDefinition(id: DayTradesDataItem.Field.Id.BuyCrossRef) {
-        return new GridFieldDefinition(
+    function createBuyCrossRefRevFieldDefinition(id: DayTradesDataItem.Field.Id.BuyCrossRef) {
+        return new RevFieldDefinition(
             sourceDefinition,
             DayTradesDataItem.Field.idToName(id),
             Strings[StringId.DayTradesGridHeading_BuyCrossRef],
@@ -372,8 +372,8 @@ export namespace DayTradesGridField {
         )
     }
 
-    function createSellDepthOrderIdGridFieldDefinition(id: DayTradesDataItem.Field.Id.SellDepthOrderId) {
-        return new GridFieldDefinition(
+    function createSellDepthOrderIdRevFieldDefinition(id: DayTradesDataItem.Field.Id.SellDepthOrderId) {
+        return new RevFieldDefinition(
             sourceDefinition,
             DayTradesDataItem.Field.idToName(id),
             Strings[StringId.DayTradesGridHeading_SellDepthOrderId],
@@ -381,8 +381,8 @@ export namespace DayTradesGridField {
         )
     }
 
-    function createSellBrokerGridFieldDefinition(id: DayTradesDataItem.Field.Id.SellBroker) {
-        return new GridFieldDefinition(
+    function createSellBrokerRevFieldDefinition(id: DayTradesDataItem.Field.Id.SellBroker) {
+        return new RevFieldDefinition(
             sourceDefinition,
             DayTradesDataItem.Field.idToName(id),
             Strings[StringId.DayTradesGridHeading_SellBroker],
@@ -390,8 +390,8 @@ export namespace DayTradesGridField {
         )
     }
 
-    function createSellCrossRefGridFieldDefinition(id: DayTradesDataItem.Field.Id.SellCrossRef) {
-        return new GridFieldDefinition(
+    function createSellCrossRefRevFieldDefinition(id: DayTradesDataItem.Field.Id.SellCrossRef) {
+        return new RevFieldDefinition(
             sourceDefinition,
             DayTradesDataItem.Field.idToName(id),
             Strings[StringId.DayTradesGridHeading_SellCrossRef],
@@ -399,8 +399,8 @@ export namespace DayTradesGridField {
         )
     }
 
-    function createMarketIdGridFieldDefinition(id: DayTradesDataItem.Field.Id.MarketId) {
-        return new GridFieldDefinition(
+    function createMarketIdRevFieldDefinition(id: DayTradesDataItem.Field.Id.MarketId) {
+        return new RevFieldDefinition(
             sourceDefinition,
             DayTradesDataItem.Field.idToName(id),
             Strings[StringId.DayTradesGridHeading_MarketId],
@@ -408,8 +408,8 @@ export namespace DayTradesGridField {
         )
     }
 
-    function createRelatedIdGridFieldDefinition(id: DayTradesDataItem.Field.Id.RelatedId) {
-        return new GridFieldDefinition(
+    function createRelatedIdRevFieldDefinition(id: DayTradesDataItem.Field.Id.RelatedId) {
+        return new RevFieldDefinition(
             sourceDefinition,
             DayTradesDataItem.Field.idToName(id),
             Strings[StringId.DayTradesGridHeading_RelatedId],
@@ -417,8 +417,8 @@ export namespace DayTradesGridField {
         )
     }
 
-    function createAttributesGridFieldDefinition(id: DayTradesDataItem.Field.Id.Attributes) {
-        return new GridFieldDefinition(
+    function createAttributesRevFieldDefinition(id: DayTradesDataItem.Field.Id.Attributes) {
+        return new RevFieldDefinition(
             sourceDefinition,
             DayTradesDataItem.Field.idToName(id),
             Strings[StringId.DayTradesGridHeading_Attributes],
@@ -426,8 +426,8 @@ export namespace DayTradesGridField {
         )
     }
 
-    function createRecordTypeIdGridFieldDefinition(id: DayTradesDataItem.Field.Id.RecordTypeId) {
-        return new GridFieldDefinition(
+    function createRecordTypeIdRevFieldDefinition(id: DayTradesDataItem.Field.Id.RecordTypeId) {
+        return new RevFieldDefinition(
             sourceDefinition,
             DayTradesDataItem.Field.idToName(id),
             Strings[StringId.DayTradesGridHeading_RecordType],

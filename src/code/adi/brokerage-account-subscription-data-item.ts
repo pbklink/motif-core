@@ -12,7 +12,7 @@ import {
     MultiEvent,
     UnreachableCaseError,
     UsableListChangeTypeId
-} from '../sys/sys-internal-api';
+} from '../sys/internal-api';
 import { Account } from './account';
 import { BrokerageAccountsDataItem } from './brokerage-accounts-data-item';
 import {
@@ -21,7 +21,7 @@ import {
     DataDefinition,
     FeedInfo,
     SubscribabilityExtentId
-} from './common/adi-common-internal-api';
+} from './common/internal-api';
 import { SubscribabilityExtentSubscriptionDataItem } from './publish-subscribe/internal-api';
 
 export class BrokerageAccountSubscriptionDataItem extends SubscribabilityExtentSubscriptionDataItem {

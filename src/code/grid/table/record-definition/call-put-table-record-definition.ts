@@ -4,17 +4,18 @@
  * License: motionite.trade/license/motif
  */
 
-import { CallPut } from '../../../services/services-internal-api';
+import { CallPut } from '../../../services/internal-api';
+import { TableFieldSourceDefinition } from '../field-source/internal-api';
 import { TableRecordDefinition } from './table-record-definition';
 
 export interface CallPutTableRecordDefinition extends TableRecordDefinition {
-    readonly typeId: TableRecordDefinition.TypeId.CallPut;
+    readonly typeId: TableFieldSourceDefinition.TypeId.CallPut;
     readonly record: CallPut;
 }
 
 export namespace CallPutTableRecordDefinition {
     export function is(definition: TableRecordDefinition): definition is CallPutTableRecordDefinition {
-        return definition.typeId === TableRecordDefinition.TypeId.CallPut;
+        return definition.typeId === TableFieldSourceDefinition.TypeId.CallPut;
     }
 }
 

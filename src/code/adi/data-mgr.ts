@@ -13,13 +13,14 @@ import {
     concatenateArrayUniquely,
     Integer,
     Logger,
+    logger,
     MapKey,
     mSecsPerSec,
     NotImplementedError,
     secsPerMin,
     SysTick,
     UnreachableCaseError
-} from '../sys/sys-internal-api';
+} from '../sys/internal-api';
 import { AllBalancesDataItem } from './all-balances-data-item';
 import { AllHoldingsDataItem } from './all-holdings-data-item';
 import { AllOrdersDataItem } from './all-orders-data-item';
@@ -40,7 +41,7 @@ import {
     DataItemId,
     DataMessage,
     DataMessages
-} from "./common/adi-common-internal-api";
+} from "./common/internal-api";
 import { DataItem } from './data-item/internal-api';
 import { DataItemsActivationMgr } from './data-items-activation-mgr';
 import { DayTradesDataItem } from './day-trades-data-item';
@@ -54,7 +55,7 @@ import { MarketsDataItem } from './markets-data-item';
 import { MoveOrderDataItem } from './move-order-data-item';
 import { CreateNotificationChannelDataItem, DeleteNotificationChannelDataItem, QueryNotificationChannelDataItem, QueryNotificationChannelsDataItem, QueryNotificationDistributionMethodDataItem, QueryNotificationDistributionMethodsDataItem, UpdateNotificationChannelDataItem, UpdateNotificationChannelEnabledDataItem } from './notification-channel/internal-api';
 import { PlaceOrderDataItem } from './place-order-data-item';
-import { ZenithPublisher } from './publishers/adi-publishers-internal-api';
+import { ZenithPublisher } from './publishers/internal-api';
 import { CreateScanDataItem } from './scan/create-scan-data-item';
 import { DeleteScanDataItem } from './scan/delete-scan-data-item';
 import { LitIvemIdScanMatchesDataItem } from './scan/lit-ivem-id-scan-matches-data-item';
@@ -172,10 +173,10 @@ export class DataMgr {
     }
 
     deletePublishers(): void {
-        Logger.log(Logger.LevelId.Info, 'Deleting Publishers');
+        logger.log(Logger.LevelId.Info, 'Deleting Publishers');
 
         if (this.dataItemCount > 0) {
-            Logger.log(Logger.LevelId.Warning, 'DataItemsStore is not empty (DF).  DataItemCount = ' + this.dataItemCount.toString(10));
+            logger.log(Logger.LevelId.Warning, 'DataItemsStore is not empty (DF).  DataItemCount = ' + this.dataItemCount.toString(10));
         }
 
         this._publishers.length = 0;
@@ -630,7 +631,7 @@ export class DataMgr {
                 const cond3 = !this._permanentDependsOnChannels.includes(dataItem.channelId);
 
                 if (cond1 && cond2 && cond3) {
-                    Logger.log(Logger.LevelId.Warning, 'Orphaned DataItem: ' + dataItem.definition.description);
+                    logger.log(Logger.LevelId.Warning, 'Orphaned DataItem: ' + dataItem.definition.description);
                     this._orphanedDataItemList.add(dataItem);
                     orphanCount++;
                 }
@@ -640,7 +641,7 @@ export class DataMgr {
         this._orphanedDataItemList.deactivateDataItems();
 
         if (orphanCount > 0) {
-            Logger.log(Logger.LevelId.Warning, 'Number of Orphaned DataItems: ' + orphanCount.toString(10));
+            logger.log(Logger.LevelId.Warning, 'Number of Orphaned DataItems: ' + orphanCount.toString(10));
         }
     }
 

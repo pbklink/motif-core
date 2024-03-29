@@ -4,8 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
-import { DepthLevelsDataItem } from '../../../../adi/adi-internal-api';
-import { CorrectnessId, GridRecordIndex, GridRecordStore, Integer, MultiEvent, UnreachableCaseError } from '../../../../sys/sys-internal-api';
+import { DepthLevelsDataItem } from '../../../../adi/internal-api';
+import { CorrectnessId, GridRecordIndex, GridRecordStore, Integer, MultiEvent, UnreachableCaseError } from '../../../../sys/internal-api';
 import { DepthSideGridRecordStore } from '../depth-side-grid-record-store';
 import { ShortDepthRecord } from './short-depth-record';
 

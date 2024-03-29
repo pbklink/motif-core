@@ -4,6 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
+import { RevFieldCustomHeadingsService } from '@xilytix/rev-data-source';
 import {
     AdiService,
     ExchangeId,
@@ -13,32 +14,32 @@ import {
     SearchSymbolsLitIvemFullDetail,
     SymbolFieldId,
     SymbolsDataItem
-} from "../../../adi/adi-internal-api";
+} from "../../../adi/internal-api";
 import {
     AssertInternalError,
     Badness,
+    CorrectnessBadness,
     Integer,
     LockOpenListItem,
     MultiEvent,
     UnreachableCaseError,
     UsableListChangeTypeId
-} from '../../../sys/sys-internal-api';
-import { TextFormatterService } from '../../../text-format/text-format-internal-api';
+} from '../../../sys/internal-api';
+import { TextFormatterService } from '../../../text-format/internal-api';
 import {
-    TableFieldSourceDefinition
-} from "../field-source/grid-table-field-source-internal-api";
-import { LitIvemDetailTableRecordDefinition, TableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
-import { TableRecord } from '../record/grid-table-record-internal-api';
+    TableFieldSourceDefinition, TableFieldSourceDefinitionCachingFactoryService
+} from "../field-source/internal-api";
+import { LitIvemBaseDetailTableRecordDefinition } from '../record-definition/internal-api';
+import { TableRecord } from '../record/internal-api';
 import {
     LitIvemAlternateCodesTableValueSource,
     LitIvemBaseDetailTableValueSource,
     LitIvemExtendedDetailTableValueSource,
     MyxLitIvemAttributesTableValueSource
 } from "../value-source/internal-api";
-import { TableRecordSourceDefinitionFactoryService } from './definition/grid-table-record-source-definition-internal-api';
 import {
     LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition
-} from "./definition/lit-ivem-detail-from-symbol-search-table-record-source-definition";
+} from './definition/internal-api';
 import { SingleDataItemTableRecordSource } from './single-data-item-table-record-source';
 
 export class LitIvemDetailFromSearchSymbolsTableRecordSource extends SingleDataItemTableRecordSource {
@@ -53,18 +54,22 @@ export class LitIvemDetailFromSearchSymbolsTableRecordSource extends SingleDataI
     private _dataItemSubscribed = false;
     private _litIvemDetails: LitIvemBaseDetail[];
     private _listChangeEventSubscriptionId: MultiEvent.SubscriptionId;
-    private _badnessChangeEventSubscriptionId: MultiEvent.SubscriptionId;
+    private _badnessChangedEventSubscriptionId: MultiEvent.SubscriptionId;
 
     // setting accountId to undefined will return orders for all accounts
     constructor(
         private readonly _adiService: AdiService,
         textFormatterService: TextFormatterService,
-        tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService,
+        gridFieldCustomHeadingsService: RevFieldCustomHeadingsService,
+        tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService,
+        correctnessBadness: CorrectnessBadness,
         definition: LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition
     ) {
         super(
             textFormatterService,
-            tableRecordSourceDefinitionFactoryService,
+            gridFieldCustomHeadingsService,
+            tableFieldSourceDefinitionCachingFactoryService,
+            correctnessBadness,
             definition,
             definition.allowedFieldSourceDefinitionTypeIds,
         );
@@ -76,13 +81,17 @@ export class LitIvemDetailFromSearchSymbolsTableRecordSource extends SingleDataI
     get dataDefinition() { return this._dataDefinition; }
 
     override createDefinition(): LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition {
-        return this.tableRecordSourceDefinitionFactoryService.createLitIvemIdFromSearchSymbols(this._dataDefinition.createCopy());
+        return new LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition(
+            this._gridFieldCustomHeadingsService,
+            this._tableFieldSourceDefinitionCachingFactoryService,
+            this._dataDefinition.createCopy(),
+        );
     }
 
-    override createRecordDefinition(idx: Integer): LitIvemDetailTableRecordDefinition {
+    override createRecordDefinition(idx: Integer): LitIvemBaseDetailTableRecordDefinition {
         const litIvemBaseDetail = this.recordList[idx];
         return {
-            typeId: TableRecordDefinition.TypeId.LitIvemDetail,
+            typeId: TableFieldSourceDefinition.TypeId.LitIvemBaseDetail,
             mapKey: litIvemBaseDetail.key.mapKey,
             litIvemBaseDetail,
         };
@@ -176,9 +185,9 @@ export class LitIvemDetailFromSearchSymbolsTableRecordSource extends SingleDataI
                     );
                 }
             );
-        this._badnessChangeEventSubscriptionId =
-            this._dataItem.subscribeBadnessChangeEvent(
-                () => { this.handleDataItemBadnessChangeEvent(); }
+        this._badnessChangedEventSubscriptionId =
+            this._dataItem.subscribeBadnessChangedEvent(
+                () => { this.handleDataItembadnessChangedEvent(); }
             );
 
         super.openLocked(opener);
@@ -215,10 +224,10 @@ export class LitIvemDetailFromSearchSymbolsTableRecordSource extends SingleDataI
                 this._listChangeEventSubscriptionId
             );
             this._listChangeEventSubscriptionId = undefined;
-            this._dataItem.unsubscribeBadnessChangeEvent(
-                this._badnessChangeEventSubscriptionId
+            this._dataItem.unsubscribeBadnessChangedEvent(
+                this._badnessChangedEventSubscriptionId
             );
-            this._badnessChangeEventSubscriptionId = undefined;
+            this._badnessChangedEventSubscriptionId = undefined;
 
             super.closeLocked(opener);
 
@@ -266,7 +275,7 @@ export class LitIvemDetailFromSearchSymbolsTableRecordSource extends SingleDataI
         this.processDataItemListChange(listChangeTypeId, idx, count);
     }
 
-    private handleDataItemBadnessChangeEvent() {
+    private handleDataItembadnessChangedEvent() {
         this.checkSetUnusable(this._dataItem.badness);
     }
 

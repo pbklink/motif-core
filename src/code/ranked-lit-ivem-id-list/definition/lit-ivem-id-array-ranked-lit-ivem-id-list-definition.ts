@@ -4,8 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
-import { LitIvemId } from '../../adi/adi-internal-api';
-import { Err, ErrorCode, JsonElement, Ok, Result } from "../../sys/sys-internal-api";
+import { LitIvemId } from '../../adi/internal-api';
+import { ErrorCode, JsonElement, JsonElementErr, Ok, Result } from "../../sys/internal-api";
 import { RankedLitIvemIdListDefinition } from './ranked-lit-ivem-id-list-definition';
 
 export class LitIvemIdArrayRankedLitIvemIdListDefinition extends RankedLitIvemIdListDefinition {
@@ -34,7 +34,12 @@ export namespace LitIvemIdArrayRankedLitIvemIdListDefinition {
     export function tryCreateFromJson(element: JsonElement): Result<LitIvemIdArrayRankedLitIvemIdListDefinition> {
         const litIvemIdsResult = tryCreateLitIvemIdsFromJson(element);
         if (litIvemIdsResult.isErr()) {
-            return litIvemIdsResult.createOuter(ErrorCode.LitIvemIdArrayRankedLitIvemIdListDefinition_JsonIsInvalid);
+            const error = litIvemIdsResult.error as ErrorCode;
+            if (error === ErrorCode.LitIvemIdArrayRankedLitIvemIdListDefinition_JsonArrayNotSpecified) {
+                return litIvemIdsResult.createOuter(ErrorCode.LitIvemIdArrayRankedLitIvemIdListDefinition_JsonNotSpecified);
+            } else {
+                return litIvemIdsResult.createOuter(ErrorCode.LitIvemIdArrayRankedLitIvemIdListDefinition_JsonIsInvalid);
+            }
         } else {
             const name = element.getString(nameJsonName, '');
             const description = element.getString(descriptionJsonName, '');
@@ -47,11 +52,11 @@ export namespace LitIvemIdArrayRankedLitIvemIdListDefinition {
     export function tryCreateLitIvemIdsFromJson(element: JsonElement): Result<LitIvemId[]> {
         const elementArrayResult = element.tryGetElementArray(litIvemIdsJsonName);
         if (elementArrayResult.isErr()) {
-            const error = elementArrayResult.error;
-            if (error === JsonElement.arrayErrorCode_NotSpecified) {
-                return new Err(ErrorCode.LitIvemIdArrayRankedLitIvemIdListDefinition_JsonArrayNotSpecified);
+            const errorId = elementArrayResult.error;
+            if (errorId === JsonElement.ErrorId.JsonValueIsNotDefined) {
+                return JsonElementErr.createOuter(elementArrayResult.error, ErrorCode.LitIvemIdArrayRankedLitIvemIdListDefinition_JsonArrayNotSpecified);
             } else {
-                return new Err(ErrorCode.LitIvemIdArrayRankedLitIvemIdListDefinition_JsonArrayIsInvalid);
+                return JsonElementErr.createOuter(elementArrayResult.error, ErrorCode.LitIvemIdArrayRankedLitIvemIdListDefinition_JsonArrayIsInvalid);
             }
         } else {
             const litIvemIdsResult = LitIvemId.tryCreateArrayFromJsonElementArray(elementArrayResult.value);

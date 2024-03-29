@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { UnreachableCaseError } from '../../../../sys/sys-internal-api';
+import { UnreachableCaseError } from '../../../../sys/internal-api';
 import { NotificationDistributionMethodId } from '../../../common/data-types';
 import { ZenithProtocolCommon } from '../../../common/zenith-protocol/internal-api';
 import { ZenithProtocol } from './protocol/internal-api';
@@ -45,8 +45,13 @@ export namespace ZenithChannelConvert {
     }
 
     export namespace UserMetadata {
-        export function fromMerge(userMetadata: ZenithProtocolCommon.UserMetadata, favourite: boolean): ZenithProtocolCommon.UserMetadata {
-            userMetadata[favouriteName] = favourite ? 'true' : 'false';
+        export function fromMerge(userMetadata: ZenithProtocolCommon.UserMetadata | undefined, favourite: boolean | undefined): ZenithProtocolCommon.UserMetadata {
+            if (userMetadata === undefined) {
+                userMetadata = {};
+            }
+            if (favourite !== undefined) {
+                userMetadata[favouriteName] = favourite ? 'true' : 'false';
+            }
             return userMetadata
         }
 

@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, ErrorCode, ifDefined, UnexpectedCaseError, ZenithDataError } from '../../../../sys/sys-internal-api';
+import { AssertInternalError, ErrorCode, ifDefined, UnexpectedCaseError, ZenithDataError } from '../../../../sys/internal-api';
 import {
     AdiPublisherRequest,
     AdiPublisherSubscription,
@@ -12,7 +12,7 @@ import {
     QueryTradesDataDefinition,
     TradesDataDefinition,
     TradesDataMessage
-} from "../../../common/adi-common-internal-api";
+} from "../../../common/internal-api";
 import { ZenithProtocol } from './protocol/zenith-protocol';
 import { ZenithConvert } from './zenith-convert';
 
@@ -78,7 +78,7 @@ export namespace TradesMessageConvert {
             dataMessage.dataItemRequestNr = subscription.dataItemRequestNr;
             switch (actionId) {
                 case ZenithConvert.MessageContainer.Action.Id.Publish:
-                    if (message.Topic !== ZenithProtocol.MarketController.TopicName.QueryTrades) {
+                    if (message.Topic as ZenithProtocol.MarketController.TopicName !== ZenithProtocol.MarketController.TopicName.QueryTrades) {
                         throw new ZenithDataError(ErrorCode.TMCPMP9333857676, message.Topic);
                     } else {
                         const publishMsg = message as ZenithProtocol.MarketController.Trades.PayloadMessageContainer;

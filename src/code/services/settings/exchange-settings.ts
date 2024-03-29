@@ -4,8 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
-import { ExchangeId, ExchangeInfo, SymbolField, SymbolFieldId } from '../../adi/adi-internal-api';
-import { AssertInternalError } from '../../sys/sys-internal-api';
+import { ExchangeId, ExchangeInfo, SymbolField, SymbolFieldId } from '../../adi/internal-api';
+import { AssertInternalError } from '../../sys/internal-api';
 import { TypedKeyValueSettings } from './typed-key-value-settings';
 
 export class ExchangeSettings {

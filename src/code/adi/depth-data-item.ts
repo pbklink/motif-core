@@ -4,25 +4,25 @@
  * License: motionite.trade/license/motif
  */
 
-import { Decimal } from 'decimal.js-light';
 import {
-    assert,
     AssertInternalError,
     BinarySearchResult,
     ComparisonResult,
-    earliestBinarySearch,
+    Decimal,
     ErrorCode,
     Integer,
-    isArrayEqualUniquely,
-    isDecimalEqual,
-    isDecimalGreaterThan,
-    moveElementInArray,
     MultiEvent,
     UnexpectedCaseError,
     UnreachableCaseError,
     ValueRecentChangeTypeId,
-    ZenithDataError
-} from "../sys/sys-internal-api";
+    ZenithDataError,
+    assert,
+    earliestBinarySearch,
+    isArrayEqualUniquely,
+    isDecimalEqual,
+    isDecimalGreaterThan,
+    moveElementInArray
+} from "../sys/internal-api";
 import {
     DataDefinition,
     DataMessage,
@@ -30,7 +30,7 @@ import {
     DepthDataDefinition,
     DepthDataMessage,
     MarketId, OrderSideId
-} from './common/adi-common-internal-api';
+} from './common/internal-api';
 import { MarketSubscriptionDataItem } from './market-subscription-data-item';
 
 export class DepthDataItem extends MarketSubscriptionDataItem {

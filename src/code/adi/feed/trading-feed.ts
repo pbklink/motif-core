@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { StringId, Strings } from '../../res/res-internal-api';
+import { StringId, Strings } from '../../res/internal-api';
 import {
     AssertInternalError,
     Badness,
@@ -15,8 +15,8 @@ import {
     FieldDataTypeId,
     Integer,
     MultiEvent
-} from "../../sys/sys-internal-api";
-import { FeedId, FeedStatusId, OrderStatuses, TradingEnvironment, TradingEnvironmentId } from '../common/adi-common-internal-api';
+} from "../../sys/internal-api";
+import { FeedId, FeedStatusId, OrderStatuses, TradingEnvironment, TradingEnvironmentId } from '../common/internal-api';
 import { Feed } from './feed';
 
 export class TradingFeed extends Feed {

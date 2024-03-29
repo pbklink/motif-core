@@ -4,25 +4,24 @@
  * License: motionite.trade/license/motif
  */
 
-import { LitIvemId, TopShareholder } from '../../../../adi/adi-internal-api';
-import { ErrorCode, JsonElement, Ok, PickEnum, Result } from '../../../../sys/sys-internal-api';
-import { GridFieldCustomHeadingsService } from '../../../field/grid-field-internal-api';
-import { GridLayoutDefinition } from '../../../layout/grid-layout-internal-api';
-import { TableFieldSourceDefinition, TableFieldSourceDefinitionCachedFactoryService } from '../../field-source/grid-table-field-source-internal-api';
+import { RevFieldCustomHeadingsService, RevGridLayoutDefinition } from '@xilytix/rev-data-source';
+import { LitIvemId, TopShareholder } from '../../../../adi/internal-api';
+import { ErrorCode, JsonElement, Ok, PickEnum, Result } from '../../../../sys/internal-api';
+import { TableFieldSourceDefinition, TableFieldSourceDefinitionCachingFactoryService, TopShareholderTableFieldSourceDefinition } from '../../field-source/internal-api';
 import { TableRecordSourceDefinition } from './table-record-source-definition';
 
 /** @public */
 export class TopShareholderTableRecordSourceDefinition extends TableRecordSourceDefinition {
     constructor(
-        customHeadingsService: GridFieldCustomHeadingsService,
-        tableFieldSourceDefinitionCachedFactoryService: TableFieldSourceDefinitionCachedFactoryService,
+        customHeadingsService: RevFieldCustomHeadingsService,
+        tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService,
         readonly litIvemId: LitIvemId,
         readonly tradingDate: Date | undefined,
         readonly compareToTradingDate: Date | undefined,
     ) {
         super(
             customHeadingsService,
-            tableFieldSourceDefinitionCachedFactoryService,
+            tableFieldSourceDefinitionCachingFactoryService,
             TableRecordSourceDefinition.TypeId.TopShareholder,
             TopShareholderTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
         );
@@ -42,7 +41,7 @@ export class TopShareholderTableRecordSourceDefinition extends TableRecordSource
     }
 
     override createDefaultLayoutDefinition() {
-        const topShareholdersFieldSourceDefinition = this.tableFieldSourceDefinitionCachedFactoryService.topShareholdersDataItem;
+        const topShareholdersFieldSourceDefinition = TopShareholderTableFieldSourceDefinition.get(this.tableFieldSourceDefinitionCachingFactoryService);
 
         const fieldNames = new Array<string>();
 
@@ -53,20 +52,20 @@ export class TopShareholderTableRecordSourceDefinition extends TableRecordSource
         fieldNames.push(topShareholdersFieldSourceDefinition.getSupportedFieldNameById(TopShareholder.FieldId.HolderKey));
         fieldNames.push(topShareholdersFieldSourceDefinition.getSupportedFieldNameById(TopShareholder.FieldId.SharesChanged));
 
-        return GridLayoutDefinition.createFromFieldNames(fieldNames);
+        return RevGridLayoutDefinition.createFromFieldNames(fieldNames);
     }
 }
 
 /** @public */
 export namespace TopShareholderTableRecordSourceDefinition {
     export type FieldSourceDefinitionTypeId = PickEnum<TableFieldSourceDefinition.TypeId,
-        TableFieldSourceDefinition.TypeId.TopShareholdersDataItem
+        TableFieldSourceDefinition.TypeId.TopShareholder
     >;
     export const allowedFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[] = [
-        TableFieldSourceDefinition.TypeId.TopShareholdersDataItem,
+        TableFieldSourceDefinition.TypeId.TopShareholder,
     ];
     export const defaultFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[] = [
-        TableFieldSourceDefinition.TypeId.TopShareholdersDataItem,
+        TableFieldSourceDefinition.TypeId.TopShareholder,
     ];
 
     export namespace JsonTag {

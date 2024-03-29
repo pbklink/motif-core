@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, ErrorCode, Logger, UnexpectedCaseError, ZenithDataError } from '../../../../sys/sys-internal-api';
+import { AssertInternalError, ErrorCode, ErrorCodeLogger, UnexpectedCaseError, ZenithDataError } from '../../../../sys/internal-api';
 import {
     AdiPublisherRequest,
     AdiPublisherSubscription,
@@ -12,7 +12,7 @@ import {
     BrokerageAccountBalancesDataDefinition,
     ErrorPublisherSubscriptionDataMessage_DataError,
     QueryBrokerageAccountBalancesDataDefinition
-} from "../../../common/adi-common-internal-api";
+} from "../../../common/internal-api";
 import { ZenithProtocol } from './protocol/zenith-protocol';
 import { ZenithConvert } from './zenith-convert';
 
@@ -89,7 +89,7 @@ export namespace BalancesMessageConvert {
 
             if (typeof changesOrErrorText === 'string') {
                 const errorText = 'Balances: ' + changesOrErrorText;
-                Logger.logDataError('BMCPME989822220', errorText);
+                ErrorCodeLogger.logDataError('BMCPME989822220', errorText);
                 const errorMessage = new ErrorPublisherSubscriptionDataMessage_DataError(subscription.dataItemId,
                     subscription.dataItemRequestNr,
                     errorText,

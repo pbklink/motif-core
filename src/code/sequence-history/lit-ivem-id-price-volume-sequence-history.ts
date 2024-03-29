@@ -24,15 +24,14 @@ import {
     SymbolsDataItem,
     TradeAffectsId,
     TradesDataItem
-} from '../adi/adi-internal-api';
-import { StringId, Strings } from '../res/res-internal-api';
-import { SymbolsService } from '../services/services-internal-api';
+} from '../adi/internal-api';
+import { StringId, Strings } from '../res/internal-api';
+import { SymbolsService } from '../services/internal-api';
 import {
     AssertInternalError,
     Badness,
     EnumInfoOutOfOrderError,
     Integer,
-    Logger,
     MultiEvent,
     ResourceBadness,
     SourceTzOffsetDateTime,
@@ -40,10 +39,11 @@ import {
     UsableListChangeTypeId,
     compareInteger,
     isDateEqual,
+    logger,
     newNowDate,
     newNullDate,
     newUndefinableDate
-} from '../sys/sys-internal-api';
+} from '../sys/internal-api';
 import { HistorySequenceSeries } from './history-sequence-series';
 import { HistorySequencer } from './history-sequencer';
 import { IntervalHistorySequencer } from './interval-history-sequencer';
@@ -96,11 +96,11 @@ export class LitIvemIdPriceVolumeSequenceHistory extends SequenceHistory {
     };
 
     private _symbolDataItemDataCorrectnessChangeSubscriptionId: MultiEvent.SubscriptionId;
-    private _chartHistoryDataItemBadnessChangeSubscriptionId: MultiEvent.SubscriptionId;
-    private _tradesDataItemBadnessChangeSubscriptionId: MultiEvent.SubscriptionId;
+    private _chartHistoryDataItembadnessChangedSubscriptionId: MultiEvent.SubscriptionId;
+    private _tradesDataItembadnessChangedSubscriptionId: MultiEvent.SubscriptionId;
     private _tradesDataItemListChangeSubscriptionId: MultiEvent.SubscriptionId;
     private _tradesDataItemRecordChangeSubscriptionId: MultiEvent.SubscriptionId;
-    private _securityDataItemBadnessChangeSubscriptionId: MultiEvent.SubscriptionId;
+    private _securityDataItembadnessChangedSubscriptionId: MultiEvent.SubscriptionId;
     private _securityDataItemFieldValuesChangedSubscriptionId: MultiEvent.SubscriptionId;
 
     constructor(private readonly _symbolsService: SymbolsService, private readonly _adi: AdiService, private _litIvemId: LitIvemId) {
@@ -265,7 +265,7 @@ export class LitIvemIdPriceVolumeSequenceHistory extends SequenceHistory {
         super.processUsableChanged();
     }
 
-    private handleSymbolDataItemBadnessChangeEvent() {
+    private handleSymbolDataItembadnessChangedEvent() {
         if (this._symbolsDataItem === undefined) {
             throw new AssertInternalError('LIIPVSH13138853');
         } else {
@@ -282,15 +282,15 @@ export class LitIvemIdPriceVolumeSequenceHistory extends SequenceHistory {
         }
     }
 
-    private handleChartHistoryDataItemBadnessChangeEvent() {
+    private handleChartHistoryDataItembadnessChangedEvent() {
         this.updateResourcingBadness();
     }
 
-    private handleTradesDataItemBadnessChangeEvent() {
+    private handleTradesDataItembadnessChangedEvent() {
         this.updateResourcingBadness();
     }
 
-    private handleSecurityDataItemBadnessChangeEvent() {
+    private handleSecurityDataItembadnessChangedEvent() {
         this.updateResourcingBadness();
     }
 
@@ -367,8 +367,8 @@ export class LitIvemIdPriceVolumeSequenceHistory extends SequenceHistory {
             this.processSymbolsDataItemBecameGood(this._symbolsDataItem);
         } else {
             this._symbolDataItemDataCorrectnessChangeSubscriptionId =
-                this._symbolsDataItem.subscribeBadnessChangeEvent(
-                    () => { this.handleSymbolDataItemBadnessChangeEvent(); }
+                this._symbolsDataItem.subscribeBadnessChangedEvent(
+                    () => { this.handleSymbolDataItembadnessChangedEvent(); }
                 );
         }
     }
@@ -557,17 +557,17 @@ export class LitIvemIdPriceVolumeSequenceHistory extends SequenceHistory {
         definition.toDate = newUndefinableDate(this.toDateTime);
         this._chartHistoryDataItem = this._adi.subscribe(definition) as ChartHistoryDataItem;
 
-        this._chartHistoryDataItemBadnessChangeSubscriptionId = this._chartHistoryDataItem.subscribeBadnessChangeEvent(
-            () => { this.handleChartHistoryDataItemBadnessChangeEvent(); }
+        this._chartHistoryDataItembadnessChangedSubscriptionId = this._chartHistoryDataItem.subscribeBadnessChangedEvent(
+            () => { this.handleChartHistoryDataItembadnessChangedEvent(); }
         );
     }
 
     private deactivateChartHistory() {
         if (this._chartHistoryDataItem !== undefined) {
-            this._chartHistoryDataItem.unsubscribeBadnessChangeEvent(
-                this._chartHistoryDataItemBadnessChangeSubscriptionId
+            this._chartHistoryDataItem.unsubscribeBadnessChangedEvent(
+                this._chartHistoryDataItembadnessChangedSubscriptionId
             );
-            this._chartHistoryDataItemBadnessChangeSubscriptionId = undefined;
+            this._chartHistoryDataItembadnessChangedSubscriptionId = undefined;
 
             this._adi.unsubscribe(this._chartHistoryDataItem);
             this._chartHistoryDataItem = undefined;
@@ -580,8 +580,8 @@ export class LitIvemIdPriceVolumeSequenceHistory extends SequenceHistory {
         const tradesDataItem = this._adi.subscribe(definition) as DayTradesDataItem;
         this._tradesDataItem = tradesDataItem;
 
-        this._tradesDataItemBadnessChangeSubscriptionId = tradesDataItem.subscribeBadnessChangeEvent(
-            () => { this.handleTradesDataItemBadnessChangeEvent(); }
+        this._tradesDataItembadnessChangedSubscriptionId = tradesDataItem.subscribeBadnessChangedEvent(
+            () => { this.handleTradesDataItembadnessChangedEvent(); }
         );
         this._tradesDataItemListChangeSubscriptionId =
             tradesDataItem.subscribeListChangeEvent(
@@ -594,8 +594,8 @@ export class LitIvemIdPriceVolumeSequenceHistory extends SequenceHistory {
 
     private deactivateTrades() {
         if (this._tradesDataItem !== undefined) {
-            this._tradesDataItem.unsubscribeBadnessChangeEvent(this._tradesDataItemBadnessChangeSubscriptionId);
-            this._tradesDataItemBadnessChangeSubscriptionId = undefined;
+            this._tradesDataItem.unsubscribeBadnessChangedEvent(this._tradesDataItembadnessChangedSubscriptionId);
+            this._tradesDataItembadnessChangedSubscriptionId = undefined;
             this._tradesDataItem.unsubscribeListChangeEvent(this._tradesDataItemListChangeSubscriptionId);
             this._tradesDataItemListChangeSubscriptionId = undefined;
             this._tradesDataItem.unsubscribeRecordChangeEvent(this._tradesDataItemRecordChangeSubscriptionId);
@@ -610,8 +610,8 @@ export class LitIvemIdPriceVolumeSequenceHistory extends SequenceHistory {
         const definition = new SecurityDataDefinition(this.litIvemId);
         this._securityDataItem = this._adi.subscribe(definition) as SecurityDataItem;
 
-        this._securityDataItemBadnessChangeSubscriptionId = this._securityDataItem.subscribeBadnessChangeEvent(
-            () => { this.handleSecurityDataItemBadnessChangeEvent(); }
+        this._securityDataItembadnessChangedSubscriptionId = this._securityDataItem.subscribeBadnessChangedEvent(
+            () => { this.handleSecurityDataItembadnessChangedEvent(); }
         );
         this._securityDataItemFieldValuesChangedSubscriptionId = this._securityDataItem.subscribeFieldValuesChangedEvent(
             (valueChanges) => { this.handleSecurityDataItemValuesChangeEvent(valueChanges); }
@@ -620,8 +620,8 @@ export class LitIvemIdPriceVolumeSequenceHistory extends SequenceHistory {
 
     private deactivateSecurity() {
         if (this._securityDataItem !== undefined) {
-            this._securityDataItem.unsubscribeBadnessChangeEvent(this._securityDataItemBadnessChangeSubscriptionId);
-            this._securityDataItemBadnessChangeSubscriptionId = undefined;
+            this._securityDataItem.unsubscribeBadnessChangedEvent(this._securityDataItembadnessChangedSubscriptionId);
+            this._securityDataItembadnessChangedSubscriptionId = undefined;
             this._securityDataItem.unsubscribeFieldValuesChangedEvent(this._securityDataItemFieldValuesChangedSubscriptionId);
             this._securityDataItemFieldValuesChangedSubscriptionId = undefined;
 
@@ -808,7 +808,7 @@ export class LitIvemIdPriceVolumeSequenceHistory extends SequenceHistory {
                     // extremely unlikely but possible - use UTC
                     offset = 0;
                     if (!this._resortedToUtcOffsetLogged) {
-                        Logger.logWarning('LitIvemIdPriceVolumeSequenceHistory resorted to UTC offset: ' + this._litIvemId.name);
+                        logger.logWarning('LitIvemIdPriceVolumeSequenceHistory resorted to UTC offset: ' + this._litIvemId.name);
                         this._resortedToUtcOffsetLogged = true;
                     }
                 }
@@ -1002,7 +1002,8 @@ export class LitIvemIdPriceVolumeSequenceHistory extends SequenceHistory {
         }
 
         const volume = securityDataItem.volume;
-        this.stageVolumeValueTick(dateTime, tickDateTimeRepeatCount, volume);
+        const volumeAsNumber = volume === undefined ? undefined : volume.toNumber();
+        this.stageVolumeValueTick(dateTime, tickDateTimeRepeatCount, volumeAsNumber);
     }
 
     private loadSeriesFromModifiedSecurityFields(valueChanges: SecurityDataItem.ValueChange[]) {

@@ -4,36 +4,36 @@
  * License: motionite.trade/license/motif
  */
 
-import { Feed } from '../../../../adi/adi-internal-api';
+import { Feed } from '../../../../adi/internal-api';
 import {
     AssertInternalError,
-    CommaText,
     FieldDataType,
     FieldDataTypeId,
     Integer,
     UnreachableCaseError
-} from "../../../../sys/sys-internal-api";
+} from "../../../../sys/internal-api";
 import {
     CorrectnessTableField,
     EnumCorrectnessTableField,
     IntegerCorrectnessTableField,
     StringCorrectnessTableField,
     TableField
-} from '../../field/grid-table-field-internal-api';
+} from '../../field/internal-api';
 import {
     CorrectnessTableValue,
     FeedClassIdCorrectnessTableValue,
     FeedStatusIdCorrectnessTableValue,
     IntegerCorrectnessTableValue,
     StringCorrectnessTableValue
-} from '../../value/grid-table-value-internal-api';
+} from '../../value/internal-api';
 import { TableFieldSourceDefinition } from './table-field-source-definition';
+import { TableFieldSourceDefinitionCachingFactoryService } from './table-field-source-definition-caching-factory-service';
 
 export class FeedTableFieldSourceDefinition extends TableFieldSourceDefinition {
     override readonly fieldDefinitions: TableField.Definition[];
 
     constructor() {
-        super(TableFieldSourceDefinition.TypeId.Feed);
+        super(FeedTableFieldSourceDefinition.typeId);
 
         this.fieldDefinitions = this.createFieldDefinitions();
     }
@@ -44,7 +44,7 @@ export class FeedTableFieldSourceDefinition extends TableFieldSourceDefinition {
 
     getFieldNameById(id: Feed.FieldId) {
         const sourcelessFieldName = FeedTableFieldSourceDefinition.Field.getNameById(id);
-        return CommaText.from2Values(this.name, sourcelessFieldName);
+        return this.encodeFieldName(sourcelessFieldName);
     }
 
     getSupportedFieldNameById(id: Feed.FieldId) {
@@ -81,6 +81,9 @@ export class FeedTableFieldSourceDefinition extends TableFieldSourceDefinition {
 }
 
 export namespace FeedTableFieldSourceDefinition {
+    export const typeId = TableFieldSourceDefinition.TypeId.Feed;
+    export type TypeId = typeof typeId;
+
     export namespace Field {
         const unsupportedIds = [Feed.FieldId.Id, Feed.FieldId.EnvironmentDisplay];
         export const count = Feed.Field.idCount - unsupportedIds.length;
@@ -168,8 +171,12 @@ export namespace FeedTableFieldSourceDefinition {
     }
 
     export interface FieldId extends TableFieldSourceDefinition.FieldId {
-        sourceTypeId: TableFieldSourceDefinition.TypeId.Feed;
+        sourceTypeId: FeedTableFieldSourceDefinition.TypeId;
         id: Feed.FieldId;
+    }
+
+    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactoryService): FeedTableFieldSourceDefinition {
+        return cachingFactoryService.get(typeId) as FeedTableFieldSourceDefinition;
     }
 
     export function initialiseStatic() {

@@ -4,21 +4,21 @@
  * License: motionite.trade/license/motif
  */
 
-import { AdiService, LitIvemBaseDetail, RankedLitIvemId } from '../../../adi/adi-internal-api';
+import { RevFieldCustomHeadingsService } from '@xilytix/rev-data-source';
+import { AdiService, LitIvemBaseDetail, RankedLitIvemId } from '../../../adi/internal-api';
 import { SymbolDetailCacheService } from '../../../services/symbol-detail-cache-service';
-import { Badness, BadnessComparableList, Integer, NotImplementedError, UnreachableCaseError, UsableListChangeType, UsableListChangeTypeId, moveElementsInArray } from '../../../sys/sys-internal-api';
-import { TextFormatterService } from '../../../text-format/text-format-internal-api';
+import { Badness, BadnessComparableList, CorrectnessBadness, Integer, NotImplementedError, UnreachableCaseError, UsableListChangeType, UsableListChangeTypeId, moveElementsInArray } from '../../../sys/internal-api';
+import { TextFormatterService } from '../../../text-format/internal-api';
 import {
-    TableFieldSourceDefinition
-} from "../field-source/grid-table-field-source-internal-api";
-import { RankedLitIvemIdTableRecordDefinition, TableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
-import { TableRecord } from '../record/grid-table-record-internal-api';
+    TableFieldSourceDefinition, TableFieldSourceDefinitionCachingFactoryService
+} from "../field-source/internal-api";
+import { RankedLitIvemIdTableRecordDefinition } from '../record-definition/internal-api';
+import { TableRecord } from '../record/internal-api';
 import { LitIvemBaseDetailTableValueSource, RankedLitIvemIdTableValueSource, SecurityDataItemTableValueSource } from '../value-source/internal-api';
 import {
     RankedLitIvemIdUsableListTableRecordSourceDefinition,
-    TableRecordSourceDefinition,
-    TableRecordSourceDefinitionFactoryService
-} from './definition/grid-table-record-source-definition-internal-api';
+    TableRecordSourceDefinition
+} from './definition/internal-api';
 import { PromisedLitIvemBaseDetail } from './promised-lit-ivem-base-detail';
 import { UsableListTableRecordSource } from './usable-list-table-record-source';
 
@@ -32,12 +32,16 @@ export class RankedLitIvemIdUsableListTableRecordSource extends UsableListTableR
         private readonly _adiService: AdiService,
         private readonly _symbolDetailCacheService: SymbolDetailCacheService,
         textFormatterService: TextFormatterService,
-        tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService,
+        gridFieldCustomHeadingsService: RevFieldCustomHeadingsService,
+        tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService,
+        correctnessBadness: CorrectnessBadness,
         definition: RankedLitIvemIdUsableListTableRecordSourceDefinition,
     ) {
         super(
             textFormatterService,
-            tableRecordSourceDefinitionFactoryService,
+            gridFieldCustomHeadingsService,
+            tableFieldSourceDefinitionCachingFactoryService,
+            correctnessBadness,
             definition,
         );
 
@@ -57,7 +61,7 @@ export class RankedLitIvemIdUsableListTableRecordSource extends UsableListTableR
         const record = this.records[recordIdx];
         const rankedLitIvemId = record.rankedLitIvemId.createCopy();
         return {
-            typeId: TableRecordDefinition.TypeId.RankedLitIvemId,
+            typeId: TableFieldSourceDefinition.TypeId.RankedLitIvemId,
             mapKey: RankedLitIvemIdTableRecordDefinition.createMapKey(rankedLitIvemId),
             rankedLitIvemId,
         };
@@ -106,7 +110,7 @@ export class RankedLitIvemIdUsableListTableRecordSource extends UsableListTableR
                     }
 
                     // AlternateCodesFix: Currently this actually is part of FullDetail.  Will be in BaseDetail in future
-                    // case TableFieldSourceDefinition.TypeId.LitIvemAlternateCodes: {
+                    // case TypedTableFieldSourceDefinition.TypeId.LitIvemAlternateCodes: {
                     //     const altCodesSource =
                     //         new LitIvemAlternateCodesTableValueSource(
                     //             result.fieldCount,

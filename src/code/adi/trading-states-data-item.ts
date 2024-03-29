@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { assert, AssertInternalError, Badness, UnexpectedTypeError } from '../sys/sys-internal-api';
+import { assert, AssertInternalError, Badness, UnexpectedTypeError } from '../sys/internal-api';
 import {
     DataDefinition,
     DataMessage,
@@ -14,7 +14,7 @@ import {
     TradingStates,
     TradingStatesDataDefinition,
     TradingStatesDataMessage
-} from './common/adi-common-internal-api';
+} from './common/internal-api';
 import { FeedSubscriptionDataItem } from './feed/internal-api';
 
 export class TradingStatesDataItem extends FeedSubscriptionDataItem {

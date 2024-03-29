@@ -4,25 +4,24 @@
  * License: motionite.trade/license/motif
  */
 
-import { AdiService } from './adi/adi-internal-api';
-import { CommandRegisterService } from "./command/command-internal-api";
+import { RevFieldCustomHeadingsService } from '@xilytix/rev-data-source';
+import { AdiService } from './adi/internal-api';
+import { CommandRegisterService } from "./command/internal-api";
 import {
     CellPainterFactoryService,
-    GridFieldCustomHeadingsService,
+    ReferenceableDataSourceDefinitionsStoreService,
+    ReferenceableDataSourcesService,
     ReferenceableGridLayoutsService,
-    ReferenceableGridSourceDefinitionsStoreService,
-    ReferenceableGridSourcesService,
-    TableFieldSourceDefinitionCachedFactoryService,
+    TableFieldSourceDefinitionCachingFactoryService,
     TableFieldSourceDefinitionFactory,
-    TableRecordSourceDefinitionFactoryService,
     TableRecordSourceFactory
 } from "./grid/internal-api";
-import { KeyboardService } from "./keyboard/keyboard-internal-api";
+import { KeyboardService } from "./keyboard/internal-api";
 import { NotificationChannelsService } from './notification-channel/internal-api';
 import {
     RankedLitIvemIdListDefinitionFactoryService,
     RankedLitIvemIdListFactoryService,
-} from "./ranked-lit-ivem-id-list/ranked-lit-ivem-id-list-internal-api";
+} from "./ranked-lit-ivem-id-list/internal-api";
 import { ScansService } from './scan/internal-api';
 import {
     AppStorageService,
@@ -32,9 +31,9 @@ import {
     SettingsService,
     SymbolDetailCacheService,
     SymbolsService
-} from "./services/services-internal-api";
-import { TextFormatterService } from "./text-format/text-format-internal-api";
-import { WatchmakerService } from './watchmaker/watchmaker-internal-api';
+} from "./services/internal-api";
+import { TextFormatterService } from "./text-format/internal-api";
+import { WatchmakerService } from './watchmaker/internal-api';
 
 /** @public */
 export class CoreService {
@@ -52,18 +51,17 @@ export class CoreService {
     readonly rankedLitIvemIdListDefinitionFactoryService: RankedLitIvemIdListDefinitionFactoryService;
     readonly rankedLitIvemIdListFactoryService: RankedLitIvemIdListFactoryService;
     readonly textFormatterService: TextFormatterService;
-    readonly gridFieldCustomHeadingsService: GridFieldCustomHeadingsService;
+    readonly gridFieldCustomHeadingsService: RevFieldCustomHeadingsService;
     readonly referenceableGridLayoutsService: ReferenceableGridLayoutsService;
-    readonly referenceableGridSourceDefinitionsStoreService: ReferenceableGridSourceDefinitionsStoreService;
+    readonly referenceableDataSourceDefinitionsStoreService: ReferenceableDataSourceDefinitionsStoreService;
     readonly cellPainterFactoryService: CellPainterFactoryService;
     readonly commandRegisterService: CommandRegisterService;
     readonly keyboardService: KeyboardService;
 
     private _finalised = false;
 
-    private _tableFieldSourceDefinitionCachedFactoryService: TableFieldSourceDefinitionCachedFactoryService;
-    private _tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService;
-    private _referenceableGridSourcesService: ReferenceableGridSourcesService;
+    private _tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService;
+    private _referenceableDataSourcesService: ReferenceableDataSourcesService;
     private _activeColorSchemeName: string;
 
     constructor() {
@@ -85,18 +83,9 @@ export class CoreService {
             this.watchmakerService,
         );
         this.textFormatterService = new TextFormatterService(this.symbolsService, this.settingsService);
-        this.gridFieldCustomHeadingsService = new GridFieldCustomHeadingsService();
+        this.gridFieldCustomHeadingsService = new RevFieldCustomHeadingsService();
         this.referenceableGridLayoutsService = new ReferenceableGridLayoutsService();
-        // this.tableRecordSourceFactoryService = new TableRecordSourceFactoryService(
-        //     this.adiService,
-        //     this.symbolDetailCacheService,
-        //     this.rankedLitIvemIdListFactoryService,
-        //     this.watchmakerService,
-        //     this.scansService,
-        //     this.textFormatterService,
-        //     this.tableRecordSourceDefinitionFactoryService,
-        // );
-        this.referenceableGridSourceDefinitionsStoreService = new ReferenceableGridSourceDefinitionsStoreService(
+        this.referenceableDataSourceDefinitionsStoreService = new ReferenceableDataSourceDefinitionsStoreService(
         );
         this.cellPainterFactoryService = new CellPainterFactoryService(
             this.settingsService,
@@ -106,23 +95,17 @@ export class CoreService {
         this.keyboardService = new KeyboardService();
     }
 
-    get tableFieldSourceDefinitionCachedFactoryService() { return this._tableFieldSourceDefinitionCachedFactoryService; }
-    get tableRecordSourceDefinitionFactoryService() { return this._tableRecordSourceDefinitionFactoryService; }
-    get referenceableGridSourcesService() { return this._referenceableGridSourcesService; }
+    get tableFieldSourceDefinitionCachingFactoryService() { return this._tableFieldSourceDefinitionCachingFactoryService; }
+    get referenceableDataSourcesService() { return this._referenceableDataSourcesService; }
 
     setTableFieldSourceDefinitionFactory(tableFieldSourceDefinitionFactory: TableFieldSourceDefinitionFactory) {
-        this._tableFieldSourceDefinitionCachedFactoryService = new TableFieldSourceDefinitionCachedFactoryService(tableFieldSourceDefinitionFactory);
-
-        this._tableRecordSourceDefinitionFactoryService = new TableRecordSourceDefinitionFactoryService(
-            this.rankedLitIvemIdListDefinitionFactoryService,
-            this.gridFieldCustomHeadingsService,
-            this._tableFieldSourceDefinitionCachedFactoryService,
-        );
+        this._tableFieldSourceDefinitionCachingFactoryService = new TableFieldSourceDefinitionCachingFactoryService(tableFieldSourceDefinitionFactory);
     }
 
-    setTableRecordSourceFactory(tableRecordSourceFactory: TableRecordSourceFactory) {
-        this._referenceableGridSourcesService = new ReferenceableGridSourcesService(
+    setTableRecordSourceFactory(tableRecordSourceFactory: TableRecordSourceFactory, tableFieldSourceDefinitionFactory: TableFieldSourceDefinitionFactory) {
+        this._referenceableDataSourcesService = new ReferenceableDataSourcesService(
             this.referenceableGridLayoutsService,
+            tableFieldSourceDefinitionFactory,
             tableRecordSourceFactory,
         );
     }

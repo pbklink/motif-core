@@ -4,8 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
-import { Decimal } from 'decimal.js-light';
-import { IvemId, LitIvemId } from '../../../adi/adi-internal-api';
+import { RevTableValue } from '@xilytix/rev-data-source';
+import { IvemId, LitIvemId } from '../../../adi/internal-api';
 import {
     BooleanRenderValue,
     DateRenderValue,
@@ -26,39 +26,18 @@ import {
     SourceTzOffsetDateTimeRenderValue,
     StringArrayRenderValue,
     StringRenderValue
-} from '../../../services/services-internal-api';
+} from '../../../services/internal-api';
 import {
     CorrectnessId,
+    Decimal,
     Integer,
     SourceTzOffsetDate,
     SourceTzOffsetDateTime,
     newUndefinableDate,
     newUndefinableDecimal
-} from '../../../sys/sys-internal-api';
+} from '../../../sys/internal-api';
 
-export abstract class TableValue {
-    private _renderValue: RenderValue | undefined;
-    private _renderAttributes: RenderValue.Attribute[] = [];
-
-    get renderValue() {
-        if (this._renderValue === undefined) {
-            this._renderValue = this.createRenderValue();
-            this._renderValue.setAttributes(this._renderAttributes);
-        }
-        return this._renderValue;
-    }
-
-    addRenderAttribute(value: RenderValue.Attribute) {
-        this._renderAttributes.push(value);
-    }
-
-    clearRendering() {
-        this._renderValue = undefined;
-    }
-
-    abstract isUndefined(): boolean;
-
-    protected abstract createRenderValue(): RenderValue;
+export abstract class TableValue extends RevTableValue<RenderValue.TypeId, RenderValue.Attribute.TypeId> {
 }
 
 export namespace TableValue {
@@ -183,10 +162,22 @@ export class VisibleTableValue extends BooleanTableValue {
         this.renderValueTypeId = RenderValue.TypeId.Visible;
     }
 }
+export class EnabledTableValue extends BooleanTableValue {
+    constructor() {
+        super();
+        this.renderValueTypeId = RenderValue.TypeId.Enabled;
+    }
+}
 export class ValidTableValue extends BooleanTableValue {
     constructor() {
         super();
         this.renderValueTypeId = RenderValue.TypeId.Valid;
+    }
+}
+export class FaultedTableValue extends BooleanTableValue {
+    constructor() {
+        super();
+        this.renderValueTypeId = RenderValue.TypeId.Faulted;
     }
 }
 
@@ -195,6 +186,12 @@ export abstract class EnumTableValue extends GenericTableValue<Integer> {
 
     protected createRenderValue() {
         return new EnumRenderValue(this.data, this.renderValueTypeId);
+    }
+}
+export class ActiveFaultedStatusIdTableValue extends EnumTableValue {
+    constructor() {
+        super();
+        this.renderValueTypeId = RenderValue.TypeId.ActiveFaultedStatusId;
     }
 }
 export class MarketIdTableValue extends EnumTableValue {
@@ -221,10 +218,16 @@ export class ScanFieldBooleanOperationIdTableValue extends EnumTableValue {
         this.renderValueTypeId = RenderValue.TypeId.ScanFieldBooleanOperationId;
     }
 }
-export class NotificationChannelSourceSettingsUrgencyTableValue extends EnumTableValue {
+export class NotificationChannelSourceSettingsUrgencyIdTableValue extends EnumTableValue {
     constructor() {
         super();
-        this.renderValueTypeId = RenderValue.TypeId.NotificationChannelSourceSettingsUrgency;
+        this.renderValueTypeId = RenderValue.TypeId.NotificationChannelSourceSettingsUrgencyId;
+    }
+}
+export class NotificationDistributionMethodIdTableValue extends EnumTableValue {
+    constructor() {
+        super();
+        this.renderValueTypeId = RenderValue.TypeId.NotificationDistributionMethodId;
     }
 }
 
@@ -615,10 +618,10 @@ export class ScanTargetTypeIdCorrectnessTableValue extends EnumCorrectnessTableV
         this.renderValueTypeId = RenderValue.TypeId.ScanTargetTypeId;
     }
 }
-export class ScanStatusIdCorrectnessTableValue extends EnumCorrectnessTableValue {
+export class ActiveFaultedStatusIdCorrectnessTableValue extends EnumCorrectnessTableValue {
     constructor() {
         super();
-        this.renderValueTypeId = RenderValue.TypeId.ScanStatusId;
+        this.renderValueTypeId = RenderValue.TypeId.ActiveFaultedStatusId;
     }
 }
 export class RankedLitIvemIdListDirectoryItemTypeIdCorrectnessTableValue extends EnumCorrectnessTableValue {

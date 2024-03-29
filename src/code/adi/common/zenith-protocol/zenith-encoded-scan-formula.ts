@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { PickEnum } from '../../../sys/sys-internal-api';
+import { PickEnum } from '../../../sys/internal-api';
 import { ZenithProtocolCommon } from './zenith-protocol-common';
 
 export namespace ZenithEncodedScanFormula {

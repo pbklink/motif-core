@@ -4,15 +4,14 @@
  * License: motionite.trade/license/motif
  */
 
-import { MyxLitIvemAttributes } from '../../../../adi/adi-internal-api';
+import { MyxLitIvemAttributes } from '../../../../adi/internal-api';
 import {
     AssertInternalError,
-    CommaText,
     FieldDataType,
     FieldDataTypeId,
     Integer,
     UnreachableCaseError
-} from "../../../../sys/sys-internal-api";
+} from "../../../../sys/internal-api";
 import {
     CorrectnessTableField,
     EnumCorrectnessTableField,
@@ -20,7 +19,7 @@ import {
     IntegerCorrectnessTableField,
     NumberCorrectnessTableField,
     TableField
-} from '../../field/grid-table-field-internal-api';
+} from '../../field/internal-api';
 import {
     CorrectnessTableValue,
     DeliveryBasisIdMyxLitIvemAttributeCorrectnessTableValue,
@@ -28,14 +27,15 @@ import {
     MarketClassificationIdMyxLitIvemAttributeCorrectnessTableValue,
     PercentageCorrectnessTableValue,
     ShortSellTypeIdArrayMyxLitIvemAttributeCorrectnessTableValue
-} from '../../value/grid-table-value-internal-api';
+} from '../../value/internal-api';
 import { TableFieldSourceDefinition } from './table-field-source-definition';
+import { TableFieldSourceDefinitionCachingFactoryService } from './table-field-source-definition-caching-factory-service';
 
 export class MyxLitIvemAttributesTableFieldSourceDefinition extends TableFieldSourceDefinition {
     override readonly fieldDefinitions: TableField.Definition[];
 
     constructor() {
-        super(TableFieldSourceDefinition.TypeId.MyxLitIvemAttributes);
+        super(MyxLitIvemAttributesTableFieldSourceDefinition.typeId);
 
         this.fieldDefinitions = this.createFieldDefinitions();
     }
@@ -46,7 +46,7 @@ export class MyxLitIvemAttributesTableFieldSourceDefinition extends TableFieldSo
 
     getFieldNameById(id: MyxLitIvemAttributes.Field.Id) {
         const sourcelessFieldName = MyxLitIvemAttributesTableFieldSourceDefinition.Field.getNameById(id);
-        return CommaText.from2Values(this.name, sourcelessFieldName);
+        return this.encodeFieldName(sourcelessFieldName);
     }
 
     getSupportedFieldNameById(id: MyxLitIvemAttributes.Field.Id) {
@@ -82,6 +82,9 @@ export class MyxLitIvemAttributesTableFieldSourceDefinition extends TableFieldSo
 }
 
 export namespace MyxLitIvemAttributesTableFieldSourceDefinition {
+    export const typeId = TableFieldSourceDefinition.TypeId.MyxLitIvemAttributes;
+    export type TypeId = typeof typeId;
+
     export namespace Field {
         const unsupportedIds: MyxLitIvemAttributes.Field.Id[] = [];
         export const count = MyxLitIvemAttributes.Field.idCount - unsupportedIds.length;
@@ -175,8 +178,12 @@ export namespace MyxLitIvemAttributesTableFieldSourceDefinition {
     }
 
     export interface FieldId extends TableFieldSourceDefinition.FieldId {
-        sourceTypeId: TableFieldSourceDefinition.TypeId.MyxLitIvemAttributes;
+        sourceTypeId: MyxLitIvemAttributesTableFieldSourceDefinition.TypeId;
         id: MyxLitIvemAttributes.Field.Id;
+    }
+
+    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactoryService): MyxLitIvemAttributesTableFieldSourceDefinition {
+        return cachingFactoryService.get(typeId) as MyxLitIvemAttributesTableFieldSourceDefinition;
     }
 
     export function initialiseStatic() {

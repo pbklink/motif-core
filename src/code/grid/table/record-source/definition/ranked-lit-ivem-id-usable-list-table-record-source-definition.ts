@@ -4,10 +4,10 @@
  * License: motionite.trade/license/motif
  */
 
-import { RankedLitIvemId } from '../../../../adi/adi-internal-api';
-import { PickEnum, UsableList } from '../../../../sys/sys-internal-api';
-import { GridFieldCustomHeadingsService } from '../../../field/grid-field-internal-api';
-import { TableFieldSourceDefinition, TableFieldSourceDefinitionCachedFactoryService } from '../../field-source/grid-table-field-source-internal-api';
+import { RevFieldCustomHeadingsService } from '@xilytix/rev-data-source';
+import { RankedLitIvemId } from '../../../../adi/internal-api';
+import { PickEnum, UsableList } from '../../../../sys/internal-api';
+import { TableFieldSourceDefinition, TableFieldSourceDefinitionCachingFactoryService } from '../../field-source/internal-api';
 import { TableRecordSourceDefinition } from './table-record-source-definition';
 import { UsableListTableRecordSourceDefinition } from './usable-list-table-record-source-definition';
 
@@ -15,13 +15,13 @@ import { UsableListTableRecordSourceDefinition } from './usable-list-table-recor
 export abstract class RankedLitIvemIdUsableListTableRecordSourceDefinition extends UsableListTableRecordSourceDefinition<RankedLitIvemId> {
     // eslint-disable-next-line @typescript-eslint/no-useless-constructor
     constructor(
-        customHeadingsService: GridFieldCustomHeadingsService,
-        tableFieldSourceDefinitionCachedFactoryService: TableFieldSourceDefinitionCachedFactoryService,
+        customHeadingsService: RevFieldCustomHeadingsService,
+        tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService,
         typeId: TableRecordSourceDefinition.TypeId,
         allowedFieldSourceDefinitionTypeIds: RankedLitIvemIdUsableListTableRecordSourceDefinition.FieldSourceDefinitionTypeId[],
         list: UsableList<RankedLitIvemId>,
     ) {
-        super(customHeadingsService, tableFieldSourceDefinitionCachedFactoryService, typeId, allowedFieldSourceDefinitionTypeIds, list);
+        super(customHeadingsService, tableFieldSourceDefinitionCachingFactoryService, typeId, allowedFieldSourceDefinitionTypeIds, list);
     }
 
     abstract get defaultFieldSourceDefinitionTypeIds(): RankedLitIvemIdUsableListTableRecordSourceDefinition.FieldSourceDefinitionTypeId[];
@@ -35,7 +35,7 @@ export namespace RankedLitIvemIdUsableListTableRecordSourceDefinition {
         TableFieldSourceDefinition.TypeId.RankedLitIvemId |
         TableFieldSourceDefinition.TypeId.SecurityDataItem
         // AlternateCodesFix: Currently this actually is part of FullDetail.  Will be in BaseDetail in future
-        // TableFieldSourceDefinition.TypeId.LitIvemAlternateCodes
+        // TypedTableFieldSourceDefinition.TypeId.LitIvemAlternateCodes
     >;
 
     export const allowedFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[] = [
@@ -43,6 +43,6 @@ export namespace RankedLitIvemIdUsableListTableRecordSourceDefinition {
         TableFieldSourceDefinition.TypeId.RankedLitIvemId,
         TableFieldSourceDefinition.TypeId.SecurityDataItem
         // AlternateCodesFix: Currently this actually is part of FullDetail.  Will be in BaseDetail in future
-        // TableFieldSourceDefinition.TypeId.LitIvemAlternateCodes,
+        // TypedTableFieldSourceDefinition.TypeId.LitIvemAlternateCodes,
     ];
 }

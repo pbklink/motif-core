@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { StringId, Strings } from '../../res/res-internal-api';
+import { StringId, Strings } from '../../res/internal-api';
 import {
     AssertInternalError,
     Badness,
@@ -16,9 +16,10 @@ import {
     SysTick,
     UnreachableCaseError,
     getErrorMessage,
+    logger,
     mSecsPerSec,
     secsPerMin
-} from '../../sys/sys-internal-api';
+} from '../../sys/internal-api';
 import { AdiPublisherRequest } from './adi-publisher-request';
 import { AdiPublisherSubscription } from './adi-publisher-subscription';
 import { AdiPublisherSubscriptionDelayRetryAlgorithmId } from './adi-publisher-subscription-delay-retry-algorithm';
@@ -59,7 +60,7 @@ export abstract class AdiPublisherSubscriptionManager {
     protected get subscriptionByMessageMap() { return this._subscriptionByMessageMap; }
 
     finalise() {
-        Logger.logInfo('PublisherRequestEngine finalising');
+        logger.logInfo('PublisherRequestEngine finalising');
 
         this._highPrioritySendQueue.clear();
         this._normalSendQueue.clear();
@@ -411,7 +412,7 @@ export abstract class AdiPublisherSubscriptionManager {
 
                     const exists = this._subscriptionByDataItemIdMap.has(subscription.dataItemId);
                     if (!exists) {
-                        Logger.log(Logger.LevelId.Warning, 'TPariSessSvc.ProcessResponseWaitList - Could not find subscription: '
+                        logger.log(Logger.LevelId.Warning, 'TPariSessSvc.ProcessResponseWaitList - Could not find subscription: '
                             + subscription.dataDefinition.description);
                     } else {
                         // assume Unsubscribe worked. Do not notify as error

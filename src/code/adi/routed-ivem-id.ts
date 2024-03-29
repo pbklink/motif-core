@@ -4,8 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
-import { ErrorCode, Integer, JsonElement, MapKey, Ok, Result } from '../sys/sys-internal-api';
-import { IvemId, OrderExtendedSideId, OrderRoute, OrderTriggerTypeId, OrderTypeId, TimeInForceId } from './common/adi-common-internal-api';
+import { ErrorCode, Integer, JsonElement, JsonElementErr, MapKey, Ok, Result } from '../sys/internal-api';
+import { IvemId, OrderExtendedSideId, OrderRoute, OrderTriggerTypeId, OrderTypeId, TimeInForceId } from './common/internal-api';
 
 export class RoutedIvemId {
     private _mapKey: MapKey | undefined;
@@ -211,7 +211,7 @@ export namespace RoutedIvemId {
     export function tryCreateFromJson(element: JsonElement): Result<RoutedIvemId> {
         const ivemIdElementResult = element.tryGetElement(JsonName.ivemId);
         if (ivemIdElementResult.isErr()) {
-            return ivemIdElementResult.createOuter(ErrorCode.RoutedIvemId_IvemIdNotSpecified);
+            return JsonElementErr.createOuter(ivemIdElementResult.error, ErrorCode.RoutedIvemId_IvemIdNotSpecified);
         } else {
             const ivemIdResult = IvemId.tryCreateFromJson(ivemIdElementResult.value);
             if (ivemIdResult.isErr()) {
@@ -219,7 +219,7 @@ export namespace RoutedIvemId {
             } else {
                 const routeElementResult = element.tryGetElement(JsonName.route);
                 if (routeElementResult.isErr()) {
-                    return routeElementResult.createOuter(ErrorCode.RoutedIvemId_RouteNotSpecified);
+                    return JsonElementErr.createOuter(routeElementResult.error, ErrorCode.RoutedIvemId_RouteNotSpecified);
                 } else {
                     const routeResult = OrderRoute.tryCreateFromJson(routeElementResult.value);
                     if (routeResult.isErr()) {

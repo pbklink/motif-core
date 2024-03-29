@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { UnreachableCaseError } from '../sys/sys-internal-api';
+import { UnreachableCaseError } from '../sys/internal-api';
 import { CapabilityId } from './capability';
 
 export class CapabilitiesService {

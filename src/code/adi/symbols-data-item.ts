@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { assert, CorrectnessList, ErrorCode, FeedError, Integer, MultiEvent, UnreachableCaseError, UsableListChangeTypeId } from '../sys/sys-internal-api';
+import { assert, CorrectnessList, ErrorCode, FeedError, Integer, MultiEvent, UnreachableCaseError, UsableListChangeTypeId } from '../sys/internal-api';
 import {
     AurcChangeTypeId,
     DataDefinition,
@@ -13,7 +13,7 @@ import {
     LitIvemId,
     SearchSymbolsDataDefinition,
     SymbolsDataMessage
-} from './common/adi-common-internal-api';
+} from './common/internal-api';
 import { PublisherSubscriptionDataItem } from './publish-subscribe/internal-api';
 import { SearchSymbolsLitIvemFullDetail } from './search-symbols-lit-ivem-full-detail';
 

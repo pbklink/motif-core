@@ -17,10 +17,10 @@ import {
     UpdateScanDataDefinition,
     UpdateScanDataItem,
     ZenithEncodedScanFormula
-} from '../adi/adi-internal-api';
+} from '../adi/internal-api';
 import { CreateScanDataItem } from '../adi/scan/create-scan-data-item';
 import { NotificationChannelsService } from '../notification-channel/notification-channels-service';
-import { StringId, Strings } from '../res/res-internal-api';
+import { StringId, Strings } from '../res/internal-api';
 import { SymbolsService } from '../services/symbols-service';
 import {
     AssertInternalError,
@@ -29,15 +29,15 @@ import {
     Guid,
     Integer,
     LockOpenListItem,
-    Logger,
     MultiEvent,
     Ok,
     Result,
     UnreachableCaseError,
     getErrorMessage,
     isUndefinableArrayEqual,
+    logger,
     newGuid
-} from '../sys/sys-internal-api';
+} from '../sys/internal-api';
 import { ScanConditionSet } from './condition-set/internal-api';
 import { ScanFieldSet } from './field-set/internal-api';
 import { ScanFormula } from './formula/scan-formula';
@@ -134,7 +134,6 @@ export class ScanEditor extends OpenableScanEditor {
         emptyScanFieldSet: ScanFieldSet | undefined,
         emptyScanConditionSet: ScanConditionSet | undefined,
         private readonly _getOrWaitForScanEventer: ScanEditor.GetOrWaitForScanEventer,
-        private readonly _errorEventer: ScanEditor.ErrorEventer | undefined,
     ) {
         super(opener);
         const attachedNotificationChannelsListLocker: LockOpenListItem.Locker = {
@@ -383,6 +382,9 @@ export class ScanEditor extends OpenableScanEditor {
     }
 
     setMaxMatchCount(value: Integer) {
+        if (value >= ScanEditor.MaxMaxMatchCount) {
+            value = ScanEditor.MaxMaxMatchCount;
+        }
         if (value !== this._maxMatchCount) {
             this.beginFieldChanges(undefined)
             this._maxMatchCount = value;
@@ -593,11 +595,9 @@ export class ScanEditor extends OpenableScanEditor {
     apply() {
         switch (this._lifeCycleStateId) {
             case ScanEditor.LifeCycleStateId.NotYetCreated:
-                this.createScan();
-                break;
+                return this.createScan();
             case ScanEditor.LifeCycleStateId.ExistsDetailLoaded:
-                this.updateScan();
-                break;
+                return this.updateScan();
             case ScanEditor.LifeCycleStateId.Creating:
             case ScanEditor.LifeCycleStateId.ExistsInitialDetailLoading:
             case ScanEditor.LifeCycleStateId.Updating:
@@ -619,25 +619,13 @@ export class ScanEditor extends OpenableScanEditor {
         this.setUnmodified();
     }
 
-    createScan() {
-        const promise = this.asyncCreateScan();
-        promise.then(
-            (result) => {
-                if (!this._finalised && result.isErr() && this._errorEventer !== undefined) {
-                    this._errorEventer(result.error);
-                }
-            },
-            (reason) => { throw AssertInternalError.createIfNotError(reason, 'SECS55716'); }
-        );
-    }
-
     canCreateScan() {
         // must match conditions at start of asyncCreateScan()
         const targetTypeId = this._targetTypeId;
         if (targetTypeId === undefined) {
             return false;
         } else {
-            if (targetTypeId === ScanTargetTypeId.Markets && this._maxMatchCount === undefined) {
+            if (this._maxMatchCount === undefined) {
                 return false;
             } else {
                 if (this._criteria === undefined) {
@@ -653,12 +641,12 @@ export class ScanEditor extends OpenableScanEditor {
         }
     }
 
-    async asyncCreateScan(): Promise<Result<Scan>> {
+    async createScan(): Promise<Result<Scan>> {
         const targetTypeId = this._targetTypeId;
         if (targetTypeId === undefined) {
             throw new AssertInternalError('SEACSTTI31310', this._name);
         } else {
-            if (targetTypeId === ScanTargetTypeId.Markets && this._maxMatchCount === undefined) {
+            if (this._maxMatchCount === undefined) {
                 throw new AssertInternalError('SEACSMMC31310', this._name);
             } else {
                 if (this._criteria === undefined) {
@@ -668,6 +656,9 @@ export class ScanEditor extends OpenableScanEditor {
                         throw new AssertInternalError('SEACSANCL31310', this._name);
                     } else {
                         const { versionNumber, versionId, versioningInterrupted } = this.updateVersion();
+
+                        // Make sure always less than maximum
+                        const maxMatchCount = this._maxMatchCount <= ScanEditor.MaxMaxMatchCount ? this._maxMatchCount : ScanEditor.MaxMaxMatchCount;
 
                         const criteriaJson = this.createZenithEncodedCriteria(this._criteria);
                         const rank = this._rank;
@@ -684,7 +675,7 @@ export class ScanEditor extends OpenableScanEditor {
                         definition.lastEditSessionId = this._editSessionId;
                         definition.targetTypeId = targetTypeId;
                         definition.targets = this.calculateTargets(targetTypeId);
-                        definition.maxMatchCount = this._maxMatchCount;
+                        definition.maxMatchCount = maxMatchCount;
                         definition.zenithCriteria = criteriaJson;
                         definition.zenithRank = zenithRank;
                         definition.zenithCriteriaSource = this._criteriaSourceId === ScanEditor.SourceId.ZenithText ? this._criteriaAsZenithText : undefined;
@@ -720,18 +711,6 @@ export class ScanEditor extends OpenableScanEditor {
         }
     }
 
-    updateScan() {
-        const promise = this.asyncUpdateScan();
-        promise.then(
-            (result) => {
-                if (!this._finalised && result.isErr() && this._errorEventer !== undefined) {
-                    this._errorEventer(result.error);
-                }
-            },
-            (reason) => { throw AssertInternalError.createIfNotError(reason, 'SEUS55716'); }
-        );
-    }
-
     canUpdateScan() {
         // must match conditions at start of asyncUpdateScan()
         if (this._scan === undefined) {
@@ -741,7 +720,7 @@ export class ScanEditor extends OpenableScanEditor {
             if (targetTypeId === undefined) {
                 return false;
             } else {
-                if (targetTypeId === ScanTargetTypeId.Markets && this._maxMatchCount === undefined) {
+                if (this._maxMatchCount === undefined) {
                     return false;
                 } else {
                     if (this._criteria === undefined) {
@@ -758,7 +737,7 @@ export class ScanEditor extends OpenableScanEditor {
         }
     }
 
-    async asyncUpdateScan(): Promise<Result<void>> {
+    async updateScan(): Promise<Result<void>> {
         if (this._scan === undefined) {
             throw new AssertInternalError('SEAUS31310', this._name);
         } else {
@@ -766,7 +745,7 @@ export class ScanEditor extends OpenableScanEditor {
             if (targetTypeId === undefined) {
                 throw new AssertInternalError('SEAUCTTI31310', this._name);
             } else {
-                if (targetTypeId === ScanTargetTypeId.Markets && this._maxMatchCount === undefined) {
+                if (this._maxMatchCount === undefined) {
                     throw new AssertInternalError('SEAUCMMC31310', this._name);
                 } else {
                     if (this._criteria === undefined) {
@@ -779,6 +758,9 @@ export class ScanEditor extends OpenableScanEditor {
                             const zenithCriteria = this.createZenithEncodedCriteria(this._criteria);
                             const rank = this._rank;
                             const zenithRank = rank === undefined ? undefined : this.createZenithEncodedRank(rank);
+
+                            // Make sure always less than maximum
+                            const maxMatchCount = this._maxMatchCount <= ScanEditor.MaxMaxMatchCount ? this._maxMatchCount : ScanEditor.MaxMaxMatchCount;
 
                             const definition = new UpdateScanDataDefinition();
                             definition.scanId = this._scan.id;
@@ -797,7 +779,7 @@ export class ScanEditor extends OpenableScanEditor {
                             definition.zenithRank = zenithRank;
                             definition.targetTypeId = targetTypeId;
                             definition.targets = this.calculateTargets(targetTypeId);
-                            definition.maxMatchCount = this._maxMatchCount;
+                            definition.maxMatchCount = maxMatchCount;
                             definition.attachedNotificationChannels = this.attachedNotificationChannelsList.toScanAttachedNotificationChannelArray();
 
                             const incubator = new DataItemIncubator<UpdateScanDataItem>(this._adiService);
@@ -829,23 +811,7 @@ export class ScanEditor extends OpenableScanEditor {
         }
     }
 
-    deleteScan() {
-        if (this._lifeCycleStateId === ScanEditor.LifeCycleStateId.NotYetCreated) {
-            this.setLifeCycleState(ScanEditor.LifeCycleStateId.Deleted);
-        } else {
-            const promise = this.asyncDeleteScan();
-            promise.then(
-                (result) => {
-                    if (!this._finalised && result.isErr() && this._errorEventer !== undefined) {
-                        this._errorEventer(result.error);
-                    }
-                },
-                (reason) => { throw AssertInternalError.createIfNotError(reason, 'SED55716'); }
-            );
-        }
-    }
-
-    async asyncDeleteScan() {
+    async deleteScan() {
         if (this._scan === undefined) {
             throw new AssertInternalError('SEADS31310', this._name);
         } else {
@@ -1140,7 +1106,7 @@ export class ScanEditor extends OpenableScanEditor {
         const defaultMarketId = ExchangeInfo.idToDefaultMarketId(defaultExchangeId);
         this.setTargetMarketIds([defaultMarketId]);
         this.setTargetTypeId(ScanTargetTypeId.Markets);
-        this.setMaxMatchCount(10);
+        this.setMaxMatchCount(ScanEditor.DefaultMaxMatchCount);
         this.setCriteria(ScanEditor.DefaultCriteria, undefined);
         this.updateCriteriaSourceValid(true);
         this.setRank(ScanEditor.DefaultRank, undefined);
@@ -1202,7 +1168,7 @@ export class ScanEditor extends OpenableScanEditor {
             }
             const progress = decodedError.progress;
             msg += ` Count: ${progress.tupleNodeCount} Depth: ${progress.tupleNodeDepth}`;
-            Logger.logWarning(msg);
+            logger.logWarning(msg);
             if (defaultIfError) {
                 criteria = ScanEditor.DefaultCriteria;
             }
@@ -1232,7 +1198,7 @@ export class ScanEditor extends OpenableScanEditor {
                 }
                 const progress = decodedError.progress;
                 msg += ` Count: ${progress.tupleNodeCount} Depth: ${progress.tupleNodeDepth}`;
-                Logger.logWarning(msg);
+                logger.logWarning(msg);
                 if (defaultIfError) {
                     rank = ScanEditor.DefaultRank;
                 }
@@ -1444,18 +1410,14 @@ export namespace ScanEditor {
     export const DefaultScanTargetTypeId = ScanTargetTypeId.Markets;
     export const DefaultCriteria: ScanFormula.BooleanNode = { typeId: ScanFormula.NodeTypeId.None };
     export const DefaultRank: ScanFormula.NumericPosNode | undefined = undefined; // { typeId: ScanFormula.NodeTypeId.NumericPos, operand: 0 } ;
+    export const MaxMaxMatchCount = 100;
+    export const DefaultMaxMatchCount = 10;
 
     export type Modifier = Integer;
 
     export type StateChangeEventHandler = (this: void) => void;
     export type FieldChangesEventHandler = (this: void, changedFieldIds: readonly FieldId[], modifier: Modifier | undefined) => void;
     export type GetOrWaitForScanEventer = (this: void, scanId: string) => Promise<Scan>; // returns ScanId
-    export type ErrorEventer = (this: void, errorText: string) => void;
-
-    // export interface Modifier {
-    //     readonly typeName: string;
-    //     readonly typeInstanceId: string;
-    // }
 
     export const enum FieldId {
         Id,

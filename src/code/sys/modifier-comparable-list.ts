@@ -5,10 +5,7 @@
  */
 
 import { BadnessComparableList } from './badness-comparable-list';
-import { MultiEvent } from './multi-event';
-import { Integer } from './types';
-import { UsableListChangeTypeId } from './usable-list-change-type';
-import { CompareFtn } from './utils-search';
+import { CompareFtn, Integer, MultiEvent, UsableListChangeTypeId } from './xilytix-sysutils';
 
 export class ModifierComparableList<out T extends U, Modifier = void, in U = T> extends BadnessComparableList<T, U> {
     private _modifierListChangeMultiEvent = new MultiEvent<ModifierComparableList.ListChangeEventHandler<Modifier>>();
@@ -18,6 +15,8 @@ export class ModifierComparableList<out T extends U, Modifier = void, in U = T> 
     constructor(readonly notChangingModifier: Modifier, compareItemsFtn?: CompareFtn<U>) {
         super(compareItemsFtn);
     }
+
+    protected get modifier() { return this._modifier; }
 
     override clone(): ModifierComparableList<T, Modifier, U> {
         const result = new ModifierComparableList<T, Modifier, U>(this.notChangingModifier, this._compareItemsFtn);
@@ -202,7 +201,7 @@ export class ModifierComparableList<out T extends U, Modifier = void, in U = T> 
         }
     }
 
-    private notifyAfterListChanged() {
+    protected notifyAfterListChanged() {
         const handlers = this._afterListChangedMultiEvent.copyHandlers();
         for (let i = 0; i < handlers.length; i++) {
             handlers[i](this._modifier);

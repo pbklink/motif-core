@@ -4,12 +4,13 @@
  * License: motionite.trade/license/motif
  */
 
-import { DataServer, DatalessViewCell, IndexSignatureHack, Rectangle, StandardCheckboxPainter } from '@xilytix/revgrid';
-import { RenderValue, SettingsService } from '../../../../services/services-internal-api';
-import { AssertInternalError, Integer } from '../../../../sys/sys-internal-api';
-import { GridField } from '../../../field/grid-field-internal-api';
+import { DataServer, DatalessViewCell, Rectangle, StandardCheckboxPainter } from '@xilytix/revgrid';
+import { IndexSignatureHack } from '@xilytix/sysutils';
+import { RenderValue, SettingsService } from '../../../../services/internal-api';
+import { AssertInternalError, Integer } from '../../../../sys/internal-api';
+import { GridField } from '../../../field/internal-api';
 import { AdaptedRevgrid } from '../../adapted-revgrid/adapted-revgrid';
-import { AdaptedRevgridBehavioredColumnSettings } from '../../settings/grid-revgrid-settings-internal-api';
+import { AdaptedRevgridBehavioredColumnSettings } from '../../settings/internal-api';
 import { RenderValueCellPainter } from './render-value-cell-painter';
 
 export class CheckboxRenderValueCellPainter extends RenderValueCellPainter  {

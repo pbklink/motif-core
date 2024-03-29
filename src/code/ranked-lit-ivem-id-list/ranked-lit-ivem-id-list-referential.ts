@@ -4,12 +4,12 @@
  * License: motionite.trade/license/motif
  */
 
-import { AdiService } from '../adi/adi-internal-api';
+import { AdiService } from '../adi/internal-api';
 import { ScansService } from '../scan/internal-api';
-import { AssertInternalError, ErrorCode, Guid, IndexedRecord, Integer, LockOpenListItem, LockOpenManager, MapKey, Ok, Result, UnexpectedCaseError } from "../sys/sys-internal-api";
+import { AssertInternalError, ErrorCode, Guid, IndexedRecord, Integer, LockOpenListItem, LockOpenManager, MapKey, Ok, Result, UnexpectedCaseError } from "../sys/internal-api";
 import { WatchmakerService } from '../watchmaker/watchmaker-service';
 import { BaseRankedLitIvemIdList } from './base-ranked-lit-ivem-id-list';
-import { LitIvemIdArrayRankedLitIvemIdListDefinition, RankedLitIvemIdListDefinition, ScanIdRankedLitIvemIdListDefinition, WatchmakerListIdRankedLitIvemIdListDefinition } from "./definition/ranked-lit-ivem-id-list-definition-internal-api";
+import { LitIvemIdArrayRankedLitIvemIdListDefinition, RankedLitIvemIdListDefinition, ScanIdRankedLitIvemIdListDefinition, WatchmakerListIdRankedLitIvemIdListDefinition } from "./definition/internal-api";
 import { LitIvemIdArrayRankedLitIvemIdList } from './lit-ivem-id-array-ranked-lit-ivem-id-list';
 import { ScanIdRankedLitIvemIdList } from './scan-id-ranked-lit-ivem-id-list';
 import { WatchmakerListIdRankedLitIvemIdList } from './watchmaker-list-id-ranked-lit-ivem-id-list';
@@ -74,7 +74,7 @@ export class RankedLitIvemIdListReferential implements LockOpenListItem<RankedLi
         }
     }
 
-    async tryLock(locker: LockOpenListItem.Locker): Promise<Result<void>> {
+    tryLock(locker: LockOpenListItem.Locker): Promise<Result<void>> {
         return this._lockOpenManager.tryLock(locker);
     }
 

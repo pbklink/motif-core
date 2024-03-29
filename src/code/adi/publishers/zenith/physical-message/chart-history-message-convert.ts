@@ -4,13 +4,13 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, ErrorCode, ZenithDataError } from '../../../../sys/sys-internal-api';
+import { AssertInternalError, ErrorCode, ZenithDataError } from '../../../../sys/internal-api';
 import {
     AdiPublisherRequest,
     AdiPublisherSubscription,
     ChartHistoryDataMessage,
     QueryChartHistoryDataDefinition
-} from "../../../common/adi-common-internal-api";
+} from "../../../common/internal-api";
 import { ZenithProtocol } from './protocol/zenith-protocol';
 import { ZenithConvert } from './zenith-convert';
 
@@ -31,13 +31,13 @@ export namespace ChartHistoryMessageConvert {
         const marketId = litIvemId.litId;
         const dataEnvironmentId = litIvemId.environmentId;
         const period = ZenithConvert.ChartHistory.Period.fromChartIntervalId(definition.intervalId);
-        let fromDate: ZenithProtocol.DateTimeIso8601 | undefined;
+        let fromDate: ZenithProtocol.Iso8601DateTime | undefined;
         if (definition.fromDate === undefined) {
             fromDate = undefined;
         } else {
             fromDate = ZenithConvert.Date.DateTimeIso8601.fromDate(definition.fromDate);
         }
-        let toDate: ZenithProtocol.DateTimeIso8601 | undefined;
+        let toDate: ZenithProtocol.Iso8601DateTime | undefined;
         if (definition.toDate === undefined) {
             toDate = undefined;
         } else {

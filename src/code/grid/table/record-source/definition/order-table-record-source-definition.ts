@@ -4,24 +4,23 @@
  * License: motionite.trade/license/motif
  */
 
-import { Account, BrokerageAccountGroup, Order } from '../../../../adi/adi-internal-api';
-import { PickEnum } from '../../../../sys/sys-internal-api';
-import { GridFieldCustomHeadingsService } from '../../../field/grid-field-internal-api';
-import { GridLayoutDefinition } from '../../../layout/grid-layout-internal-api';
-import { TableFieldSourceDefinition, TableFieldSourceDefinitionCachedFactoryService } from '../../field-source/grid-table-field-source-internal-api';
+import { RevFieldCustomHeadingsService, RevGridLayoutDefinition } from '@xilytix/rev-data-source';
+import { Account, BrokerageAccountGroup, Order } from '../../../../adi/internal-api';
+import { PickEnum } from '../../../../sys/internal-api';
+import { BrokerageAccountTableFieldSourceDefinition, OrderTableFieldSourceDefinition, TableFieldSourceDefinition, TableFieldSourceDefinitionCachingFactoryService } from '../../field-source/internal-api';
 import { BrokerageAccountGroupTableRecordSourceDefinition } from './brokerage-account-group-table-record-source-definition';
 import { TableRecordSourceDefinition } from './table-record-source-definition';
 
 /** @public */
 export class OrderTableRecordSourceDefinition extends BrokerageAccountGroupTableRecordSourceDefinition {
     constructor(
-        customHeadingsService: GridFieldCustomHeadingsService,
-        tableFieldSourceDefinitionCachedFactoryService: TableFieldSourceDefinitionCachedFactoryService,
+        customHeadingsService: RevFieldCustomHeadingsService,
+        tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService,
         brokerageAccountGroup: BrokerageAccountGroup
     ) {
         super(
             customHeadingsService,
-            tableFieldSourceDefinitionCachedFactoryService,
+            tableFieldSourceDefinitionCachingFactoryService,
             TableRecordSourceDefinition.TypeId.Order,
             OrderTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
             brokerageAccountGroup,
@@ -29,8 +28,8 @@ export class OrderTableRecordSourceDefinition extends BrokerageAccountGroupTable
     }
 
     override createDefaultLayoutDefinition() {
-        const ordersDataItemFieldSourceDefinition = this.tableFieldSourceDefinitionCachedFactoryService.ordersDataItem;
-        const brokerageAccountsFieldSourceDefinition = this.tableFieldSourceDefinitionCachedFactoryService.brokerageAccounts;
+        const ordersDataItemFieldSourceDefinition = OrderTableFieldSourceDefinition.get(this.tableFieldSourceDefinitionCachingFactoryService);
+        const brokerageAccountsFieldSourceDefinition = BrokerageAccountTableFieldSourceDefinition.get(this.tableFieldSourceDefinitionCachingFactoryService);
 
         const fieldNames = new Array<string>();
 
@@ -51,24 +50,24 @@ export class OrderTableRecordSourceDefinition extends BrokerageAccountGroupTable
         fieldNames.push(brokerageAccountsFieldSourceDefinition.getSupportedFieldNameById(Account.FieldId.BranchCode));
         fieldNames.push(brokerageAccountsFieldSourceDefinition.getSupportedFieldNameById(Account.FieldId.AdvisorCode));
 
-        return GridLayoutDefinition.createFromFieldNames(fieldNames);
+        return RevGridLayoutDefinition.createFromFieldNames(fieldNames);
     }
 }
 
 /** @public */
 export namespace OrderTableRecordSourceDefinition {
     export type FieldSourceDefinitionTypeId = PickEnum<TableFieldSourceDefinition.TypeId,
-        TableFieldSourceDefinition.TypeId.OrdersDataItem |
-        TableFieldSourceDefinition.TypeId.BrokerageAccounts
+        TableFieldSourceDefinition.TypeId.Order |
+        TableFieldSourceDefinition.TypeId.BrokerageAccount
     >;
 
     export const allowedFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[] = [
-        TableFieldSourceDefinition.TypeId.OrdersDataItem,
-        TableFieldSourceDefinition.TypeId.BrokerageAccounts,
+        TableFieldSourceDefinition.TypeId.Order,
+        TableFieldSourceDefinition.TypeId.BrokerageAccount,
     ];
 
     export const defaultFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[] = [
-        TableFieldSourceDefinition.TypeId.OrdersDataItem,
-        TableFieldSourceDefinition.TypeId.BrokerageAccounts,
+        TableFieldSourceDefinition.TypeId.Order,
+        TableFieldSourceDefinition.TypeId.BrokerageAccount,
     ];
 }

@@ -6,7 +6,7 @@
 
 import {
     AssertInternalError, ErrorCode, UnexpectedCaseError, UnreachableCaseError, ZenithDataError
-} from '../../../../sys/sys-internal-api';
+} from '../../../../sys/internal-api';
 import {
     AdiPublisherRequest,
     AdiPublisherSubscription,
@@ -17,7 +17,7 @@ import {
     LitIvemIdMatchesDataMessage,
     MatchesDataDefinition,
     QueryMatchesDataDefinition
-} from "../../../common/adi-common-internal-api";
+} from "../../../common/internal-api";
 import { ZenithProtocol } from './protocol/zenith-protocol';
 import { ZenithConvert } from './zenith-convert';
 import { ZenithNotifyConvert } from './zenith-notify-convert';
@@ -77,7 +77,7 @@ export namespace MatchesMessageConvert {
                 Rank: definition.zenithRank,
                 Type: ZenithNotifyConvert.ScanType.fromId(definition.targetTypeId),
                 Target: ZenithNotifyConvert.Target.fromId(definition.targetTypeId, definition.targets),
-                MaxMatchCount: definition.maxMatchCount,
+                Count: definition.maxMatchCount,
             }
         };
 

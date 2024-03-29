@@ -4,8 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
-import { Integer } from '../../../sys/sys-internal-api';
-import { TableValue } from '../value/grid-table-value-internal-api';
+import { Integer } from '../../../sys/internal-api';
+import { TableValue } from '../value/internal-api';
 import { TableValueSource } from './table-value-source';
 
 export class UndefinedTableValueSource extends TableValueSource {

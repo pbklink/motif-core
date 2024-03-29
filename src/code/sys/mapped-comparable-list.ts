@@ -4,11 +4,9 @@
  * License: motionite.trade/license/motif
  */
 
-import { ChangeSubscribableComparableList } from './change-subscribable-comparable-list';
 import { ErrorCode } from './error-code';
 import { DuplicateError } from './external-error';
-import { AssertInternalError, UnreachableCaseError } from './internal-error';
-import { Integer, MapKey, Mappable } from './types';
+import { AssertInternalError, ChangeSubscribableComparableList, Integer, MapKey, Mappable, UnreachableCaseError } from './xilytix-sysutils';
 
 /** @public */
 export class MappedComparableList<out T extends (Mappable & U), in U = T> extends ChangeSubscribableComparableList<T, U> {
@@ -51,29 +49,37 @@ export class MappedComparableList<out T extends (Mappable & U), in U = T> extend
 
     override addRange(values: readonly T[]) {
         const onDuplicate = this.onDuplicate;
-        if (onDuplicate === MappedComparableList.OnDuplicate.Never) {
-            for (const value of values) {
-                this._map.set(value.mapKey, value);
-            }
-            super.addRange(values);
-        } else {
+        if (onDuplicate === MappedComparableList.OnDuplicate.Ignore) {
             const uncontainedValues = this.createArrayOfUncontainedValues(values, onDuplicate);
             super.addRange(uncontainedValues);
+        } else {
+            for (const value of values) {
+                if (onDuplicate === MappedComparableList.OnDuplicate.Error && this.contains(value)) {
+                    throw this.createDuplicateError(value);
+                } else {
+                    this._map.set(value.mapKey, value);
+                }
+            }
+            super.addRange(values);
         }
     }
 
-    override addSubRange(values: readonly T[], rangeStartIndex: Integer, rangeCount: Integer) {
+    override addSubRange(values: readonly T[], subRangeStartIndex: Integer, subRangeLength: Integer) {
         const onDuplicate = this.onDuplicate;
-        if (onDuplicate === MappedComparableList.OnDuplicate.Never) {
-            const nextSubRangeIdx = rangeStartIndex + rangeCount;
-            for (let i = rangeStartIndex; i < nextSubRangeIdx; i++) {
-                const value = values[i];
-                this._map.set(value.mapKey, value);
-            }
-            super.addSubRange(values, rangeStartIndex, rangeCount);
+        const nextSubRangeIdx = subRangeStartIndex + subRangeLength;
+        if (onDuplicate === MappedComparableList.OnDuplicate.Ignore) {
+            const uncontainedValues = this.createArrayOfUncontainedValues(values.slice(subRangeStartIndex, nextSubRangeIdx), onDuplicate);
+            super.addRange(uncontainedValues);
         } else {
-            const uncontainedValues = this.createArrayOfUncontainedValues(values, onDuplicate);
-            super.addSubRange(uncontainedValues, rangeStartIndex, rangeCount);
+            for (let i = subRangeStartIndex; i < nextSubRangeIdx; i++) {
+                const value = values[i];
+                if (onDuplicate === MappedComparableList.OnDuplicate.Error && this.contains(value)) {
+                    throw this.createDuplicateError(value);
+                } else {
+                    this._map.set(value.mapKey, value);
+                }
+            }
+            super.addSubRange(values, subRangeStartIndex, subRangeLength);
         }
     }
 
@@ -86,29 +92,37 @@ export class MappedComparableList<out T extends (Mappable & U), in U = T> extend
 
     override insertRange(index: Integer, values: readonly T[]) {
         const onDuplicate = this.onDuplicate;
-        if (onDuplicate === MappedComparableList.OnDuplicate.Never) {
-            for (const value of values) {
-                this._map.set(value.mapKey, value);
-            }
-            super.insertRange(index, values);
-        } else {
+        if (onDuplicate === MappedComparableList.OnDuplicate.Ignore) {
             const uncontainedValues = this.createArrayOfUncontainedValues(values, onDuplicate);
             super.insertRange(index, uncontainedValues);
+        } else {
+            for (const value of values) {
+                if (onDuplicate === MappedComparableList.OnDuplicate.Error && this.contains(value)) {
+                    throw this.createDuplicateError(value);
+                } else {
+                    this._map.set(value.mapKey, value);
+                }
+            }
+            super.insertRange(index, values);
         }
     }
 
-    override insertSubRange(index: Integer, values: readonly T[], subRangeStartIndex: Integer, subRangeCount: Integer) {
+    override insertSubRange(index: Integer, values: readonly T[], subRangeStartIndex: Integer, subRangeLength: Integer) {
         const onDuplicate = this.onDuplicate;
-        if (onDuplicate === MappedComparableList.OnDuplicate.Never) {
-            const nextSubRangeIdx = subRangeStartIndex + subRangeCount;
+        const nextSubRangeIdx = subRangeStartIndex + subRangeLength;
+        if (onDuplicate === MappedComparableList.OnDuplicate.Ignore) {
+            const uncontainedValues = this.createArrayOfUncontainedValues(values.slice(subRangeStartIndex, nextSubRangeIdx), onDuplicate);
+            super.insertRange(index, uncontainedValues);
+        } else {
             for (let i = subRangeStartIndex; i < nextSubRangeIdx; i++) {
                 const value = values[i];
-                this._map.set(value.mapKey, value);
+                if (onDuplicate === MappedComparableList.OnDuplicate.Error && this.contains(value)) {
+                    throw this.createDuplicateError(value);
+                } else {
+                    this._map.set(value.mapKey, value);
+                }
             }
-            super.insertSubRange(index, values, subRangeStartIndex, subRangeCount);
-        } else {
-            const uncontainedValues = this.createArrayOfUncontainedValues(values, onDuplicate);
-            super.insertSubRange(index, uncontainedValues, subRangeStartIndex, subRangeCount);
+            super.insertSubRange(index, values, subRangeStartIndex, subRangeLength);
         }
     }
 

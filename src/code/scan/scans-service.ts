@@ -4,9 +4,9 @@
  * License: motionite.trade/license/motif
  */
 
-import { AdiService } from '../adi/adi-internal-api';
+import { AdiService } from '../adi/internal-api';
 import { NotificationChannelsService } from '../notification-channel/internal-api';
-import { SymbolsService } from '../services/services-internal-api';
+import { SymbolsService } from '../services/internal-api';
 import {
     ErrorCode,
     Integer,
@@ -15,7 +15,7 @@ import {
     Ok,
     Result,
     UsableListChangeTypeId
-} from "../sys/sys-internal-api";
+} from "../sys/internal-api";
 import { ScanConditionSet } from './condition-set/internal-api';
 import { ScanFieldSet } from './field-set/internal-api';
 import { Scan } from './scan';
@@ -57,7 +57,6 @@ export class ScansService {
         opener: LockOpenListItem.Opener,
         emptyScanFieldSet?: ScanFieldSet,
         emptyScanConditionSet?: ScanConditionSet,
-        errorEventer?: ScanEditor.ErrorEventer,
     ): ScanEditor {
         return new ScanEditor(
             this._adiService,
@@ -68,7 +67,6 @@ export class ScansService {
             emptyScanFieldSet,
             emptyScanConditionSet,
             (createdScanId) => this.getOrWaitForScan(createdScanId),
-            errorEventer,
         );
     }
 
@@ -77,7 +75,6 @@ export class ScansService {
         opener: LockOpenListItem.Opener,
         newScanFieldSetCallback?: (this: void) => ScanFieldSet | undefined,
         newScanConditionSetCallback?: (this: void) => ScanConditionSet | undefined,
-        errorEventer?: ScanEditor.ErrorEventer,
     ): Promise<Result<ScanEditor | undefined>> {
         if (scanId === undefined) {
             const emptyScanFieldSet = newScanFieldSetCallback === undefined ? undefined : newScanFieldSetCallback();
@@ -106,11 +103,11 @@ export class ScansService {
                             emptyScanFieldSet,
                             emptyScanConditionSet,
                             (createdScanId) => this.getOrWaitForScan(createdScanId),
-                            errorEventer,
                         );
                         this._openedScanEditors.set(scan, openedEditor);
+                    } else {
+                        openedEditor.addOpener(opener);
                     }
-                    openedEditor.addOpener(opener);
                     return new Ok(openedEditor as ScanEditor);
                 }
             }
@@ -228,7 +225,7 @@ export class ScansService {
 /** @public */
 export namespace ScansService {
     export type CorrectnessChangedEventHandler = (this: void) => void;
-    export type BadnessChangeEventHandler = (this: void) => void;
+    export type badnessChangedEventHandler = (this: void) => void;
 
     export type ScansOnlineResolve = (this: void, ready: boolean) => void;
     export type CreatedScanWaitingResolve = (this: void, scan: Scan) => void;

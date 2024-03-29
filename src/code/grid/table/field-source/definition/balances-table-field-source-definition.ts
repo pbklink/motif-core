@@ -4,35 +4,37 @@
  * License: motionite.trade/license/motif
  */
 
-import { Balances } from '../../../../adi/adi-internal-api';
+import { Balances } from '../../../../adi/internal-api';
 import {
     AssertInternalError,
-    CommaText,
     FieldDataType,
     FieldDataTypeId,
     Integer,
     UnreachableCaseError
-} from "../../../../sys/sys-internal-api";
+} from "../../../../sys/internal-api";
 import {
     CorrectnessTableField,
     DecimalCorrectnessTableField,
     EnumCorrectnessTableField,
     StringCorrectnessTableField,
     TableField
-} from '../../field/grid-table-field-internal-api';
+} from '../../field/internal-api';
 import {
     CorrectnessTableValue,
     CurrencyIdCorrectnessTableValue,
     DecimalCorrectnessTableValue,
     StringCorrectnessTableValue
-} from '../../value/grid-table-value-internal-api';
+} from '../../value/internal-api';
 import { TableFieldSourceDefinition } from './table-field-source-definition';
+import { TableFieldSourceDefinitionCachingFactoryService } from './table-field-source-definition-caching-factory-service';
 
 export class BalancesTableFieldSourceDefinition extends TableFieldSourceDefinition {
+    declare readonly typeId: BalancesTableFieldSourceDefinition.TypeId;
+
     override readonly fieldDefinitions: TableField.Definition[];
 
     constructor() {
-        super(TableFieldSourceDefinition.TypeId.BalancesDataItem);
+        super(BalancesTableFieldSourceDefinition.typeId);
 
         this.fieldDefinitions = this.createFieldDefinitions();
     }
@@ -43,7 +45,7 @@ export class BalancesTableFieldSourceDefinition extends TableFieldSourceDefiniti
 
     getFieldNameById(id: Balances.FieldId) {
         const sourcelessFieldName = BalancesTableFieldSourceDefinition.Field.getNameById(id);
-        return CommaText.from2Values(this.name, sourcelessFieldName);
+        return this.encodeFieldName(sourcelessFieldName);
     }
 
     getSupportedFieldNameById(id: Balances.FieldId) {
@@ -79,6 +81,9 @@ export class BalancesTableFieldSourceDefinition extends TableFieldSourceDefiniti
 }
 
 export namespace BalancesTableFieldSourceDefinition {
+    export const typeId = TableFieldSourceDefinition.TypeId.Balances;
+    export type TypeId = typeof typeId;
+
     export namespace Field {
         const unsupportedIds: Balances.FieldId[] = [];
         export const count = Balances.Field.idCount - unsupportedIds.length;
@@ -170,8 +175,12 @@ export namespace BalancesTableFieldSourceDefinition {
     }
 
     export interface FieldId extends TableFieldSourceDefinition.FieldId {
-        sourceTypeId: TableFieldSourceDefinition.TypeId.BalancesDataItem;
+        sourceTypeId: BalancesTableFieldSourceDefinition.TypeId;
         id: Balances.FieldId;
+    }
+
+    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactoryService): BalancesTableFieldSourceDefinition {
+        return cachingFactoryService.get(typeId) as BalancesTableFieldSourceDefinition;
     }
 
     export function initialiseStatic() {

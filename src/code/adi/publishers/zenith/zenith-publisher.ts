@@ -8,13 +8,15 @@ import {
     AssertInternalError,
     Integer,
     Logger,
+    logger,
     mSecsPerHour,
     mSecsPerMin,
     mSecsPerSec,
     SysTick,
     UnreachableCaseError,
     WebsocketCloseCode
-} from '../../../sys/sys-internal-api';
+} from '../../../sys/internal-api';
+import { AdiPublisher } from '../../common/adi-publisher';
 import {
     AdiPublisherSubscription,
     AdiPublisherTypeId,
@@ -36,8 +38,7 @@ import {
     ZenithPublisherStateId,
     ZenithReconnectDataMessage,
     ZenithSessionTerminatedDataMessage
-} from "../../common/adi-common-internal-api";
-import { AdiPublisher } from '../../common/adi-publisher';
+} from "../../common/internal-api";
 import { AuthTokenMessageConvert } from './physical-message/auth-token-message-convert';
 import { ZenithProtocol, ZenithWebSocketCloseCode } from './physical-message/protocol/zenith-protocol';
 import { ZenithConnectionStateEngine } from './zenith-connection-state-engine';
@@ -339,7 +340,7 @@ export class ZenithPublisher extends AdiPublisher {
         this._dataMessages.add(dataMessage);
         if (loggerAsWell) {
             const loggerText = `Zenith Publisher: ${text}`;
-            Logger.log(levelId, loggerText);
+            logger.log(levelId, loggerText);
         }
     }
 

@@ -4,22 +4,23 @@
  * License: motionite.trade/license/motif
  */
 
-import { Decimal } from 'decimal.js-light';
 import {
     AssertInternalError,
     CommaText,
     concatenateArrayUniquely,
+    Decimal,
     defined,
     EnumInfoOutOfOrderError,
     ErrorCode,
+    ErrorCodeLogger,
     ErrorCodeWithExtra,
     ErrorCodeWithExtraErr,
     Integer,
-    Logger,
     mSecsPerDay,
     mSecsPerHour,
     mSecsPerMin,
     mSecsPerSec,
+    newDecimal,
     newUndefinableDecimal,
     NotImplementedError,
     Ok,
@@ -30,8 +31,8 @@ import {
     SourceTzOffsetDateTime,
     UnexpectedCaseError,
     UnreachableCaseError,
-    ZenithDataError,
-} from '../../../../sys/sys-internal-api';
+    ZenithDataError
+} from '../../../../sys/internal-api';
 import {
     ActiveFaultedStatusId,
     OrderRequestError as AdiOrderRequestError,
@@ -107,7 +108,7 @@ import {
     TrailingStopLossOrderConditionTypeId,
     TransactionsDataMessage,
     ZenithProtocolCommon
-} from '../../../common/adi-common-internal-api';
+} from '../../../common/internal-api';
 import { ZenithProtocol } from './protocol/zenith-protocol';
 
 export namespace ZenithConvert {
@@ -129,19 +130,18 @@ export namespace ZenithConvert {
     }
 
     export namespace Date {
-        export namespace DateYYYYMMDD {
-            export function toSourceTzOffsetDate(value: ZenithProtocol.DateYYYYMMDD): SourceTzOffsetDate | undefined {
+        export namespace DashedYyyyMmDdDate {
+            export function toSourceTzOffsetDate(value: ZenithProtocol.DashedYyyyMmDdDate): SourceTzOffsetDate | undefined {
                 return SourceTzOffsetDate.createFromIso8601(value);
-                // return new globalThis.Date(globalThis.Date.parse(value)); // switch to SourceTzOffsetDateTime
             }
 
-            export function fromSourceTzOffsetDate(value: SourceTzOffsetDate): ZenithProtocol.DateYYYYMMDD {
-                return SourceTzOffsetDate.toUtcYYYYMMDDString(value);
+            export function fromSourceTzOffsetDate(value: SourceTzOffsetDate): ZenithProtocol.DashedYyyyMmDdDate {
+                return SourceTzOffsetDate.toUtcDashedYyyyMmDdString(value);
             }
         }
 
         export namespace DateTimeIso8601 {
-            export function toSourceTzOffsetDateTime(value: ZenithProtocol.DateTimeIso8601): SourceTzOffsetDateTime | undefined {
+            export function toSourceTzOffsetDateTime(value: ZenithProtocol.Iso8601DateTime): SourceTzOffsetDateTime | undefined {
                 return SourceTzOffsetDateTime.createFromIso8601(value);
             }
 
@@ -151,13 +151,30 @@ export namespace ZenithConvert {
         }
 
         export namespace DateOptionalTimeIso8601 {
-            export function toDate(value: ZenithProtocol.DateOptionalTimeIso8601) {
+            export function toDate(value: ZenithProtocol.OptionalTimeIso8601Date) {
                 return new globalThis.Date(globalThis.Date.parse(value));
             }
             export function fromDate(value: globalThis.Date) {
                 throw new NotImplementedError('ZCDDOTI8FD121200932');
             }
         }
+
+        // export namespace DateYYYYMMDD {
+        //     export function toSourceTzOffsetDate(value: ZenithProtocol.DateYYYYdashMMdashDD): SourceTzOffsetDate | undefined {
+        //         const { nextIdx, year, month, day } = Iso8601.parseYyyymmddDateIntoParts(value);
+        //         if (nextIdx === -1) {
+        //             return undefined;
+        //         } else {
+        //             const dateMilliseconds = globalThis.Date.UTC(year, month - 1, day);
+        //             const utcMidnight = new globalThis.Date(dateMilliseconds);
+        //             return SourceTzOffsetDate.createFromUtcDate(utcMidnight);
+        //         }
+        //     }
+
+        //     export function fromSourceTzOffsetDate(value: SourceTzOffsetDate): ZenithProtocol.DateYYYYdashMMdashDD {
+        //         return SourceTzOffsetDate.toUtcYYYYMMDDString(value);
+        //     }
+        // }
     }
 
     export namespace Time {
@@ -1136,7 +1153,7 @@ export namespace ZenithConvert {
                                 case ZenithProtocol.Market2Node.AsxTradeMatchED: return MarketBoardId.AsxTradeMatchED;
                                 default:
                                     if (tryHarder) {
-                                        Logger.logDataError('ZCEMCMBIAT223', `${m2}: Using Tradematch`);
+                                        ErrorCodeLogger.logDataError('ZCEMCMBIAT223', `${m2}: Using Tradematch`);
                                         return MarketBoardId.AsxTradeMatch;
                                     } else {
                                         return undefined;
@@ -1153,7 +1170,7 @@ export namespace ZenithConvert {
                                 case ZenithProtocol.Market2Node.AsxPureMatchEquity5: return MarketBoardId.AsxPureMatchEquity5;
                                 default:
                                     if (tryHarder) {
-                                        Logger.logDataError('ZCEMCMBIAP847', `${m2}: Using Purematch`);
+                                        ErrorCodeLogger.logDataError('ZCEMCMBIAP847', `${m2}: Using Purematch`);
                                         return MarketBoardId.AsxPureMatch;
                                     } else {
                                         return undefined;
@@ -1201,7 +1218,7 @@ export namespace ZenithConvert {
                             switch (m2) {
                                 case undefined:
                                     if (tryHarder) {
-                                        Logger.logDataError('ZCEMCMBNNU33885', 'Using NSX Main');
+                                        ErrorCodeLogger.logDataError('ZCEMCMBNNU33885', 'Using NSX Main');
                                         return MarketBoardId.NsxMain;
                                     } else {
                                         return undefined;
@@ -1215,7 +1232,7 @@ export namespace ZenithConvert {
                                 case ZenithProtocol.Market2Node.NsxRestricted: return MarketBoardId.NsxRestricted;
                                 default:
                                     if (tryHarder) {
-                                        Logger.logDataError('ZCEMCMBNND77541', `${m2}: Using NSX Main`);
+                                        ErrorCodeLogger.logDataError('ZCEMCMBNND77541', `${m2}: Using NSX Main`);
                                         return MarketBoardId.NsxMain;
                                     } else {
                                         return undefined;
@@ -1225,7 +1242,7 @@ export namespace ZenithConvert {
                             switch (m2) {
                                 case undefined:
                                     if (tryHarder) {
-                                        Logger.logDataError('ZCEMCMBNSPU33997', 'Using NSX Main');
+                                        ErrorCodeLogger.logDataError('ZCEMCMBNSPU33997', 'Using NSX Main');
                                         return MarketBoardId.NsxMain;
                                     } else {
                                         return undefined;
@@ -1234,7 +1251,7 @@ export namespace ZenithConvert {
                                 case ZenithProtocol.Market2Node.SouthPacificStockExchangeRestricted: return MarketBoardId.SouthPacificStockExchangeRestricted;
                                 default:
                                     if (tryHarder) {
-                                        Logger.logDataError('ZCEMCMBNSPD23232', `${m2}: Using NSX Main`);
+                                        ErrorCodeLogger.logDataError('ZCEMCMBNSPD23232', `${m2}: Using NSX Main`);
                                         return MarketBoardId.NsxMain;
                                     } else {
                                         return undefined;
@@ -1243,7 +1260,7 @@ export namespace ZenithConvert {
 
                         default:
                             if (tryHarder) {
-                                Logger.logDataError('ZCEMCMBND55558', `${m1 ?? '<undefined>'}: Using NSX Main`);
+                                ErrorCodeLogger.logDataError('ZCEMCMBND55558', `${m1 ?? '<undefined>'}: Using NSX Main`);
                                 return MarketBoardId.NsxMain;
                             } else {
                                 return undefined;
@@ -1255,7 +1272,7 @@ export namespace ZenithConvert {
                             switch (m2) {
                                 case undefined:
                                     if (tryHarder) {
-                                        Logger.logDataError('ZCEMBCMBINZMU66685', 'Using NZX Main');
+                                        ErrorCodeLogger.logDataError('ZCEMBCMBINZMU66685', 'Using NZX Main');
                                         return MarketBoardId.NzxMainBoard;
                                     } else {
                                         return undefined;
@@ -1276,7 +1293,7 @@ export namespace ZenithConvert {
                                 case ZenithProtocol.Market2Node.NzxMStgy: return MarketBoardId.NzxMStgy;
                                 default:
                                     if (tryHarder) {
-                                        Logger.logDataError('ZCEMBCMBINZMD23239', `${m2}: Using NZX Main`);
+                                        ErrorCodeLogger.logDataError('ZCEMBCMBINZMD23239', `${m2}: Using NZX Main`);
                                         return MarketBoardId.NzxMainBoard;
                                     } else {
                                         return undefined;
@@ -1284,7 +1301,7 @@ export namespace ZenithConvert {
                             }
                         default:
                             if (tryHarder) {
-                                Logger.logDataError('ZCEMBCMBINZD77559', `${m1 ?? '<undefined>'}: Using NZX Main`);
+                                ErrorCodeLogger.logDataError('ZCEMBCMBINZD77559', `${m1 ?? '<undefined>'}: Using NZX Main`);
                                 return MarketBoardId.NzxMainBoard;
                             } else {
                                 return undefined;
@@ -1299,7 +1316,7 @@ export namespace ZenithConvert {
                                 case ZenithProtocol.Market2Node.MyxDirectBusinessTransactionMarket: return MarketBoardId.MyxDirectBusinessTransactionMarket;
                                 default:
                                     if (tryHarder) {
-                                        Logger.logDataError('ZCEMCMBIMYXN239987', `Unknown "${m2 ?? '<undefined>'}": Using MYX Normal`);
+                                        ErrorCodeLogger.logDataError('ZCEMCMBIMYXN239987', `Unknown "${m2 ?? '<undefined>'}": Using MYX Normal`);
                                         return MarketBoardId.MyxNormalMarket;
                                     } else {
                                         return undefined;
@@ -1308,20 +1325,20 @@ export namespace ZenithConvert {
                         case ZenithProtocol.Market1Node.MyxBuyIn:
                             if (m2 !== undefined) {
                                 if (tryHarder) {
-                                    Logger.logDataError('ZCEMCMBIMYXBI39286', `Unexpected "${m2}": Using MYX BuyIn`);
+                                    ErrorCodeLogger.logDataError('ZCEMCMBIMYXBI39286', `Unexpected "${m2}": Using MYX BuyIn`);
                                 }
                             }
                             return MarketBoardId.MyxBuyInMarket;
                         case ZenithProtocol.Market1Node.MyxOddLot:
                             if (m2 !== undefined) {
                                 if (tryHarder) {
-                                    Logger.logDataError('ZCEMCMBIMYXOL88453', `Unexpected "${m2}": Using MYX OddLot`);
+                                    ErrorCodeLogger.logDataError('ZCEMCMBIMYXOL88453', `Unexpected "${m2}": Using MYX OddLot`);
                                 }
                             }
                             return MarketBoardId.MyxOddLotMarket;
                         default:
                             if (tryHarder) {
-                                Logger.logDataError('ZCEMCMBIMYXD12995', `Unsupported ${m1 ?? '<undefined>'}: Using MYX Normal`);
+                                ErrorCodeLogger.logDataError('ZCEMCMBIMYXD12995', `Unsupported ${m1 ?? '<undefined>'}: Using MYX Normal`);
                             }
                             return MarketBoardId.MyxNormalMarket;
                     }
@@ -1926,7 +1943,7 @@ export namespace ZenithConvert {
                         }
                         default: {
                             const neverValueIgnored: never = classId;
-                            Logger.logDataError('ZCFTAU98721', `${neverValueIgnored as Integer}`);
+                            ErrorCodeLogger.logDataError('ZCFTAU98721', `${neverValueIgnored as Integer}`);
                             return undefined;
                         }
                     }
@@ -1948,7 +1965,7 @@ export namespace ZenithConvert {
                     case ZenithProtocol.ZenithController.Feeds.FeedClass.Channel: return FeedClassId.Channel;
                     default: {
                         const neverValueIgnored: never = value;
-                        Logger.logDataError('ZCFFCU0092288573', `${neverValueIgnored as Integer}`);
+                        ErrorCodeLogger.logDataError('ZCFFCU0092288573', `${neverValueIgnored as Integer}`);
                         return undefined;
                     }
                 }
@@ -2137,7 +2154,7 @@ export namespace ZenithConvert {
 
             let tradingDate: SourceTzOffsetDate | undefined;
             if (zenithState.TradingDate !== undefined) {
-                tradingDate = ZenithConvert.Date.DateYYYYMMDD.toSourceTzOffsetDate(zenithState.TradingDate);
+                tradingDate = ZenithConvert.Date.DashedYyyyMmDdDate.toSourceTzOffsetDate(zenithState.TradingDate);
             }
 
             let marketTime: SourceTzOffsetDateTime | undefined;
@@ -2287,9 +2304,9 @@ export namespace ZenithConvert {
     export namespace OrderFees {
         export function toDecimal(value: ZenithProtocol.TradingController.OrderFees): AsDecimal {
             const valueBrokerage = value.Brokerage;
-            const brokerage = valueBrokerage === undefined ? undefined : new Decimal(valueBrokerage);
+            const brokerage = valueBrokerage === undefined ? undefined : newDecimal(valueBrokerage);
             const valueTax = value.Tax;
-            const tax = valueTax === undefined ? undefined : new Decimal(valueTax);
+            const tax = valueTax === undefined ? undefined : newDecimal(valueTax);
             return {
                 brokerage,
                 tax,
@@ -3308,7 +3325,7 @@ export namespace ZenithConvert {
                         code: zenithHolding.Code,
                         accountId: environmentedAccountId.accountId,
                         styleId: IvemClassId.Market,
-                        cost: new Decimal(zenithHolding.Cost),
+                        cost: newDecimal(zenithHolding.Cost),
                         currencyId: Currency.tryToId(zenithHolding.Currency),
                         marketDetail,
                     };
@@ -3323,7 +3340,7 @@ export namespace ZenithConvert {
                         code: zenithHolding.Code,
                         accountId: managedFundEnvironmentedAccountId.accountId,
                         styleId: IvemClassId.ManagedFund,
-                        cost: new Decimal(zenithHolding.Cost),
+                        cost: newDecimal(zenithHolding.Cost),
                         currencyId: Currency.tryToId(zenithHolding.Currency),
                     };
                     return managedFund;
@@ -3337,7 +3354,7 @@ export namespace ZenithConvert {
             const marketDetail: HoldingsDataMessage.MarketChangeData.Detail = {
                 totalQuantity: zenithMarketHolding.TotalQuantity,
                 totalAvailableQuantity: zenithMarketHolding.TotalAvailable,
-                averagePrice: new Decimal(zenithMarketHolding.AveragePrice),
+                averagePrice: newDecimal(zenithMarketHolding.AveragePrice),
             };
             return marketDetail;
         }
@@ -3364,7 +3381,7 @@ export namespace ZenithConvert {
                         environmentId: environmentedAccountId.environmentId,
                         balanceType: balance.Type,
                         currencyId,
-                        amount: new Decimal(balance.Amount)
+                        amount: newDecimal(balance.Amount)
                     } as const;
                     return change;
                 }
@@ -3469,13 +3486,13 @@ export namespace ZenithConvert {
                         orderStyleId: IvemClassId.Market,
                         tradeDate,
                         settlementDate,
-                        grossAmount: new Decimal(detail.GrossAmount),
-                        netAmount: new Decimal(detail.NetAmount),
-                        settlementAmount: new Decimal(detail.SettlementAmount),
+                        grossAmount: newDecimal(detail.GrossAmount),
+                        netAmount: newDecimal(detail.NetAmount),
+                        settlementAmount: newDecimal(detail.SettlementAmount),
                         currencyId,
                         orderId: detail.OrderID,
                         totalQuantity: detail.TotalQuantity,
-                        averagePrice: new Decimal(detail.AveragePrice),
+                        averagePrice: newDecimal(detail.AveragePrice),
                     };
 
                     return result;
@@ -3508,13 +3525,13 @@ export namespace ZenithConvert {
                         orderStyleId: IvemClassId.ManagedFund,
                         tradeDate,
                         settlementDate,
-                        grossAmount: new Decimal(detail.GrossAmount),
-                        netAmount: new Decimal(detail.NetAmount),
-                        settlementAmount: new Decimal(detail.SettlementAmount),
+                        grossAmount: newDecimal(detail.GrossAmount),
+                        netAmount: newDecimal(detail.NetAmount),
+                        settlementAmount: newDecimal(detail.SettlementAmount),
                         currencyId,
                         orderId: detail.OrderID,
-                        totalUnits: new Decimal(detail.TotalUnits),
-                        unitValue: new Decimal(detail.UnitValue),
+                        totalUnits: newDecimal(detail.TotalUnits),
+                        unitValue: newDecimal(detail.UnitValue),
                     };
 
                     return result;
@@ -3725,16 +3742,16 @@ export namespace ZenithConvert {
             switch (value.Type) {
                 case ZenithProtocol.TradingController.PlaceOrder.TrailingStopLossCondition.Type.Price: {
                     const trigger = new TrailingPriceOrderTrigger();
-                    trigger.value = new Decimal(value.Value);
-                    trigger.limit = new Decimal(value.Limit);
+                    trigger.value = newDecimal(value.Value);
+                    trigger.limit = newDecimal(value.Limit);
                     trigger.stop = newUndefinableDecimal(value.Stop);
                     return trigger;
                 }
 
                 case ZenithProtocol.TradingController.PlaceOrder.TrailingStopLossCondition.Type.Percent: {
                     const percentTrigger = new PercentageTrailingPriceOrderTrigger();
-                    percentTrigger.value = new Decimal(value.Value);
-                    percentTrigger.limit = new Decimal(value.Limit);
+                    percentTrigger.value = newDecimal(value.Value);
+                    percentTrigger.limit = newDecimal(value.Limit);
                     percentTrigger.stop = newUndefinableDecimal(value.Stop);
                     return percentTrigger;
                 }

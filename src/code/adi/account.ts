@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { StringId, Strings } from '../res/res-internal-api';
+import { StringId, Strings } from '../res/internal-api';
 import {
     Correctness,
     CorrectnessId,
@@ -14,6 +14,7 @@ import {
     FieldDataTypeId,
     Integer,
     JsonElement,
+    JsonElementErr,
     KeyedCorrectnessListItem,
     KeyedRecord,
     MapKey,
@@ -21,14 +22,14 @@ import {
     Ok,
     Result,
     ValueRecentChangeTypeId
-} from "../sys/sys-internal-api";
+} from "../sys/internal-api";
 import {
     BrokerageAccountId,
     BrokerageAccountsDataMessage,
     FeedStatus,
     TradingEnvironment,
     TradingEnvironmentId
-} from './common/adi-common-internal-api';
+} from './common/internal-api';
 import { TradingFeed } from './feed/internal-api';
 
 export class Account implements KeyedCorrectnessListItem {
@@ -409,7 +410,7 @@ export namespace Account {
         export function tryCreateFromJson(element: JsonElement): Result<Account.Key> {
             const idResult = element.tryGetString(Key.JsonTag_Id);
             if (idResult.isErr()) {
-                return idResult.createOuter(ErrorCode.Account_IdNotSpecified);
+                return JsonElementErr.createOuter(idResult.error, ErrorCode.Account_IdNotSpecified);
             } else {
                 const environmentResult = element.tryGetString(Key.JsonTag_EnvironmentId);
                 if (environmentResult.isErr()) {

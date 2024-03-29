@@ -4,25 +4,27 @@
  * License: motionite.trade/license/motif
  */
 
-import { LitIvemBaseDetail, RankedLitIvemId } from '../../../../adi/adi-internal-api';
-import { LitIvemIdExecuteScanRankedLitIvemIdListDefinition } from '../../../../ranked-lit-ivem-id-list/ranked-lit-ivem-id-list-internal-api';
-import { GridFieldCustomHeadingsService } from '../../../field/grid-field-internal-api';
-import { GridLayoutDefinition } from '../../../layout/grid-layout-internal-api';
-import { TableFieldSourceDefinition, TableFieldSourceDefinitionCachedFactoryService } from '../../field-source/grid-table-field-source-internal-api';
+import { RevFieldCustomHeadingsService, RevGridLayoutDefinition } from '@xilytix/rev-data-source';
+import { LitIvemBaseDetail, RankedLitIvemId } from '../../../../adi/internal-api';
+import { LitIvemIdExecuteScanRankedLitIvemIdListDefinition } from '../../../../ranked-lit-ivem-id-list/internal-api';
+import {
+    LitIvemBaseDetailTableFieldSourceDefinition,
+    RankedLitIvemIdTableFieldSourceDefinition,
+    TableFieldSourceDefinition,
+    TableFieldSourceDefinitionCachingFactoryService,
+} from '../../field-source/internal-api';
 import { RankedLitIvemIdListTableRecordSourceDefinition } from './ranked-lit-ivem-id-list-table-record-source-definition';
-import { TableRecordSourceDefinition } from './table-record-source-definition';
 
 /** @public */
 export class ScanTestTableRecordSourceDefinition extends RankedLitIvemIdListTableRecordSourceDefinition {
     constructor(
-        customHeadingsService: GridFieldCustomHeadingsService,
-        tableFieldSourceDefinitionCachedFactoryService: TableFieldSourceDefinitionCachedFactoryService,
+        customHeadingsService: RevFieldCustomHeadingsService,
+        tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService,
         rankedLitIvemIdListDefinition: LitIvemIdExecuteScanRankedLitIvemIdListDefinition,
     ) {
         super(
             customHeadingsService,
-            tableFieldSourceDefinitionCachedFactoryService,
-            TableRecordSourceDefinition.TypeId.ScanTest,
+            tableFieldSourceDefinitionCachingFactoryService,
             ScanTestTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
             rankedLitIvemIdListDefinition,
         );
@@ -30,9 +32,9 @@ export class ScanTestTableRecordSourceDefinition extends RankedLitIvemIdListTabl
 
     override get defaultFieldSourceDefinitionTypeIds() { return ScanTestTableRecordSourceDefinition.defaultFieldSourceDefinitionTypeIds; }
 
-    override createDefaultLayoutDefinition(): GridLayoutDefinition {
-        const rankedLitIvemIdFieldSourceDefinition = this.tableFieldSourceDefinitionCachedFactoryService.rankedLitIvemId;
-        const litIvemBaseDetailFieldSourceDefinition = this.tableFieldSourceDefinitionCachedFactoryService.litIvemBaseDetail;
+    override createDefaultLayoutDefinition(): RevGridLayoutDefinition {
+        const rankedLitIvemIdFieldSourceDefinition = RankedLitIvemIdTableFieldSourceDefinition.get(this.tableFieldSourceDefinitionCachingFactoryService);
+        const litIvemBaseDetailFieldSourceDefinition = LitIvemBaseDetailTableFieldSourceDefinition.get(this.tableFieldSourceDefinitionCachingFactoryService);
 
         const fieldNames = new Array<string>();
 
@@ -41,7 +43,7 @@ export class ScanTestTableRecordSourceDefinition extends RankedLitIvemIdListTabl
         fieldNames.push(rankedLitIvemIdFieldSourceDefinition.getFieldNameById(RankedLitIvemId.FieldId.RankScore));
         fieldNames.push(rankedLitIvemIdFieldSourceDefinition.getFieldNameById(RankedLitIvemId.FieldId.Rank));
 
-        return GridLayoutDefinition.createFromFieldNames(fieldNames);
+        return RevGridLayoutDefinition.createFromFieldNames(fieldNames);
     }
 }
 
@@ -51,7 +53,7 @@ export namespace ScanTestTableRecordSourceDefinition {
         TableFieldSourceDefinition.TypeId.LitIvemBaseDetail,
         TableFieldSourceDefinition.TypeId.RankedLitIvemId,
         // AlternateCodesFix: Currently this actually is part of FullDetail.  Will be in BaseDetail in future
-        // TableFieldSourceDefinition.TypeId.LitIvemAlternateCodes,
+        // TypedTableFieldSourceDefinition.TypeId.LitIvemAlternateCodes,
     ];
 
     export const defaultFieldSourceDefinitionTypeIds: RankedLitIvemIdListTableRecordSourceDefinition.FieldSourceDefinitionTypeId[] = [

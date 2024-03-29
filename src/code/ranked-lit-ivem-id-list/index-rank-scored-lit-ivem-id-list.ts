@@ -4,13 +4,11 @@
  * License: motionite.trade/license/motif
  */
 
-import { LitIvemId, RankScoredLitIvemId, RankScoredLitIvemIdList } from '../adi/adi-internal-api';
+import { LitIvemId, RankScoredLitIvemId, RankScoredLitIvemIdList } from '../adi/internal-api';
 import { Badness } from '../sys/badness';
 import { BadnessList } from '../sys/badness-list';
 import { CorrectnessId } from '../sys/correctness';
-import { MultiEvent } from '../sys/multi-event';
-import { RecordList } from '../sys/record-list';
-import { CorrectnessRecord, Integer, UsableListChangeTypeId } from '../sys/sys-internal-api';
+import { CorrectnessRecord, Integer, MultiEvent, RecordList, UsableListChangeTypeId } from '../sys/internal-api';
 
 export class IndexRankScoredLitIvemIdList implements RankScoredLitIvemIdList {
     readonly userCanAdd = true;
@@ -99,11 +97,11 @@ export class IndexRankScoredLitIvemIdList implements RankScoredLitIvemIdList {
         this.notifyModified();
     }
 
-    subscribeBadnessChangeEvent(_handler: BadnessList.BadnessChangeEventHandler) {
+    subscribeBadnessChangedEvent(_handler: BadnessList.badnessChangedEventHandler) {
         return MultiEvent.nullDefinedSubscriptionId;
     }
 
-    unsubscribeBadnessChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void {
+    unsubscribeBadnessChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void {
         // nothing to do
     }
 

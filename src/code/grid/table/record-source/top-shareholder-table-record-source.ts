@@ -4,30 +4,31 @@
  * License: motionite.trade/license/motif
  */
 
+import { RevFieldCustomHeadingsService } from '@xilytix/rev-data-source';
 import {
     AdiService,
     LitIvemId,
     TopShareholder,
     TopShareholdersDataDefinition,
     TopShareholdersDataItem
-} from "../../../adi/adi-internal-api";
+} from "../../../adi/internal-api";
 import {
     AssertInternalError,
     Badness,
+    CorrectnessBadness,
     Integer,
     LockOpenListItem,
     MultiEvent, UnreachableCaseError,
     UsableListChangeTypeId,
     newUndefinableDate
-} from "../../../sys/sys-internal-api";
-import { TextFormatterService } from '../../../text-format/text-format-internal-api';
+} from "../../../sys/internal-api";
+import { TextFormatterService } from '../../../text-format/internal-api';
 import {
-    TableFieldSourceDefinition
-} from "../field-source/grid-table-field-source-internal-api";
-import { TableRecordDefinition, TopShareholderTableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
-import { TableRecord } from '../record/grid-table-record-internal-api';
+    TableFieldSourceDefinition, TableFieldSourceDefinitionCachingFactoryService
+} from "../field-source/internal-api";
+import { TopShareholderTableRecordDefinition } from '../record-definition/internal-api';
+import { TableRecord } from '../record/internal-api';
 import { TopShareholderTableValueSource } from '../value-source/internal-api';
-import { TableRecordSourceDefinitionFactoryService } from './definition/grid-table-record-source-definition-internal-api';
 import { TopShareholderTableRecordSourceDefinition } from './definition/top-shareholder-table-record-source-definition';
 import { SingleDataItemTableRecordSource } from './single-data-item-table-record-source';
 
@@ -42,17 +43,21 @@ export class TopShareholderTableRecordSource extends SingleDataItemTableRecordSo
     private _dataItem: TopShareholdersDataItem;
     private _dataItemSubscribed = false;
     private _listChangeEventSubscriptionId: MultiEvent.SubscriptionId;
-    private _badnessChangeEventSubscriptionId: MultiEvent.SubscriptionId;
+    private _badnessChangedEventSubscriptionId: MultiEvent.SubscriptionId;
 
     constructor(
         private readonly _adiService: AdiService,
         textFormatterService: TextFormatterService,
-        tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService,
+        gridFieldCustomHeadingsService: RevFieldCustomHeadingsService,
+        tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService,
+        correctnessBadness: CorrectnessBadness,
         definition: TopShareholderTableRecordSourceDefinition,
     ) {
         super(
             textFormatterService,
-            tableRecordSourceDefinitionFactoryService,
+            gridFieldCustomHeadingsService,
+            tableFieldSourceDefinitionCachingFactoryService,
+            correctnessBadness,
             definition,
             TopShareholderTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
         );
@@ -63,7 +68,9 @@ export class TopShareholderTableRecordSource extends SingleDataItemTableRecordSo
     }
 
     override createDefinition(): TopShareholderTableRecordSourceDefinition {
-        return this.tableRecordSourceDefinitionFactoryService.createTopShareholder(
+        return new TopShareholderTableRecordSourceDefinition(
+            this._gridFieldCustomHeadingsService,
+            this._tableFieldSourceDefinitionCachingFactoryService,
             this._litIvemId.createCopy(),
             newUndefinableDate(this._tradingDate),
             newUndefinableDate(this._compareToTradingDate),
@@ -73,7 +80,7 @@ export class TopShareholderTableRecordSource extends SingleDataItemTableRecordSo
     override createRecordDefinition(idx: Integer): TopShareholderTableRecordDefinition {
         const record = this.recordList[idx];
         return {
-            typeId: TableRecordDefinition.TypeId.TopShareholder,
+            typeId: TableFieldSourceDefinition.TypeId.TopShareholder,
             mapKey: record.createKey().mapKey,
             record,
         };
@@ -91,7 +98,7 @@ export class TopShareholderTableRecordSource extends SingleDataItemTableRecordSo
             const fieldSourceDefinitionTypeId =
                 fieldSourceDefinition.typeId as TopShareholderTableRecordSourceDefinition.FieldSourceDefinitionTypeId;
             switch (fieldSourceDefinitionTypeId) {
-                case TableFieldSourceDefinition.TypeId.TopShareholdersDataItem: {
+                case TableFieldSourceDefinition.TypeId.TopShareholder: {
                     const valueSource = new TopShareholderTableValueSource(result.fieldCount, topShareholder, this._dataItem);
                     result.addSource(valueSource);
                     break;
@@ -117,8 +124,8 @@ export class TopShareholderTableRecordSource extends SingleDataItemTableRecordSo
         this._listChangeEventSubscriptionId = this._dataItem.subscribeListChangeEvent(
                 (listChangeTypeId, idx, count) => { this.handleDataItemListChangeEvent(listChangeTypeId, idx, count); }
         );
-        this._badnessChangeEventSubscriptionId = this._dataItem.subscribeBadnessChangeEvent(
-            () => { this.handleDataItemBadnessChangeEvent(); }
+        this._badnessChangedEventSubscriptionId = this._dataItem.subscribeBadnessChangedEvent(
+            () => { this.handleDataItembadnessChangedEvent(); }
         );
 
         super.openLocked(opener);
@@ -145,8 +152,8 @@ export class TopShareholderTableRecordSource extends SingleDataItemTableRecordSo
         } else {
             this._dataItem.unsubscribeListChangeEvent(this._listChangeEventSubscriptionId);
             this._listChangeEventSubscriptionId = undefined;
-            this._dataItem.unsubscribeBadnessChangeEvent(this._badnessChangeEventSubscriptionId);
-            this._badnessChangeEventSubscriptionId = undefined;
+            this._dataItem.unsubscribeBadnessChangedEvent(this._badnessChangedEventSubscriptionId);
+            this._badnessChangedEventSubscriptionId = undefined;
 
             super.closeLocked(opener);
 
@@ -178,7 +185,7 @@ export class TopShareholderTableRecordSource extends SingleDataItemTableRecordSo
         this.processDataItemListChange(listChangeTypeId, idx, count);
     }
 
-    private handleDataItemBadnessChangeEvent() {
+    private handleDataItembadnessChangedEvent() {
         this.checkSetUnusable(this._dataItem.badness);
     }
 

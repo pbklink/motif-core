@@ -4,8 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
-import { Currency, CurrencyId, ExchangeId, MarketBoardId, MarketId, ZenithConvert, ZenithEncodedScanFormula, ZenithProtocolCommon } from '../../adi/adi-internal-api';
-import { StringId, Strings } from '../../res/res-internal-api';
+import { Currency, CurrencyId, ExchangeId, MarketBoardId, MarketId, ZenithConvert, ZenithEncodedScanFormula, ZenithProtocolCommon } from '../../adi/internal-api';
+import { StringId, Strings } from '../../res/internal-api';
 import {
     AssertInternalError,
     EnumInfoOutOfOrderError,
@@ -16,7 +16,7 @@ import {
     Result,
     SourceTzOffsetDate,
     UnreachableCaseError
-} from "../../sys/sys-internal-api";
+} from "../../sys/internal-api";
 import { ScanFormula } from './scan-formula';
 
 export namespace ScanFormulaZenithEncoding {
@@ -588,7 +588,7 @@ export namespace ScanFormulaZenithEncoding {
             case ZenithEncodedScanFormula.AltCodeTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.AltCodeSubbed, strict);
             case ZenithEncodedScanFormula.AttributeTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.AttributeSubbed, strict);
             case ZenithEncodedScanFormula.AuctionTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.Auction, strict);
-            case ZenithEncodedScanFormula.AuctionLastTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.Auction, strict);
+            case ZenithEncodedScanFormula.AuctionLastTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.AuctionLast, strict);
             case ZenithEncodedScanFormula.AuctionQuantityTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.AuctionQuantity, strict);
             case ZenithEncodedScanFormula.BestAskCountTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.BestAskCount, strict);
             case ZenithEncodedScanFormula.BestAskPriceTupleNodeType: return tryDecodeFieldBooleanNode(tupleNode as ZenithEncodedScanFormula.MatchingTupleNode, ScanFormula.FieldId.BestAskPrice, strict);
@@ -1005,10 +1005,10 @@ export namespace ScanFormulaZenithEncoding {
                             }
                         }
                         case 'object': {
-                            if (param1 === null) {
+                            if (param2 === null) {
                                 return createDecodeErrorResult(ErrorId.NamedParametersCannotBeNull, '');
                             } else {
-                                const { As: as, IgnoreCase: ignoreCase } = param1 as ZenithEncodedScanFormula.TextNamedParameters
+                                const { As: as, IgnoreCase: ignoreCase } = param2 as ZenithEncodedScanFormula.TextNamedParameters
                                 if (!subbed) {
                                     return tryDecodeTextFieldContainsNode(fieldId as ScanFormula.TextContainsFieldId, param1, as, ignoreCase);
                                 } else {
@@ -2477,11 +2477,11 @@ export namespace ScanFormulaZenithEncoding {
 
     namespace DateValue {
         export function encodeDate(value: SourceTzOffsetDate): ZenithEncodedScanFormula.DateString {
-            return ZenithConvert.Date.DateYYYYMMDD.fromSourceTzOffsetDate(value);
+            return ZenithConvert.Date.DashedYyyyMmDdDate.fromSourceTzOffsetDate(value);
         }
 
         export function tryDecodeDate(value: ZenithEncodedScanFormula.DateString): SourceTzOffsetDate | undefined {
-            return ZenithConvert.Date.DateYYYYMMDD.toSourceTzOffsetDate(value);
+            return ZenithConvert.Date.DashedYyyyMmDdDate.toSourceTzOffsetDate(value);
         }
     }
 

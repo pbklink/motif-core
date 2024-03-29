@@ -4,8 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
-import { CallOrPutId } from '../../../../adi/adi-internal-api';
-import { UnreachableCaseError } from '../../../../sys/sys-internal-api';
+import { CallOrPutId } from '../../../../adi/internal-api';
+import { UnreachableCaseError } from '../../../../sys/internal-api';
 import { PrefixableSecurityDataItemTableFieldSourceDefinition } from './prefixable-security-data-item-table-field-source-definition';
 import { TableFieldSourceDefinition } from './table-field-source-definition';
 
@@ -44,10 +44,6 @@ export namespace CallPutSecurityDataItemTableFieldSourceDefinition {
             default:
                 throw new UnreachableCaseError('CPSDITFSDCTIAP33382', callOrPutId);
         }
-    }
-
-    export interface CallFieldId extends PrefixableSecurityDataItemTableFieldSourceDefinition.FieldId {
-        sourceTypeId: TableFieldSourceDefinition.TypeId.CallSecurityDataItem;
     }
 
     export interface PutFieldId extends PrefixableSecurityDataItemTableFieldSourceDefinition.FieldId {

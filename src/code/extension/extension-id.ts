@@ -4,8 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
-import { PublisherId } from '../publisher/publisher-internal-api';
-import { ErrorCode, JsonElement, Ok, Result } from '../sys/sys-internal-api';
+import { PublisherId } from '../publisher/internal-api';
+import { ErrorCode, JsonElement, JsonElementErr, Ok, Result } from '../sys/internal-api';
 
 /** @public */
 export interface ExtensionId {
@@ -32,7 +32,7 @@ export namespace ExtensionId {
     export function tryCreateFromJson(value: JsonElement): Result<ExtensionId> {
         const publisherIdElementResult = value.tryGetElement(JsonName.publisherId);
         if (publisherIdElementResult.isErr()) {
-            return publisherIdElementResult.createOuter(ErrorCode.ExtensionId_PublisherIdIsNotSpecified);
+            return JsonElementErr.createOuter(publisherIdElementResult.error, ErrorCode.ExtensionId_PublisherIdIsNotSpecified);
         } else {
             const publisherIdResult = PublisherId.tryCreateFromJson(publisherIdElementResult.value);
             if (publisherIdResult.isErr()) {
@@ -40,7 +40,7 @@ export namespace ExtensionId {
             } else {
                 const nameResult = value.tryGetString(JsonName.name)
                 if (nameResult.isErr()) {
-                    return nameResult.createOuter(ErrorCode.ExtensionId_ExtensionNameIsNotSpecifiedOrInvalid);
+                    return JsonElementErr.createOuter(nameResult.error, ErrorCode.ExtensionId_ExtensionNameIsNotSpecifiedOrInvalid);
                 } else {
                     const extensionId: ExtensionId = {
                         publisherId: publisherIdResult.value,

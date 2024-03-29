@@ -4,10 +4,10 @@
  * License: motionite.trade/license/motif
  */
 
-import { Command } from '../command/command-internal-api';
-import { extStrings } from '../res/res-internal-api';
-import { MultiEvent } from '../sys/sys-internal-api';
-import { BooleanUiAction } from './boolean-ui-action';
+import { BooleanUiAction } from '@xilytix/ui-action';
+import { Command } from '../command/internal-api';
+import { extStrings } from '../res/internal-api';
+import { MultiEvent } from '../sys/internal-api';
 
 export class CommandUiAction extends BooleanUiAction {
     private _accessKey = '';

@@ -4,10 +4,10 @@
  * License: motionite.trade/license/motif
  */
 
-import { Decimal } from 'decimal.js-light';
-import { StringId, Strings } from '../res/res-internal-api';
+import { StringId, Strings } from '../res/internal-api';
 import {
     AssertInternalError,
+    Decimal,
     EnumInfoOutOfOrderError,
     FieldDataTypeId,
     Integer,
@@ -19,10 +19,11 @@ import {
     isDecimalEqual,
     isDecimalGreaterThan,
     isUndefinableArrayEqualUniquely,
-    uniqueElementArraysOverlap
-} from '../sys/sys-internal-api';
+    newDecimal
+} from '../sys/internal-api';
 import {
     CallOrPutId,
+    CurrencyId,
     DataDefinition,
     DataMessage,
     DataMessageTypeId,
@@ -36,7 +37,7 @@ import {
     SecurityDataMessage,
     TradingState,
     TradingStates
-} from './common/adi-common-internal-api';
+} from './common/internal-api';
 import { MarketSubscriptionDataItem } from './market-subscription-data-item';
 
 export class SecurityDataItem extends MarketSubscriptionDataItem {
@@ -48,14 +49,15 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
     private _tradingState: string | undefined;
     private _tradingStateAllowIds: TradingState.AllowIds | undefined;
     private _tradingStateReasonId: TradingState.ReasonId | undefined;
-    private _tradingMarkets: MarketId[] | undefined;
+    private _tradingMarkets: readonly MarketId[] | undefined;
     private _isIndex: boolean | undefined;
     private _expiryDate: SourceTzOffsetDate | undefined;
     private _strikePrice: Decimal | undefined;
-    private _callOrPut: CallOrPutId | undefined;
-    private _contractSize: Integer | undefined;
+    private _callOrPutId: CallOrPutId | undefined;
+    private _contractSize: Decimal | undefined;
     private _subscriptionDataTypeIds: readonly PublisherSubscriptionDataTypeId[] | undefined;
-    private _quotationBasis: string | undefined;
+    private _quotationBasis: readonly string[] | undefined;
+    private _currencyId: CurrencyId | undefined;
     private _open: Decimal | undefined;
     private _high: Decimal | undefined;
     private _low: Decimal | undefined;
@@ -65,22 +67,22 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
     private _trend: MovementId | undefined;
     private _bestAsk: Decimal | undefined;
     private _askCount: Integer | undefined;
-    private _askQuantity: Integer | undefined;
+    private _askQuantity: Decimal | undefined;
     private _askUndisclosed: boolean | undefined;
     private _bestBid: Decimal | undefined;
     private _bidCount: Integer | undefined;
-    private _bidQuantity: Integer | undefined;
+    private _bidQuantity: Decimal | undefined;
     private _bidUndisclosed: boolean | undefined;
     private _numberOfTrades: Integer | undefined;
-    private _volume: Integer | undefined;
+    private _volume: Decimal | undefined;
     private _auctionPrice: Decimal | undefined;
-    private _auctionQuantity: Integer | undefined;
-    private _auctionRemainder: Integer | undefined;
+    private _auctionQuantity: Decimal | undefined;
+    private _auctionRemainder: Decimal | undefined;
     private _vWAP: Decimal | undefined;
-    private _valueTraded: number | undefined;
+    private _valueTraded: Decimal | undefined;
     private _openInterest: Integer | undefined;
-    private _shareIssue: Integer | undefined;
-    private _statusNote: string | undefined;
+    private _shareIssue: Decimal | undefined;
+    private _statusNote: readonly string[] | undefined;
 
     private _fieldValuesChangedMultiEvent = new MultiEvent<SecurityDataItem.FieldValuesChangedEvent>();
 
@@ -88,7 +90,7 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
         super(MyDataDefinition);
 
         if (!(super.getDefinition() instanceof SecurityDataDefinition)) {
-            throw new AssertInternalError('SDICID2993', `${super.getDefinition().description}`);
+            throw new AssertInternalError('SDICID2993', super.getDefinition().description);
         } else {
             const litIvemId = this.definition.litIvemId;
             this._code = litIvemId.code;
@@ -110,10 +112,11 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
     get isIndex() { return this._isIndex; }
     get expiryDate() { return this._expiryDate; }
     get strikePrice() { return this._strikePrice; }
-    get callOrPut() { return this._callOrPut; }
+    get callOrPutId() { return this._callOrPutId; }
     get contractSize() { return this._contractSize; }
     get subscriptionDataTypeIds() { return this._subscriptionDataTypeIds; }
     get quotationBasis() { return this._quotationBasis; }
+    get currencyId() { return this._currencyId; }
     get open() { return this._open; }
     get high() { return this._high; }
     get low() { return this._low; }
@@ -140,10 +143,45 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
     get shareIssue() { return this._shareIssue; }
     get statusNote() { return this._statusNote; }
 
-    override processSubscriptionPreOnline() { // virtual
+    /*AssignValues(SrcDataItem: TDataItem): void { // virtual
+        super.AssignValues(SrcDataItem);
+        const TypedSrc = SrcDataItem as TSecurityDataItem;
+        this.FSecurityInfo = clone(TypedSrc.FSecurityInfo);
+    }*/
+
+    override processMessage(msg: DataMessage) { // virtual;
+        if (msg.typeId !== DataMessageTypeId.Security) {
+            super.processMessage(msg);
+        } else {
+            assert(msg instanceof SecurityDataMessage, 'ID:6905152711');
+            const typedMsg = msg as SecurityDataMessage;
+
+            this.beginUpdate();
+            try {
+                this.advisePublisherResponseUpdateReceived();
+                const valueChanges = this.assignMessageSecurityInfo(typedMsg.securityInfo);
+
+                if (valueChanges.length > 0) {
+                    this.notifyUpdateChange();
+                    this.notifyFieldValuesChanged(valueChanges);
+                }
+            } finally {
+                this.endUpdate();
+            }
+        }
+    }
+
+    subscribeFieldValuesChangedEvent(handler: SecurityDataItem.FieldValuesChangedEvent) {
+        return this._fieldValuesChangedMultiEvent.subscribe(handler);
+    }
+
+    unsubscribeFieldValuesChangedEvent(subscriptionId: MultiEvent.SubscriptionId) {
+        this._fieldValuesChangedMultiEvent.unsubscribe(subscriptionId);
+    }
+
+    protected override processSubscriptionPreOnline() { // virtual
         this.beginUpdate();
         try {
-            this.notifyUpdateChange();
             super.processSubscriptionPreOnline();
 
             const modifiedFieldIds = new Array<SecurityDataItem.FieldId>(SecurityDataItem.Field.idCount);
@@ -201,8 +239,8 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
                 this._strikePrice = undefined;
                 modifiedFieldIds[modifiedFieldCount++] = SecurityDataItem.FieldId.StrikePrice;
             }
-            if (this._callOrPut !== undefined) {
-                this._callOrPut = undefined;
+            if (this._callOrPutId !== undefined) {
+                this._callOrPutId = undefined;
                 modifiedFieldIds[modifiedFieldCount++] = SecurityDataItem.FieldId.CallOrPut;
             }
             if (this._contractSize !== undefined) {
@@ -216,6 +254,10 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
             if (this._quotationBasis !== undefined) {
                 this._quotationBasis = undefined;
                 modifiedFieldIds[modifiedFieldCount++] = SecurityDataItem.FieldId.QuotationBasis;
+            }
+            if (this._currencyId !== undefined) {
+                this._currencyId = undefined;
+                modifiedFieldIds[modifiedFieldCount++] = SecurityDataItem.FieldId.Currency;
             }
             if (this._open !== undefined) {
                 this._open = undefined;
@@ -335,40 +377,92 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
         }
     }
 
-    /*AssignValues(SrcDataItem: TDataItem): void { // virtual
-        super.AssignValues(SrcDataItem);
-        const TypedSrc = SrcDataItem as TSecurityDataItem;
-        this.FSecurityInfo = clone(TypedSrc.FSecurityInfo);
-    }*/
+    protected override processSubscriptionPreSynchronised() {
+        this.beginUpdate();
+        try {
+            const modifiedFieldIds = new Array<SecurityDataItem.FieldId>(SecurityDataItem.Field.idCount);
+            let modifiedFieldCount = 0;
 
-    override processMessage(msg: DataMessage) { // virtual;
-        if (msg.typeId !== DataMessageTypeId.Security) {
-            super.processMessage(msg);
-        } else {
-            assert(msg instanceof SecurityDataMessage, 'ID:6905152711');
-            const typedMsg = msg as SecurityDataMessage;
-
-            this.beginUpdate();
-            try {
-                this.advisePublisherResponseUpdateReceived();
-                const valueChanges = this.assignMessageSecurityInfo(typedMsg.securityInfo);
-
-                if (valueChanges.length > 0) {
-                    this.notifyUpdateChange();
-                    this.notifyFieldValuesChanged(valueChanges);
-                }
-            } finally {
-                this.endUpdate();
+            if (this._name === undefined) {
+                this._name = SecurityDataItem.defaultName;
+                modifiedFieldIds[modifiedFieldCount++] = SecurityDataItem.FieldId.Name;
             }
+            if (this._tradingMarkets === undefined) {
+                this._tradingMarkets = SecurityDataItem.defaultTradingMarkets;
+                modifiedFieldIds[modifiedFieldCount++] = SecurityDataItem.FieldId.TradingMarkets;
+            }
+            if (this._isIndex === undefined) {
+                this._isIndex = SecurityDataItem.defaultIsIndex;
+                modifiedFieldIds[modifiedFieldCount++] = SecurityDataItem.FieldId.IsIndex;
+            }
+            if (this._quotationBasis === undefined) {
+                this._quotationBasis = SecurityDataItem.defaultQuotationBasis;
+                modifiedFieldIds[modifiedFieldCount++] = SecurityDataItem.FieldId.QuotationBasis;
+            }
+            if (this._askCount === undefined) {
+                this._askCount = SecurityDataItem.defaultAskCount;
+                modifiedFieldIds[modifiedFieldCount++] = SecurityDataItem.FieldId.AskCount;
+            }
+            if (this._askQuantity === undefined) {
+                this._askQuantity = newDecimal(SecurityDataItem.defaultAskQuantity);
+                modifiedFieldIds[modifiedFieldCount++] = SecurityDataItem.FieldId.AskQuantity;
+            }
+            if (this._askUndisclosed === undefined) {
+                this._askUndisclosed = SecurityDataItem.defaultAskUndisclosed;
+                modifiedFieldIds[modifiedFieldCount++] = SecurityDataItem.FieldId.AskUndisclosed;
+            }
+            if (this._bidCount === undefined) {
+                this._bidCount = SecurityDataItem.defaultBidCount;
+                modifiedFieldIds[modifiedFieldCount++] = SecurityDataItem.FieldId.BidCount;
+            }
+            if (this._bidQuantity === undefined) {
+                this._bidQuantity = newDecimal(SecurityDataItem.defaultBidQuantity);
+                modifiedFieldIds[modifiedFieldCount++] = SecurityDataItem.FieldId.BidQuantity;
+            }
+            if (this._bidUndisclosed === undefined) {
+                this._bidUndisclosed = SecurityDataItem.defaultBidUndisclosed;
+                modifiedFieldIds[modifiedFieldCount++] = SecurityDataItem.FieldId.BidUndisclosed;
+            }
+            if (this._numberOfTrades === undefined) {
+                this._numberOfTrades = SecurityDataItem.defaultNumberOfTrades;
+                modifiedFieldIds[modifiedFieldCount++] = SecurityDataItem.FieldId.NumberOfTrades;
+            }
+            if (this._volume === undefined) {
+                this._volume = newDecimal(SecurityDataItem.defaultVolume);
+                modifiedFieldIds[modifiedFieldCount++] = SecurityDataItem.FieldId.Volume;
+            }
+            if (this._valueTraded === undefined) {
+                this._valueTraded = newDecimal(SecurityDataItem.defaultValueTraded);
+                modifiedFieldIds[modifiedFieldCount++] = SecurityDataItem.FieldId.ValueTraded;
+            }
+            if (this._openInterest === undefined) {
+                this._openInterest = SecurityDataItem.defaultOpenInterest;
+                modifiedFieldIds[modifiedFieldCount++] = SecurityDataItem.FieldId.OpenInterest;
+            }
+            if (this._shareIssue === undefined) {
+                this._shareIssue = newDecimal(SecurityDataItem.defaultShareIssue);
+                modifiedFieldIds[modifiedFieldCount++] = SecurityDataItem.FieldId.ShareIssue;
+            }
+            if (this._statusNote === undefined) {
+                this._statusNote = SecurityDataItem.defaultStatusNote;
+                modifiedFieldIds[modifiedFieldCount++] = SecurityDataItem.FieldId.StatusNote;
+            }
+
+            if (modifiedFieldCount > 0) {
+                const valueChanges = new Array<SecurityDataItem.ValueChange>(modifiedFieldCount);
+                for (let i = 0; i < modifiedFieldCount; i++) {
+                    valueChanges[i] = {
+                        fieldId: modifiedFieldIds[i],
+                        recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                    };
+                }
+                this.notifyUpdateChange();
+                this.notifyFieldValuesChanged(valueChanges);
+            }
+
+        } finally {
+            this.endUpdate();
         }
-    }
-
-    subscribeFieldValuesChangedEvent(handler: SecurityDataItem.FieldValuesChangedEvent) {
-        return this._fieldValuesChangedMultiEvent.subscribe(handler);
-    }
-
-    unsubscribeFieldValuesChangedEvent(subscriptionId: MultiEvent.SubscriptionId) {
-        this._fieldValuesChangedMultiEvent.unsubscribe(subscriptionId);
     }
 
     protected override processMarketBecameAvailable() {
@@ -484,9 +578,7 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
         }
 
         if (msgRec.marketIds !== undefined) {
-            if ((this._tradingMarkets === undefined) ||
-                !uniqueElementArraysOverlap<Integer>(msgRec.marketIds, this._tradingMarkets)
-            ) {
+            if ((this._tradingMarkets === undefined) || !isArrayEqualUniquely(msgRec.marketIds, this._tradingMarkets)) {
                 this._tradingMarkets = msgRec.marketIds;
                 valueChanges[valueChangeCount++] = {
                     fieldId: SecurityDataItem.FieldId.TradingMarkets,
@@ -503,44 +595,114 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
             };
         }
 
-        if ((msgRec.expiryDate !== undefined) && (!SourceTzOffsetDate.isUndefinableEqual(msgRec.expiryDate, this._expiryDate))) {
-            this._expiryDate = msgRec.expiryDate;
-            valueChanges[valueChangeCount++] = {
-                fieldId: SecurityDataItem.FieldId.ExpiryDate,
-                recentChangeTypeId: ValueRecentChangeTypeId.Update,
-            };
-        }
-
-        if (msgRec.strikePrice !== undefined) {
-            if (this._strikePrice === undefined || !isDecimalEqual(msgRec.strikePrice, this._strikePrice)) {
-                this._strikePrice = msgRec.strikePrice;
-                valueChanges[valueChangeCount++] = {
-                    fieldId: SecurityDataItem.FieldId.StrikePrice,
-                    recentChangeTypeId: ValueRecentChangeTypeId.Update,
-                };
+        const newExpiryDate = msgRec.expiryDate;
+        if (newExpiryDate !== undefined) {
+            if (newExpiryDate === null) {
+                if (this._expiryDate !== undefined) {
+                    this._expiryDate = undefined;
+                    valueChanges[valueChangeCount++] = {
+                        fieldId: SecurityDataItem.FieldId.ExpiryDate,
+                        recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                    };
+                }
+            } else {
+                if (this._expiryDate === undefined || !SourceTzOffsetDate.isEqual(newExpiryDate, this._expiryDate)) {
+                    this._expiryDate = newExpiryDate;
+                    valueChanges[valueChangeCount++] = {
+                        fieldId: SecurityDataItem.FieldId.ExpiryDate,
+                        recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                    };
+                }
             }
         }
 
-        if ((msgRec.callOrPutId !== undefined) && (msgRec.callOrPutId !== this._callOrPut)) {
-            this._callOrPut = msgRec.callOrPutId;
-            valueChanges[valueChangeCount++] = {
-                fieldId: SecurityDataItem.FieldId.CallOrPut,
-                recentChangeTypeId: ValueRecentChangeTypeId.Update,
-            };
+        const newStrikePrice = msgRec.strikePrice;
+        if (newStrikePrice !== undefined) {
+            if (newStrikePrice === null) {
+                if (this._strikePrice !== undefined) {
+                    this._strikePrice = undefined;
+                    valueChanges[valueChangeCount++] = {
+                        fieldId: SecurityDataItem.FieldId.StrikePrice,
+                        recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                    };
+                }
+            } else {
+                if (this._strikePrice === undefined) {
+                    this._strikePrice = newStrikePrice;
+                    valueChanges[valueChangeCount++] = {
+                        fieldId: SecurityDataItem.FieldId.StrikePrice,
+                        recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                    };
+                } else {
+                    if (!isDecimalEqual(newStrikePrice, this._strikePrice)) {
+                        const recentChangeTypeId = isDecimalGreaterThan(newStrikePrice, this._strikePrice)
+                            ? ValueRecentChangeTypeId.Increase
+                            : ValueRecentChangeTypeId.Decrease;
+                        this._strikePrice = newStrikePrice;
+                        valueChanges[valueChangeCount++] = {
+                            fieldId: SecurityDataItem.FieldId.StrikePrice,
+                            recentChangeTypeId,
+                        };
+                    }
+                }
+            }
         }
 
-        if ((msgRec.contractSize !== undefined) && (msgRec.contractSize !== this._contractSize)) {
-            this._contractSize = msgRec.contractSize;
-            valueChanges[valueChangeCount++] = {
-                fieldId: SecurityDataItem.FieldId.ContractSize,
-                recentChangeTypeId: ValueRecentChangeTypeId.Update,
-            };
+        const newCallOrPutId = msgRec.callOrPutId;
+        if (newCallOrPutId !== undefined) {
+            if (newCallOrPutId === null) {
+                if (this._callOrPutId !== undefined) {
+                    this._callOrPutId = undefined;
+                    valueChanges[valueChangeCount++] = {
+                        fieldId: SecurityDataItem.FieldId.CallOrPut,
+                        recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                    };
+                }
+            } else {
+                if (this._callOrPutId === undefined || newCallOrPutId !== this._callOrPutId) {
+                    this._callOrPutId = newCallOrPutId;
+                    valueChanges[valueChangeCount++] = {
+                        fieldId: SecurityDataItem.FieldId.CallOrPut,
+                        recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                    };
+                }
+            }
+        }
+
+        const newContractSize = msgRec.contractSize;
+        if (newContractSize !== undefined) {
+            if (newContractSize === null) {
+                if (this._contractSize !== undefined) {
+                    this._contractSize = undefined;
+                    valueChanges[valueChangeCount++] = {
+                        fieldId: SecurityDataItem.FieldId.ContractSize,
+                        recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                    };
+                }
+            } else {
+                if (this._contractSize === undefined) {
+                    this._contractSize = newContractSize;
+                    valueChanges[valueChangeCount++] = {
+                        fieldId: SecurityDataItem.FieldId.ContractSize,
+                        recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                    };
+                } else {
+                    if (!isDecimalEqual(newContractSize, this._contractSize)) {
+                        const recentChangeTypeId = isDecimalGreaterThan(newContractSize, this._contractSize)
+                            ? ValueRecentChangeTypeId.Increase
+                            : ValueRecentChangeTypeId.Decrease;
+                        this._contractSize = newContractSize;
+                        valueChanges[valueChangeCount++] = {
+                            fieldId: SecurityDataItem.FieldId.ContractSize,
+                            recentChangeTypeId,
+                        };
+                    }
+                }
+            }
         }
 
         if (msgRec.subscriptionDataTypeIds !== undefined) {
-            if ((this._subscriptionDataTypeIds === undefined) ||
-                !isArrayEqualUniquely<Integer>(msgRec.subscriptionDataTypeIds, this._subscriptionDataTypeIds)
-            ) {
+            if ((this._subscriptionDataTypeIds === undefined) || !isArrayEqualUniquely(msgRec.subscriptionDataTypeIds, this._subscriptionDataTypeIds)) {
                 this._subscriptionDataTypeIds = msgRec.subscriptionDataTypeIds;
                 valueChanges[valueChangeCount++] = {
                     fieldId: SecurityDataItem.FieldId.SubscriptionDataTypeIds,
@@ -549,20 +711,32 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
             }
         }
 
-        if (msgRec.quotationBasis !== undefined) {
-            if (msgRec.quotationBasis === null) {
-                if (this._quotationBasis !== undefined) {
-                    this._quotationBasis = undefined;
+        const newQuotationBasis = msgRec.quotationBasis;
+        if (newQuotationBasis !== undefined) {
+            if (this._quotationBasis === undefined || !isArrayEqualUniquely(newQuotationBasis, this._quotationBasis)) {
+                this._quotationBasis = msgRec.quotationBasis;
+                valueChanges[valueChangeCount++] = {
+                    fieldId: SecurityDataItem.FieldId.QuotationBasis,
+                    recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                };
+            }
+        }
+
+        const newCurrencyId = msgRec.currencyId;
+        if (newCurrencyId !== undefined) {
+            if (newCurrencyId === null) {
+                if (this._currencyId !== undefined) {
+                    this._currencyId = undefined;
                     valueChanges[valueChangeCount++] = {
-                        fieldId: SecurityDataItem.FieldId.QuotationBasis,
+                        fieldId: SecurityDataItem.FieldId.CallOrPut,
                         recentChangeTypeId: ValueRecentChangeTypeId.Update,
                     };
                 }
             } else {
-                if (msgRec.quotationBasis !== this._quotationBasis) {
-                    this._quotationBasis = msgRec.quotationBasis;
+                if (this._currencyId === undefined || newCurrencyId !== this._currencyId) {
+                    this._currencyId = newCurrencyId;
                     valueChanges[valueChangeCount++] = {
-                        fieldId: SecurityDataItem.FieldId.QuotationBasis,
+                        fieldId: SecurityDataItem.FieldId.CallOrPut,
                         recentChangeTypeId: ValueRecentChangeTypeId.Update,
                     };
                 }
@@ -821,20 +995,25 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
         }
 
         const newAskQuantity = msgRec.askQuantity;
-        if ((newAskQuantity !== undefined) && (newAskQuantity !== this._askQuantity)) {
-            let recentChangeTypeId: ValueRecentChangeTypeId;
+        if (newAskQuantity !== undefined) {
             if (this._askQuantity === undefined) {
-                recentChangeTypeId = ValueRecentChangeTypeId.Update;
+                this._askQuantity = newAskQuantity;
+                valueChanges[valueChangeCount++] = {
+                    fieldId: SecurityDataItem.FieldId.AskQuantity,
+                    recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                };
             } else {
-                recentChangeTypeId = newAskQuantity > this._askQuantity
-                    ? ValueRecentChangeTypeId.Increase
-                    : ValueRecentChangeTypeId.Decrease;
+                if (!isDecimalEqual(newAskQuantity, this._askQuantity)) {
+                    const recentChangeTypeId = isDecimalGreaterThan(newAskQuantity, this._askQuantity)
+                        ? ValueRecentChangeTypeId.Increase
+                        : ValueRecentChangeTypeId.Decrease;
+                    this._askQuantity = newAskQuantity;
+                    valueChanges[valueChangeCount++] = {
+                        fieldId: SecurityDataItem.FieldId.AskQuantity,
+                        recentChangeTypeId,
+                    };
+                }
             }
-            this._askQuantity = newAskQuantity;
-            valueChanges[valueChangeCount++] = {
-                fieldId: SecurityDataItem.FieldId.AskQuantity,
-                recentChangeTypeId,
-            };
         }
 
         const newAskUndisclosed = msgRec.askUndisclosed;
@@ -906,13 +1085,15 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
                     recentChangeTypeId: ValueRecentChangeTypeId.Update,
                 };
             } else {
-                if (newBidQuantity !== this._bidQuantity) {
-                    const recentChangeTypeId = newBidQuantity > this._bidQuantity
+                if (!isDecimalEqual(newBidQuantity, this._bidQuantity)) {
+                    const recentChangeTypeId = isDecimalGreaterThan(newBidQuantity, this._bidQuantity)
                         ? ValueRecentChangeTypeId.Increase
                         : ValueRecentChangeTypeId.Decrease;
-
                     this._bidQuantity = newBidQuantity;
-                    valueChanges[valueChangeCount++] = { fieldId: SecurityDataItem.FieldId.BidQuantity, recentChangeTypeId };
+                    valueChanges[valueChangeCount++] = {
+                        fieldId: SecurityDataItem.FieldId.BidQuantity,
+                        recentChangeTypeId,
+                    };
                 }
             }
         }
@@ -955,13 +1136,15 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
                     recentChangeTypeId: ValueRecentChangeTypeId.Update,
                 };
             } else {
-                if (newVolume !== this._volume) {
-                    const recentChangeTypeId = newVolume > this._volume
+                if (!isDecimalEqual(newVolume, this._volume)) {
+                    const recentChangeTypeId = isDecimalGreaterThan(newVolume, this._volume)
                         ? ValueRecentChangeTypeId.Increase
                         : ValueRecentChangeTypeId.Decrease;
-
                     this._volume = newVolume;
-                    valueChanges[valueChangeCount++] = { fieldId: SecurityDataItem.FieldId.Volume, recentChangeTypeId };
+                    valueChanges[valueChangeCount++] = {
+                        fieldId: SecurityDataItem.FieldId.Volume,
+                        recentChangeTypeId,
+                    };
                 }
             }
         }
@@ -1014,8 +1197,8 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
                         recentChangeTypeId: ValueRecentChangeTypeId.Update,
                     };
                 } else {
-                    if (newAuctionQuantity !== this._auctionQuantity) {
-                        const recentChangeTypeId = newAuctionQuantity > this._auctionQuantity
+                    if (!isDecimalEqual(newAuctionQuantity, this._auctionQuantity)) {
+                        const recentChangeTypeId = isDecimalGreaterThan(newAuctionQuantity, this._auctionQuantity)
                             ? ValueRecentChangeTypeId.Increase
                             : ValueRecentChangeTypeId.Decrease;
 
@@ -1044,8 +1227,8 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
                         recentChangeTypeId: ValueRecentChangeTypeId.Update,
                     };
                 } else {
-                    if (newAuctionRemainder !== this._auctionRemainder) {
-                        const recentChangeTypeId = newAuctionRemainder > this._auctionRemainder
+                    if (!isDecimalEqual(newAuctionRemainder, this._auctionRemainder)) {
+                        const recentChangeTypeId = isDecimalGreaterThan(newAuctionRemainder, this._auctionRemainder)
                             ? ValueRecentChangeTypeId.Increase
                             : ValueRecentChangeTypeId.Decrease;
 
@@ -1075,7 +1258,7 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
                     };
                 } else {
                     if (!isDecimalEqual(newVWAP, this._vWAP)) {
-                        const recentChangeTypeId = newVWAP > this._vWAP
+                        const recentChangeTypeId = isDecimalGreaterThan(newVWAP, this._vWAP)
                             ? ValueRecentChangeTypeId.Increase
                             : ValueRecentChangeTypeId.Decrease;
 
@@ -1095,8 +1278,8 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
                     recentChangeTypeId: ValueRecentChangeTypeId.Update,
                 };
             } else {
-                if (newValueTraded !== this._valueTraded) {
-                    const recentChangeTypeId = newValueTraded > this._valueTraded
+                if (!isDecimalEqual(newValueTraded, this._valueTraded)) {
+                    const recentChangeTypeId = isDecimalGreaterThan(newValueTraded, this._valueTraded)
                         ? ValueRecentChangeTypeId.Increase
                         : ValueRecentChangeTypeId.Decrease;
 
@@ -1154,8 +1337,8 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
                         recentChangeTypeId: ValueRecentChangeTypeId.Update,
                     };
                 } else {
-                    if (newShareIssue !== this._shareIssue) {
-                        const recentChangeTypeId = newShareIssue > this._shareIssue
+                    if (!isDecimalEqual(newShareIssue, this._shareIssue)) {
+                        const recentChangeTypeId = isDecimalGreaterThan(newShareIssue, this._shareIssue)
                             ? ValueRecentChangeTypeId.Increase
                             : ValueRecentChangeTypeId.Decrease;
 
@@ -1168,22 +1351,12 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
 
         const newStatusNote = msgRec.statusNote;
         if (newStatusNote !== undefined) {
-            if (newStatusNote === null) {
-                if (this._statusNote !== undefined) {
-                    this._statusNote = undefined;
-                    valueChanges[valueChangeCount++] = {
-                        fieldId: SecurityDataItem.FieldId.StatusNote,
-                        recentChangeTypeId: ValueRecentChangeTypeId.Update,
-                    };
-                }
-            } else {
-                if (newStatusNote !== this._statusNote) {
-                    this._statusNote = newStatusNote;
-                    valueChanges[valueChangeCount++] = {
-                        fieldId: SecurityDataItem.FieldId.StatusNote,
-                        recentChangeTypeId: ValueRecentChangeTypeId.Update,
-                    };
-                }
+            if (this._statusNote === undefined || !isArrayEqualUniquely(newStatusNote, this._statusNote)) {
+                this._statusNote = newStatusNote;
+                valueChanges[valueChangeCount++] = {
+                    fieldId: SecurityDataItem.FieldId.StatusNote,
+                    recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                };
             }
         }
 
@@ -1193,6 +1366,23 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
 }
 
 export namespace SecurityDataItem {
+    export const defaultName = '';
+    export const defaultTradingMarkets: readonly MarketId[] = [];
+    export const defaultIsIndex = false;
+    export const defaultQuotationBasis: readonly string[] = [];
+    export const defaultAskCount = 0;
+    export const defaultAskQuantity = newDecimal(0.0);
+    export const defaultAskUndisclosed = false;
+    export const defaultBidCount = 0;
+    export const defaultBidQuantity = newDecimal(0.0);
+    export const defaultBidUndisclosed = false;
+    export const defaultNumberOfTrades = 0;
+    export const defaultVolume = newDecimal(0.0);
+    export const defaultValueTraded = newDecimal(0.0);
+    export const defaultOpenInterest = 0;
+    export const defaultShareIssue = newDecimal(0.0);
+    export const defaultStatusNote: readonly string[] = [];
+
     export const enum FieldId {
         LitIvemId,
         Code,
@@ -1213,6 +1403,7 @@ export namespace SecurityDataItem {
         ContractSize,
         SubscriptionDataTypeIds,
         QuotationBasis,
+        Currency,
         Open,
         High,
         Low,
@@ -1363,7 +1554,7 @@ export namespace SecurityDataItem {
             ContractSize: {
                 id: FieldId.ContractSize,
                 name: 'ContractSize',
-                dataTypeId: FieldDataTypeId.Integer,
+                dataTypeId: FieldDataTypeId.Decimal,
                 displayId: StringId.SecurityFieldDisplay_ContractSize,
                 headingId: StringId.SecurityFieldHeading_ContractSize,
             },
@@ -1377,9 +1568,16 @@ export namespace SecurityDataItem {
             QuotationBasis: {
                 id: FieldId.QuotationBasis,
                 name: 'QuotationBasis',
-                dataTypeId: FieldDataTypeId.String,
+                dataTypeId: FieldDataTypeId.StringArray,
                 displayId: StringId.SecurityFieldDisplay_QuotationBasis,
                 headingId: StringId.SecurityFieldHeading_QuotationBasis,
+            },
+            Currency: {
+                id: FieldId.Currency,
+                name: 'Currency',
+                dataTypeId: FieldDataTypeId.Enumeration,
+                displayId: StringId.SecurityFieldDisplay_Currency,
+                headingId: StringId.SecurityFieldHeading_Currency,
             },
             Open: {
                 id: FieldId.Open,
@@ -1447,7 +1645,7 @@ export namespace SecurityDataItem {
             AskQuantity: {
                 id: FieldId.AskQuantity,
                 name: 'AskQuantity',
-                dataTypeId: FieldDataTypeId.Integer,
+                dataTypeId: FieldDataTypeId.Decimal,
                 displayId: StringId.SecurityFieldDisplay_AskQuantity,
                 headingId: StringId.SecurityFieldHeading_AskQuantity,
             },
@@ -1475,7 +1673,7 @@ export namespace SecurityDataItem {
             BidQuantity: {
                 id: FieldId.BidQuantity,
                 name: 'BidQuantity',
-                dataTypeId: FieldDataTypeId.Integer,
+                dataTypeId: FieldDataTypeId.Decimal,
                 displayId: StringId.SecurityFieldDisplay_BidQuantity,
                 headingId: StringId.SecurityFieldHeading_BidQuantity,
             },
@@ -1496,7 +1694,7 @@ export namespace SecurityDataItem {
             Volume: {
                 id: FieldId.Volume,
                 name: 'Volume',
-                dataTypeId: FieldDataTypeId.Integer,
+                dataTypeId: FieldDataTypeId.Decimal,
                 displayId: StringId.SecurityFieldDisplay_Volume,
                 headingId: StringId.SecurityFieldHeading_Volume,
             },
@@ -1510,14 +1708,14 @@ export namespace SecurityDataItem {
             AuctionQuantity: {
                 id: FieldId.AuctionQuantity,
                 name: 'AuctionQuantity',
-                dataTypeId: FieldDataTypeId.Integer,
+                dataTypeId: FieldDataTypeId.Decimal,
                 displayId: StringId.SecurityFieldDisplay_AuctionQuantity,
                 headingId: StringId.SecurityFieldHeading_AuctionQuantity,
             },
             AuctionRemainder: {
                 id: FieldId.AuctionRemainder,
                 name: 'AuctionReminder',
-                dataTypeId: FieldDataTypeId.Integer,
+                dataTypeId: FieldDataTypeId.Decimal,
                 displayId: StringId.SecurityFieldDisplay_AuctionRemainder,
                 headingId: StringId.SecurityFieldHeading_AuctionRemainder,
             },
@@ -1531,7 +1729,7 @@ export namespace SecurityDataItem {
             ValueTraded: {
                 id: FieldId.ValueTraded,
                 name: 'ValueTraded',
-                dataTypeId: FieldDataTypeId.Number,
+                dataTypeId: FieldDataTypeId.Decimal,
                 displayId: StringId.SecurityFieldDisplay_ValueTraded,
                 headingId: StringId.SecurityFieldHeading_ValueTraded,
             },
@@ -1545,14 +1743,14 @@ export namespace SecurityDataItem {
             ShareIssue: {
                 id: FieldId.ShareIssue,
                 name: 'ShareIssue',
-                dataTypeId: FieldDataTypeId.Integer,
+                dataTypeId: FieldDataTypeId.Decimal,
                 displayId: StringId.SecurityFieldDisplay_ShareIssue,
                 headingId: StringId.SecurityFieldHeading_ShareIssue,
             },
             StatusNote: {
                 id: FieldId.StatusNote,
                 name: 'StatusNote',
-                dataTypeId: FieldDataTypeId.String,
+                dataTypeId: FieldDataTypeId.StringArray,
                 displayId: StringId.SecurityFieldDisplay_StatusNote,
                 headingId: StringId.SecurityFieldHeading_StatusNote,
             },

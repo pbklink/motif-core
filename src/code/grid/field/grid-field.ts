@@ -4,56 +4,19 @@
  * License: motionite.trade/license/motif
  */
 
-import { StringId, Strings } from '../../res/res-internal-api';
-import { RenderValue } from '../../services/services-internal-api';
+import { RevField } from '@xilytix/rev-data-source';
+import { StringId, Strings } from '../../res/internal-api';
+import { RenderValue } from '../../services/internal-api';
 import {
-    AssertInternalError,
     EnumInfoOutOfOrderError,
     FieldDataTypeId,
-    GridDataEditValue,
-    GridRevRecordField,
-    IndexedRecord,
-    Integer
-} from '../../sys/sys-internal-api';
-import { GridFieldCustomHeadingsService } from './grid-field-custom-headings-service';
-import { GridFieldDefinition } from './grid-field-definition';
+} from '../../sys/internal-api';
 
-export abstract class GridField implements GridRevRecordField {
-    readonly name: string;
-    index: Integer;
-    heading: string;
+export abstract class GridField extends RevField<RenderValue.TypeId, RenderValue.Attribute.TypeId> {
 
-    getEditValueEventer: GridField.GetEditValueEventer | undefined;
-    setEditValueEventer: GridField.SetEditValueEventer | undefined;
-
-    constructor(readonly definition: GridFieldDefinition, heading?: string) {
-        this.name = definition.name;
-        this.heading = heading ?? definition.defaultHeading;
-    }
-
-    getEditValue(record: IndexedRecord): GridDataEditValue {
-        if (this.getEditValueEventer === undefined) {
-            throw new AssertInternalError('GFGEV20814');
-        } else {
-            return this.getEditValueEventer(record);
-        }
-    }
-
-    setEditValue(record: IndexedRecord, value: GridDataEditValue) {
-        if (this.setEditValueEventer === undefined) {
-            throw new AssertInternalError('GFSEV20814');
-        } else {
-            this.setEditValueEventer(record, value);
-        }
-    }
-
-    abstract getViewValue(record: IndexedRecord): RenderValue;
 }
 
 export namespace GridField {
-    export type GetEditValueEventer = (this: void, record: IndexedRecord) => GridDataEditValue;
-    export type SetEditValueEventer = (this: void, record: IndexedRecord, value: GridDataEditValue) => void;
-
     export const enum FieldId {
         Name,
         Heading,
@@ -120,7 +83,7 @@ export namespace GridField {
         export function initialise() {
             const outOfOrderIdx = infos.findIndex((info: Info, index: number) => info.id !== index as FieldId);
             if (outOfOrderIdx >= 0) {
-                throw new EnumInfoOutOfOrderError('GridField.FieldId', outOfOrderIdx, `${idToName(outOfOrderIdx)}`);
+                throw new EnumInfoOutOfOrderError('GridField.FieldId', outOfOrderIdx, idToName(outOfOrderIdx));
             }
         }
 
@@ -138,15 +101,6 @@ export namespace GridField {
 
         export function idToHeading(id: Id) {
             return Strings[idToHeadingId(id)];
-        }
-    }
-
-    export function generateHeading(customHeadingsService: GridFieldCustomHeadingsService, fieldDefinition: GridFieldDefinition) {
-        const customHeading = customHeadingsService.tryGetFieldHeading(fieldDefinition.name, fieldDefinition.sourcelessName);
-        if (customHeading !== undefined) {
-            return customHeading;
-        } else {
-            return fieldDefinition.defaultHeading;
         }
     }
 }

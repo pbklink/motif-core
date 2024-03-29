@@ -4,11 +4,11 @@
  * License: motionite.trade/license/motif
  */
 
-import { CommandContext } from '../command-context/command-context-internal-api';
+import { CommandContext } from '../command-context/internal-api';
 import { Command } from '../command/command';
 import { extStrings } from '../res/ext-strings';
 import { ExtensionOrInternalError } from '../sys/external-error';
-import { compareInteger, ErrorCode, Integer, ModifierKey, SysTick } from '../sys/sys-internal-api';
+import { compareInteger, ErrorCode, Integer, ModifierKey, SysTick } from '../sys/internal-api';
 import { UiAction } from '../ui-action/internal-api';
 import { KeyboardShortcutRegistry } from './keyboard-shortcut-registry';
 

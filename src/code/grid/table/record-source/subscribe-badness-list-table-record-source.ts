@@ -4,15 +4,15 @@
  * License: motionite.trade/license/motif
  */
 
-import { LockOpenListItem } from '../../../sys/lock-open-list-item';
 import {
     Badness,
     BadnessList,
     Integer,
+    LockOpenListItem,
     MultiEvent,
     UnreachableCaseError,
     UsableListChangeTypeId
-} from "../../../sys/sys-internal-api";
+} from "../../../sys/internal-api";
 import { TableRecordSource } from './table-record-source';
 
 /** @public */
@@ -21,7 +21,7 @@ export abstract class SubscribeBadnessListTableRecordSource<Record, RecordList e
     private _recordListListChangeEventSubscriptionId: MultiEvent.SubscriptionId;
     // private _recordListBeforeRecordChangeEventSubscriptionId: MultiEvent.SubscriptionId;
     // private _recordListAfterRecordChangedEventSubscriptionId: MultiEvent.SubscriptionId;
-    private _recordListbadnessChangeEventSubscriptionId: MultiEvent.SubscriptionId;
+    private _recordListbadnessChangedEventSubscriptionId: MultiEvent.SubscriptionId;
 
     get recordList() { return this._recordList; }
 
@@ -40,8 +40,8 @@ export abstract class SubscribeBadnessListTableRecordSource<Record, RecordList e
         // this._recordListAfterRecordChangedEventSubscriptionId = this._recordList.subscribeAfterRecordChangedEvent(
         //     (index) => this.handleRecordListAfterRecordChangedEvent(index)
         // );
-        this._recordListbadnessChangeEventSubscriptionId = this._recordList.subscribeBadnessChangeEvent(
-            () => { this.handleRecordListBadnessChangeEvent(); }
+        this._recordListbadnessChangedEventSubscriptionId = this._recordList.subscribeBadnessChangedEvent(
+            () => { this.handleRecordListbadnessChangedEvent(); }
         );
 
         super.openLocked(opener);
@@ -64,7 +64,7 @@ export abstract class SubscribeBadnessListTableRecordSource<Record, RecordList e
         }
 
         this._recordList.unsubscribeListChangeEvent(this._recordListListChangeEventSubscriptionId);
-        this._recordList.unsubscribeBadnessChangeEvent(this._recordListbadnessChangeEventSubscriptionId);
+        this._recordList.unsubscribeBadnessChangedEvent(this._recordListbadnessChangedEventSubscriptionId);
         // this._recordList.unsubscribeBeforeRecordChangeEvent(this._recordListBeforeRecordChangeEventSubscriptionId);
         // this._recordList.unsubscribeAfterRecordChangedEvent(this._recordListAfterRecordChangedEventSubscriptionId);
 
@@ -100,7 +100,7 @@ export abstract class SubscribeBadnessListTableRecordSource<Record, RecordList e
     //     this._definitions[index] = definition;
     // }
 
-    private handleRecordListBadnessChangeEvent() {
+    private handleRecordListbadnessChangedEvent() {
         this.checkSetUnusable(this._recordList.badness);
     }
 

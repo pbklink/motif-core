@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, Badness } from '../sys/sys-internal-api';
+import { AssertInternalError, Badness } from '../sys/internal-api';
 import { DataItem } from './data-item/internal-api';
 
 export abstract class ExtConnectionDataItem extends DataItem {

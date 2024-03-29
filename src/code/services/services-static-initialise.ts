@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { InternalCommandModule } from '../command/command-internal-api';
+import { InternalCommandModule } from '../command/internal-api';
 import { UserAlertServiceModule } from '../services/user-alert-service';
 import { CallPutModule } from './call-put';
 import { ChartHistoryIntervalModule } from './chart-history-interval';

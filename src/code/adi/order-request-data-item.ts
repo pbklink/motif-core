@@ -4,8 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { Decimal } from 'decimal.js-light';
-import { AssertInternalError } from '../sys/sys-internal-api';
+import { AssertInternalError, Decimal } from '../sys/internal-api';
 import {
     DataDefinition,
     OrderRequestError,
@@ -13,7 +12,7 @@ import {
     OrderRequestTypeId,
     OrderResponseDataMessage,
     OrdersDataMessage
-} from './common/adi-common-internal-api';
+} from './common/internal-api';
 import { PublisherSubscriptionDataItem } from './publish-subscribe/internal-api';
 
 export abstract class OrderRequestDataItem extends PublisherSubscriptionDataItem {

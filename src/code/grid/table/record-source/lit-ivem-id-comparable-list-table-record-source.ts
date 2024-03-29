@@ -4,18 +4,19 @@
  * License: motionite.trade/license/motif
  */
 
-import { AdiService, LitIvemId } from '../../../adi/adi-internal-api';
-import { SymbolDetailCacheService } from '../../../services/services-internal-api';
-import { Integer, UiComparableList, UnreachableCaseError } from '../../../sys/sys-internal-api';
-import { TextFormatterService } from '../../../text-format/text-format-internal-api';
+import { RevFieldCustomHeadingsService } from '@xilytix/rev-data-source';
+import { AdiService, LitIvemId } from '../../../adi/internal-api';
+import { SymbolDetailCacheService } from '../../../services/internal-api';
+import { CorrectnessBadness, Integer, UiComparableList, UnreachableCaseError } from '../../../sys/internal-api';
+import { TextFormatterService } from '../../../text-format/internal-api';
 import {
-    TableFieldSourceDefinition
-} from "../field-source/grid-table-field-source-internal-api";
-import { LitIvemIdTableRecordDefinition, TableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
-import { TableRecord } from '../record/grid-table-record-internal-api';
+    TableFieldSourceDefinition, TableFieldSourceDefinitionCachingFactoryService
+} from "../field-source/internal-api";
+import { LitIvemIdTableRecordDefinition } from '../record-definition/internal-api';
+import { TableRecord } from '../record/internal-api';
 import { LitIvemBaseDetailTableValueSource, LitIvemIdTableValueSource, SecurityDataItemTableValueSource } from '../value-source/internal-api';
 import { BadnessListTableRecordSource } from './badness-comparable-list-table-record-source';
-import { LitIvemIdComparableListTableRecordSourceDefinition, TableRecordSourceDefinitionFactoryService } from './definition/grid-table-record-source-definition-internal-api';
+import { LitIvemIdComparableListTableRecordSourceDefinition } from './definition/internal-api';
 import { PromisedLitIvemBaseDetail } from './promised-lit-ivem-base-detail';
 
 export class LitIvemIdComparableListTableRecordSource extends BadnessListTableRecordSource<LitIvemId> {
@@ -26,12 +27,16 @@ export class LitIvemIdComparableListTableRecordSource extends BadnessListTableRe
         private readonly _adiService: AdiService,
         private readonly _symbolDetailCacheService: SymbolDetailCacheService,
         textFormatterService: TextFormatterService,
-        tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService,
+        gridFieldCustomHeadingsService: RevFieldCustomHeadingsService,
+        tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService,
+        correctnessBadness: CorrectnessBadness,
         definition: LitIvemIdComparableListTableRecordSourceDefinition,
     ) {
         super(
             textFormatterService,
-            tableRecordSourceDefinitionFactoryService,
+            gridFieldCustomHeadingsService,
+            tableFieldSourceDefinitionCachingFactoryService,
+            correctnessBadness,
             definition,
             definition.allowedFieldSourceDefinitionTypeIds,
         );
@@ -41,13 +46,17 @@ export class LitIvemIdComparableListTableRecordSource extends BadnessListTableRe
 
     override createDefinition(): LitIvemIdComparableListTableRecordSourceDefinition {
         const list = this.list.clone();
-        return this.tableRecordSourceDefinitionFactoryService.createLitIvemIdComparableList(list);
+        return new LitIvemIdComparableListTableRecordSourceDefinition(
+            this._gridFieldCustomHeadingsService,
+            this._tableFieldSourceDefinitionCachingFactoryService,
+            list,
+        );
     }
 
     override createRecordDefinition(idx: Integer): LitIvemIdTableRecordDefinition {
         const litIvemId = this.list.getAt(idx);
         return {
-            typeId: TableRecordDefinition.TypeId.LitIvemId,
+            typeId: TableFieldSourceDefinition.TypeId.LitIvemId,
             mapKey: litIvemId.mapKey,
             litIvemId,
         };

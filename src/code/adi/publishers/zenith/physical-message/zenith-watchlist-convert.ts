@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { LitIvemId } from '../../../common/adi-common-internal-api';
+import { LitIvemId } from '../../../common/internal-api';
 import { ZenithConvert } from './zenith-convert';
 
 export namespace ZenithWatchlistConvert {

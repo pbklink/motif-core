@@ -4,10 +4,10 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, Badness, CorrectnessId } from '../sys/sys-internal-api';
+import { AssertInternalError, Badness, CorrectnessId } from '../sys/internal-api';
 
 export abstract class SequenceHistory {
-    badnessChangeEvent: SequenceHistory.BadnessChangeEvent;
+    badnessChangedEvent: SequenceHistory.badnessChangedEvent;
     becameUsableEvent: SequenceHistory.BecameUsableEvent | undefined;
     allSeriesLoadedChangedEvent: SequenceHistory.AllSeriesLoadedChanged | undefined;
 
@@ -64,7 +64,7 @@ export abstract class SequenceHistory {
                 const transactionId = ++this._setGoodBadnessTransactionId;
                 this.setAllSeriesLoaded(false);
                 if (transactionId === this._setGoodBadnessTransactionId) {
-                    this.notifyBadnessChange();
+                    this.notifyBadnessChanged();
                     if (transactionId === this._setGoodBadnessTransactionId && this.usable !== oldUsable) {
                         this.processUsableChanged();
                     }
@@ -78,8 +78,8 @@ export abstract class SequenceHistory {
     }
 
 
-    private notifyBadnessChange() {
-        this.badnessChangeEvent();
+    private notifyBadnessChanged() {
+        this.badnessChangedEvent();
     }
 
     private notifyBecameUsable() {
@@ -116,7 +116,7 @@ export abstract class SequenceHistory {
             const transactionId = ++this._setGoodBadnessTransactionId;
             this.setAllSeriesLoaded(false);
             if (transactionId === this._setGoodBadnessTransactionId) {
-                this.notifyBadnessChange();
+                this.notifyBadnessChanged();
                 if (transactionId === this._setGoodBadnessTransactionId) {
                     if (this._usable !== oldUsable) {
                         this.processUsableChanged();
@@ -132,7 +132,7 @@ export abstract class SequenceHistory {
 }
 
 export namespace SequenceHistory {
-    export type BadnessChangeEvent = (this: void) => void;
+    export type badnessChangedEvent = (this: void) => void;
     export type BecameUsableEvent = (this: void) => void;
     export type AllSeriesLoadedChanged = (this: void) => void;
 }

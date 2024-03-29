@@ -6,7 +6,7 @@
 
 import {
     AssertInternalError, ErrorCode, UnreachableCaseError, ZenithDataError
-} from '../../../../sys/sys-internal-api';
+} from '../../../../sys/internal-api';
 import {
     ActiveFaultedStatusId,
     AdiPublisherRequest,
@@ -15,7 +15,7 @@ import {
     QueryScanDescriptorsDataDefinition,
     ScanDescriptorsDataDefinition,
     ScanStatusedDescriptorsDataMessage
-} from "../../../common/adi-common-internal-api";
+} from "../../../common/internal-api";
 import { ZenithProtocol } from './protocol/zenith-protocol';
 import { ZenithConvert } from './zenith-convert';
 import { ZenithNotifyConvert } from './zenith-notify-convert';

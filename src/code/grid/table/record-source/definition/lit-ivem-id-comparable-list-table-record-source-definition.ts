@@ -4,17 +4,16 @@
  * License: motionite.trade/license/motif
  */
 
-import { LitIvemId } from '../../../../adi/adi-internal-api';
-import { Err, ErrorCode, JsonElement, Ok, PickEnum, Result, UiComparableList } from '../../../../sys/sys-internal-api';
-import { GridFieldCustomHeadingsService } from '../../../field/grid-field-internal-api';
-import { GridLayoutDefinition } from '../../../layout/grid-layout-internal-api';
+import { RevFieldCustomHeadingsService, RevGridLayoutDefinition } from '@xilytix/rev-data-source';
+import { LitIvemId } from '../../../../adi/internal-api';
+import { ErrorCode, JsonElement, JsonElementErr, Ok, PickEnum, Result, UiComparableList } from '../../../../sys/internal-api';
 import {
     LitIvemBaseDetailTableFieldSourceDefinition,
     LitIvemIdTableFieldSourceDefinition,
     SecurityDataItemTableFieldSourceDefinition,
     TableFieldSourceDefinition,
-    TableFieldSourceDefinitionCachedFactoryService
-} from "../../field-source/grid-table-field-source-internal-api";
+    TableFieldSourceDefinitionCachingFactoryService
+} from "../../field-source/internal-api";
 import { BadnessListTableRecordSourceDefinition } from './badness-list-table-record-source-definition';
 import { TableRecordSourceDefinition } from './table-record-source-definition';
 
@@ -23,13 +22,13 @@ export class LitIvemIdComparableListTableRecordSourceDefinition extends BadnessL
     declare list: UiComparableList<LitIvemId>;
 
     constructor(
-        customHeadingsService: GridFieldCustomHeadingsService,
-        tableFieldSourceDefinitionCachedFactoryService: TableFieldSourceDefinitionCachedFactoryService,
+        customHeadingsService: RevFieldCustomHeadingsService,
+        tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService,
         list: UiComparableList<LitIvemId>,
     ) {
         super(
             customHeadingsService,
-            tableFieldSourceDefinitionCachedFactoryService,
+            tableFieldSourceDefinitionCachingFactoryService,
             TableRecordSourceDefinition.TypeId.LitIvemIdComparableList,
             LitIvemIdComparableListTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
             list,
@@ -42,14 +41,14 @@ export class LitIvemIdComparableListTableRecordSourceDefinition extends BadnessL
         element.setElementArray(LitIvemIdComparableListTableRecordSourceDefinition.JsonName.list, listElementArray);
     }
 
-    override createDefaultLayoutDefinition(): GridLayoutDefinition {
-        const litIvemIdFieldSourceDefinition = this.tableFieldSourceDefinitionCachedFactoryService.litIvemId;
+    override createDefaultLayoutDefinition(): RevGridLayoutDefinition {
+        const litIvemIdFieldSourceDefinition = LitIvemIdTableFieldSourceDefinition.get(this.tableFieldSourceDefinitionCachingFactoryService);
 
         const fieldNames = new Array<string>();
 
         fieldNames.push(litIvemIdFieldSourceDefinition.getFieldNameById(LitIvemId.FieldId.LitIvemId));
 
-        return GridLayoutDefinition.createFromFieldNames(fieldNames);
+        return RevGridLayoutDefinition.createFromFieldNames(fieldNames);
     }
 }
 
@@ -60,7 +59,7 @@ export namespace LitIvemIdComparableListTableRecordSourceDefinition {
         TableFieldSourceDefinition.TypeId.LitIvemBaseDetail |
         TableFieldSourceDefinition.TypeId.SecurityDataItem
         // AlternateCodesFix: Currently this actually is part of FullDetail.  Will be in BaseDetail in future
-        // TableFieldSourceDefinition.TypeId.LitIvemAlternateCodes
+        // TypedTableFieldSourceDefinition.TypeId.LitIvemAlternateCodes
     >;
 
     export const allowedFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[] = [
@@ -68,7 +67,7 @@ export namespace LitIvemIdComparableListTableRecordSourceDefinition {
         TableFieldSourceDefinition.TypeId.LitIvemBaseDetail,
         TableFieldSourceDefinition.TypeId.SecurityDataItem,
         // AlternateCodesFix: Currently this actually is part of FullDetail.  Will be in BaseDetail in future
-        // TableFieldSourceDefinition.TypeId.LitIvemAlternateCodes,
+        // TypedTableFieldSourceDefinition.TypeId.LitIvemAlternateCodes,
     ];
 
     export const defaultFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[] = [
@@ -87,11 +86,11 @@ export namespace LitIvemIdComparableListTableRecordSourceDefinition {
     export function tryCreateListFromElement(element: JsonElement): Result<UiComparableList<LitIvemId>> {
         const elementArrayResult = element.tryGetElementArray(JsonName.list);
         if (elementArrayResult.isErr()) {
-            const error = elementArrayResult.error;
-            if (error === JsonElement.arrayErrorCode_NotSpecified) {
-                return new Err(ErrorCode.LitIvemIdComparableListTableRecordSourceDefinition_JsonLitIvemIdsNotSpecified);
+            const errorId = elementArrayResult.error;
+            if (errorId === JsonElement.ErrorId.JsonValueIsNotAnArray) {
+                return JsonElementErr.createOuter(elementArrayResult.error, ErrorCode.LitIvemIdComparableListTableRecordSourceDefinition_JsonLitIvemIdsNotSpecified);
             } else {
-                return new Err(ErrorCode.LitIvemIdComparableListTableRecordSourceDefinition_JsonLitIvemIdsIsInvalid);
+                return JsonElementErr.createOuter(elementArrayResult.error, ErrorCode.LitIvemIdComparableListTableRecordSourceDefinition_JsonLitIvemIdsIsInvalid);
             }
         } else {
             const litIvemIdsResult = LitIvemId.tryCreateArrayFromJsonElementArray(elementArrayResult.value);
@@ -107,8 +106,8 @@ export namespace LitIvemIdComparableListTableRecordSourceDefinition {
     }
 
     export function tryCreateDefinition(
-        customHeadingsService: GridFieldCustomHeadingsService,
-        tableFieldSourceDefinitionCachedFactoryService: TableFieldSourceDefinitionCachedFactoryService,
+        customHeadingsService: RevFieldCustomHeadingsService,
+        tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService,
         element: JsonElement,
     ): Result<LitIvemIdComparableListTableRecordSourceDefinition> {
         const listCreateResult = tryCreateListFromElement(element);
@@ -117,15 +116,15 @@ export namespace LitIvemIdComparableListTableRecordSourceDefinition {
             return listCreateResult.createOuter(errorCode);
         } else {
             const list = listCreateResult.value;
-            const definition = new LitIvemIdComparableListTableRecordSourceDefinition(customHeadingsService, tableFieldSourceDefinitionCachedFactoryService, list);
+            const definition = new LitIvemIdComparableListTableRecordSourceDefinition(customHeadingsService, tableFieldSourceDefinitionCachingFactoryService, list);
             return new Ok(definition);
         }
     }
 
     export function createLayoutDefinition(
-        fieldSourceDefinitionRegistryService: TableFieldSourceDefinitionCachedFactoryService,
+        fieldSourceDefinitionRegistryService: TableFieldSourceDefinitionCachingFactoryService,
         fieldIds: FieldId[],
-    ): GridLayoutDefinition {
+    ): RevGridLayoutDefinition {
         return fieldSourceDefinitionRegistryService.createLayoutDefinition(fieldIds);
     }
 

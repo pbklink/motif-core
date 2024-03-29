@@ -4,36 +4,36 @@
  * License: motionite.trade/license/motif
  */
 
-import { RankedLitIvemId } from '../../../../adi/adi-internal-api';
+import { RankedLitIvemId } from '../../../../adi/internal-api';
 import {
     AssertInternalError,
-    CommaText,
     FieldDataType,
     FieldDataTypeId,
     Integer,
     UnreachableCaseError
-} from "../../../../sys/sys-internal-api";
+} from "../../../../sys/internal-api";
 import {
     CorrectnessTableField,
     IntegerCorrectnessTableField,
     LitIvemIdCorrectnessTableField,
     NumberCorrectnessTableField,
     TableField
-} from "../../field/grid-table-field-internal-api";
+} from "../../field/internal-api";
 import {
     CorrectnessTableValue,
     IntegerCorrectnessTableValue,
     LitIvemIdCorrectnessTableValue,
     NumberCorrectnessTableValue
-} from "../../value/grid-table-value-internal-api";
+} from "../../value/internal-api";
 import { TableFieldSourceDefinition } from './table-field-source-definition';
+import { TableFieldSourceDefinitionCachingFactoryService } from './table-field-source-definition-caching-factory-service';
 
 /** @public */
 export class RankedLitIvemIdTableFieldSourceDefinition extends TableFieldSourceDefinition {
     override readonly fieldDefinitions: TableField.Definition[];
 
     constructor() {
-        super(TableFieldSourceDefinition.TypeId.RankedLitIvemId);
+        super(RankedLitIvemIdTableFieldSourceDefinition.typeId);
 
         this.fieldDefinitions = this.createFieldDefinitions();
     }
@@ -44,7 +44,7 @@ export class RankedLitIvemIdTableFieldSourceDefinition extends TableFieldSourceD
 
     getFieldNameById(id: RankedLitIvemId.FieldId) {
         const sourcelessFieldName = RankedLitIvemIdTableFieldSourceDefinition.Field.getNameById(id);
-        return CommaText.from2Values(this.name, sourcelessFieldName);
+        return this.encodeFieldName(sourcelessFieldName);
     }
 
     getSupportedFieldNameById(id: RankedLitIvemId.FieldId) {
@@ -83,6 +83,9 @@ export class RankedLitIvemIdTableFieldSourceDefinition extends TableFieldSourceD
 
 /** @public */
 export namespace RankedLitIvemIdTableFieldSourceDefinition {
+    export const typeId = TableFieldSourceDefinition.TypeId.RankedLitIvemId;
+    export type TypeId = typeof typeId;
+
     export namespace Field {
         const unsupportedIds: RankedLitIvemId.FieldId[] = [];
         export const count = RankedLitIvemId.Field.idCount - unsupportedIds.length;
@@ -166,8 +169,12 @@ export namespace RankedLitIvemIdTableFieldSourceDefinition {
     }
 
     export interface FieldId extends TableFieldSourceDefinition.FieldId {
-        sourceTypeId: TableFieldSourceDefinition.TypeId.RankedLitIvemId;
+        sourceTypeId: RankedLitIvemIdTableFieldSourceDefinition.TypeId;
         id: RankedLitIvemId.FieldId;
+    }
+
+    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactoryService): RankedLitIvemIdTableFieldSourceDefinition {
+        return cachingFactoryService.get(typeId) as RankedLitIvemIdTableFieldSourceDefinition;
     }
 
     export function initialiseStatic() {

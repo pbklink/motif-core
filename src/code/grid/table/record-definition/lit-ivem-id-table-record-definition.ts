@@ -4,11 +4,12 @@
  * License: motionite.trade/license/motif
  */
 
-import { LitIvemId } from '../../../adi/adi-internal-api';
+import { LitIvemId } from '../../../adi/internal-api';
+import { TableFieldSourceDefinition } from '../field-source/internal-api';
 import { TableRecordDefinition } from './table-record-definition';
 
 export interface LitIvemIdTableRecordDefinition extends TableRecordDefinition {
-    readonly typeId: TableRecordDefinition.TypeId.LitIvemId;
+    readonly typeId: TableFieldSourceDefinition.TypeId.LitIvemId;
     readonly litIvemId: LitIvemId;
 }
 

@@ -4,13 +4,13 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, ErrorCode, Logger, newUndefinableDecimal, ZenithDataError } from '../../../../sys/sys-internal-api';
+import { AssertInternalError, ErrorCode, logger, newUndefinableDecimal, ZenithDataError } from '../../../../sys/internal-api';
 import {
     AdiPublisherRequest,
     AdiPublisherSubscription,
     AmendOrderRequestDataDefinition,
     AmendOrderResponseDataMessage
-} from "../../../common/adi-common-internal-api";
+} from "../../../common/internal-api";
 import { ZenithProtocol } from './protocol/zenith-protocol';
 import { ZenithConvert } from './zenith-convert';
 import { ZenithOrderConvert } from './zenith-order-convert';
@@ -43,7 +43,7 @@ export namespace AmendOrderMessageConvert {
         };
 
         const messageText = JSON.stringify(result);
-        Logger.logInfo('Amend Order Request', messageText);
+        logger.logInfo('Amend Order Request', messageText);
 
         return result;
     }
@@ -52,7 +52,7 @@ export namespace AmendOrderMessageConvert {
         actionId: ZenithConvert.MessageContainer.Action.Id) {
 
         const messageText = JSON.stringify(message);
-        Logger.logInfo('Amend Order Response', messageText);
+        logger.logInfo('Amend Order Response', messageText);
 
         if (message.Controller !== ZenithProtocol.MessageContainer.Controller.Trading) {
             throw new ZenithDataError(ErrorCode.AOMCPMC585822200, message.Controller);

@@ -7,14 +7,14 @@
 import {
     assert,
     comparePriceOrRemainder,
+    ErrorCodeLogger,
     Integer,
-    Logger,
     MultiEvent,
     PriceOrRemainder,
     UnexpectedCaseError,
     UnreachableCaseError,
     ValueRecentChangeType, ValueRecentChangeTypeId
-} from '../sys/sys-internal-api';
+} from '../sys/internal-api';
 import {
     DataDefinition,
     DataMessage,
@@ -22,7 +22,7 @@ import {
     DepthLevelsDataDefinition,
     DepthLevelsDataMessage,
     MarketId, OrderSideId
-} from './common/adi-common-internal-api';
+} from './common/internal-api';
 import { MarketSubscriptionDataItem } from './market-subscription-data-item';
 
 export class DepthLevelsDataItem extends MarketSubscriptionDataItem {
@@ -402,11 +402,11 @@ export class DepthLevelsDataItem extends MarketSubscriptionDataItem {
         msgLevel: DepthLevelsDataMessage.Level | undefined
     ) {
         if (msgLevel === undefined) {
-            Logger.logDataError('DLDIPMALU834448', 'Add: Undefined Level');
+            ErrorCodeLogger.logDataError('DLDIPMALU834448', 'Add: Undefined Level');
         } else {
             const sideId = msgLevel.sideId;
             if (sideId === undefined) {
-                Logger.logDataError(
+                ErrorCodeLogger.logDataError(
                     'DLDIPMALS111984',
                     `Add: Undefined SideId. LitIvemId: ${this._depthLevelsDefinition.litIvemId.name}`
                 );
@@ -417,7 +417,7 @@ export class DepthLevelsDataItem extends MarketSubscriptionDataItem {
                 } = this.getLevelsAndRemainderAtMax(sideId);
                 const price = msgLevel.price;
                 if (price === undefined) {
-                    Logger.logDataError(
+                    ErrorCodeLogger.logDataError(
                         'DLDIPMALP68477',
                         `Add: Undefined Price. LitIvemId: ${this._depthLevelsDefinition.litIvemId.name}`
                     );
@@ -428,7 +428,7 @@ export class DepthLevelsDataItem extends MarketSubscriptionDataItem {
                         price
                     );
                     if (found) {
-                        Logger.logDataError(
+                        ErrorCodeLogger.logDataError(
                             'DLDIPMALF448633',
                             `Add: price already exists. LitIvemId: ${
                                 this._depthLevelsDefinition.litIvemId.name
@@ -465,14 +465,14 @@ export class DepthLevelsDataItem extends MarketSubscriptionDataItem {
         msgLevel: DepthLevelsDataMessage.Level | undefined
     ) {
         if (msgLevel === undefined) {
-            Logger.logDataError('DLDIPMULU488177', 'Update: Undefined Level');
+            ErrorCodeLogger.logDataError('DLDIPMULU488177', 'Update: Undefined Level');
         } else {
             const id = msgLevel.id;
             const { found, sideId, levels, index } = this.findLevelIndexById(
                 id
             );
             if (!found) {
-                Logger.logDataError(
+                ErrorCodeLogger.logDataError(
                     'DLDIPMULF448633',
                     `update: id not found. LitIvemId: ${this._depthLevelsDefinition.litIvemId.name} Id: ${id}`
                 );
@@ -533,14 +533,14 @@ export class DepthLevelsDataItem extends MarketSubscriptionDataItem {
         msgLevel: DepthLevelsDataMessage.Level | undefined
     ) {
         if (msgLevel === undefined) {
-            Logger.logDataError('DLDIPMRLU666683', 'Remove: Undefined Level');
+            ErrorCodeLogger.logDataError('DLDIPMRLU666683', 'Remove: Undefined Level');
         } else {
             const id = msgLevel.id;
             const { found, sideId, levels, index } = this.findLevelIndexById(
                 id
             );
             if (!found) {
-                Logger.logDataError(
+                ErrorCodeLogger.logDataError(
                     'DLDIPMRLF229827',
                     `Remove: id not found. LitIvemId: ${this._depthLevelsDefinition.litIvemId.name} Id: ${id}`
                 );

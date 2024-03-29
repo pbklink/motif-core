@@ -4,8 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, Integer, UsableListChangeTypeId } from '../../sys/sys-internal-api';
-import { DataMessage, DataMessageTypeId, FeedClassId, FeedId, FeedInfo, FeedsDataMessage, OrderStatusesDataDefinition } from '../common/adi-common-internal-api';
+import { AssertInternalError, Integer, UsableListChangeTypeId } from '../../sys/internal-api';
+import { DataMessage, DataMessageTypeId, FeedClassId, FeedId, FeedInfo, FeedsDataMessage, OrderStatusesDataDefinition } from '../common/internal-api';
 import { RecordsPublisherSubscriptionDataItem } from '../publish-subscribe/internal-api';
 import { DataFeed } from './data-feed';
 import { Feed } from './feed';

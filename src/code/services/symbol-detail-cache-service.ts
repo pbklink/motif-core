@@ -23,8 +23,8 @@ import {
     SearchSymbolsLitIvemBaseDetail,
     SymbolFieldId,
     SymbolsDataItem
-} from '../adi/adi-internal-api';
-import { StringId, Strings } from '../res/res-internal-api';
+} from '../adi/internal-api';
+import { StringId, Strings } from '../res/internal-api';
 import {
     AssertInternalError,
     CorrectnessId,
@@ -34,7 +34,7 @@ import {
     UnreachableCaseError,
     addToCapacitisedArrayUniquely,
     mSecsPerHour
-} from '../sys/sys-internal-api';
+} from '../sys/internal-api';
 import { SymbolsService } from './symbols-service';
 
 export class SymbolDetailCacheService {

@@ -4,8 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, BadnessList, Integer, Logger, MultiEvent, RecordList, UnreachableCaseError, UsableListChangeTypeId } from '../../sys/sys-internal-api';
-import { AurcChangeTypeId, DataDefinition, DataMessage, DataMessageTypeId, FeedId, ScanStatusedDescriptorsDataMessage } from '../common/adi-common-internal-api';
+import { AssertInternalError, BadnessList, ErrorCodeLogger, Integer, MultiEvent, RecordList, UnreachableCaseError, UsableListChangeTypeId } from '../../sys/internal-api';
+import { AurcChangeTypeId, DataDefinition, DataMessage, DataMessageTypeId, FeedId, ScanStatusedDescriptorsDataMessage } from '../common/internal-api';
 import { FeedSubscriptionDataItem } from '../feed/internal-api';
 import { ScanStatusedDescriptor } from './scan-statused-descriptor';
 
@@ -108,7 +108,7 @@ export class ScanStatusedDescriptorsDataItem extends FeedSubscriptionDataItem im
                     } else {
                         if (this._map.has(change.scanId)) {
                             addStartMsgIdx = this.checkApplyAdd(msg.changes, addStartMsgIdx, msgChangeIdx);
-                            Logger.logDataError('SDIPSDMAE10091', `${change.scanId}, ${change.scanName ?? ''}, ${change.scanDescription ?? ''}`);
+                            ErrorCodeLogger.logDataError('SDIPSDMAE10091', `${change.scanId}, ${change.scanName ?? ''}, ${change.scanDescription ?? ''}`);
                         } else {
                             if (addStartMsgIdx < 0) {
                                 addStartMsgIdx = msgChangeIdx;
@@ -126,7 +126,7 @@ export class ScanStatusedDescriptorsDataItem extends FeedSubscriptionDataItem im
                         const descriptor = this._map.get(change.scanId);
 
                         if (descriptor === undefined) {
-                            Logger.logDataError('SDIPSDMUM10091', `${change.scanId}`);
+                            ErrorCodeLogger.logDataError('SDIPSDMUM10091', `${change.scanId}`);
                         } else {
                             descriptor.update(change);
                         }
@@ -141,7 +141,7 @@ export class ScanStatusedDescriptorsDataItem extends FeedSubscriptionDataItem im
                     } else {
                         const scanIdx = this.indexOfScanId(change.scanId);
                         if (scanIdx < 0) {
-                            Logger.logDataError('SDIPSDMRF10091', `Scan not found: ${JSON.stringify(change)}`);
+                            ErrorCodeLogger.logDataError('SDIPSDMRF10091', `Scan not found: ${JSON.stringify(change)}`);
                         } else {
                             this.removeRecord(scanIdx);
                         }

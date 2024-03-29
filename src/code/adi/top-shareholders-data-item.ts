@@ -14,12 +14,12 @@ import {
     isSameDay,
     MultiEvent,
     UsableListChangeTypeId
-} from '../sys/sys-internal-api';
+} from '../sys/internal-api';
 import {
     DataMessage,
     TopShareholder,
     TopShareholdersDataDefinition
-} from './common/adi-common-internal-api';
+} from './common/internal-api';
 import { DataItem } from './data-item/internal-api';
 import { LowLevelTopShareholdersDataItem } from './low-level-top-shareholders-data-item';
 

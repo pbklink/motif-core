@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, ErrorCode, ThrowableError, UnexpectedCaseError, ZenithDataError } from '../../../../sys/sys-internal-api';
+import { AssertInternalError, ErrorCode, InternalError, UnexpectedCaseError, ZenithDataError } from '../../../../sys/internal-api';
 import {
     AdiPublisherRequest,
     AdiPublisherSubscription,
@@ -12,7 +12,7 @@ import {
     BrokerageAccountTransactionsDataDefinition,
     QueryTransactionsDataDefinition,
     TransactionsDataMessage
-} from "../../../common/adi-common-internal-api";
+} from "../../../common/internal-api";
 import { ZenithProtocol } from './protocol/zenith-protocol';
 import { ZenithConvert } from './zenith-convert';
 
@@ -117,7 +117,7 @@ export namespace TransactionsMessageConvert {
                 };
                 result[index] = change;
             } catch (e) {
-                throw ThrowableError.appendToErrorMessage(e, ` Index: ${index}`);
+                throw InternalError.appendToErrorMessage(e, ` Index: ${index}`);
             }
         }
         return result;
@@ -131,7 +131,7 @@ export namespace TransactionsMessageConvert {
                 const change = ZenithConvert.Transactions.toDataMessageChange(zenithChange);
                 result[index] = change;
             } catch (e) {
-                throw ThrowableError.appendToErrorMessage(e, ` Index: ${index}`);
+                throw InternalError.appendToErrorMessage(e, ` Index: ${index}`);
             }
         }
         return result;

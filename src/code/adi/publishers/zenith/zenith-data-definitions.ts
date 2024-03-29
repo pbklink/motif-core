@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { DataChannelId, PublisherSubscriptionDataDefinition } from '../../common/adi-common-internal-api';
+import { DataChannelId, PublisherSubscriptionDataDefinition } from '../../common/internal-api';
 import { ZenithProtocol } from './physical-message/protocol/zenith-protocol';
 
 // This may need to be moved out of here to handle PublisherOnlined

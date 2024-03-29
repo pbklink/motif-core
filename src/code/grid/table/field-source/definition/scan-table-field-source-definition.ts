@@ -5,7 +5,7 @@
  */
 
 import { Scan } from '../../../../scan/internal-api';
-import { AssertInternalError, CommaText, FieldDataType, FieldDataTypeId, Integer } from '../../../../sys/sys-internal-api';
+import { AssertInternalError, FieldDataType, FieldDataTypeId, Integer } from '../../../../sys/internal-api';
 import {
     BooleanCorrectnessTableField,
     CorrectnessTableField,
@@ -15,27 +15,28 @@ import {
     IntegerCorrectnessTableField,
     StringCorrectnessTableField,
     TableField
-} from "../../field/grid-table-field-internal-api";
+} from "../../field/internal-api";
 import {
+    ActiveFaultedStatusIdCorrectnessTableValue,
     CorrectnessTableValue,
     DateTimeCorrectnessTableValue,
     EnabledCorrectnessTableValue,
     IntegerCorrectnessTableValue,
     LitIvemIdArrayCorrectnessTableValue,
     MarketIdArrayCorrectnessTableValue,
-    ScanStatusIdCorrectnessTableValue,
     ScanTargetTypeIdCorrectnessTableValue,
     StringCorrectnessTableValue,
     WritableCorrectnessTableValue
-} from '../../value/grid-table-value-internal-api';
+} from '../../value/internal-api';
 import { TableFieldSourceDefinition } from './table-field-source-definition';
+import { TableFieldSourceDefinitionCachingFactoryService } from './table-field-source-definition-caching-factory-service';
 
 /** @public */
 export class ScanTableFieldSourceDefinition extends TableFieldSourceDefinition {
     override readonly fieldDefinitions: TableField.Definition[];
 
     constructor() {
-        super(TableFieldSourceDefinition.TypeId.Scan);
+        super(ScanTableFieldSourceDefinition.typeId);
 
         this.fieldDefinitions = this.createFieldDefinitions();
     }
@@ -46,7 +47,7 @@ export class ScanTableFieldSourceDefinition extends TableFieldSourceDefinition {
 
     getFieldNameById(id: Scan.FieldId) {
         const sourcelessFieldName = Scan.Field.idToName(id);
-        return CommaText.from2Values(this.name, sourcelessFieldName);
+        return this.encodeFieldName(sourcelessFieldName);
     }
 
     getSupportedFieldNameById(id: Scan.FieldId) {
@@ -85,6 +86,9 @@ export class ScanTableFieldSourceDefinition extends TableFieldSourceDefinition {
 
 /** @public */
 export namespace ScanTableFieldSourceDefinition {
+    export const typeId = TableFieldSourceDefinition.TypeId.Scan;
+    export type TypeId = typeof typeId;
+
     export namespace Field {
         const unsupportedIds: Scan.FieldId[] = [
             Scan.FieldId.Index,
@@ -113,7 +117,7 @@ export namespace ScanTableFieldSourceDefinition {
             },
             {
                 id: Scan.FieldId.StatusId,
-                tableFieldValueConstructors: [EnumCorrectnessTableField, ScanStatusIdCorrectnessTableValue],
+                tableFieldValueConstructors: [EnumCorrectnessTableField, ActiveFaultedStatusIdCorrectnessTableValue],
             },
             {
                 id: Scan.FieldId.Enabled,
@@ -213,8 +217,12 @@ export namespace ScanTableFieldSourceDefinition {
     }
 
     export interface FieldId extends TableFieldSourceDefinition.FieldId {
-        sourceTypeId: TableFieldSourceDefinition.TypeId.Scan;
+        sourceTypeId: ScanTableFieldSourceDefinition.TypeId;
         id: Scan.FieldId;
+    }
+
+    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactoryService): ScanTableFieldSourceDefinition {
+        return cachingFactoryService.get(typeId) as ScanTableFieldSourceDefinition;
     }
 
     export function initialiseStatic() {

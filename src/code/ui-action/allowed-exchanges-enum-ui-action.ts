@@ -4,10 +4,10 @@
  * License: motionite.trade/license/motif
  */
 
-import { ExchangeId, ExchangeInfo } from '../adi/adi-internal-api';
-import { SymbolsService } from '../services/services-internal-api';
-import { Integer, MultiEvent } from '../sys/sys-internal-api';
-import { EnumUiAction } from './enum-ui-action';
+import { EnumUiAction } from '@xilytix/ui-action';
+import { ExchangeId, ExchangeInfo } from '../adi/internal-api';
+import { SymbolsService } from '../services/internal-api';
+import { Integer, MultiEvent } from '../sys/internal-api';
 
 export class AllowedExchangesEnumUiAction extends EnumUiAction<Integer> {
     private _allowedExchangeIdsChangedSubscriptionId: MultiEvent.SubscriptionId;

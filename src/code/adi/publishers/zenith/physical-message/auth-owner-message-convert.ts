@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { defined, ErrorCode, Integer, ZenithDataError } from '../../../../sys/sys-internal-api';
+import { defined, ErrorCode, Integer, ZenithDataError } from '../../../../sys/internal-api';
 import { ZenithProtocol } from './protocol/zenith-protocol';
 
 /** @internal */

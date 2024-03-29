@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { PhysicalMessageStaticInitialise } from './physical-message/adi-publishers-zenith-physical-message-internal-api';
+import { PhysicalMessageStaticInitialise } from './physical-message/internal-api';
 import { ZenithConnectionStateEngineModule } from './zenith-connection-state-engine';
 
 export namespace ZenithStaticInitialise {

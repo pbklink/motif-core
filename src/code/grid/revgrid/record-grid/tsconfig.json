@@ -14,7 +14,7 @@
   ],
   "references": [
     { "path": "../adapted-revgrid/tsconfig.json" },
-    { "path": "../../source/tsconfig.json" },
+    { "path": "../../typed/tsconfig.json" },
     { "path": "../../layout/tsconfig.json" },
     { "path": "../../field/tsconfig.json" },
     { "path": "../../../services/tsconfig.json" },

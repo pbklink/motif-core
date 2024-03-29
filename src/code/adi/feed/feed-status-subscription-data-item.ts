@@ -4,9 +4,9 @@
  * License: motionite.trade/license/motif
  */
 
-import { StringId, Strings } from '../../res/res-internal-api';
-import { Badness } from '../../sys/sys-internal-api';
-import { FeedId, FeedInfo, FeedStatus, FeedStatusId, SubscribabilityExtentId } from '../common/adi-common-internal-api';
+import { StringId, Strings } from '../../res/internal-api';
+import { Badness } from '../../sys/internal-api';
+import { FeedId, FeedInfo, FeedStatus, FeedStatusId, SubscribabilityExtentId } from '../common/internal-api';
 import { SubscribabilityExtentSubscriptionDataItem } from '../publish-subscribe/internal-api';
 
 export abstract class FeedStatusSubscriptionDataItem extends SubscribabilityExtentSubscriptionDataItem {

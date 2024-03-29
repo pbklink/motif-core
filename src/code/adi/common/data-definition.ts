@@ -4,8 +4,20 @@
  * License: motionite.trade/license/motif
  */
 
-import { Decimal } from 'decimal.js-light';
-import { CommaText, dateToUtcYYYYMMDD, Guid, Integer, JsonElement, MapKey, newUndefinableDate, newUndefinableDecimal, NotImplementedError, Ok, Result } from '../../sys/sys-internal-api';
+import {
+    CommaText,
+    dateToUtcYyyyMmDd,
+    Decimal,
+    Guid,
+    Integer,
+    JsonElement,
+    MapKey,
+    newUndefinableDate,
+    newUndefinableDecimal,
+    NotImplementedError,
+    Ok,
+    Result,
+} from '../../sys/internal-api';
 import { AdiPublisherSubscriptionDelayRetryAlgorithmId } from './adi-publisher-subscription-delay-retry-algorithm';
 import {
     BrokerageAccountId,
@@ -615,7 +627,7 @@ export class QueryTradesDataDefinition extends MarketSubscriptionDataDefinition 
             result += ` LastTradedId: ${this.lastTradeId}`;
         }
         if (this.tradingDate !== undefined) {
-            result += ` TradingDate: ${dateToUtcYYYYMMDD(this.tradingDate)}`;
+            result += ` TradingDate: ${dateToUtcYyyyMmDd(this.tradingDate)}`;
         }
         return result;
     }
@@ -672,7 +684,7 @@ export class DayTradesDataDefinition extends DataDefinition {
     get referencable() { return true; }
 
     get date() { return this._date; }
-    set date(value: Date |undefined) {
+    set date(value: Date | undefined) {
         if (value === undefined) {
             this._date = undefined;
         } else {
@@ -682,12 +694,12 @@ export class DayTradesDataDefinition extends DataDefinition {
     }
 
     protected override getDescription(): string {
-        const dateDescription = this._date === undefined ? '' : ' ' + dateToUtcYYYYMMDD(this._date);
+        const dateDescription = this._date === undefined ? '' : ' ' + dateToUtcYyyyMmDd(this._date);
         return super.getDescription() + ` LitIvemId: ${this.litIvemId.name} Date: ${dateDescription}`;
     }
 
     protected override calculateChannelReferencableKey() {
-        const dateStr = this._date === undefined ? '' : dateToUtcYYYYMMDD(this._date);
+        const dateStr = this._date === undefined ? '' : dateToUtcYyyyMmDd(this._date);
         return dateStr + '|' + this.litIvemId.mapKey;
     }
 }
@@ -1226,7 +1238,7 @@ export class CreateScanDataDefinition extends FeedSubscriptionDataDefinition {
     symbolListEnabled: boolean;
     targetTypeId: ScanTargetTypeId;
     targets: readonly MarketId[] | readonly LitIvemId[];
-    maxMatchCount: Integer | undefined;
+    maxMatchCount: Integer;
     zenithCriteria: ZenithEncodedScanFormula.BooleanTupleNode;
     zenithRank: ZenithEncodedScanFormula.NumericTupleNode | undefined;
     attachedNotificationChannels: readonly ScanAttachedNotificationChannel[];
@@ -1278,7 +1290,7 @@ export class UpdateScanDataDefinition extends FeedSubscriptionDataDefinition {
     zenithRank: ZenithEncodedScanFormula.NumericTupleNode | undefined;
     targetTypeId: ScanTargetTypeId;
     targets: readonly MarketId[] | readonly LitIvemId[];
-    maxMatchCount: Integer | undefined;
+    maxMatchCount: Integer;
     attachedNotificationChannels: readonly ScanAttachedNotificationChannel[];
 
     constructor() {
@@ -1294,7 +1306,7 @@ export abstract class ExecuteScanDataDefinition extends FeedSubscriptionDataDefi
     zenithRank: ZenithEncodedScanFormula.NumericTupleNode | undefined;
     targetTypeId: ScanTargetTypeId;
     targets: readonly MarketId[] | readonly LitIvemId[];
-    maxMatchCount: Integer | undefined;
+    maxMatchCount: Integer;
 
     // eslint-disable-next-line @typescript-eslint/class-literal-property-style
     get referencable(): boolean { return false; }
@@ -1454,10 +1466,10 @@ export class CreateNotificationChannelDataDefinition extends FeedSubscriptionDat
     enabled: boolean;
     notificationChannelName: string;
     notificationChannelDescription?: string;
-    userMetadata: ZenithProtocolCommon.UserMetadata;
-    favourite: boolean;
+    userMetadata?: ZenithProtocolCommon.UserMetadata;
+    favourite?: boolean;
     distributionMethodId: NotificationDistributionMethodId;
-    settings: ZenithProtocolCommon.NotificationChannelSettings;
+    settings?: ZenithProtocolCommon.NotificationChannelSettings;
 
     constructor() {
         super(DataChannelId.CreateNotificationChannel);
@@ -1484,8 +1496,8 @@ export class UpdateNotificationChannelDataDefinition extends FeedSubscriptionDat
     enabled: boolean;
     notificationChannelName: string;
     notificationChannelDescription?: string;
-    userMetadata: ZenithProtocolCommon.UserMetadata;
-    favourite: boolean;
+    userMetadata?: ZenithProtocolCommon.UserMetadata;
+    favourite?: boolean;
     distributionMethodId: NotificationDistributionMethodId;
     settings: ZenithProtocolCommon.NotificationChannelSettings;
 

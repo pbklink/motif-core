@@ -4,17 +4,16 @@
  * License: motionite.trade/license/motif
  */
 
-import { Decimal } from 'decimal.js-light';
 import {
     AssertInternalError,
     ErrorCode,
     getUndefinedNullOrFunctionResult,
     ifDefined,
-    newUndefinableDecimal,
-    ThrowableError,
+    InternalError,
+    newDecimal,
     UnexpectedCaseError,
     ZenithDataError
-} from "../../../../sys/sys-internal-api";
+} from "../../../../sys/internal-api";
 import {
     AdiPublisherRequest,
     AdiPublisherSubscription,
@@ -25,7 +24,7 @@ import {
     QuerySecurityDataDefinition,
     SecurityDataDefinition,
     SecurityDataMessage
-} from "../../../common/adi-common-internal-api";
+} from "../../../common/internal-api";
 import { ZenithProtocol } from './protocol/zenith-protocol';
 import { ZenithConvert } from './zenith-convert';
 
@@ -155,42 +154,43 @@ export namespace SecurityMessageConvert {
                 tradingState: data.TradingState,
                 marketIds: ifDefined(data.TradingMarkets, parseTradingMarkets),
                 isIndex: data.IsIndex === true,
-                expiryDate: ifDefined(data.ExpiryDate, x => ZenithConvert.Date.DateYYYYMMDD.toSourceTzOffsetDate(x)),
-                strikePrice: newUndefinableDecimal(data.StrikePrice),
-                callOrPutId: ifDefined(data.CallOrPut, x => ZenithConvert.CallOrPut.toId(x)),
-                contractSize: data.ContractSize,
+                expiryDate: getUndefinedNullOrFunctionResult(data.ExpiryDate, x => ZenithConvert.Date.DashedYyyyMmDdDate.toSourceTzOffsetDate(x)),
+                strikePrice: getUndefinedNullOrFunctionResult(data.StrikePrice, x => newDecimal(x)),
+                callOrPutId: getUndefinedNullOrFunctionResult(data.CallOrPut, x => ZenithConvert.CallOrPut.toId(x)),
+                contractSize: getUndefinedNullOrFunctionResult(data.ContractSize, x => newDecimal(x)),
                 subscriptionDataTypeIds: ifDefined(data.SubscriptionData, x => ZenithConvert.SubscriptionData.toIdArray(x)),
                 quotationBasis: data.QuotationBasis,
-                open: getUndefinedNullOrFunctionResult(data.Open, x => new Decimal(x)),
-                high: getUndefinedNullOrFunctionResult(data.High, x => new Decimal(x)),
-                low: getUndefinedNullOrFunctionResult(data.Low, x => new Decimal(x)),
-                close: getUndefinedNullOrFunctionResult(data.Close, x => new Decimal(x)),
-                settlement: getUndefinedNullOrFunctionResult(data.Settlement, x => new Decimal(x)),
-                last: getUndefinedNullOrFunctionResult(data.Last, x => new Decimal(x)),
+                currencyId: getUndefinedNullOrFunctionResult(data.Currency, x => ZenithConvert.Currency.tryToId(x)),
+                open: getUndefinedNullOrFunctionResult(data.Open, x => newDecimal(x)),
+                high: getUndefinedNullOrFunctionResult(data.High, x => newDecimal(x)),
+                low: getUndefinedNullOrFunctionResult(data.Low, x => newDecimal(x)),
+                close: getUndefinedNullOrFunctionResult(data.Close, x => newDecimal(x)),
+                settlement: getUndefinedNullOrFunctionResult(data.Settlement, x => newDecimal(x)),
+                last: getUndefinedNullOrFunctionResult(data.Last, x => newDecimal(x)),
                 trend: ifDefined(data.Trend, x => ZenithConvert.Trend.toId(x)),
-                bestAsk: getUndefinedNullOrFunctionResult(data.BestAsk, x => new Decimal(x)),
+                bestAsk: getUndefinedNullOrFunctionResult(data.BestAsk, x => newDecimal(x)),
                 askCount: data.AskCount,
-                askQuantity: data.AskQuantity,
+                askQuantity: ifDefined(data.AskQuantity, x => newDecimal(x)),
                 askUndisclosed: data.AskUndisclosed,
-                bestBid: getUndefinedNullOrFunctionResult(data.BestBid, x => new Decimal(x)),
+                bestBid: getUndefinedNullOrFunctionResult(data.BestBid, x => newDecimal(x)),
                 bidCount: data.BidCount,
-                bidQuantity: data.BidQuantity,
+                bidQuantity: ifDefined(data.BidQuantity, x => newDecimal(x)),
                 bidUndisclosed: data.BidUndisclosed,
                 numberOfTrades: data.NumberOfTrades,
-                volume: data.Volume,
-                auctionPrice: getUndefinedNullOrFunctionResult(data.AuctionPrice, x => new Decimal(x)),
-                auctionQuantity: data.AuctionQuantity,
-                auctionRemainder: data.AuctionRemainder,
-                vWAP: getUndefinedNullOrFunctionResult(data.VWAP, x => new Decimal(x)),
-                valueTraded: data.ValueTraded,
+                volume: ifDefined(data.Volume, x => newDecimal(x)),
+                auctionPrice: getUndefinedNullOrFunctionResult(data.AuctionPrice, x => newDecimal(x)),
+                auctionQuantity: getUndefinedNullOrFunctionResult(data.AuctionQuantity, x => newDecimal(x)),
+                auctionRemainder: getUndefinedNullOrFunctionResult(data.AuctionRemainder, x => newDecimal(x)),
+                vWAP: getUndefinedNullOrFunctionResult(data.VWAP, x => newDecimal(x)),
+                valueTraded: ifDefined(data.ValueTraded, x => newDecimal(x)),
                 openInterest: data.OpenInterest,
-                shareIssue: data.ShareIssue,
+                shareIssue: getUndefinedNullOrFunctionResult(data.ShareIssue, x => newDecimal(x)),
                 statusNote: data.StatusNote,
                 extended: getUndefinedNullOrFunctionResult(extended, value => ZenithConvert.Security.Extended.toAdi(value)),
             } as const;
             return result;
         } catch (error) {
-            throw ThrowableError.prependErrorMessage(error, 'Security Data Message: ');
+            throw InternalError.prependErrorMessage(error, 'Security Data Message: ');
         }
     }
 

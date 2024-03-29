@@ -4,13 +4,13 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, ErrorCode, Logger, ZenithDataError } from '../../../../sys/sys-internal-api';
+import { AssertInternalError, ErrorCode, logger, ZenithDataError } from '../../../../sys/internal-api';
 import {
     AdiPublisherRequest,
     AdiPublisherSubscription,
     MoveOrderRequestDataDefinition,
     MoveOrderResponseDataMessage
-} from "../../../common/adi-common-internal-api";
+} from "../../../common/internal-api";
 import { ZenithProtocol } from './protocol/zenith-protocol';
 import { ZenithConvert } from './zenith-convert';
 import { ZenithOrderConvert } from './zenith-order-convert';
@@ -41,7 +41,7 @@ export namespace MoveOrderMessageConvert {
         };
 
         const messageText = JSON.stringify(result);
-        Logger.logInfo('Move Order Request', messageText);
+        logger.logInfo('Move Order Request', messageText);
 
         return result;
     }
@@ -50,7 +50,7 @@ export namespace MoveOrderMessageConvert {
         actionId: ZenithConvert.MessageContainer.Action.Id) {
 
         const messageText = JSON.stringify(message);
-        Logger.logInfo('Move Order Response', messageText);
+        logger.logInfo('Move Order Response', messageText);
 
         if (message.Controller !== ZenithProtocol.MessageContainer.Controller.Trading) {
             throw new ZenithDataError(ErrorCode.MOMCPMA6744444883, message.Controller);

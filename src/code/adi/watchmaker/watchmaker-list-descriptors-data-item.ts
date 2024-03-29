@@ -4,8 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, Integer, Logger, UnreachableCaseError, UsableListChangeTypeId } from '../../sys/sys-internal-api';
-import { AurcChangeTypeId, DataDefinition, DataMessage, DataMessageTypeId, FeedId, WatchmakerListDescriptorsDataMessage } from '../common/adi-common-internal-api';
+import { AssertInternalError, ErrorCodeLogger, Integer, UnreachableCaseError, UsableListChangeTypeId } from '../../sys/internal-api';
+import { AurcChangeTypeId, DataDefinition, DataMessage, DataMessageTypeId, FeedId, WatchmakerListDescriptorsDataMessage } from '../common/internal-api';
 import { KeyedCorrectnessSettableListFeedSubscriptionDataItem } from '../feed/internal-api';
 import { WatchmakerListDescriptor } from './watchmaker-list-descriptor';
 
@@ -46,7 +46,7 @@ export class WatchmakerListDescriptorsDataItem extends KeyedCorrectnessSettableL
                         const mapKey = change.id;
                         if (this.hasRecord(mapKey)) {
                             addStartMsgIdx = this.checkApplyAdd(msg.changes, addStartMsgIdx, msgChangeIdx);
-                            Logger.logDataError('WDDIPSDMAE10091', `${change.id}, ${change.name}, ${change.description ?? ''}`);
+                            ErrorCodeLogger.logDataError('WDDIPSDMAE10091', `${change.id}, ${change.name}, ${change.description ?? ''}`);
                         } else {
                             if (addStartMsgIdx < 0) {
                                 addStartMsgIdx = msgChangeIdx;
@@ -65,7 +65,7 @@ export class WatchmakerListDescriptorsDataItem extends KeyedCorrectnessSettableL
                         const descriptor = this.getRecordByMapKey(mapKey);
 
                         if (descriptor === undefined) {
-                            Logger.logDataError('SDIPSDMUM10091', `${change.id}`);
+                            ErrorCodeLogger.logDataError('SDIPSDMUM10091', `${change.id}`);
                         } else {
                             descriptor.update(change);
                         }
@@ -81,7 +81,7 @@ export class WatchmakerListDescriptorsDataItem extends KeyedCorrectnessSettableL
                         const removeMapKey = change.id;
                         const descriptorIdx = this.indexOfRecordByMapKey(removeMapKey);
                         if (descriptorIdx < 0) {
-                            Logger.logDataError('WDDIPSDMRF10091', `Watchmaker List Descriptor not found: ${JSON.stringify(change)}`);
+                            ErrorCodeLogger.logDataError('WDDIPSDMRF10091', `Watchmaker List Descriptor not found: ${JSON.stringify(change)}`);
                         } else {
                             this.checkUsableNotifyListChange(UsableListChangeTypeId.Remove, descriptorIdx, 1);
                             this.removeRecord(descriptorIdx);

@@ -4,33 +4,33 @@
  * License: motionite.trade/license/motif
  */
 
-import { Account } from '../../../../adi/adi-internal-api';
+import { Account } from '../../../../adi/internal-api';
 import {
     AssertInternalError,
-    CommaText,
     FieldDataType,
     FieldDataTypeId,
     Integer,
     UnreachableCaseError
-} from "../../../../sys/sys-internal-api";
+} from "../../../../sys/internal-api";
 import {
     CorrectnessTableField,
     EnumCorrectnessTableField,
     StringCorrectnessTableField,
     TableField
-} from '../../field/grid-table-field-internal-api';
+} from '../../field/internal-api';
 import {
     CorrectnessTableValue,
     DataEnvironmentIdCorrectnessTableValue,
     StringCorrectnessTableValue
-} from '../../value/grid-table-value-internal-api';
+} from '../../value/internal-api';
 import { TableFieldSourceDefinition } from './table-field-source-definition';
+import { TableFieldSourceDefinitionCachingFactoryService } from './table-field-source-definition-caching-factory-service';
 
 export class BrokerageAccountTableFieldSourceDefinition extends TableFieldSourceDefinition {
     override readonly fieldDefinitions: TableField.Definition[];
 
     constructor() {
-        super(TableFieldSourceDefinition.TypeId.BrokerageAccounts);
+        super(BrokerageAccountTableFieldSourceDefinition.typeId);
 
         this.fieldDefinitions = this.createFieldDefinitions();
     }
@@ -41,7 +41,7 @@ export class BrokerageAccountTableFieldSourceDefinition extends TableFieldSource
 
     getFieldNameById(id: Account.FieldId) {
         const sourcelessFieldName = BrokerageAccountTableFieldSourceDefinition.Field.getNameById(id);
-        return CommaText.from2Values(this.name, sourcelessFieldName);
+        return this.encodeFieldName(sourcelessFieldName);
     }
 
     getSupportedFieldNameById(id: Account.FieldId) {
@@ -77,6 +77,9 @@ export class BrokerageAccountTableFieldSourceDefinition extends TableFieldSource
 }
 
 export namespace BrokerageAccountTableFieldSourceDefinition {
+    export const typeId = TableFieldSourceDefinition.TypeId.BrokerageAccount;
+    export type TypeId = typeof typeId;
+
     export namespace Field {
         const unsupportedIds = [Account.FieldId.EnvironmentId];
         export const count = Account.Field.idCount - unsupportedIds.length;
@@ -166,8 +169,12 @@ export namespace BrokerageAccountTableFieldSourceDefinition {
     }
 
     export interface FieldId extends TableFieldSourceDefinition.FieldId {
-        sourceTypeId: TableFieldSourceDefinition.TypeId.BrokerageAccounts;
+        sourceTypeId: BrokerageAccountTableFieldSourceDefinition.TypeId;
         id: Account.FieldId;
+    }
+
+    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactoryService): BrokerageAccountTableFieldSourceDefinition {
+        return cachingFactoryService.get(typeId) as BrokerageAccountTableFieldSourceDefinition;
     }
 
     export function initialiseStatic() {

@@ -4,6 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
+import { RevFieldCustomHeadingsService } from '@xilytix/rev-data-source';
 import {
     AdiService,
     AllHoldingsDataDefinition,
@@ -14,19 +15,19 @@ import {
     BrokerageAccountHoldingsDataItem,
     Holding,
     SingleBrokerageAccountGroup
-} from "../../../adi/adi-internal-api";
-import { Integer, LockOpenListItem, UnreachableCaseError } from '../../../sys/sys-internal-api';
-import { TextFormatterService } from '../../../text-format/text-format-internal-api';
+} from "../../../adi/internal-api";
+import { CorrectnessBadness, Integer, LockOpenListItem, UnreachableCaseError } from '../../../sys/internal-api';
+import { TextFormatterService } from '../../../text-format/internal-api';
 import {
-    TableFieldSourceDefinition
+    TableFieldSourceDefinition, TableFieldSourceDefinitionCachingFactoryService
 } from '../field-source/definition/internal-api';
-import { HoldingTableRecordDefinition, TableRecordDefinition } from '../record-definition/grid-table-record-definition-internal-api';
-import { TableRecord } from '../record/grid-table-record-internal-api';
+import { HoldingTableRecordDefinition } from '../record-definition/internal-api';
+import { TableRecord } from '../record/internal-api';
 import { BrokerageAccountTableValueSource, HoldingTableValueSource, SecurityDataItemTableValueSource } from '../value-source/internal-api';
 import {
     BrokerageAccountGroupTableRecordSource
 } from './brokerage-account-group-table-record-source';
-import { HoldingTableRecordSourceDefinition, TableRecordSourceDefinitionFactoryService } from './definition/grid-table-record-source-definition-internal-api';
+import { HoldingTableRecordSourceDefinition } from './definition/internal-api';
 
 /** @public */
 export class HoldingTableRecordSource
@@ -35,26 +36,34 @@ export class HoldingTableRecordSource
     constructor(
         private readonly _adiService: AdiService,
         textFormatterService: TextFormatterService,
-        tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFactoryService,
+        gridFieldCustomHeadingsService: RevFieldCustomHeadingsService,
+        tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService,
+        correctnessBadness: CorrectnessBadness,
         definition: HoldingTableRecordSourceDefinition,
     ) {
         super(
             textFormatterService,
-            tableRecordSourceDefinitionFactoryService,
+            gridFieldCustomHeadingsService,
+            tableFieldSourceDefinitionCachingFactoryService,
+            correctnessBadness,
             definition,
             HoldingTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
         );
     }
 
     override createDefinition(): HoldingTableRecordSourceDefinition {
-        return this.tableRecordSourceDefinitionFactoryService.createHolding(this.brokerageAccountGroup);
+        return new HoldingTableRecordSourceDefinition(
+            this._gridFieldCustomHeadingsService,
+            this._tableFieldSourceDefinitionCachingFactoryService,
+            this.brokerageAccountGroup,
+        );
     }
 
     override createRecordDefinition(idx: Integer): HoldingTableRecordDefinition {
         const record = this.recordList.records[idx];
 
         return {
-            typeId: TableRecordDefinition.TypeId.Holding,
+            typeId: TableFieldSourceDefinition.TypeId.Holding,
             mapKey:record.mapKey,
             record,
         };
@@ -72,12 +81,12 @@ export class HoldingTableRecordSource
             const fieldSourceDefinitionTypeId =
                 fieldSourceDefinition.typeId as HoldingTableRecordSourceDefinition.FieldSourceDefinitionTypeId;
             switch (fieldSourceDefinitionTypeId) {
-                case TableFieldSourceDefinition.TypeId.HoldingsDataItem: {
+                case TableFieldSourceDefinition.TypeId.Holding: {
                     const valueSource = new HoldingTableValueSource(result.fieldCount, holding);
                     result.addSource(valueSource);
                     break;
                 }
-                case TableFieldSourceDefinition.TypeId.BrokerageAccounts: {
+                case TableFieldSourceDefinition.TypeId.BrokerageAccount: {
                     const valueSource = new BrokerageAccountTableValueSource(result.fieldCount, holding.account);
                     result.addSource(valueSource);
                     break;

@@ -6,11 +6,10 @@
 
 import { Badness } from './badness';
 import { BadnessList } from './badness-list';
-import { ChangeSubscribableComparableList } from './change-subscribable-comparable-list';
+import { CorrectnessId } from './correctness';
 import { CorrectnessBadness } from './correctness-badness';
 import { CorrectnessList } from './correctness-list';
-import { MultiEvent } from './multi-event';
-import { CompareFtn } from './utils-search';
+import { ChangeSubscribableComparableList, CompareFtn, MultiEvent } from './xilytix-sysutils';
 
 export class BadnessComparableList<out T extends U, in U = T> extends ChangeSubscribableComparableList<T, U> implements CorrectnessList<T>,  BadnessList<T> {
     private readonly _correctnessBadness = new CorrectnessBadness();
@@ -22,7 +21,7 @@ export class BadnessComparableList<out T extends U, in U = T> extends ChangeSubs
 
     get usable() { return this._correctnessBadness.usable; }
     get badness() { return this._correctnessBadness.badness; }
-    get correctnessId() { return this._correctnessBadness.correctnessId; }
+    get correctnessId(): CorrectnessId { return this._correctnessBadness.correctnessId; }
 
     override clone(): BadnessComparableList<T, U> {
         const result = new BadnessComparableList<T, U>(this._compareItemsFtn);
@@ -42,12 +41,12 @@ export class BadnessComparableList<out T extends U, in U = T> extends ChangeSubs
         this._correctnessBadness.unsubscribeUsableChangedEvent(subscriptionId);
     }
 
-    subscribeBadnessChangeEvent(handler: CorrectnessBadness.BadnessChangeEventHandler): MultiEvent.DefinedSubscriptionId {
-        return this._correctnessBadness.subscribeBadnessChangeEvent(handler);
+    subscribeBadnessChangedEvent(handler: CorrectnessBadness.BadnessChangedEventHandler): MultiEvent.DefinedSubscriptionId {
+        return this._correctnessBadness.subscribeBadnessChangedEvent(handler);
     }
 
-    unsubscribeBadnessChangeEvent(subscriptionId: MultiEvent.SubscriptionId) {
-        this._correctnessBadness.unsubscribeBadnessChangeEvent(subscriptionId);
+    unsubscribeBadnessChangedEvent(subscriptionId: MultiEvent.SubscriptionId) {
+        this._correctnessBadness.unsubscribeBadnessChangedEvent(subscriptionId);
     }
 
     subscribeCorrectnessChangedEvent(handler: CorrectnessList.CorrectnessChangedEventHandler): MultiEvent.DefinedSubscriptionId {

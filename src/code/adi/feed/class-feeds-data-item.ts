@@ -4,8 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, Badness, Integer, MultiEvent, UnreachableCaseError, UsableListChangeTypeId } from '../../sys/sys-internal-api';
-import { ClassFeedsDataDefinition, DataDefinition, FeedClassId, FeedId, FeedsDataDefinition } from '../common/adi-common-internal-api';
+import { AssertInternalError, Badness, Integer, MultiEvent, UnreachableCaseError, UsableListChangeTypeId } from '../../sys/internal-api';
+import { ClassFeedsDataDefinition, DataDefinition, FeedClassId, FeedId, FeedsDataDefinition } from '../common/internal-api';
 import { DataItem } from '../data-item/internal-api';
 import { Feed } from './feed';
 import { FeedsDataItem } from './feeds-data-item';
@@ -16,7 +16,7 @@ export class ClassFeedsDataItem extends DataItem {
 
     private _allFeedsDataItem: FeedsDataItem;
 
-    private _allBadnessChangeSubscriptionId: MultiEvent.SubscriptionId;
+    private _allBadnessChangedSubscriptionId: MultiEvent.SubscriptionId;
     private _allListChangeSubscriptionId: MultiEvent.SubscriptionId;
 
     private _listChangeMultiEvent = new MultiEvent<ClassFeedsDataItem.ListChangeEventHandler>();
@@ -55,8 +55,8 @@ export class ClassFeedsDataItem extends DataItem {
         const feedsDefinition = new FeedsDataDefinition();
         this._allFeedsDataItem = this.subscribeDataItem(feedsDefinition) as FeedsDataItem;
 
-        this._allBadnessChangeSubscriptionId = this._allFeedsDataItem.subscribeBadnessChangeEvent(
-            () => { this.handleAllBadnessChangeEvent(); }
+        this._allBadnessChangedSubscriptionId = this._allFeedsDataItem.subscribeBadnessChangedEvent(
+            () => { this.handleAllBadnessChangedEvent(); }
         );
         this._allListChangeSubscriptionId = this._allFeedsDataItem.subscribeListChangeEvent(
             (listChangeTypeId, index, count) => { this.handleAllListChangeEvent(listChangeTypeId, index, count); }
@@ -76,7 +76,7 @@ export class ClassFeedsDataItem extends DataItem {
     }
 
     protected override stop() {
-        this._allFeedsDataItem.unsubscribeBadnessChangeEvent(this._allBadnessChangeSubscriptionId);
+        this._allFeedsDataItem.unsubscribeBadnessChangedEvent(this._allBadnessChangedSubscriptionId);
         this._allFeedsDataItem.unsubscribeListChangeEvent(this._allListChangeSubscriptionId);
         this.unsubscribeDataItem(this._allFeedsDataItem);
     }
@@ -98,7 +98,7 @@ export class ClassFeedsDataItem extends DataItem {
         }
     }
 
-    private handleAllBadnessChangeEvent() {
+    private handleAllBadnessChangedEvent() {
         if (!this._allFeedsDataItem.usable) {
             this.setUnusable(this._allFeedsDataItem.badness);
         }

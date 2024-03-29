@@ -4,8 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
-import { MultiEvent } from '../sys/sys-internal-api';
-import { BooleanUiAction } from './boolean-ui-action';
+import { BooleanUiAction } from '@xilytix/ui-action';
+import { MultiEvent } from '../sys/internal-api';
 import { ButtonUiAction } from './button-ui-action';
 
 export class IconButtonUiAction extends ButtonUiAction {

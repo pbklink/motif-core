@@ -4,9 +4,9 @@
  * License: motionite.trade/license/motif
  */
 
-import { Command } from '../command/command-internal-api';
-import { StringId } from '../res/res-internal-api';
-import { ErrorCode, ExtensionHandle, ExtensionOrInternalError, SysTick } from '../sys/sys-internal-api';
+import { Command } from '../command/internal-api';
+import { StringId } from '../res/internal-api';
+import { ErrorCode, ExtensionHandle, ExtensionOrInternalError, SysTick } from '../sys/internal-api';
 import { CommandUiAction, UiAction } from '../ui-action/internal-api';
 import { Cancellable } from './cancellable';
 

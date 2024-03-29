@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { StringId, Strings } from '../../res/res-internal-api';
+import { StringId, Strings } from '../../res/internal-api';
 import {
     AssertInternalError,
     Badness,
@@ -12,7 +12,7 @@ import {
     Integer,
     UnexpectedCaseError,
     UnreachableCaseError
-} from '../../sys/sys-internal-api';
+} from '../../sys/internal-api';
 import {
     AdiPublisher,
     AdiPublisherSubscription,
@@ -28,7 +28,7 @@ import {
     PublisherSubscriptionDataDefinition,
     SynchronisedPublisherSubscriptionDataMessage,
     WarningPublisherSubscriptionDataMessage
-} from "../common/adi-common-internal-api";
+} from "../common/internal-api";
 import { DataItem } from '../data-item/internal-api';
 
 export abstract class PublisherSubscriptionDataItem extends DataItem {
@@ -130,6 +130,12 @@ export abstract class PublisherSubscriptionDataItem extends DataItem {
      * When called, descendants should get ready for fresh data.  Normally this involves clearing existing data */
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     protected processSubscriptionPreOnline() {
+
+    }
+
+    /** Descendants can override if they want to do any processing just prior to entering a synchronised state */
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    protected processSubscriptionPreSynchronised() {
 
     }
 
@@ -367,6 +373,8 @@ export abstract class PublisherSubscriptionDataItem extends DataItem {
                 } else {
                     newStateId = PublisherSubscriptionDataItem.SubscriptionStateId.Synchronised;
                 }
+
+                this.processSubscriptionPreSynchronised();
 
                 const badness = this.createSubscriptionStateBadness(newStateId);
                 this.setStateId(newStateId, badness);

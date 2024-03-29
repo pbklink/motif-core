@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, ErrorCode, UnreachableCaseError, ZenithDataError } from '../../../../sys/sys-internal-api';
+import { AssertInternalError, ErrorCode, UnreachableCaseError, ZenithDataError } from '../../../../sys/internal-api';
 import {
     ActiveFaultedStatusId,
     AdiPublisherRequest,
@@ -12,7 +12,7 @@ import {
     QueryScanDetailDataDefinition,
     QueryScanDetailDataMessage,
     ScanTargetTypeId
-} from "../../../common/adi-common-internal-api";
+} from "../../../common/internal-api";
 import { ZenithProtocol } from './protocol/zenith-protocol';
 import { ZenithConvert } from './zenith-convert';
 import { ZenithNotifyConvert } from './zenith-notify-convert';
@@ -99,7 +99,7 @@ export namespace QueryScanMessageConvert {
                         default:
                             throw new UnreachableCaseError('QSMCPM33358', dataMessage.targetTypeId);
                     }
-                    dataMessage.maxMatchCount = parameters.MaxMatchCount,
+                    dataMessage.maxMatchCount = parameters.Count,
                     dataMessage.zenithCriteria = parameters.Criteria;
                     dataMessage.zenithRank = parameters.Rank;
                     const parametersNotifications = parameters.Notifications;

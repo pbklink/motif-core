@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { EnumInfoOutOfOrderError } from './internal-error';
+import { EnumInfoOutOfOrderError } from './xilytix-sysutils';
 
 export const enum FieldDataTypeId {
     // eslint-disable-next-line id-blacklist

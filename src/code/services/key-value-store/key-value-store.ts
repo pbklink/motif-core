@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { Result, ServiceOperatorId } from '../../sys/sys-internal-api';
+import { Result, ServiceOperatorId } from '../../sys/internal-api';
 
 /** @public */
 export interface KeyValueStore {

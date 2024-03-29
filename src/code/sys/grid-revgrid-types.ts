@@ -5,8 +5,6 @@
  */
 
 import {
-    DataServer,
-    HorizontalAlign,
     RevRecordDataServer,
     RevRecordField,
     RevRecordFieldIndex,
@@ -14,6 +12,10 @@ import {
     RevRecordInvalidatedValue,
     RevRecordStore,
     RevRecordValueRecentChangeTypeId
+} from '@xilytix/rev-data-source';
+import {
+    DataServer,
+    HorizontalAlign,
 } from '@xilytix/revgrid';
 
 // Aliases for RevGrid types (so that revgrid is only imported here for grid sub projects)

@@ -4,15 +4,14 @@
  * License: motionite.trade/license/motif
  */
 
-import { Holding } from '../../../../adi/adi-internal-api';
+import { Holding } from '../../../../adi/internal-api';
 import {
     AssertInternalError,
-    CommaText,
     FieldDataType,
     FieldDataTypeId,
     Integer,
     UnreachableCaseError
-} from "../../../../sys/sys-internal-api";
+} from "../../../../sys/internal-api";
 import {
     CorrectnessTableField,
     DecimalCorrectnessTableField,
@@ -20,7 +19,7 @@ import {
     IntegerCorrectnessTableField,
     StringCorrectnessTableField,
     TableField
-} from '../../field/grid-table-field-internal-api';
+} from '../../field/internal-api';
 import {
     CorrectnessTableValue,
     CurrencyIdCorrectnessTableValue,
@@ -29,14 +28,15 @@ import {
     IvemClassIdCorrectnessTableValue,
     PriceCorrectnessTableValue,
     StringCorrectnessTableValue
-} from '../../value/grid-table-value-internal-api';
+} from '../../value/internal-api';
 import { TableFieldSourceDefinition } from './table-field-source-definition';
+import { TableFieldSourceDefinitionCachingFactoryService } from './table-field-source-definition-caching-factory-service';
 
 export class HoldingTableFieldSourceDefinition extends TableFieldSourceDefinition {
     override readonly fieldDefinitions: TableField.Definition[];
 
     constructor() {
-        super(TableFieldSourceDefinition.TypeId.HoldingsDataItem);
+        super(HoldingTableFieldSourceDefinition.typeId);
 
         this.fieldDefinitions = this.createFieldDefinitions();
     }
@@ -47,7 +47,7 @@ export class HoldingTableFieldSourceDefinition extends TableFieldSourceDefinitio
 
     getFieldNameById(id: Holding.FieldId) {
         const sourcelessFieldName = HoldingTableFieldSourceDefinition.Field.getNameById(id);
-        return CommaText.from2Values(this.name, sourcelessFieldName);
+        return this.encodeFieldName(sourcelessFieldName);
     }
 
     getSupportedFieldNameById(id: Holding.FieldId) {
@@ -84,6 +84,9 @@ export class HoldingTableFieldSourceDefinition extends TableFieldSourceDefinitio
 }
 
 export namespace HoldingTableFieldSourceDefinition {
+    export const typeId = TableFieldSourceDefinition.TypeId.Holding;
+    export type TypeId = typeof typeId;
+
     export namespace Field {
         const unsupportedIds: Holding.FieldId[] = [];
         export const count = Holding.Field.idCount - unsupportedIds.length;
@@ -179,8 +182,12 @@ export namespace HoldingTableFieldSourceDefinition {
     }
 
     export interface FieldId extends TableFieldSourceDefinition.FieldId {
-        sourceTypeId: TableFieldSourceDefinition.TypeId.HoldingsDataItem;
+        sourceTypeId: HoldingTableFieldSourceDefinition.TypeId;
         id: Holding.FieldId;
+    }
+
+    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactoryService): HoldingTableFieldSourceDefinition {
+        return cachingFactoryService.get(typeId) as HoldingTableFieldSourceDefinition;
     }
 
     export function initialiseStatic() {

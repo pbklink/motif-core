@@ -4,15 +4,14 @@
  * License: motionite.trade/license/motif
  */
 
-import { CallPut } from '../../../../services/services-internal-api';
+import { CallPut } from '../../../../services/internal-api';
 import {
     AssertInternalError,
-    CommaText,
     FieldDataType,
     FieldDataTypeId,
     Integer,
     UnreachableCaseError
-} from "../../../../sys/sys-internal-api";
+} from "../../../../sys/internal-api";
 import {
     BooleanTableField,
     DateTableField,
@@ -22,7 +21,7 @@ import {
     LitIvemIdTableField,
     NumberTableField,
     TableField
-} from "../../field/grid-table-field-internal-api";
+} from "../../field/internal-api";
 import {
     DateTableValue,
     ExerciseTypeIdTableValue,
@@ -33,14 +32,15 @@ import {
     NumberTableValue,
     PriceTableValue,
     TableValue
-} from '../../value/grid-table-value-internal-api';
+} from '../../value/internal-api';
 import { TableFieldSourceDefinition } from './table-field-source-definition';
+import { TableFieldSourceDefinitionCachingFactoryService } from './table-field-source-definition-caching-factory-service';
 
 export class CallPutTableFieldSourceDefinition extends TableFieldSourceDefinition {
     override readonly fieldDefinitions: TableField.Definition[];
 
     constructor() {
-        super(TableFieldSourceDefinition.TypeId.CallPut);
+        super(CallPutTableFieldSourceDefinition.typeId);
 
         this.fieldDefinitions = this.createFieldDefinitions();
     }
@@ -51,7 +51,7 @@ export class CallPutTableFieldSourceDefinition extends TableFieldSourceDefinitio
 
     getFieldNameById(id: CallPut.FieldId) {
         const sourcelessFieldName = CallPutTableFieldSourceDefinition.Field.getNameById(id);
-        return CommaText.from2Values(this.name, sourcelessFieldName);
+        return this.encodeFieldName(sourcelessFieldName);
     }
 
     getSupportedFieldNameById(id: CallPut.FieldId) {
@@ -88,6 +88,9 @@ export class CallPutTableFieldSourceDefinition extends TableFieldSourceDefinitio
 }
 
 export namespace CallPutTableFieldSourceDefinition {
+    export const typeId = TableFieldSourceDefinition.TypeId.CallPut;
+    export type TypeId = typeof typeId;
+
     export namespace Field {
         const unsupportedIds = [CallPut.FieldId.UnderlyingIvemId, CallPut.FieldId.UnderlyingIsIndex];
         export const count = CallPut.Field.count - unsupportedIds.length;
@@ -101,8 +104,7 @@ export namespace CallPutTableFieldSourceDefinition {
         const infos = new Array<Info>(count);
         const idFieldIndices = new Array<Integer>(CallPut.Field.count);
 
-        function idToTableGridConstructors(id: CallPut.FieldId):
-            TableFieldSourceDefinition.TableGridConstructors {
+        function idToTableGridConstructors(id: CallPut.FieldId): TableFieldSourceDefinition.TableGridConstructors {
             switch (id) {
                 case CallPut.FieldId.ExercisePrice:
                     return [DecimalTableField, PriceTableValue];
@@ -184,16 +186,12 @@ export namespace CallPutTableFieldSourceDefinition {
 
     export interface FieldId extends TableFieldSourceDefinition.FieldId {
         id: CallPut.FieldId;
-        sourceTypeId: TableFieldSourceDefinition.TypeId.CallPut;
+        sourceTypeId: CallPutTableFieldSourceDefinition.TypeId;
     }
 
-    // export interface CallFieldId extends CallPutFieldId {
-    //     sourceTypeId: TableFieldSourceDefinition.TypeId.CallSecurityDataItem;
-    // }
-
-    // export interface PutFieldId extends CallPutFieldId {
-    //     sourceTypeId: TableFieldSourceDefinition.TypeId.PutSecurityDataItem;
-    // }
+    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactoryService): CallPutTableFieldSourceDefinition {
+        return cachingFactoryService.get(typeId) as CallPutTableFieldSourceDefinition;
+    }
 
     export function initialiseStatic() {
         Field.initialiseFieldStatic();

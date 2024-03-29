@@ -4,8 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
-import { UnreachableCaseError } from '../../../../sys/internal-error';
-import { NotificationChannel } from '../../../common/adi-common-internal-api';
+import { UnreachableCaseError } from '../../../../sys/internal-api';
+import { NotificationChannel } from '../../../common/internal-api';
 import { ZenithProtocol } from './protocol/internal-api';
 
 export namespace ZenithDistributionChannelsConvert {

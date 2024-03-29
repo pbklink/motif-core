@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { AdiService, WatchmakerListDescriptorsDataDefinition, WatchmakerListDescriptorsDataItem } from '../adi/adi-internal-api';
+import { AdiService, WatchmakerListDescriptorsDataDefinition, WatchmakerListDescriptorsDataItem } from '../adi/internal-api';
 import {
     AssertInternalError,
     Integer,
@@ -12,7 +12,7 @@ import {
     MultiEvent,
     UnreachableCaseError,
     UsableListChangeTypeId
-} from "../sys/sys-internal-api";
+} from "../sys/internal-api";
 import { WatchmakerList } from './watchmaker-list';
 
 /** @public */
@@ -207,7 +207,7 @@ export namespace WatchmakerService {
     export type ListChangeEventHandler = (this: void, listChangeTypeId: UsableListChangeTypeId, index: Integer, count: Integer) => void;
     export type RecordChangeEventHandler = (this: void, index: Integer) => void;
     export type CorrectnessChangedEventHandler = (this: void) => void;
-    export type BadnessChangeEventHandler = (this: void) => void;
+    export type badnessChangedEventHandler = (this: void) => void;
 
     export type ScansOnlineResolve = (this: void, ready: boolean) => void;
 

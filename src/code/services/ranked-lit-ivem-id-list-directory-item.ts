@@ -4,8 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
-import { StringId, Strings } from '../res/res-internal-api';
-import { CorrectnessRecord, CorrectnessSettableListItem, EnumInfoOutOfOrderError, FieldDataTypeId, Integer, LockOpenListItem, MultiEvent } from '../sys/sys-internal-api';
+import { StringId, Strings } from '../res/internal-api';
+import { CorrectnessRecord, CorrectnessSettableListItem, EnumInfoOutOfOrderError, FieldDataTypeId, Integer, LockOpenListItem, MultiEvent } from '../sys/internal-api';
 
 export interface RankedLitIvemIdListDirectoryItem extends LockOpenListItem<RankedLitIvemIdListDirectoryItem>, CorrectnessSettableListItem, CorrectnessRecord {
     readonly directoryItemTypeId: RankedLitIvemIdListDirectoryItem.TypeId;

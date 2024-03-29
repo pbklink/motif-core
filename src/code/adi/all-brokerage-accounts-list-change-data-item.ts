@@ -4,24 +4,24 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, Badness, Integer, MultiEvent, UnreachableCaseError, UsableListChangeTypeId } from '../sys/sys-internal-api';
+import { AssertInternalError, Badness, Integer, MultiEvent, UnreachableCaseError, UsableListChangeTypeId } from '../sys/internal-api';
 import { Account } from './account';
 import { BrokerageAccountsDataItem } from './brokerage-accounts-data-item';
-import { BrokerageAccountsDataDefinition } from './common/adi-common-internal-api';
+import { BrokerageAccountsDataDefinition } from './common/internal-api';
 import { DataItem } from './data-item/internal-api';
 
 export abstract class AllBrokerageAccountsListChangeDataItem extends DataItem {
     private _accountsDataItem: BrokerageAccountsDataItem;
     private _accountsListChangeSubscriptionId: MultiEvent.SubscriptionId;
-    private _accountsBadnessChangeSubscriptionId: MultiEvent.SubscriptionId;
+    private _accountsBadnessChangedSubscriptionId: MultiEvent.SubscriptionId;
 
     protected get accounts(): Account[] { return this._accountsDataItem.records; }
 
     protected override start() {
         const accountDataDefinition = new BrokerageAccountsDataDefinition();
         this._accountsDataItem = this.subscribeDataItem(accountDataDefinition) as BrokerageAccountsDataItem;
-        this._accountsBadnessChangeSubscriptionId = this._accountsDataItem.subscribeBadnessChangeEvent(
-            () => { this.handleAccountsBadnessChangeEvent(); }
+        this._accountsBadnessChangedSubscriptionId = this._accountsDataItem.subscribeBadnessChangedEvent(
+            () => { this.handleAccountsBadnessChangedEvent(); }
         );
         this._accountsListChangeSubscriptionId = this._accountsDataItem.subscribeListChangeEvent(
             (listChangeType, index, count) => { this.handleAccountsListChangeEvent(listChangeType, index, count); }
@@ -46,7 +46,7 @@ export abstract class AllBrokerageAccountsListChangeDataItem extends DataItem {
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         if (this._accountsDataItem !== undefined) {
             this._accountsDataItem.unsubscribeListChangeEvent(this._accountsListChangeSubscriptionId);
-            this._accountsDataItem.unsubscribeBadnessChangeEvent(this._accountsBadnessChangeSubscriptionId);
+            this._accountsDataItem.unsubscribeBadnessChangedEvent(this._accountsBadnessChangedSubscriptionId);
             this.unsubscribeDataItem(this._accountsDataItem);
             this._accountsDataItem = undefined as unknown as BrokerageAccountsDataItem;
         }
@@ -62,7 +62,7 @@ export abstract class AllBrokerageAccountsListChangeDataItem extends DataItem {
         }
     }
 
-    private handleAccountsBadnessChangeEvent() {
+    private handleAccountsBadnessChangedEvent() {
         if (!this._accountsDataItem.usable) {
             const badness = this.createUnusableAccountsBadness();
             this.setUnusable(badness);

@@ -4,8 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
-import { OrderType, OrderTypeId, TimeInForce, TimeInForceId } from '../../adi/adi-internal-api';
-import { AssertInternalError, Integer, InternalError, parseIntStrict, parseNumberStrict } from '../../sys/sys-internal-api';
+import { OrderType, OrderTypeId, TimeInForce, TimeInForceId } from '../../adi/internal-api';
+import { AssertInternalError, Integer, parseIntStrict, parseNumberStrict } from '../../sys/internal-api';
 
 export namespace TypedKeyValueSettings {
     const _numberFormat = new Intl.NumberFormat(TypedKeyValueSettings.locale, { useGrouping: false });
@@ -422,19 +422,19 @@ export namespace TypedKeyValueSettings {
         export const trueString = 'true';
     }
 
-    export class AssertDefaulterNotImplemented extends InternalError {
+    export class AssertDefaulterNotImplemented extends AssertInternalError {
         constructor(id: Integer) {
             super('TKVSADNI30093', id.toString());
         }
     }
 
-    export class AssertGetterNotImplemented extends InternalError {
+    export class AssertGetterNotImplemented extends AssertInternalError {
         constructor(id: Integer) {
             super('TKVSAGNI30093', id.toString());
         }
     }
 
-    export class AssertPusherNotImplemented extends InternalError {
+    export class AssertPusherNotImplemented extends AssertInternalError {
         constructor(id: Integer) {
             super('TKVSAPNI30093', id.toString());
         }

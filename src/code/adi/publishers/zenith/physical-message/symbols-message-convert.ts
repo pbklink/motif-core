@@ -7,12 +7,12 @@
 import {
     AssertInternalError,
     ErrorCode,
+    ErrorCodeLogger,
     getErrorMessage,
     ifDefined,
-    Logger,
     newUndefinableDecimal,
     ZenithDataError
-} from "../../../../sys/sys-internal-api";
+} from "../../../../sys/internal-api";
 import {
     AdiPublisherRequest,
     AdiPublisherSubscription,
@@ -29,7 +29,7 @@ import {
     SymbolFieldId,
     SymbolsDataMessage,
     TmcLeg
-} from "../../../common/adi-common-internal-api";
+} from "../../../common/internal-api";
 import { ZenithProtocol } from './protocol/zenith-protocol';
 import { ZenithConvert } from './zenith-convert';
 import { ZenithMarketAsx } from './zenith-market-asx';
@@ -438,7 +438,7 @@ export namespace SymbolsMessageConvert {
                     cfi: detail.CFI,
                     depthDirectionId: ifDefined(detail.DepthDirection, x => ZenithConvert.DepthDirection.toId(x)),
                     isIndex: detail.IsIndex,
-                    expiryDate: ifDefined(detail.ExpiryDate, x => ZenithConvert.Date.DateYYYYMMDD.toSourceTzOffsetDate(x)),
+                    expiryDate: ifDefined(detail.ExpiryDate, x => ZenithConvert.Date.DashedYyyyMmDdDate.toSourceTzOffsetDate(x)),
                     strikePrice: newUndefinableDecimal(detail.StrikePrice),
                     exerciseTypeId: ifDefined(detail.ExerciseType, x => ZenithConvert.ExerciseType.toId(x)),
                     callOrPutId: ifDefined(detail.CallOrPut, x => ZenithConvert.CallOrPut.toId(x)),
@@ -500,7 +500,7 @@ export namespace SymbolsMessageConvert {
                     result = ZenithMarketMyxConvert.Symbols.Attributes.toLitIvem(attributes);
                     break;
                 default:
-                    Logger.logDataError('SMCCAUC77667733772', ExchangeInfo.idToName(exchangeId));
+                    ErrorCodeLogger.logDataError('SMCCAUC77667733772', ExchangeInfo.idToName(exchangeId));
                     result = undefined;
             }
             return result;
@@ -554,7 +554,7 @@ export namespace SymbolsMessageConvert {
                     break;
                 }
                 default:
-                    Logger.logDataError('SMCCAUC77667733773', ExchangeInfo.idToName(exchangeId));
+                    ErrorCodeLogger.logDataError('SMCCAUC77667733773', ExchangeInfo.idToName(exchangeId));
                     result = undefined;
             }
             return result;

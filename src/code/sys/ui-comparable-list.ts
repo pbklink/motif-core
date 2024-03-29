@@ -5,8 +5,7 @@
  */
 
 import { ModifierComparableList } from './modifier-comparable-list';
-import { Integer } from './types';
-import { CompareFtn } from './utils-search';
+import { CompareFtn, Integer } from './xilytix-sysutils';
 
 export class UiComparableList<out T extends U, in U = T> extends ModifierComparableList<T, boolean, U> {
     constructor(compareItemsFtn?: CompareFtn<U>) {
