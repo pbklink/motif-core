@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, FieldDataType, FieldDataTypeId, Integer } from '../../../../sys/internal-api';
+import { AssertInternalError, FieldDataType, GridFieldHorizontalAlign, Integer } from '../../../../sys/internal-api';
 import { GridField } from '../../../field/internal-api';
 import {
     StringTableField,
@@ -51,8 +51,7 @@ export class GridFieldTableFieldSourceDefinition extends TableFieldSourceDefinit
         for (let fieldIdx = 0; fieldIdx < count; fieldIdx++) {
             const sourcelessFieldName = GridFieldTableFieldSourceDefinition.Field.getName(fieldIdx);
             const heading = GridFieldTableFieldSourceDefinition.Field.getHeading(fieldIdx);
-            const dataTypeId = GridFieldTableFieldSourceDefinition.Field.getDataTypeId(fieldIdx);
-            const textAlign = FieldDataType.idIsNumber(dataTypeId) ? 'right' : 'left';
+            const textAlign = GridFieldTableFieldSourceDefinition.Field.getHorizontalAlign(fieldIdx);
             const [fieldConstructor, valueConstructor] =
                 GridFieldTableFieldSourceDefinition.Field.getTableFieldValueConstructors(fieldIdx);
 
@@ -137,11 +136,11 @@ export namespace GridFieldTableFieldSourceDefinition {
         }
 
         export function getHeading(fieldIdx: Integer) {
-            return GridField.Field.idToHeading(infos[fieldIdx].id);
+            return GridField.idToHeading(infos[fieldIdx].id);
         }
 
-        export function getDataTypeId(fieldIdx: Integer): FieldDataTypeId {
-            return GridField.Field.idToFieldDataTypeId(infos[fieldIdx].id);
+        export function getHorizontalAlign(fieldIdx: Integer): GridFieldHorizontalAlign {
+            return GridField.Field.idToHorizontalAlign(infos[fieldIdx].id);
         }
 
         export function getTableFieldValueConstructors(fieldIndex: Integer) {
