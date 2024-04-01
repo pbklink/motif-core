@@ -8,7 +8,6 @@ export * from './data-source';
 export * from './data-source-definition';
 export * from './data-source-or-reference';
 export * from './data-source-or-reference-definition';
-export * from './grid-row-order-definition';
 export * from './referenceable-data-source';
 export * from './referenceable-data-source-definition';
 export * from './referenceable-data-source-definitions-store-service';

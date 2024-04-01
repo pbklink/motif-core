@@ -10861,37 +10861,9 @@ export abstract class GridField extends RevField<RenderValue.TypeId, RenderValue
 // @public (undocumented)
 export namespace GridField {
     // (undocumented)
-    export namespace Field {
-        // (undocumented)
-        export type Id = FieldId;
-        const // (undocumented)
-        idCount: number;
-        // (undocumented)
-        export function idToFieldDataTypeId(id: Id): FieldDataTypeId;
-        // (undocumented)
-        export function idToHeading(id: Id): string;
-        // (undocumented)
-        export function idToHeadingId(id: Id): StringId;
-        // (undocumented)
-        export function idToName(id: Id): string;
-        // (undocumented)
-        export function initialise(): void;
-    }
+    export type FieldId = RevField.FieldId;
     // (undocumented)
-    export const enum FieldId {
-        // (undocumented)
-        DefaultHeading = 3,
-        // (undocumented)
-        DefaultTextAlign = 4,
-        // (undocumented)
-        DefaultWidth = 5,
-        // (undocumented)
-        Heading = 1,
-        // (undocumented)
-        Name = 0,
-        // (undocumented)
-        SourceName = 2
-    }
+    export function idToHeading(id: FieldId): string;
 }
 
 // @public
@@ -10909,22 +10881,6 @@ export namespace GridFieldHorizontalAlign {
     start = "start";
     const // (undocumented)
     end = "end";
-}
-
-// Warning: (ae-missing-release-tag) "GridFieldModule" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export namespace GridFieldModule {
-    // (undocumented)
-    export function initialiseStatic(): void;
-}
-
-// Warning: (ae-missing-release-tag) "GridFieldStaticInitialise" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export namespace GridFieldStaticInitialise {
-    // (undocumented)
-    export function initialise(): void;
 }
 
 // @public (undocumented)
@@ -10949,11 +10905,11 @@ export namespace GridFieldTableFieldSourceDefinition {
         const // (undocumented)
         count: number;
         // (undocumented)
-        export function getDataTypeId(fieldIdx: Integer): FieldDataTypeId;
-        // (undocumented)
         export function getHeading(fieldIdx: Integer): string;
         // (undocumented)
-        export function getId(fieldIdx: Integer): GridField.FieldId;
+        export function getHorizontalAlign(fieldIdx: Integer): GridFieldHorizontalAlign;
+        // (undocumented)
+        export function getId(fieldIdx: Integer): RevField;
         // (undocumented)
         export function getName(fieldIdx: Integer): string;
         // (undocumented)
@@ -11133,12 +11089,6 @@ export namespace GridRecordStoreRenderValue {
 
 // @public (undocumented)
 export type GridRevRecordField = RevRecordField;
-
-// Warning: (ae-missing-release-tag) "GridRowOrderDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class GridRowOrderDefinition extends RevGridRowOrderDefinition<TableFieldSourceDefinition.TypeId> {
-}
 
 // @public (undocumented)
 export type GridSortFieldSpecifier = RevRecordDataServer.SortFieldSpecifier;
@@ -22467,7 +22417,7 @@ export class RecordGrid extends AdaptedRevgrid implements RevGridLayout.ChangeIn
     // (undocumented)
     applyFilter(filter?: RevRecordDataServer.RecordFilterCallback): void;
     // (undocumented)
-    applyFirstUsable(rowOrderDefinition: GridRowOrderDefinition | undefined, viewAnchor: RecordGrid.ViewAnchor | undefined, gridLayout: RevGridLayout | undefined): void;
+    applyFirstUsable(rowOrderDefinition: RevGridRowOrderDefinition | undefined, viewAnchor: RecordGrid.ViewAnchor | undefined, gridLayout: RevGridLayout | undefined): void;
     // (undocumented)
     applyGridLayoutDefinition(value: RevGridLayoutDefinition): void;
     // (undocumented)
@@ -22519,7 +22469,7 @@ export class RecordGrid extends AdaptedRevgrid implements RevGridLayout.ChangeIn
     // (undocumented)
     getFieldSortPriority(field: RevRecordFieldIndex | GridField): number | undefined;
     // (undocumented)
-    getRowOrderDefinition(): GridRowOrderDefinition;
+    getRowOrderDefinition(): RevGridRowOrderDefinition;
     // (undocumented)
     getSortFields(): RevGridSortDefinition.Field[] | undefined;
     // (undocumented)

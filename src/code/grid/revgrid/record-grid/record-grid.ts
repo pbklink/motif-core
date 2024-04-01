@@ -7,12 +7,13 @@
 import {
     RevGridLayout,
     RevGridLayoutDefinition,
+    RevGridRowOrderDefinition,
     RevGridSortDefinition,
     RevRecordDataServer,
     RevRecordField,
     RevRecordFieldIndex,
     RevRecordIndex,
-    RevRecordStore,
+    RevRecordStore
 } from '@xilytix/rev-data-source';
 import {
     Column,
@@ -33,7 +34,6 @@ import {
     UnreachableCaseError
 } from '../../../sys/internal-api';
 import { GridField } from '../../field/internal-api';
-import { GridRowOrderDefinition } from '../../typed/internal-api';
 import { AdaptedRevgrid, SingleHeadingGridDataServer } from '../adapted-revgrid/internal-api';
 import { AdaptedRevgridBehavioredColumnSettings } from '../settings/internal-api';
 import { RecordGridDataServer } from './record-grid-data-server';
@@ -174,7 +174,7 @@ export class RecordGrid extends AdaptedRevgrid implements RevGridLayout.ChangeIn
         this._allowedFields = fields;
     }
 
-    applyFirstUsable(rowOrderDefinition: GridRowOrderDefinition | undefined, viewAnchor: RecordGrid.ViewAnchor | undefined, gridLayout: RevGridLayout | undefined) {
+    applyFirstUsable(rowOrderDefinition: RevGridRowOrderDefinition | undefined, viewAnchor: RecordGrid.ViewAnchor | undefined, gridLayout: RevGridLayout | undefined) {
         this._beenUsable = true;
 
         this._firstUsableRenderViewAnchor = viewAnchor;
@@ -283,9 +283,9 @@ export class RecordGrid extends AdaptedRevgrid implements RevGridLayout.ChangeIn
         this.mainDataServer.clearSort();
     }
 
-    getRowOrderDefinition(): GridRowOrderDefinition {
+    getRowOrderDefinition(): RevGridRowOrderDefinition {
         const sortColumns = this.getSortFields();
-        return new GridRowOrderDefinition(sortColumns, undefined);
+        return new RevGridRowOrderDefinition(sortColumns, undefined);
     }
 
     getFieldByName(fieldName: string): RevRecordField {
