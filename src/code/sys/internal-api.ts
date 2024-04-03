@@ -30,7 +30,6 @@ export * from './keyed-correctness-settable-list';
 export * from './keyed-correctness-settable-list-item';
 export * from './keyed-record';
 export * from './lock-open-list';
-export * from './mapped-comparable-list';
 export * from './modifier-comparable-list';
 export * from './resource-badness';
 export * from './service-operator';
@@ -72,6 +71,7 @@ export {
     MapKey,
     MapKeyed,
     Mappable,
+    MappedComparableList,
     ModifierKey,
     ModifierKeyId,
     MultiEvent,

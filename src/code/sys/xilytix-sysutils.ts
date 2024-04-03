@@ -39,6 +39,7 @@ export {
     MapKey,
     MapKeyed,
     Mappable,
+    MappedComparableList,
     ModifierKey,
     ModifierKeyId,
     MultiEvent,
