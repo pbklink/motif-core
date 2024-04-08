@@ -43,7 +43,7 @@ export namespace Correctness {
 
     export function initialise() {
         for (let id = 0; id < idCount; id++) {
-            if (id !== infos[id].id) {
+            if (id as CorrectnessId !== infos[id].id) {
                 throw new EnumInfoOutOfOrderError('CorrectnessId', id, id.toString());
             }
         }

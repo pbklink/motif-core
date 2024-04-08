@@ -8,6 +8,7 @@ export * from './authorisations';
 export * from './badness';
 export * from './badness-comparable-list';
 export * from './badness-list';
+export * from './badness-mapped-comparable-list';
 export * from './comma-text-err';
 export * from './correctness';
 export * from './correctness-badness';
@@ -69,7 +70,6 @@ export {
     LockOpenManager,
     Logger,
     MapKey,
-    MapKeyed,
     Mappable,
     MappedComparableList,
     ModifierKey,
