@@ -4,6 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
+import { RevField } from '@xilytix/rev-data-source';
 import { AssertInternalError, Integer, UnreachableCaseError } from '../../../sys/internal-api';
 import { GridField } from '../../field/internal-api';
 import { GridFieldTableFieldSourceDefinition } from '../field-source/internal-api';
@@ -48,27 +49,27 @@ export class GridFieldTableValueSource extends TableValueSource {
         return new valueConstructor();
     }
 
-    private loadValue(id: GridField.FieldId, value: TableValue) {
+    private loadValue(id: RevField.FieldId, value: TableValue) {
         switch (id) {
-            case GridField.FieldId.Name: {
+            case RevField.FieldId.Name: {
                 (value as StringTableValue).data = this._gridField.name;
                 break;
             }
-            case GridField.FieldId.Heading: {
+            case RevField.FieldId.Heading: {
                 (value as StringTableValue).data = this._gridField.heading;
                 break;
             }
-            case GridField.FieldId.SourceName: {
+            case RevField.FieldId.SourceName: {
                 (value as StringTableValue).data = this._gridField.definition.source.name;
                 break;
             }
-            case GridField.FieldId.DefaultHeading: {
+            case RevField.FieldId.DefaultHeading: {
                 throw new AssertInternalError('GFTVSLVDH99799');
             }
-            case GridField.FieldId.DefaultTextAlign: {
+            case RevField.FieldId.DefaultTextAlign: {
                 throw new AssertInternalError('GFTVSLVDT99799');
             }
-            case GridField.FieldId.DefaultWidth: {
+            case RevField.FieldId.DefaultWidth: {
                 throw new AssertInternalError('GFTVSLVDW99799');
             }
             default:

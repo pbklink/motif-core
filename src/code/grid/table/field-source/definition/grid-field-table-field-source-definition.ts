@@ -4,7 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, FieldDataType, GridFieldHorizontalAlign, Integer } from '../../../../sys/internal-api';
+import { RevField } from '@xilytix/rev-data-source';
+import { AssertInternalError, GridFieldHorizontalAlign, Integer } from '../../../../sys/internal-api';
 import { GridField } from '../../../field/internal-api';
 import {
     StringTableField,
@@ -27,16 +28,16 @@ export class GridFieldTableFieldSourceDefinition extends TableFieldSourceDefinit
         this.fieldDefinitions = this.createFieldDefinitions();
     }
 
-    isFieldSupported(id: GridField.FieldId) {
+    isFieldSupported(id: RevField.FieldId) {
         return GridFieldTableFieldSourceDefinition.Field.isIdSupported(id);
     }
 
-    getFieldNameById(id: GridField.FieldId) {
+    getFieldNameById(id: RevField.FieldId) {
         const sourcelessFieldName = GridField.Field.idToName(id);
         return this.encodeFieldName(sourcelessFieldName);
     }
 
-    getSupportedFieldNameById(id: GridField.FieldId) {
+    getSupportedFieldNameById(id: RevField.FieldId) {
         if (!this.isFieldSupported(id)) {
             throw new AssertInternalError('STFSDGSFNBI30398', GridField.Field.idToName(id));
         } else {
@@ -75,25 +76,25 @@ export namespace GridFieldTableFieldSourceDefinition {
     export type TypeId = typeof typeId;
 
     export namespace Field {
-        const unsupportedIds: GridField.FieldId[] = [GridField.FieldId.DefaultHeading, GridField.FieldId.DefaultWidth, GridField.FieldId.DefaultTextAlign];
+        const unsupportedIds: RevField.FieldId[] = [RevField.FieldId.DefaultHeading, RevField.FieldId.DefaultWidth, RevField.FieldId.DefaultTextAlign];
         export const count = GridField.Field.idCount - unsupportedIds.length;
 
         interface Info {
-            readonly id: GridField.FieldId;
+            readonly id: RevField.FieldId;
             readonly tableFieldValueConstructors: [field: TableField.Constructor, value: TableValue.Constructor];
         }
 
         const infos: Info[] = [
             {
-                id: GridField.FieldId.Name,
+                id: RevField.FieldId.Name,
                 tableFieldValueConstructors: [StringTableField, StringTableValue],
             },
             {
-                id: GridField.FieldId.Heading,
+                id: RevField.FieldId.Heading,
                 tableFieldValueConstructors: [StringTableField, StringTableValue],
             },
             {
-                id: GridField.FieldId.SourceName,
+                id: RevField.FieldId.SourceName,
                 tableFieldValueConstructors: [StringTableField, StringTableValue],
             },
         ];
@@ -119,11 +120,11 @@ export namespace GridFieldTableFieldSourceDefinition {
             }
         }
 
-        export function isIdSupported(id: GridField.FieldId) {
+        export function isIdSupported(id: RevField.FieldId) {
             return !unsupportedIds.includes(id);
         }
 
-        export function indexOfId(id: GridField.FieldId) {
+        export function indexOfId(id: RevField.FieldId) {
             return idFieldIndices[id];
         }
 
@@ -155,7 +156,7 @@ export namespace GridFieldTableFieldSourceDefinition {
 
     export interface FieldId extends TableFieldSourceDefinition.FieldId {
         sourceTypeId: GridFieldTableFieldSourceDefinition.TypeId;
-        id: GridField.FieldId;
+        id: RevField.FieldId;
     }
 
     export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactoryService): GridFieldTableFieldSourceDefinition {
