@@ -27,11 +27,12 @@ export class RankedLitIvemIdListReferentialsService extends LockOpenList<RankedL
         super();
     }
 
-    finalise() {
+    override finalise() {
         if (this._delayedSaveTimeoutHandle !== undefined) {
             clearTimeout(this._delayedSaveTimeoutHandle);
             this._delayedSaveTimeoutHandle = undefined;
         }
+        super.finalise();
     }
 
     new(definition: RankedLitIvemIdListDefinition): RankedLitIvemIdListReferential {
@@ -45,7 +46,7 @@ export class RankedLitIvemIdListReferentialsService extends LockOpenList<RankedL
             index,
             () => { this.registerSaveCallback() }
         );
-        this.addItem(implementation);
+        this.add(implementation);
         this.registerSaveCallback();
         return implementation;
     }

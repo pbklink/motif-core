@@ -14,7 +14,7 @@ import { ReferenceableDataSourceDefinition } from './referenceable-data-source-d
 import { TableRecordSourceFactory } from './table-record-source-factory';
 
 export class ReferenceableDataSourcesService
-    extends LockOpenList<ReferenceableDataSource, RevDataSource.LockErrorIdPlusTryError>
+    extends LockOpenList<ReferenceableDataSource, ReferenceableDataSource, RevDataSource.LockErrorIdPlusTryError>
     implements RevReferenceableDataSourcesService<
         TableRecordSourceDefinition.TypeId,
         TableFieldSourceDefinition.TypeId,
@@ -39,15 +39,11 @@ export class ReferenceableDataSourcesService
         return this._saveModified;
     }
 
-    destroy() {
-        //
-    }
-
     getOrNew(definition: ReferenceableDataSourceDefinition): ReferenceableDataSource {
         let source = this.getItemByKey(definition.id);
         if (source === undefined) {
             source = this.createReferenceableGridSource(definition);
-            this.addItem(source);
+            this.add(source);
         }
         return source;
     }

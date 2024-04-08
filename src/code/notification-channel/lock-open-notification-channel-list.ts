@@ -43,16 +43,8 @@ export class LockOpenNotificationChannelList extends LockOpenList<LockOpenNotifi
         }
 
         if (addCount > 0) {
-            this.addItems(addLockOpenNotificationChannels, addCount);
+            this.addSubRange(addLockOpenNotificationChannels, 0, addCount);
         }
-    }
-
-    initialise() {
-
-    }
-
-    finalise() {
-
     }
 
     indexOfChannelByName(name: string) {

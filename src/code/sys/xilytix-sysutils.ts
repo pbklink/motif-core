@@ -37,7 +37,6 @@ export {
     LockOpenManager,
     Logger,
     MapKey,
-    MapKeyed,
     Mappable,
     MappedComparableList,
     ModifierKey,

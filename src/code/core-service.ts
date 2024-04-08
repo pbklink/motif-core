@@ -112,8 +112,14 @@ export class CoreService {
 
     finalise() {
         if (!this._finalised) {
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+            if (this._referenceableDataSourcesService !== undefined) {
+                this._referenceableDataSourcesService.finalise();
+            }
+            this.referenceableGridLayoutsService.finalise();
 
             this.scansService.finalise();
+            this.notificationChannelsService.finalise();
             this.watchmakerService.finalise();
             this.symbolsService.finalise();
             this.textFormatterService.finalise();

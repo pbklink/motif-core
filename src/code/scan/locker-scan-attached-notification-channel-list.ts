@@ -6,7 +6,7 @@
 
 import { NotificationChannel, ScanAttachedNotificationChannel } from '../adi/internal-api';
 import { NotificationChannelsService } from '../notification-channel/internal-api';
-import { AssertInternalError, Integer, LockOpenListItem, MultiEvent, UsableListChangeTypeId } from '../sys/internal-api';
+import { AssertInternalError, Integer, LockOpenListItem, MultiEvent, UnreachableCaseError, UsableListChangeTypeId } from '../sys/internal-api';
 import { ModifierComparableList } from '../sys/modifier-comparable-list';
 import { LockerScanAttachedNotificationChannel } from './locker-scan-attached-notification-channel';
 
@@ -153,6 +153,8 @@ export class LockerScanAttachedNotificationChannelList extends ModifierComparabl
                 }
                 super.notifyListChange(listChangeTypeId, index, count);
                 break;
+            default:
+                throw new UnreachableCaseError('LSANCLNLC45456', listChangeTypeId);
         }
     }
 

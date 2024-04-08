@@ -5,10 +5,11 @@
  */
 
 import { AdiService, ScanDescriptorsDataDefinition, ScanStatusedDescriptor, ScanStatusedDescriptorsDataItem } from '../adi/internal-api';
+import { RankedLitIvemIdListDirectoryItem } from '../services/ranked-lit-ivem-id-list-directory-item';
 import { AssertInternalError, Badness, ErrorCode, Integer, LockOpenList, MultiEvent, UnreachableCaseError, UsableListChangeTypeId, ZenithDataError } from '../sys/internal-api';
 import { Scan } from './scan';
 
-export class ScanList extends LockOpenList<Scan> {
+export class ScanList extends LockOpenList<Scan, RankedLitIvemIdListDirectoryItem> {
     private _scanDescriptorsDataItem: ScanStatusedDescriptorsDataItem;
     private _scanDescriptorsDataItemListChangeEventSubscriptionId: MultiEvent.SubscriptionId;
     private _scanDescriptorsDataItemCorrectnessChangedSubscriptionId: MultiEvent.SubscriptionId;
@@ -43,13 +44,21 @@ export class ScanList extends LockOpenList<Scan> {
         }
     }
 
-    finalise() {
+    override finalise() {
         this._scanDescriptorsDataItem.unsubscribeCorrectnessChangedEvent(this._scanDescriptorsDataItemCorrectnessChangedSubscriptionId);
         this._scanDescriptorsDataItemCorrectnessChangedSubscriptionId = undefined;
         this._scanDescriptorsDataItem.unsubscribeListChangeEvent(this._scanDescriptorsDataItemListChangeEventSubscriptionId);
         this._scanDescriptorsDataItemListChangeEventSubscriptionId = undefined;
         this._adiService.unsubscribe(this._scanDescriptorsDataItem);
         this._scanDescriptorsDataItem = undefined as unknown as ScanStatusedDescriptorsDataItem;
+
+        super.finalise();
+    }
+
+    override clone(): ScanList {
+        const result = new ScanList(this._adiService);
+        result.assign(this);
+        return result;
     }
 
     suspendUnwantDetailOnScanLastClose() {
@@ -62,17 +71,8 @@ export class ScanList extends LockOpenList<Scan> {
         }
     }
 
-    protected override processUsableChanged() {
-        if (this.usable) {
-            this.notifyListChange(UsableListChangeTypeId.PreUsableClear, 0, 0);
-            const count = this.count;
-            if (count > 0) {
-                this.notifyListChange(UsableListChangeTypeId.PreUsableAdd, 0, count);
-            }
-            this.notifyListChange(UsableListChangeTypeId.Usable, 0, 0);
-        } else {
-            this.notifyListChange(UsableListChangeTypeId.Unusable, 0, 0);
-        }
+    protected override assign(other: LockOpenList<Scan, RankedLitIvemIdListDirectoryItem>) {
+        super.assign(other);
     }
 
     private processDescriptorsDataItemCorrectnessChangedEvent() {
@@ -113,7 +113,7 @@ export class ScanList extends LockOpenList<Scan> {
                     }
                 }
                 if (addedCount > 0) {
-                    this.addItems(addedScans, addedCount);
+                    this.addSubRange(addedScans, 0, addedCount);
                 }
                 break;
             }
@@ -121,7 +121,7 @@ export class ScanList extends LockOpenList<Scan> {
                 for (let i = this.count - 1; i >= 0; i--) {
                     const scan = this.getAt(i);
                     if (!scan.existenceVerified) {
-                        this.deleteItemAtIndex(i);
+                        this.removeAtIndex(i);
                     }
                 }
                 this.setUsable(Badness.notBad);
@@ -136,13 +136,13 @@ export class ScanList extends LockOpenList<Scan> {
                     const scanId = descriptor.id;
                     let scan = this.getItemByKey(scanId);
                     if (scan !== undefined) {
-                        throw new ZenithDataError(ErrorCode.ScanList_InsertAlreadyExistingScan, `${scanId}`);
+                        throw new ZenithDataError(ErrorCode.ScanList_InsertAlreadyExistingScan, scanId);
                     } else {
                         scan = this.createScan(descriptor);
                         insertScans[insertCount++] = scan;
                     }
                 }
-                this.addItems(insertScans);
+                this.addRange(insertScans);
                 break;
             }
             case UsableListChangeTypeId.BeforeReplace:
@@ -174,7 +174,7 @@ export class ScanList extends LockOpenList<Scan> {
             descriptor,
             this.correctnessId,
             () => this.requireUnwantDetailOnScanLastClose(),
-            (aScanId) => { this.deleteItem(aScanId); },
+            (aScanId) => { this.remove(aScanId); },
         );
     }
 
@@ -193,7 +193,7 @@ export class ScanList extends LockOpenList<Scan> {
                 if (blockLastIndex !== undefined) {
                     const index = i + 1;
                     const blockLength = blockLastIndex - i;
-                    this.deleteItemsAtIndex(index, blockLength);
+                    this.removeRange(index, blockLength);
                     blockLastIndex = undefined;
                 }
             }
@@ -202,7 +202,7 @@ export class ScanList extends LockOpenList<Scan> {
         if (blockLastIndex !== undefined) {
             const index = 0;
             const blockLength = blockLastIndex + 1;
-            this.deleteItemsAtIndex(index, blockLength);
+            this.removeRange(index, blockLength);
         }
     }
 

@@ -12,7 +12,7 @@ export class ReferenceableGridLayoutsService extends LockOpenList<RevReferenceab
         let source = this.getItemByKey(definition.id);
         if (source === undefined) {
             source = this.createReferenceableGridLayout(definition);
-            this.addItem(source);
+            this.add(source);
         }
         return source;
     }

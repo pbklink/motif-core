@@ -51,6 +51,7 @@ export class NotificationChannelsService {
                 idIncubator.resolveFtns.length = 0;
             }
         );
+        this.list.finalise();
     }
 
     getSupportedDistributionMethodIds(refresh: boolean): Promise<Result<readonly NotificationDistributionMethodId[] | undefined>> {
@@ -353,7 +354,7 @@ export class NotificationChannelsService {
                                 channel.load(notificationChannel, true);
                             } else {
                                 channel = new LockOpenNotificationChannel(notificationChannel, true);
-                                channelList.addItem(channel);
+                                channelList.add(channel);
                             }
 
                             if (locker !== undefined) {

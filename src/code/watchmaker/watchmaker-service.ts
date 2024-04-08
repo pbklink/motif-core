@@ -72,7 +72,7 @@ export class WatchmakerService extends LockOpenList<WatchmakerList> {
         }
     }
 
-    finalise() {
+    override finalise() {
         this._descriptorsDataItem.unsubscribeCorrectnessChangedEvent(this._descriptorsDataItemCorrectnessChangedSubscriptionId);
         this._descriptorsDataItemCorrectnessChangedSubscriptionId = undefined;
         this._descriptorsDataItem.unsubscribeListChangeEvent(this._descriptorsDataItemListChangeEventSubscriptionId);
@@ -81,6 +81,8 @@ export class WatchmakerService extends LockOpenList<WatchmakerList> {
         this._descriptorsDataItem = undefined as unknown as WatchmakerListDescriptorsDataItem;
 
         this.resolveScansOnlinePromises(false);
+
+        super.finalise();
     }
 
     subscribeScanChangeEvent(handler: WatchmakerService.RecordChangeEventHandler) {
@@ -177,7 +179,7 @@ export class WatchmakerService extends LockOpenList<WatchmakerList> {
         }
 
         if (addCount > 0) {
-            this.addItems(addedScans);
+            this.addRange(addedScans);
         }
     }
 
