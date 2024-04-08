@@ -135,7 +135,7 @@ export namespace RankedLitIvemIdListDirectoryItem {
         export function initialise() {
             const outOfOrderIdx = infos.findIndex((info: Info, index: number) => info.id !== index as FieldId);
             if (outOfOrderIdx >= 0) {
-                throw new EnumInfoOutOfOrderError('RankedLitIvemIdListDirectoryItem.FieldId', outOfOrderIdx, `${idToName(outOfOrderIdx)}`);
+                throw new EnumInfoOutOfOrderError('RankedLitIvemIdListDirectoryItem.FieldId', outOfOrderIdx, idToName(outOfOrderIdx));
             }
         }
 

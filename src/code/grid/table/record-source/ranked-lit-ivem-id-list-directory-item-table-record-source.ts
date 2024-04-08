@@ -48,23 +48,6 @@ export class RankedLitIvemIdListDirectoryItemTableRecordSource extends Subscribe
         );
     }
 
-    override tryLock(_locker: LockOpenListItem.Locker): Promise<Result<void>> {
-        return Ok.createResolvedPromise(undefined);
-    }
-
-    override unlock(_locker: LockOpenListItem.Locker) {
-        // nothing to do
-    }
-
-
-    override openLocked(_opener: LockOpenListItem.Opener) {
-        this._listDirectory.open();
-    }
-
-    override closeLocked(_opener: LockOpenListItem.Opener) {
-        this._listDirectory.close();
-    }
-
     override createRecordDefinition(idx: Integer): RankedLitIvemIdListDirectoryItemTableRecordDefinition {
         const rankedLitIvemIdListDirectoryItem = this._listDirectory.getAt(idx);
         return {

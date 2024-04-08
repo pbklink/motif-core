@@ -2375,7 +2375,8 @@ export const enum StringId {
     ScanFieldSetLoadErrorTypeDisplay_NumericComparisonBooleanNodeDoesNotHaveANumberOperand,
     ScanFieldSetLoadErrorTypeDisplay_FactoryCreateFieldError,
     ScanFieldSetLoadErrorTypeDisplay_FactoryCreateFieldConditionError,
-
+    OpenWatchlistDialog_ListName_Caption,
+    OpenWatchlistDialog_ListName_Description,
 }
 
 /** @public */
@@ -14257,6 +14258,16 @@ export namespace I18nStrings {
         ScanFieldSetLoadErrorTypeDisplay_FactoryCreateFieldConditionError: {
             id: StringId.ScanFieldSetLoadErrorTypeDisplay_FactoryCreateFieldConditionError, translations: {
                 en: 'Factory create field condition error',
+            }
+        },
+        OpenWatchlistDialog_ListName_Caption: {
+            id: StringId.OpenWatchlistDialog_ListName_Caption, translations: {
+                en: 'List name',
+            }
+        },
+        OpenWatchlistDialog_ListName_Description: {
+            id: StringId.OpenWatchlistDialog_ListName_Description, translations: {
+                en: 'Selected list name',
             }
         },
 

@@ -129,8 +129,8 @@ import { LockOpenManager } from '@xilytix/sysutils';
 import { Logger } from '@xilytix/sysutils';
 import { logger } from '@xilytix/sysutils';
 import { MapKey } from '@xilytix/sysutils';
-import { MapKeyed } from '@xilytix/sysutils';
 import { Mappable } from '@xilytix/sysutils';
+import { MappedComparableList } from '@xilytix/sysutils';
 import { minsPerDay } from '@xilytix/sysutils';
 import { minsPerHour } from '@xilytix/sysutils';
 import { ModifierKey } from '@xilytix/sysutils';
@@ -144,7 +144,6 @@ import { mSecsPerHour } from '@xilytix/sysutils';
 import { mSecsPerMin } from '@xilytix/sysutils';
 import { mSecsPerSec } from '@xilytix/sysutils';
 import { MultiEvent } from '@xilytix/sysutils';
-import { NamedLocker } from '@xilytix/sysutils';
 import { newDate } from '@xilytix/sysutils';
 import { newDecimal } from '@xilytix/sysutils';
 import { newGuid } from '@xilytix/sysutils';
@@ -1848,6 +1847,47 @@ export abstract class BadnessListTableRecordSourceDefinition<T> extends TableRec
     constructor(customHeadingsService: RevFieldCustomHeadingsService, tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService, typeId: TableRecordSourceDefinition.TypeId, allowedFieldSourceDefinitionTypeIds: TableFieldSourceDefinition.TypeId[], list: BadnessList<T>);
     // (undocumented)
     readonly list: BadnessList<T>;
+}
+
+// Warning: (ae-missing-release-tag) "BadnessMappedComparableList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class BadnessMappedComparableList<out T extends (Mappable & U), in U = T> extends MappedComparableList<T, U> implements CorrectnessList<T>, BadnessList<T>, CorrectnessState<Badness> {
+    constructor(compareItemsFtn?: CompareFtn<U>, badness?: Badness);
+    // (undocumented)
+    protected assign(other: BadnessMappedComparableList<T, U>): void;
+    // (undocumented)
+    get badness(): Badness;
+    // (undocumented)
+    checkSetUnusable(badness: Badness): void;
+    // (undocumented)
+    clone(): BadnessMappedComparableList<T, U>;
+    // (undocumented)
+    get correctnessId(): CorrectnessId;
+    // (undocumented)
+    finalise(): void;
+    // (undocumented)
+    protected processUsableChanged(): void;
+    // (undocumented)
+    setBadness(value: Badness): void;
+    // (undocumented)
+    setUnusable(badness: Badness): void;
+    // (undocumented)
+    setUsable(badness: Badness): void;
+    // (undocumented)
+    subscribeBadnessChangedEvent(handler: CorrectnessBadness.BadnessChangedEventHandler): MultiEvent.DefinedSubscriptionId;
+    // (undocumented)
+    subscribeCorrectnessChangedEvent(handler: CorrectnessList.CorrectnessChangedEventHandler): MultiEvent.DefinedSubscriptionId;
+    // (undocumented)
+    subscribeUsableChangedEvent(handler: CorrectnessBadness.UsableChangedEventHandler): MultiEvent.DefinedSubscriptionId;
+    // (undocumented)
+    unsubscribeBadnessChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+    // (undocumented)
+    unsubscribeCorrectnessChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+    // (undocumented)
+    unsubscribeUsableChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+    // (undocumented)
+    get usable(): boolean;
 }
 
 // Warning: (ae-internal-missing-underscore) The name "BadnessModule" should be prefixed with an underscore because the declaration is marked as @internal
@@ -7876,11 +7916,6 @@ export interface DisposableRecord {
     dispose(): void;
 }
 
-// @public (undocumented)
-export class DuplicateError extends ExternalError {
-    constructor(code: ErrorCode, message?: string);
-}
-
 export { earliestBinarySearch }
 
 // Warning: (ae-missing-release-tag) "EditableGridLayoutDefinitionColumn" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -10861,9 +10896,7 @@ export abstract class GridField extends RevField<RenderValue.TypeId, RenderValue
 // @public (undocumented)
 export namespace GridField {
     // (undocumented)
-    export type FieldId = RevField.FieldId;
-    // (undocumented)
-    export function idToHeading(id: FieldId): string;
+    export function idToHeading(id: RevField.FieldId): string;
 }
 
 // @public
@@ -10889,11 +10922,11 @@ export class GridFieldTableFieldSourceDefinition extends TableFieldSourceDefinit
     // (undocumented)
     readonly fieldDefinitions: TableField.Definition[];
     // (undocumented)
-    getFieldNameById(id: GridField.FieldId): string;
+    getFieldNameById(id: RevField.FieldId): string;
     // (undocumented)
-    getSupportedFieldNameById(id: GridField.FieldId): string;
+    getSupportedFieldNameById(id: RevField.FieldId): string;
     // (undocumented)
-    isFieldSupported(id: GridField.FieldId): boolean;
+    isFieldSupported(id: RevField.FieldId): boolean;
 }
 
 // @public (undocumented)
@@ -10909,7 +10942,7 @@ export namespace GridFieldTableFieldSourceDefinition {
         // (undocumented)
         export function getHorizontalAlign(fieldIdx: Integer): GridFieldHorizontalAlign;
         // (undocumented)
-        export function getId(fieldIdx: Integer): RevField;
+        export function getId(fieldIdx: Integer): RevField.FieldId;
         // (undocumented)
         export function getName(fieldIdx: Integer): string;
         // (undocumented)
@@ -10917,16 +10950,16 @@ export namespace GridFieldTableFieldSourceDefinition {
         // (undocumented)
         export function getTableValueConstructor(fieldIndex: Integer): TableValue.Constructor;
         // (undocumented)
-        export function indexOfId(id: GridField.FieldId): number;
+        export function indexOfId(id: RevField.FieldId): number;
         // (undocumented)
         export function initialise(): void;
         // (undocumented)
-        export function isIdSupported(id: GridField.FieldId): boolean;
+        export function isIdSupported(id: RevField.FieldId): boolean;
     }
     // (undocumented)
     export interface FieldId extends TableFieldSourceDefinition.FieldId {
         // (undocumented)
-        id: GridField.FieldId;
+        id: RevField.FieldId;
         // (undocumented)
         sourceTypeId: GridFieldTableFieldSourceDefinition.TypeId;
     }
@@ -15196,43 +15229,15 @@ export namespace LockerScanAttachedNotificationChannelList {
 // Warning: (ae-missing-release-tag) "LockOpenList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export abstract class LockOpenList<Item extends LockOpenListItem<Item, Error>, Error = string> extends CorrectnessBadness implements LockItemByKeyList<Item, Error>, BadnessList<Item> {
+export abstract class LockOpenList<Item extends (LockOpenListItem<Item, Error> & ContravariantBase), ContravariantBase = Item, Error = string> extends BadnessMappedComparableList<Item, ContravariantBase> implements LockItemByKeyList<Item, Error>, BadnessList<Item> {
     // (undocumented)
-    addItem(item: Item): void;
+    protected assign(other: LockOpenList<Item, ContravariantBase, Error>): void;
     // (undocumented)
-    addItems(items: Item[], addCount?: Integer): void;
-    // (undocumented)
-    protected checkUsableNotifyListChange(listChangeTypeId: UsableListChangeTypeId, index: Integer, count: Integer): void;
-    // (undocumented)
-    clearItems(): void;
+    clear(): void;
     // (undocumented)
     closeLockedItem(item: Item, opener: LockOpenListItem.Opener): void;
     // (undocumented)
-    get count(): number;
-    // (undocumented)
-    deleteItem(item: Item): void;
-    // (undocumented)
-    deleteItemAtIndex(idx: Integer): void;
-    // (undocumented)
-    deleteItemsAtIndex(idx: Integer, count: Integer): void;
-    // (undocumented)
-    find(predicate: (item: Item) => boolean): Item | undefined;
-    // (undocumented)
-    getAt(idx: Integer): Item;
-    // (undocumented)
-    getItemAtIndexLockCount(index: Integer): number;
-    // (undocumented)
-    getItemByKey(key: MapKey): Item | undefined;
-    // (undocumented)
-    getItemLockCount(item: Item): number;
-    // (undocumented)
-    getItemLockers(item: Item): readonly NamedLocker[];
-    // (undocumented)
-    getItemOpeners(item: Item): readonly NamedLocker[];
-    // (undocumented)
     indexOf(item: Item): number;
-    // (undocumented)
-    indexOfKey(key: MapKey): Integer;
     // (undocumented)
     isAnyItemInRangeLocked(idx: Integer, count: Integer): boolean;
     // (undocumented)
@@ -15246,15 +15251,23 @@ export abstract class LockOpenList<Item extends LockOpenListItem<Item, Error>, E
     // (undocumented)
     lockItems(items: Item[], locker: LockOpenListItem.Locker): Promise<Result<Item | undefined, Error>[]>;
     // (undocumented)
-    protected notifyListChange(listChangeTypeId: UsableListChangeTypeId, recIdx: Integer, recCount: Integer): void;
+    protected notifyListChange(listChangeTypeId: UsableListChangeTypeId, index: Integer, count: Integer): void;
     // (undocumented)
     get nullListId(): string;
     // (undocumented)
     openLockedItem(item: Item, opener: LockOpenListItem.Opener): void;
     // (undocumented)
-    subscribeListChangeEvent(handler: LockOpenList.ListChangeEventHandler): number;
+    remove(item: Item): void;
     // (undocumented)
-    toArray(): readonly Item[];
+    removeAtIndex(index: Integer): void;
+    // (undocumented)
+    removeAtIndices(removeIndices: Integer[]): void;
+    // (undocumented)
+    removeItems(removeItems: readonly Item[]): void;
+    // (undocumented)
+    removeRange(index: Integer, deleteCount: Integer): void;
+    // (undocumented)
+    setAt(index: Integer, value: Item): void;
     // (undocumented)
     tryLockItemAtIndex(idx: Integer, locker: LockOpenListItem.Locker): Promise<Result<Item, Error>>;
     // (undocumented)
@@ -15265,15 +15278,10 @@ export abstract class LockOpenList<Item extends LockOpenListItem<Item, Error>, E
     unlockItemAtIndex(idx: Integer, locker: LockOpenListItem.Locker): void;
     // (undocumented)
     unlockItems(items: readonly Item[], locker: LockOpenListItem.Locker): void;
-    // (undocumented)
-    unsubscribeListChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
 }
 
 // @public (undocumented)
 export namespace LockOpenList {
-    // (undocumented)
-    export class List<Item extends LockOpenListItem<Item>> extends ComparableList<Item> {
-    }
     // (undocumented)
     export type ListChangeEventHandler = (this: void, listChangeTypeId: UsableListChangeTypeId, index: Integer, count: Integer) => void;
 }
@@ -15436,11 +15444,7 @@ export namespace LockOpenNotificationChannel {
 // @public (undocumented)
 export class LockOpenNotificationChannelList extends LockOpenList<LockOpenNotificationChannel> {
     // (undocumented)
-    finalise(): void;
-    // (undocumented)
     indexOfChannelByName(name: string): number;
-    // (undocumented)
-    initialise(): void;
     // (undocumented)
     load(channels: readonly NotificationChannel[], settingsSpecified: boolean): void;
 }
@@ -15513,68 +15517,9 @@ export interface ManagedFundTransaction extends Transaction {
 
 export { MapKey }
 
-export { MapKeyed }
-
 export { Mappable }
 
-// Warning: (ae-missing-release-tag) "MappedComparableList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class MappedComparableList<out T extends (Mappable & U), in U = T> extends ChangeSubscribableComparableList<T, U> {
-    // (undocumented)
-    add(value: T): number;
-    // (undocumented)
-    addRange(values: readonly T[]): void;
-    // (undocumented)
-    addSubRange(values: readonly T[], subRangeStartIndex: Integer, subRangeLength: Integer): void;
-    // (undocumented)
-    addUndefinedRange(undefinedValueCount: Integer): void;
-    // (undocumented)
-    clear(): void;
-    // (undocumented)
-    clone(): MappedComparableList<T, U>;
-    // (undocumented)
-    contains(value: T): boolean;
-    // (undocumented)
-    duplicateErrorText: string;
-    // (undocumented)
-    extract(value: T): T;
-    // (undocumented)
-    getItemByKey(key: MapKey): T | undefined;
-    // (undocumented)
-    insert(index: Integer, value: T): void;
-    // (undocumented)
-    insertRange(index: Integer, values: readonly T[]): void;
-    // (undocumented)
-    insertSubRange(index: Integer, values: readonly T[], subRangeStartIndex: Integer, subRangeLength: Integer): void;
-    // (undocumented)
-    onDuplicate: MappedComparableList.OnDuplicate;
-    // (undocumented)
-    remove(value: T): void;
-    // (undocumented)
-    removeAtIndex(index: Integer): void;
-    // (undocumented)
-    removeAtIndices(removeIndices: Integer[]): void;
-    // (undocumented)
-    removeItems(removeItems: readonly T[]): void;
-    // (undocumented)
-    removeRange(index: Integer, deleteCount: Integer): void;
-    // (undocumented)
-    setAt(index: Integer, value: T): void;
-}
-
-// @public (undocumented)
-export namespace MappedComparableList {
-    // (undocumented)
-    export const enum OnDuplicate {
-        // (undocumented)
-        Error = 2,
-        // (undocumented)
-        Ignore = 1,
-        // (undocumented)
-        Never = 0
-    }
-}
+export { MappedComparableList }
 
 // Warning: (ae-missing-release-tag) "Market" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "Market" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -21809,24 +21754,10 @@ export namespace RankedLitIvemIdListDefinitionModule {
 // Warning: (ae-missing-release-tag) "RankedLitIvemIdListDirectory" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class RankedLitIvemIdListDirectory extends CorrectnessBadness implements BadnessList<RankedLitIvemIdListDirectoryItem> {
+export class RankedLitIvemIdListDirectory extends BadnessComparableList<RankedLitIvemIdListDirectoryItem> {
     constructor(namedSourceLists: readonly RankedLitIvemIdListDirectory.NamedSourceList[], _locker: LockOpenListItem.Locker);
     // (undocumented)
-    close(): void;
-    // (undocumented)
-    get count(): number;
-    // (undocumented)
-    getAt(index: Integer): RankedLitIvemIdListDirectoryItem;
-    // (undocumented)
-    indexOf(item: RankedLitIvemIdListDirectoryItem): number;
-    // (undocumented)
-    open(): void;
-    // (undocumented)
-    subscribeListChangeEvent(handler: RecordList.ListChangeEventHandler): number;
-    // (undocumented)
-    toArray(): readonly RankedLitIvemIdListDirectoryItem[];
-    // (undocumented)
-    unsubscribeListChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+    finalise(): void;
 }
 
 // @public (undocumented)
@@ -21871,7 +21802,7 @@ export namespace RankedLitIvemIdListDirectory {
     // (undocumented)
     export interface NamedSourceList {
         // (undocumented)
-        list: LockOpenList<RankedLitIvemIdListDirectoryItem>;
+        list: BadnessMappedComparableList<RankedLitIvemIdListDirectoryItem>;
         // (undocumented)
         name: string;
     }
@@ -21884,11 +21815,9 @@ export namespace RankedLitIvemIdListDirectory {
         // (undocumented)
         lastResourceBadness: ResourceBadness;
         // (undocumented)
-        readonly list: LockOpenList<RankedLitIvemIdListDirectoryItem>;
+        readonly list: BadnessMappedComparableList<RankedLitIvemIdListDirectoryItem>;
         // (undocumented)
         listChangeEventSubscriptionId: MultiEvent.SubscriptionId | undefined;
-        // (undocumented)
-        lockedItems: RankedLitIvemIdListDirectoryItem[];
     }
 }
 
@@ -22061,8 +21990,6 @@ export namespace RankedLitIvemIdListDirectoryItemTableRecordDefinition {
 export class RankedLitIvemIdListDirectoryItemTableRecordSource extends SubscribeBadnessListTableRecordSource<RankedLitIvemIdListDirectoryItem, RankedLitIvemIdListDirectory> {
     constructor(textFormatterService: TextFormatterService, gridFieldCustomHeadingsService: RevFieldCustomHeadingsService, tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService, correctnessBadness: CorrectnessBadness, definition: RankedLitIvemIdListDirectoryItemTableRecordSourceDefinition);
     // (undocumented)
-    closeLocked(_opener: LockOpenListItem.Opener): void;
-    // (undocumented)
     createDefinition(): RankedLitIvemIdListDirectoryItemTableRecordSourceDefinition;
     // (undocumented)
     createRecordDefinition(idx: Integer): RankedLitIvemIdListDirectoryItemTableRecordDefinition;
@@ -22073,13 +22000,7 @@ export class RankedLitIvemIdListDirectoryItemTableRecordSource extends Subscribe
     // (undocumented)
     protected getDefaultFieldSourceDefinitionTypeIds(): TableFieldSourceDefinition.TypeId.RankedLitIvemIdListDirectoryItem[];
     // (undocumented)
-    openLocked(_opener: LockOpenListItem.Opener): void;
-    // (undocumented)
     protected subscribeList(opener: LockOpenListItem.Opener): RankedLitIvemIdListDirectory;
-    // (undocumented)
-    tryLock(_locker: LockOpenListItem.Locker): Promise<Result<void>>;
-    // (undocumented)
-    unlock(_locker: LockOpenListItem.Locker): void;
     // (undocumented)
     protected unsubscribeList(opener: LockOpenListItem.Opener): void;
 }
@@ -22704,14 +22625,12 @@ export class ReferenceableDataSourceDefinitionsStoreService implements RevRefere
 // Warning: (ae-missing-release-tag) "ReferenceableDataSourcesService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class ReferenceableDataSourcesService extends LockOpenList<ReferenceableDataSource, RevDataSource.LockErrorIdPlusTryError> implements RevReferenceableDataSourcesService<TableRecordSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId, RenderValue.TypeId, RenderValue.Attribute.TypeId, Badness> {
+export class ReferenceableDataSourcesService extends LockOpenList<ReferenceableDataSource, ReferenceableDataSource, RevDataSource.LockErrorIdPlusTryError> implements RevReferenceableDataSourcesService<TableRecordSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId, RenderValue.TypeId, RenderValue.Attribute.TypeId, Badness> {
     constructor(_referenceableGridLayoutsService: ReferenceableGridLayoutsService, _tableFieldSourceDefinitionFactory: TableFieldSourceDefinitionFactory, _tableRecordSourceFactory: TableRecordSourceFactory);
     // (undocumented)
     checkPeriodiSaveRequired(nowTime: SysTick.Time): void;
     // (undocumented)
     checkSave(onlyIfPeriodicRequired: boolean): void;
-    // (undocumented)
-    destroy(): void;
     // (undocumented)
     getOrNew(definition: ReferenceableDataSourceDefinition): ReferenceableDataSource;
     // (undocumented)
@@ -26311,14 +26230,16 @@ export namespace ScanIdRankedLitIvemIdListDefinition {
 // Warning: (ae-missing-release-tag) "ScanList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class ScanList extends LockOpenList<Scan> {
+export class ScanList extends LockOpenList<Scan, RankedLitIvemIdListDirectoryItem> {
     constructor(_adiService: AdiService);
+    // (undocumented)
+    protected assign(other: LockOpenList<Scan, RankedLitIvemIdListDirectoryItem>): void;
+    // (undocumented)
+    clone(): ScanList;
     // (undocumented)
     finalise(): void;
     // (undocumented)
     initialise(): void;
-    // (undocumented)
-    protected processUsableChanged(): void;
     // (undocumented)
     suspendUnwantDetailOnScanLastClose(): void;
     // (undocumented)
@@ -30712,6 +30633,10 @@ export const enum StringId {
     // (undocumented)
     OpenColorSchemeTitle = 273,
     // (undocumented)
+    OpenWatchlistDialog_ListName_Caption = 2367,
+    // (undocumented)
+    OpenWatchlistDialog_ListName_Description = 2368,
+    // (undocumented)
     Options = 192,
     // (undocumented)
     OrderApiTriggerMovementTitle_Down = 1431,
@@ -32714,17 +32639,17 @@ export const enum StringId {
     // (undocumented)
     SettingTitle_Symbol_ExchangeHideMode = 1045,
     // (undocumented)
-    SettingTitle_Symbol_ExplicitSearchFields = 1063,
+    SettingTitle_Symbol_ExplicitSearchFields = 1063,// remove when Watchmaker no longer references
     // (undocumented)
-    SettingTitle_Symbol_ExplicitSearchFieldsEnabled = 1061,
+    SettingTitle_Symbol_ExplicitSearchFieldsEnabled = 1061,// remove when Watchmaker no longer references
     // (undocumented)
     SettingTitle_Symbol_MarketCodeAsLocalWheneverPossible = 1049,// remove when Watchmaker no longer references
     // (undocumented)
     Show = 42,// remove when Watchmaker no longer references
     // (undocumented)
-    ShowSelectedAlertDetailsTitle = 934,// remove when Watchmaker no longer references
+    ShowSelectedAlertDetailsTitle = 934,
     // (undocumented)
-    SideAbbreviation_Buy = 791,// remove when Watchmaker no longer references
+    SideAbbreviation_Buy = 791,
     // (undocumented)
     SideAbbreviation_IntraDayShortSell = 795,
     // (undocumented)
@@ -33683,6 +33608,15 @@ export const enum SymbolFieldId {
     Short = 2,
     // (undocumented)
     Ticker = 4
+}
+
+// Warning: (ae-missing-release-tag) "SymbolListEnabledUsableScanList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class SymbolListEnabledUsableScanList extends BadnessMappedComparableList<Scan> {
+    constructor(_scanList: ScanList);
+    // (undocumented)
+    finalise(): void;
 }
 
 // Warning: (ae-missing-release-tag) "SymbolsDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)

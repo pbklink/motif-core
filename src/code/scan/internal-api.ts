@@ -14,4 +14,5 @@ export * from './scan-editor';
 export * from './scan-list';
 export * from './scan-static-initialise';
 export * from './scans-service';
+export * from './symbol-list-enabled-usable-scan-list';
 
