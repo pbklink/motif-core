@@ -13,6 +13,7 @@
     "*.ts"
   ],
   "references": [
+    { "path": "./table-grid/tsconfig.json" },
     { "path": "./record-grid/tsconfig.json" },
     { "path": "./row-data-array-grid/tsconfig.json" },
     { "path": "./cell-editors/tsconfig.json" },

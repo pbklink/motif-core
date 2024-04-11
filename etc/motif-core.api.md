@@ -34332,6 +34332,62 @@ export namespace TableFieldSourceStaticInitialise {
     export function initialise(): void;
 }
 
+// Warning: (ae-missing-release-tag) "TableGrid" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TableGrid" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class TableGrid extends RecordGrid {
+    constructor(gridFieldCustomHeadingsService: RevFieldCustomHeadingsService, _referenceableGridLayoutsService: ReferenceableGridLayoutsService, tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService, tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFromJsonFactory, _tableRecordSourceFactory: TableRecordSourceFactory, _referenceableGridSourcesService: ReferenceableDataSourcesService, cellPainterFactoryService: CellPainterFactoryService, settingsService: SettingsService, gridHostElement: HTMLElement, customGridSettings: AdaptedRevgrid.CustomGridSettings, customiseSettingsForNewColumnEventer: AdaptedRevgrid.CustomiseSettingsForNewColumnEventer, getMainCellPainterEventer: Subgrid.GetCellPainterEventer<AdaptedRevgridBehavioredColumnSettings, GridField>, getHeaderCellPainterEventer: Subgrid.GetCellPainterEventer<AdaptedRevgridBehavioredColumnSettings, GridField>, externalParent: unknown);
+    // (undocumented)
+    applyGridLayoutOrReferenceDefinition(definition: RevGridLayoutOrReferenceDefinition): void;
+    // (undocumented)
+    canCreateAllowedFieldsGridLayoutDefinition(): boolean;
+    // (undocumented)
+    readonly cellPainterFactoryService: CellPainterFactoryService;
+    // (undocumented)
+    closeGridSource(keepView: boolean): void;
+    // (undocumented)
+    createAllowedFieldsGridLayoutDefinition(): AllowedFieldsGridLayoutDefinition;
+    // (undocumented)
+    createGridLayoutOrReferenceDefinition(): RevGridLayoutOrReferenceDefinition;
+    // (undocumented)
+    createGridSourceOrReferenceDefinition(): DataSourceOrReferenceDefinition;
+    // (undocumented)
+    createRecordDefinition(index: Integer): TableRecordDefinition;
+    // (undocumented)
+    createTableRecordSourceDefinition(): TableRecordSourceDefinition;
+    // (undocumented)
+    readonly gridFieldCustomHeadingsService: RevFieldCustomHeadingsService;
+    // (undocumented)
+    gridLayoutSetEventer: TableGrid.GridLayoutSetEventer | undefined;
+    // (undocumented)
+    keepPreviousLayoutIfPossible: boolean;
+    // (undocumented)
+    keptGridLayoutOrReferenceDefinition: RevGridLayoutOrReferenceDefinition | undefined;
+    // (undocumented)
+    openedEventer: TableGrid.OpenedEventer | undefined;
+    // (undocumented)
+    subscribeBadnessChangedEvent(handler: CorrectnessState.BadnessChangedEventHandler): MultiEvent.SubscriptionId;
+    // (undocumented)
+    readonly tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService;
+    // (undocumented)
+    readonly tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFromJsonFactory;
+    // (undocumented)
+    tryOpenGridLayoutOrReferenceDefinition(gridLayoutOrReferenceDefinition: RevGridLayoutOrReferenceDefinition): Promise<Result<void>>;
+    // (undocumented)
+    tryOpenGridSource(definition: DataSourceOrReferenceDefinition, keepView: boolean): Promise<Result<DataSourceOrReference>>;
+    // (undocumented)
+    unsubscribeBadnessChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+}
+
+// @public (undocumented)
+export namespace TableGrid {
+    // (undocumented)
+    export type GridLayoutSetEventer = (this: void, layout: RevGridLayout) => void;
+    // (undocumented)
+    export type OpenedEventer = (this: void) => void;
+}
+
 // Warning: (ae-missing-release-tag) "TableRecord" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "TableRecord" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
