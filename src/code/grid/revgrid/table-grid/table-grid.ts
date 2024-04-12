@@ -2,9 +2,10 @@ import { RevFieldCustomHeadingsService, RevGridLayout, RevGridLayoutOrReferenceD
 import { Subgrid } from '@xilytix/revgrid';
 import { AssertInternalError, CorrectnessState, Integer, LockOpenListItem, MultiEvent, Ok, Result } from '@xilytix/sysutils';
 import { SettingsService } from '../../../services/internal-api';
+import { Badness } from '../../../sys/internal-api';
 import { GridField } from '../../field/internal-api';
 import { AllowedFieldsGridLayoutDefinition, ReferenceableGridLayoutsService } from '../../layout/internal-api';
-import { Table, TableFieldSourceDefinitionCachingFactoryService, TableRecordDefinition, TableRecordSourceDefinition, TableRecordStore } from '../../table/internal-api';
+import { Table, TableFieldSourceDefinitionCachingFactoryService, TableRecordDefinition, TableRecordSource, TableRecordSourceDefinition, TableRecordStore } from '../../table/internal-api';
 import { DataSource, DataSourceOrReference, DataSourceOrReferenceDefinition, ReferenceableDataSourcesService, TableRecordSourceDefinitionFromJsonFactory, TableRecordSourceFactory } from '../../typed/internal-api';
 import { AdaptedRevgrid } from '../adapted-revgrid/internal-api';
 import { CellPainterFactoryService } from '../cell-painters/internal-api';
@@ -12,6 +13,7 @@ import { RecordGrid } from '../record-grid/internal-api';
 import { AdaptedRevgridBehavioredColumnSettings } from '../settings/internal-api';
 
 export class TableGrid extends RecordGrid {
+    opener: LockOpenListItem.Opener;
     keepPreviousLayoutIfPossible = false;
     keptGridLayoutOrReferenceDefinition: RevGridLayoutOrReferenceDefinition | undefined;
 
@@ -19,8 +21,6 @@ export class TableGrid extends RecordGrid {
     gridLayoutSetEventer: TableGrid.GridLayoutSetEventer | undefined;
 
     private readonly _recordStore: TableRecordStore;
-
-    private _opener: LockOpenListItem.Opener;
 
     private _lockedGridSourceOrReference: DataSourceOrReference | undefined;
     private _openedDataSource: DataSource | undefined;
@@ -56,6 +56,30 @@ export class TableGrid extends RecordGrid {
         this._recordStore = recordStore;
     }
 
+    get recordCount(): Integer { return this._openedTable === undefined ? 0 : this._openedTable.recordCount; }
+    get opened(): boolean { return this._openedTable !== undefined; }
+    get openedTable() {
+        if (this._openedTable === undefined) {
+            throw new AssertInternalError('TGGOT32072');
+        } else {
+            return this._openedTable;
+        }
+    }
+    get openedRecordSource(): TableRecordSource {
+        if (this._openedTable === undefined) {
+            throw new AssertInternalError('TGGORS32072');
+        } else {
+            return this._openedTable.recordSource as TableRecordSource;
+        }
+    }
+    get badness(): Badness {
+        if (this._openedTable === undefined) {
+            throw new AssertInternalError('TGGG32072');
+        } else {
+            return this._openedTable.badness;
+        }
+    }
+
     tryOpenGridSource(definition: DataSourceOrReferenceDefinition, keepView: boolean): Promise<Result<DataSourceOrReference>> {
         // Replace with Promise.withResolvers when available in TypeScript (ES2023)
         let resolve: (value: Result<DataSourceOrReference>) => void;
@@ -79,7 +103,7 @@ export class TableGrid extends RecordGrid {
             definition
         );
 
-        const dataSourceOrReferenceLockPromise = DataSourceOrReference.tryLock(gridSourceOrReference, this._opener);
+        const dataSourceOrReferenceLockPromise = DataSourceOrReference.tryLock(gridSourceOrReference, this.opener);
         dataSourceOrReferenceLockPromise.then(
             (lockResult) => {
                 if (lockResult.isErr()) {
@@ -89,7 +113,7 @@ export class TableGrid extends RecordGrid {
                     if (gridSource === undefined) {
                         throw new AssertInternalError('GSFOGSL22209');
                     } else {
-                        gridSource.openLocked(this._opener);
+                        gridSource.openLocked(this.opener);
                         const table = gridSource.table;
                         if (table === undefined) {
                             throw new AssertInternalError('GSFOGSTA22209');
@@ -163,7 +187,7 @@ export class TableGrid extends RecordGrid {
                     this._keptRowOrderDefinition = undefined;
                     this._keptGridRowAnchor = undefined;
                 }
-                const opener = this._opener;
+                const opener = this.opener;
                 this._openedDataSource.closeLocked(opener);
                 this._lockedGridSourceOrReference.unlock(opener);
                 this._lockedGridSourceOrReference = undefined;
@@ -203,7 +227,7 @@ export class TableGrid extends RecordGrid {
         if (this._openedDataSource === undefined) {
             throw new AssertInternalError('GSFOGLONRD22209');
         } else {
-            return DataSource.tryOpenGridLayoutOrReferenceDefinition(this._openedDataSource, gridLayoutOrReferenceDefinition, this._opener);
+            return DataSource.tryOpenGridLayoutOrReferenceDefinition(this._openedDataSource, gridLayoutOrReferenceDefinition, this.opener);
         }
     }
 
@@ -211,8 +235,8 @@ export class TableGrid extends RecordGrid {
         if (this._openedDataSource === undefined) {
             throw new AssertInternalError('GSFAGLD22209');
         } else {
-            const promise = this._openedDataSource.tryOpenGridLayoutOrReferenceDefinition(definition, this._opener);
-            AssertInternalError.throwErrorIfPromiseRejected(promise, 'GSFIG81190', this._opener.lockerName);
+            const promise = this._openedDataSource.tryOpenGridLayoutOrReferenceDefinition(definition, this.opener);
+            AssertInternalError.throwErrorIfPromiseRejected(promise, 'GSFIG81190', this.opener.lockerName);
         }
     }
 
@@ -226,6 +250,12 @@ export class TableGrid extends RecordGrid {
 
     canCreateAllowedFieldsGridLayoutDefinition() {
         return this._openedTable !== undefined;
+    }
+
+    clearRendering() {
+        if (this._openedTable !== undefined) {
+            this._openedTable.clearRendering();
+        }
     }
 
     subscribeBadnessChangedEvent(handler: CorrectnessState.BadnessChangedEventHandler) {

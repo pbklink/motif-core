@@ -34341,9 +34341,13 @@ export class TableGrid extends RecordGrid {
     // (undocumented)
     applyGridLayoutOrReferenceDefinition(definition: RevGridLayoutOrReferenceDefinition): void;
     // (undocumented)
+    get badness(): Badness;
+    // (undocumented)
     canCreateAllowedFieldsGridLayoutDefinition(): boolean;
     // (undocumented)
     readonly cellPainterFactoryService: CellPainterFactoryService;
+    // (undocumented)
+    clearRendering(): void;
     // (undocumented)
     closeGridSource(keepView: boolean): void;
     // (undocumented)
@@ -34365,7 +34369,17 @@ export class TableGrid extends RecordGrid {
     // (undocumented)
     keptGridLayoutOrReferenceDefinition: RevGridLayoutOrReferenceDefinition | undefined;
     // (undocumented)
+    get opened(): boolean;
+    // (undocumented)
     openedEventer: TableGrid.OpenedEventer | undefined;
+    // (undocumented)
+    get openedRecordSource(): TableRecordSource;
+    // (undocumented)
+    get openedTable(): Table;
+    // (undocumented)
+    opener: LockOpenListItem.Opener;
+    // (undocumented)
+    get recordCount(): Integer;
     // (undocumented)
     subscribeBadnessChangedEvent(handler: CorrectnessState.BadnessChangedEventHandler): MultiEvent.SubscriptionId;
     // (undocumented)
