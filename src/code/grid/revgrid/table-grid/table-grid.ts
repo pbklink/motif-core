@@ -1,4 +1,4 @@
-import { RevGridLayout, RevGridLayoutOrReferenceDefinition, RevGridRowOrderDefinition, RevSourcedFieldCustomHeadingsService } from '@xilytix/rev-data-source';
+import { RevGridLayout, RevGridLayoutOrReferenceDefinition, RevRecordRowOrderDefinition, RevSourcedFieldCustomHeadingsService } from '@xilytix/rev-data-source';
 import { Subgrid } from '@xilytix/revgrid';
 import { AssertInternalError, CorrectnessState, Integer, LockOpenListItem, MultiEvent, Ok, Result } from '@xilytix/sysutils';
 import { SettingsService } from '../../../services/internal-api';
@@ -26,7 +26,7 @@ export class TableGrid extends RecordGrid {
     private _openedDataSource: DataSource | undefined;
     private _openedTable: Table | undefined;
 
-    private _keptRowOrderDefinition: RevGridRowOrderDefinition | undefined;
+    private _keptRowOrderDefinition: RevRecordRowOrderDefinition | undefined;
     private _keptGridRowAnchor: RecordGrid.ViewAnchor | undefined;
 
     private _autoSizeAllColumnWidthsOnFirstUsable: boolean;

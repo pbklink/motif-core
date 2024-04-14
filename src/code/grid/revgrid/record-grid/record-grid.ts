@@ -7,12 +7,12 @@
 import {
     RevGridLayout,
     RevGridLayoutDefinition,
-    RevGridRowOrderDefinition,
-    RevGridSortDefinition,
     RevRecordDataServer,
     RevRecordField,
     RevRecordFieldIndex,
     RevRecordIndex,
+    RevRecordRowOrderDefinition,
+    RevRecordSortDefinition,
     RevRecordStore
 } from '@xilytix/rev-data-source';
 import {
@@ -174,7 +174,7 @@ export class RecordGrid extends AdaptedRevgrid implements RevGridLayout.ChangeIn
         this._allowedFields = fields;
     }
 
-    applyFirstUsable(rowOrderDefinition: RevGridRowOrderDefinition | undefined, viewAnchor: RecordGrid.ViewAnchor | undefined, gridLayout: RevGridLayout | undefined) {
+    applyFirstUsable(rowOrderDefinition: RevRecordRowOrderDefinition | undefined, viewAnchor: RecordGrid.ViewAnchor | undefined, gridLayout: RevGridLayout | undefined) {
         this._beenUsable = true;
 
         this._firstUsableRenderViewAnchor = viewAnchor;
@@ -232,13 +232,13 @@ export class RecordGrid extends AdaptedRevgrid implements RevGridLayout.ChangeIn
         }
     }
 
-    getSortFields(): RevGridSortDefinition.Field[] | undefined {
+    getSortFields(): RevRecordSortDefinition.Field[] | undefined {
         const specifiers = this.mainDataServer.sortFieldSpecifiers;
         const count = specifiers.length;
         if (count === 0) {
             return undefined;
         } else {
-            const fieldDefinitions = new Array<RevGridSortDefinition.Field>(count);
+            const fieldDefinitions = new Array<RevRecordSortDefinition.Field>(count);
             const fieldCount = this.fieldCount;
             for (let i = 0; i < count; i++) {
                 const specifier = specifiers[i];
@@ -247,7 +247,7 @@ export class RecordGrid extends AdaptedRevgrid implements RevGridLayout.ChangeIn
                     throw new AssertInternalError('RCGSC81899');
                 } else {
                     const field = this.getField(fieldIndex);
-                    const fieldDefinition: RevGridSortDefinition.Field = {
+                    const fieldDefinition: RevRecordSortDefinition.Field = {
                         name: field.name,
                         ascending: specifier.ascending,
                     };
@@ -283,9 +283,9 @@ export class RecordGrid extends AdaptedRevgrid implements RevGridLayout.ChangeIn
         this.mainDataServer.clearSort();
     }
 
-    getRowOrderDefinition(): RevGridRowOrderDefinition {
+    getRowOrderDefinition(): RevRecordRowOrderDefinition {
         const sortColumns = this.getSortFields();
-        return new RevGridRowOrderDefinition(sortColumns, undefined);
+        return new RevRecordRowOrderDefinition(sortColumns, undefined);
     }
 
     getFieldByName(fieldName: string): RevRecordField {
@@ -496,7 +496,7 @@ export class RecordGrid extends AdaptedRevgrid implements RevGridLayout.ChangeIn
         this.mainDataServer.invalidateAll();
     }
 
-    private applySortFields(sortFields: RevGridSortDefinition.Field[] | undefined) {
+    private applySortFields(sortFields: RevRecordSortDefinition.Field[] | undefined) {
         if (sortFields === undefined) {
             this.mainDataServer.clearSort();
         } else {

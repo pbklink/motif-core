@@ -185,15 +185,15 @@ import { RevGridLayout } from '@xilytix/rev-data-source';
 import { RevGridLayoutDefinition } from '@xilytix/rev-data-source';
 import { RevGridLayoutOrReference } from '@xilytix/rev-data-source';
 import { RevGridLayoutOrReferenceDefinition } from '@xilytix/rev-data-source';
-import { RevGridRowOrderDefinition } from '@xilytix/rev-data-source';
-import { RevGridSortDefinition } from '@xilytix/rev-data-source';
 import { RevListChangedTypeId } from '@xilytix/revgrid';
 import { RevRecordDataServer } from '@xilytix/rev-data-source';
 import { RevRecordField } from '@xilytix/rev-data-source';
 import { RevRecordFieldIndex } from '@xilytix/rev-data-source';
 import { RevRecordIndex } from '@xilytix/rev-data-source';
 import { RevRecordInvalidatedValue } from '@xilytix/rev-data-source';
+import { RevRecordRowOrderDefinition } from '@xilytix/rev-data-source';
 import { RevRecordSchemaServer } from '@xilytix/rev-data-source';
+import { RevRecordSortDefinition } from '@xilytix/rev-data-source';
 import { RevRecordStore } from '@xilytix/rev-data-source';
 import { RevRecordValueRecentChangeTypeId } from '@xilytix/rev-data-source';
 import { RevReferenceableDataSource } from '@xilytix/rev-data-source';
@@ -22338,7 +22338,7 @@ export class RecordGrid extends AdaptedRevgrid implements RevGridLayout.ChangeIn
     // (undocumented)
     applyFilter(filter?: RevRecordDataServer.RecordFilterCallback): void;
     // (undocumented)
-    applyFirstUsable(rowOrderDefinition: RevGridRowOrderDefinition | undefined, viewAnchor: RecordGrid.ViewAnchor | undefined, gridLayout: RevGridLayout | undefined): void;
+    applyFirstUsable(rowOrderDefinition: RevRecordRowOrderDefinition | undefined, viewAnchor: RecordGrid.ViewAnchor | undefined, gridLayout: RevGridLayout | undefined): void;
     // (undocumented)
     applyGridLayoutDefinition(value: RevGridLayoutDefinition): void;
     // (undocumented)
@@ -22390,9 +22390,9 @@ export class RecordGrid extends AdaptedRevgrid implements RevGridLayout.ChangeIn
     // (undocumented)
     getFieldSortPriority(field: RevRecordFieldIndex | GridField): number | undefined;
     // (undocumented)
-    getRowOrderDefinition(): RevGridRowOrderDefinition;
+    getRowOrderDefinition(): RevRecordRowOrderDefinition;
     // (undocumented)
-    getSortFields(): RevGridSortDefinition.Field[] | undefined;
+    getSortFields(): RevRecordSortDefinition.Field[] | undefined;
     // (undocumented)
     getSortSpecifier(index: number): RevRecordDataServer.SortFieldSpecifier;
     // (undocumented)
