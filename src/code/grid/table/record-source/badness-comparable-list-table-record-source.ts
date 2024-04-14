@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevFieldCustomHeadingsService } from '@xilytix/rev-data-source';
+import { RevSourcedFieldCustomHeadingsService } from '@xilytix/rev-data-source';
 import { BadnessList, CorrectnessBadness, LockOpenListItem } from '../../../sys/internal-api';
 import { TextFormatterService } from '../../../text-format/internal-api';
 import { TableFieldSourceDefinition, TableFieldSourceDefinitionCachingFactoryService } from '../field-source/internal-api';
@@ -16,7 +16,7 @@ export abstract class BadnessListTableRecordSource<Record> extends SubscribeBadn
 
     constructor(
         textFormatterService: TextFormatterService,
-        gridFieldCustomHeadingsService: RevFieldCustomHeadingsService,
+        gridFieldCustomHeadingsService: RevSourcedFieldCustomHeadingsService,
         tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService,
         correctnessBadness: CorrectnessBadness,
         definition: BadnessListTableRecordSourceDefinition<Record>,

@@ -4,7 +4,6 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevFieldCustomHeadingsService } from '@xilytix/rev-data-source';
 import { AdiService } from './adi/internal-api';
 import { CommandRegisterService } from "./command/internal-api";
 import {
@@ -34,6 +33,7 @@ import {
 } from "./services/internal-api";
 import { TextFormatterService } from "./text-format/internal-api";
 import { WatchmakerService } from './watchmaker/internal-api';
+import { RevSourcedFieldCustomHeadingsService } from '@xilytix/rev-data-source';
 
 /** @public */
 export class CoreService {
@@ -51,7 +51,7 @@ export class CoreService {
     readonly rankedLitIvemIdListDefinitionFactoryService: RankedLitIvemIdListDefinitionFactoryService;
     readonly rankedLitIvemIdListFactoryService: RankedLitIvemIdListFactoryService;
     readonly textFormatterService: TextFormatterService;
-    readonly gridFieldCustomHeadingsService: RevFieldCustomHeadingsService;
+    readonly gridFieldCustomHeadingsService: RevSourcedFieldCustomHeadingsService;
     readonly referenceableGridLayoutsService: ReferenceableGridLayoutsService;
     readonly referenceableDataSourceDefinitionsStoreService: ReferenceableDataSourceDefinitionsStoreService;
     readonly cellPainterFactoryService: CellPainterFactoryService;
@@ -83,7 +83,7 @@ export class CoreService {
             this.watchmakerService,
         );
         this.textFormatterService = new TextFormatterService(this.symbolsService, this.settingsService);
-        this.gridFieldCustomHeadingsService = new RevFieldCustomHeadingsService();
+        this.gridFieldCustomHeadingsService = new RevSourcedFieldCustomHeadingsService();
         this.referenceableGridLayoutsService = new ReferenceableGridLayoutsService();
         this.referenceableDataSourceDefinitionsStoreService = new ReferenceableDataSourceDefinitionsStoreService(
         );

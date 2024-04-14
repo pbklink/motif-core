@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevFieldDefinition, RevGridLayoutDefinition } from '@xilytix/rev-data-source';
+import { RevGridLayoutDefinition, RevSourcedFieldDefinition } from '@xilytix/rev-data-source';
 import { OrderSideId } from '../../../../adi/internal-api';
 import { RenderValue } from '../../../../services/internal-api';
 import { CorrectnessId, UnreachableCaseError } from '../../../../sys/internal-api';
@@ -84,8 +84,8 @@ export namespace FullDepthSideGridField {
         return fields;
     }
 
-    export function createRevFieldDefinition(id: FullDepthSideFieldId): RevFieldDefinition {
-        return new RevFieldDefinition(
+    export function createRevFieldDefinition(id: FullDepthSideFieldId): RevSourcedFieldDefinition {
+        return new RevSourcedFieldDefinition(
             DepthSideGridField.sourceDefinition,
             FullDepthSideField.idToName(id),
             FullDepthSideField.idToDefaultHeading(id),
@@ -106,7 +106,7 @@ export namespace FullDepthSideGridField {
             const sourceName = DepthSideGridField.sourceDefinition.name;
             const fieldId = fieldIds[i];
             const sourcelessFieldName = FullDepthSideField.idToName(fieldId);
-            const fieldName = RevFieldDefinition.Name.compose(sourceName, sourcelessFieldName);
+            const fieldName = RevSourcedFieldDefinition.Name.compose(sourceName, sourcelessFieldName);
             const layoutDefinitionColumn: RevGridLayoutDefinition.Column = {
                 fieldName,
                 visible: undefined,

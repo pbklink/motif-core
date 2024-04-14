@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevFieldDefinition, RevFieldSourceDefinition } from '@xilytix/rev-data-source';
+import { RevSourcedFieldDefinition, RevSourcedFieldSourceDefinition } from '@xilytix/rev-data-source';
 import {
     DataRowArraySchemaServer,
     DatalessSubgrid,
@@ -144,8 +144,8 @@ export namespace RowDataArrayGrid {
         defaultTextAlign: GridFieldHorizontalAlign,
         defaultWidth?:number,
     ) {
-        const definition = new RevFieldDefinition(
-            new RevFieldSourceDefinition(''),
+        const definition = new RevSourcedFieldDefinition(
+            new RevSourcedFieldSourceDefinition(''),
             sourcelessName,
             defaultHeading,
             defaultTextAlign,

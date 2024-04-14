@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevFieldCustomHeadingsService, RevTableRecordSourceDefinition } from '@xilytix/rev-data-source';
+import { RevSourcedFieldCustomHeadingsService, RevTableRecordSourceDefinition } from '@xilytix/rev-data-source';
 import { StringId, Strings } from '../../../../res/internal-api';
 import { RenderValue } from '../../../../services/internal-api';
 import {
@@ -27,7 +27,7 @@ export abstract class TableRecordSourceDefinition extends RevTableRecordSourceDe
     RenderValue.Attribute.TypeId
 > {
     constructor(
-        customHeadingsService: RevFieldCustomHeadingsService,
+        customHeadingsService: RevSourcedFieldCustomHeadingsService,
         tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService,
         typeId: TableRecordSourceDefinition.TypeId,
         allowedFieldSourceDefinitionTypeIds: readonly TableFieldSourceDefinition.TypeId[],

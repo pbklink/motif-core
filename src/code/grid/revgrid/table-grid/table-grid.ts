@@ -1,4 +1,4 @@
-import { RevFieldCustomHeadingsService, RevGridLayout, RevGridLayoutOrReferenceDefinition, RevGridRowOrderDefinition } from '@xilytix/rev-data-source';
+import { RevGridLayout, RevGridLayoutOrReferenceDefinition, RevGridRowOrderDefinition, RevSourcedFieldCustomHeadingsService } from '@xilytix/rev-data-source';
 import { Subgrid } from '@xilytix/revgrid';
 import { AssertInternalError, CorrectnessState, Integer, LockOpenListItem, MultiEvent, Ok, Result } from '@xilytix/sysutils';
 import { SettingsService } from '../../../services/internal-api';
@@ -36,7 +36,7 @@ export class TableGrid extends RecordGrid {
     private _gridSourceGridLayoutSetSubscriptionId: MultiEvent.SubscriptionId;
 
     constructor(
-        readonly gridFieldCustomHeadingsService: RevFieldCustomHeadingsService,
+        readonly gridFieldCustomHeadingsService: RevSourcedFieldCustomHeadingsService,
         private readonly _referenceableGridLayoutsService: ReferenceableGridLayoutsService,
         readonly tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService,
         readonly tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFromJsonFactory,

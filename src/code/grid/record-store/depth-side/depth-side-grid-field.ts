@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevFieldSourceDefinition } from '@xilytix/rev-data-source';
+import { RevSourcedFieldSourceDefinition } from '@xilytix/rev-data-source';
 import { RenderValue } from '../../../services/internal-api';
 import { CorrectnessId, GridRevRecordField } from '../../../sys/internal-api';
 import { GridField } from '../../field/internal-api';
@@ -24,5 +24,5 @@ export namespace DepthSideGridField {
     //     defaultVisibles: boolean[];
     // }
 
-    export const sourceDefinition = new RevFieldSourceDefinition('DepthSide');
+    export const sourceDefinition = new RevSourcedFieldSourceDefinition('DepthSide');
 }

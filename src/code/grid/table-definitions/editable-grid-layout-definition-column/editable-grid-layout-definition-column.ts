@@ -30,7 +30,7 @@ export class EditableGridLayoutDefinitionColumn implements IndexedRecord {
 
     get fieldName() { return this.field.name }
     get fieldHeading() { return this.field.heading; }
-    get fieldSourceName() { return this.field.definition.source.name; }
+    get fieldSourceName() { return this.field.definition.sourceDefinition.name; }
     get width() { return this._width; }
     set width(newWidth: Integer | undefined) {
         const oldWidth = this._width;

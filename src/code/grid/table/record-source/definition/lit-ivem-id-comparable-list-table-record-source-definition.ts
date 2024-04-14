@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevFieldCustomHeadingsService, RevGridLayoutDefinition } from '@xilytix/rev-data-source';
+import { RevGridLayoutDefinition, RevSourcedFieldCustomHeadingsService } from '@xilytix/rev-data-source';
 import { LitIvemId } from '../../../../adi/internal-api';
 import { ErrorCode, JsonElement, JsonElementErr, Ok, PickEnum, Result, UiComparableList } from '../../../../sys/internal-api';
 import {
@@ -22,7 +22,7 @@ export class LitIvemIdComparableListTableRecordSourceDefinition extends BadnessL
     declare list: UiComparableList<LitIvemId>;
 
     constructor(
-        customHeadingsService: RevFieldCustomHeadingsService,
+        customHeadingsService: RevSourcedFieldCustomHeadingsService,
         tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService,
         list: UiComparableList<LitIvemId>,
     ) {
@@ -106,7 +106,7 @@ export namespace LitIvemIdComparableListTableRecordSourceDefinition {
     }
 
     export function tryCreateDefinition(
-        customHeadingsService: RevFieldCustomHeadingsService,
+        customHeadingsService: RevSourcedFieldCustomHeadingsService,
         tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService,
         element: JsonElement,
     ): Result<LitIvemIdComparableListTableRecordSourceDefinition> {

@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevFieldCustomHeadingsService } from '@xilytix/rev-data-source';
+import { RevSourcedFieldCustomHeadingsService } from '@xilytix/rev-data-source';
 import { BadnessList } from '../../../../sys/internal-api';
 import { TableFieldSourceDefinition, TableFieldSourceDefinitionCachingFactoryService } from '../../field-source/internal-api';
 import { TableRecordSourceDefinition } from './table-record-source-definition';
@@ -12,7 +12,7 @@ import { TableRecordSourceDefinition } from './table-record-source-definition';
 /** @public */
 export abstract class BadnessListTableRecordSourceDefinition<T> extends TableRecordSourceDefinition {
     constructor(
-        customHeadingsService: RevFieldCustomHeadingsService,
+        customHeadingsService: RevSourcedFieldCustomHeadingsService,
         tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService,
         typeId: TableRecordSourceDefinition.TypeId,
         allowedFieldSourceDefinitionTypeIds: TableFieldSourceDefinition.TypeId[],

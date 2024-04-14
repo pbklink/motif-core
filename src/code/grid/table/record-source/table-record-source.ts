@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevFieldCustomHeadingsService, RevTableRecordSource } from '@xilytix/rev-data-source';
+import { RevSourcedFieldCustomHeadingsService, RevTableRecordSource } from '@xilytix/rev-data-source';
 import { RenderValue } from '../../../services/internal-api';
 import { Badness, CorrectnessBadness, MultiEvent } from '../../../sys/internal-api';
 import { TextFormatterService } from '../../../text-format/internal-api';
@@ -22,7 +22,7 @@ export abstract class TableRecordSource extends RevTableRecordSource<
 
     constructor(
         textFormatterService: TextFormatterService,
-        gridFieldCustomHeadingsService: RevFieldCustomHeadingsService,
+        gridFieldCustomHeadingsService: RevSourcedFieldCustomHeadingsService,
         tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService,
         private readonly _correctnessBadness: CorrectnessBadness,
         definition: TableRecordSourceDefinition,

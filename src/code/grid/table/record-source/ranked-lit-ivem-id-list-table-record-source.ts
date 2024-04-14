@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevFieldCustomHeadingsService } from '@xilytix/rev-data-source';
+import { RevSourcedFieldCustomHeadingsService } from '@xilytix/rev-data-source';
 import { AdiService, RankedLitIvemId } from '../../../adi/internal-api';
 import {
     LitIvemIdArrayRankedLitIvemIdListDefinition,
@@ -36,7 +36,7 @@ export class RankedLitIvemIdListTableRecordSource extends SubscribeBadnessListTa
         private readonly _symbolDetailCacheService: SymbolDetailCacheService,
         private readonly _rankedLitIvemIdListFactoryService: RankedLitIvemIdListFactoryService,
         textFormatterService: TextFormatterService,
-        gridFieldCustomHeadingsService: RevFieldCustomHeadingsService,
+        gridFieldCustomHeadingsService: RevSourcedFieldCustomHeadingsService,
         tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService,
         correctnessBadness: CorrectnessBadness,
         definition: RankedLitIvemIdListTableRecordSourceDefinition,

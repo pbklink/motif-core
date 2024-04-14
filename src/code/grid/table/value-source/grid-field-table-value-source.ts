@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevField } from '@xilytix/rev-data-source';
+import { RevSourcedField } from '@xilytix/rev-data-source';
 import { AssertInternalError, Integer, UnreachableCaseError } from '../../../sys/internal-api';
 import { GridField } from '../../field/internal-api';
 import { GridFieldTableFieldSourceDefinition } from '../field-source/internal-api';
@@ -49,27 +49,27 @@ export class GridFieldTableValueSource extends TableValueSource {
         return new valueConstructor();
     }
 
-    private loadValue(id: RevField.FieldId, value: TableValue) {
+    private loadValue(id: RevSourcedField.FieldId, value: TableValue) {
         switch (id) {
-            case RevField.FieldId.Name: {
+            case RevSourcedField.FieldId.Name: {
                 (value as StringTableValue).data = this._gridField.name;
                 break;
             }
-            case RevField.FieldId.Heading: {
+            case RevSourcedField.FieldId.Heading: {
                 (value as StringTableValue).data = this._gridField.heading;
                 break;
             }
-            case RevField.FieldId.SourceName: {
-                (value as StringTableValue).data = this._gridField.definition.source.name;
+            case RevSourcedField.FieldId.SourceName: {
+                (value as StringTableValue).data = this._gridField.definition.sourceDefinition.name;
                 break;
             }
-            case RevField.FieldId.DefaultHeading: {
+            case RevSourcedField.FieldId.DefaultHeading: {
                 throw new AssertInternalError('GFTVSLVDH99799');
             }
-            case RevField.FieldId.DefaultTextAlign: {
+            case RevSourcedField.FieldId.DefaultTextAlign: {
                 throw new AssertInternalError('GFTVSLVDT99799');
             }
-            case RevField.FieldId.DefaultWidth: {
+            case RevSourcedField.FieldId.DefaultWidth: {
                 throw new AssertInternalError('GFTVSLVDW99799');
             }
             default:

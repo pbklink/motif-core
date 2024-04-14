@@ -4,10 +4,10 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevFieldCustomHeadingsService } from '@xilytix/rev-data-source';
+import { RevSourcedFieldCustomHeadingsService } from '@xilytix/rev-data-source';
 import { RankedLitIvemIdListDirectory } from '../../../ranked-lit-ivem-id-list/internal-api';
 import { RankedLitIvemIdListDirectoryItem } from '../../../services/internal-api';
-import { CorrectnessBadness, Integer, LockOpenListItem, Ok, Result, UnreachableCaseError } from '../../../sys/internal-api';
+import { CorrectnessBadness, Integer, LockOpenListItem, UnreachableCaseError } from '../../../sys/internal-api';
 import { TextFormatterService } from '../../../text-format/internal-api';
 import {
     TableFieldSourceDefinition, TableFieldSourceDefinitionCachingFactoryService
@@ -23,7 +23,7 @@ export class RankedLitIvemIdListDirectoryItemTableRecordSource extends Subscribe
 
     constructor(
         textFormatterService: TextFormatterService,
-        gridFieldCustomHeadingsService: RevFieldCustomHeadingsService,
+        gridFieldCustomHeadingsService: RevSourcedFieldCustomHeadingsService,
         tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService,
         correctnessBadness: CorrectnessBadness,
         definition: RankedLitIvemIdListDirectoryItemTableRecordSourceDefinition,
