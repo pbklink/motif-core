@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevGridLayoutDefinition, RevSourcedFieldCustomHeadingsService } from '@xilytix/rev-data-source';
+import { RevColumnLayoutDefinition, RevSourcedFieldCustomHeadingsService } from '@xilytix/rev-data-source';
 import { LitIvemId } from '../../../../adi/internal-api';
 import { ErrorCode, JsonElement, JsonElementErr, Ok, PickEnum, Result, UiComparableList } from '../../../../sys/internal-api';
 import {
@@ -41,14 +41,14 @@ export class LitIvemIdComparableListTableRecordSourceDefinition extends BadnessL
         element.setElementArray(LitIvemIdComparableListTableRecordSourceDefinition.JsonName.list, listElementArray);
     }
 
-    override createDefaultLayoutDefinition(): RevGridLayoutDefinition {
+    override createDefaultLayoutDefinition(): RevColumnLayoutDefinition {
         const litIvemIdFieldSourceDefinition = LitIvemIdTableFieldSourceDefinition.get(this.tableFieldSourceDefinitionCachingFactoryService);
 
         const fieldNames = new Array<string>();
 
         fieldNames.push(litIvemIdFieldSourceDefinition.getFieldNameById(LitIvemId.FieldId.LitIvemId));
 
-        return RevGridLayoutDefinition.createFromFieldNames(fieldNames);
+        return RevColumnLayoutDefinition.createFromFieldNames(fieldNames);
     }
 }
 
@@ -124,7 +124,7 @@ export namespace LitIvemIdComparableListTableRecordSourceDefinition {
     export function createLayoutDefinition(
         fieldSourceDefinitionRegistryService: TableFieldSourceDefinitionCachingFactoryService,
         fieldIds: FieldId[],
-    ): RevGridLayoutDefinition {
+    ): RevColumnLayoutDefinition {
         return fieldSourceDefinitionRegistryService.createLayoutDefinition(fieldIds);
     }
 

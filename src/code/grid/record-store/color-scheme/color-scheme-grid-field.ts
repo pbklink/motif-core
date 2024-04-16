@@ -5,7 +5,7 @@
  */
 
 import { isReadable as TinyColorIsReadable, readability as TinyColorReadability } from '@ctrl/tinycolor';
-import { RevGridLayoutDefinition, RevSourcedFieldDefinition, RevSourcedFieldSourceDefinition } from '@xilytix/rev-data-source';
+import { RevColumnLayoutDefinition, RevSourcedFieldDefinition, RevSourcedFieldSourceDefinition } from '@xilytix/rev-data-source';
 import { StringId, Strings } from '../../../res/internal-api';
 import {
     ColorRenderValue,
@@ -100,7 +100,7 @@ export namespace ColorSchemeGridField {
         }
     }
 
-    export function createDefaultGridLayoutDefinition() {
+    export function createDefaultColumnLayoutDefinition() {
         const sourcelessFieldNames: FieldName[] = [
             ColorSchemeGridField.FieldName.Display,
             ColorSchemeGridField.FieldName.ResolvedBkgdColorText,
@@ -112,19 +112,19 @@ export namespace ColorSchemeGridField {
         ];
 
         const count = sourcelessFieldNames.length;
-        const columns = new Array<RevGridLayoutDefinition.Column>(count);
+        const columns = new Array<RevColumnLayoutDefinition.Column>(count);
         for (let i = 0; i < count; i++) {
             const sourceName = ColorSchemeGridField.sourceDefinition.name;
             const sourcelessFieldName = sourcelessFieldNames[i];
             const fieldName = RevSourcedFieldDefinition.Name.compose(sourceName, sourcelessFieldName);
-            const column: RevGridLayoutDefinition.Column = {
+            const column: RevColumnLayoutDefinition.Column = {
                 fieldName,
                 visible: undefined,
                 autoSizableWidth: undefined,
             };
             columns[i] = column;
         }
-        return new RevGridLayoutDefinition(columns);
+        return new RevColumnLayoutDefinition(columns);
     }
 }
 

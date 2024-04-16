@@ -1,10 +1,10 @@
-import { RevGridLayout, RevGridLayoutOrReferenceDefinition, RevRecordRowOrderDefinition, RevSourcedFieldCustomHeadingsService } from '@xilytix/rev-data-source';
+import { RevColumnLayout, RevColumnLayoutOrReferenceDefinition, RevRecordRowOrderDefinition, RevSourcedFieldCustomHeadingsService } from '@xilytix/rev-data-source';
 import { Subgrid } from '@xilytix/revgrid';
 import { AssertInternalError, CorrectnessState, Integer, LockOpenListItem, MultiEvent, Ok, Result } from '@xilytix/sysutils';
 import { SettingsService } from '../../../services/internal-api';
 import { Badness } from '../../../sys/internal-api';
 import { GridField } from '../../field/internal-api';
-import { AllowedFieldsGridLayoutDefinition, ReferenceableGridLayoutsService } from '../../layout/internal-api';
+import { AllowedSourcedFieldsColumnLayoutDefinition, ReferenceableColumnLayoutsService } from '../../layout/internal-api';
 import { Table, TableFieldSourceDefinitionCachingFactoryService, TableRecordDefinition, TableRecordSource, TableRecordSourceDefinition, TableRecordStore } from '../../table/internal-api';
 import { DataSource, DataSourceOrReference, DataSourceOrReferenceDefinition, ReferenceableDataSourcesService, TableRecordSourceDefinitionFromJsonFactory, TableRecordSourceFactory } from '../../typed/internal-api';
 import { AdaptedRevgrid } from '../adapted-revgrid/internal-api';
@@ -15,10 +15,10 @@ import { AdaptedRevgridBehavioredColumnSettings } from '../settings/internal-api
 export class TableGrid extends RecordGrid {
     opener: LockOpenListItem.Opener;
     keepPreviousLayoutIfPossible = false;
-    keptGridLayoutOrReferenceDefinition: RevGridLayoutOrReferenceDefinition | undefined;
+    keptColumnLayoutOrReferenceDefinition: RevColumnLayoutOrReferenceDefinition | undefined;
 
     openedEventer: TableGrid.OpenedEventer | undefined;
-    gridLayoutSetEventer: TableGrid.GridLayoutSetEventer | undefined;
+    columnLayoutSetEventer: TableGrid.ColumnLayoutSetEventer | undefined;
 
     private readonly _recordStore: TableRecordStore;
 
@@ -33,11 +33,11 @@ export class TableGrid extends RecordGrid {
 
     private _tableFieldsChangedSubscriptionId: MultiEvent.SubscriptionId;
     private _tableFirstUsableSubscriptionId: MultiEvent.SubscriptionId;
-    private _gridSourceGridLayoutSetSubscriptionId: MultiEvent.SubscriptionId;
+    private _gridSourceColumnLayoutSetSubscriptionId: MultiEvent.SubscriptionId;
 
     constructor(
         readonly gridFieldCustomHeadingsService: RevSourcedFieldCustomHeadingsService,
-        private readonly _referenceableGridLayoutsService: ReferenceableGridLayoutsService,
+        private readonly _referenceableColumnLayoutsService: ReferenceableColumnLayoutsService,
         readonly tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService,
         readonly tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFromJsonFactory,
         private readonly _tableRecordSourceFactory: TableRecordSourceFactory,
@@ -89,14 +89,14 @@ export class TableGrid extends RecordGrid {
 
         this.closeGridSource(keepView);
 
-        if (definition.canUpdateGridLayoutDefinitionOrReference() &&
+        if (definition.canUpdateColumnLayoutDefinitionOrReference() &&
             this.keepPreviousLayoutIfPossible &&
-            this.keptGridLayoutOrReferenceDefinition !== undefined
+            this.keptColumnLayoutOrReferenceDefinition !== undefined
         ) {
-            definition.updateGridLayoutDefinitionOrReference(this.keptGridLayoutOrReferenceDefinition);
+            definition.updateColumnLayoutDefinitionOrReference(this.keptColumnLayoutOrReferenceDefinition);
         }
         const gridSourceOrReference = new DataSourceOrReference(
-            this._referenceableGridLayoutsService,
+            this._referenceableColumnLayoutsService,
             this.tableFieldSourceDefinitionCachingFactoryService.definitionFactory,
             this._tableRecordSourceFactory,
             this._referenceableGridSourcesService,
@@ -118,7 +118,7 @@ export class TableGrid extends RecordGrid {
                         if (table === undefined) {
                             throw new AssertInternalError('GSFOGSTA22209');
                         } else {
-                            const layout = gridSource.lockedGridLayout;
+                            const layout = gridSource.lockedColumnLayout;
                             if (layout === undefined) {
                                 throw new AssertInternalError('GSFOGSGL22209');
                             } else {
@@ -128,8 +128,8 @@ export class TableGrid extends RecordGrid {
 
                                 this.notifyOpened(/*gridSourceOrReference*/);
 
-                                this._gridSourceGridLayoutSetSubscriptionId = this._openedDataSource.subscribeGridLayoutSetEvent(
-                                    () => this.handleGridSourceGridLayoutSetEvent()
+                                this._gridSourceColumnLayoutSetSubscriptionId = this._openedDataSource.subscribeColumnLayoutSetEvent(
+                                    () => this.handleGridSourceColumnLayoutSetEvent()
                                 );
 
                                 this._recordStore.setTable(table);
@@ -148,7 +148,7 @@ export class TableGrid extends RecordGrid {
                                     });
                                 }
 
-                                this.notifyGridLayoutSet(layout);
+                                this.notifyColumnLayoutSet(layout);
 
                                 resolve(new Ok(gridSourceOrReference));
                             }
@@ -173,12 +173,12 @@ export class TableGrid extends RecordGrid {
                 openedTable.unsubscribeFirstUsableEvent(this._tableFirstUsableSubscriptionId); // may not be subscribed
                 this._tableFirstUsableSubscriptionId = undefined;
                 this._tableFieldsChangedSubscriptionId = undefined;
-                this._openedDataSource.unsubscribeGridLayoutSetEvent(this._gridSourceGridLayoutSetSubscriptionId);
-                this._gridSourceGridLayoutSetSubscriptionId = undefined;
+                this._openedDataSource.unsubscribeColumnLayoutSetEvent(this._gridSourceColumnLayoutSetSubscriptionId);
+                this._gridSourceColumnLayoutSetSubscriptionId = undefined;
                 if (this.keepPreviousLayoutIfPossible) {
-                    this.keptGridLayoutOrReferenceDefinition = this.createGridLayoutOrReferenceDefinition();
+                    this.keptColumnLayoutOrReferenceDefinition = this.createColumnLayoutOrReferenceDefinition();
                 } else {
-                    this.keptGridLayoutOrReferenceDefinition = undefined;
+                    this.keptColumnLayoutOrReferenceDefinition = undefined;
                 }
                 if (keepView) {
                     this._keptRowOrderDefinition = super.getRowOrderDefinition();
@@ -207,11 +207,11 @@ export class TableGrid extends RecordGrid {
         }
     }
 
-    createGridLayoutOrReferenceDefinition() {
+    createColumnLayoutOrReferenceDefinition() {
         if (this._openedDataSource === undefined) {
             throw new AssertInternalError('GSFCCGLONRD22209');
         } else {
-            return this._openedDataSource.createGridLayoutOrReferenceDefinition();
+            return this._openedDataSource.createColumnLayoutOrReferenceDefinition();
         }
     }
 
@@ -223,19 +223,19 @@ export class TableGrid extends RecordGrid {
         }
     }
 
-    tryOpenGridLayoutOrReferenceDefinition(gridLayoutOrReferenceDefinition: RevGridLayoutOrReferenceDefinition) {
+    tryOpenColumnLayoutOrReferenceDefinition(columnLayoutOrReferenceDefinition: RevColumnLayoutOrReferenceDefinition) {
         if (this._openedDataSource === undefined) {
             throw new AssertInternalError('GSFOGLONRD22209');
         } else {
-            return DataSource.tryOpenGridLayoutOrReferenceDefinition(this._openedDataSource, gridLayoutOrReferenceDefinition, this.opener);
+            return DataSource.tryOpenColumnLayoutOrReferenceDefinition(this._openedDataSource, columnLayoutOrReferenceDefinition, this.opener);
         }
     }
 
-    applyGridLayoutOrReferenceDefinition(definition: RevGridLayoutOrReferenceDefinition) {
+    applyColumnLayoutOrReferenceDefinition(definition: RevColumnLayoutOrReferenceDefinition) {
         if (this._openedDataSource === undefined) {
             throw new AssertInternalError('GSFAGLD22209');
         } else {
-            const promise = this._openedDataSource.tryOpenGridLayoutOrReferenceDefinition(definition, this.opener);
+            const promise = this._openedDataSource.tryOpenColumnLayoutOrReferenceDefinition(definition, this.opener);
             AssertInternalError.throwErrorIfPromiseRejected(promise, 'GSFIG81190', this.opener.lockerName);
         }
     }
@@ -248,7 +248,7 @@ export class TableGrid extends RecordGrid {
         }
     }
 
-    canCreateAllowedFieldsGridLayoutDefinition() {
+    canCreateAllowedSourcedFieldsColumnLayoutDefinition() {
         return this._openedTable !== undefined;
     }
 
@@ -274,16 +274,16 @@ export class TableGrid extends RecordGrid {
         }
     }
 
-    override createAllowedFieldsGridLayoutDefinition(): AllowedFieldsGridLayoutDefinition {
+    override createAllowedSourcedFieldsColumnLayoutDefinition(): AllowedSourcedFieldsColumnLayoutDefinition {
         if (this._openedTable === undefined) {
             throw new AssertInternalError('GSFCAFALD56678');
         } else {
             const allowedFields = this._openedTable.createAllowedFields();
-            return super.createAllowedFieldsGridLayoutDefinition(allowedFields);
+            return super.createAllowedSourcedFieldsColumnLayoutDefinition(allowedFields);
         }
     }
 
-    private applyFirstUsableFromLayout(layout: RevGridLayout) {
+    private applyFirstUsableFromLayout(layout: RevColumnLayout) {
         let rowOrderDefinition = this._keptRowOrderDefinition;
         this._keptRowOrderDefinition = undefined;
         if (rowOrderDefinition === undefined) {
@@ -298,16 +298,16 @@ export class TableGrid extends RecordGrid {
         super.applyFirstUsable(rowOrderDefinition, viewAnchor, layout);
     }
 
-    private handleGridSourceGridLayoutSetEvent() {
+    private handleGridSourceColumnLayoutSetEvent() {
         if (this._openedDataSource === undefined) {
             throw new AssertInternalError('GSFHGSGLSE22209');
         } else {
-            const newLayout = this._openedDataSource.lockedGridLayout;
+            const newLayout = this._openedDataSource.lockedColumnLayout;
             if (newLayout === undefined) {
                 throw new AssertInternalError('GSFHGSGLCE22202');
             } else {
-                super.updateGridLayout(newLayout);
-                this.notifyGridLayoutSet(newLayout);
+                super.updateColumnLayout(newLayout);
+                this.notifyColumnLayoutSet(newLayout);
             }
         }
     }
@@ -318,14 +318,14 @@ export class TableGrid extends RecordGrid {
         }
     }
 
-    private notifyGridLayoutSet(layout: RevGridLayout) {
-        if (this.gridLayoutSetEventer !== undefined) {
-            this.gridLayoutSetEventer(layout);
+    private notifyColumnLayoutSet(layout: RevColumnLayout) {
+        if (this.columnLayoutSetEventer !== undefined) {
+            this.columnLayoutSetEventer(layout);
         }
     }
 }
 
 export namespace TableGrid {
     export type OpenedEventer = (this: void) => void;
-    export type GridLayoutSetEventer = (this: void, layout: RevGridLayout) => void;
+    export type ColumnLayoutSetEventer = (this: void, layout: RevColumnLayout) => void;
 }

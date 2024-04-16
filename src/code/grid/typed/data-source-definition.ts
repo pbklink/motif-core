@@ -74,38 +74,38 @@ export namespace DataSourceDefinition {
     }
 
     export type LayoutErrorCode = PickEnum<ErrorCode,
-        ErrorCode.DataSourceDefinition_GridLayoutOrReferenceElementIsNotDefined |
-        ErrorCode.DataSourceDefinition_GridLayoutOrReferenceJsonValueIsNotOfTypeObject |
-        ErrorCode.DataSourceDefinition_GridLayoutNeitherReferenceOrDefinitionJsonValueIsDefined |
-        ErrorCode.DataSourceDefinition_GridLayoutBothReferenceAndDefinitionJsonValuesAreOfWrongType |
-        ErrorCode.DataSourceDefinition_GridLayoutOrReferenceDefinitionJsonValueIsNotOfTypeObject |
-        ErrorCode.DataSourceDefinition_GridLayoutOrReferenceDefinitionColumnsElementIsNotDefined |
-        ErrorCode.DataSourceDefinition_GridLayoutOrReferenceDefinitionColumnsElementIsNotAnArray |
-        ErrorCode.DataSourceDefinition_GridLayoutOrReferenceDefinitionColumnElementIsNotAnObject |
-        ErrorCode.DataSourceDefinition_GridLayoutOrReferenceDefinitionAllColumnElementsAreInvalid
+        ErrorCode.DataSourceDefinition_ColumnLayoutOrReferenceElementIsNotDefined |
+        ErrorCode.DataSourceDefinition_ColumnLayoutOrReferenceJsonValueIsNotOfTypeObject |
+        ErrorCode.DataSourceDefinition_ColumnLayoutNeitherReferenceOrDefinitionJsonValueIsDefined |
+        ErrorCode.DataSourceDefinition_ColumnLayoutBothReferenceAndDefinitionJsonValuesAreOfWrongType |
+        ErrorCode.DataSourceDefinition_ColumnLayoutOrReferenceDefinitionJsonValueIsNotOfTypeObject |
+        ErrorCode.DataSourceDefinition_ColumnLayoutOrReferenceDefinitionColumnsElementIsNotDefined |
+        ErrorCode.DataSourceDefinition_ColumnLayoutOrReferenceDefinitionColumnsElementIsNotAnArray |
+        ErrorCode.DataSourceDefinition_ColumnLayoutOrReferenceDefinitionColumnElementIsNotAnObject |
+        ErrorCode.DataSourceDefinition_ColumnLayoutOrReferenceDefinitionAllColumnElementsAreInvalid
     >;
 
     export namespace LayoutErrorCode {
         export function fromErrorId(errorId: RevDataSourceDefinition.LayoutCreateFromJsonErrorId): LayoutErrorCode {
             switch (errorId) {
-                case RevDataSourceDefinition.LayoutCreateFromJsonErrorId.GridLayoutOrReferenceElementIsNotDefined:
-                    return ErrorCode.DataSourceDefinition_GridLayoutOrReferenceElementIsNotDefined;
-                case RevDataSourceDefinition.LayoutCreateFromJsonErrorId.GridLayoutOrReferenceJsonValueIsNotOfTypeObject:
-                    return ErrorCode.DataSourceDefinition_GridLayoutOrReferenceJsonValueIsNotOfTypeObject;
-                case RevDataSourceDefinition.LayoutCreateFromJsonErrorId.GridLayoutNeitherReferenceOrDefinitionJsonValueIsDefined:
-                    return ErrorCode.DataSourceDefinition_GridLayoutNeitherReferenceOrDefinitionJsonValueIsDefined;
-                case RevDataSourceDefinition.LayoutCreateFromJsonErrorId.GridLayoutBothReferenceAndDefinitionJsonValuesAreOfWrongType:
-                    return ErrorCode.DataSourceDefinition_GridLayoutBothReferenceAndDefinitionJsonValuesAreOfWrongType;
-                case RevDataSourceDefinition.LayoutCreateFromJsonErrorId.GridLayoutOrReferenceDefinitionJsonValueIsNotOfTypeObject:
-                    return ErrorCode.DataSourceDefinition_GridLayoutOrReferenceDefinitionJsonValueIsNotOfTypeObject;
-                case RevDataSourceDefinition.LayoutCreateFromJsonErrorId.GridLayoutOrReferenceDefinitionColumnsElementIsNotDefined:
-                    return ErrorCode.DataSourceDefinition_GridLayoutOrReferenceDefinitionColumnsElementIsNotDefined;
-                case RevDataSourceDefinition.LayoutCreateFromJsonErrorId.GridLayoutOrReferenceDefinitionColumnsElementIsNotAnArray:
-                    return ErrorCode.DataSourceDefinition_GridLayoutOrReferenceDefinitionColumnsElementIsNotAnArray;
-                case RevDataSourceDefinition.LayoutCreateFromJsonErrorId.GridLayoutOrReferenceDefinitionColumnElementIsNotAnObject:
-                    return ErrorCode.DataSourceDefinition_GridLayoutOrReferenceDefinitionColumnElementIsNotAnObject;
-                case RevDataSourceDefinition.LayoutCreateFromJsonErrorId.GridLayoutOrReferenceDefinitionAllColumnElementsAreInvalid:
-                    return ErrorCode.DataSourceDefinition_GridLayoutOrReferenceDefinitionAllColumnElementsAreInvalid;
+                case RevDataSourceDefinition.LayoutCreateFromJsonErrorId.ColumnLayoutOrReferenceElementIsNotDefined:
+                    return ErrorCode.DataSourceDefinition_ColumnLayoutOrReferenceElementIsNotDefined;
+                case RevDataSourceDefinition.LayoutCreateFromJsonErrorId.ColumnLayoutOrReferenceJsonValueIsNotOfTypeObject:
+                    return ErrorCode.DataSourceDefinition_ColumnLayoutOrReferenceJsonValueIsNotOfTypeObject;
+                case RevDataSourceDefinition.LayoutCreateFromJsonErrorId.ColumnLayoutNeitherReferenceOrDefinitionJsonValueIsDefined:
+                    return ErrorCode.DataSourceDefinition_ColumnLayoutNeitherReferenceOrDefinitionJsonValueIsDefined;
+                case RevDataSourceDefinition.LayoutCreateFromJsonErrorId.ColumnLayoutBothReferenceAndDefinitionJsonValuesAreOfWrongType:
+                    return ErrorCode.DataSourceDefinition_ColumnLayoutBothReferenceAndDefinitionJsonValuesAreOfWrongType;
+                case RevDataSourceDefinition.LayoutCreateFromJsonErrorId.ColumnLayoutOrReferenceDefinitionJsonValueIsNotOfTypeObject:
+                    return ErrorCode.DataSourceDefinition_ColumnLayoutOrReferenceDefinitionJsonValueIsNotOfTypeObject;
+                case RevDataSourceDefinition.LayoutCreateFromJsonErrorId.ColumnLayoutOrReferenceDefinitionColumnsElementIsNotDefined:
+                    return ErrorCode.DataSourceDefinition_ColumnLayoutOrReferenceDefinitionColumnsElementIsNotDefined;
+                case RevDataSourceDefinition.LayoutCreateFromJsonErrorId.ColumnLayoutOrReferenceDefinitionColumnsElementIsNotAnArray:
+                    return ErrorCode.DataSourceDefinition_ColumnLayoutOrReferenceDefinitionColumnsElementIsNotAnArray;
+                case RevDataSourceDefinition.LayoutCreateFromJsonErrorId.ColumnLayoutOrReferenceDefinitionColumnElementIsNotAnObject:
+                    return ErrorCode.DataSourceDefinition_ColumnLayoutOrReferenceDefinitionColumnElementIsNotAnObject;
+                case RevDataSourceDefinition.LayoutCreateFromJsonErrorId.ColumnLayoutOrReferenceDefinitionAllColumnElementsAreInvalid:
+                    return ErrorCode.DataSourceDefinition_ColumnLayoutOrReferenceDefinitionAllColumnElementsAreInvalid;
                 default:
                     throw new UnreachableCaseError('DSDGECFRDSDLCFJEI51512', errorId);
             }

@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevGridLayoutDefinition, RevSourcedFieldCustomHeadingsService } from '@xilytix/rev-data-source';
+import { RevColumnLayoutDefinition, RevSourcedFieldCustomHeadingsService } from '@xilytix/rev-data-source';
 import { Account, Balances, BrokerageAccountGroup } from '../../../../adi/internal-api';
 import { PickEnum } from '../../../../sys/internal-api';
 import {
@@ -49,7 +49,7 @@ export class BalancesTableRecordSourceDefinition extends BrokerageAccountGroupTa
         fieldNames.push(brokerageAccountFieldSourceDefinition.getSupportedFieldNameById(Account.FieldId.BranchCode));
         fieldNames.push(brokerageAccountFieldSourceDefinition.getSupportedFieldNameById(Account.FieldId.AdvisorCode));
 
-        return RevGridLayoutDefinition.createFromFieldNames(fieldNames);
+        return RevColumnLayoutDefinition.createFromFieldNames(fieldNames);
     }
 }
 

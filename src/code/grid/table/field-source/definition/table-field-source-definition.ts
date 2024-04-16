@@ -26,7 +26,7 @@ export namespace TableFieldSourceDefinition {
         LitIvemExtendedDetail,
         LitIvemAlternateCodes,
         MyxLitIvemAttributes,
-        EditableGridLayoutDefinitionColumn,
+        EditableColumnLayoutDefinitionColumn,
         SecurityDataItem,
         BrokerageAccount,
         Order,
@@ -62,7 +62,7 @@ export namespace TableFieldSourceDefinition {
         export const litIvemExtendedDetailName = 'Lie';
         export const litIvemAlternateCodesName = 'Liac';
         export const myxLitIvemAttributesName = 'MyxSA';
-        export const editableGridLayoutDefinitionColumnName = 'Gldc';
+        export const editableColumnLayoutDefinitionColumnName = 'Gldc';
         export const securityDataItemName = 'SecDI';
         export const brokerageAccountsName = 'Ba';
         export const ordersDataItemName = 'Odi';
@@ -93,7 +93,7 @@ export namespace TableFieldSourceDefinition {
             LitIvemExtendedDetail: { id: TypeId.LitIvemExtendedDetail, name: litIvemExtendedDetailName },
             LitIvemAlternateCodes: { id: TypeId.LitIvemAlternateCodes, name: litIvemAlternateCodesName },
             MyxLitIvemAttributes: { id: TypeId.MyxLitIvemAttributes, name: myxLitIvemAttributesName },
-            EditableGridLayoutDefinitionColumn: { id: TypeId.EditableGridLayoutDefinitionColumn, name: editableGridLayoutDefinitionColumnName },
+            EditableColumnLayoutDefinitionColumn: { id: TypeId.EditableColumnLayoutDefinitionColumn, name: editableColumnLayoutDefinitionColumnName },
             SecurityDataItem: { id: TypeId.SecurityDataItem, name: securityDataItemName },
             BrokerageAccount: { id: TypeId.BrokerageAccount, name: brokerageAccountsName },
             Order: { id: TypeId.Order, name: ordersDataItemName },

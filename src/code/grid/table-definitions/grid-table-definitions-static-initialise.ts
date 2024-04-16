@@ -4,11 +4,11 @@
  * License: motionite.trade/license/motif
  */
 
-import { EditableGridLayoutDefinitionColumnModule } from './editable-grid-layout-definition-column/internal-api';
+import { EditableColumnLayoutDefinitionColumnModule } from './editable-column-layout-definition-column/internal-api';
 
 /** @internal */
 export namespace GridTableDefinitionsStaticInitialise {
     export function initialise() {
-        EditableGridLayoutDefinitionColumnModule.initialise();
+        EditableColumnLayoutDefinitionColumnModule.initialise();
     }
 }

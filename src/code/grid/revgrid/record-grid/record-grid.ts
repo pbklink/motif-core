@@ -5,8 +5,8 @@
  */
 
 import {
-    RevGridLayout,
-    RevGridLayoutDefinition,
+    RevColumnLayout,
+    RevColumnLayoutDefinition,
     RevRecordDataServer,
     RevRecordField,
     RevRecordFieldIndex,
@@ -40,7 +40,7 @@ import { RecordGridDataServer } from './record-grid-data-server';
 import { RecordGridSchemaServer } from './record-grid-schema-server';
 
 /** @public */
-export class RecordGrid extends AdaptedRevgrid implements RevGridLayout.ChangeInitiator {
+export class RecordGrid extends AdaptedRevgrid implements RevColumnLayout.ChangeInitiator {
     declare schemaServer: RecordGridSchemaServer;
     declare mainDataServer: RecordGridDataServer;
     readonly headerDataServer: SingleHeadingGridDataServer;
@@ -51,7 +51,7 @@ export class RecordGrid extends AdaptedRevgrid implements RevGridLayout.ChangeIn
     selectionChangedEventer: RecordGrid.SelectionChangedEventer | undefined;
     dataServersRowListChangedEventer: RecordGrid.DataServersRowListChangedEventer | undefined;
 
-    private _gridLayout: RevGridLayout | undefined;
+    private _columnLayout: RevColumnLayout | undefined;
     private _allowedFields: readonly GridField[] | undefined;
 
     private _beenUsable = false;
@@ -60,8 +60,8 @@ export class RecordGrid extends AdaptedRevgrid implements RevGridLayout.ChangeIn
 
     private _activeColumnsAndWidthSetting = false;
 
-    private _gridLayoutChangedSubscriptionId: MultiEvent.SubscriptionId;
-    private _gridLayoutWidthsChangedSubscriptionId: MultiEvent.SubscriptionId;
+    private _columnLayoutChangedSubscriptionId: MultiEvent.SubscriptionId;
+    private _columnLayoutWidthsChangedSubscriptionId: MultiEvent.SubscriptionId;
 
     constructor(
         settingsService: SettingsService,
@@ -174,7 +174,7 @@ export class RecordGrid extends AdaptedRevgrid implements RevGridLayout.ChangeIn
         this._allowedFields = fields;
     }
 
-    applyFirstUsable(rowOrderDefinition: RevRecordRowOrderDefinition | undefined, viewAnchor: RecordGrid.ViewAnchor | undefined, gridLayout: RevGridLayout | undefined) {
+    applyFirstUsable(rowOrderDefinition: RevRecordRowOrderDefinition | undefined, viewAnchor: RecordGrid.ViewAnchor | undefined, columnLayout: RevColumnLayout | undefined) {
         this._beenUsable = true;
 
         this._firstUsableRenderViewAnchor = viewAnchor;
@@ -186,49 +186,49 @@ export class RecordGrid extends AdaptedRevgrid implements RevGridLayout.ChangeIn
             }
         }
 
-        if (gridLayout !== undefined) {
-            this.updateGridLayout(gridLayout);
+        if (columnLayout !== undefined) {
+            this.updateColumnLayout(columnLayout);
         }
     }
 
     updateAllowedFields(fields: readonly GridField[]) {
         this.schemaServer.setFields(fields);
         this._allowedFields = fields;
-        if (this._gridLayout !== undefined) {
-            this.setActiveColumnsAndWidths(fields, this._gridLayout);
+        if (this._columnLayout !== undefined) {
+            this.setActiveColumnsAndWidths(fields, this._columnLayout);
         }
     }
 
-    updateGridLayout(value: RevGridLayout) {
-        if (value !== this._gridLayout) {
-            if (this._gridLayout !== undefined) {
-                this._gridLayout.unsubscribeChangedEvent(this._gridLayoutChangedSubscriptionId);
-                this._gridLayoutChangedSubscriptionId = undefined;
-                this._gridLayout.unsubscribeWidthsChangedEvent(this._gridLayoutWidthsChangedSubscriptionId);
-                this._gridLayoutChangedSubscriptionId = undefined;
+    updateColumnLayout(value: RevColumnLayout) {
+        if (value !== this._columnLayout) {
+            if (this._columnLayout !== undefined) {
+                this._columnLayout.unsubscribeChangedEvent(this._columnLayoutChangedSubscriptionId);
+                this._columnLayoutChangedSubscriptionId = undefined;
+                this._columnLayout.unsubscribeWidthsChangedEvent(this._columnLayoutWidthsChangedSubscriptionId);
+                this._columnLayoutChangedSubscriptionId = undefined;
             }
 
-            this._gridLayout = value;
-            this._gridLayoutChangedSubscriptionId = this._gridLayout.subscribeChangedEvent(
+            this._columnLayout = value;
+            this._columnLayoutChangedSubscriptionId = this._columnLayout.subscribeChangedEvent(
                 (initiator) => {
                     if (!this._activeColumnsAndWidthSetting) {
-                        this.processGridLayoutChangedEvent(initiator);
+                        this.processColumnLayoutChangedEvent(initiator);
                     }
                 }
             );
-            this._gridLayoutWidthsChangedSubscriptionId = this._gridLayout.subscribeWidthsChangedEvent(
-                (initiator) => { this.processGridLayoutWidthsChangedEvent(initiator); }
+            this._columnLayoutWidthsChangedSubscriptionId = this._columnLayout.subscribeWidthsChangedEvent(
+                (initiator) => { this.processColumnLayoutWidthsChangedEvent(initiator); }
             );
 
-            this.processGridLayoutChangedEvent(RevGridLayout.forceChangeInitiator);
+            this.processColumnLayoutChangedEvent(RevColumnLayout.forceChangeInitiator);
         }
     }
 
-    applyGridLayoutDefinition(value: RevGridLayoutDefinition) {
-        if (this._gridLayout === undefined) {
+    applyColumnLayoutDefinition(value: RevColumnLayoutDefinition) {
+        if (this._columnLayout === undefined) {
             throw new AssertInternalError('RGSLD34488');
         } else {
-            this._gridLayout.applyDefinition(RevGridLayout.forceChangeInitiator, value);
+            this._columnLayout.applyDefinition(RevColumnLayout.forceChangeInitiator, value);
         }
     }
 
@@ -422,7 +422,7 @@ export class RecordGrid extends AdaptedRevgrid implements RevGridLayout.ChangeIn
         ui: boolean,
     ) {
         if (ui) {
-            if (this._gridLayout === undefined) {
+            if (this._columnLayout === undefined) {
                 throw new AssertInternalError('RGPACLC56678');
             } else {
                 switch (typeId) {
@@ -430,19 +430,19 @@ export class RecordGrid extends AdaptedRevgrid implements RevGridLayout.ChangeIn
                         if (targetIndex === undefined) {
                             throw new AssertInternalError('RGPACCLCM44430');
                         } else {
-                            this._gridLayout.moveColumns(this, index, count, targetIndex);
+                            this._columnLayout.moveColumns(this, index, count, targetIndex);
                             break;
                         }
                     }
                     case RevListChangedTypeId.Clear: {
-                        this._gridLayout.clearColumns(this);
+                        this._columnLayout.clearColumns(this);
                         break;
                     }
                     case RevListChangedTypeId.Insert:
                     case RevListChangedTypeId.Remove:
                     case RevListChangedTypeId.Set: {
-                        const definition = this.createGridLayoutDefinition();
-                        this._gridLayout.applyDefinition(this, definition);
+                        const definition = this.createColumnLayoutDefinition();
+                        this._columnLayout.applyDefinition(this, definition);
                         break;
                     }
                     default:
@@ -454,14 +454,14 @@ export class RecordGrid extends AdaptedRevgrid implements RevGridLayout.ChangeIn
 
     protected override descendantProcessColumnsWidthChanged(columns: Column<AdaptedRevgridBehavioredColumnSettings, GridField>[], ui: boolean) {
         if (ui) {
-            if (this._gridLayout === undefined) {
+            if (this._columnLayout === undefined) {
                 throw new AssertInternalError('RGPCWC56678');
             } else {
-                this._gridLayout.beginChange(this);
+                this._columnLayout.beginChange(this);
                 for (const column of columns) {
-                    this._gridLayout.setColumnWidth(this, column.field.name, column.width);
+                    this._columnLayout.setColumnWidth(this, column.field.name, column.width);
                 }
-                this._gridLayout.endChange();
+                this._columnLayout.endChange();
             }
         }
     }
@@ -527,19 +527,19 @@ export class RecordGrid extends AdaptedRevgrid implements RevGridLayout.ChangeIn
     }
 
 
-    private processGridLayoutChangedEvent(initiator: RevGridLayout.ChangeInitiator) {
+    private processColumnLayoutChangedEvent(initiator: RevColumnLayout.ChangeInitiator) {
         if (initiator !== this) {
             if (this._allowedFields !== undefined) {
-                if (this._gridLayout === undefined) {
+                if (this._columnLayout === undefined) {
                     throw new AssertInternalError('RGPGLCE56678');
                 } else {
-                    this.setActiveColumnsAndWidths(this._allowedFields, this._gridLayout);
+                    this.setActiveColumnsAndWidths(this._allowedFields, this._columnLayout);
                 }
             }
         }
     }
 
-    private processGridLayoutWidthsChangedEvent(initiator: RevGridLayout.ChangeInitiator) {
+    private processColumnLayoutWidthsChangedEvent(initiator: RevColumnLayout.ChangeInitiator) {
         if (initiator !== this) {
             const columnNameWidths = this.createColumnNameWidths();
             this.setColumnWidthsByName(columnNameWidths);
@@ -547,11 +547,11 @@ export class RecordGrid extends AdaptedRevgrid implements RevGridLayout.ChangeIn
     }
 
     private createColumnNameWidths() {
-        if (this._gridLayout === undefined) {
+        if (this._columnLayout === undefined) {
             throw new AssertInternalError('RGCCNW56678');
         } else {
             const schemaFieldNames = this.schemaServer.getFieldNames();
-            const columns = this._gridLayout.columns;
+            const columns = this._columnLayout.columns;
             const maxCount = columns.length;
             const columnNameWidths = new Array<ColumnsManager.FieldNameAndAutoSizableWidth>(maxCount);
             let count = 0;
@@ -571,9 +571,9 @@ export class RecordGrid extends AdaptedRevgrid implements RevGridLayout.ChangeIn
         }
     }
 
-    private setActiveColumnsAndWidths(allowedFields: readonly GridField[], gridLayout: RevGridLayout) {
-        const layoutColumnCount = gridLayout.columnCount;
-        const layoutColumns = gridLayout.columns;
+    private setActiveColumnsAndWidths(allowedFields: readonly GridField[], columnLayout: RevColumnLayout) {
+        const layoutColumnCount = columnLayout.columnCount;
+        const layoutColumns = columnLayout.columns;
         const nameAndWidths = new Array<ColumnsManager.FieldNameAndAutoSizableWidth>(layoutColumnCount);
         let count = 0;
         for (let i = 0; i < layoutColumnCount; i++) {

@@ -7,16 +7,16 @@
 import { RenderValue } from '../../../services/render-value';
 import { Integer, MultiEvent, UnreachableCaseError, ValueRecentChangeTypeId } from '../../../sys/internal-api';
 import { IntegerTableValue, StringTableValue, TableValue, TableValueSource, VisibleTableValue } from '../../table/internal-api';
-import { EditableGridLayoutDefinitionColumn } from './editable-grid-layout-definition-column';
-import { EditableGridLayoutDefinitionColumnTableFieldSourceDefinition } from './editable-grid-layout-definition-column-table-field-source-definition';
+import { EditableColumnLayoutDefinitionColumn } from './editable-column-layout-definition-column';
+import { EditableColumnLayoutDefinitionColumnTableFieldSourceDefinition } from './editable-column-layout-definition-column-table-field-source-definition';
 
-export class EditableGridLayoutDefinitionColumnTableValueSource extends TableValueSource {
+export class EditableColumnLayoutDefinitionColumnTableValueSource extends TableValueSource {
     private _widthChangedSubscriptionId: MultiEvent.SubscriptionId;
     private _visibleChangedSubscriptionId: MultiEvent.SubscriptionId;
 
     constructor(
         firstFieldIndexOffset: Integer,
-        private readonly _record: EditableGridLayoutDefinitionColumn,
+        private readonly _record: EditableColumnLayoutDefinitionColumn,
     ) {
         super(firstFieldIndexOffset);
     }
@@ -44,7 +44,7 @@ export class EditableGridLayoutDefinitionColumnTableValueSource extends TableVal
     }
 
     getAllValues(): TableValue[] {
-        const fieldCount = EditableGridLayoutDefinitionColumn.Field.count;
+        const fieldCount = EditableColumnLayoutDefinitionColumn.Field.count;
         const result = new Array<TableValue>(fieldCount);
 
         for (let fieldId = 0; fieldId < fieldCount; fieldId++) {
@@ -61,10 +61,10 @@ export class EditableGridLayoutDefinitionColumnTableValueSource extends TableVal
     }
 
     protected getfieldCount(): Integer {
-        return EditableGridLayoutDefinitionColumn.Field.count;
+        return EditableColumnLayoutDefinitionColumn.Field.count;
     }
 
-    private handleWidthChangedEvent(recordValueChange: EditableGridLayoutDefinitionColumn.ValueChange) {
+    private handleWidthChangedEvent(recordValueChange: EditableColumnLayoutDefinitionColumn.ValueChange) {
         const { fieldId, recentChangeTypeId } = recordValueChange;
         const newValue = this.createTableValue(fieldId);
         this.loadValue(fieldId, newValue);
@@ -73,42 +73,42 @@ export class EditableGridLayoutDefinitionColumnTableValueSource extends TableVal
     }
 
     private handleVisibleChangedEvent() {
-        const fieldId = EditableGridLayoutDefinitionColumn.FieldId.Visible;
+        const fieldId = EditableColumnLayoutDefinitionColumn.FieldId.Visible;
         const newValue = this.createTableValue(fieldId);
         this.loadValue(fieldId, newValue);
         const valueChange: TableValueSource.ValueChange = { fieldIndex: fieldId, newValue, recentChangeTypeId: ValueRecentChangeTypeId.Update };
         this.notifyValueChangesEvent([valueChange]);
     }
 
-    private createTableValue(fieldId: EditableGridLayoutDefinitionColumn.FieldId) {
-        const constructor = EditableGridLayoutDefinitionColumnTableFieldSourceDefinition.Field.idToTableValueConstructor(fieldId);
+    private createTableValue(fieldId: EditableColumnLayoutDefinitionColumn.FieldId) {
+        const constructor = EditableColumnLayoutDefinitionColumnTableFieldSourceDefinition.Field.idToTableValueConstructor(fieldId);
         return new constructor();
     }
 
-    private loadValue(id: EditableGridLayoutDefinitionColumn.FieldId, value: TableValue) {
+    private loadValue(id: EditableColumnLayoutDefinitionColumn.FieldId, value: TableValue) {
         switch (id) {
-            case EditableGridLayoutDefinitionColumn.FieldId.FieldName:
+            case EditableColumnLayoutDefinitionColumn.FieldId.FieldName:
                 (value as StringTableValue).data = this._record.fieldName;
                 if (this._record.anchored) {
                     value.addRenderAttribute(RenderValue.greyedOutAttribute);
                 }
                 break;
-            case EditableGridLayoutDefinitionColumn.FieldId.FieldSourceName:
+            case EditableColumnLayoutDefinitionColumn.FieldId.FieldSourceName:
                 (value as StringTableValue).data = this._record.fieldSourceName;
                 if (this._record.anchored) {
                     value.addRenderAttribute(RenderValue.greyedOutAttribute);
                 }
                 break;
-            case EditableGridLayoutDefinitionColumn.FieldId.FieldHeading:
+            case EditableColumnLayoutDefinitionColumn.FieldId.FieldHeading:
                 (value as StringTableValue).data = this._record.fieldHeading;
                 if (this._record.anchored) {
                     value.addRenderAttribute(RenderValue.greyedOutAttribute);
                 }
                 break;
-            case EditableGridLayoutDefinitionColumn.FieldId.Width:
+            case EditableColumnLayoutDefinitionColumn.FieldId.Width:
                 (value as IntegerTableValue).data = this._record.width;
                 break;
-            case EditableGridLayoutDefinitionColumn.FieldId.Visible:
+            case EditableColumnLayoutDefinitionColumn.FieldId.Visible:
                 (value as VisibleTableValue).data = this._record.visible;
                 break;
             default:

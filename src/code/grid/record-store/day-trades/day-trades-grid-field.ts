@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevGridLayoutDefinition, RevSourcedFieldDefinition, RevSourcedFieldSourceDefinition } from '@xilytix/rev-data-source';
+import { RevColumnLayoutDefinition, RevSourcedFieldDefinition, RevSourcedFieldSourceDefinition } from '@xilytix/rev-data-source';
 import { DayTradesDataItem, MovementId, TradeFlagId } from '../../../adi/internal-api';
 import { StringId, Strings } from '../../../res/internal-api';
 import {
@@ -185,7 +185,7 @@ export namespace DayTradesGridField {
         }
     }
 
-    export function createDefaultGridLayoutDefinition() {
+    export function createDefaultColumnLayoutDefinition() {
         const fieldIds: DayTradesGridField.Id[] = [
             DayTradesDataItem.Field.Id.Time,
             DayTradesDataItem.Field.Id.Price,
@@ -193,20 +193,20 @@ export namespace DayTradesGridField {
         ];
 
         const count = fieldIds.length;
-        const columns = new Array<RevGridLayoutDefinition.Column>(count);
+        const columns = new Array<RevColumnLayoutDefinition.Column>(count);
         for (let i = 0; i < count; i++) {
             const sourceName = DayTradesGridField.sourceDefinition.name;
             const fieldId = fieldIds[i];
             const sourcelessFieldName = DayTradesDataItem.Field.idToName(fieldId);
             const fieldName = RevSourcedFieldDefinition.Name.compose(sourceName, sourcelessFieldName);
-            const column: RevGridLayoutDefinition.Column = {
+            const column: RevColumnLayoutDefinition.Column = {
                 fieldName,
                 visible: undefined,
                 autoSizableWidth: undefined,
             };
             columns[i] = column;
         }
-        return new RevGridLayoutDefinition(columns);
+        return new RevColumnLayoutDefinition(columns);
     }
 
     export function createAllowedFields(): readonly AllowedGridField[] {

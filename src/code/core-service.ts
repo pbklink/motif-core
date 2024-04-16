@@ -4,13 +4,14 @@
  * License: motionite.trade/license/motif
  */
 
+import { RevSourcedFieldCustomHeadingsService } from '@xilytix/rev-data-source';
 import { AdiService } from './adi/internal-api';
 import { CommandRegisterService } from "./command/internal-api";
 import {
     CellPainterFactoryService,
+    ReferenceableColumnLayoutsService,
     ReferenceableDataSourceDefinitionsStoreService,
     ReferenceableDataSourcesService,
-    ReferenceableGridLayoutsService,
     TableFieldSourceDefinitionCachingFactoryService,
     TableFieldSourceDefinitionFactory,
     TableRecordSourceFactory
@@ -33,7 +34,6 @@ import {
 } from "./services/internal-api";
 import { TextFormatterService } from "./text-format/internal-api";
 import { WatchmakerService } from './watchmaker/internal-api';
-import { RevSourcedFieldCustomHeadingsService } from '@xilytix/rev-data-source';
 
 /** @public */
 export class CoreService {
@@ -52,7 +52,7 @@ export class CoreService {
     readonly rankedLitIvemIdListFactoryService: RankedLitIvemIdListFactoryService;
     readonly textFormatterService: TextFormatterService;
     readonly gridFieldCustomHeadingsService: RevSourcedFieldCustomHeadingsService;
-    readonly referenceableGridLayoutsService: ReferenceableGridLayoutsService;
+    readonly referenceableColumnLayoutsService: ReferenceableColumnLayoutsService;
     readonly referenceableDataSourceDefinitionsStoreService: ReferenceableDataSourceDefinitionsStoreService;
     readonly cellPainterFactoryService: CellPainterFactoryService;
     readonly commandRegisterService: CommandRegisterService;
@@ -84,7 +84,7 @@ export class CoreService {
         );
         this.textFormatterService = new TextFormatterService(this.symbolsService, this.settingsService);
         this.gridFieldCustomHeadingsService = new RevSourcedFieldCustomHeadingsService();
-        this.referenceableGridLayoutsService = new ReferenceableGridLayoutsService();
+        this.referenceableColumnLayoutsService = new ReferenceableColumnLayoutsService();
         this.referenceableDataSourceDefinitionsStoreService = new ReferenceableDataSourceDefinitionsStoreService(
         );
         this.cellPainterFactoryService = new CellPainterFactoryService(
@@ -104,7 +104,7 @@ export class CoreService {
 
     setTableRecordSourceFactory(tableRecordSourceFactory: TableRecordSourceFactory, tableFieldSourceDefinitionFactory: TableFieldSourceDefinitionFactory) {
         this._referenceableDataSourcesService = new ReferenceableDataSourcesService(
-            this.referenceableGridLayoutsService,
+            this.referenceableColumnLayoutsService,
             tableFieldSourceDefinitionFactory,
             tableRecordSourceFactory,
         );
@@ -116,7 +116,7 @@ export class CoreService {
             if (this._referenceableDataSourcesService !== undefined) {
                 this._referenceableDataSourcesService.finalise();
             }
-            this.referenceableGridLayoutsService.finalise();
+            this.referenceableColumnLayoutsService.finalise();
 
             this.scansService.finalise();
             this.notificationChannelsService.finalise();

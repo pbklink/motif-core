@@ -4,9 +4,9 @@
  * License: motionite.trade/license/motif
  */
 
-export * from './allowed-fields-grid-layout-definition';
-export * from './favourite-referenceable-grid-layout-definition';
-export * from './grid-layout-definition';
-export * from './grid-layout-or-reference-definition';
-export * from './referenceable-grid-layout-definition';
+export * from './allowed-sourced-fields-column-layout-definition';
+export * from './column-layout-definition';
+export * from './column-layout-or-reference-definition';
+export * from './favourite-referenceable-column-layout-definition';
+export * from './referenceable-column-layout-definition';
 

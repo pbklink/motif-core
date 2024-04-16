@@ -15,14 +15,14 @@ import {
 } from "../../../sys/internal-api";
 import { GridField } from '../../field/internal-api';
 
-export class EditableGridLayoutDefinitionColumn implements IndexedRecord {
+export class EditableColumnLayoutDefinitionColumn implements IndexedRecord {
     index: Integer;
 
     private _width: Integer | undefined;
-    private _visible = EditableGridLayoutDefinitionColumn.defaultVisible;
+    private _visible = EditableColumnLayoutDefinitionColumn.defaultVisible;
 
-    private _widthChangedMultiEvent = new MultiEvent<EditableGridLayoutDefinitionColumn.WidthChangedEventHandler>();
-    private _visibleChangedMultiEvent = new MultiEvent<EditableGridLayoutDefinitionColumn.VisibleChangedEventHandler>();
+    private _widthChangedMultiEvent = new MultiEvent<EditableColumnLayoutDefinitionColumn.WidthChangedEventHandler>();
+    private _visibleChangedMultiEvent = new MultiEvent<EditableColumnLayoutDefinitionColumn.VisibleChangedEventHandler>();
 
     constructor(readonly field: GridField, readonly anchored: boolean, initialIndex: Integer) {
         this.index = initialIndex;
@@ -42,7 +42,7 @@ export class EditableGridLayoutDefinitionColumn implements IndexedRecord {
                 recentChangeTypeId = newWidth > oldWidth ? ValueRecentChangeTypeId.Increase : ValueRecentChangeTypeId.Decrease;
             }
             this._width = newWidth;
-            this.notifyWidthChanged({ fieldId: EditableGridLayoutDefinitionColumn.FieldId.Width, recentChangeTypeId });
+            this.notifyWidthChanged({ fieldId: EditableColumnLayoutDefinitionColumn.FieldId.Width, recentChangeTypeId });
         }
     }
     // eslint-disable-next-line @typescript-eslint/member-ordering
@@ -55,7 +55,7 @@ export class EditableGridLayoutDefinitionColumn implements IndexedRecord {
         }
     }
 
-    subscribeWidthChangedEvent(handler: EditableGridLayoutDefinitionColumn.WidthChangedEventHandler) {
+    subscribeWidthChangedEvent(handler: EditableColumnLayoutDefinitionColumn.WidthChangedEventHandler) {
         return this._widthChangedMultiEvent.subscribe(handler);
     }
 
@@ -63,7 +63,7 @@ export class EditableGridLayoutDefinitionColumn implements IndexedRecord {
         this._widthChangedMultiEvent.unsubscribe(subscriptionId);
     }
 
-    subscribeVisibleChangedEvent(handler: EditableGridLayoutDefinitionColumn.VisibleChangedEventHandler) {
+    subscribeVisibleChangedEvent(handler: EditableColumnLayoutDefinitionColumn.VisibleChangedEventHandler) {
         return this._visibleChangedMultiEvent.subscribe(handler);
     }
 
@@ -71,7 +71,7 @@ export class EditableGridLayoutDefinitionColumn implements IndexedRecord {
         this._visibleChangedMultiEvent.unsubscribe(subscriptionId);
     }
 
-    private notifyWidthChanged(valueChange: EditableGridLayoutDefinitionColumn.ValueChange) {
+    private notifyWidthChanged(valueChange: EditableColumnLayoutDefinitionColumn.ValueChange) {
         const handlers = this._widthChangedMultiEvent.copyHandlers();
         for (let index = 0; index < handlers.length; index++) {
             handlers[index](valueChange);
@@ -86,7 +86,7 @@ export class EditableGridLayoutDefinitionColumn implements IndexedRecord {
     }
 }
 
-export namespace EditableGridLayoutDefinitionColumn {
+export namespace EditableColumnLayoutDefinitionColumn {
     export type WidthChangedEventHandler = (this: void, valueChange: ValueChange) => void;
     export type VisibleChangedEventHandler = (this: void) => void;
 
@@ -126,36 +126,36 @@ export namespace EditableGridLayoutDefinitionColumn {
             FieldName: {
                 id: FieldId.FieldName,
                 name: FieldName.fieldName,
-                headingId: StringId.GridLayoutDefinitionColumnHeading_FieldName,
-                descriptionId: StringId.GridLayoutDefinitionColumnDescription_FieldName,
+                headingId: StringId.ColumnLayoutDefinitionColumnHeading_FieldName,
+                descriptionId: StringId.ColumnLayoutDefinitionColumnDescription_FieldName,
                 dataTypeId: FieldDataTypeId.String,
             },
             FieldSourceName: {
                 id: FieldId.FieldSourceName,
                 name: FieldName.fieldSourceName,
-                headingId: StringId.GridLayoutDefinitionColumnHeading_FieldSourceName,
-                descriptionId: StringId.GridLayoutDefinitionColumnDescription_FieldSourceName,
+                headingId: StringId.ColumnLayoutDefinitionColumnHeading_FieldSourceName,
+                descriptionId: StringId.ColumnLayoutDefinitionColumnDescription_FieldSourceName,
                 dataTypeId: FieldDataTypeId.String,
             },
             FieldHeading: {
                 id: FieldId.FieldHeading,
                 name: FieldName.fieldHeading,
-                headingId: StringId.GridLayoutDefinitionColumnHeading_FieldHeading,
-                descriptionId: StringId.GridLayoutDefinitionColumnDescription_FieldHeading,
+                headingId: StringId.ColumnLayoutDefinitionColumnHeading_FieldHeading,
+                descriptionId: StringId.ColumnLayoutDefinitionColumnDescription_FieldHeading,
                 dataTypeId: FieldDataTypeId.String,
             },
             Width: {
                 id: FieldId.Width,
                 name: FieldName.width,
-                headingId: StringId.GridLayoutDefinitionColumnHeading_Width,
-                descriptionId: StringId.GridLayoutDefinitionColumnDescription_Width,
+                headingId: StringId.ColumnLayoutDefinitionColumnHeading_Width,
+                descriptionId: StringId.ColumnLayoutDefinitionColumnDescription_Width,
                 dataTypeId: FieldDataTypeId.Integer,
             },
             Visible: {
                 id: FieldId.Visible,
                 name: FieldName.visible,
-                headingId: StringId.GridLayoutDefinitionColumnHeading_Visible,
-                descriptionId: StringId.GridLayoutDefinitionColumnDescription_Visible,
+                headingId: StringId.ColumnLayoutDefinitionColumnHeading_Visible,
+                descriptionId: StringId.ColumnLayoutDefinitionColumnDescription_Visible,
                 dataTypeId: FieldDataTypeId.Boolean,
             },
         };
@@ -167,7 +167,7 @@ export namespace EditableGridLayoutDefinitionColumn {
         export function initialise() {
             for (let id = 0; id < idCount; id++) {
                 if (infos[id].id !== id as FieldId) {
-                    throw new EnumInfoOutOfOrderError('GridLayoutDefinitionColumnEditRecord.Field', id, idToName(id));
+                    throw new EnumInfoOutOfOrderError('ColumnLayoutDefinitionColumnEditRecord.Field', id, idToName(id));
                 }
             }
         }
@@ -202,8 +202,8 @@ export namespace EditableGridLayoutDefinitionColumn {
     }
 }
 
-export namespace EditableGridLayoutDefinitionColumnModule {
+export namespace EditableColumnLayoutDefinitionColumnModule {
     export function initialise() {
-        EditableGridLayoutDefinitionColumn.Field.initialise();
+        EditableColumnLayoutDefinitionColumn.Field.initialise();
     }
 }

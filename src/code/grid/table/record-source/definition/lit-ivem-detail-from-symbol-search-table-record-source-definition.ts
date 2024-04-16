@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevGridLayoutDefinition, RevSourcedFieldCustomHeadingsService } from '@xilytix/rev-data-source';
+import { RevColumnLayoutDefinition, RevSourcedFieldCustomHeadingsService } from '@xilytix/rev-data-source';
 import { ExchangeId, LitIvemAlternateCodes, LitIvemBaseDetail, MarketInfo, MyxLitIvemAttributes, SearchSymbolsDataDefinition, SearchSymbolsLitIvemFullDetail } from '../../../../adi/internal-api';
 import { ErrorCode, JsonElement, JsonElementErr, Ok, PickEnum, Result } from '../../../../sys/internal-api';
 import {
@@ -46,7 +46,7 @@ export class LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition extends T
     override createDefaultLayoutDefinition() {
         const fieldNames = new Array<string>();
 
-        this.addLitIvemBaseDetailToDefaultGridLayout(fieldNames);
+        this.addLitIvemBaseDetailToDefaultColumnLayout(fieldNames);
 
         if (this.dataDefinition.fullSymbol) {
             this.addLitIvemExtendedDetailFieldDefinitionSource(fieldNames);
@@ -59,7 +59,7 @@ export class LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition extends T
             this.addLitIvemAlternateCodesFieldDefinitionSource(fieldNames);
         }
 
-        return RevGridLayoutDefinition.createFromFieldNames(fieldNames);
+        return RevColumnLayoutDefinition.createFromFieldNames(fieldNames);
     }
 
     getDefaultFieldSourceDefinitionTypeIds(): LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition.FieldSourceDefinitionTypeId[] {
@@ -132,7 +132,7 @@ export class LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition extends T
         return exchangeId;
     }
 
-    private addLitIvemBaseDetailToDefaultGridLayout(fieldNames: string[]) {
+    private addLitIvemBaseDetailToDefaultColumnLayout(fieldNames: string[]) {
         const fieldSourceDefinition = LitIvemBaseDetailTableFieldSourceDefinition.get(this.tableFieldSourceDefinitionCachingFactoryService);
 
         fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(LitIvemBaseDetail.Field.Id.Id));
@@ -153,7 +153,7 @@ export class LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition extends T
         fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(SearchSymbolsLitIvemFullDetail.ExtendedField.Id.StrikePrice));
         fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(SearchSymbolsLitIvemFullDetail.ExtendedField.Id.ExpiryDate));
         fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(SearchSymbolsLitIvemFullDetail.ExtendedField.Id.ContractSize));
-        // gridLayout.addColumn(fieldSourceDefinition.getSupportedFieldNameById(LitIvemFullDetail.ExtendedField.Id.DepthDirection
+        // columnLayout.addColumn(fieldSourceDefinition.getSupportedFieldNameById(LitIvemFullDetail.ExtendedField.Id.DepthDirection
     }
 
     private addMyxLitIvemAttributesFieldDefinitionSource(fieldNames: string[]) {
@@ -220,7 +220,7 @@ export namespace LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition {
     export function createLayoutDefinition(
         fieldSourceDefinitionRegistryService: TableFieldSourceDefinitionCachingFactoryService,
         fieldIds: FieldId[],
-    ): RevGridLayoutDefinition {
+    ): RevColumnLayoutDefinition {
         return fieldSourceDefinitionRegistryService.createLayoutDefinition(fieldIds);
     }
 

@@ -82,9 +82,9 @@ export namespace InternalCommand {
 
         ColorSettings_SaveScheme,
 
-        GridLayoutDialog_Ok,
-        GridLayoutDialog_Cancel,
-        GridLayoutDialog_EditColumns,
+        ColumnLayoutDialog_Ok,
+        ColumnLayoutDialog_Cancel,
+        ColumnLayoutDialog_EditColumns,
 
         Watchlist_DeleteSymbol,
         Watchlist_New,
@@ -252,9 +252,9 @@ export namespace InternalCommand {
 
         ColorSettings_SaveScheme = 'ColorSettings_SaveScheme',
 
-        GridLayoutDialog_Ok = 'GridLayoutDialog_Ok',
-        GridLayoutDialog_Cancel = 'GridLayoutDialog_Cancel',
-        GridLayoutDialog_EditColumns = 'GridLayoutDialog_EditColumns',
+        ColumnLayoutDialog_Ok = 'ColumnLayoutDialog_Ok',
+        ColumnLayoutDialog_Cancel = 'ColumnLayoutDialog_Cancel',
+        ColumnLayoutDialog_EditColumns = 'ColumnLayoutDialog_EditColumns',
 
         Watchlist_DeleteSymbol = 'Watchlist_DeleteSymbol',
         Watchlist_New = 'Watchlist_New',
@@ -421,9 +421,9 @@ export namespace InternalCommand {
         ColorSelector_Spin: { id: Id.ColorSelector_Spin, nameId: NameId.ColorSelector_Spin },
         ColorSelector_Copy: { id: Id.ColorSelector_Copy, nameId: NameId.ColorSelector_Copy },
         ColorSettings_SaveScheme: { id: Id.ColorSettings_SaveScheme, nameId: NameId.ColorSettings_SaveScheme },
-        GridLayoutDialog_Ok: { id: Id.GridLayoutDialog_Ok, nameId: NameId.GridLayoutDialog_Ok },
-        GridLayoutDialog_Cancel: { id: Id.GridLayoutDialog_Cancel, nameId: NameId.GridLayoutDialog_Cancel },
-        GridLayoutDialog_EditColumns: { id: Id.GridLayoutDialog_EditColumns, nameId: NameId.GridLayoutDialog_EditColumns },
+        ColumnLayoutDialog_Ok: { id: Id.ColumnLayoutDialog_Ok, nameId: NameId.ColumnLayoutDialog_Ok },
+        ColumnLayoutDialog_Cancel: { id: Id.ColumnLayoutDialog_Cancel, nameId: NameId.ColumnLayoutDialog_Cancel },
+        ColumnLayoutDialog_EditColumns: { id: Id.ColumnLayoutDialog_EditColumns, nameId: NameId.ColumnLayoutDialog_EditColumns },
         Watchlist_DeleteSymbol: { id: Id.Watchlist_DeleteSymbol, nameId: NameId.Watchlist_DeleteSymbol },
         Watchlist_New: { id: Id.Watchlist_New, nameId: NameId.Watchlist_New },
         Watchlist_Open: { id: Id.Watchlist_Open, nameId: NameId.Watchlist_Open },

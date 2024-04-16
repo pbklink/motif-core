@@ -4,19 +4,19 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevGridLayoutOrReference } from '@xilytix/rev-data-source';
+import { RevColumnLayoutOrReference } from '@xilytix/rev-data-source';
 import { UnreachableCaseError } from '@xilytix/sysutils';
 import { AssertInternalError, Err, ErrorCode, LockOpenListItem, Ok, PickEnum, Result } from '../../sys/internal-api';
 
-export namespace GridLayoutOrReference {
-    export function tryLock(gridLayoutOrReference: RevGridLayoutOrReference, locker: LockOpenListItem.Locker): Promise<Result<void>> {
+export namespace ColumnLayoutOrReference {
+    export function tryLock(columnLayoutOrReference: RevColumnLayoutOrReference, locker: LockOpenListItem.Locker): Promise<Result<void>> {
         // Replace with Promise.withResolvers when available in TypeScript (ES2023)
         let resolve: (value: Result<void>) => void;
         const resultPromise = new Promise<Result<void>>((res) => {
             resolve = res;
         });
 
-        const lockPromise = gridLayoutOrReference.tryLock(locker);
+        const lockPromise = columnLayoutOrReference.tryLock(locker);
         lockPromise.then(
             (lockIdPlusTryError) => {
                 if (lockIdPlusTryError.isOk()) {
@@ -39,17 +39,17 @@ export namespace GridLayoutOrReference {
     }
 
     export type LockErrorCode = PickEnum<ErrorCode,
-        ErrorCode.GridLayoutOrReference_DefinitionTry |
-        ErrorCode.GridLayoutOrReference_ReferenceTry |
-        ErrorCode.GridLayoutOrReference_ReferenceNotFound
+        ErrorCode.ColumnLayoutOrReference_DefinitionTry |
+        ErrorCode.ColumnLayoutOrReference_ReferenceTry |
+        ErrorCode.ColumnLayoutOrReference_ReferenceNotFound
     >;
 
     export namespace LockErrorCode {
-        export function fromId(lockErrorId: RevGridLayoutOrReference.LockErrorId): LockErrorCode {
+        export function fromId(lockErrorId: RevColumnLayoutOrReference.LockErrorId): LockErrorCode {
             switch (lockErrorId) {
-                case RevGridLayoutOrReference.LockErrorId.DefinitionTry: return ErrorCode.GridLayoutOrReference_DefinitionTry;
-                case RevGridLayoutOrReference.LockErrorId.ReferenceTry: return ErrorCode.GridLayoutOrReference_ReferenceTry;
-                case RevGridLayoutOrReference.LockErrorId.ReferenceNotFound: return ErrorCode.GridLayoutOrReference_ReferenceNotFound;
+                case RevColumnLayoutOrReference.LockErrorId.DefinitionTry: return ErrorCode.ColumnLayoutOrReference_DefinitionTry;
+                case RevColumnLayoutOrReference.LockErrorId.ReferenceTry: return ErrorCode.ColumnLayoutOrReference_ReferenceTry;
+                case RevColumnLayoutOrReference.LockErrorId.ReferenceNotFound: return ErrorCode.ColumnLayoutOrReference_ReferenceNotFound;
                 default:
                     throw new UnreachableCaseError('GLORLECFI35252', lockErrorId);
             }

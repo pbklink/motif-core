@@ -14,16 +14,16 @@ import {
     TableRecord,
     TableRecordSource
 } from '../../table/internal-api';
-import { EditableGridLayoutDefinitionColumn } from './editable-grid-layout-definition-column';
-import { EditableGridLayoutDefinitionColumnList } from './editable-grid-layout-definition-column-list';
-import { EditableGridLayoutDefinitionColumnTableRecordDefinition } from './editable-grid-layout-definition-column-table-record-definition';
-import { EditableGridLayoutDefinitionColumnTableRecordSourceDefinition } from './editable-grid-layout-definition-column-table-record-source-definition';
-import { EditableGridLayoutDefinitionColumnTableValueSource } from './editable-grid-layout-definition-column-table-value-source';
+import { EditableColumnLayoutDefinitionColumn } from './editable-column-layout-definition-column';
+import { EditableColumnLayoutDefinitionColumnList } from './editable-column-layout-definition-column-list';
+import { EditableColumnLayoutDefinitionColumnTableRecordDefinition } from './editable-column-layout-definition-column-table-record-definition';
+import { EditableColumnLayoutDefinitionColumnTableRecordSourceDefinition } from './editable-column-layout-definition-column-table-record-source-definition';
+import { EditableColumnLayoutDefinitionColumnTableValueSource } from './editable-column-layout-definition-column-table-value-source';
 
 /** @public */
-export class EditableGridLayoutDefinitionColumnTableRecordSource extends TableRecordSource {
-    private readonly _list: EditableGridLayoutDefinitionColumnList;
-    private readonly _records: readonly EditableGridLayoutDefinitionColumn[];
+export class EditableColumnLayoutDefinitionColumnTableRecordSource extends TableRecordSource {
+    private readonly _list: EditableColumnLayoutDefinitionColumnList;
+    private readonly _records: readonly EditableColumnLayoutDefinitionColumn[];
     private _listChangeEventSubscriptionId: MultiEvent.SubscriptionId;
 
     constructor(
@@ -31,7 +31,7 @@ export class EditableGridLayoutDefinitionColumnTableRecordSource extends TableRe
         gridFieldCustomHeadingsService: RevSourcedFieldCustomHeadingsService,
         tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService,
         correctnessBadness: CorrectnessBadness,
-        definition: EditableGridLayoutDefinitionColumnTableRecordSourceDefinition,
+        definition: EditableColumnLayoutDefinitionColumnTableRecordSourceDefinition,
     ) {
         super(
             textFormatterService,
@@ -39,7 +39,7 @@ export class EditableGridLayoutDefinitionColumnTableRecordSource extends TableRe
             tableFieldSourceDefinitionCachingFactoryService,
             correctnessBadness,
             definition,
-            EditableGridLayoutDefinitionColumnTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
+            EditableColumnLayoutDefinitionColumnTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
         );
 
         this._list = definition.list;
@@ -76,18 +76,18 @@ export class EditableGridLayoutDefinitionColumnTableRecordSource extends TableRe
 
     override getCount() { return this._list.count; }
 
-    override createDefinition(): EditableGridLayoutDefinitionColumnTableRecordSourceDefinition {
-        return new EditableGridLayoutDefinitionColumnTableRecordSourceDefinition(
+    override createDefinition(): EditableColumnLayoutDefinitionColumnTableRecordSourceDefinition {
+        return new EditableColumnLayoutDefinitionColumnTableRecordSourceDefinition(
             this._gridFieldCustomHeadingsService,
             this._tableFieldSourceDefinitionCachingFactoryService,
             this._list,
         );
     }
 
-    override createRecordDefinition(idx: Integer): EditableGridLayoutDefinitionColumnTableRecordDefinition {
+    override createRecordDefinition(idx: Integer): EditableColumnLayoutDefinitionColumnTableRecordDefinition {
         const record = this._records[idx];
         return {
-            typeId: TableFieldSourceDefinition.TypeId.EditableGridLayoutDefinitionColumn,
+            typeId: TableFieldSourceDefinition.TypeId.EditableColumnLayoutDefinitionColumn,
             mapKey: record.fieldName,
             record,
         };
@@ -102,10 +102,10 @@ export class EditableGridLayoutDefinitionColumnTableRecordSource extends TableRe
         for (let i = 0; i < sourceCount; i++) {
             const fieldSource = fieldSources[i];
             const fieldSourceDefinition = fieldSource.definition;
-            const fieldSourceDefinitionTypeId = fieldSourceDefinition.typeId as EditableGridLayoutDefinitionColumnTableRecordSourceDefinition.FieldSourceDefinitionTypeId;
+            const fieldSourceDefinitionTypeId = fieldSourceDefinition.typeId as EditableColumnLayoutDefinitionColumnTableRecordSourceDefinition.FieldSourceDefinitionTypeId;
             switch (fieldSourceDefinitionTypeId) {
-                case TableFieldSourceDefinition.TypeId.EditableGridLayoutDefinitionColumn: {
-                    const valueSource = new EditableGridLayoutDefinitionColumnTableValueSource(result.fieldCount, record);
+                case TableFieldSourceDefinition.TypeId.EditableColumnLayoutDefinitionColumn: {
+                    const valueSource = new EditableColumnLayoutDefinitionColumnTableValueSource(result.fieldCount, record);
                     result.addSource(valueSource);
                     break;
                 }
@@ -118,13 +118,13 @@ export class EditableGridLayoutDefinitionColumnTableRecordSource extends TableRe
     }
 
     protected override getDefaultFieldSourceDefinitionTypeIds() {
-        return EditableGridLayoutDefinitionColumnTableRecordSourceDefinition.defaultFieldSourceDefinitionTypeIds;
+        return EditableColumnLayoutDefinitionColumnTableRecordSourceDefinition.defaultFieldSourceDefinitionTypeIds;
     }
 
     protected override createFields(): TableField[] {
         const fields = super.createFields();
         for (const field of fields) {
-            if (field.definition.sourcelessName === EditableGridLayoutDefinitionColumn.FieldName.visible) {
+            if (field.definition.sourcelessName === EditableColumnLayoutDefinitionColumn.FieldName.visible) {
                 field.getEditValueEventer = (tableRecord) => {
                     const index = tableRecord.index;
                     const record = this._records[index];
@@ -136,7 +136,7 @@ export class EditableGridLayoutDefinitionColumnTableRecordSource extends TableRe
                     record.visible = value as boolean;
                 }
             } else {
-                if (field.definition.sourcelessName === EditableGridLayoutDefinitionColumn.FieldName.width) {
+                if (field.definition.sourcelessName === EditableColumnLayoutDefinitionColumn.FieldName.width) {
                     field.getEditValueEventer = (tableRecord) => {
                         const index = tableRecord.index;
                         const record = this._records[index];

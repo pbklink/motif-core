@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevGridLayoutDefinition, RevSourcedFieldDefinition } from '@xilytix/rev-data-source';
+import { RevColumnLayoutDefinition, RevSourcedFieldDefinition } from '@xilytix/rev-data-source';
 import { OrderSideId } from '../../../../adi/internal-api';
 import { RenderValue } from '../../../../services/internal-api';
 import { CorrectnessId, UnreachableCaseError } from '../../../../sys/internal-api';
@@ -93,7 +93,7 @@ export namespace ShortDepthSideGridField {
         );
     }
 
-    export function createDefaultGridLayoutDefinition(sideId: OrderSideId) {
+    export function createDefaultColumnLayoutDefinition(sideId: OrderSideId) {
         const fieldIds: ShortDepthSideFieldId[] = [
             ShortDepthSideFieldId.PriceAndHasUndisclosed,
             ShortDepthSideFieldId.Volume,
@@ -101,13 +101,13 @@ export namespace ShortDepthSideGridField {
         ];
 
         const fieldCount = fieldIds.length;
-        const layoutDefinitionColumns = new Array<RevGridLayoutDefinition.Column>(fieldCount);
+        const layoutDefinitionColumns = new Array<RevColumnLayoutDefinition.Column>(fieldCount);
         for (let i = 0; i < fieldCount; i++) {
             const sourceName = DepthSideGridField.sourceDefinition.name;
             const fieldId = fieldIds[i];
             const sourcelessFieldName = ShortDepthSideField.idToName(fieldId);
             const fieldName = RevSourcedFieldDefinition.Name.compose(sourceName, sourcelessFieldName);
-            const layoutDefinitionColumn: RevGridLayoutDefinition.Column = {
+            const layoutDefinitionColumn: RevColumnLayoutDefinition.Column = {
                 fieldName,
                 visible: undefined,
                 autoSizableWidth: undefined,
@@ -120,7 +120,7 @@ export namespace ShortDepthSideGridField {
             layoutDefinitionColumns.reverse();
         }
 
-        return new RevGridLayoutDefinition(layoutDefinitionColumns);
+        return new RevColumnLayoutDefinition(layoutDefinitionColumns);
     }
     // export function createAllFields(
     //     sideId: OrderSideId,

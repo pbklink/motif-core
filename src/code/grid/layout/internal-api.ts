@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
+export * from './column-layout-or-reference';
 export * from './definition/internal-api';
-export * from './referenceable-grid-layouts-service';
-export * from './grid-layout-or-reference';
+export * from './referenceable-column-layouts-service';
 

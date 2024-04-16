@@ -4,11 +4,11 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevDataSource, RevGridLayoutOrReferenceDefinition } from '@xilytix/rev-data-source';
+import { RevColumnLayoutOrReferenceDefinition, RevDataSource } from '@xilytix/rev-data-source';
 import { UnreachableCaseError } from '@xilytix/sysutils';
 import { RenderValue } from '../../services/internal-api';
 import { AssertInternalError, Badness, Err, ErrorCode, LockOpenListItem, Ok, PickEnum, Result } from '../../sys/internal-api';
-import { GridLayoutOrReference } from '../layout/internal-api';
+import { ColumnLayoutOrReference } from '../layout/internal-api';
 import { TableFieldSourceDefinition, TableRecordSourceDefinition } from '../table/internal-api';
 
 export class DataSource extends RevDataSource<
@@ -50,14 +50,14 @@ export namespace DataSource {
         return resultPromise;
     }
 
-    export function tryOpenGridLayoutOrReferenceDefinition(dataSource: DataSource, definition: RevGridLayoutOrReferenceDefinition, opener: LockOpenListItem.Opener): Promise<Result<void>> {
+    export function tryOpenColumnLayoutOrReferenceDefinition(dataSource: DataSource, definition: RevColumnLayoutOrReferenceDefinition, opener: LockOpenListItem.Opener): Promise<Result<void>> {
         // Replace with Promise.withResolvers when available in TypeScript (ES2023)
         let resolve: (value: Result<void>) => void;
         const resultPromise = new Promise<Result<void>>((res) => {
             resolve = res;
         });
 
-        const openPromise = dataSource.tryOpenGridLayoutOrReferenceDefinition(definition, opener);
+        const openPromise = dataSource.tryOpenColumnLayoutOrReferenceDefinition(definition, opener);
         openPromise.then(
             (lockIdPlusTryError) => {
                 if (lockIdPlusTryError.isOk()) {
@@ -65,7 +65,7 @@ export namespace DataSource {
                 } else {
                     const lockErrorIdPlusTryError = lockIdPlusTryError.error;
                     const lockErrorId = lockErrorIdPlusTryError.errorId;
-                    let errorText = GridLayoutOrReference.LockErrorCode.fromId(lockErrorId) as string;
+                    let errorText = ColumnLayoutOrReference.LockErrorCode.fromId(lockErrorId) as string;
                     const tryError = lockErrorIdPlusTryError.tryError;
                     if (tryError === undefined) {
                         errorText += `: ${tryError}`;

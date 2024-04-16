@@ -20,7 +20,7 @@ export const enum StringId {
     PossibleExternalError,
     JsonLoadExternalError,
     ConfigExternalError,
-    GridLayoutExternalError,
+    ColumnLayoutExternalError,
     DataExternalError,
     FeedExternalError,
     ZenithDataExternalError,
@@ -155,7 +155,7 @@ export const enum StringId {
     ErrorCreatingNew,
     ErrorUpdating,
     ErrorDeleting,
-    ErrorLoadingGridLayout,
+    ErrorLoadingColumnLayout,
     ValueRequired,
     CodeMissing,
     SymbolSourceDoesNotHaveDefaultMarket,
@@ -247,12 +247,12 @@ export const enum StringId {
     Feeds,
     Notifications,
     AllowedFields,
-    GridLayoutEditorColumns,
+    ColumnLayoutEditorColumns,
     BrokerageAccounts,
     OrderAuthorise,
     Scans,
     TopShareholders,
-    GridLayout,
+    ColumnLayout,
     ExecuteCommandTitle,
     ApplySymbolCaption,
     ApplySymbolTitle,
@@ -454,8 +454,8 @@ export const enum StringId {
     TableRecordDefinitionList_ListTypeAbbr_Balances,
     TableRecordDefinitionList_ListTypeDisplay_TopShareholder,
     TableRecordDefinitionList_ListTypeAbbr_TopShareholder,
-    TableRecordDefinitionList_ListTypeDisplay_GridLayoutDefinitionColumnEditRecord,
-    TableRecordDefinitionList_ListTypeAbbr_GridLayoutDefinitionColumnEditRecord,
+    TableRecordDefinitionList_ListTypeDisplay_ColumnLayoutDefinitionColumnEditRecord,
+    TableRecordDefinitionList_ListTypeAbbr_ColumnLayoutDefinitionColumnEditRecord,
     TableRecordDefinitionList_ListTypeDisplay_Scan,
     TableRecordDefinitionList_ListTypeAbbr_Scan,
     TableRecordDefinitionList_ListTypeDisplay_RankedLitIvemIdListDirectoryItem,
@@ -977,27 +977,27 @@ export const enum StringId {
     Grid_SearchInputTitle,
     Grid_SearchNextCaption,
     Grid_SearchNextTitle,
-    GridLayoutDialog_EditGridColumns,
-    GridLayoutEditor_MoveUpCaption,
-    GridLayoutEditor_MoveUpTitle,
-    GridLayoutEditor_MoveTopCaption,
-    GridLayoutEditor_MoveTopTitle,
-    GridLayoutEditor_MoveDownCaption,
-    GridLayoutEditor_MoveDownTitle,
-    GridLayoutEditor_MoveBottomCaption,
-    GridLayoutEditor_MoveBottomTitle,
-    GridLayoutEditor_InsertCaption,
-    GridLayoutEditor_InsertTitle,
-    GridLayoutEditor_RemoveCaption,
-    GridLayoutEditor_RemoveTitle,
-    GridLayoutEditor_ShowAllRadioCaption,
-    GridLayoutEditor_ShowAllRadioTitle,
-    GridLayoutEditor_ShowVisibleRadioCaption,
-    GridLayoutEditor_ShowVisibleRadioTitle,
-    GridLayoutEditor_ShowHiddenRadioCaption,
-    GridLayoutEditor_ShowHiddenRadioTitle,
-    GridLayoutEditorColumns_SetWidthCaption,
-    GridLayoutEditorColumns_SetWidthTitle,
+    ColumnLayoutDialog_EditGridColumns,
+    ColumnLayoutEditor_MoveUpCaption,
+    ColumnLayoutEditor_MoveUpTitle,
+    ColumnLayoutEditor_MoveTopCaption,
+    ColumnLayoutEditor_MoveTopTitle,
+    ColumnLayoutEditor_MoveDownCaption,
+    ColumnLayoutEditor_MoveDownTitle,
+    ColumnLayoutEditor_MoveBottomCaption,
+    ColumnLayoutEditor_MoveBottomTitle,
+    ColumnLayoutEditor_InsertCaption,
+    ColumnLayoutEditor_InsertTitle,
+    ColumnLayoutEditor_RemoveCaption,
+    ColumnLayoutEditor_RemoveTitle,
+    ColumnLayoutEditor_ShowAllRadioCaption,
+    ColumnLayoutEditor_ShowAllRadioTitle,
+    ColumnLayoutEditor_ShowVisibleRadioCaption,
+    ColumnLayoutEditor_ShowVisibleRadioTitle,
+    ColumnLayoutEditor_ShowHiddenRadioCaption,
+    ColumnLayoutEditor_ShowHiddenRadioTitle,
+    ColumnLayoutEditorColumns_SetWidthCaption,
+    ColumnLayoutEditorColumns_SetWidthTitle,
     LitIvemIdListEditor_RemoveSelectedCaption,
     LitIvemIdListEditor_RemoveSelectedTitle,
     LitIvemIdListEditor_PopoutCaption,
@@ -2123,16 +2123,16 @@ export const enum StringId {
     ScanEditorComponent_TestTitle,
     ScanEditorTargetsComponent_EditMultiSymbolList,
     ScanEditorTargetsComponent_EditMultiSymbolGridColumns,
-    GridLayoutDefinitionColumnHeading_FieldName,
-    GridLayoutDefinitionColumnDescription_FieldName,
-    GridLayoutDefinitionColumnHeading_FieldHeading,
-    GridLayoutDefinitionColumnDescription_FieldHeading,
-    GridLayoutDefinitionColumnHeading_FieldSourceName,
-    GridLayoutDefinitionColumnDescription_FieldSourceName,
-    GridLayoutDefinitionColumnHeading_Width,
-    GridLayoutDefinitionColumnDescription_Width,
-    GridLayoutDefinitionColumnHeading_Visible,
-    GridLayoutDefinitionColumnDescription_Visible,
+    ColumnLayoutDefinitionColumnHeading_FieldName,
+    ColumnLayoutDefinitionColumnDescription_FieldName,
+    ColumnLayoutDefinitionColumnHeading_FieldHeading,
+    ColumnLayoutDefinitionColumnDescription_FieldHeading,
+    ColumnLayoutDefinitionColumnHeading_FieldSourceName,
+    ColumnLayoutDefinitionColumnDescription_FieldSourceName,
+    ColumnLayoutDefinitionColumnHeading_Width,
+    ColumnLayoutDefinitionColumnDescription_Width,
+    ColumnLayoutDefinitionColumnHeading_Visible,
+    ColumnLayoutDefinitionColumnDescription_Visible,
     ScanFieldHeading_Id,
     ScanFieldHeading_Readonly,
     ScanFieldHeading_Index,
@@ -2482,8 +2482,8 @@ export namespace I18nStrings {
                 en: 'Configuration error',
             }
         },
-        GridLayoutExternalError: {
-            id: StringId.GridLayoutExternalError, translations: {
+        ColumnLayoutExternalError: {
+            id: StringId.ColumnLayoutExternalError, translations: {
                 en: 'Grid layout error',
             }
         },
@@ -3153,8 +3153,8 @@ export namespace I18nStrings {
                 en: 'Error deleting',
             }
         },
-        ErrorLoadingGridLayout: {
-            id: StringId.ErrorLoadingGridLayout, translations: {
+        ErrorLoadingColumnLayout: {
+            id: StringId.ErrorLoadingColumnLayout, translations: {
                 en: 'Error loading grid layout',
             }
         },
@@ -3613,8 +3613,8 @@ export namespace I18nStrings {
                 en: 'Allowed Fields',
             }
         },
-        GridLayoutEditorColumns: {
-            id: StringId.GridLayoutEditorColumns, translations: {
+        ColumnLayoutEditorColumns: {
+            id: StringId.ColumnLayoutEditorColumns, translations: {
                 en: 'Grid Layout Editor Columns',
             }
         },
@@ -3638,8 +3638,8 @@ export namespace I18nStrings {
                 en: 'Top shareholders',
             }
         },
-        GridLayout: {
-            id: StringId.GridLayout, translations: {
+        ColumnLayout: {
+            id: StringId.ColumnLayout, translations: {
                 en: 'Grid layout',
             }
         },
@@ -4649,13 +4649,13 @@ export namespace I18nStrings {
                 en: 'Tsh',
             }
         },
-        TableRecordDefinitionList_ListTypeDisplay_GridLayoutDefinitionColumnEditRecord: {
-            id: StringId.TableRecordDefinitionList_ListTypeDisplay_GridLayoutDefinitionColumnEditRecord, translations: {
+        TableRecordDefinitionList_ListTypeDisplay_ColumnLayoutDefinitionColumnEditRecord: {
+            id: StringId.TableRecordDefinitionList_ListTypeDisplay_ColumnLayoutDefinitionColumnEditRecord, translations: {
                 en: 'Grid Layout Definition Column Edit Record',
             }
         },
-        TableRecordDefinitionList_ListTypeAbbr_GridLayoutDefinitionColumnEditRecord: {
-            id: StringId.TableRecordDefinitionList_ListTypeAbbr_GridLayoutDefinitionColumnEditRecord, translations: {
+        TableRecordDefinitionList_ListTypeAbbr_ColumnLayoutDefinitionColumnEditRecord: {
+            id: StringId.TableRecordDefinitionList_ListTypeAbbr_ColumnLayoutDefinitionColumnEditRecord, translations: {
                 en: 'Gldcer',
             }
         },
@@ -7264,108 +7264,108 @@ export namespace I18nStrings {
                 en: 'Next search match',
             }
         },
-        GridLayoutDialog_EditGridColumns: {
-            id: StringId.GridLayoutDialog_EditGridColumns, translations: {
+        ColumnLayoutDialog_EditGridColumns: {
+            id: StringId.ColumnLayoutDialog_EditGridColumns, translations: {
                 en: 'Edit Columns',
             }
         },
-        GridLayoutEditor_MoveUpCaption: {
-            id: StringId.GridLayoutEditor_MoveUpCaption, translations: {
+        ColumnLayoutEditor_MoveUpCaption: {
+            id: StringId.ColumnLayoutEditor_MoveUpCaption, translations: {
                 en: 'Up one',
             }
         },
-        GridLayoutEditor_MoveUpTitle: {
-            id: StringId.GridLayoutEditor_MoveUpTitle, translations: {
+        ColumnLayoutEditor_MoveUpTitle: {
+            id: StringId.ColumnLayoutEditor_MoveUpTitle, translations: {
                 en: 'Move column up one position',
             }
         },
-        GridLayoutEditor_MoveTopCaption: {
-            id: StringId.GridLayoutEditor_MoveTopCaption, translations: {
+        ColumnLayoutEditor_MoveTopCaption: {
+            id: StringId.ColumnLayoutEditor_MoveTopCaption, translations: {
                 en: 'To top',
             }
         },
-        GridLayoutEditor_MoveTopTitle: {
-            id: StringId.GridLayoutEditor_MoveTopTitle, translations: {
+        ColumnLayoutEditor_MoveTopTitle: {
+            id: StringId.ColumnLayoutEditor_MoveTopTitle, translations: {
                 en: 'Move column to top',
             }
         },
-        GridLayoutEditor_MoveDownCaption: {
-            id: StringId.GridLayoutEditor_MoveDownCaption, translations: {
+        ColumnLayoutEditor_MoveDownCaption: {
+            id: StringId.ColumnLayoutEditor_MoveDownCaption, translations: {
                 en: 'Down one',
             }
         },
-        GridLayoutEditor_MoveDownTitle: {
-            id: StringId.GridLayoutEditor_MoveDownTitle, translations: {
+        ColumnLayoutEditor_MoveDownTitle: {
+            id: StringId.ColumnLayoutEditor_MoveDownTitle, translations: {
                 en: 'Move column down one position',
             }
         },
-        GridLayoutEditor_MoveBottomCaption: {
-            id: StringId.GridLayoutEditor_MoveBottomCaption, translations: {
+        ColumnLayoutEditor_MoveBottomCaption: {
+            id: StringId.ColumnLayoutEditor_MoveBottomCaption, translations: {
                 en: 'To bottom',
             }
         },
-        GridLayoutEditor_MoveBottomTitle: {
-            id: StringId.GridLayoutEditor_MoveBottomTitle, translations: {
+        ColumnLayoutEditor_MoveBottomTitle: {
+            id: StringId.ColumnLayoutEditor_MoveBottomTitle, translations: {
                 en: 'Move column to bottom',
             }
         },
-        GridLayoutEditor_InsertCaption: {
-            id: StringId.GridLayoutEditor_InsertCaption, translations: {
+        ColumnLayoutEditor_InsertCaption: {
+            id: StringId.ColumnLayoutEditor_InsertCaption, translations: {
                 en: 'Insert',
             }
         },
-        GridLayoutEditor_InsertTitle: {
-            id: StringId.GridLayoutEditor_InsertTitle, translations: {
+        ColumnLayoutEditor_InsertTitle: {
+            id: StringId.ColumnLayoutEditor_InsertTitle, translations: {
                 en: 'Insert column into grid',
             }
         },
-        GridLayoutEditor_RemoveCaption: {
-            id: StringId.GridLayoutEditor_RemoveCaption, translations: {
+        ColumnLayoutEditor_RemoveCaption: {
+            id: StringId.ColumnLayoutEditor_RemoveCaption, translations: {
                 en: 'Remove',
             }
         },
-        GridLayoutEditor_RemoveTitle: {
-            id: StringId.GridLayoutEditor_RemoveTitle, translations: {
+        ColumnLayoutEditor_RemoveTitle: {
+            id: StringId.ColumnLayoutEditor_RemoveTitle, translations: {
                 en: 'Remove column from grid',
             }
         },
-        GridLayoutEditor_ShowAllRadioCaption: {
-            id: StringId.GridLayoutEditor_ShowAllRadioCaption, translations: {
+        ColumnLayoutEditor_ShowAllRadioCaption: {
+            id: StringId.ColumnLayoutEditor_ShowAllRadioCaption, translations: {
                 en: 'All',
             }
         },
-        GridLayoutEditor_ShowAllRadioTitle: {
-            id: StringId.GridLayoutEditor_ShowAllRadioTitle, translations: {
+        ColumnLayoutEditor_ShowAllRadioTitle: {
+            id: StringId.ColumnLayoutEditor_ShowAllRadioTitle, translations: {
                 en: 'Show all columns',
             }
         },
-        GridLayoutEditor_ShowVisibleRadioCaption: {
-            id: StringId.GridLayoutEditor_ShowVisibleRadioCaption, translations: {
+        ColumnLayoutEditor_ShowVisibleRadioCaption: {
+            id: StringId.ColumnLayoutEditor_ShowVisibleRadioCaption, translations: {
                 en: 'Visible',
             }
         },
-        GridLayoutEditor_ShowVisibleRadioTitle: {
-            id: StringId.GridLayoutEditor_ShowVisibleRadioTitle, translations: {
+        ColumnLayoutEditor_ShowVisibleRadioTitle: {
+            id: StringId.ColumnLayoutEditor_ShowVisibleRadioTitle, translations: {
                 en: 'Only show visible columns',
             }
         },
-        GridLayoutEditor_ShowHiddenRadioCaption: {
-            id: StringId.GridLayoutEditor_ShowHiddenRadioCaption, translations: {
+        ColumnLayoutEditor_ShowHiddenRadioCaption: {
+            id: StringId.ColumnLayoutEditor_ShowHiddenRadioCaption, translations: {
                 en: 'Hidden',
             }
         },
-        GridLayoutEditor_ShowHiddenRadioTitle: {
-            id: StringId.GridLayoutEditor_ShowHiddenRadioTitle, translations: {
+        ColumnLayoutEditor_ShowHiddenRadioTitle: {
+            id: StringId.ColumnLayoutEditor_ShowHiddenRadioTitle, translations: {
                 en: 'Only show hidden columns',
             }
         },
-        GridLayoutEditorColumns_SetWidthCaption: {
-            id: StringId.GridLayoutEditorColumns_SetWidthCaption, translations: {
+        ColumnLayoutEditorColumns_SetWidthCaption: {
+            id: StringId.ColumnLayoutEditorColumns_SetWidthCaption, translations: {
                 en: 'Set width',
             }
         },
-        GridLayoutEditorColumns_SetWidthTitle: {
-            id: StringId.GridLayoutEditorColumns_SetWidthTitle, translations: {
+        ColumnLayoutEditorColumns_SetWidthTitle: {
+            id: StringId.ColumnLayoutEditorColumns_SetWidthTitle, translations: {
                 en: 'Set column width or clear for width to be set automatically',
             }
         },
@@ -12999,53 +12999,53 @@ export namespace I18nStrings {
                 en: 'Edit scan target symbol grid columns'
             }
         },
-        GridLayoutDefinitionColumnHeading_FieldName: {
-            id: StringId.GridLayoutDefinitionColumnHeading_FieldName, translations: {
+        ColumnLayoutDefinitionColumnHeading_FieldName: {
+            id: StringId.ColumnLayoutDefinitionColumnHeading_FieldName, translations: {
                 en: 'Name',
             }
         },
-        GridLayoutDefinitionColumnDescription_FieldName: {
-            id: StringId.GridLayoutDefinitionColumnDescription_FieldName, translations: {
+        ColumnLayoutDefinitionColumnDescription_FieldName: {
+            id: StringId.ColumnLayoutDefinitionColumnDescription_FieldName, translations: {
                 en: 'Field Name',
             }
         },
-        GridLayoutDefinitionColumnHeading_FieldHeading: {
-            id: StringId.GridLayoutDefinitionColumnHeading_FieldHeading, translations: {
+        ColumnLayoutDefinitionColumnHeading_FieldHeading: {
+            id: StringId.ColumnLayoutDefinitionColumnHeading_FieldHeading, translations: {
                 en: 'Heading',
             }
         },
-        GridLayoutDefinitionColumnDescription_FieldHeading: {
-            id: StringId.GridLayoutDefinitionColumnDescription_FieldHeading, translations: {
+        ColumnLayoutDefinitionColumnDescription_FieldHeading: {
+            id: StringId.ColumnLayoutDefinitionColumnDescription_FieldHeading, translations: {
                 en: 'Field Heading',
             }
         },
-        GridLayoutDefinitionColumnHeading_FieldSourceName: {
-            id: StringId.GridLayoutDefinitionColumnHeading_FieldSourceName, translations: {
+        ColumnLayoutDefinitionColumnHeading_FieldSourceName: {
+            id: StringId.ColumnLayoutDefinitionColumnHeading_FieldSourceName, translations: {
                 en: 'Source',
             }
         },
-        GridLayoutDefinitionColumnDescription_FieldSourceName: {
-            id: StringId.GridLayoutDefinitionColumnDescription_FieldSourceName, translations: {
+        ColumnLayoutDefinitionColumnDescription_FieldSourceName: {
+            id: StringId.ColumnLayoutDefinitionColumnDescription_FieldSourceName, translations: {
                 en: 'Field Source Name',
             }
         },
-        GridLayoutDefinitionColumnHeading_Width: {
-            id: StringId.GridLayoutDefinitionColumnHeading_Width, translations: {
+        ColumnLayoutDefinitionColumnHeading_Width: {
+            id: StringId.ColumnLayoutDefinitionColumnHeading_Width, translations: {
                 en: 'Width',
             }
         },
-        GridLayoutDefinitionColumnDescription_Width: {
-            id: StringId.GridLayoutDefinitionColumnDescription_Width, translations: {
+        ColumnLayoutDefinitionColumnDescription_Width: {
+            id: StringId.ColumnLayoutDefinitionColumnDescription_Width, translations: {
                 en: 'Width',
             }
         },
-        GridLayoutDefinitionColumnHeading_Visible: {
-            id: StringId.GridLayoutDefinitionColumnHeading_Visible, translations: {
+        ColumnLayoutDefinitionColumnHeading_Visible: {
+            id: StringId.ColumnLayoutDefinitionColumnHeading_Visible, translations: {
                 en: 'Visible',
             }
         },
-        GridLayoutDefinitionColumnDescription_Visible: {
-            id: StringId.GridLayoutDefinitionColumnDescription_Visible, translations: {
+        ColumnLayoutDefinitionColumnDescription_Visible: {
+            id: StringId.ColumnLayoutDefinitionColumnDescription_Visible, translations: {
                 en: 'Visible',
             }
         },

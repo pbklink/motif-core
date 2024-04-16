@@ -107,8 +107,8 @@ export class ExtensionOrInternalError extends ExternalError {
 }
 
 /** @public */
-export class GridLayoutError extends ExternalError {
+export class ColumnLayoutError extends ExternalError {
     constructor(code: ErrorCode, message?: string) {
-        super(StringId.GridLayoutExternalError, code, message);
+        super(StringId.ColumnLayoutExternalError, code, message);
     }
 }

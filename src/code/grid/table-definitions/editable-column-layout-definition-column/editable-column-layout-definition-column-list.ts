@@ -4,13 +4,13 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevGridLayoutDefinition } from '@xilytix/rev-data-source';
+import { RevColumnLayoutDefinition } from '@xilytix/rev-data-source';
 import { AnchoredRecordsList } from '@xilytix/sysutils';
 import { Integer } from '../../../sys/internal-api';
 import { GridField } from '../../field/internal-api';
-import { EditableGridLayoutDefinitionColumn } from './editable-grid-layout-definition-column';
+import { EditableColumnLayoutDefinitionColumn } from './editable-column-layout-definition-column';
 
-export class EditableGridLayoutDefinitionColumnList extends AnchoredRecordsList<EditableGridLayoutDefinitionColumn> {
+export class EditableColumnLayoutDefinitionColumnList extends AnchoredRecordsList<EditableColumnLayoutDefinitionColumn> {
     indexOfGridField(gridField: GridField): Integer {
         const count = this.count;
         for (let i = 0; i < count; i++) {
@@ -22,20 +22,20 @@ export class EditableGridLayoutDefinitionColumnList extends AnchoredRecordsList<
         return -1;
     }
 
-    load(allowedFields: readonly GridField[], layoutDefinition: RevGridLayoutDefinition, fixedColumnCount: Integer) {
+    load(allowedFields: readonly GridField[], layoutDefinition: RevColumnLayoutDefinition, fixedColumnCount: Integer) {
         const definitionColumns = layoutDefinition.columns;
         const maxCount = definitionColumns.length;
-        const records = new Array<EditableGridLayoutDefinitionColumn>(maxCount);
+        const records = new Array<EditableColumnLayoutDefinitionColumn>(maxCount);
         let count = 0;
         for (let i = 0; i < maxCount; i++) {
             const definitionColumn = definitionColumns[i];
             const fieldName = definitionColumn.fieldName;
             const field = allowedFields.find((value) => value.name === fieldName);
             if (field !== undefined) {
-                const editableColumn = new EditableGridLayoutDefinitionColumn(field, i < fixedColumnCount, count);
+                const editableColumn = new EditableColumnLayoutDefinitionColumn(field, i < fixedColumnCount, count);
                 const visible = definitionColumn.visible;
                 if (visible === undefined) {
-                    editableColumn.visible = EditableGridLayoutDefinitionColumn.defaultVisible;
+                    editableColumn.visible = EditableColumnLayoutDefinitionColumn.defaultVisible;
                 } else {
                     editableColumn.visible = visible;
                 }
@@ -47,12 +47,12 @@ export class EditableGridLayoutDefinitionColumnList extends AnchoredRecordsList<
         super.assign(records, fixedColumnCount)
     }
 
-    createGridLayoutDefinition() {
+    createColumnLayoutDefinition() {
         const count = this.count;
-        const columns = new Array<RevGridLayoutDefinition.Column>(count);
+        const columns = new Array<RevColumnLayoutDefinition.Column>(count);
         for (let i = 0; i < count; i++) {
             const record = this.getAt(i);
-            const column: RevGridLayoutDefinition.Column = {
+            const column: RevColumnLayoutDefinition.Column = {
                 fieldName: record.fieldName,
                 autoSizableWidth: record.width,
                 visible: record.visible,
@@ -60,15 +60,15 @@ export class EditableGridLayoutDefinitionColumnList extends AnchoredRecordsList<
             columns[i] = column;
         }
 
-        return new RevGridLayoutDefinition(columns);
+        return new RevColumnLayoutDefinition(columns);
     }
 
     appendFields(fields: readonly GridField[]) {
         const appendCount = fields.length;
-        const appendRecords = new Array<EditableGridLayoutDefinitionColumn>(appendCount);
+        const appendRecords = new Array<EditableColumnLayoutDefinitionColumn>(appendCount);
         for (let i = 0; i < appendCount; i++) {
             const field = fields[i];
-            appendRecords[i] = new EditableGridLayoutDefinitionColumn(field, false, -1);
+            appendRecords[i] = new EditableColumnLayoutDefinitionColumn(field, false, -1);
         }
 
         this.insert(this.count, appendRecords);

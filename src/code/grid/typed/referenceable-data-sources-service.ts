@@ -7,7 +7,7 @@
 import { RevDataSource, RevReferenceableDataSourcesService } from '@xilytix/rev-data-source';
 import { RenderValue } from '../../services/internal-api';
 import { Badness, JsonElement, LockOpenList, SysTick, mSecsPerSec } from '../../sys/internal-api';
-import { ReferenceableGridLayoutsService } from '../layout/internal-api';
+import { ReferenceableColumnLayoutsService } from '../layout/internal-api';
 import { TableFieldSourceDefinition, TableFieldSourceDefinitionFactory, TableRecordSourceDefinition } from '../table/internal-api';
 import { ReferenceableDataSource } from './referenceable-data-source';
 import { ReferenceableDataSourceDefinition } from './referenceable-data-source-definition';
@@ -28,7 +28,7 @@ export class ReferenceableDataSourcesService
     private savePeriodicRequired: boolean;
 
     constructor(
-        private readonly _referenceableGridLayoutsService: ReferenceableGridLayoutsService,
+        private readonly _referenceableColumnLayoutsService: ReferenceableColumnLayoutsService,
         private readonly _tableFieldSourceDefinitionFactory: TableFieldSourceDefinitionFactory,
         private readonly _tableRecordSourceFactory: TableRecordSourceFactory,
     ) {
@@ -78,7 +78,7 @@ export class ReferenceableDataSourcesService
     private createReferenceableGridSource(definition: ReferenceableDataSourceDefinition) {
         const index = this.count;
         const result = new ReferenceableDataSource(
-            this._referenceableGridLayoutsService,
+            this._referenceableColumnLayoutsService,
             this._tableFieldSourceDefinitionFactory,
             this._tableRecordSourceFactory,
             definition,

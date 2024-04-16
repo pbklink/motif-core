@@ -64,7 +64,7 @@ export namespace TableRecordSourceDefinition {
         Holding,
         Balances,
         TopShareholder,
-        EditableGridLayoutDefinitionColumn,
+        EditableColumnLayoutDefinitionColumn,
         Scan,
         RankedLitIvemIdListDirectoryItem,
         // eslint-disable-next-line @typescript-eslint/no-shadow
@@ -212,11 +212,11 @@ export namespace TableRecordSourceDefinition {
                 display: StringId.TableRecordDefinitionList_ListTypeDisplay_TopShareholder,
                 abbr: StringId.TableRecordDefinitionList_ListTypeAbbr_TopShareholder
             },
-            EditableGridLayoutDefinitionColumn: {
-                id: TableRecordSourceDefinition.TypeId.EditableGridLayoutDefinitionColumn,
-                name: 'GridLayoutDefinitionColumnEditRecord',
-                display: StringId.TableRecordDefinitionList_ListTypeDisplay_GridLayoutDefinitionColumnEditRecord,
-                abbr: StringId.TableRecordDefinitionList_ListTypeAbbr_GridLayoutDefinitionColumnEditRecord
+            EditableColumnLayoutDefinitionColumn: {
+                id: TableRecordSourceDefinition.TypeId.EditableColumnLayoutDefinitionColumn,
+                name: 'ColumnLayoutDefinitionColumnEditRecord',
+                display: StringId.TableRecordDefinitionList_ListTypeDisplay_ColumnLayoutDefinitionColumnEditRecord,
+                abbr: StringId.TableRecordDefinitionList_ListTypeAbbr_ColumnLayoutDefinitionColumnEditRecord
             },
             Scan: {
                 id: TableRecordSourceDefinition.TypeId.Scan,
