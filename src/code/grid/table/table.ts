@@ -11,10 +11,10 @@ import { TableFieldSourceDefinition } from './field-source/internal-api';
 import { TableRecordSourceDefinition } from './record-source/internal-api';
 
 export class Table extends RevTable<
+    Badness,
     TableRecordSourceDefinition.TypeId,
     TableFieldSourceDefinition.TypeId,
     RenderValue.TypeId,
-    RenderValue.Attribute.TypeId,
-    Badness
+    RenderValue.Attribute.TypeId
 > {
 }

@@ -12,11 +12,11 @@ import { ColumnLayoutOrReference } from '../layout/internal-api';
 import { TableFieldSourceDefinition, TableRecordSourceDefinition } from '../table/internal-api';
 
 export class DataSource extends RevDataSource<
+    Badness,
     TableRecordSourceDefinition.TypeId,
     TableFieldSourceDefinition.TypeId,
     RenderValue.TypeId,
-    RenderValue.Attribute.TypeId,
-    Badness
+    RenderValue.Attribute.TypeId
 > {
 }
 

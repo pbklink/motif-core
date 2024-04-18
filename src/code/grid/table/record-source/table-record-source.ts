@@ -12,11 +12,11 @@ import { TableFieldSourceDefinition, TableFieldSourceDefinitionCachingFactorySer
 import { TableRecordSourceDefinition } from './definition/internal-api';
 
 export abstract class TableRecordSource extends RevTableRecordSource<
+    Badness,
     TableRecordSourceDefinition.TypeId,
     TableFieldSourceDefinition.TypeId,
     RenderValue.TypeId,
-    RenderValue.Attribute.TypeId,
-    Badness
+    RenderValue.Attribute.TypeId
 > {
     private _correctnessBadnessUsableChangedSubscriptionId: MultiEvent.SubscriptionId;
 

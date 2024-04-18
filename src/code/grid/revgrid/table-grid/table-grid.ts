@@ -97,9 +97,9 @@ export class TableGrid extends RecordGrid {
         }
         const gridSourceOrReference = new DataSourceOrReference(
             this._referenceableColumnLayoutsService,
+            this._referenceableGridSourcesService,
             this.tableFieldSourceDefinitionCachingFactoryService.definitionFactory,
             this._tableRecordSourceFactory,
-            this._referenceableGridSourcesService,
             definition
         );
 

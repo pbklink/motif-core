@@ -16,11 +16,11 @@ import { TableRecordSourceFactory } from './table-record-source-factory';
 export class ReferenceableDataSourcesService
     extends LockOpenList<ReferenceableDataSource, ReferenceableDataSource, RevDataSource.LockErrorIdPlusTryError>
     implements RevReferenceableDataSourcesService<
+        Badness,
         TableRecordSourceDefinition.TypeId,
         TableFieldSourceDefinition.TypeId,
         RenderValue.TypeId,
-        RenderValue.Attribute.TypeId,
-        Badness
+        RenderValue.Attribute.TypeId
     > {
     private _saveModified: boolean;
     private nextPeriodicSaveCheckTime: SysTick.Time =

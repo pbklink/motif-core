@@ -10,11 +10,11 @@ import { AssertInternalError, Badness, Err, ErrorCode, LockOpenListItem, Ok, Pic
 import { TableFieldSourceDefinition, TableRecordSourceDefinition } from '../table/internal-api';
 
 export class DataSourceOrReference extends RevDataSourceOrReference<
+    Badness,
     TableRecordSourceDefinition.TypeId,
     TableFieldSourceDefinition.TypeId,
     RenderValue.TypeId,
-    RenderValue.Attribute.TypeId,
-    Badness
+    RenderValue.Attribute.TypeId
 > {
 }
 

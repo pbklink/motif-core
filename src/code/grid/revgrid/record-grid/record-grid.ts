@@ -329,8 +329,7 @@ export class RecordGrid extends AdaptedRevgrid implements RevColumnLayout.Change
         }
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    reorderRecRows(itemIndices: number[]) {
+    reorderRecRows(_itemIndices: number[]) {
         // todo
     }
 

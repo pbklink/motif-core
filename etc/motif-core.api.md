@@ -6520,7 +6520,7 @@ export namespace DataMgr {
 // Warning: (ae-missing-release-tag) "DataSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class DataSource extends RevDataSource<TableRecordSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId, RenderValue.TypeId, RenderValue.Attribute.TypeId, Badness> {
+export class DataSource extends RevDataSource<Badness, TableRecordSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId, RenderValue.TypeId, RenderValue.Attribute.TypeId> {
 }
 
 // @public (undocumented)
@@ -6576,7 +6576,7 @@ export namespace DataSourceDefinition {
 // Warning: (ae-missing-release-tag) "DataSourceOrReference" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class DataSourceOrReference extends RevDataSourceOrReference<TableRecordSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId, RenderValue.TypeId, RenderValue.Attribute.TypeId, Badness> {
+export class DataSourceOrReference extends RevDataSourceOrReference<Badness, TableRecordSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId, RenderValue.TypeId, RenderValue.Attribute.TypeId> {
 }
 
 // @public (undocumented)
@@ -22426,7 +22426,7 @@ export class RecordGrid extends AdaptedRevgrid implements RevColumnLayout.Change
     // (undocumented)
     recordToRowIndex(recIdx: RevRecordIndex): number;
     // (undocumented)
-    reorderRecRows(itemIndices: number[]): void;
+    reorderRecRows(_itemIndices: number[]): void;
     // (undocumented)
     reset(): void;
     // (undocumented)
@@ -22632,7 +22632,7 @@ export class ReferenceableColumnLayoutsService extends LockOpenList<RevReference
 // Warning: (ae-missing-release-tag) "ReferenceableDataSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class ReferenceableDataSource extends RevReferenceableDataSource<TableRecordSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId, RenderValue.TypeId, RenderValue.Attribute.TypeId, Badness> {
+export class ReferenceableDataSource extends RevReferenceableDataSource<Badness, TableRecordSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId, RenderValue.TypeId, RenderValue.Attribute.TypeId> {
 }
 
 // Warning: (ae-missing-release-tag) "ReferenceableDataSourceDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -22648,7 +22648,7 @@ export class ReferenceableDataSourceDefinitionsStoreService implements RevRefere
 // Warning: (ae-missing-release-tag) "ReferenceableDataSourcesService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class ReferenceableDataSourcesService extends LockOpenList<ReferenceableDataSource, ReferenceableDataSource, RevDataSource.LockErrorIdPlusTryError> implements RevReferenceableDataSourcesService<TableRecordSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId, RenderValue.TypeId, RenderValue.Attribute.TypeId, Badness> {
+export class ReferenceableDataSourcesService extends LockOpenList<ReferenceableDataSource, ReferenceableDataSource, RevDataSource.LockErrorIdPlusTryError> implements RevReferenceableDataSourcesService<Badness, TableRecordSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId, RenderValue.TypeId, RenderValue.Attribute.TypeId> {
     constructor(_referenceableColumnLayoutsService: ReferenceableColumnLayoutsService, _tableFieldSourceDefinitionFactory: TableFieldSourceDefinitionFactory, _tableRecordSourceFactory: TableRecordSourceFactory);
     // (undocumented)
     checkPeriodiSaveRequired(nowTime: SysTick.Time): void;
@@ -34145,7 +34145,7 @@ export { SysTick }
 // Warning: (ae-missing-release-tag) "Table" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class Table extends RevTable<TableRecordSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId, RenderValue.TypeId, RenderValue.Attribute.TypeId, Badness> {
+export class Table extends RevTable<Badness, TableRecordSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId, RenderValue.TypeId, RenderValue.Attribute.TypeId> {
 }
 
 // Warning: (ae-missing-release-tag) "TableField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -34424,7 +34424,7 @@ export interface TableRecordDefinition extends RevTableRecordDefinition<TableFie
 // Warning: (ae-missing-release-tag) "TableRecordSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export abstract class TableRecordSource extends RevTableRecordSource<TableRecordSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId, RenderValue.TypeId, RenderValue.Attribute.TypeId, Badness> {
+export abstract class TableRecordSource extends RevTableRecordSource<Badness, TableRecordSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId, RenderValue.TypeId, RenderValue.Attribute.TypeId> {
     constructor(textFormatterService: TextFormatterService, gridFieldCustomHeadingsService: RevSourcedFieldCustomHeadingsService, tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService, _correctnessBadness: CorrectnessBadness, definition: TableRecordSourceDefinition, allowedFieldSourceDefinitionTypeIds: readonly TableFieldSourceDefinition.TypeId[]);
     // (undocumented)
     finalise(): void;
@@ -34549,7 +34549,7 @@ export namespace TableRecordSourceDefinitionStaticInitialise {
 // Warning: (ae-missing-release-tag) "TableRecordSourceFactory" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface TableRecordSourceFactory extends RevTableRecordSourceFactory<TableRecordSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId, RenderValue.TypeId, RenderValue.Attribute.TypeId, Badness> {
+export interface TableRecordSourceFactory extends RevTableRecordSourceFactory<Badness, TableRecordSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId, RenderValue.TypeId, RenderValue.Attribute.TypeId> {
     // (undocumented)
     createCorrectnessState(): CorrectnessBadness;
 }
@@ -34563,7 +34563,7 @@ export namespace TableRecordSourceStaticInitialise {
 }
 
 // @public (undocumented)
-export class TableRecordStore extends RevTableRecordStore<TableRecordSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId, RenderValue.TypeId, RenderValue.Attribute.TypeId, Badness> {
+export class TableRecordStore extends RevTableRecordStore<Badness, TableRecordSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId, RenderValue.TypeId, RenderValue.Attribute.TypeId> {
 }
 
 // Warning: (ae-internal-missing-underscore) The name "TableStaticInitialise" should be prefixed with an underscore because the declaration is marked as @internal

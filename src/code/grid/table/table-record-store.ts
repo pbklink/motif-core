@@ -12,10 +12,10 @@ import { TableRecordSourceDefinition } from './record-source/internal-api';
 
 /** @public */
 export class TableRecordStore extends RevTableRecordStore<
+    Badness,
     TableRecordSourceDefinition.TypeId,
     TableFieldSourceDefinition.TypeId,
     RenderValue.TypeId,
-    RenderValue.Attribute.TypeId,
-    Badness
+    RenderValue.Attribute.TypeId
 > {
 }
