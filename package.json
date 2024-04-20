@@ -28,7 +28,7 @@
     "license.txt"
   ],
   "scripts": {
-    "link-xilytix": "npm link @xilytix/sysutils @xilytix/revgrid @xilytix/rev-data-source @xilytix/ui-action",
+    "link-xilytix": "npm link @xilytix/sysutils @xilytix/revgrid @xilytix/ui-action",
     "lint": "eslint -c .eslintrc.json --ext .ts src/",
     "build": "tsc --build ./tsconfig.json",
     "force-build": "tsc --build --force ./tsconfig.json",
@@ -43,7 +43,6 @@
   },
   "dependencies": {
     "@ctrl/tinycolor": "^4.0.3",
-    "@xilytix/rev-data-source": "^0.0.2",
     "@xilytix/revgrid": "^0.9.0",
     "@xilytix/sysutils": "^0.0.3",
     "@xilytix/ui-action": "^0.0.3",
