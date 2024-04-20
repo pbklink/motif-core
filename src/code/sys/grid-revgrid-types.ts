@@ -12,7 +12,7 @@ import {
     RevRecordInvalidatedValue,
     RevRecordStore,
     RevRecordValueRecentChangeTypeId
-} from '@xilytix/rev-data-source';
+} from '@xilytix/revgrid';
 import {
     DataServer,
     HorizontalAlign,

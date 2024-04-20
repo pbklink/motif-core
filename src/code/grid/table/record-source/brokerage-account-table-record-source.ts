@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevSourcedFieldCustomHeadingsService } from '@xilytix/rev-data-source';
+import { RevSourcedFieldCustomHeadingsService } from '@xilytix/revgrid';
 import { Account, AdiService, BrokerageAccountsDataDefinition, BrokerageAccountsDataItem } from '../../../adi/internal-api';
 import { CorrectnessBadness, Integer, KeyedCorrectnessList, LockOpenListItem, UnreachableCaseError } from '../../../sys/internal-api';
 import { TextFormatterService } from '../../../text-format/internal-api';

@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevColumnLayoutDefinition } from '@xilytix/rev-data-source';
+import { RevColumnLayoutDefinition } from '@xilytix/revgrid';
 import { AnchoredRecordsList } from '@xilytix/sysutils';
 import { Integer } from '../../../sys/internal-api';
 import { GridField } from '../../field/internal-api';

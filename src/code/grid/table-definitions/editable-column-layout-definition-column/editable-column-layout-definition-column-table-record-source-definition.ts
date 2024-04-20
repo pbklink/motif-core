@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevColumnLayoutDefinition, RevSourcedFieldCustomHeadingsService } from '@xilytix/rev-data-source';
+import { RevColumnLayoutDefinition, RevSourcedFieldCustomHeadingsService } from '@xilytix/revgrid';
 import { PickEnum } from '../../../sys/internal-api';
 import { TableFieldSourceDefinition, TableFieldSourceDefinitionCachingFactoryService, TableRecordSourceDefinition } from '../../table/internal-api';
 import { EditableColumnLayoutDefinitionColumn } from './editable-column-layout-definition-column';

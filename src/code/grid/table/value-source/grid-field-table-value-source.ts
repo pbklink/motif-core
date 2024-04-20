@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevSourcedField } from '@xilytix/rev-data-source';
+import { RevSourcedField } from '@xilytix/revgrid';
 import { AssertInternalError, Integer, UnreachableCaseError } from '../../../sys/internal-api';
 import { GridField } from '../../field/internal-api';
 import { GridFieldTableFieldSourceDefinition } from '../field-source/internal-api';

@@ -5,7 +5,7 @@
  */
 
 import { isReadable as TinyColorIsReadable, readability as TinyColorReadability } from '@ctrl/tinycolor';
-import { RevColumnLayoutDefinition, RevSourcedFieldDefinition, RevSourcedFieldSourceDefinition } from '@xilytix/rev-data-source';
+import { RevColumnLayoutDefinition, RevSourcedFieldDefinition, RevSourcedFieldSourceDefinition } from '@xilytix/revgrid';
 import { StringId, Strings } from '../../../res/internal-api';
 import {
     ColorRenderValue,

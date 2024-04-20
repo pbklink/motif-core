@@ -5,8 +5,7 @@
  */
 
 // import { ColorScheme, GridField, MultiEvent, SettingsService } from '@motifmarkets/motif-core';
-import { RevColumnLayoutDefinition } from '@xilytix/rev-data-source';
-import { Revgrid, ViewLayout } from '@xilytix/revgrid';
+import { RevColumnLayoutDefinition, Revgrid, ViewLayout } from '@xilytix/revgrid';
 import { ColorScheme, SettingsService } from '../../../services/internal-api';
 import { MultiEvent } from '../../../sys/internal-api';
 import { AllowedGridField, GridField } from '../../field/internal-api';

@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevRecordInvalidatedValue } from '@xilytix/rev-data-source';
+import { RevRecordInvalidatedValue } from '@xilytix/revgrid';
 import { DepthLevelsDataItem, OrderSideId } from '../../../../adi/internal-api';
 import {
     IntegerRenderValue,

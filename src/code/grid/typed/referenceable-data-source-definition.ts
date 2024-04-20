@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevReferenceableDataSourceDefinition } from '@xilytix/rev-data-source';
+import { RevReferenceableDataSourceDefinition } from '@xilytix/revgrid';
 import { RenderValue } from '../../services/internal-api';
 import { TableFieldSourceDefinition, TableRecordSourceDefinition } from '../table/internal-api';
 

@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevColumnLayoutDefinition, RevSourcedFieldDefinition } from '@xilytix/rev-data-source';
+import { RevColumnLayoutDefinition, RevSourcedFieldDefinition } from '@xilytix/revgrid';
 import { OrderSideId } from '../../../../adi/internal-api';
 import { RenderValue } from '../../../../services/internal-api';
 import { CorrectnessId, UnreachableCaseError } from '../../../../sys/internal-api';

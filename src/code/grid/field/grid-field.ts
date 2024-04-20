@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevSourcedField } from '@xilytix/rev-data-source';
+import { RevSourcedField } from '@xilytix/revgrid';
 import { StringId, Strings } from '../../res/internal-api';
 import { RenderValue } from '../../services/internal-api';
 import { UnreachableCaseError } from '../../sys/internal-api';

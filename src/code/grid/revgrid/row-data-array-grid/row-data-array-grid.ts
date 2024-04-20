@@ -4,12 +4,10 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevSourcedFieldDefinition, RevSourcedFieldSourceDefinition } from '@xilytix/rev-data-source';
 import {
     DataRowArraySchemaServer,
     DatalessSubgrid,
-    LinedHoverCell,
-    Revgrid,
+    LinedHoverCell, RevSourcedFieldDefinition, RevSourcedFieldSourceDefinition, Revgrid,
     SingleHeadingDataRowArrayServerSet,
     Subgrid
 } from '@xilytix/revgrid';

@@ -1,5 +1,4 @@
-import { RevColumnLayout, RevColumnLayoutOrReferenceDefinition, RevRecordRowOrderDefinition, RevSourcedFieldCustomHeadingsService } from '@xilytix/rev-data-source';
-import { Subgrid } from '@xilytix/revgrid';
+import { RevColumnLayout, RevColumnLayoutOrReferenceDefinition, RevRecordRowOrderDefinition, RevSourcedFieldCustomHeadingsService, Subgrid } from '@xilytix/revgrid';
 import { AssertInternalError, CorrectnessState, Integer, LockOpenListItem, MultiEvent, Ok, Result } from '@xilytix/sysutils';
 import { SettingsService } from '../../../services/internal-api';
 import { Badness } from '../../../sys/internal-api';

@@ -7,7 +7,7 @@
 import {
     RevRecordRecentChangeTypeId,
     RevRecordValueRecentChangeTypeId,
-} from '@xilytix/rev-data-source';
+} from '@xilytix/revgrid';
 import {
     DataServer,
     DatalessViewCell,

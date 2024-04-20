@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevColumnLayoutOrReference } from '@xilytix/rev-data-source';
+import { RevColumnLayoutOrReference } from '@xilytix/revgrid';
 import { UnreachableCaseError } from '@xilytix/sysutils';
 import { AssertInternalError, Err, ErrorCode, LockOpenListItem, Ok, PickEnum, Result } from '../../sys/internal-api';
 

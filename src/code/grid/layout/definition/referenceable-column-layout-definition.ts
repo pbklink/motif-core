@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevReferenceableColumnLayoutDefinition } from '@xilytix/rev-data-source';
+import { RevReferenceableColumnLayoutDefinition } from '@xilytix/revgrid';
 import { Err, ErrorCode, JsonElement, Ok, PickEnum, Result, UnreachableCaseError } from '../../../sys/internal-api';
 
 export namespace ReferenceableColumnLayoutDefinition {

@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevReferenceableDataSourceDefinitionsStoreService } from '@xilytix/rev-data-source';
+import { RevReferenceableDataSourceDefinitionsStoreService } from '@xilytix/revgrid';
 
 /** @public */
 export class ReferenceableDataSourceDefinitionsStoreService implements RevReferenceableDataSourceDefinitionsStoreService {

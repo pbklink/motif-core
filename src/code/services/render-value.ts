@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevRenderValue } from '@xilytix/rev-data-source';
+import { RevRenderValue } from '@xilytix/revgrid';
 import {
     ActiveFaultedStatusId,
     DayTradesDataItem,

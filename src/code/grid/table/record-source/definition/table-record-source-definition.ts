@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevSourcedFieldCustomHeadingsService, RevTableRecordSourceDefinition } from '@xilytix/rev-data-source';
+import { RevSourcedFieldCustomHeadingsService, RevTableRecordSourceDefinition } from '@xilytix/revgrid';
 import { StringId, Strings } from '../../../../res/internal-api';
 import { RenderValue } from '../../../../services/internal-api';
 import {

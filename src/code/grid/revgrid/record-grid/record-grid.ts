@@ -5,23 +5,21 @@
  */
 
 import {
+    Column,
+    ColumnsManager,
+    DataServer,
+    DatalessSubgrid,
+    LinedHoverCell,
     RevColumnLayout,
     RevColumnLayoutDefinition,
+    RevListChangedTypeId,
     RevRecordDataServer,
     RevRecordField,
     RevRecordFieldIndex,
     RevRecordIndex,
     RevRecordRowOrderDefinition,
     RevRecordSortDefinition,
-    RevRecordStore
-} from '@xilytix/rev-data-source';
-import {
-    Column,
-    ColumnsManager,
-    DataServer,
-    DatalessSubgrid,
-    LinedHoverCell,
-    RevListChangedTypeId,
+    RevRecordStore,
     Revgrid,
     Subgrid,
     ViewCell

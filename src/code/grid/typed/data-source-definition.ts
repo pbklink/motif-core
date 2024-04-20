@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevDataSourceDefinition } from '@xilytix/rev-data-source';
+import { RevDataSourceDefinition } from '@xilytix/revgrid';
 import { UnreachableCaseError } from '@xilytix/sysutils';
 import { RenderValue } from '../../services/internal-api';
 import { Err, ErrorCode, JsonElement, Ok, PickEnum, Result } from '../../sys/internal-api';

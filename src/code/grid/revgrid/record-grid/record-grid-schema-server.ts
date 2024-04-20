@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevRecordSchemaServer } from '@xilytix/rev-data-source';
+import { RevRecordSchemaServer } from '@xilytix/revgrid';
 import { GridField } from '../../field/internal-api';
 
 export class RecordGridSchemaServer extends RevRecordSchemaServer<GridField> {

@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevTableFieldSourceDefinition } from '@xilytix/rev-data-source';
+import { RevTableFieldSourceDefinition } from '@xilytix/revgrid';
 import { RenderValue } from '../../../../services/internal-api';
 import { EnumInfoOutOfOrderError, Integer } from '../../../../sys/internal-api';
 // import { GridRecordFieldState } from '../../../record/grid-record-internal-api';
