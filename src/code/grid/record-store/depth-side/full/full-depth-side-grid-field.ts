@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevColumnLayoutDefinition, RevSourcedFieldDefinition } from '@xilytix/revgrid';
+import { RevColumnLayoutDefinition, RevRecordSourcedFieldDefinition, RevSourcedFieldDefinition } from '@xilytix/revgrid';
 import { OrderSideId } from '../../../../adi/internal-api';
 import { RenderValue } from '../../../../services/internal-api';
 import { CorrectnessId, UnreachableCaseError } from '../../../../sys/internal-api';
@@ -84,8 +84,8 @@ export namespace FullDepthSideGridField {
         return fields;
     }
 
-    export function createRevFieldDefinition(id: FullDepthSideFieldId): RevSourcedFieldDefinition {
-        return new RevSourcedFieldDefinition(
+    export function createRevFieldDefinition(id: FullDepthSideFieldId): RevRecordSourcedFieldDefinition {
+        return new RevRecordSourcedFieldDefinition(
             DepthSideGridField.sourceDefinition,
             FullDepthSideField.idToName(id),
             FullDepthSideField.idToDefaultHeading(id),

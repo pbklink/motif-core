@@ -7,7 +7,8 @@
 import {
     DataRowArraySchemaServer,
     DatalessSubgrid,
-    LinedHoverCell, RevSourcedFieldDefinition, RevSourcedFieldSourceDefinition, Revgrid,
+    LinedHoverCell,
+    Revgrid,
     SingleHeadingDataRowArrayServerSet,
     Subgrid
 } from '@xilytix/revgrid';
@@ -142,8 +143,8 @@ export namespace RowDataArrayGrid {
         defaultTextAlign: GridFieldHorizontalAlign,
         defaultWidth?:number,
     ) {
-        const definition = new RevSourcedFieldDefinition(
-            new RevSourcedFieldSourceDefinition(''),
+        const definition = new RevSingleHeadingSourcedFieldDefinition(
+            new RevSingleHeadingSourcedFieldSourceDefinition(''),
             sourcelessName,
             defaultHeading,
             defaultTextAlign,

@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevColumnLayoutDefinition, RevSourcedFieldDefinition, RevSourcedFieldSourceDefinition } from '@xilytix/revgrid';
+import { RevColumnLayoutDefinition, RevRecordSourcedFieldDefinition, RevRecordSourcedFieldSourceDefinition, RevSourcedFieldDefinition } from '@xilytix/revgrid';
 import { DayTradesDataItem, MovementId, TradeFlagId } from '../../../adi/internal-api';
 import { StringId, Strings } from '../../../res/internal-api';
 import {
@@ -42,7 +42,7 @@ import { AllowedGridField, GridField } from '../../field/internal-api';
 export abstract class DayTradesGridField extends GridField implements GridRevRecordField {
     constructor(
         private readonly _id: DayTradesDataItem.Field.Id,
-        definition: RevSourcedFieldDefinition,
+        definition: RevRecordSourcedFieldDefinition,
         private readonly _getDataItemCorrectnessIdEvent: DayTradesGridField.GetDataItemCorrectnessIdEventHandler,
     ) {
         super(definition);
@@ -130,7 +130,7 @@ export namespace DayTradesGridField {
     export const idCount = DayTradesDataItem.Field.idCount;
     export type GetDataItemCorrectnessIdEventHandler = (this: void) => CorrectnessId;
 
-    export const sourceDefinition = new RevSourcedFieldSourceDefinition('DayTrades');
+    export const sourceDefinition = new RevRecordSourcedFieldSourceDefinition('DayTrades');
 
     export interface CreateRenderValueResult {
         renderValue: RenderValue;
@@ -265,7 +265,7 @@ export namespace DayTradesGridField {
     }
 
     function createIdRevFieldDefinition(id: DayTradesDataItem.Field.Id) {
-        return new RevSourcedFieldDefinition(
+        return new RevRecordSourcedFieldDefinition(
             DayTradesGridField.sourceDefinition,
             DayTradesDataItem.Field.idToName(id),
             Strings[StringId.DayTradesGridHeading_Id],
@@ -274,7 +274,7 @@ export namespace DayTradesGridField {
     }
 
     function createPriceRevFieldDefinition(id: DayTradesDataItem.Field.Id.Price) {
-        return new RevSourcedFieldDefinition(
+        return new RevRecordSourcedFieldDefinition(
             sourceDefinition,
             DayTradesDataItem.Field.idToName(id),
             Strings[StringId.DayTradesGridHeading_Price],
@@ -283,7 +283,7 @@ export namespace DayTradesGridField {
     }
 
     function createQuantityRevFieldDefinition(id: DayTradesDataItem.Field.Id.Quantity) {
-        return new RevSourcedFieldDefinition(
+        return new RevRecordSourcedFieldDefinition(
             sourceDefinition,
             DayTradesDataItem.Field.idToName(id),
             Strings[StringId.DayTradesGridHeading_Quantity],
@@ -292,7 +292,7 @@ export namespace DayTradesGridField {
     }
 
     function createTimeRevFieldDefinition(id: DayTradesDataItem.Field.Id.Time) {
-        return new RevSourcedFieldDefinition(
+        return new RevRecordSourcedFieldDefinition(
             sourceDefinition,
             DayTradesDataItem.Field.idToName(id),
             Strings[StringId.DayTradesGridHeading_Time],
@@ -301,7 +301,7 @@ export namespace DayTradesGridField {
     }
 
     function createFlagIdsRevFieldDefinition(id: DayTradesDataItem.Field.Id.FlagIds) {
-        return new RevSourcedFieldDefinition(
+        return new RevRecordSourcedFieldDefinition(
             sourceDefinition,
             DayTradesDataItem.Field.idToName(id),
             Strings[StringId.DayTradesGridHeading_FlagIds],
@@ -310,7 +310,7 @@ export namespace DayTradesGridField {
     }
 
     function createTrendIdRevFieldDefinition(id: DayTradesDataItem.Field.Id.TrendId) {
-        return new RevSourcedFieldDefinition(
+        return new RevRecordSourcedFieldDefinition(
             sourceDefinition,
             DayTradesDataItem.Field.idToName(id),
             Strings[StringId.DayTradesGridHeading_TrendId],
@@ -319,7 +319,7 @@ export namespace DayTradesGridField {
     }
 
     function createOrderSideIdRevFieldDefinition(id: DayTradesDataItem.Field.Id.OrderSideId) {
-        return new RevSourcedFieldDefinition(
+        return new RevRecordSourcedFieldDefinition(
             sourceDefinition,
             DayTradesDataItem.Field.idToName(id),
             Strings[StringId.DayTradesGridHeading_OrderSideId],
@@ -328,7 +328,7 @@ export namespace DayTradesGridField {
     }
 
     function createAffectsIdsRevFieldDefinition(id: DayTradesDataItem.Field.Id.AffectsIds) {
-        return new RevSourcedFieldDefinition(
+        return new RevRecordSourcedFieldDefinition(
             sourceDefinition,
             DayTradesDataItem.Field.idToName(id),
             Strings[StringId.DayTradesGridHeading_AffectsIds],
@@ -337,7 +337,7 @@ export namespace DayTradesGridField {
     }
 
     function createConditionCodesRevFieldDefinition(id: DayTradesDataItem.Field.Id.ConditionCodes) {
-        return new RevSourcedFieldDefinition(
+        return new RevRecordSourcedFieldDefinition(
             sourceDefinition,
             DayTradesDataItem.Field.idToName(id),
             Strings[StringId.DayTradesGridHeading_ConditionCodes],
@@ -346,7 +346,7 @@ export namespace DayTradesGridField {
     }
 
     function createBuyDepthOrderIdRevFieldDefinition(id: DayTradesDataItem.Field.Id.BuyDepthOrderId) {
-        return new RevSourcedFieldDefinition(
+        return new RevRecordSourcedFieldDefinition(
             sourceDefinition,
             DayTradesDataItem.Field.idToName(id),
             Strings[StringId.DayTradesGridHeading_BuyDepthOrderId],
@@ -355,7 +355,7 @@ export namespace DayTradesGridField {
     }
 
     function createBuyBrokerRevFieldDefinition(id: DayTradesDataItem.Field.Id.BuyBroker) {
-        return new RevSourcedFieldDefinition(
+        return new RevRecordSourcedFieldDefinition(
             sourceDefinition,
             DayTradesDataItem.Field.idToName(id),
             Strings[StringId.DayTradesGridHeading_BuyBroker],
@@ -364,7 +364,7 @@ export namespace DayTradesGridField {
     }
 
     function createBuyCrossRefRevFieldDefinition(id: DayTradesDataItem.Field.Id.BuyCrossRef) {
-        return new RevSourcedFieldDefinition(
+        return new RevRecordSourcedFieldDefinition(
             sourceDefinition,
             DayTradesDataItem.Field.idToName(id),
             Strings[StringId.DayTradesGridHeading_BuyCrossRef],
@@ -373,7 +373,7 @@ export namespace DayTradesGridField {
     }
 
     function createSellDepthOrderIdRevFieldDefinition(id: DayTradesDataItem.Field.Id.SellDepthOrderId) {
-        return new RevSourcedFieldDefinition(
+        return new RevRecordSourcedFieldDefinition(
             sourceDefinition,
             DayTradesDataItem.Field.idToName(id),
             Strings[StringId.DayTradesGridHeading_SellDepthOrderId],
@@ -382,7 +382,7 @@ export namespace DayTradesGridField {
     }
 
     function createSellBrokerRevFieldDefinition(id: DayTradesDataItem.Field.Id.SellBroker) {
-        return new RevSourcedFieldDefinition(
+        return new RevRecordSourcedFieldDefinition(
             sourceDefinition,
             DayTradesDataItem.Field.idToName(id),
             Strings[StringId.DayTradesGridHeading_SellBroker],
@@ -391,7 +391,7 @@ export namespace DayTradesGridField {
     }
 
     function createSellCrossRefRevFieldDefinition(id: DayTradesDataItem.Field.Id.SellCrossRef) {
-        return new RevSourcedFieldDefinition(
+        return new RevRecordSourcedFieldDefinition(
             sourceDefinition,
             DayTradesDataItem.Field.idToName(id),
             Strings[StringId.DayTradesGridHeading_SellCrossRef],
@@ -400,7 +400,7 @@ export namespace DayTradesGridField {
     }
 
     function createMarketIdRevFieldDefinition(id: DayTradesDataItem.Field.Id.MarketId) {
-        return new RevSourcedFieldDefinition(
+        return new RevRecordSourcedFieldDefinition(
             sourceDefinition,
             DayTradesDataItem.Field.idToName(id),
             Strings[StringId.DayTradesGridHeading_MarketId],
@@ -409,7 +409,7 @@ export namespace DayTradesGridField {
     }
 
     function createRelatedIdRevFieldDefinition(id: DayTradesDataItem.Field.Id.RelatedId) {
-        return new RevSourcedFieldDefinition(
+        return new RevRecordSourcedFieldDefinition(
             sourceDefinition,
             DayTradesDataItem.Field.idToName(id),
             Strings[StringId.DayTradesGridHeading_RelatedId],
@@ -418,7 +418,7 @@ export namespace DayTradesGridField {
     }
 
     function createAttributesRevFieldDefinition(id: DayTradesDataItem.Field.Id.Attributes) {
-        return new RevSourcedFieldDefinition(
+        return new RevRecordSourcedFieldDefinition(
             sourceDefinition,
             DayTradesDataItem.Field.idToName(id),
             Strings[StringId.DayTradesGridHeading_Attributes],
@@ -427,7 +427,7 @@ export namespace DayTradesGridField {
     }
 
     function createRecordTypeIdRevFieldDefinition(id: DayTradesDataItem.Field.Id.RecordTypeId) {
-        return new RevSourcedFieldDefinition(
+        return new RevRecordSourcedFieldDefinition(
             sourceDefinition,
             DayTradesDataItem.Field.idToName(id),
             Strings[StringId.DayTradesGridHeading_RecordType],
