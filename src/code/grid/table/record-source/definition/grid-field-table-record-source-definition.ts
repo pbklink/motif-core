@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevColumnLayoutDefinition, RevSourcedFieldCustomHeadingsService } from '@xilytix/revgrid';
+import { RevColumnLayoutDefinition, RevSourcedField, RevSourcedFieldCustomHeadingsService } from '@xilytix/revgrid';
 import { PickEnum } from '../../../../sys/internal-api';
 import { GridField } from '../../../field/internal-api';
 import { GridFieldTableFieldSourceDefinition, TableFieldSourceDefinition, TableFieldSourceDefinitionCachingFactoryService } from '../../field-source/internal-api';
@@ -32,8 +32,8 @@ export class GridFieldTableRecordSourceDefinition extends TableRecordSourceDefin
 
         const fieldNames = new Array<string>();
 
-        fieldNames.push(gridFieldFieldSourceDefinition.getSupportedFieldNameById(GridField.FieldId.Heading));
-        fieldNames.push(gridFieldFieldSourceDefinition.getSupportedFieldNameById(GridField.FieldId.SourceName));
+        fieldNames.push(gridFieldFieldSourceDefinition.getSupportedFieldNameById(RevSourcedField.FieldId.Heading));
+        fieldNames.push(gridFieldFieldSourceDefinition.getSupportedFieldNameById(RevSourcedField.FieldId.SourceName));
 
         return RevColumnLayoutDefinition.createFromFieldNames(fieldNames);
     }

@@ -33,13 +33,13 @@ export class GridFieldTableFieldSourceDefinition extends TableFieldSourceDefinit
     }
 
     getFieldNameById(id: RevSourcedField.FieldId) {
-        const sourcelessFieldName = GridField.Field.idToName(id);
+        const sourcelessFieldName = RevSourcedField.Field.idToName(id);
         return this.encodeFieldName(sourcelessFieldName);
     }
 
     getSupportedFieldNameById(id: RevSourcedField.FieldId) {
         if (!this.isFieldSupported(id)) {
-            throw new AssertInternalError('STFSDGSFNBI30398', GridField.Field.idToName(id));
+            throw new AssertInternalError('STFSDGSFNBI30398', RevSourcedField.Field.idToName(id));
         } else {
             return this.getFieldNameById(id);
         }
@@ -77,7 +77,7 @@ export namespace GridFieldTableFieldSourceDefinition {
 
     export namespace Field {
         const unsupportedIds: RevSourcedField.FieldId[] = [RevSourcedField.FieldId.DefaultHeading, RevSourcedField.FieldId.DefaultWidth, RevSourcedField.FieldId.DefaultTextAlign];
-        export const count = GridField.Field.idCount - unsupportedIds.length;
+        export const count = RevSourcedField.Field.idCount - unsupportedIds.length;
 
         interface Info {
             readonly id: RevSourcedField.FieldId;
@@ -133,7 +133,7 @@ export namespace GridFieldTableFieldSourceDefinition {
         }
 
         export function getName(fieldIdx: Integer) {
-            return GridField.Field.idToName(infos[fieldIdx].id);
+            return RevSourcedField.Field.idToName(infos[fieldIdx].id);
         }
 
         export function getHeading(fieldIdx: Integer) {
@@ -141,7 +141,7 @@ export namespace GridFieldTableFieldSourceDefinition {
         }
 
         export function getHorizontalAlign(fieldIdx: Integer): GridFieldHorizontalAlign {
-            return GridField.Field.idToHorizontalAlign(infos[fieldIdx].id);
+            return RevSourcedField.Field.idToHorizontalAlign(infos[fieldIdx].id);
         }
 
         export function getTableFieldValueConstructors(fieldIndex: Integer) {
