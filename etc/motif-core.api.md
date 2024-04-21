@@ -173,8 +173,8 @@ import { Rect } from '@xilytix/sysutils';
 import { Rectangle } from '@xilytix/revgrid';
 import { removeFromArray } from '@xilytix/sysutils';
 import { Result } from '@xilytix/sysutils';
-import { RevAllowedSourcedField } from '@xilytix/revgrid';
-import { RevAllowedSourcedFieldsColumnLayoutDefinition } from '@xilytix/revgrid';
+import { RevAllowedRecordSourcedField } from '@xilytix/revgrid';
+import { RevAllowedRecordSourcedFieldsColumnLayoutDefinition } from '@xilytix/revgrid';
 import { RevColumnLayout } from '@xilytix/revgrid';
 import { RevColumnLayoutDefinition } from '@xilytix/revgrid';
 import { RevColumnLayoutOrReference } from '@xilytix/revgrid';
@@ -194,6 +194,7 @@ import { RevRecordInvalidatedValue } from '@xilytix/revgrid';
 import { RevRecordRowOrderDefinition } from '@xilytix/revgrid';
 import { RevRecordSchemaServer } from '@xilytix/revgrid';
 import { RevRecordSortDefinition } from '@xilytix/revgrid';
+import { RevRecordSourcedField } from '@xilytix/revgrid';
 import { RevRecordStore } from '@xilytix/revgrid';
 import { RevRecordValueRecentChangeTypeId } from '@xilytix/revgrid';
 import { RevReferenceableColumnLayout } from '@xilytix/revgrid';
@@ -1226,7 +1227,7 @@ export class AllowedExchangesExplicitElementsArrayUiAction extends EnumExplicitE
 // Warning: (ae-missing-release-tag) "AllowedGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class AllowedGridField extends RevAllowedSourcedField<RenderValue.TypeId, RenderValue.Attribute.TypeId> {
+export class AllowedGridField extends RevAllowedRecordSourcedField<RenderValue.TypeId, RenderValue.Attribute.TypeId> {
 }
 
 // Warning: (ae-missing-release-tag) "AllowedMarketsEnumUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -1258,7 +1259,7 @@ export class AllowedMarketsExplicitElementsArrayUiAction extends EnumExplicitEle
 // Warning: (ae-missing-release-tag) "AllowedSourcedFieldsColumnLayoutDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class AllowedSourcedFieldsColumnLayoutDefinition extends RevAllowedSourcedFieldsColumnLayoutDefinition<RenderValue.TypeId, RenderValue.Attribute.TypeId> {
+export class AllowedSourcedFieldsColumnLayoutDefinition extends RevAllowedRecordSourcedFieldsColumnLayoutDefinition<RenderValue.TypeId, RenderValue.Attribute.TypeId> {
 }
 
 // Warning: (ae-missing-release-tag) "AllScanCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -10929,7 +10930,7 @@ export type GridDataEditValue = DataServer.EditValue;
 // Warning: (ae-missing-release-tag) "GridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export abstract class GridField extends RevSourcedField<RenderValue.TypeId, RenderValue.Attribute.TypeId> {
+export abstract class GridField extends RevRecordSourcedField<RenderValue.TypeId, RenderValue.Attribute.TypeId> {
 }
 
 // @public (undocumented)

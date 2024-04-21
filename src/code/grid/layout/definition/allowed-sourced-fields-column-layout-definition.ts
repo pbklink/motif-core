@@ -4,11 +4,11 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevAllowedSourcedFieldsColumnLayoutDefinition } from '@xilytix/revgrid';
+import { RevAllowedRecordSourcedFieldsColumnLayoutDefinition } from '@xilytix/revgrid';
 import { RenderValue } from '../../../services/internal-api';
 import { BidAskPair } from '../../../sys/internal-api';
 
-export class AllowedSourcedFieldsColumnLayoutDefinition extends RevAllowedSourcedFieldsColumnLayoutDefinition<RenderValue.TypeId, RenderValue.Attribute.TypeId> {
+export class AllowedSourcedFieldsColumnLayoutDefinition extends RevAllowedRecordSourcedFieldsColumnLayoutDefinition<RenderValue.TypeId, RenderValue.Attribute.TypeId> {
     // Uses AllowedGridField instead of RevFieldDefinition as heading can be changed at runtime
 }
 

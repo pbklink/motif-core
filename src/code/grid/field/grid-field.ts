@@ -4,12 +4,12 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevSourcedField } from '@xilytix/revgrid';
+import { RevRecordSourcedField, RevSourcedField } from '@xilytix/revgrid';
 import { StringId, Strings } from '../../res/internal-api';
 import { RenderValue } from '../../services/internal-api';
 import { UnreachableCaseError } from '../../sys/internal-api';
 
-export abstract class GridField extends RevSourcedField<RenderValue.TypeId, RenderValue.Attribute.TypeId> {
+export abstract class GridField extends RevRecordSourcedField<RenderValue.TypeId, RenderValue.Attribute.TypeId> {
 
 }
 
