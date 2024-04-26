@@ -8,7 +8,7 @@ import { CachedCanvasRenderingContext2D, DataServer, DatalessViewCell, Rectangle
 import { ColorScheme, ColorSettings, RenderValue, ScalarSettings, SettingsService } from '../../../../services/internal-api';
 import { IndexSignatureHack } from '../../../../sys/internal-api';
 import { GridField } from '../../../field/internal-api';
-import { AdaptedRevgrid } from '../../adapted-revgrid/internal-api';
+import { SourcedFieldGrid } from '../../adapted-revgrid/sourced-field-grid';
 import { AdaptedRevgridBehavioredColumnSettings, AdaptedRevgridBehavioredGridSettings } from '../../settings/internal-api';
 
 /** @public */
@@ -22,7 +22,7 @@ export abstract class RenderValueCellPainter {
 
     constructor(
         settingsService: SettingsService,
-        protected readonly _grid: AdaptedRevgrid,
+        protected readonly _grid: SourcedFieldGrid,
         readonly dataServer: DataServer<GridField>,
     ) {
         const grid = this._grid;

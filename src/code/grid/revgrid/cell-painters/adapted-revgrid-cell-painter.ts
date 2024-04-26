@@ -7,12 +7,12 @@
 // not used
 import { CellPainter, DataServer, DatalessViewCell } from '@xilytix/revgrid';
 import { GridField } from '../../field/internal-api';
-import { AdaptedRevgrid } from '../adapted-revgrid/adapted-revgrid';
+import { SourcedFieldGrid } from '../adapted-revgrid/sourced-field-grid';
 import { AdaptedRevgridBehavioredColumnSettings } from '../settings/internal-api';
 
 export abstract class AdaptedRevgridCellPainter implements CellPainter<AdaptedRevgridBehavioredColumnSettings, GridField> {
     constructor(
-        protected readonly _grid: AdaptedRevgrid,
+        protected readonly _grid: SourcedFieldGrid,
         protected readonly _dataServer: DataServer<GridField>,
     ) {
         // const grid = this._grid;

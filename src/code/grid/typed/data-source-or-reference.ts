@@ -58,7 +58,7 @@ export namespace DataSourceOrReference {
         ErrorCode.DataSourceOrReference_ReferenceableLayoutReferenceTry |
         ErrorCode.DataSourceOrReference_ReferenceableLayoutReferenceNotFound |
         ErrorCode.DataSourceOrReference_ReferenceableNotFound
->;
+    >;
 
     export namespace LockErrorCode {
         export function fromId(lockErrorId: RevDataSourceOrReference.LockErrorId): LockErrorCode {

@@ -5,12 +5,10 @@
  */
 
 import {
-    RevRecordRecentChangeTypeId,
-    RevRecordValueRecentChangeTypeId,
-} from '@xilytix/revgrid';
-import {
     DataServer,
     DatalessViewCell,
+    RevRecordRecentChangeTypeId,
+    RevRecordValueRecentChangeTypeId,
     StandardTextPainter
 } from '@xilytix/revgrid';
 import { HigherLowerId, OrderSideId } from '../../../../adi/internal-api';
@@ -19,7 +17,7 @@ import { CorrectnessId, IndexSignatureHack, Integer, UnreachableCaseError } from
 import { TextFormatterService } from '../../../../text-format/internal-api';
 import { GridField } from '../../../field/internal-api';
 import { DepthRecord, DepthRecordRenderValue } from '../../../record-store/internal-api';
-import { AdaptedRevgrid } from '../../adapted-revgrid/internal-api';
+import { SourcedFieldGrid } from '../../adapted-revgrid/sourced-field-grid';
 import { RecordGridDataServer } from '../../record-grid/record-grid-data-server';
 import { AdaptedRevgridBehavioredColumnSettings } from '../../settings/internal-api';
 import { RenderValueCellPainter } from './render-value-cell-painter';
@@ -27,7 +25,7 @@ import { RenderValueCellPainter } from './render-value-cell-painter';
 export class TextRenderValueCellPainter extends RenderValueCellPainter {
     private readonly _textPainter: StandardTextPainter;
 
-    constructor(settingsService: SettingsService, private readonly _textFormatterService: TextFormatterService, grid: AdaptedRevgrid, dataServer: DataServer<GridField>) {
+    constructor(settingsService: SettingsService, private readonly _textFormatterService: TextFormatterService, grid: SourcedFieldGrid, dataServer: DataServer<GridField>) {
         super(settingsService, grid, dataServer);
         this._textPainter = new StandardTextPainter(this._renderingContext);
     }

@@ -9,7 +9,7 @@ import { IndexSignatureHack } from '@xilytix/sysutils';
 import { RenderValue, SettingsService } from '../../../../services/internal-api';
 import { AssertInternalError, Integer } from '../../../../sys/internal-api';
 import { GridField } from '../../../field/internal-api';
-import { AdaptedRevgrid } from '../../adapted-revgrid/adapted-revgrid';
+import { SourcedFieldGrid } from '../../adapted-revgrid/sourced-field-grid';
 import { AdaptedRevgridBehavioredColumnSettings } from '../../settings/internal-api';
 import { RenderValueCellPainter } from './render-value-cell-painter';
 
@@ -18,7 +18,7 @@ export class CheckboxRenderValueCellPainter extends RenderValueCellPainter  {
 
     constructor(
         settingsService: SettingsService,
-        grid: AdaptedRevgrid,
+        grid: SourcedFieldGrid,
         dataServer: DataServer<GridField>,
         private readonly _editable: boolean,
     ) {

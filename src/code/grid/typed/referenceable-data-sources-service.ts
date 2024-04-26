@@ -42,7 +42,7 @@ export class ReferenceableDataSourcesService
     getOrNew(definition: ReferenceableDataSourceDefinition): ReferenceableDataSource {
         let source = this.getItemByKey(definition.id);
         if (source === undefined) {
-            source = this.createReferenceableGridSource(definition);
+            source = this.createReferenceableDataSource(definition);
             this.add(source);
         }
         return source;
@@ -75,7 +75,7 @@ export class ReferenceableDataSourcesService
         }
     }
 
-    private createReferenceableGridSource(definition: ReferenceableDataSourceDefinition) {
+    private createReferenceableDataSource(definition: ReferenceableDataSourceDefinition) {
         const index = this.count;
         const result = new ReferenceableDataSource(
             this._referenceableColumnLayoutsService,

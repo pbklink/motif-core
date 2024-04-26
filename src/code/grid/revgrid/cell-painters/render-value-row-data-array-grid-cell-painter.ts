@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { CellPainter, DataRowArrayDataServer, DataServer, DatalessViewCell } from '@xilytix/revgrid';
+import { CellPainter, RevDataRowArrayDataServer, DataServer, DatalessViewCell } from '@xilytix/revgrid';
 import {
     BigIntRenderValue,
     DateTimeRenderValue,
@@ -18,10 +18,10 @@ import { AdaptedRevgridBehavioredColumnSettings } from '../settings/adapted-revg
 import { RenderValueCellPainter } from './render-value/render-value-cell-painter';
 
 export class RenderValueRowDataArrayGridCellPainter<RVCP extends RenderValueCellPainter> implements CellPainter<AdaptedRevgridBehavioredColumnSettings, GridField> {
-    private readonly _dataServer: DataRowArrayDataServer<GridField>;
+    private readonly _dataServer: RevDataRowArrayDataServer<GridField>;
 
     constructor(private readonly _renderValueCellPainter: RVCP) {
-        this._dataServer = this._renderValueCellPainter.dataServer as DataRowArrayDataServer<GridField>;
+        this._dataServer = this._renderValueCellPainter.dataServer as RevDataRowArrayDataServer<GridField>;
     }
 
     paint(cell: DatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined) {

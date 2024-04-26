@@ -8,14 +8,14 @@ import { DataServer, DatalessViewCell, StandardTextPainter } from '@xilytix/revg
 import { IndexSignatureHack } from '@xilytix/sysutils';
 import { ColorScheme, SettingsService } from '../../../../services/internal-api';
 import { GridField } from '../../../field/internal-api';
-import { AdaptedRevgrid } from '../../adapted-revgrid/internal-api';
+import { SourcedFieldGrid } from '../../adapted-revgrid/internal-api';
 import { AdaptedRevgridBehavioredColumnSettings } from '../../settings/adapted-revgrid-behaviored-column-settings';
 import { HeaderCellPainter } from './header-cell-painter';
 
 export class TextHeaderCellPainter extends HeaderCellPainter {
     private readonly _textPainter: StandardTextPainter;
 
-    constructor(settingsService: SettingsService, grid: AdaptedRevgrid, dataServer: DataServer<GridField>) {
+    constructor(settingsService: SettingsService, grid: SourcedFieldGrid, dataServer: DataServer<GridField>) {
         super(settingsService, grid, dataServer);
         this._textPainter = new StandardTextPainter(this._renderingContext);
     }

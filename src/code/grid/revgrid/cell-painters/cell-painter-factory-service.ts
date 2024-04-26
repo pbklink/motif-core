@@ -6,8 +6,8 @@
 
 import { SettingsService } from '../../../services/internal-api';
 import { TextFormatterService } from '../../../text-format/internal-api';
-import { AdaptedRevgrid, SingleHeadingGridDataServer } from '../adapted-revgrid/internal-api';
-import { RecordGrid, RecordGridDataServer } from '../record-grid/internal-api';
+import { RecordSourcedFieldGrid, SingleHeadingGridDataServer, SourcedFieldGrid } from '../adapted-revgrid/internal-api';
+import { RecordGridDataServer } from '../record-grid/internal-api';
 import { RowDataArrayGrid, RowDataArrayGridDataServer } from '../row-data-array-grid/internal-api';
 import { CheckboxRenderValueRecordGridCellPainter } from './checkbox-render-value-record-grid-cell-painter';
 import { TextHeaderCellPainter } from './header/internal-api';
@@ -23,16 +23,16 @@ export class CellPainterFactoryService {
 
     }
 
-    createTextHeader(grid: AdaptedRevgrid, dataServer: SingleHeadingGridDataServer) {
+    createTextHeader(grid: SourcedFieldGrid, dataServer: SingleHeadingGridDataServer) {
         return new TextHeaderCellPainter(this._settingsService, grid, dataServer);
     }
 
-    createTextRenderValueRecordGrid(grid: RecordGrid, dataServer: RecordGridDataServer) {
+    createTextRenderValueRecordGrid(grid: RecordSourcedFieldGrid, dataServer: RecordGridDataServer) {
         const renderValueCellPainter = new TextRenderValueCellPainter(this._settingsService, this._textFormatterService, grid, dataServer);
         return new RenderValueRecordGridCellPainter(renderValueCellPainter);
     }
 
-    createCheckboxRenderValueRecordGrid(grid: RecordGrid, dataServer: RecordGridDataServer) {
+    createCheckboxRenderValueRecordGrid(grid: RecordSourcedFieldGrid, dataServer: RecordGridDataServer) {
         const valueCellPainter = new CheckboxRenderValueCellPainter(this._settingsService, grid, dataServer, false);
         return new CheckboxRenderValueRecordGridCellPainter(valueCellPainter);
     }

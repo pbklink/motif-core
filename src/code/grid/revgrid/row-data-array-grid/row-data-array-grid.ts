@@ -5,66 +5,61 @@
  */
 
 import {
-    DataRowArraySchemaServer,
-    DatalessSubgrid,
     LinedHoverCell,
-    Revgrid,
-    SingleHeadingDataRowArrayServerSet,
+    RevGridOptions,
+    RevSingleHeadingDataRowArraySourcedFieldDefinition,
+    RevSingleHeadingDataRowArraySourcedFieldGrid,
     Subgrid
 } from '@xilytix/revgrid';
 import { SettingsService } from '../../../services/internal-api';
-import { GridFieldHorizontalAlign } from '../../../sys/internal-api';
+import { GridFieldHorizontalAlign, Integer, MultiEvent } from '../../../sys/internal-api';
 import { GridField } from '../../field/internal-api';
-import { AdaptedRevgrid, SingleHeadingGridDataServer } from '../adapted-revgrid/internal-api';
-import { AdaptedRevgridBehavioredColumnSettings } from '../settings/internal-api';
-import { RowDataArrayGridDataServer } from './row-data-array-grid-data-server';
+import { SourcedFieldGrid } from '../adapted-revgrid/internal-api';
+import { AdaptedRevgridBehavioredColumnSettings, AdaptedRevgridBehavioredGridSettings } from '../settings/internal-api';
 import { RowDataArrayGridField } from './row-data-array-grid-field';
 
-export class RowDataArrayGrid extends AdaptedRevgrid {
-    declare schemaServer: DataRowArraySchemaServer<GridField>;
-    readonly headerDataServer: SingleHeadingGridDataServer;
-    declare mainDataServer: RowDataArrayGridDataServer;
-
+export class RowDataArrayGrid extends RevSingleHeadingDataRowArraySourcedFieldGrid<AdaptedRevgridBehavioredGridSettings, AdaptedRevgridBehavioredColumnSettings, GridField> {
     rowFocusEventer: RowDataArrayGrid.RowFocusEventer | undefined;
     mainClickEventer: RowDataArrayGrid.MainClickEventer | undefined;
     mainDblClickEventer: RowDataArrayGrid.MainDblClickEventer | undefined;
 
-    private readonly _serverSet: SingleHeadingDataRowArrayServerSet<GridField>;
+    private readonly _settingsService: SettingsService;
+    private _settingsChangedSubscriptionId: MultiEvent.SubscriptionId;
 
     constructor(
         settingsService: SettingsService,
         gridHostElement: HTMLElement,
-        customGridSettings: AdaptedRevgrid.CustomGridSettings,
-        createFieldEventer: SingleHeadingDataRowArrayServerSet.CreateFieldEventer<GridField>,
-        customiseSettingsForNewColumnEventer: AdaptedRevgrid.CustomiseSettingsForNewColumnEventer,
+        customGridSettings: SourcedFieldGrid.CustomGridSettings,
+        createFieldEventer: RevSingleHeadingDataRowArraySourcedFieldGrid.CreateFieldEventer<GridField>,
+        private readonly _customiseSettingsForNewColumnEventer: SourcedFieldGrid.CustomiseSettingsForNewColumnEventer,
         getMainCellPainterEventer: Subgrid.GetCellPainterEventer<AdaptedRevgridBehavioredColumnSettings, GridField>,
         getHeaderCellPainterEventer: Subgrid.GetCellPainterEventer<AdaptedRevgridBehavioredColumnSettings, GridField>,
         externalParent: unknown,
     ) {
-        const serverSet = new SingleHeadingDataRowArrayServerSet<GridField>(createFieldEventer);
-        const schemaServer = serverSet.schemaServer;
-        const headerDataServer = serverSet.headerDataServer;
-        const mainDataServer = serverSet.mainDataServer;
+        const gridSettings = SourcedFieldGrid.createGridSettings(settingsService, customGridSettings);
 
-        const definition: Revgrid.Definition<AdaptedRevgridBehavioredColumnSettings, GridField> = {
-            schemaServer,
-            subgrids: [
-                {
-                    role: DatalessSubgrid.RoleEnum.header,
-                    dataServer: headerDataServer,
-                    getCellPainterEventer: getHeaderCellPainterEventer,
-                },
-                {
-                    role: DatalessSubgrid.RoleEnum.main,
-                    dataServer: mainDataServer,
-                    getCellPainterEventer: getMainCellPainterEventer,
-                },
-            ],
+        const options: RevGridOptions<AdaptedRevgridBehavioredGridSettings, AdaptedRevgridBehavioredColumnSettings, GridField> = {
+            externalParent,
+            canvasRenderingContext2DSettings: {
+                alpha: false,
+            }
         }
-        super(settingsService, gridHostElement, definition, customGridSettings, customiseSettingsForNewColumnEventer, externalParent);
 
-        this._serverSet = serverSet;
-        this.headerDataServer = headerDataServer;
+        super(
+            gridHostElement,
+            getHeaderCellPainterEventer,
+            getMainCellPainterEventer,
+            gridSettings,
+            (field) => this.getSettingsForNewColumn(field),
+            createFieldEventer,
+            options,
+        );
+
+        this._settingsService = settingsService;
+
+        this._settingsChangedSubscriptionId = this._settingsService.subscribeSettingsChangedEvent(() => { this.handleSettingsChangedEvent(); });
+        this.verticalScroller.setAfterInsideOffset(0);
+        this.horizontalScroller.setAfterInsideOffset(0);
 
         this.applySettings();
     }
@@ -78,14 +73,18 @@ export class RowDataArrayGrid extends AdaptedRevgrid {
         }
     }
 
+    override destroy(): void {
+        this._settingsService.unsubscribeSettingsChangedEvent(
+            this._settingsChangedSubscriptionId
+        );
+        this._settingsChangedSubscriptionId = undefined;
+        super.destroy();
+    }
+
     override reset(): void {
         this.schemaServer.reset();
         this.mainDataServer.reset();
         super.reset();
-    }
-
-    setData(data: SingleHeadingDataRowArrayServerSet.DataRow[], keyIsHeading: boolean) {
-        this._serverSet.setData(data, keyIsHeading);
     }
 
     protected override descendantProcessClick(event: MouseEvent, hoverCell: LinedHoverCell<AdaptedRevgridBehavioredColumnSettings, GridField> | null | undefined) {
@@ -126,8 +125,22 @@ export class RowDataArrayGrid extends AdaptedRevgrid {
         }
     }
 
-    protected override invalidateAll() {
-        this.mainDataServer.invalidateAll();
+    private handleSettingsChangedEvent(): void {
+        const gridPropertiesUpdated = this.applySettings();
+
+        if (!gridPropertiesUpdated) {
+            this.invalidateAll();
+        }
+    }
+
+    private applySettings() {
+        return SourcedFieldGrid.mergeSettings(this._settingsService, this.settings);
+    }
+
+    private getSettingsForNewColumn(field: GridField) {
+        const columnSettings = SourcedFieldGrid.getSettingsForNewColumn(this.settings, field);
+        this._customiseSettingsForNewColumnEventer(columnSettings);
+        return columnSettings;
     }
 }
 
@@ -141,14 +154,16 @@ export namespace RowDataArrayGrid {
         sourcelessName: string,
         defaultHeading: string,
         defaultTextAlign: GridFieldHorizontalAlign,
-        defaultWidth?:number,
+        defaultWidth?: Integer,
+        key?: string,
     ) {
-        const definition = new RevSingleHeadingSourcedFieldDefinition(
-            new RevSingleHeadingSourcedFieldSourceDefinition(''),
+        const definition = RevSingleHeadingDataRowArraySourcedFieldDefinition.create(
+            { name: '' },
             sourcelessName,
             defaultHeading,
             defaultTextAlign,
             defaultWidth,
+            key,
         );
 
         return new RowDataArrayGridField(definition);

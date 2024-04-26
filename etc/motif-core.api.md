@@ -26,7 +26,6 @@ import { checkEscapeCharForRegexOutsideCharClass } from '@xilytix/sysutils';
 import { checkLimitTextLength } from '@xilytix/sysutils';
 import { ClickBoxCellPainter } from '@xilytix/revgrid';
 import { cloneDecimal } from '@xilytix/sysutils';
-import { Column } from '@xilytix/revgrid';
 import { ColumnSettings } from '@xilytix/revgrid';
 import { CommaText } from '@xilytix/sysutils';
 import { ComparableList } from '@xilytix/sysutils';
@@ -56,8 +55,6 @@ import { CorrectnessState } from '@xilytix/sysutils';
 import { createNumberGroupCharRemoveRegex } from '@xilytix/sysutils';
 import { createRandomUrlSearch } from '@xilytix/sysutils';
 import { DatalessViewCell } from '@xilytix/revgrid';
-import { DataRowArrayDataServer } from '@xilytix/revgrid';
-import { DataRowArraySchemaServer } from '@xilytix/revgrid';
 import { DataServer } from '@xilytix/revgrid';
 import { DateOrDateTime } from '@xilytix/sysutils';
 import { dateToDashedYyyyMmDd } from '@xilytix/sysutils';
@@ -179,22 +176,22 @@ import { RevColumnLayout } from '@xilytix/revgrid';
 import { RevColumnLayoutDefinition } from '@xilytix/revgrid';
 import { RevColumnLayoutOrReference } from '@xilytix/revgrid';
 import { RevColumnLayoutOrReferenceDefinition } from '@xilytix/revgrid';
+import { RevDataRowArrayDataServer } from '@xilytix/revgrid';
 import { RevDataSource } from '@xilytix/revgrid';
 import { RevDataSourceDefinition } from '@xilytix/revgrid';
 import { RevDataSourceOrReference } from '@xilytix/revgrid';
 import { RevDataSourceOrReferenceDefinition } from '@xilytix/revgrid';
 import { RevFavouriteReferenceableColumnLayoutDefinition } from '@xilytix/revgrid';
-import { Revgrid } from '@xilytix/revgrid';
-import { RevListChangedTypeId } from '@xilytix/revgrid';
 import { RevRecordDataServer } from '@xilytix/revgrid';
 import { RevRecordField } from '@xilytix/revgrid';
 import { RevRecordFieldIndex } from '@xilytix/revgrid';
 import { RevRecordIndex } from '@xilytix/revgrid';
 import { RevRecordInvalidatedValue } from '@xilytix/revgrid';
-import { RevRecordRowOrderDefinition } from '@xilytix/revgrid';
 import { RevRecordSchemaServer } from '@xilytix/revgrid';
-import { RevRecordSortDefinition } from '@xilytix/revgrid';
 import { RevRecordSourcedField } from '@xilytix/revgrid';
+import { RevRecordSourcedFieldDefinition } from '@xilytix/revgrid';
+import { RevRecordSourcedFieldGrid } from '@xilytix/revgrid';
+import { RevRecordSourcedFieldSourceDefinition } from '@xilytix/revgrid';
 import { RevRecordStore } from '@xilytix/revgrid';
 import { RevRecordValueRecentChangeTypeId } from '@xilytix/revgrid';
 import { RevReferenceableColumnLayout } from '@xilytix/revgrid';
@@ -205,15 +202,17 @@ import { RevReferenceableDataSourceDefinition } from '@xilytix/revgrid';
 import { RevReferenceableDataSourceDefinitionsStoreService } from '@xilytix/revgrid';
 import { RevReferenceableDataSourcesService } from '@xilytix/revgrid';
 import { RevRenderValue } from '@xilytix/revgrid';
+import { RevSingleHeadingDataRowArraySourcedFieldGrid } from '@xilytix/revgrid';
+import { RevSingleHeadingDataServer } from '@xilytix/revgrid';
 import { RevSourcedField } from '@xilytix/revgrid';
 import { RevSourcedFieldCustomHeadingsService } from '@xilytix/revgrid';
-import { RevSourcedFieldDefinition } from '@xilytix/revgrid';
-import { RevSourcedFieldSourceDefinition } from '@xilytix/revgrid';
+import { RevSourcedFieldGrid } from '@xilytix/revgrid';
 import { RevTable } from '@xilytix/revgrid';
 import { RevTableField } from '@xilytix/revgrid';
 import { RevTableFieldSourceDefinition } from '@xilytix/revgrid';
 import { RevTableFieldSourceDefinitionCachingFactoryService } from '@xilytix/revgrid';
 import { RevTableFieldSourceDefinitionFactory } from '@xilytix/revgrid';
+import { RevTableGrid } from '@xilytix/revgrid';
 import { RevTableRecord } from '@xilytix/revgrid';
 import { RevTableRecordDefinition } from '@xilytix/revgrid';
 import { RevTableRecordSource } from '@xilytix/revgrid';
@@ -229,8 +228,6 @@ import { secsPerDay } from '@xilytix/sysutils';
 import { secsPerHour } from '@xilytix/sysutils';
 import { secsPerMin } from '@xilytix/sysutils';
 import { shuffleElementsUpInArray } from '@xilytix/sysutils';
-import { SingleHeadingDataRowArrayServerSet } from '@xilytix/revgrid';
-import { SingleHeadingDataServer } from '@xilytix/revgrid';
 import { SourceTzOffsetDate } from '@xilytix/sysutils';
 import { SourceTzOffsetDateTime } from '@xilytix/sysutils';
 import { StandardCheckboxPainter } from '@xilytix/revgrid';
@@ -257,7 +254,6 @@ import { uniqueElementArraysOverlap } from '@xilytix/sysutils';
 import { UnreachableCaseError } from '@xilytix/sysutils';
 import { UsableListChangeType } from '@xilytix/sysutils';
 import { UsableListChangeTypeId } from '@xilytix/sysutils';
-import { ViewCell } from '@xilytix/revgrid';
 import { ViewLayout } from '@xilytix/revgrid';
 
 // Warning: (ae-missing-release-tag) "Account" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -479,56 +475,6 @@ export class ActiveFaultedStatusIdRenderValue extends EnumRenderValue {
 // @public (undocumented)
 export class ActiveFaultedStatusIdTableValue extends EnumTableValue {
     constructor();
-}
-
-// Warning: (ae-missing-release-tag) "AdaptedRevgrid" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "AdaptedRevgrid" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export abstract class AdaptedRevgrid extends Revgrid<AdaptedRevgridBehavioredGridSettings, AdaptedRevgridBehavioredColumnSettings, GridField> {
-    constructor(settingsService: SettingsService, gridHostElement: HTMLElement, definition: Revgrid.Definition<AdaptedRevgridBehavioredColumnSettings, GridField>, customGridSettings: AdaptedRevgrid.CustomGridSettings, customiseSettingsForNewColumnEventer: AdaptedRevgrid.CustomiseSettingsForNewColumnEventer, externalParent: unknown);
-    // (undocumented)
-    protected applySettings(): boolean;
-    // (undocumented)
-    autoSizeAllColumnWidths(widenOnly: boolean): void;
-    // (undocumented)
-    calculateHeaderPlusFixedRowsHeight(): number;
-    // (undocumented)
-    columnsViewWidthsChangedEventer: AdaptedRevgrid.ColumnsViewWidthsChangedEventer | undefined;
-    // (undocumented)
-    createAllowedSourcedFieldsColumnLayoutDefinition(allowedFields: readonly AllowedGridField[]): AllowedSourcedFieldsColumnLayoutDefinition;
-    // (undocumented)
-    createColumnLayoutDefinition(): RevColumnLayoutDefinition;
-    // (undocumented)
-    customiseSettingsForNewColumnEventer: AdaptedRevgrid.CustomiseSettingsForNewColumnEventer;
-    // (undocumented)
-    protected descendantProcessColumnsViewWidthsChanged(changeds: ViewLayout.ColumnsViewWidthChangeds): void;
-    // (undocumented)
-    destroy(): void;
-    // (undocumented)
-    get emWidth(): number;
-    // (undocumented)
-    protected abstract invalidateAll(): void;
-    // (undocumented)
-    protected readonly _settingsService: SettingsService;
-}
-
-// @public (undocumented)
-export namespace AdaptedRevgrid {
-    // (undocumented)
-    export type ColumnsViewWidthsChangedEventer = (this: void, fixedChanged: boolean, nonFixedChanged: boolean, allChanged: boolean) => void;
-    // (undocumented)
-    export function createColumnSettings(gridSettings: AdaptedRevgridBehavioredGridSettings): AdaptedRevgridBehavioredColumnSettings;
-    // (undocumented)
-    export function createGridSettings(settingsService: SettingsService, customSettings: Partial<AdaptedRevgridGridSettings>): AdaptedRevgridBehavioredGridSettings;
-    // (undocumented)
-    export function createSettingsServicePartialGridSettings(settingsService: SettingsService): Partial<AdaptedRevgridGridSettings>;
-    // (undocumented)
-    export type CustomGridSettings = Partial<AdaptedRevgridGridSettings>;
-    // (undocumented)
-    export type CustomiseSettingsForNewColumnEventer = (this: void, columnSettings: AdaptedRevgridBehavioredColumnSettings) => void;
-    // (undocumented)
-    export type SettingsChangedEventer = (this: void) => void;
 }
 
 // @public (undocumented)
@@ -3819,11 +3765,11 @@ export const enum CapabilityId {
 export class CellPainterFactoryService {
     constructor(_settingsService: SettingsService, _textFormatterService: TextFormatterService);
     // (undocumented)
-    createCheckboxRenderValueRecordGrid(grid: RecordGrid, dataServer: RecordGridDataServer): CheckboxRenderValueRecordGridCellPainter;
+    createCheckboxRenderValueRecordGrid(grid: RecordSourcedFieldGrid, dataServer: RecordGridDataServer): CheckboxRenderValueRecordGridCellPainter;
     // (undocumented)
-    createTextHeader(grid: AdaptedRevgrid, dataServer: SingleHeadingGridDataServer): TextHeaderCellPainter;
+    createTextHeader(grid: SourcedFieldGrid, dataServer: SingleHeadingGridDataServer): TextHeaderCellPainter;
     // (undocumented)
-    createTextRenderValueRecordGrid(grid: RecordGrid, dataServer: RecordGridDataServer): RenderValueRecordGridCellPainter<TextRenderValueCellPainter>;
+    createTextRenderValueRecordGrid(grid: RecordSourcedFieldGrid, dataServer: RecordGridDataServer): RenderValueRecordGridCellPainter<TextRenderValueCellPainter>;
     // (undocumented)
     createTextRenderValueRowDataArrayGrid(grid: RowDataArrayGrid, dataServer: RowDataArrayGridDataServer): RenderValueRowDataArrayGridCellPainter<TextRenderValueCellPainter>;
 }
@@ -4052,7 +3998,7 @@ export const enum ChartIntervalId {
 //
 // @public (undocumented)
 export class CheckboxRenderValueCellPainter extends RenderValueCellPainter {
-    constructor(settingsService: SettingsService, grid: AdaptedRevgrid, dataServer: DataServer<GridField>, _editable: boolean);
+    constructor(settingsService: SettingsService, grid: SourcedFieldGrid, dataServer: DataServer<GridField>, _editable: boolean);
     // (undocumented)
     calculateClickBox(cell: DatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>): Rectangle | undefined;
     // (undocumented)
@@ -4077,7 +4023,7 @@ export namespace CheckboxRenderValueCellPainter {
 //
 // @public (undocumented)
 export class CheckboxRenderValueRecordGridCellEditor extends StandardToggleClickBoxCellEditor<AdaptedRevgridBehavioredGridSettings, AdaptedRevgridBehavioredColumnSettings, GridField> {
-    constructor(settingsService: SettingsService, grid: RecordGrid, dataServer: RecordGridDataServer);
+    constructor(settingsService: SettingsService, grid: SourcedFieldGrid, dataServer: RecordGridDataServer);
 }
 
 // Warning: (ae-missing-release-tag) "CheckboxRenderValueRecordGridCellPainter" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -4660,7 +4606,7 @@ export namespace ColorScheme {
 //
 // @public (undocumented)
 export abstract class ColorSchemeGridField extends GridField implements GridRevRecordField {
-    constructor(_colorSettings: ColorSettings, definition: RevSourcedFieldDefinition);
+    constructor(_colorSettings: ColorSettings, definition: RevRecordSourcedFieldDefinition);
     // (undocumented)
     get colorSettings(): ColorSettings;
     // (undocumented)
@@ -4674,7 +4620,7 @@ export namespace ColorSchemeGridField {
     const // (undocumented)
     allFieldNames: FieldName[];
     const // (undocumented)
-    sourceDefinition: RevSourcedFieldSourceDefinition;
+    sourceDefinition: RevRecordSourcedFieldSourceDefinition;
     // (undocumented)
     export function createField(name: FieldName, colorSettings: ColorSettings): ItemIdColorSchemeGridField | NameColorSchemeGridField | DisplayColorSchemeGridField | ItemBkgdColorTextColorSchemeGridField | ResolvedBkgdColorTextColorSchemeGridField | ItemForeColorTextColorSchemeGridField | ResolvedForeColorTextColorSchemeGridField | ItemBkgdColorColorSchemeGridField | ResolvedBkgdColorColorSchemeGridField | ItemForeColorColorSchemeGridField | ResolvedForeColorColorSchemeGridField | BkgdItemStateColorSchemeGridField | ForeItemStateColorSchemeGridField | ReadabilityColorSchemeGridField | IsReadableColorSchemeGridField;
     // (undocumented)
@@ -7110,7 +7056,7 @@ export class DayTradesDataItemRecordTypeIdRenderValue extends EnumRenderValue {
 
 // @public (undocumented)
 export abstract class DayTradesGridField extends GridField implements GridRevRecordField {
-    constructor(_id: DayTradesDataItem.Field.Id, definition: RevSourcedFieldDefinition, _getDataItemCorrectnessIdEvent: DayTradesGridField.GetDataItemCorrectnessIdEventHandler);
+    constructor(_id: DayTradesDataItem.Field.Id, definition: RevRecordSourcedFieldDefinition, _getDataItemCorrectnessIdEvent: DayTradesGridField.GetDataItemCorrectnessIdEventHandler);
     // (undocumented)
     protected addRenderAttributes(renderValue: RenderValue, record: DayTradesDataItem.Record, cellAttribute: RenderValue.Attribute): void;
     // (undocumented)
@@ -7136,7 +7082,7 @@ export namespace DayTradesGridField {
     // (undocumented)
     export function createDefaultColumnLayoutDefinition(): RevColumnLayoutDefinition;
     const // (undocumented)
-    sourceDefinition: RevSourcedFieldSourceDefinition;
+    sourceDefinition: RevRecordSourcedFieldSourceDefinition;
     // (undocumented)
     export function createField(id: Id, getDataItemCorrectnessIdEventHandler: GetDataItemCorrectnessIdEventHandler): DayTradesGridField;
     // (undocumented)
@@ -7817,7 +7763,7 @@ export namespace DepthSideGridField {
     // (undocumented)
     export type GetDataItemCorrectnessIdEventHandler = (this: void) => CorrectnessId;
     const // (undocumented)
-    sourceDefinition: RevSourcedFieldSourceDefinition;
+    sourceDefinition: RevRecordSourcedFieldSourceDefinition;
 }
 
 // @public (undocumented)
@@ -8537,6 +8483,8 @@ export const enum ErrorCode {
     // (undocumented)
     DataSourceDefinition_TableRecordSourceTryCreate = "DSDTRSTC30899",
     // (undocumented)
+    DataSourceFrame_JsonDefinitionIsInvalid = "GSFKDII34589",
+    // (undocumented)
     DataSourceOrReference_LayoutDefinitionTry = "DSORLDT66334",
     // (undocumented)
     DataSourceOrReference_LayoutReferenceNotFound = "DSORLRNF66334",
@@ -8662,8 +8610,6 @@ export const enum ErrorCode {
     FMCPMT5583200023 = "FMCPMT5583200023",
     // (undocumented)
     GLHFPGLCTNP34458 = "GLHFPGLCTNP34458",
-    // (undocumented)
-    GridSourceFrame_JsonDefinitionIsInvalid = "GSFKDII34589",
     // (undocumented)
     HU0882468723 = "HU0882468723",
     // (undocumented)
@@ -10746,7 +10692,7 @@ export namespace FullDepthSideGridField {
     // (undocumented)
     export function createDefaultColumnLayoutDefinition(sideId: OrderSideId): RevColumnLayoutDefinition;
     // (undocumented)
-    export function createRevFieldDefinition(id: FullDepthSideFieldId): RevSourcedFieldDefinition;
+    export function createRevFieldDefinition(id: FullDepthSideFieldId): RevRecordSourcedFieldDefinition;
     // (undocumented)
     export type GetDataItemCorrectnessIdEventHandler = (this: void) => CorrectnessId;
 }
@@ -22334,156 +22280,28 @@ export class ReadonlyRenderValue extends BooleanRenderValue {
 }
 
 // @public (undocumented)
-export class RecordGrid extends AdaptedRevgrid implements RevColumnLayout.ChangeInitiator {
-    constructor(settingsService: SettingsService, gridHostElement: HTMLElement, recordStore: RevRecordStore, customGridSettings: AdaptedRevgrid.CustomGridSettings, customiseSettingsForNewColumnEventer: AdaptedRevgrid.CustomiseSettingsForNewColumnEventer, getMainCellPainterEventer: Subgrid.GetCellPainterEventer<AdaptedRevgridBehavioredColumnSettings, GridField>, getHeaderCellPainterEventer: Subgrid.GetCellPainterEventer<AdaptedRevgridBehavioredColumnSettings, GridField>, externalParent: unknown);
+export class RecordGrid extends RecordSourcedFieldGrid {
+    constructor(settingsService: SettingsService, gridHostElement: HTMLElement, recordStore: RevRecordStore, customGridSettings: SourcedFieldGrid.CustomGridSettings, _customiseSettingsForNewColumnEventer: SourcedFieldGrid.CustomiseSettingsForNewColumnEventer, getMainCellPainterEventer: Subgrid.GetCellPainterEventer<AdaptedRevgridBehavioredColumnSettings, GridField>, getHeaderCellPainterEventer: Subgrid.GetCellPainterEventer<AdaptedRevgridBehavioredColumnSettings, GridField>, externalParent: unknown);
     // (undocumented)
-    applyColumnLayoutDefinition(value: RevColumnLayoutDefinition): void;
+    columnsViewWidthsChangedEventer: SourcedFieldGrid.ColumnsViewWidthsChangedEventer | undefined;
     // (undocumented)
-    applyFilter(filter?: RevRecordDataServer.RecordFilterCallback): void;
-    // (undocumented)
-    applyFirstUsable(rowOrderDefinition: RevRecordRowOrderDefinition | undefined, viewAnchor: RecordGrid.ViewAnchor | undefined, columnLayout: RevColumnLayout | undefined): void;
-    // (undocumented)
-    protected applySettings(): boolean;
-    // (undocumented)
-    get beenUsable(): boolean;
-    // (undocumented)
-    clearFilter(): void;
-    // (undocumented)
-    clearSort(): void;
-    // (undocumented)
-    get continuousFiltering(): boolean;
-    set continuousFiltering(value: boolean);
-    // (undocumented)
-    dataServersRowListChangedEventer: RecordGrid.DataServersRowListChangedEventer | undefined;
-    // (undocumented)
-    protected descendantProcessActiveColumnListChanged(typeId: RevListChangedTypeId, index: number, count: number, targetIndex: number | undefined, ui: boolean): void;
-    // (undocumented)
-    protected descendantProcessClick(event: MouseEvent, hoverCell: LinedHoverCell<AdaptedRevgridBehavioredColumnSettings, GridField> | null | undefined): void;
-    // (undocumented)
-    protected descendantProcessColumnSort(_event: MouseEvent, headerOrFixedRowCell: ViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>): void;
-    // (undocumented)
-    protected descendantProcessColumnsWidthChanged(columns: Column<AdaptedRevgridBehavioredColumnSettings, GridField>[], ui: boolean): void;
-    // (undocumented)
-    protected descendantProcessDataServersRowListChanged(dataServers: DataServer<GridField>[]): void;
-    // (undocumented)
-    protected descendantProcessDblClick(event: MouseEvent, hoverCell: LinedHoverCell<AdaptedRevgridBehavioredColumnSettings, GridField> | null | undefined): void;
-    // (undocumented)
-    protected descendantProcessRendered(): void;
-    // (undocumented)
-    protected descendantProcessRowFocusChanged(newSubgridRowIndex: number | undefined, oldSubgridRowIndex: number | undefined): void;
-    // (undocumented)
-    protected descendantProcessSelectionChanged(): void;
+    protected descendantProcessColumnsViewWidthsChanged(changeds: ViewLayout.ColumnsViewWidthChangeds): void;
     // (undocumented)
     destroy(): void;
     // (undocumented)
-    get fieldCount(): number;
-    // (undocumented)
-    get fieldNames(): readonly GridField[];
-    // (undocumented)
-    get focusedRecordIndex(): RevRecordIndex | undefined;
-    set focusedRecordIndex(recordIndex: number | undefined);
-    // (undocumented)
-    getField(fieldIndex: RevRecordFieldIndex): RevRecordField;
-    // (undocumented)
-    getFieldByName(fieldName: string): RevRecordField;
-    // (undocumented)
-    getFieldSortAscending(field: RevRecordFieldIndex | GridField): boolean | undefined;
-    // (undocumented)
-    getFieldSortPriority(field: RevRecordFieldIndex | GridField): number | undefined;
-    // (undocumented)
-    getRowOrderDefinition(): RevRecordRowOrderDefinition;
-    // (undocumented)
-    getSortFields(): RevRecordSortDefinition.Field[] | undefined;
-    // (undocumented)
-    getSortSpecifier(index: number): RevRecordDataServer.SortFieldSpecifier;
-    // (undocumented)
-    getViewAnchor(): RecordGrid.ViewAnchor | undefined;
-    // (undocumented)
-    get gridRightAligned(): boolean;
-    // (undocumented)
     readonly headerDataServer: SingleHeadingGridDataServer;
     // (undocumented)
-    get headerRowCount(): number;
+    readonly mainDataServer: RecordGridDataServer;
     // (undocumented)
-    initialiseAllowedFields(fields: readonly GridField[]): void;
-    // (undocumented)
-    protected invalidateAll(): void;
-    // (undocumented)
-    get isFiltered(): boolean;
-    // (undocumented)
-    isHeaderRow(rowIndex: number): boolean;
-    // (undocumented)
-    mainClickEventer: RecordGrid.MainClickEventer | undefined;
-    // (undocumented)
-    mainDataServer: RecordGridDataServer;
-    // (undocumented)
-    mainDblClickEventer: RecordGrid.MainDblClickEventer | undefined;
-    // (undocumented)
-    get mainRowCount(): number;
-    // (undocumented)
-    get recordFocused(): boolean;
-    // (undocumented)
-    recordFocusedEventer: RecordGrid.RecordFocusEventer | undefined;
-    // (undocumented)
-    recordToRowIndex(recIdx: RevRecordIndex): number;
-    // (undocumented)
-    reorderRecRows(_itemIndices: number[]): void;
-    // (undocumented)
-    reset(): void;
-    // (undocumented)
-    resetUsable(): void;
-    // (undocumented)
-    get rowHeight(): number;
-    // (undocumented)
-    get rowOrderReversed(): boolean;
-    set rowOrderReversed(value: boolean);
-    // (undocumented)
-    get rowRecIndices(): number[];
-    // (undocumented)
-    rowToRecordIndex(rowIdx: number): Integer;
-    // (undocumented)
-    schemaServer: RecordGridSchemaServer;
-    // (undocumented)
-    selectionChangedEventer: RecordGrid.SelectionChangedEventer | undefined;
-    // (undocumented)
-    sortBy(fieldIndex?: number, isAscending?: boolean): boolean;
-    // (undocumented)
-    sortByMany(specifiers: RevRecordDataServer.SortFieldSpecifier[]): boolean;
-    // (undocumented)
-    updateAllowedFields(fields: readonly GridField[]): void;
-    // (undocumented)
-    updateColumnLayout(value: RevColumnLayout): void;
-}
-
-// @public (undocumented)
-export namespace RecordGrid {
-    // (undocumented)
-    export type DataServersRowListChangedEventer = (this: void, dataServers: DataServer<GridField>[]) => void;
-    // (undocumented)
-    export type FieldSortedEventer = (this: void) => void;
-    // (undocumented)
-    export type MainClickEventer = (this: void, fieldIndex: RevRecordFieldIndex, recordIndex: RevRecordIndex) => void;
-    // (undocumented)
-    export type MainDblClickEventer = (this: void, fieldIndex: RevRecordFieldIndex, recordIndex: RevRecordIndex) => void;
-    // (undocumented)
-    export type RecordFocusEventer = (this: void, newRecordIndex: RevRecordIndex | undefined, oldRecordIndex: RevRecordIndex | undefined) => void;
-    // (undocumented)
-    export type SelectionChangedEventer = (this: void) => void;
-    // (undocumented)
-    export interface ViewAnchor {
-        // (undocumented)
-        readonly columnScrollAnchorIndex: Integer;
-        // (undocumented)
-        readonly columnScrollAnchorOffset: Integer;
-        // (undocumented)
-        readonly rowScrollAnchorIndex: Integer;
-    }
+    readonly schemaServer: RecordGridSchemaServer;
 }
 
 // Warning: (ae-missing-release-tag) "RecordGridDataServer" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class RecordGridDataServer extends RevRecordDataServer<GridField> {
+    // (undocumented)
+    applySettings(scalarSettings: ScalarSettings): void;
 }
 
 // Warning: (ae-missing-release-tag) "RecordGridSchemaServer" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -22547,6 +22365,12 @@ export abstract class RecordsBrokerageAccountSubscriptionDataItem<Record extends
     unsubscribeBeforeRecordChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
     // (undocumented)
     unsubscribeListChangeEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+}
+
+// Warning: (ae-missing-release-tag) "RecordSourcedFieldGrid" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class RecordSourcedFieldGrid extends RevRecordSourcedFieldGrid<RenderValue.TypeId, RenderValue.Attribute.TypeId, AdaptedRevgridBehavioredGridSettings, AdaptedRevgridBehavioredColumnSettings, GridField> {
 }
 
 // Warning: (ae-missing-release-tag) "RecordsPublisherSubscriptionDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -23304,8 +23128,8 @@ export namespace RoutedIvemIdUiAction {
 // Warning: (ae-missing-release-tag) "RowDataArrayGrid" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class RowDataArrayGrid extends AdaptedRevgrid {
-    constructor(settingsService: SettingsService, gridHostElement: HTMLElement, customGridSettings: AdaptedRevgrid.CustomGridSettings, createFieldEventer: SingleHeadingDataRowArrayServerSet.CreateFieldEventer<GridField>, customiseSettingsForNewColumnEventer: AdaptedRevgrid.CustomiseSettingsForNewColumnEventer, getMainCellPainterEventer: Subgrid.GetCellPainterEventer<AdaptedRevgridBehavioredColumnSettings, GridField>, getHeaderCellPainterEventer: Subgrid.GetCellPainterEventer<AdaptedRevgridBehavioredColumnSettings, GridField>, externalParent: unknown);
+export class RowDataArrayGrid extends RevSingleHeadingDataRowArraySourcedFieldGrid<AdaptedRevgridBehavioredGridSettings, AdaptedRevgridBehavioredColumnSettings, GridField> {
+    constructor(settingsService: SettingsService, gridHostElement: HTMLElement, customGridSettings: SourcedFieldGrid.CustomGridSettings, createFieldEventer: RevSingleHeadingDataRowArraySourcedFieldGrid.CreateFieldEventer<GridField>, _customiseSettingsForNewColumnEventer: SourcedFieldGrid.CustomiseSettingsForNewColumnEventer, getMainCellPainterEventer: Subgrid.GetCellPainterEventer<AdaptedRevgridBehavioredColumnSettings, GridField>, getHeaderCellPainterEventer: Subgrid.GetCellPainterEventer<AdaptedRevgridBehavioredColumnSettings, GridField>, externalParent: unknown);
     // (undocumented)
     protected descendantProcessClick(event: MouseEvent, hoverCell: LinedHoverCell<AdaptedRevgridBehavioredColumnSettings, GridField> | null | undefined): void;
     // (undocumented)
@@ -23313,26 +23137,18 @@ export class RowDataArrayGrid extends AdaptedRevgrid {
     // (undocumented)
     protected descendantProcessRowFocusChanged(newSubgridRowIndex: number | undefined, oldSubgridRowIndex: number | undefined): void;
     // (undocumented)
+    destroy(): void;
+    // (undocumented)
     get focusedRowIndex(): number | undefined;
     set focusedRowIndex(rowIndex: number | undefined);
     // (undocumented)
-    readonly headerDataServer: SingleHeadingGridDataServer;
-    // (undocumented)
-    protected invalidateAll(): void;
-    // (undocumented)
     mainClickEventer: RowDataArrayGrid.MainClickEventer | undefined;
-    // (undocumented)
-    mainDataServer: RowDataArrayGridDataServer;
     // (undocumented)
     mainDblClickEventer: RowDataArrayGrid.MainDblClickEventer | undefined;
     // (undocumented)
     reset(): void;
     // (undocumented)
     rowFocusEventer: RowDataArrayGrid.RowFocusEventer | undefined;
-    // (undocumented)
-    schemaServer: DataRowArraySchemaServer<GridField>;
-    // (undocumented)
-    setData(data: SingleHeadingDataRowArrayServerSet.DataRow[], keyIsHeading: boolean): void;
 }
 
 // @public (undocumented)
@@ -23340,7 +23156,7 @@ export namespace RowDataArrayGrid {
     // Warning: (ae-forgotten-export) The symbol "RowDataArrayGridField" needs to be exported by the entry point public-api.d.ts
     //
     // (undocumented)
-    export function createField(sourcelessName: string, defaultHeading: string, defaultTextAlign: GridFieldHorizontalAlign, defaultWidth?: number): RowDataArrayGridField;
+    export function createField(sourcelessName: string, defaultHeading: string, defaultTextAlign: GridFieldHorizontalAlign, defaultWidth?: Integer, key?: string): RowDataArrayGridField;
     // (undocumented)
     export type MainClickEventer = (this: void, columnIndex: number, rowIndex: number) => void;
     // (undocumented)
@@ -23352,7 +23168,7 @@ export namespace RowDataArrayGrid {
 // Warning: (ae-missing-release-tag) "RowDataArrayGridDataServer" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class RowDataArrayGridDataServer extends DataRowArrayDataServer<GridField> {
+export class RowDataArrayGridDataServer extends RevDataRowArrayDataServer<GridField> {
 }
 
 // Warning: (ae-missing-release-tag) "SaveManagement" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -28128,7 +27944,7 @@ export namespace ShortDepthSideGridField {
     // (undocumented)
     export function createDefaultColumnLayoutDefinition(sideId: OrderSideId): RevColumnLayoutDefinition;
     // (undocumented)
-    export function createRevFieldDefinition(id: ShortDepthSideFieldId): RevSourcedFieldDefinition;
+    export function createRevFieldDefinition(id: ShortDepthSideFieldId): RevRecordSourcedFieldDefinition;
     // (undocumented)
     export type GetDataItemCorrectnessIdEventHandler = (this: void) => CorrectnessId;
 }
@@ -28214,7 +28030,35 @@ export abstract class SingleDataItemTableRecordSource extends TableRecordSource 
 // Warning: (ae-missing-release-tag) "SingleHeadingGridDataServer" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class SingleHeadingGridDataServer extends SingleHeadingDataServer<GridField> {
+export class SingleHeadingGridDataServer extends RevSingleHeadingDataServer<GridField> {
+}
+
+// Warning: (ae-missing-release-tag) "SourcedFieldGrid" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SourcedFieldGrid" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type SourcedFieldGrid = RevSourcedFieldGrid<AdaptedRevgridBehavioredGridSettings, AdaptedRevgridBehavioredColumnSettings, GridField>;
+
+// @public (undocumented)
+export namespace SourcedFieldGrid {
+    // (undocumented)
+    export type ColumnsViewWidthsChangedEventer = (this: void, fixedChanged: boolean, nonFixedChanged: boolean, allChanged: boolean) => void;
+    // (undocumented)
+    export function createColumnSettings(gridSettings: AdaptedRevgridBehavioredGridSettings): AdaptedRevgridBehavioredColumnSettings;
+    // (undocumented)
+    export function createGridSettings(settingsService: SettingsService, customSettings: Partial<AdaptedRevgridGridSettings>): AdaptedRevgridBehavioredGridSettings;
+    // (undocumented)
+    export function createSettingsServicePartialGridSettings(settingsService: SettingsService): Partial<AdaptedRevgridGridSettings>;
+    // (undocumented)
+    export type CustomGridSettings = Partial<AdaptedRevgridGridSettings>;
+    // (undocumented)
+    export type CustomiseSettingsForNewColumnEventer = (this: void, columnSettings: AdaptedRevgridBehavioredColumnSettings) => void;
+    // (undocumented)
+    export function getSettingsForNewColumn(gridSettings: AdaptedRevgridBehavioredGridSettings, field: GridField): InMemoryAdaptedRevgridBehavioredColumnSettings;
+    // (undocumented)
+    export function mergeSettings(settingsService: SettingsService, gridSettings: AdaptedRevgridBehavioredGridSettings): boolean;
+    // (undocumented)
+    export type SettingsChangedEventer = (this: void) => void;
 }
 
 export { SourceTzOffsetDate }
@@ -30516,7 +30360,7 @@ export const enum StringId {
     // (undocumented)
     MyxShortSellTypeDisplay_RegulatedShortSelling = 1649,
     // (undocumented)
-    NamedGridSource = 213,
+    NamedDataSource = 213,
     // (undocumented)
     New = 217,
     // (undocumented)
@@ -34337,62 +34181,22 @@ export namespace TableFieldSourceStaticInitialise {
 // Warning: (ae-missing-release-tag) "TableGrid" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class TableGrid extends RecordGrid {
-    constructor(gridFieldCustomHeadingsService: RevSourcedFieldCustomHeadingsService, _referenceableColumnLayoutsService: ReferenceableColumnLayoutsService, tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService, tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFromJsonFactory, _tableRecordSourceFactory: TableRecordSourceFactory, _referenceableGridSourcesService: ReferenceableDataSourcesService, cellPainterFactoryService: CellPainterFactoryService, settingsService: SettingsService, gridHostElement: HTMLElement, customGridSettings: AdaptedRevgrid.CustomGridSettings, customiseSettingsForNewColumnEventer: AdaptedRevgrid.CustomiseSettingsForNewColumnEventer, getMainCellPainterEventer: Subgrid.GetCellPainterEventer<AdaptedRevgridBehavioredColumnSettings, GridField>, getHeaderCellPainterEventer: Subgrid.GetCellPainterEventer<AdaptedRevgridBehavioredColumnSettings, GridField>, externalParent: unknown);
+export class TableGrid extends RevTableGrid<Badness, TableRecordSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId, RenderValue.TypeId, RenderValue.Attribute.TypeId, AdaptedRevgridBehavioredGridSettings, AdaptedRevgridBehavioredColumnSettings> {
+    constructor(gridFieldCustomHeadingsService: RevSourcedFieldCustomHeadingsService, referenceableColumnLayoutsService: ReferenceableColumnLayoutsService, tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService, tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFromJsonFactory, tableRecordSourceFactory: TableRecordSourceFactory, referenceableDataSourcesService: ReferenceableDataSourcesService, settingsService: SettingsService, gridHostElement: HTMLElement, customGridSettings: SourcedFieldGrid.CustomGridSettings, _customiseSettingsForNewColumnEventer: SourcedFieldGrid.CustomiseSettingsForNewColumnEventer, getMainCellPainterEventer: Subgrid.GetCellPainterEventer<AdaptedRevgridBehavioredColumnSettings, GridField>, getHeaderCellPainterEventer: Subgrid.GetCellPainterEventer<AdaptedRevgridBehavioredColumnSettings, GridField>, externalParent: unknown);
     // (undocumented)
-    applyColumnLayoutOrReferenceDefinition(definition: RevColumnLayoutOrReferenceDefinition): void;
+    calculateHeaderPlusFixedRowsHeight(): number;
     // (undocumented)
-    get badness(): Badness;
+    columnsViewWidthsChangedEventer: SourcedFieldGrid.ColumnsViewWidthsChangedEventer | undefined;
     // (undocumented)
-    canCreateAllowedSourcedFieldsColumnLayoutDefinition(): boolean;
+    protected descendantProcessColumnsViewWidthsChanged(changeds: ViewLayout.ColumnsViewWidthChangeds): void;
     // (undocumented)
-    readonly cellPainterFactoryService: CellPainterFactoryService;
+    destroy(): void;
     // (undocumented)
-    clearRendering(): void;
+    readonly headerDataServer: SingleHeadingGridDataServer;
     // (undocumented)
-    closeGridSource(keepView: boolean): void;
+    readonly mainDataServer: RecordGridDataServer;
     // (undocumented)
-    columnLayoutSetEventer: TableGrid.ColumnLayoutSetEventer | undefined;
-    // (undocumented)
-    createAllowedSourcedFieldsColumnLayoutDefinition(): AllowedSourcedFieldsColumnLayoutDefinition;
-    // (undocumented)
-    createColumnLayoutOrReferenceDefinition(): RevColumnLayoutOrReferenceDefinition;
-    // (undocumented)
-    createGridSourceOrReferenceDefinition(): DataSourceOrReferenceDefinition;
-    // (undocumented)
-    createRecordDefinition(index: Integer): TableRecordDefinition;
-    // (undocumented)
-    createTableRecordSourceDefinition(): TableRecordSourceDefinition;
-    // (undocumented)
-    readonly gridFieldCustomHeadingsService: RevSourcedFieldCustomHeadingsService;
-    // (undocumented)
-    keepPreviousLayoutIfPossible: boolean;
-    // (undocumented)
-    keptColumnLayoutOrReferenceDefinition: RevColumnLayoutOrReferenceDefinition | undefined;
-    // (undocumented)
-    get opened(): boolean;
-    // (undocumented)
-    openedEventer: TableGrid.OpenedEventer | undefined;
-    // (undocumented)
-    get openedRecordSource(): TableRecordSource;
-    // (undocumented)
-    get openedTable(): Table;
-    // (undocumented)
-    opener: LockOpenListItem.Opener;
-    // (undocumented)
-    get recordCount(): Integer;
-    // (undocumented)
-    subscribeBadnessChangedEvent(handler: CorrectnessState.BadnessChangedEventHandler): MultiEvent.SubscriptionId;
-    // (undocumented)
-    readonly tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService;
-    // (undocumented)
-    readonly tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFromJsonFactory;
-    // (undocumented)
-    tryOpenColumnLayoutOrReferenceDefinition(columnLayoutOrReferenceDefinition: RevColumnLayoutOrReferenceDefinition): Promise<Result<void>>;
-    // (undocumented)
-    tryOpenGridSource(definition: DataSourceOrReferenceDefinition, keepView: boolean): Promise<Result<DataSourceOrReference>>;
-    // (undocumented)
-    unsubscribeBadnessChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
+    readonly schemaServer: RevRecordSchemaServer<GridField>;
 }
 
 // @public (undocumented)
@@ -35165,7 +34969,7 @@ export namespace TextHasValueEqualsScanFieldCondition {
 //
 // @public (undocumented)
 export class TextHeaderCellPainter extends HeaderCellPainter {
-    constructor(settingsService: SettingsService, grid: AdaptedRevgrid, dataServer: DataServer<GridField>);
+    constructor(settingsService: SettingsService, grid: SourcedFieldGrid, dataServer: DataServer<GridField>);
     // (undocumented)
     paint(cell: DatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, _prefillColor: string | undefined): number | undefined;
 }
@@ -35197,7 +35001,7 @@ export namespace TextHeaderCellPainter {
 //
 // @public (undocumented)
 export class TextRenderValueCellPainter extends RenderValueCellPainter {
-    constructor(settingsService: SettingsService, _textFormatterService: TextFormatterService, grid: AdaptedRevgrid, dataServer: DataServer<GridField>);
+    constructor(settingsService: SettingsService, _textFormatterService: TextFormatterService, grid: SourcedFieldGrid, dataServer: DataServer<GridField>);
     // (undocumented)
     paintValue(cell: DatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined, renderValue: RenderValue): Integer | undefined;
 }

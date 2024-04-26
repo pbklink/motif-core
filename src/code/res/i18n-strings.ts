@@ -220,7 +220,7 @@ export const enum StringId {
     NewScan,
     Scan,
     TableJsonMissingFieldlist,
-    NamedGridSource,
+    NamedDataSource,
     List,
     None,
     QuestionMark,
@@ -3478,8 +3478,8 @@ export namespace I18nStrings {
                 en: 'Table JSON Missing Field List',
             }
         },
-        NamedGridSource: {
-            id: StringId.NamedGridSource, translations: {
+        NamedDataSource: {
+            id: StringId.NamedDataSource, translations: {
                 en: 'Named Grid',
             }
         },

@@ -4,8 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
-import { SingleHeadingDataServer } from '@xilytix/revgrid';
+import { RevSingleHeadingDataServer } from '@xilytix/revgrid';
 import { GridField } from '../../field/internal-api';
 
-export class SingleHeadingGridDataServer extends SingleHeadingDataServer<GridField> {
+export class SingleHeadingGridDataServer extends RevSingleHeadingDataServer<GridField> {
 }
