@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { DataServer, DatalessViewCell, StandardTextPainter } from '@xilytix/revgrid';
+import { RevDatalessViewCell, RevDataServer, RevStandardTextPainter } from '@xilytix/revgrid';
 import { IndexSignatureHack } from '@xilytix/sysutils';
 import { ColorScheme, SettingsService } from '../../../../services/internal-api';
 import { GridField } from '../../../field/internal-api';
@@ -13,14 +13,14 @@ import { AdaptedRevgridBehavioredColumnSettings } from '../../settings/adapted-r
 import { HeaderCellPainter } from './header-cell-painter';
 
 export class TextHeaderCellPainter extends HeaderCellPainter {
-    private readonly _textPainter: StandardTextPainter;
+    private readonly _textPainter: RevStandardTextPainter;
 
-    constructor(settingsService: SettingsService, grid: SourcedFieldGrid, dataServer: DataServer<GridField>) {
+    constructor(settingsService: SettingsService, grid: SourcedFieldGrid, dataServer: RevDataServer<GridField>) {
         super(settingsService, grid, dataServer);
-        this._textPainter = new StandardTextPainter(this._renderingContext);
+        this._textPainter = new RevStandardTextPainter(this._renderingContext);
     }
 
-    override paint(cell: DatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, _prefillColor: string | undefined): number | undefined {
+    override paint(cell: RevDatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, _prefillColor: string | undefined): number | undefined {
         const columnSettings = cell.columnSettings;
         this._textPainter.setColumnSettings(columnSettings);
 

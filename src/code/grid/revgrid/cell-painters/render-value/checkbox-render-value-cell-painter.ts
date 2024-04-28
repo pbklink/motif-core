@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { DataServer, DatalessViewCell, Rectangle, StandardCheckboxPainter } from '@xilytix/revgrid';
+import { RevDatalessViewCell, RevRectangle, RevDataServer, RevStandardCheckboxPainter } from '@xilytix/revgrid';
 import { IndexSignatureHack } from '@xilytix/sysutils';
 import { RenderValue, SettingsService } from '../../../../services/internal-api';
 import { AssertInternalError, Integer } from '../../../../sys/internal-api';
@@ -14,22 +14,22 @@ import { AdaptedRevgridBehavioredColumnSettings } from '../../settings/internal-
 import { RenderValueCellPainter } from './render-value-cell-painter';
 
 export class CheckboxRenderValueCellPainter extends RenderValueCellPainter  {
-    private readonly _checkboxPainter: StandardCheckboxPainter;
+    private readonly _checkboxPainter: RevStandardCheckboxPainter;
 
     constructor(
         settingsService: SettingsService,
         grid: SourcedFieldGrid,
-        dataServer: DataServer<GridField>,
+        dataServer: RevDataServer<GridField>,
         private readonly _editable: boolean,
     ) {
         super(settingsService, grid, dataServer);
-        this._checkboxPainter = new StandardCheckboxPainter(
+        this._checkboxPainter = new RevStandardCheckboxPainter(
             this._editable,
             this._renderingContext,
         );
     }
 
-    paintValue(cell: DatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined, renderValue: RenderValue): Integer | undefined {
+    paintValue(cell: RevDatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined, renderValue: RenderValue): Integer | undefined {
         const baseBkgdForeColors = this.calculateBaseColors(cell, prefillColor);
         const bkgdColor = baseBkgdForeColors.bkgdColor;
         const foreColor = baseBkgdForeColors.foreColor;
@@ -102,7 +102,7 @@ export class CheckboxRenderValueCellPainter extends RenderValueCellPainter  {
         }
     }
 
-    calculateClickBox(cell: DatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>): Rectangle | undefined {
+    calculateClickBox(cell: RevDatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>): RevRectangle | undefined {
         if (this.dataServer.getEditValue === undefined) {
             return undefined;
         } else {
@@ -121,7 +121,7 @@ export class CheckboxRenderValueCellPainter extends RenderValueCellPainter  {
 }
 
 export namespace CheckboxRenderValueCellPainter {
-    export interface CheckboxPaintFingerprintInterface extends RenderValueCellPainter.PaintFingerprintInterface, StandardCheckboxPainter.PaintFingerprintInterface {
+    export interface CheckboxPaintFingerprintInterface extends RenderValueCellPainter.PaintFingerprintInterface, RevStandardCheckboxPainter.PaintFingerprintInterface {
     }
 
     export type CheckboxPaintFingerprint = IndexSignatureHack<CheckboxPaintFingerprintInterface>;
@@ -130,7 +130,7 @@ export namespace CheckboxRenderValueCellPainter {
         export function same(left: CheckboxPaintFingerprint, right: CheckboxPaintFingerprint) {
             return (
                 RenderValueCellPainter.PaintFingerprint.same(left, right) &&
-                StandardCheckboxPainter.PaintFingerprint.same(left, right)
+                RevStandardCheckboxPainter.PaintFingerprint.same(left, right)
             );
         }
     }

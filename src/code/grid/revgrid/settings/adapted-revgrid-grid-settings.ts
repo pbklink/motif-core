@@ -4,10 +4,10 @@
  * License: motionite.trade/license/motif
  */
 
-import { GridSettings } from '@xilytix/revgrid';
+import { RevGridSettings } from '@xilytix/revgrid';
 import { AdaptedRevgridOnlyGridSettings } from './adapted-revgrid-only-grid-settings';
 
 /** @public */
-export interface AdaptedRevgridGridSettings extends AdaptedRevgridOnlyGridSettings, GridSettings {
+export interface AdaptedRevgridGridSettings extends AdaptedRevgridOnlyGridSettings, RevGridSettings {
 
 }

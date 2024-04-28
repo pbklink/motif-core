@@ -5,11 +5,11 @@
  */
 
 import {
-    DataServer,
-    DatalessViewCell,
+    RevDatalessViewCell,
+    RevDataServer,
     RevRecordRecentChangeTypeId,
     RevRecordValueRecentChangeTypeId,
-    StandardTextPainter
+    RevStandardTextPainter
 } from '@xilytix/revgrid';
 import { HigherLowerId, OrderSideId } from '../../../../adi/internal-api';
 import { ColorRenderValue, ColorScheme, RenderValue, SettingsService } from '../../../../services/internal-api';
@@ -23,14 +23,14 @@ import { AdaptedRevgridBehavioredColumnSettings } from '../../settings/internal-
 import { RenderValueCellPainter } from './render-value-cell-painter';
 
 export class TextRenderValueCellPainter extends RenderValueCellPainter {
-    private readonly _textPainter: StandardTextPainter;
+    private readonly _textPainter: RevStandardTextPainter;
 
-    constructor(settingsService: SettingsService, private readonly _textFormatterService: TextFormatterService, grid: SourcedFieldGrid, dataServer: DataServer<GridField>) {
+    constructor(settingsService: SettingsService, private readonly _textFormatterService: TextFormatterService, grid: SourcedFieldGrid, dataServer: RevDataServer<GridField>) {
         super(settingsService, grid, dataServer);
-        this._textPainter = new StandardTextPainter(this._renderingContext);
+        this._textPainter = new RevStandardTextPainter(this._renderingContext);
     }
 
-    paintValue(cell: DatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined, renderValue: RenderValue): Integer | undefined {
+    paintValue(cell: RevDatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined, renderValue: RenderValue): Integer | undefined {
         const columnSettings = cell.columnSettings;
 
         const baseBkgdForeColors = this.calculateBaseColors(cell, prefillColor);

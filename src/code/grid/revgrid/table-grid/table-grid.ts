@@ -1,4 +1,4 @@
-import { DatalessSubgrid, RevColumnLayout, RevGridDefinition, RevGridOptions, RevRecordSchemaServer, RevSourcedFieldCustomHeadingsService, RevTableGrid, Subgrid, ViewLayout } from '@xilytix/revgrid';
+import { RevColumnLayout, RevDatalessSubgrid, RevGridDefinition, RevGridOptions, RevRecordSchemaServer, RevSourcedFieldCustomHeadingsService, RevSubgrid, RevTableGrid, RevViewLayout } from '@xilytix/revgrid';
 import { MultiEvent } from '@xilytix/sysutils';
 import { RenderValue, SettingsService } from '../../../services/internal-api';
 import { Badness } from '../../../sys/internal-api';
@@ -39,8 +39,8 @@ export class TableGrid extends RevTableGrid<
         gridHostElement: HTMLElement,
         customGridSettings: SourcedFieldGrid.CustomGridSettings,
         private readonly _customiseSettingsForNewColumnEventer: SourcedFieldGrid.CustomiseSettingsForNewColumnEventer,
-        getMainCellPainterEventer: Subgrid.GetCellPainterEventer<AdaptedRevgridBehavioredColumnSettings, GridField>,
-        getHeaderCellPainterEventer: Subgrid.GetCellPainterEventer<AdaptedRevgridBehavioredColumnSettings, GridField>,
+        getMainCellPainterEventer: RevSubgrid.GetCellPainterEventer<AdaptedRevgridBehavioredColumnSettings, GridField>,
+        getHeaderCellPainterEventer: RevSubgrid.GetCellPainterEventer<AdaptedRevgridBehavioredColumnSettings, GridField>,
         externalParent: unknown,
     ) {
         const gridSettings = SourcedFieldGrid.createGridSettings(settingsService, customGridSettings);
@@ -61,12 +61,12 @@ export class TableGrid extends RevTableGrid<
             schemaServer,
             subgrids: [
                 {
-                    role: DatalessSubgrid.RoleEnum.header,
+                    role: RevDatalessSubgrid.RoleEnum.header,
                     dataServer: headerDataServer,
                     getCellPainterEventer: getHeaderCellPainterEventer,
                 },
                 {
-                    role: DatalessSubgrid.RoleEnum.main,
+                    role: RevDatalessSubgrid.RoleEnum.main,
                     dataServer: mainDataServer,
                     getCellPainterEventer: getMainCellPainterEventer,
                 },
@@ -108,7 +108,7 @@ export class TableGrid extends RevTableGrid<
         return this.subgridsManager.calculatePreMainPlusFixedRowsHeight();
     }
 
-    protected override descendantProcessColumnsViewWidthsChanged(changeds: ViewLayout.ColumnsViewWidthChangeds) {
+    protected override descendantProcessColumnsViewWidthsChanged(changeds: RevViewLayout.ColumnsViewWidthChangeds) {
         if (this.columnsViewWidthsChangedEventer !== undefined) {
             this.columnsViewWidthsChangedEventer(
                 changeds.fixedChanged,

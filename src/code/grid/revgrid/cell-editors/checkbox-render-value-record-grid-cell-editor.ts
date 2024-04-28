@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { StandardToggleClickBoxCellEditor } from '@xilytix/revgrid';
+import { RevStandardToggleClickBoxCellEditor } from '@xilytix/revgrid';
 import { SettingsService } from '../../../services/internal-api';
 import { GridField } from '../../field/internal-api';
 import { SourcedFieldGrid } from '../adapted-revgrid/internal-api';
@@ -12,7 +12,7 @@ import { CheckboxRenderValueCellPainter, CheckboxRenderValueRecordGridCellPainte
 import { RecordGridDataServer } from '../record-grid/internal-api';
 import { AdaptedRevgridBehavioredColumnSettings, AdaptedRevgridBehavioredGridSettings } from '../settings/internal-api';
 
-export class CheckboxRenderValueRecordGridCellEditor extends StandardToggleClickBoxCellEditor<AdaptedRevgridBehavioredGridSettings, AdaptedRevgridBehavioredColumnSettings, GridField> {
+export class CheckboxRenderValueRecordGridCellEditor extends RevStandardToggleClickBoxCellEditor<AdaptedRevgridBehavioredGridSettings, AdaptedRevgridBehavioredColumnSettings, GridField> {
     constructor(settingsService: SettingsService, grid: SourcedFieldGrid, dataServer: RecordGridDataServer) {
         const valueCellPainter = new CheckboxRenderValueCellPainter(settingsService, grid, dataServer, true);
         const gridCellPainter = new CheckboxRenderValueRecordGridCellPainter(valueCellPainter);

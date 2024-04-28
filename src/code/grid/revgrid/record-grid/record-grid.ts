@@ -5,12 +5,12 @@
  */
 
 import {
-    DatalessSubgrid,
+    RevDatalessSubgrid,
     RevGridDefinition,
     RevGridOptions,
     RevRecordStore,
-    Subgrid,
-    ViewLayout
+    RevSubgrid,
+    RevViewLayout
 } from '@xilytix/revgrid';
 import { MultiEvent } from '@xilytix/sysutils';
 import { SettingsService } from '../../../services/internal-api';
@@ -37,8 +37,8 @@ export class RecordGrid extends RecordSourcedFieldGrid {
         recordStore: RevRecordStore,
         customGridSettings: SourcedFieldGrid.CustomGridSettings,
         private readonly _customiseSettingsForNewColumnEventer: SourcedFieldGrid.CustomiseSettingsForNewColumnEventer,
-        getMainCellPainterEventer: Subgrid.GetCellPainterEventer<AdaptedRevgridBehavioredColumnSettings, GridField>,
-        getHeaderCellPainterEventer: Subgrid.GetCellPainterEventer<AdaptedRevgridBehavioredColumnSettings, GridField>,
+        getMainCellPainterEventer: RevSubgrid.GetCellPainterEventer<AdaptedRevgridBehavioredColumnSettings, GridField>,
+        getHeaderCellPainterEventer: RevSubgrid.GetCellPainterEventer<AdaptedRevgridBehavioredColumnSettings, GridField>,
         externalParent: unknown,
     ) {
         const gridSettings = SourcedFieldGrid.createGridSettings(settingsService, customGridSettings);
@@ -58,12 +58,12 @@ export class RecordGrid extends RecordSourcedFieldGrid {
             schemaServer,
             subgrids: [
                 {
-                    role: DatalessSubgrid.RoleEnum.header,
+                    role: RevDatalessSubgrid.RoleEnum.header,
                     dataServer: headerDataServer,
                     getCellPainterEventer: getHeaderCellPainterEventer,
                 },
                 {
-                    role: DatalessSubgrid.RoleEnum.main,
+                    role: RevDatalessSubgrid.RoleEnum.main,
                     dataServer: mainDataServer,
                     getCellPainterEventer: getMainCellPainterEventer,
                 },
@@ -95,7 +95,7 @@ export class RecordGrid extends RecordSourcedFieldGrid {
         super.destroy();
     }
 
-    protected override descendantProcessColumnsViewWidthsChanged(changeds: ViewLayout.ColumnsViewWidthChangeds) {
+    protected override descendantProcessColumnsViewWidthsChanged(changeds: RevViewLayout.ColumnsViewWidthChangeds) {
         if (this.columnsViewWidthsChangedEventer !== undefined) {
             this.columnsViewWidthsChangedEventer(
                 changeds.fixedChanged,

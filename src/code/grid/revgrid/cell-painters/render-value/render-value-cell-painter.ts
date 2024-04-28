@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { CachedCanvasRenderingContext2D, DataServer, DatalessViewCell, Rectangle, SelectionAreaTypeId } from '@xilytix/revgrid';
+import { RevCachedCanvasRenderingContext2D, RevDatalessViewCell, RevRectangle, RevDataServer, RevSelectionAreaTypeId } from '@xilytix/revgrid';
 import { ColorScheme, ColorSettings, RenderValue, ScalarSettings, SettingsService } from '../../../../services/internal-api';
 import { IndexSignatureHack } from '../../../../sys/internal-api';
 import { GridField } from '../../../field/internal-api';
@@ -16,14 +16,14 @@ export abstract class RenderValueCellPainter {
     focusedRowColoredAllowed = true;
 
     protected readonly _gridSettings: AdaptedRevgridBehavioredGridSettings;
-    protected readonly _renderingContext: CachedCanvasRenderingContext2D;
+    protected readonly _renderingContext: RevCachedCanvasRenderingContext2D;
     protected readonly _scalarSettings: ScalarSettings;
     protected readonly _colorSettings: ColorSettings;
 
     constructor(
         settingsService: SettingsService,
         protected readonly _grid: SourcedFieldGrid,
-        readonly dataServer: DataServer<GridField>,
+        readonly dataServer: RevDataServer<GridField>,
     ) {
         const grid = this._grid;
         this._gridSettings = grid.settings;
@@ -32,7 +32,7 @@ export abstract class RenderValueCellPainter {
         this._colorSettings = settingsService.color;
     }
 
-    protected calculateBaseColors(cell: DatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined): RenderValueCellPainter.BaseColors {
+    protected calculateBaseColors(cell: RevDatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined): RenderValueCellPainter.BaseColors {
         const grid = this._grid;
 
         const subgridRowIndex = cell.viewLayoutRow.subgridRowIndex;
@@ -65,7 +65,7 @@ export abstract class RenderValueCellPainter {
 
         let bkgdColor: string;
         const selection = grid.selection;
-        let cellSelectionAreaTypeId: SelectionAreaTypeId | undefined;
+        let cellSelectionAreaTypeId: RevSelectionAreaTypeId | undefined;
         if (
             (cellSelectionAreaTypeId = selection.getOneCellSelectionAreaTypeId(activeColumnIndex, subgridRowIndex, subgrid)) !== undefined &&
             (
@@ -106,7 +106,7 @@ export abstract class RenderValueCellPainter {
     }
 
     protected paintBackgroundBorderFocus(
-        bounds: Rectangle,
+        bounds: RevRectangle,
         prefillColor: string | undefined,
         bkgdColor: string,
         internalBorderColor: string | undefined,
@@ -171,7 +171,7 @@ export abstract class RenderValueCellPainter {
         }
     }
 
-    abstract paintValue(cell: DatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined, renderValue: RenderValue): number | undefined;
+    abstract paintValue(cell: RevDatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined, renderValue: RenderValue): number | undefined;
 }
 
 export namespace RenderValueCellPainter {

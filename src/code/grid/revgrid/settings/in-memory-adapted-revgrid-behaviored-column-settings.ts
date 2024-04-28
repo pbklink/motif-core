@@ -4,23 +4,23 @@
  * License: motionite.trade/license/motif
  */
 
-import { HorizontalAlign, InMemoryBehavioredColumnSettings, TextTruncateType } from '@xilytix/revgrid';
+import { RevHorizontalAlign, RevInMemoryBehavioredColumnSettings, RevTextTruncateTypeId } from '@xilytix/revgrid';
 import { AdaptedRevgridBehavioredColumnSettings } from './adapted-revgrid-behaviored-column-settings';
 import { AdaptedRevgridColumnSettings } from './adapted-revgrid-column-settings';
 import { AdaptedRevgridGridSettings } from './adapted-revgrid-grid-settings';
 import { AdaptedRevgridOnlyColumnSettings } from './adapted-revgrid-only-column-settings';
 
 /** @public */
-export class InMemoryAdaptedRevgridBehavioredColumnSettings extends InMemoryBehavioredColumnSettings implements AdaptedRevgridBehavioredColumnSettings {
+export class InMemoryAdaptedRevgridBehavioredColumnSettings extends RevInMemoryBehavioredColumnSettings implements AdaptedRevgridBehavioredColumnSettings {
     declare gridSettings: AdaptedRevgridGridSettings;
 
     private _verticalOffset: number | undefined;
-    private _textTruncateType: TextTruncateType | undefined | null;
+    private _textTruncateType: RevTextTruncateTypeId | undefined | null;
     private _textStrikeThrough: boolean | undefined;
     private _font: string | undefined;
-    private _horizontalAlign: HorizontalAlign | undefined;
+    private _horizontalAlign: RevHorizontalAlign | undefined;
     private _columnHeaderFont: string | undefined;
-    private _columnHeaderHorizontalAlign: HorizontalAlign | undefined;
+    private _columnHeaderHorizontalAlign: RevHorizontalAlign | undefined;
 
     get verticalOffset() { return this._verticalOffset !== undefined ? this._verticalOffset : this.gridSettings.verticalOffset; }
     set verticalOffset(value: number) {
@@ -38,7 +38,7 @@ export class InMemoryAdaptedRevgridBehavioredColumnSettings extends InMemoryBeha
             return this._textTruncateType !== undefined ? this._textTruncateType : this.gridSettings.textTruncateType;
         }
     }
-    set textTruncateType(value: TextTruncateType | undefined) {
+    set textTruncateType(value: RevTextTruncateTypeId | undefined) {
         if (value !== this._textTruncateType) {
             this.beginChange();
             if (value === undefined) {
@@ -69,7 +69,7 @@ export class InMemoryAdaptedRevgridBehavioredColumnSettings extends InMemoryBeha
         }
     }
     get horizontalAlign() { return this._horizontalAlign !== undefined ? this._horizontalAlign : this.gridSettings.horizontalAlign; }
-    set horizontalAlign(value: HorizontalAlign) {
+    set horizontalAlign(value: RevHorizontalAlign) {
         if (value !== this._horizontalAlign) {
             this.beginChange();
             this._horizontalAlign = value;
@@ -89,7 +89,7 @@ export class InMemoryAdaptedRevgridBehavioredColumnSettings extends InMemoryBeha
     get columnHeaderHorizontalAlign() {
         return this._columnHeaderHorizontalAlign !== undefined ? this._columnHeaderHorizontalAlign : this.gridSettings.columnHeaderHorizontalAlign;
     }
-    set columnHeaderHorizontalAlign(value: HorizontalAlign) {
+    set columnHeaderHorizontalAlign(value: RevHorizontalAlign) {
         if (value !== this._columnHeaderHorizontalAlign) {
             this.beginChange();
             this._columnHeaderHorizontalAlign = value;

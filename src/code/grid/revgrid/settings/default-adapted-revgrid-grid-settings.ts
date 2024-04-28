@@ -4,12 +4,12 @@
  * License: motionite.trade/license/motif
  */
 
-import { defaultGridSettings } from '@xilytix/revgrid';
+import { revDefaultGridSettings } from '@xilytix/revgrid';
 import { AdaptedRevgridGridSettings } from './adapted-revgrid-grid-settings';
 import { defaultAdaptedRevgridOnlyGridSettings } from './default-adapted-revgrid-only-grid-settings';
 
 /** @public */
 export const defaultAdaptedRevgridGridSettings: AdaptedRevgridGridSettings = {
-    ...defaultGridSettings,
+    ...revDefaultGridSettings,
     ...defaultAdaptedRevgridOnlyGridSettings,
 } as const;

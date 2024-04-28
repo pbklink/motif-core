@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { CellPainter, RevDataRowArrayDataServer, DataServer, DatalessViewCell } from '@xilytix/revgrid';
+import { RevCellPainter, RevDatalessViewCell, RevDataRowArrayDataServer, RevDataServer } from '@xilytix/revgrid';
 import {
     BigIntRenderValue,
     DateTimeRenderValue,
@@ -17,14 +17,14 @@ import { GridField } from '../../field/internal-api';
 import { AdaptedRevgridBehavioredColumnSettings } from '../settings/adapted-revgrid-behaviored-column-settings';
 import { RenderValueCellPainter } from './render-value/render-value-cell-painter';
 
-export class RenderValueRowDataArrayGridCellPainter<RVCP extends RenderValueCellPainter> implements CellPainter<AdaptedRevgridBehavioredColumnSettings, GridField> {
+export class RenderValueRowDataArrayGridCellPainter<RVCP extends RenderValueCellPainter> implements RevCellPainter<AdaptedRevgridBehavioredColumnSettings, GridField> {
     private readonly _dataServer: RevDataRowArrayDataServer<GridField>;
 
     constructor(private readonly _renderValueCellPainter: RVCP) {
         this._dataServer = this._renderValueCellPainter.dataServer as RevDataRowArrayDataServer<GridField>;
     }
 
-    paint(cell: DatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined) {
+    paint(cell: RevDatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined) {
         const field = cell.viewLayoutColumn.column.field;
         const subgridRowIndex = cell.viewLayoutRow.subgridRowIndex;
         const viewValue = this._dataServer.getViewValue(field, subgridRowIndex);
@@ -32,7 +32,7 @@ export class RenderValueRowDataArrayGridCellPainter<RVCP extends RenderValueCell
         return this._renderValueCellPainter.paintValue(cell, prefillColor, renderValue);
     }
 
-    private createRenderValue(viewValue: DataServer.ViewValue): RenderValue {
+    private createRenderValue(viewValue: RevDataServer.ViewValue): RenderValue {
         switch (typeof viewValue) {
             case 'string':
                 return new StringRenderValue(viewValue);

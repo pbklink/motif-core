@@ -4,14 +4,14 @@
  * License: motionite.trade/license/motif
  */
 
-import { ClickBoxCellPainter, DatalessViewCell, Rectangle } from '@xilytix/revgrid';
+import { RevClickBoxCellPainter, RevDatalessViewCell, RevRectangle } from '@xilytix/revgrid';
 import { RenderValue } from '../../../services/internal-api';
 import { GridField } from '../../field/internal-api';
 import { RecordGridDataServer } from '../record-grid/internal-api';
 import { AdaptedRevgridBehavioredColumnSettings } from '../settings/internal-api';
 import { CheckboxRenderValueCellPainter } from './render-value/internal-api';
 
-export class CheckboxRenderValueRecordGridCellPainter implements ClickBoxCellPainter<AdaptedRevgridBehavioredColumnSettings, GridField> {
+export class CheckboxRenderValueRecordGridCellPainter implements RevClickBoxCellPainter<AdaptedRevgridBehavioredColumnSettings, GridField> {
     private readonly _dataServer: RecordGridDataServer;
 
     constructor(private readonly _renderValueCellPainter: CheckboxRenderValueCellPainter) {
@@ -23,14 +23,14 @@ export class CheckboxRenderValueRecordGridCellPainter implements ClickBoxCellPai
         this._renderValueCellPainter.focusedRowColoredAllowed = value;
     }
 
-    paint(cell: DatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined) {
+    paint(cell: RevDatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined) {
         const field = cell.viewLayoutColumn.column.field;
         const subgridRowIndex = cell.viewLayoutRow.subgridRowIndex;
         const renderValue = this._dataServer.getViewValue(field, subgridRowIndex) as RenderValue;
         return this._renderValueCellPainter.paintValue(cell, prefillColor, renderValue);
     }
 
-    calculateClickBox(cell: DatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>): Rectangle | undefined {
+    calculateClickBox(cell: RevDatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>): RevRectangle | undefined {
         return this._renderValueCellPainter.calculateClickBox(cell);
     }
 }

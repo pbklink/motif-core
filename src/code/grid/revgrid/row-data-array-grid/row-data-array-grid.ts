@@ -5,11 +5,11 @@
  */
 
 import {
-    LinedHoverCell,
     RevGridOptions,
+    RevLinedHoverCell,
     RevSingleHeadingDataRowArraySourcedFieldDefinition,
     RevSingleHeadingDataRowArraySourcedFieldGrid,
-    Subgrid
+    RevSubgrid
 } from '@xilytix/revgrid';
 import { SettingsService } from '../../../services/internal-api';
 import { GridFieldHorizontalAlign, Integer, MultiEvent } from '../../../sys/internal-api';
@@ -32,8 +32,8 @@ export class RowDataArrayGrid extends RevSingleHeadingDataRowArraySourcedFieldGr
         customGridSettings: SourcedFieldGrid.CustomGridSettings,
         createFieldEventer: RevSingleHeadingDataRowArraySourcedFieldGrid.CreateFieldEventer<GridField>,
         private readonly _customiseSettingsForNewColumnEventer: SourcedFieldGrid.CustomiseSettingsForNewColumnEventer,
-        getMainCellPainterEventer: Subgrid.GetCellPainterEventer<AdaptedRevgridBehavioredColumnSettings, GridField>,
-        getHeaderCellPainterEventer: Subgrid.GetCellPainterEventer<AdaptedRevgridBehavioredColumnSettings, GridField>,
+        getMainCellPainterEventer: RevSubgrid.GetCellPainterEventer<AdaptedRevgridBehavioredColumnSettings, GridField>,
+        getHeaderCellPainterEventer: RevSubgrid.GetCellPainterEventer<AdaptedRevgridBehavioredColumnSettings, GridField>,
         externalParent: unknown,
     ) {
         const gridSettings = SourcedFieldGrid.createGridSettings(settingsService, customGridSettings);
@@ -87,12 +87,12 @@ export class RowDataArrayGrid extends RevSingleHeadingDataRowArraySourcedFieldGr
         super.reset();
     }
 
-    protected override descendantProcessClick(event: MouseEvent, hoverCell: LinedHoverCell<AdaptedRevgridBehavioredColumnSettings, GridField> | null | undefined) {
+    protected override descendantProcessClick(event: MouseEvent, hoverCell: RevLinedHoverCell<AdaptedRevgridBehavioredColumnSettings, GridField> | null | undefined) {
         if (this.mainClickEventer !== undefined) {
             if (hoverCell === null) {
                 hoverCell = this.findLinedHoverCellAtCanvasOffset(event.offsetX, event.offsetY);
             }
-            if (hoverCell !== undefined && !LinedHoverCell.isMouseOverLine(hoverCell)) { // skip clicks on grid lines
+            if (hoverCell !== undefined && !RevLinedHoverCell.isMouseOverLine(hoverCell)) { // skip clicks on grid lines
                 const cell = hoverCell.viewCell;
                 if (!cell.isHeaderOrRowFixed) { // Skip clicks to the column headers
                     const rowIndex = cell.viewLayoutRow.subgridRowIndex;
@@ -103,12 +103,12 @@ export class RowDataArrayGrid extends RevSingleHeadingDataRowArraySourcedFieldGr
         }
     }
 
-    protected override descendantProcessDblClick(event: MouseEvent, hoverCell: LinedHoverCell<AdaptedRevgridBehavioredColumnSettings, GridField> | null | undefined) {
+    protected override descendantProcessDblClick(event: MouseEvent, hoverCell: RevLinedHoverCell<AdaptedRevgridBehavioredColumnSettings, GridField> | null | undefined) {
         if (this.mainDblClickEventer !== undefined) {
             if (hoverCell === null) {
                 hoverCell = this.findLinedHoverCellAtCanvasOffset(event.offsetX, event.offsetY);
             }
-            if (hoverCell !== undefined && !LinedHoverCell.isMouseOverLine(hoverCell)) { // skip clicks on grid lines
+            if (hoverCell !== undefined && !RevLinedHoverCell.isMouseOverLine(hoverCell)) { // skip clicks on grid lines
                 const cell = hoverCell.viewCell;
                 if (!cell.isHeaderOrRowFixed) { // Skip clicks to the column headers
                     const rowIndex = cell.viewLayoutRow.subgridRowIndex;

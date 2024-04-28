@@ -12,21 +12,15 @@ import { addToGrow15ArrayUniquely } from '@xilytix/sysutils';
 import { AnchoredRecordsList } from '@xilytix/sysutils';
 import { anyBinarySearch } from '@xilytix/sysutils';
 import { AssertInternalError } from '@xilytix/sysutils';
-import { BehavioredColumnSettings } from '@xilytix/revgrid';
-import { BehavioredGridSettings } from '@xilytix/revgrid';
 import { BinarySearchResult } from '@xilytix/sysutils';
 import { BooleanOrUndefined } from '@xilytix/sysutils';
 import { BooleanUiAction } from '@xilytix/ui-action';
-import { CachedCanvasRenderingContext2D } from '@xilytix/revgrid';
 import { calculateIntlNumberFormatCharParts } from '@xilytix/sysutils';
-import { CellPainter } from '@xilytix/revgrid';
 import { ChangeSubscribableComparableList } from '@xilytix/sysutils';
 import { checkEscapeCharForRegexInsideCharClass } from '@xilytix/sysutils';
 import { checkEscapeCharForRegexOutsideCharClass } from '@xilytix/sysutils';
 import { checkLimitTextLength } from '@xilytix/sysutils';
-import { ClickBoxCellPainter } from '@xilytix/revgrid';
 import { cloneDecimal } from '@xilytix/sysutils';
-import { ColumnSettings } from '@xilytix/revgrid';
 import { CommaText } from '@xilytix/sysutils';
 import { ComparableList } from '@xilytix/sysutils';
 import { compareArray } from '@xilytix/sysutils';
@@ -54,8 +48,6 @@ import { copyJsonValue } from '@xilytix/sysutils';
 import { CorrectnessState } from '@xilytix/sysutils';
 import { createNumberGroupCharRemoveRegex } from '@xilytix/sysutils';
 import { createRandomUrlSearch } from '@xilytix/sysutils';
-import { DatalessViewCell } from '@xilytix/revgrid';
-import { DataServer } from '@xilytix/revgrid';
 import { DateOrDateTime } from '@xilytix/sysutils';
 import { dateToDashedYyyyMmDd } from '@xilytix/sysutils';
 import { dateToDateOnlyIsoString } from '@xilytix/sysutils';
@@ -78,16 +70,12 @@ import { getElementDocumentPosition } from '@xilytix/sysutils';
 import { getElementDocumentPositionRect } from '@xilytix/sysutils';
 import { getErrorMessage } from '@xilytix/sysutils';
 import { getUniqueElementArraysOverlapElements } from '@xilytix/sysutils';
-import { GridSettings } from '@xilytix/revgrid';
 import { Guid } from '@xilytix/sysutils';
-import { HorizontalAlign } from '@xilytix/revgrid';
 import { hoursPerDay } from '@xilytix/sysutils';
 import { HtmlTypes } from '@xilytix/sysutils';
 import { incDateByDays } from '@xilytix/sysutils';
 import { IndexedRecord } from '@xilytix/sysutils';
 import { IndexSignatureHack } from '@xilytix/sysutils';
-import { InMemoryBehavioredColumnSettings } from '@xilytix/revgrid';
-import { InMemoryBehavioredGridSettings } from '@xilytix/revgrid';
 import { Integer } from '@xilytix/sysutils';
 import { IntegerExplicitElementsEnumUiAction } from '@xilytix/ui-action';
 import { IntegerUiAction } from '@xilytix/ui-action';
@@ -119,7 +107,6 @@ import { JsonElement } from '@xilytix/sysutils';
 import { JsonValue } from '@xilytix/sysutils';
 import { JsonValueArray } from '@xilytix/sysutils';
 import { Line } from '@xilytix/sysutils';
-import { LinedHoverCell } from '@xilytix/revgrid';
 import { LockItemByKeyList } from '@xilytix/sysutils';
 import { LockOpenListItem } from '@xilytix/sysutils';
 import { LockOpenManager } from '@xilytix/sysutils';
@@ -167,21 +154,33 @@ import { rangedEarliestBinarySearch } from '@xilytix/sysutils';
 import { rangedQuickSort } from '@xilytix/sysutils';
 import { RecordList } from '@xilytix/sysutils';
 import { Rect } from '@xilytix/sysutils';
-import { Rectangle } from '@xilytix/revgrid';
 import { removeFromArray } from '@xilytix/sysutils';
 import { Result } from '@xilytix/sysutils';
 import { RevAllowedRecordSourcedField } from '@xilytix/revgrid';
 import { RevAllowedRecordSourcedFieldsColumnLayoutDefinition } from '@xilytix/revgrid';
+import { RevBehavioredColumnSettings } from '@xilytix/revgrid';
+import { RevBehavioredGridSettings } from '@xilytix/revgrid';
+import { RevCachedCanvasRenderingContext2D } from '@xilytix/revgrid';
+import { RevCellPainter } from '@xilytix/revgrid';
+import { RevClickBoxCellPainter } from '@xilytix/revgrid';
 import { RevColumnLayout } from '@xilytix/revgrid';
 import { RevColumnLayoutDefinition } from '@xilytix/revgrid';
 import { RevColumnLayoutOrReference } from '@xilytix/revgrid';
 import { RevColumnLayoutOrReferenceDefinition } from '@xilytix/revgrid';
+import { RevColumnSettings } from '@xilytix/revgrid';
+import { RevDatalessViewCell } from '@xilytix/revgrid';
 import { RevDataRowArrayDataServer } from '@xilytix/revgrid';
+import { RevDataServer } from '@xilytix/revgrid';
 import { RevDataSource } from '@xilytix/revgrid';
 import { RevDataSourceDefinition } from '@xilytix/revgrid';
 import { RevDataSourceOrReference } from '@xilytix/revgrid';
 import { RevDataSourceOrReferenceDefinition } from '@xilytix/revgrid';
 import { RevFavouriteReferenceableColumnLayoutDefinition } from '@xilytix/revgrid';
+import { RevGridSettings } from '@xilytix/revgrid';
+import { RevHorizontalAlign } from '@xilytix/revgrid';
+import { RevInMemoryBehavioredColumnSettings } from '@xilytix/revgrid';
+import { RevInMemoryBehavioredGridSettings } from '@xilytix/revgrid';
+import { RevLinedHoverCell } from '@xilytix/revgrid';
 import { RevRecordDataServer } from '@xilytix/revgrid';
 import { RevRecordField } from '@xilytix/revgrid';
 import { RevRecordFieldIndex } from '@xilytix/revgrid';
@@ -194,6 +193,7 @@ import { RevRecordSourcedFieldGrid } from '@xilytix/revgrid';
 import { RevRecordSourcedFieldSourceDefinition } from '@xilytix/revgrid';
 import { RevRecordStore } from '@xilytix/revgrid';
 import { RevRecordValueRecentChangeTypeId } from '@xilytix/revgrid';
+import { RevRectangle } from '@xilytix/revgrid';
 import { RevReferenceableColumnLayout } from '@xilytix/revgrid';
 import { RevReferenceableColumnLayoutDefinition } from '@xilytix/revgrid';
 import { RevReferenceableColumnLayoutsService } from '@xilytix/revgrid';
@@ -207,6 +207,9 @@ import { RevSingleHeadingDataServer } from '@xilytix/revgrid';
 import { RevSourcedField } from '@xilytix/revgrid';
 import { RevSourcedFieldCustomHeadingsService } from '@xilytix/revgrid';
 import { RevSourcedFieldGrid } from '@xilytix/revgrid';
+import { RevStandardCheckboxPainter } from '@xilytix/revgrid';
+import { RevStandardToggleClickBoxCellEditor } from '@xilytix/revgrid';
+import { RevSubgrid } from '@xilytix/revgrid';
 import { RevTable } from '@xilytix/revgrid';
 import { RevTableField } from '@xilytix/revgrid';
 import { RevTableFieldSourceDefinition } from '@xilytix/revgrid';
@@ -223,6 +226,8 @@ import { RevTableRecordStore } from '@xilytix/revgrid';
 import { RevTableValue } from '@xilytix/revgrid';
 import { RevTableValueSource } from '@xilytix/revgrid';
 import { RevTableValuesRecord } from '@xilytix/revgrid';
+import { RevTextTruncateTypeId } from '@xilytix/revgrid';
+import { RevViewLayout } from '@xilytix/revgrid';
 import { RGB } from '@xilytix/sysutils';
 import { secsPerDay } from '@xilytix/sysutils';
 import { secsPerHour } from '@xilytix/sysutils';
@@ -230,18 +235,14 @@ import { secsPerMin } from '@xilytix/sysutils';
 import { shuffleElementsUpInArray } from '@xilytix/sysutils';
 import { SourceTzOffsetDate } from '@xilytix/sysutils';
 import { SourceTzOffsetDateTime } from '@xilytix/sysutils';
-import { StandardCheckboxPainter } from '@xilytix/revgrid';
-import { StandardToggleClickBoxCellEditor } from '@xilytix/revgrid';
 import { StringArrayUiAction } from '@xilytix/ui-action';
 import { StringBuilder } from '@xilytix/sysutils';
 import { StringExplicitElementsEnumUiAction } from '@xilytix/ui-action';
 import { StringUiAction } from '@xilytix/ui-action';
-import { Subgrid } from '@xilytix/revgrid';
 import { subtractElementFromArray } from '@xilytix/sysutils';
 import { subtractElementFromArrayUniquely } from '@xilytix/sysutils';
 import { SysTick } from '@xilytix/sysutils';
 import { testRemoveFromArray } from '@xilytix/sysutils';
-import { TextTruncateType } from '@xilytix/revgrid';
 import { TimeSpan } from '@xilytix/sysutils';
 import { tryGetErrorMessage } from '@xilytix/sysutils';
 import { TypedArrayUiAction } from '@xilytix/ui-action';
@@ -254,7 +255,6 @@ import { uniqueElementArraysOverlap } from '@xilytix/sysutils';
 import { UnreachableCaseError } from '@xilytix/sysutils';
 import { UsableListChangeType } from '@xilytix/sysutils';
 import { UsableListChangeTypeId } from '@xilytix/sysutils';
-import { ViewLayout } from '@xilytix/revgrid';
 
 // Warning: (ae-missing-release-tag) "Account" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "Account" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -478,7 +478,7 @@ export class ActiveFaultedStatusIdTableValue extends EnumTableValue {
 }
 
 // @public (undocumented)
-export interface AdaptedRevgridBehavioredColumnSettings extends AdaptedRevgridColumnSettings, BehavioredColumnSettings {
+export interface AdaptedRevgridBehavioredColumnSettings extends AdaptedRevgridColumnSettings, RevBehavioredColumnSettings {
     // (undocumented)
     clone(): AdaptedRevgridBehavioredColumnSettings;
     // (undocumented)
@@ -486,7 +486,7 @@ export interface AdaptedRevgridBehavioredColumnSettings extends AdaptedRevgridCo
 }
 
 // @public (undocumented)
-export interface AdaptedRevgridBehavioredGridSettings extends AdaptedRevgridGridSettings, BehavioredGridSettings {
+export interface AdaptedRevgridBehavioredGridSettings extends AdaptedRevgridGridSettings, RevBehavioredGridSettings {
     // (undocumented)
     clone(): AdaptedRevgridBehavioredGridSettings;
     // (undocumented)
@@ -494,11 +494,11 @@ export interface AdaptedRevgridBehavioredGridSettings extends AdaptedRevgridGrid
 }
 
 // @public (undocumented)
-export interface AdaptedRevgridColumnSettings extends AdaptedRevgridOnlyColumnSettings, ColumnSettings {
+export interface AdaptedRevgridColumnSettings extends AdaptedRevgridOnlyColumnSettings, RevColumnSettings {
 }
 
 // @public (undocumented)
-export interface AdaptedRevgridGridSettings extends AdaptedRevgridOnlyGridSettings, GridSettings {
+export interface AdaptedRevgridGridSettings extends AdaptedRevgridOnlyGridSettings, RevGridSettings {
 }
 
 // @public (undocumented)
@@ -509,16 +509,16 @@ export interface AdaptedRevgridOnlyGridSettings {
     // (undocumented)
     columnHeaderFont: string;
     // (undocumented)
-    columnHeaderHorizontalAlign: HorizontalAlign;
+    columnHeaderHorizontalAlign: RevHorizontalAlign;
     // (undocumented)
     focusedCellSelectColored: boolean;
     // (undocumented)
     font: string;
     // (undocumented)
-    horizontalAlign: HorizontalAlign;
+    horizontalAlign: RevHorizontalAlign;
     textStrikeThrough: boolean;
     // (undocumented)
-    textTruncateType: TextTruncateType | undefined;
+    textTruncateType: RevTextTruncateTypeId | undefined;
     verticalOffset: number;
 }
 
@@ -3998,11 +3998,11 @@ export const enum ChartIntervalId {
 //
 // @public (undocumented)
 export class CheckboxRenderValueCellPainter extends RenderValueCellPainter {
-    constructor(settingsService: SettingsService, grid: SourcedFieldGrid, dataServer: DataServer<GridField>, _editable: boolean);
+    constructor(settingsService: SettingsService, grid: SourcedFieldGrid, dataServer: RevDataServer<GridField>, _editable: boolean);
     // (undocumented)
-    calculateClickBox(cell: DatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>): Rectangle | undefined;
+    calculateClickBox(cell: RevDatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>): RevRectangle | undefined;
     // (undocumented)
-    paintValue(cell: DatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined, renderValue: RenderValue): Integer | undefined;
+    paintValue(cell: RevDatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined, renderValue: RenderValue): Integer | undefined;
 }
 
 // @public (undocumented)
@@ -4015,29 +4015,29 @@ export namespace CheckboxRenderValueCellPainter {
         export function same(left: CheckboxPaintFingerprint, right: CheckboxPaintFingerprint): boolean;
     }
     // (undocumented)
-    export interface CheckboxPaintFingerprintInterface extends RenderValueCellPainter.PaintFingerprintInterface, StandardCheckboxPainter.PaintFingerprintInterface {
+    export interface CheckboxPaintFingerprintInterface extends RenderValueCellPainter.PaintFingerprintInterface, RevStandardCheckboxPainter.PaintFingerprintInterface {
     }
 }
 
 // Warning: (ae-missing-release-tag) "CheckboxRenderValueRecordGridCellEditor" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class CheckboxRenderValueRecordGridCellEditor extends StandardToggleClickBoxCellEditor<AdaptedRevgridBehavioredGridSettings, AdaptedRevgridBehavioredColumnSettings, GridField> {
+export class CheckboxRenderValueRecordGridCellEditor extends RevStandardToggleClickBoxCellEditor<AdaptedRevgridBehavioredGridSettings, AdaptedRevgridBehavioredColumnSettings, GridField> {
     constructor(settingsService: SettingsService, grid: SourcedFieldGrid, dataServer: RecordGridDataServer);
 }
 
 // Warning: (ae-missing-release-tag) "CheckboxRenderValueRecordGridCellPainter" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class CheckboxRenderValueRecordGridCellPainter implements ClickBoxCellPainter<AdaptedRevgridBehavioredColumnSettings, GridField> {
+export class CheckboxRenderValueRecordGridCellPainter implements RevClickBoxCellPainter<AdaptedRevgridBehavioredColumnSettings, GridField> {
     constructor(_renderValueCellPainter: CheckboxRenderValueCellPainter);
     // (undocumented)
-    calculateClickBox(cell: DatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>): Rectangle | undefined;
+    calculateClickBox(cell: RevDatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>): RevRectangle | undefined;
     // (undocumented)
     get focusedRowColoredAllowed(): boolean;
     set focusedRowColoredAllowed(value: boolean);
     // (undocumented)
-    paint(cell: DatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined): number | undefined;
+    paint(cell: RevDatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined): number | undefined;
 }
 
 export { checkEscapeCharForRegexInsideCharClass }
@@ -10634,7 +10634,7 @@ export namespace FullDepthSideField {
     // (undocumented)
     export function idToDefaultHeading(id: Id): string;
     // (undocumented)
-    export function idToDefaultTextAlign(id: Id): "center" | "end" | "left" | "right" | "start";
+    export function idToDefaultTextAlign(id: Id): "left" | "right" | "center" | "start" | "end";
     // (undocumented)
     export function idToName(id: Id): string;
     // (undocumented)
@@ -10870,7 +10870,7 @@ export function getUndefinedNullOrFunctionResult<U, T>(value: U | undefined | nu
 export { getUniqueElementArraysOverlapElements }
 
 // @public (undocumented)
-export type GridDataEditValue = DataServer.EditValue;
+export type GridDataEditValue = RevDataServer.EditValue;
 
 // Warning: (ae-missing-release-tag) "GridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "GridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -10886,7 +10886,7 @@ export namespace GridField {
 }
 
 // @public
-export type GridFieldHorizontalAlign = HorizontalAlign;
+export type GridFieldHorizontalAlign = RevHorizontalAlign;
 
 // @public
 export namespace GridFieldHorizontalAlign {
@@ -11984,46 +11984,46 @@ export interface IndexedTableRecordDefinition<Record extends IndexedRecord> exte
 export { IndexSignatureHack }
 
 // @public (undocumented)
-export class InMemoryAdaptedRevgridBehavioredColumnSettings extends InMemoryBehavioredColumnSettings implements AdaptedRevgridBehavioredColumnSettings {
+export class InMemoryAdaptedRevgridBehavioredColumnSettings extends RevInMemoryBehavioredColumnSettings implements AdaptedRevgridBehavioredColumnSettings {
     // (undocumented)
     clone(): InMemoryAdaptedRevgridBehavioredColumnSettings;
     // (undocumented)
     get columnHeaderFont(): string;
     set columnHeaderFont(value: string);
     // (undocumented)
-    get columnHeaderHorizontalAlign(): HorizontalAlign;
-    set columnHeaderHorizontalAlign(value: HorizontalAlign);
+    get columnHeaderHorizontalAlign(): RevHorizontalAlign;
+    set columnHeaderHorizontalAlign(value: RevHorizontalAlign);
     // (undocumented)
     get font(): string;
     set font(value: string);
     // (undocumented)
     gridSettings: AdaptedRevgridGridSettings;
     // (undocumented)
-    get horizontalAlign(): HorizontalAlign;
-    set horizontalAlign(value: HorizontalAlign);
+    get horizontalAlign(): RevHorizontalAlign;
+    set horizontalAlign(value: RevHorizontalAlign);
     // (undocumented)
     merge(settings: Partial<AdaptedRevgridColumnSettings>): boolean;
     // (undocumented)
     get textStrikeThrough(): boolean;
     set textStrikeThrough(value: boolean);
     // (undocumented)
-    get textTruncateType(): TextTruncateType | undefined;
-    set textTruncateType(value: TextTruncateType | undefined);
+    get textTruncateType(): RevTextTruncateTypeId | undefined;
+    set textTruncateType(value: RevTextTruncateTypeId | undefined);
     // (undocumented)
     get verticalOffset(): number;
     set verticalOffset(value: number);
 }
 
 // @public (undocumented)
-export class InMemoryAdaptedRevgridBehavioredGridSettings extends InMemoryBehavioredGridSettings implements AdaptedRevgridBehavioredGridSettings {
+export class InMemoryAdaptedRevgridBehavioredGridSettings extends RevInMemoryBehavioredGridSettings implements AdaptedRevgridBehavioredGridSettings {
     // (undocumented)
     clone(): InMemoryAdaptedRevgridBehavioredGridSettings;
     // (undocumented)
     get columnHeaderFont(): string;
     set columnHeaderFont(value: string);
     // (undocumented)
-    get columnHeaderHorizontalAlign(): HorizontalAlign;
-    set columnHeaderHorizontalAlign(value: HorizontalAlign);
+    get columnHeaderHorizontalAlign(): RevHorizontalAlign;
+    set columnHeaderHorizontalAlign(value: RevHorizontalAlign);
     // (undocumented)
     get focusedCellSelectColored(): boolean;
     set focusedCellSelectColored(value: boolean);
@@ -12031,16 +12031,16 @@ export class InMemoryAdaptedRevgridBehavioredGridSettings extends InMemoryBehavi
     get font(): string;
     set font(value: string);
     // (undocumented)
-    get horizontalAlign(): HorizontalAlign;
-    set horizontalAlign(value: HorizontalAlign);
+    get horizontalAlign(): RevHorizontalAlign;
+    set horizontalAlign(value: RevHorizontalAlign);
     // (undocumented)
     merge(settings: Partial<AdaptedRevgridGridSettings>): boolean;
     // (undocumented)
     get textStrikeThrough(): boolean;
     set textStrikeThrough(value: boolean);
     // (undocumented)
-    get textTruncateType(): TextTruncateType | undefined;
-    set textTruncateType(value: TextTruncateType | undefined);
+    get textTruncateType(): RevTextTruncateTypeId | undefined;
+    set textTruncateType(value: RevTextTruncateTypeId | undefined);
     // (undocumented)
     get verticalOffset(): number;
     set verticalOffset(value: number);
@@ -22281,11 +22281,11 @@ export class ReadonlyRenderValue extends BooleanRenderValue {
 
 // @public (undocumented)
 export class RecordGrid extends RecordSourcedFieldGrid {
-    constructor(settingsService: SettingsService, gridHostElement: HTMLElement, recordStore: RevRecordStore, customGridSettings: SourcedFieldGrid.CustomGridSettings, _customiseSettingsForNewColumnEventer: SourcedFieldGrid.CustomiseSettingsForNewColumnEventer, getMainCellPainterEventer: Subgrid.GetCellPainterEventer<AdaptedRevgridBehavioredColumnSettings, GridField>, getHeaderCellPainterEventer: Subgrid.GetCellPainterEventer<AdaptedRevgridBehavioredColumnSettings, GridField>, externalParent: unknown);
+    constructor(settingsService: SettingsService, gridHostElement: HTMLElement, recordStore: RevRecordStore, customGridSettings: SourcedFieldGrid.CustomGridSettings, _customiseSettingsForNewColumnEventer: SourcedFieldGrid.CustomiseSettingsForNewColumnEventer, getMainCellPainterEventer: RevSubgrid.GetCellPainterEventer<AdaptedRevgridBehavioredColumnSettings, GridField>, getHeaderCellPainterEventer: RevSubgrid.GetCellPainterEventer<AdaptedRevgridBehavioredColumnSettings, GridField>, externalParent: unknown);
     // (undocumented)
     columnsViewWidthsChangedEventer: SourcedFieldGrid.ColumnsViewWidthsChangedEventer | undefined;
     // (undocumented)
-    protected descendantProcessColumnsViewWidthsChanged(changeds: ViewLayout.ColumnsViewWidthChangeds): void;
+    protected descendantProcessColumnsViewWidthsChanged(changeds: RevViewLayout.ColumnsViewWidthChangeds): void;
     // (undocumented)
     destroy(): void;
     // (undocumented)
@@ -22856,22 +22856,22 @@ export namespace RenderValue {
 // Warning: (ae-missing-release-tag) "RenderValueRecordGridCellPainter" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class RenderValueRecordGridCellPainter<RVCP extends RenderValueCellPainter> implements CellPainter<AdaptedRevgridBehavioredColumnSettings, GridField> {
+export class RenderValueRecordGridCellPainter<RVCP extends RenderValueCellPainter> implements RevCellPainter<AdaptedRevgridBehavioredColumnSettings, GridField> {
     constructor(_renderValueCellPainter: RVCP);
     // (undocumented)
     get focusedRowColoredAllowed(): boolean;
     set focusedRowColoredAllowed(value: boolean);
     // (undocumented)
-    paint(cell: DatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined): number | undefined;
+    paint(cell: RevDatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined): number | undefined;
 }
 
 // Warning: (ae-missing-release-tag) "RenderValueRowDataArrayGridCellPainter" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class RenderValueRowDataArrayGridCellPainter<RVCP extends RenderValueCellPainter> implements CellPainter<AdaptedRevgridBehavioredColumnSettings, GridField> {
+export class RenderValueRowDataArrayGridCellPainter<RVCP extends RenderValueCellPainter> implements RevCellPainter<AdaptedRevgridBehavioredColumnSettings, GridField> {
     constructor(_renderValueCellPainter: RVCP);
     // (undocumented)
-    paint(cell: DatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined): number | undefined;
+    paint(cell: RevDatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined): number | undefined;
 }
 
 // Warning: (ae-missing-release-tag) "RepeatableExactHistorySequencer" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -23129,11 +23129,11 @@ export namespace RoutedIvemIdUiAction {
 //
 // @public (undocumented)
 export class RowDataArrayGrid extends RevSingleHeadingDataRowArraySourcedFieldGrid<AdaptedRevgridBehavioredGridSettings, AdaptedRevgridBehavioredColumnSettings, GridField> {
-    constructor(settingsService: SettingsService, gridHostElement: HTMLElement, customGridSettings: SourcedFieldGrid.CustomGridSettings, createFieldEventer: RevSingleHeadingDataRowArraySourcedFieldGrid.CreateFieldEventer<GridField>, _customiseSettingsForNewColumnEventer: SourcedFieldGrid.CustomiseSettingsForNewColumnEventer, getMainCellPainterEventer: Subgrid.GetCellPainterEventer<AdaptedRevgridBehavioredColumnSettings, GridField>, getHeaderCellPainterEventer: Subgrid.GetCellPainterEventer<AdaptedRevgridBehavioredColumnSettings, GridField>, externalParent: unknown);
+    constructor(settingsService: SettingsService, gridHostElement: HTMLElement, customGridSettings: SourcedFieldGrid.CustomGridSettings, createFieldEventer: RevSingleHeadingDataRowArraySourcedFieldGrid.CreateFieldEventer<GridField>, _customiseSettingsForNewColumnEventer: SourcedFieldGrid.CustomiseSettingsForNewColumnEventer, getMainCellPainterEventer: RevSubgrid.GetCellPainterEventer<AdaptedRevgridBehavioredColumnSettings, GridField>, getHeaderCellPainterEventer: RevSubgrid.GetCellPainterEventer<AdaptedRevgridBehavioredColumnSettings, GridField>, externalParent: unknown);
     // (undocumented)
-    protected descendantProcessClick(event: MouseEvent, hoverCell: LinedHoverCell<AdaptedRevgridBehavioredColumnSettings, GridField> | null | undefined): void;
+    protected descendantProcessClick(event: MouseEvent, hoverCell: RevLinedHoverCell<AdaptedRevgridBehavioredColumnSettings, GridField> | null | undefined): void;
     // (undocumented)
-    protected descendantProcessDblClick(event: MouseEvent, hoverCell: LinedHoverCell<AdaptedRevgridBehavioredColumnSettings, GridField> | null | undefined): void;
+    protected descendantProcessDblClick(event: MouseEvent, hoverCell: RevLinedHoverCell<AdaptedRevgridBehavioredColumnSettings, GridField> | null | undefined): void;
     // (undocumented)
     protected descendantProcessRowFocusChanged(newSubgridRowIndex: number | undefined, oldSubgridRowIndex: number | undefined): void;
     // (undocumented)
@@ -27896,7 +27896,7 @@ export namespace ShortDepthSideField {
     // (undocumented)
     export function idToDefaultHeading(id: Id): string;
     // (undocumented)
-    export function idToDefaultTextAlign(id: Id): "center" | "end" | "left" | "right" | "start";
+    export function idToDefaultTextAlign(id: Id): "left" | "right" | "center" | "start" | "end";
     // (undocumented)
     export function idToName(id: Id): string;
     // (undocumented)
@@ -34182,13 +34182,13 @@ export namespace TableFieldSourceStaticInitialise {
 //
 // @public (undocumented)
 export class TableGrid extends RevTableGrid<Badness, TableRecordSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId, RenderValue.TypeId, RenderValue.Attribute.TypeId, AdaptedRevgridBehavioredGridSettings, AdaptedRevgridBehavioredColumnSettings> {
-    constructor(gridFieldCustomHeadingsService: RevSourcedFieldCustomHeadingsService, referenceableColumnLayoutsService: ReferenceableColumnLayoutsService, tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService, tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFromJsonFactory, tableRecordSourceFactory: TableRecordSourceFactory, referenceableDataSourcesService: ReferenceableDataSourcesService, settingsService: SettingsService, gridHostElement: HTMLElement, customGridSettings: SourcedFieldGrid.CustomGridSettings, _customiseSettingsForNewColumnEventer: SourcedFieldGrid.CustomiseSettingsForNewColumnEventer, getMainCellPainterEventer: Subgrid.GetCellPainterEventer<AdaptedRevgridBehavioredColumnSettings, GridField>, getHeaderCellPainterEventer: Subgrid.GetCellPainterEventer<AdaptedRevgridBehavioredColumnSettings, GridField>, externalParent: unknown);
+    constructor(gridFieldCustomHeadingsService: RevSourcedFieldCustomHeadingsService, referenceableColumnLayoutsService: ReferenceableColumnLayoutsService, tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService, tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFromJsonFactory, tableRecordSourceFactory: TableRecordSourceFactory, referenceableDataSourcesService: ReferenceableDataSourcesService, settingsService: SettingsService, gridHostElement: HTMLElement, customGridSettings: SourcedFieldGrid.CustomGridSettings, _customiseSettingsForNewColumnEventer: SourcedFieldGrid.CustomiseSettingsForNewColumnEventer, getMainCellPainterEventer: RevSubgrid.GetCellPainterEventer<AdaptedRevgridBehavioredColumnSettings, GridField>, getHeaderCellPainterEventer: RevSubgrid.GetCellPainterEventer<AdaptedRevgridBehavioredColumnSettings, GridField>, externalParent: unknown);
     // (undocumented)
     calculateHeaderPlusFixedRowsHeight(): number;
     // (undocumented)
     columnsViewWidthsChangedEventer: SourcedFieldGrid.ColumnsViewWidthsChangedEventer | undefined;
     // (undocumented)
-    protected descendantProcessColumnsViewWidthsChanged(changeds: ViewLayout.ColumnsViewWidthChangeds): void;
+    protected descendantProcessColumnsViewWidthsChanged(changeds: RevViewLayout.ColumnsViewWidthChangeds): void;
     // (undocumented)
     destroy(): void;
     // (undocumented)
@@ -34969,9 +34969,9 @@ export namespace TextHasValueEqualsScanFieldCondition {
 //
 // @public (undocumented)
 export class TextHeaderCellPainter extends HeaderCellPainter {
-    constructor(settingsService: SettingsService, grid: SourcedFieldGrid, dataServer: DataServer<GridField>);
+    constructor(settingsService: SettingsService, grid: SourcedFieldGrid, dataServer: RevDataServer<GridField>);
     // (undocumented)
-    paint(cell: DatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, _prefillColor: string | undefined): number | undefined;
+    paint(cell: RevDatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, _prefillColor: string | undefined): number | undefined;
 }
 
 // @public (undocumented)
@@ -35001,9 +35001,9 @@ export namespace TextHeaderCellPainter {
 //
 // @public (undocumented)
 export class TextRenderValueCellPainter extends RenderValueCellPainter {
-    constructor(settingsService: SettingsService, _textFormatterService: TextFormatterService, grid: SourcedFieldGrid, dataServer: DataServer<GridField>);
+    constructor(settingsService: SettingsService, _textFormatterService: TextFormatterService, grid: SourcedFieldGrid, dataServer: RevDataServer<GridField>);
     // (undocumented)
-    paintValue(cell: DatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined, renderValue: RenderValue): Integer | undefined;
+    paintValue(cell: RevDatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined, renderValue: RenderValue): Integer | undefined;
 }
 
 // @public (undocumented)

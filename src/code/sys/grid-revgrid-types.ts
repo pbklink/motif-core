@@ -5,6 +5,8 @@
  */
 
 import {
+    RevDataServer,
+    RevHorizontalAlign,
     RevRecordDataServer,
     RevRecordField,
     RevRecordFieldIndex,
@@ -13,10 +15,6 @@ import {
     RevRecordStore,
     RevRecordValueRecentChangeTypeId
 } from '@xilytix/revgrid';
-import {
-    DataServer,
-    HorizontalAlign,
-} from '@xilytix/revgrid';
 
 // Aliases for RevGrid types (so that revgrid is only imported here for grid sub projects)
 
@@ -24,7 +22,7 @@ import {
  * Corresponds to Halign
  * @public
  */
-export type GridFieldHorizontalAlign = HorizontalAlign;
+export type GridFieldHorizontalAlign = RevHorizontalAlign;
 /**
  * Corresponds to HalignEnum
  * @public
@@ -48,7 +46,7 @@ export namespace ValueRecentChangeTypeId {
 }
 
 /** @public */
-export type GridDataEditValue = DataServer.EditValue;
+export type GridDataEditValue = RevDataServer.EditValue;
 
 /** @public */
 export type GridRecordIndex = RevRecordIndex;

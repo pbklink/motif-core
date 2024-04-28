@@ -5,15 +5,15 @@
  */
 
 // not used
-import { CellPainter, DataServer, DatalessViewCell } from '@xilytix/revgrid';
+import { RevCellPainter, RevDatalessViewCell, RevDataServer } from '@xilytix/revgrid';
 import { GridField } from '../../field/internal-api';
 import { SourcedFieldGrid } from '../adapted-revgrid/sourced-field-grid';
 import { AdaptedRevgridBehavioredColumnSettings } from '../settings/internal-api';
 
-export abstract class AdaptedRevgridCellPainter implements CellPainter<AdaptedRevgridBehavioredColumnSettings, GridField> {
+export abstract class AdaptedRevgridCellPainter implements RevCellPainter<AdaptedRevgridBehavioredColumnSettings, GridField> {
     constructor(
         protected readonly _grid: SourcedFieldGrid,
-        protected readonly _dataServer: DataServer<GridField>,
+        protected readonly _dataServer: RevDataServer<GridField>,
     ) {
         // const grid = this._grid;
         // this._gridSettings = grid.settings;
@@ -21,5 +21,5 @@ export abstract class AdaptedRevgridCellPainter implements CellPainter<AdaptedRe
     }
 
 
-    abstract paint(cell: DatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined): number | undefined;
+    abstract paint(cell: RevDatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined): number | undefined;
 }

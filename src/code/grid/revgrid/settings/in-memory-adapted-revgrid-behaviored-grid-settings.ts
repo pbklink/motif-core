@@ -4,20 +4,20 @@
  * License: motionite.trade/license/motif
  */
 
-import { HorizontalAlign, InMemoryBehavioredGridSettings, TextTruncateType } from '@xilytix/revgrid';
+import { RevHorizontalAlign, RevInMemoryBehavioredGridSettings, RevTextTruncateTypeId } from '@xilytix/revgrid';
 import { AdaptedRevgridBehavioredGridSettings } from './adapted-revgrid-behaviored-grid-settings';
 import { AdaptedRevgridGridSettings } from './adapted-revgrid-grid-settings';
 import { AdaptedRevgridOnlyGridSettings } from './adapted-revgrid-only-grid-settings';
 
 /** @public */
-export class InMemoryAdaptedRevgridBehavioredGridSettings extends InMemoryBehavioredGridSettings implements AdaptedRevgridBehavioredGridSettings {
+export class InMemoryAdaptedRevgridBehavioredGridSettings extends RevInMemoryBehavioredGridSettings implements AdaptedRevgridBehavioredGridSettings {
     private _verticalOffset: number;
-    private _textTruncateType: TextTruncateType | undefined;
+    private _textTruncateType: RevTextTruncateTypeId | undefined;
     private _textStrikeThrough: boolean;
     private _font: string;
     private _columnHeaderFont: string;
-    private _horizontalAlign: HorizontalAlign;
-    private _columnHeaderHorizontalAlign: HorizontalAlign;
+    private _horizontalAlign: RevHorizontalAlign;
+    private _columnHeaderHorizontalAlign: RevHorizontalAlign;
     private _focusedCellSelectColored: boolean;
 
     get verticalOffset() { return this._verticalOffset; }
@@ -30,7 +30,7 @@ export class InMemoryAdaptedRevgridBehavioredGridSettings extends InMemoryBehavi
         }
     }
     get textTruncateType() { return this._textTruncateType; }
-    set textTruncateType(value: TextTruncateType | undefined) {
+    set textTruncateType(value: RevTextTruncateTypeId | undefined) {
         if (value !== this._textTruncateType) {
             this.beginChange();
             this._textTruncateType = value;
@@ -57,7 +57,7 @@ export class InMemoryAdaptedRevgridBehavioredGridSettings extends InMemoryBehavi
         }
     }
     get horizontalAlign() { return this._horizontalAlign; }
-    set horizontalAlign(value: HorizontalAlign) {
+    set horizontalAlign(value: RevHorizontalAlign) {
         if (value !== this._horizontalAlign) {
             this.beginChange();
             this._horizontalAlign = value;
@@ -75,7 +75,7 @@ export class InMemoryAdaptedRevgridBehavioredGridSettings extends InMemoryBehavi
         }
     }
     get columnHeaderHorizontalAlign() { return this._columnHeaderHorizontalAlign; }
-    set columnHeaderHorizontalAlign(value: HorizontalAlign) {
+    set columnHeaderHorizontalAlign(value: RevHorizontalAlign) {
         if (value !== this._columnHeaderHorizontalAlign) {
             this.beginChange();
             this._columnHeaderHorizontalAlign = value;

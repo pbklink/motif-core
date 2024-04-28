@@ -4,14 +4,14 @@
  * License: motionite.trade/license/motif
  */
 
-import { CellPainter, DatalessViewCell } from '@xilytix/revgrid';
+import { RevCellPainter, RevDatalessViewCell } from '@xilytix/revgrid';
 import { RenderValue } from '../../../services/internal-api';
 import { GridField } from '../../field/internal-api';
 import { RecordGridDataServer } from '../record-grid/internal-api';
 import { AdaptedRevgridBehavioredColumnSettings } from '../settings/internal-api';
 import { RenderValueCellPainter } from './render-value/render-value-cell-painter';
 
-export class RenderValueRecordGridCellPainter<RVCP extends RenderValueCellPainter> implements CellPainter<AdaptedRevgridBehavioredColumnSettings, GridField> {
+export class RenderValueRecordGridCellPainter<RVCP extends RenderValueCellPainter> implements RevCellPainter<AdaptedRevgridBehavioredColumnSettings, GridField> {
     private readonly _dataServer: RecordGridDataServer;
 
     constructor(private readonly _renderValueCellPainter: RVCP) {
@@ -23,7 +23,7 @@ export class RenderValueRecordGridCellPainter<RVCP extends RenderValueCellPainte
         this._renderValueCellPainter.focusedRowColoredAllowed = value;
     }
 
-    paint(cell: DatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined) {
+    paint(cell: RevDatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined) {
         const field = cell.viewLayoutColumn.column.field;
         const subgridRowIndex = cell.viewLayoutRow.subgridRowIndex;
         const renderValue = this._dataServer.getViewValue(field, subgridRowIndex) as RenderValue;
