@@ -4,6 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
+import { RevHorizontalAlignId } from '@xilytix/revgrid';
 import { EnumInfoOutOfOrderError, FieldDataType } from '../../../sys/internal-api';
 import {
     BooleanTableField,
@@ -45,7 +46,7 @@ export class EditableColumnLayoutDefinitionColumnTableFieldSourceDefinition exte
             const sourcelessFieldName = EditableColumnLayoutDefinitionColumn.Field.idToName(id);
             const heading = EditableColumnLayoutDefinitionColumn.Field.idToHeading(id);
             const dataTypeId = EditableColumnLayoutDefinitionColumn.Field.idToDataTypeId(id);
-            const textAlign = FieldDataType.idIsNumber(dataTypeId) ? 'right' : 'left';
+            const textAlignId = FieldDataType.idIsNumber(dataTypeId) ? RevHorizontalAlignId.Right : RevHorizontalAlignId.Left;
             const [fieldConstructor, valueConstructor] =
                 EditableColumnLayoutDefinitionColumnTableFieldSourceDefinition.Field.idToTableFieldValueConstructors(id);
 
@@ -53,7 +54,7 @@ export class EditableColumnLayoutDefinitionColumnTableFieldSourceDefinition exte
                 this,
                 sourcelessFieldName,
                 heading,
-                textAlign,
+                textAlignId,
                 fieldConstructor,
                 valueConstructor,
             );

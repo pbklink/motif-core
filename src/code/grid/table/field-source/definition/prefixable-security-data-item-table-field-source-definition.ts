@@ -4,6 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
+import { RevHorizontalAlignId } from '@xilytix/revgrid';
 import { SecurityDataItem } from '../../../../adi/internal-api';
 import {
     AssertInternalError,
@@ -84,7 +85,7 @@ export abstract class PrefixableSecurityDataItemTableFieldSourceDefinition exten
         for (let fieldIdx = 0; fieldIdx < PrefixableSecurityDataItemTableFieldSourceDefinition.Field.count; fieldIdx++) {
             const sourcelessFieldName = this._prefix + PrefixableSecurityDataItemTableFieldSourceDefinition.Field.getName(fieldIdx);
             const dataTypeId = PrefixableSecurityDataItemTableFieldSourceDefinition.Field.getDataTypeId(fieldIdx);
-            const textAlign = FieldDataType.idIsNumber(dataTypeId) ? 'right' : 'left';
+            const textAlignId = FieldDataType.idIsNumber(dataTypeId) ? RevHorizontalAlignId.Right : RevHorizontalAlignId.Left;
             const fieldConstructor = PrefixableSecurityDataItemTableFieldSourceDefinition.Field.getTableFieldConstructor(fieldIdx);
             const valueConstructor = PrefixableSecurityDataItemTableFieldSourceDefinition.Field.getTableValueConstructor(fieldIdx);
 
@@ -92,7 +93,7 @@ export abstract class PrefixableSecurityDataItemTableFieldSourceDefinition exten
                 this,
                 sourcelessFieldName,
                 this._prefix + PrefixableSecurityDataItemTableFieldSourceDefinition.Field.getHeading(fieldIdx),
-                textAlign,
+                textAlignId,
                 fieldConstructor,
                 valueConstructor,
             );

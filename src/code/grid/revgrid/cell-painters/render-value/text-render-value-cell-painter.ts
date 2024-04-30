@@ -7,6 +7,7 @@
 import {
     RevDatalessViewCell,
     RevDataServer,
+    RevHorizontalAlignId,
     RevRecordRecentChangeTypeId,
     RevRecordValueRecentChangeTypeId,
     RevStandardTextPainter
@@ -42,7 +43,7 @@ export class TextRenderValueCellPainter extends RenderValueCellPainter {
         const focusedRowBorderColor = baseBkgdForeColors.focusedRowBorderColor;
         const focusedRowBorderWidth = baseBkgdForeColors.focusedRowBorderWidth;
 
-        let horizontalAlign = columnSettings.horizontalAlign;
+        let horizontalAlignId = columnSettings.horizontalAlignId;
         let graphicId = TextRenderValueCellPainter.GraphicId.None;
         let proportionBarGraphic: TextRenderValueCellPainter.ProportionBarGraphic | undefined;
         const subgridRowIndex = cell.viewLayoutRow.subgridRowIndex;
@@ -138,9 +139,9 @@ export class TextRenderValueCellPainter extends RenderValueCellPainter {
                 case RenderValue.Attribute.TypeId.DepthCountXRefField: {
                     const depthCountXRefFieldAttribute = attribute as RenderValue.DepthCountXRefFieldAttribute;
                     if (depthCountXRefFieldAttribute.isCountAndXrefs) {
-                        horizontalAlign = 'right';
+                        horizontalAlignId = RevHorizontalAlignId.Right;
                     } else {
-                        horizontalAlign = 'left';
+                        horizontalAlignId = RevHorizontalAlignId.Left;
                     }
                     break;
                 }
@@ -359,7 +360,7 @@ export class TextRenderValueCellPainter extends RenderValueCellPainter {
             gc.cache.fillStyle = foreColor;
             gc.cache.font = foreFont;
             this._textPainter.setColumnSettings(columnSettings);
-            return this._textPainter.renderSingleLineText(bounds, foreText, cellPadding, cellPadding, horizontalAlign);
+            return this._textPainter.renderSingleLineText(bounds, foreText, cellPadding, cellPadding, horizontalAlignId);
         }
     }
 }

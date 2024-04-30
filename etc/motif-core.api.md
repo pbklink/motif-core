@@ -177,13 +177,12 @@ import { RevDataSourceOrReference } from '@xilytix/revgrid';
 import { RevDataSourceOrReferenceDefinition } from '@xilytix/revgrid';
 import { RevFavouriteReferenceableColumnLayoutDefinition } from '@xilytix/revgrid';
 import { RevGridSettings } from '@xilytix/revgrid';
-import { RevHorizontalAlign } from '@xilytix/revgrid';
+import { RevHorizontalAlignId } from '@xilytix/revgrid';
 import { RevInMemoryBehavioredColumnSettings } from '@xilytix/revgrid';
 import { RevInMemoryBehavioredGridSettings } from '@xilytix/revgrid';
 import { RevLinedHoverCell } from '@xilytix/revgrid';
 import { RevRecordDataServer } from '@xilytix/revgrid';
 import { RevRecordField } from '@xilytix/revgrid';
-import { RevRecordFieldIndex } from '@xilytix/revgrid';
 import { RevRecordIndex } from '@xilytix/revgrid';
 import { RevRecordInvalidatedValue } from '@xilytix/revgrid';
 import { RevRecordSchemaServer } from '@xilytix/revgrid';
@@ -208,6 +207,7 @@ import { RevSourcedField } from '@xilytix/revgrid';
 import { RevSourcedFieldCustomHeadingsService } from '@xilytix/revgrid';
 import { RevSourcedFieldGrid } from '@xilytix/revgrid';
 import { RevStandardCheckboxPainter } from '@xilytix/revgrid';
+import { RevStandardTextPainter } from '@xilytix/revgrid';
 import { RevStandardToggleClickBoxCellEditor } from '@xilytix/revgrid';
 import { RevSubgrid } from '@xilytix/revgrid';
 import { RevTable } from '@xilytix/revgrid';
@@ -388,7 +388,7 @@ export namespace Account {
         // (undocumented)
         fieldId: FieldId;
         // (undocumented)
-        recentChangeTypeId: ValueRecentChangeTypeId;
+        recentChangeTypeId: RevRecordValueRecentChangeTypeId;
     }
 }
 
@@ -494,7 +494,7 @@ export interface AdaptedRevgridBehavioredGridSettings extends AdaptedRevgridGrid
 }
 
 // @public (undocumented)
-export interface AdaptedRevgridColumnSettings extends AdaptedRevgridOnlyColumnSettings, RevColumnSettings {
+export interface AdaptedRevgridColumnSettings extends AdaptedRevgridOnlyColumnSettings, RevColumnSettings, RevStandardTextPainter.ColumnSettings {
 }
 
 // @public (undocumented)
@@ -502,23 +502,23 @@ export interface AdaptedRevgridGridSettings extends AdaptedRevgridOnlyGridSettin
 }
 
 // @public (undocumented)
-export type AdaptedRevgridOnlyColumnSettings = Pick<AdaptedRevgridOnlyGridSettings, 'verticalOffset' | 'textTruncateType' | 'textStrikeThrough' | 'font' | 'columnHeaderFont' | 'horizontalAlign' | 'columnHeaderHorizontalAlign'>;
+export type AdaptedRevgridOnlyColumnSettings = Pick<AdaptedRevgridOnlyGridSettings, 'verticalOffset' | 'textTruncateTypeId' | 'textStrikeThrough' | 'font' | 'columnHeaderFont' | 'horizontalAlignId' | 'columnHeaderHorizontalAlignId'>;
 
 // @public (undocumented)
-export interface AdaptedRevgridOnlyGridSettings {
+export interface AdaptedRevgridOnlyGridSettings extends RevStandardTextPainter.OnlyColumnSettings {
     // (undocumented)
     columnHeaderFont: string;
     // (undocumented)
-    columnHeaderHorizontalAlign: RevHorizontalAlign;
+    columnHeaderHorizontalAlignId: RevHorizontalAlignId;
     // (undocumented)
     focusedCellSelectColored: boolean;
     // (undocumented)
     font: string;
     // (undocumented)
-    horizontalAlign: RevHorizontalAlign;
+    horizontalAlignId: RevHorizontalAlignId;
     textStrikeThrough: boolean;
     // (undocumented)
-    textTruncateType: RevTextTruncateTypeId | undefined;
+    textTruncateTypeId: RevTextTruncateTypeId | undefined;
     verticalOffset: number;
 }
 
@@ -1990,7 +1990,7 @@ export namespace Balances {
         // (undocumented)
         fieldId: FieldId;
         // (undocumented)
-        recentChangeTypeId: ValueRecentChangeTypeId | undefined;
+        recentChangeTypeId: RevRecordValueRecentChangeTypeId | undefined;
     }
 }
 
@@ -2720,7 +2720,7 @@ export namespace BrokerageAccountGroup {
     // (undocumented)
     export function compare(left: BrokerageAccountGroup, right: BrokerageAccountGroup): ComparisonResult;
     // (undocumented)
-    export function compareUndefinable(left: BrokerageAccountGroup | undefined, right: BrokerageAccountGroup | undefined): 0 | 1 | -1 | ComparisonResult;
+    export function compareUndefinable(left: BrokerageAccountGroup | undefined, right: BrokerageAccountGroup | undefined): 1 | 0 | -1 | ComparisonResult;
     // (undocumented)
     export function createAll(): AllBrokerageAccountGroup;
     // (undocumented)
@@ -4605,7 +4605,7 @@ export namespace ColorScheme {
 // Warning: (ae-missing-release-tag) "ColorSchemeGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export abstract class ColorSchemeGridField extends GridField implements GridRevRecordField {
+export abstract class ColorSchemeGridField extends GridField implements RevRecordField {
     constructor(_colorSettings: ColorSettings, definition: RevRecordSourcedFieldDefinition);
     // (undocumented)
     get colorSettings(): ColorSettings;
@@ -4659,26 +4659,26 @@ export namespace ColorSchemeGridField {
 }
 
 // @public (undocumented)
-export class ColorSchemeGridRecordStore implements GridRecordStore {
+export class ColorSchemeGridRecordStore implements RevRecordStore {
     constructor(_settingsService: SettingsService);
     // (undocumented)
     readonly colorSettings: ColorSettings;
     // (undocumented)
     finalise(): void;
     // (undocumented)
-    getRecord(index: GridRecordIndex): ColorSchemeGridRecordStore.Record;
+    getRecord(index: RevRecordIndex): ColorSchemeGridRecordStore.Record;
     // (undocumented)
     getRecords(): readonly ColorSchemeGridRecordStore.Record[];
     // (undocumented)
     invalidateAll(): void;
     // (undocumented)
-    invalidateRecord(recordIndex: GridRecordIndex): void;
+    invalidateRecord(recordIndex: RevRecordIndex): void;
     // (undocumented)
     get recordCount(): number;
     // (undocumented)
-    recordsInserted(firstInsertedRecordIndex: GridRecordIndex, count: Integer): void;
+    recordsInserted(firstInsertedRecordIndex: RevRecordIndex, count: Integer): void;
     // (undocumented)
-    setRecordEventers(recordsEventers: GridRecordStoreRecordsEventers): void;
+    setRecordEventers(recordsEventers: RevRecordStore.RecordsEventers): void;
 }
 
 // @public (undocumented)
@@ -7055,7 +7055,7 @@ export class DayTradesDataItemRecordTypeIdRenderValue extends EnumRenderValue {
 }
 
 // @public (undocumented)
-export abstract class DayTradesGridField extends GridField implements GridRevRecordField {
+export abstract class DayTradesGridField extends GridField implements RevRecordField {
     constructor(_id: DayTradesDataItem.Field.Id, definition: RevRecordSourcedFieldDefinition, _getDataItemCorrectnessIdEvent: DayTradesGridField.GetDataItemCorrectnessIdEventHandler);
     // (undocumented)
     protected addRenderAttributes(renderValue: RenderValue, record: DayTradesDataItem.Record, cellAttribute: RenderValue.Attribute): void;
@@ -7101,7 +7101,7 @@ export namespace DayTradesGridField {
 // Warning: (ae-missing-release-tag) "DayTradesGridRecordStore" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class DayTradesGridRecordStore implements GridRecordStore {
+export class DayTradesGridRecordStore implements RevRecordStore {
     // (undocumented)
     allRecordsDeleted(): void;
     // (undocumented)
@@ -7125,7 +7125,7 @@ export class DayTradesGridRecordStore implements GridRecordStore {
     // (undocumented)
     setDataItem(value: DayTradesDataItem): void;
     // (undocumented)
-    setRecordEventers(recordsEventers: GridRecordStoreRecordsEventers): void;
+    setRecordEventers(recordsEventers: RevRecordStore.RecordsEventers): void;
 }
 
 export { Decimal }
@@ -7400,7 +7400,7 @@ export namespace DepthDataItem {
             // (undocumented)
             readonly fieldId: Field.Id;
             // (undocumented)
-            readonly recentChangeTypeId: ValueRecentChangeTypeId;
+            readonly recentChangeTypeId: RevRecordValueRecentChangeTypeId;
         }
         // (undocumented)
         export namespace ValueChange {
@@ -7629,7 +7629,7 @@ export namespace DepthLevelsDataItem {
             // (undocumented)
             readonly fieldId: Field.Id;
             // (undocumented)
-            readonly recentChangeTypeId: ValueRecentChangeTypeId;
+            readonly recentChangeTypeId: RevRecordValueRecentChangeTypeId;
         }
     }
     // (undocumented)
@@ -7753,7 +7753,7 @@ export namespace DepthRecordRenderValue {
 }
 
 // @public (undocumented)
-export abstract class DepthSideGridField extends GridField implements GridRevRecordField {
+export abstract class DepthSideGridField extends GridField implements RevRecordField {
     // (undocumented)
     abstract getViewValue(record: DepthRecord): RenderValue;
 }
@@ -7784,11 +7784,11 @@ export abstract class DepthSideGridRecordStore {
     // (undocumented)
     protected eventifyInvalidateRecordAndFollowingRecords(recordIndex: Integer, lastAffectedFollowingRecordIndex: Integer | undefined): void;
     // (undocumented)
-    protected eventifyInvalidateRecordAndValuesAndFollowingRecords(recordIndex: Integer, invalidatedRecordValues: GridRecordInvalidatedValue[], lastAffectedFollowingRecordIndex: Integer | undefined): void;
+    protected eventifyInvalidateRecordAndValuesAndFollowingRecords(recordIndex: Integer, invalidatedRecordValues: RevRecordInvalidatedValue[], lastAffectedFollowingRecordIndex: Integer | undefined): void;
     // (undocumented)
     protected eventifyInvalidateRecords(index: Integer, count: Integer): void;
     // (undocumented)
-    protected eventifyInvalidateRecordsAndRecordValues(recordIndex: Integer, count: Integer, valuesRecordIndex: Integer, invalidatedRecordValues: GridRecordInvalidatedValue[]): void;
+    protected eventifyInvalidateRecordsAndRecordValues(recordIndex: Integer, count: Integer, valuesRecordIndex: Integer, invalidatedRecordValues: RevRecordInvalidatedValue[]): void;
     // (undocumented)
     protected eventifyRecordDeleted(recordIndex: Integer, lastAffectedFollowingRecordIndex: Integer | undefined): void;
     // (undocumented)
@@ -7804,7 +7804,7 @@ export abstract class DepthSideGridRecordStore {
     // (undocumented)
     abstract finalise(): void;
     // (undocumented)
-    abstract getRecord(recordIndex: GridRecordIndex): DepthRecord;
+    abstract getRecord(recordIndex: RevRecordIndex): DepthRecord;
     // (undocumented)
     protected abstract getRecordCount(): Integer;
     // (undocumented)
@@ -7820,7 +7820,7 @@ export abstract class DepthSideGridRecordStore {
     // (undocumented)
     abstract setNewPriceLevelAsOrder(value: boolean): void;
     // (undocumented)
-    setRecordEventers(recordsEventers: GridRecordStoreRecordsEventers): void;
+    setRecordEventers(recordsEventers: RevRecordStore.RecordsEventers): void;
     // (undocumented)
     get sideId(): OrderSideId;
     // (undocumented)
@@ -7840,9 +7840,9 @@ export namespace DepthSideGridRecordStore {
     // (undocumented)
     export type InvalidateRecordAndFollowingRecordsEventHandler = (this: void, index: Integer, lastAffectedFollowingRecordIndex: Integer | undefined) => void;
     // (undocumented)
-    export type InvalidateRecordAndValuesAndFollowingRecordsEventHandler = (this: void, recordIndex: Integer, invalidatedRecordValues: GridRecordInvalidatedValue[], lastAffectedFollowingRecordIndex: Integer | undefined) => void;
+    export type InvalidateRecordAndValuesAndFollowingRecordsEventHandler = (this: void, recordIndex: Integer, invalidatedRecordValues: RevRecordInvalidatedValue[], lastAffectedFollowingRecordIndex: Integer | undefined) => void;
     // (undocumented)
-    export type InvalidateRecordsAndRecordValuesEventHandler = (this: void, recordIndex: Integer, count: Integer, valuesRecordIndex: Integer, invalidatedRecordValues: GridRecordInvalidatedValue[]) => void;
+    export type InvalidateRecordsAndRecordValuesEventHandler = (this: void, recordIndex: Integer, count: Integer, valuesRecordIndex: Integer, invalidatedRecordValues: RevRecordInvalidatedValue[]) => void;
     // (undocumented)
     export type InvalidateRecordsEventHandler = (this: void, index: Integer, count: Integer) => void;
     // (undocumented)
@@ -7996,7 +7996,7 @@ export namespace EditableColumnLayoutDefinitionColumn {
         // (undocumented)
         fieldId: FieldId;
         // (undocumented)
-        recentChangeTypeId: ValueRecentChangeTypeId;
+        recentChangeTypeId: RevRecordValueRecentChangeTypeId;
     }
     // (undocumented)
     export type VisibleChangedEventHandler = (this: void) => void;
@@ -10634,7 +10634,7 @@ export namespace FullDepthSideField {
     // (undocumented)
     export function idToDefaultHeading(id: Id): string;
     // (undocumented)
-    export function idToDefaultTextAlign(id: Id): "left" | "right" | "center" | "start" | "end";
+    export function idToDefaultTextAlignId(id: Id): RevHorizontalAlignId;
     // (undocumented)
     export function idToName(id: Id): string;
     // (undocumented)
@@ -10701,14 +10701,14 @@ export namespace FullDepthSideGridField {
 // Warning: (ae-missing-release-tag) "FullDepthSideGridRecordStore" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class FullDepthSideGridRecordStore extends DepthSideGridRecordStore implements GridRecordStore {
+export class FullDepthSideGridRecordStore extends DepthSideGridRecordStore implements RevRecordStore {
     constructor(sessionInfoService: SessionInfoService, styleId: DepthStyleId, sideId: OrderSideId);
     // (undocumented)
     close(): void;
     // (undocumented)
     finalise(): void;
     // (undocumented)
-    getRecord(recordIndex: GridRecordIndex): FullDepthRecord;
+    getRecord(recordIndex: RevRecordIndex): FullDepthRecord;
     // (undocumented)
     protected getRecordCount(): number;
     // (undocumented)
@@ -10869,9 +10869,6 @@ export function getUndefinedNullOrFunctionResult<U, T>(value: U | undefined | nu
 
 export { getUniqueElementArraysOverlapElements }
 
-// @public (undocumented)
-export type GridDataEditValue = RevDataServer.EditValue;
-
 // Warning: (ae-missing-release-tag) "GridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "GridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -10883,23 +10880,6 @@ export abstract class GridField extends RevRecordSourcedField<RenderValue.TypeId
 export namespace GridField {
     // (undocumented)
     export function idToHeading(id: RevSourcedField.FieldId): string;
-}
-
-// @public
-export type GridFieldHorizontalAlign = RevHorizontalAlign;
-
-// @public
-export namespace GridFieldHorizontalAlign {
-    const // (undocumented)
-    left = "left";
-    const // (undocumented)
-    right = "right";
-    const // (undocumented)
-    center = "center";
-    const // (undocumented)
-    start = "start";
-    const // (undocumented)
-    end = "end";
 }
 
 // @public (undocumented)
@@ -10926,7 +10906,7 @@ export namespace GridFieldTableFieldSourceDefinition {
         // (undocumented)
         export function getHeading(fieldIdx: Integer): string;
         // (undocumented)
-        export function getHorizontalAlign(fieldIdx: Integer): GridFieldHorizontalAlign;
+        export function getHorizontalAlign(fieldIdx: Integer): RevHorizontalAlignId;
         // (undocumented)
         export function getId(fieldIdx: Integer): RevSourcedField.FieldId;
         // (undocumented)
@@ -11043,21 +11023,6 @@ export class GridOrderTriggerTypeIdCorrectnessTableValue extends EnumCorrectness
     constructor();
 }
 
-// @public (undocumented)
-export type GridRecordFieldIndex = RevRecordFieldIndex;
-
-// @public (undocumented)
-export type GridRecordIndex = RevRecordIndex;
-
-// @public (undocumented)
-export type GridRecordInvalidatedValue = RevRecordInvalidatedValue;
-
-// @public (undocumented)
-export type GridRecordStore = RevRecordStore;
-
-// @public (undocumented)
-export type GridRecordStoreRecordsEventers = RevRecordStore.RecordsEventers;
-
 // Warning: (ae-missing-release-tag) "GridRecordStoreRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -11066,12 +11031,6 @@ export namespace GridRecordStoreRenderValue {
     export interface Attribute extends RenderValue.Attribute {
     }
 }
-
-// @public (undocumented)
-export type GridRevRecordField = RevRecordField;
-
-// @public (undocumented)
-export type GridSortFieldSpecifier = RevRecordDataServer.SortFieldSpecifier;
 
 // Warning: (ae-internal-missing-underscore) The name "GridStaticInitialise" should be prefixed with an underscore because the declaration is marked as @internal
 //
@@ -11446,7 +11405,7 @@ export namespace Holding {
         // (undocumented)
         fieldId: FieldId;
         // (undocumented)
-        recentChangeTypeId: ValueRecentChangeTypeId;
+        recentChangeTypeId: RevRecordValueRecentChangeTypeId;
     }
 }
 
@@ -11991,24 +11950,24 @@ export class InMemoryAdaptedRevgridBehavioredColumnSettings extends RevInMemoryB
     get columnHeaderFont(): string;
     set columnHeaderFont(value: string);
     // (undocumented)
-    get columnHeaderHorizontalAlign(): RevHorizontalAlign;
-    set columnHeaderHorizontalAlign(value: RevHorizontalAlign);
+    get columnHeaderHorizontalAlignId(): RevHorizontalAlignId;
+    set columnHeaderHorizontalAlignId(value: RevHorizontalAlignId);
     // (undocumented)
     get font(): string;
     set font(value: string);
     // (undocumented)
     gridSettings: AdaptedRevgridGridSettings;
     // (undocumented)
-    get horizontalAlign(): RevHorizontalAlign;
-    set horizontalAlign(value: RevHorizontalAlign);
+    get horizontalAlignId(): RevHorizontalAlignId;
+    set horizontalAlignId(value: RevHorizontalAlignId);
     // (undocumented)
     merge(settings: Partial<AdaptedRevgridColumnSettings>): boolean;
     // (undocumented)
     get textStrikeThrough(): boolean;
     set textStrikeThrough(value: boolean);
     // (undocumented)
-    get textTruncateType(): RevTextTruncateTypeId | undefined;
-    set textTruncateType(value: RevTextTruncateTypeId | undefined);
+    get textTruncateTypeId(): RevTextTruncateTypeId | undefined;
+    set textTruncateTypeId(value: RevTextTruncateTypeId | undefined);
     // (undocumented)
     get verticalOffset(): number;
     set verticalOffset(value: number);
@@ -12022,8 +11981,8 @@ export class InMemoryAdaptedRevgridBehavioredGridSettings extends RevInMemoryBeh
     get columnHeaderFont(): string;
     set columnHeaderFont(value: string);
     // (undocumented)
-    get columnHeaderHorizontalAlign(): RevHorizontalAlign;
-    set columnHeaderHorizontalAlign(value: RevHorizontalAlign);
+    get columnHeaderHorizontalAlignId(): RevHorizontalAlignId;
+    set columnHeaderHorizontalAlignId(value: RevHorizontalAlignId);
     // (undocumented)
     get focusedCellSelectColored(): boolean;
     set focusedCellSelectColored(value: boolean);
@@ -12031,16 +11990,16 @@ export class InMemoryAdaptedRevgridBehavioredGridSettings extends RevInMemoryBeh
     get font(): string;
     set font(value: string);
     // (undocumented)
-    get horizontalAlign(): RevHorizontalAlign;
-    set horizontalAlign(value: RevHorizontalAlign);
+    get horizontalAlignId(): RevHorizontalAlignId;
+    set horizontalAlignId(value: RevHorizontalAlignId);
     // (undocumented)
     merge(settings: Partial<AdaptedRevgridGridSettings>): boolean;
     // (undocumented)
     get textStrikeThrough(): boolean;
     set textStrikeThrough(value: boolean);
     // (undocumented)
-    get textTruncateType(): RevTextTruncateTypeId | undefined;
-    set textTruncateType(value: RevTextTruncateTypeId | undefined);
+    get textTruncateTypeId(): RevTextTruncateTypeId | undefined;
+    set textTruncateTypeId(value: RevTextTruncateTypeId | undefined);
     // (undocumented)
     get verticalOffset(): number;
     set verticalOffset(value: number);
@@ -15087,7 +15046,7 @@ export namespace LockerScanAttachedNotificationChannel {
             // (undocumented)
             fieldId: Id;
             // (undocumented)
-            recentChangeTypeId: ValueRecentChangeTypeId;
+            recentChangeTypeId: RevRecordValueRecentChangeTypeId;
         }
     }
     // (undocumented)
@@ -15352,7 +15311,7 @@ export namespace LockOpenNotificationChannel {
             // (undocumented)
             fieldId: Id;
             // (undocumented)
-            recentChangeTypeId: ValueRecentChangeTypeId;
+            recentChangeTypeId: RevRecordValueRecentChangeTypeId;
         }
     }
     // (undocumented)
@@ -18174,7 +18133,7 @@ export namespace Order {
         // (undocumented)
         fieldId: FieldId;
         // (undocumented)
-        recentChangeTypeId: ValueRecentChangeTypeId | undefined;
+        recentChangeTypeId: RevRecordValueRecentChangeTypeId | undefined;
     }
 }
 
@@ -18337,7 +18296,7 @@ export class OrderFullDepthRecord extends FullDepthRecord {
     // (undocumented)
     get order(): DepthDataItem.Order;
     // (undocumented)
-    processOrderValueChanges(valueChanges: DepthDataItem.Order.ValueChange[]): GridRecordInvalidatedValue[];
+    processOrderValueChanges(valueChanges: DepthDataItem.Order.ValueChange[]): RevRecordInvalidatedValue[];
 }
 
 // Warning: (ae-missing-release-tag) "OrderId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -20499,9 +20458,9 @@ export class PriceLevelFullDepthRecord extends FullDepthRecord {
     // (undocumented)
     acceptedByFilter(filterXrefs: string[]): boolean;
     // (undocumented)
-    addOrder(order: DepthDataItem.Order): GridRecordInvalidatedValue[];
+    addOrder(order: DepthDataItem.Order): RevRecordInvalidatedValue[];
     // (undocumented)
-    addOrders(depthOrders: DepthDataItem.Order[], index: Integer, count: Integer): GridRecordInvalidatedValue[];
+    addOrders(depthOrders: DepthDataItem.Order[], index: Integer, count: Integer): RevRecordInvalidatedValue[];
     // (undocumented)
     get attributes(): string[];
     // (undocumented)
@@ -20531,11 +20490,11 @@ export class PriceLevelFullDepthRecord extends FullDepthRecord {
     // (undocumented)
     get price(): Decimal;
     // (undocumented)
-    processOrderChange(newOrder: DepthDataItem.Order, oldOrderQuantity: Integer, oldHasUndisclosed: boolean, valueChanges: DepthDataItem.Order.ValueChange[]): GridRecordInvalidatedValue[];
+    processOrderChange(newOrder: DepthDataItem.Order, oldOrderQuantity: Integer, oldHasUndisclosed: boolean, valueChanges: DepthDataItem.Order.ValueChange[]): RevRecordInvalidatedValue[];
     // (undocumented)
     get quantity(): number;
     // (undocumented)
-    removeOrder(order: DepthDataItem.Order, oldVolume: Integer, oldHasUndisclosed: boolean): GridRecordInvalidatedValue[];
+    removeOrder(order: DepthDataItem.Order, oldVolume: Integer, oldHasUndisclosed: boolean): RevRecordInvalidatedValue[];
     // (undocumented)
     get undisclosedOrderCount(): number;
     // (undocumented)
@@ -21585,7 +21544,7 @@ export namespace RankedLitIvemId {
         // (undocumented)
         fieldId: FieldId;
         // (undocumented)
-        recentChangeTypeId: ValueRecentChangeTypeId;
+        recentChangeTypeId: RevRecordValueRecentChangeTypeId;
     }
 }
 
@@ -23156,7 +23115,7 @@ export namespace RowDataArrayGrid {
     // Warning: (ae-forgotten-export) The symbol "RowDataArrayGridField" needs to be exported by the entry point public-api.d.ts
     //
     // (undocumented)
-    export function createField(sourcelessName: string, defaultHeading: string, defaultTextAlign: GridFieldHorizontalAlign, defaultWidth?: Integer, key?: string): RowDataArrayGridField;
+    export function createField(sourcelessName: string, defaultHeading: string, defaultTextAlignId: RevHorizontalAlignId, defaultWidth?: Integer, key?: string): RowDataArrayGridField;
     // (undocumented)
     export type MainClickEventer = (this: void, columnIndex: number, rowIndex: number) => void;
     // (undocumented)
@@ -23753,7 +23712,7 @@ export namespace Scan {
         // (undocumented)
         fieldId: FieldId;
         // (undocumented)
-        recentChangeTypeId: ValueRecentChangeTypeId;
+        recentChangeTypeId: RevRecordValueRecentChangeTypeId;
     }
     // (undocumented)
     export type ValuesChangedEventHandler = (this: void, valueChanges: ValueChange[]) => void;
@@ -27176,7 +27135,7 @@ export namespace SecurityDataItem {
         // (undocumented)
         readonly fieldId: Field.Id;
         // (undocumented)
-        readonly recentChangeTypeId: ValueRecentChangeTypeId | undefined;
+        readonly recentChangeTypeId: RevRecordValueRecentChangeTypeId | undefined;
     }
     // (undocumented)
     export function valueChangeArrayIncludesAnyOfFieldIds(changes: readonly ValueChange[], fieldIds: readonly FieldId[]): boolean;
@@ -27896,7 +27855,7 @@ export namespace ShortDepthSideField {
     // (undocumented)
     export function idToDefaultHeading(id: Id): string;
     // (undocumented)
-    export function idToDefaultTextAlign(id: Id): "left" | "right" | "center" | "start" | "end";
+    export function idToDefaultTextAlignId(id: Id): RevHorizontalAlignId;
     // (undocumented)
     export function idToName(id: Id): string;
     // (undocumented)
@@ -27952,13 +27911,13 @@ export namespace ShortDepthSideGridField {
 // Warning: (ae-missing-release-tag) "ShortDepthSideGridRecordStore" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class ShortDepthSideGridRecordStore extends DepthSideGridRecordStore implements GridRecordStore {
+export class ShortDepthSideGridRecordStore extends DepthSideGridRecordStore implements RevRecordStore {
     // (undocumented)
     close(): void;
     // (undocumented)
     finalise(): void;
     // (undocumented)
-    getRecord(recordIndex: GridRecordIndex): ShortDepthRecord;
+    getRecord(recordIndex: RevRecordIndex): ShortDepthRecord;
     // (undocumented)
     protected getRecordCount(): number;
     // (undocumented)
@@ -37621,19 +37580,6 @@ export namespace ValueRecentChangeType {
     export function calculateChangeTypeId(oldValue: number | undefined, newValue: number | undefined): RevRecordValueRecentChangeTypeId;
 }
 
-// @public (undocumented)
-export type ValueRecentChangeTypeId = RevRecordValueRecentChangeTypeId;
-
-// @public (undocumented)
-export namespace ValueRecentChangeTypeId {
-    const // (undocumented)
-    Update = RevRecordValueRecentChangeTypeId.Update;
-    const // (undocumented)
-    Increase = RevRecordValueRecentChangeTypeId.Increase;
-    const // (undocumented)
-    Decrease = RevRecordValueRecentChangeTypeId.Decrease;
-}
-
 // Warning: (ae-missing-release-tag) "VisibleTableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -37906,7 +37852,7 @@ export namespace WatchmakerList {
         // (undocumented)
         fieldId: FieldId;
         // (undocumented)
-        recentChangeTypeId: ValueRecentChangeTypeId;
+        recentChangeTypeId: RevRecordValueRecentChangeTypeId;
     }
     // (undocumented)
     export type ValuesChangedEventHandler = (this: void, valueChanges: ValueChange[]) => void;

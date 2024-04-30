@@ -4,6 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
+import { RevHorizontalAlignId } from '@xilytix/revgrid';
 import { SearchSymbolsLitIvemFullDetail } from '../../../../adi/internal-api';
 import {
     AssertInternalError,
@@ -71,7 +72,7 @@ export class LitIvemExtendedDetailTableFieldSourceDefinition extends TableFieldS
         for (let fieldIdx = 0; fieldIdx < LitIvemExtendedDetailTableFieldSourceDefinition.Field.count; fieldIdx++) {
             const sourcelessFieldName = LitIvemExtendedDetailTableFieldSourceDefinition.Field.getName(fieldIdx);
             const dataTypeId = LitIvemExtendedDetailTableFieldSourceDefinition.Field.getDataTypeId(fieldIdx);
-            const textAlign = FieldDataType.idIsNumber(dataTypeId) ? 'right' : 'left';
+            const textAlignId = FieldDataType.idIsNumber(dataTypeId) ? RevHorizontalAlignId.Right : RevHorizontalAlignId.Left;
             const fieldConstructor = LitIvemExtendedDetailTableFieldSourceDefinition.Field.getTableFieldConstructor(fieldIdx);
             const valueConstructor = LitIvemExtendedDetailTableFieldSourceDefinition.Field.getTableValueConstructor(fieldIdx);
 
@@ -79,7 +80,7 @@ export class LitIvemExtendedDetailTableFieldSourceDefinition extends TableFieldS
                 this,
                 sourcelessFieldName,
                 LitIvemExtendedDetailTableFieldSourceDefinition.Field.getHeading(fieldIdx),
-                textAlign,
+                textAlignId,
                 fieldConstructor,
                 valueConstructor,
             );

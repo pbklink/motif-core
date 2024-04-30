@@ -10,10 +10,10 @@ import { defaultAdaptedRevgridOnlyGridSettings } from './default-adapted-revgrid
 /** @public */
 export const defaultAdaptedRevgridOnlyColumnSettings: AdaptedRevgridOnlyColumnSettings = {
     verticalOffset: defaultAdaptedRevgridOnlyGridSettings.verticalOffset,
-    textTruncateType: defaultAdaptedRevgridOnlyGridSettings.textTruncateType,
+    textTruncateTypeId: defaultAdaptedRevgridOnlyGridSettings.textTruncateTypeId,
     textStrikeThrough: defaultAdaptedRevgridOnlyGridSettings.textStrikeThrough,
     font: defaultAdaptedRevgridOnlyGridSettings.font,
     columnHeaderFont: defaultAdaptedRevgridOnlyGridSettings.columnHeaderFont,
-    horizontalAlign: defaultAdaptedRevgridOnlyGridSettings.horizontalAlign,
-    columnHeaderHorizontalAlign: defaultAdaptedRevgridOnlyGridSettings.columnHeaderHorizontalAlign,
+    horizontalAlignId: defaultAdaptedRevgridOnlyGridSettings.horizontalAlignId,
+    columnHeaderHorizontalAlignId: defaultAdaptedRevgridOnlyGridSettings.columnHeaderHorizontalAlignId,
 } as const;

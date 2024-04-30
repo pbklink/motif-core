@@ -89,7 +89,7 @@ export namespace FullDepthSideGridField {
             DepthSideGridField.sourceDefinition,
             FullDepthSideField.idToName(id),
             FullDepthSideField.idToDefaultHeading(id),
-            FullDepthSideField.idToDefaultTextAlign(id),
+            FullDepthSideField.idToDefaultTextAlignId(id),
         );
     }
 

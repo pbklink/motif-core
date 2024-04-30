@@ -4,14 +4,14 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevRecordSourcedFieldSourceDefinition } from '@xilytix/revgrid';
+import { RevRecordField, RevRecordSourcedFieldSourceDefinition } from '@xilytix/revgrid';
 import { RenderValue } from '../../../services/internal-api';
-import { CorrectnessId, GridRevRecordField } from '../../../sys/internal-api';
+import { CorrectnessId } from '../../../sys/internal-api';
 import { GridField } from '../../field/internal-api';
 import { DepthRecord } from './depth-record';
 
 /** @public */
-export abstract class DepthSideGridField extends GridField implements GridRevRecordField {
+export abstract class DepthSideGridField extends GridField implements RevRecordField {
     abstract override getViewValue(record: DepthRecord): RenderValue;
 }
 

@@ -4,8 +4,9 @@
  * License: motionite.trade/license/motif
  */
 
+import { RevRecordValueRecentChangeTypeId } from '@xilytix/revgrid';
 import { RankedLitIvemIdListDirectoryItem } from '../../../services/internal-api';
-import { Integer, MultiEvent, UnreachableCaseError, ValueRecentChangeTypeId } from '../../../sys/internal-api';
+import { Integer, MultiEvent, UnreachableCaseError } from '../../../sys/internal-api';
 import { RankedLitIvemIdListDirectoryItemTableFieldSourceDefinition } from '../field-source/internal-api';
 import { CorrectnessTableValue, RankedLitIvemIdListDirectoryItemTypeIdCorrectnessTableValue, ReadonlyCorrectnessTableValue, StringCorrectnessTableValue, TableValue } from '../value/internal-api';
 import { CorrectnessTableValueSource } from './correctness-table-value-source';
@@ -68,7 +69,7 @@ export class RankedLitIvemIdListDirectoryItemTableValueSource extends Correctnes
             if (fieldIndex >= 0) {
                 const newValue = this.createTableValue(fieldIndex);
                 this.loadValue(fieldId, newValue);
-                valueChanges[foundCount++] = { fieldIndex, newValue, recentChangeTypeId: ValueRecentChangeTypeId.Update };
+                valueChanges[foundCount++] = { fieldIndex, newValue, recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update };
             }
         }
         if (foundCount < changeValueFieldIdCount) {

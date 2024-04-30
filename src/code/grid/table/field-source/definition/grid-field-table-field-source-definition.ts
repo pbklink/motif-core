@@ -4,8 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevSourcedField } from '@xilytix/revgrid';
-import { AssertInternalError, GridFieldHorizontalAlign, Integer } from '../../../../sys/internal-api';
+import { RevHorizontalAlignId, RevSourcedField } from '@xilytix/revgrid';
+import { AssertInternalError, Integer } from '../../../../sys/internal-api';
 import { GridField } from '../../../field/internal-api';
 import {
     StringTableField,
@@ -52,7 +52,7 @@ export class GridFieldTableFieldSourceDefinition extends TableFieldSourceDefinit
         for (let fieldIdx = 0; fieldIdx < count; fieldIdx++) {
             const sourcelessFieldName = GridFieldTableFieldSourceDefinition.Field.getName(fieldIdx);
             const heading = GridFieldTableFieldSourceDefinition.Field.getHeading(fieldIdx);
-            const textAlign = GridFieldTableFieldSourceDefinition.Field.getHorizontalAlign(fieldIdx);
+            const textAlignId = GridFieldTableFieldSourceDefinition.Field.getHorizontalAlign(fieldIdx);
             const [fieldConstructor, valueConstructor] =
                 GridFieldTableFieldSourceDefinition.Field.getTableFieldValueConstructors(fieldIdx);
 
@@ -60,7 +60,7 @@ export class GridFieldTableFieldSourceDefinition extends TableFieldSourceDefinit
                 this,
                 sourcelessFieldName,
                 heading,
-                textAlign,
+                textAlignId,
                 fieldConstructor,
                 valueConstructor,
             );
@@ -140,8 +140,8 @@ export namespace GridFieldTableFieldSourceDefinition {
             return GridField.idToHeading(infos[fieldIdx].id);
         }
 
-        export function getHorizontalAlign(fieldIdx: Integer): GridFieldHorizontalAlign {
-            return RevSourcedField.Field.idToHorizontalAlign(infos[fieldIdx].id);
+        export function getHorizontalAlign(fieldIdx: Integer): RevHorizontalAlignId {
+            return RevSourcedField.Field.idToHorizontalAlignId(infos[fieldIdx].id);
         }
 
         export function getTableFieldValueConstructors(fieldIndex: Integer) {

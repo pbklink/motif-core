@@ -4,8 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
-import { isReadable as TinyColorIsReadable, readability as TinyColorReadability } from '@ctrl/tinycolor';
-import { RevColumnLayoutDefinition, RevRecordSourcedFieldDefinition, RevRecordSourcedFieldSourceDefinition, RevSourcedFieldDefinition } from '@xilytix/revgrid';
+import { isReadable as tinyColorIsReadable, readability as tinyColorReadability } from '@ctrl/tinycolor';
+import { RevColumnLayoutDefinition, RevHorizontalAlignId, RevRecordField, RevRecordSourcedFieldDefinition, RevRecordSourcedFieldSourceDefinition, RevSourcedFieldDefinition } from '@xilytix/revgrid';
 import { StringId, Strings } from '../../../res/internal-api';
 import {
     ColorRenderValue,
@@ -19,14 +19,12 @@ import {
     StringRenderValue
 } from '../../../services/internal-api';
 import {
-    GridFieldHorizontalAlign,
-    GridRevRecordField,
     UnreachableCaseError
 } from "../../../sys/internal-api";
 import { GridField } from '../../field/internal-api';
 import { ColorSchemeGridRecordStore } from './color-scheme-grid-record-store';
 
-export abstract class ColorSchemeGridField extends GridField implements GridRevRecordField {
+export abstract class ColorSchemeGridField extends GridField implements RevRecordField {
     constructor(
         private readonly _colorSettings: ColorSettings,
         definition: RevRecordSourcedFieldDefinition,
@@ -134,7 +132,7 @@ export class ItemIdColorSchemeGridField extends ColorSchemeGridField {
             ColorSchemeGridField.sourceDefinition,
             ColorSchemeGridField.FieldName.ItemId,
             Strings[StringId.ColorGridHeading_ItemId],
-            GridFieldHorizontalAlign.right,
+            RevHorizontalAlignId.Right,
         );
         super(colorSettings, definition);
     }
@@ -150,7 +148,7 @@ export class NameColorSchemeGridField extends ColorSchemeGridField {
             ColorSchemeGridField.sourceDefinition,
             ColorSchemeGridField.FieldName.Name,
             Strings[StringId.ColorGridHeading_Name],
-            GridFieldHorizontalAlign.left,
+            RevHorizontalAlignId.Left,
         );
         super(colorSettings, definition);
     }
@@ -166,7 +164,7 @@ export class DisplayColorSchemeGridField extends ColorSchemeGridField {
             ColorSchemeGridField.sourceDefinition,
             ColorSchemeGridField.FieldName.Display,
             Strings[StringId.ColorGridHeading_Display],
-            GridFieldHorizontalAlign.left,
+            RevHorizontalAlignId.Left,
         );
         super(colorSettings, definition);
     }
@@ -182,7 +180,7 @@ export class ItemBkgdColorTextColorSchemeGridField extends ColorSchemeGridField 
             ColorSchemeGridField.sourceDefinition,
             ColorSchemeGridField.FieldName.ItemBkgdColorText,
             Strings[StringId.ColorGridHeading_ItemBkgdColorText],
-            GridFieldHorizontalAlign.right,
+            RevHorizontalAlignId.Right,
         );
         super(colorSettings, definition);
     }
@@ -198,7 +196,7 @@ export class ResolvedBkgdColorTextColorSchemeGridField extends ColorSchemeGridFi
             ColorSchemeGridField.sourceDefinition,
             ColorSchemeGridField.FieldName.ResolvedBkgdColorText,
             Strings[StringId.ColorGridHeading_ResolvedBkgdColorText],
-            GridFieldHorizontalAlign.right,
+            RevHorizontalAlignId.Right,
         );
         super(colorSettings, definition);
     }
@@ -242,7 +240,7 @@ export class ItemForeColorTextColorSchemeGridField extends ColorSchemeGridField 
             ColorSchemeGridField.sourceDefinition,
             ColorSchemeGridField.FieldName.ItemForeColorText,
             Strings[StringId.ColorGridHeading_ItemForeColorText],
-            GridFieldHorizontalAlign.right,
+            RevHorizontalAlignId.Right,
         );
         super(colorSettings, definition);
     }
@@ -258,7 +256,7 @@ export class ResolvedForeColorTextColorSchemeGridField extends ColorSchemeGridFi
             ColorSchemeGridField.sourceDefinition,
             ColorSchemeGridField.FieldName.ResolvedForeColorText,
             Strings[StringId.ColorGridHeading_ResolvedForeColorText],
-            GridFieldHorizontalAlign.right,
+            RevHorizontalAlignId.Right,
         );
         super(colorSettings, definition);
     }
@@ -302,7 +300,7 @@ export class ItemBkgdColorColorSchemeGridField extends ColorSchemeGridField {
             ColorSchemeGridField.sourceDefinition,
             ColorSchemeGridField.FieldName.ItemBkgdColor,
             Strings[StringId.ColorGridHeading_ItemBkgdColor],
-            GridFieldHorizontalAlign.left,
+            RevHorizontalAlignId.Left,
         );
         super(colorSettings, definition);
     }
@@ -318,7 +316,7 @@ export class ResolvedBkgdColorColorSchemeGridField extends ColorSchemeGridField 
             ColorSchemeGridField.sourceDefinition,
             ColorSchemeGridField.FieldName.ResolvedBkgdColor,
             Strings[StringId.ColorGridHeading_ResolvedBkgdColor],
-            GridFieldHorizontalAlign.left,
+            RevHorizontalAlignId.Left,
         );
         super(colorSettings, definition);
     }
@@ -334,7 +332,7 @@ export class ItemForeColorColorSchemeGridField extends ColorSchemeGridField {
             ColorSchemeGridField.sourceDefinition,
             ColorSchemeGridField.FieldName.ItemForeColor,
             Strings[StringId.ColorGridHeading_ItemForeColor],
-            GridFieldHorizontalAlign.left,
+            RevHorizontalAlignId.Left,
         );
         super(colorSettings, definition);
     }
@@ -350,7 +348,7 @@ export class ResolvedForeColorColorSchemeGridField extends ColorSchemeGridField 
             ColorSchemeGridField.sourceDefinition,
             ColorSchemeGridField.FieldName.ResolvedForeColor,
             Strings[StringId.ColorGridHeading_ResolvedForeColor],
-            GridFieldHorizontalAlign.left,
+            RevHorizontalAlignId.Left,
         );
         super(colorSettings, definition);
     }
@@ -366,7 +364,7 @@ export class BkgdItemStateColorSchemeGridField extends ColorSchemeGridField {
             ColorSchemeGridField.sourceDefinition,
             ColorSchemeGridField.FieldName.BkgdItemState,
             Strings[StringId.ColorGridHeading_NotHasBkgd],
-            GridFieldHorizontalAlign.left,
+            RevHorizontalAlignId.Left,
         );
         super(colorSettings, definition);
     }
@@ -383,7 +381,7 @@ export class ForeItemStateColorSchemeGridField extends ColorSchemeGridField {
             ColorSchemeGridField.sourceDefinition,
             ColorSchemeGridField.FieldName.ForeItemState,
             Strings[StringId.ColorGridHeading_NotHasFore],
-            GridFieldHorizontalAlign.left,
+            RevHorizontalAlignId.Left,
         );
         super(colorSettings, definition);
     }
@@ -400,7 +398,7 @@ export class ReadabilityColorSchemeGridField extends ColorSchemeGridField {
             ColorSchemeGridField.sourceDefinition,
             ColorSchemeGridField.FieldName.Readability,
             Strings[StringId.ColorGridHeading_Readability],
-            GridFieldHorizontalAlign.right,
+            RevHorizontalAlignId.Right,
         );
         super(colorSettings, definition);
     }
@@ -409,7 +407,7 @@ export class ReadabilityColorSchemeGridField extends ColorSchemeGridField {
         if (ColorScheme.Item.idHasBkgd(record.itemId) && ColorScheme.Item.idHasFore(record.itemId)) {
             const resolvedBkgdColor = this.colorSettings.getBkgd(record.itemId);
             const resolvedForeColor = this.colorSettings.getFore(record.itemId);
-            const value = TinyColorReadability(resolvedBkgdColor, resolvedForeColor);
+            const value = tinyColorReadability(resolvedBkgdColor, resolvedForeColor);
             return new NumberRenderValue(value);
         } else {
             return new NumberRenderValue(undefined);
@@ -423,7 +421,7 @@ export class IsReadableColorSchemeGridField extends ColorSchemeGridField {
             ColorSchemeGridField.sourceDefinition,
             ColorSchemeGridField.FieldName.IsReadable,
             Strings[StringId.ColorGridHeading_IsReadable],
-            GridFieldHorizontalAlign.center,
+            RevHorizontalAlignId.Center,
         );
         super(colorSettings, definition);
     }
@@ -432,7 +430,7 @@ export class IsReadableColorSchemeGridField extends ColorSchemeGridField {
         if (ColorScheme.Item.idHasBkgd(record.itemId) && ColorScheme.Item.idHasFore(record.itemId)) {
             const resolvedBkgdColor = this.colorSettings.getBkgd(record.itemId);
             const resolvedForeColor = this.colorSettings.getFore(record.itemId);
-            const value = TinyColorIsReadable(resolvedBkgdColor, resolvedForeColor);
+            const value = tinyColorIsReadable(resolvedBkgdColor, resolvedForeColor);
             return new IsReadableRenderValue(value);
         } else {
             return new IsReadableRenderValue(undefined);

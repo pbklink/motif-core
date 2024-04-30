@@ -4,8 +4,9 @@
  * License: motionite.trade/license/motif
  */
 
+import { RevHorizontalAlignId } from '@xilytix/revgrid';
 import { DepthLevelsDataItem } from '../../../../adi/internal-api';
-import { EnumInfoOutOfOrderError, GridFieldHorizontalAlign, Integer, UnreachableCaseError } from '../../../../sys/internal-api';
+import { EnumInfoOutOfOrderError, Integer, UnreachableCaseError } from '../../../../sys/internal-api';
 
 export const enum ShortDepthSideFieldId {
     PriceAndHasUndisclosed,
@@ -19,15 +20,15 @@ export const enum ShortDepthSideFieldId {
 export namespace ShortDepthSideField {
     export type Id = ShortDepthSideFieldId;
 
-    const leftTextAlign = 'left';
-    const rightTextAlign = 'right';
+    const leftTextAlign = RevHorizontalAlignId.Left;
+    const rightTextAlign = RevHorizontalAlignId.Right;
 
     class Info {
         constructor(
             public id: Id,
             public name: string,
             public defaultHeading: string,
-            public defaultTextAlign: GridFieldHorizontalAlign,
+            public defaultTextAlignId: RevHorizontalAlignId,
         ) { }
     }
 
@@ -38,37 +39,37 @@ export namespace ShortDepthSideField {
             id: ShortDepthSideFieldId.PriceAndHasUndisclosed,
             name: 'PriceAndHasUndisclosed',
             defaultHeading: 'Price/U',
-            defaultTextAlign: rightTextAlign,
+            defaultTextAlignId: rightTextAlign,
         },
         Volume: {
             id: ShortDepthSideFieldId.Volume,
             name: 'Volume',
             defaultHeading: 'Volume',
-            defaultTextAlign: rightTextAlign,
+            defaultTextAlignId: rightTextAlign,
         },
         OrderCount: {
             id: ShortDepthSideFieldId.OrderCount,
             name: 'OrderCount',
             defaultHeading: 'Count',
-            defaultTextAlign: rightTextAlign,
+            defaultTextAlignId: rightTextAlign,
         },
         MarketId: {
             id: ShortDepthSideFieldId.MarketId,
             name: 'MarketId',
             defaultHeading: 'Market',
-            defaultTextAlign: leftTextAlign,
+            defaultTextAlignId: leftTextAlign,
         },
         VolumeAhead: {
             id: ShortDepthSideFieldId.VolumeAhead,
             name: 'VolumeAhead',
             defaultHeading: 'Vol Ahead',
-            defaultTextAlign: rightTextAlign,
+            defaultTextAlignId: rightTextAlign,
         },
         Price: {
             id: ShortDepthSideFieldId.Price,
             name: 'Price',
             defaultHeading: 'Price',
-            defaultTextAlign: rightTextAlign,
+            defaultTextAlignId: rightTextAlign,
         },
     };
 
@@ -77,7 +78,7 @@ export namespace ShortDepthSideField {
     const infos = Object.values(infosObject);
 
     export function initialise() {
-        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
+        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as ShortDepthSideFieldId);
         if (outOfOrderIdx >= 0) {
             throw new EnumInfoOutOfOrderError('ShortDepthSideFieldId', outOfOrderIdx, infos[outOfOrderIdx].name);
         }
@@ -91,8 +92,8 @@ export namespace ShortDepthSideField {
         return infos[id].defaultHeading;
     }
 
-    export function idToDefaultTextAlign(id: Id) {
-        return infos[id].defaultTextAlign;
+    export function idToDefaultTextAlignId(id: Id) {
+        return infos[id].defaultTextAlignId;
     }
 
     export function createIdFromDepthLevelFieldId(levelFieldId: DepthLevelsDataItem.Level.Field.Id): ShortDepthSideFieldId | undefined {

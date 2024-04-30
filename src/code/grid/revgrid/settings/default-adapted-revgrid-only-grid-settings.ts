@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevTextTruncateTypeId } from '@xilytix/revgrid';
+import { RevHorizontalAlignId, RevTextTruncateTypeId } from '@xilytix/revgrid';
 import { AdaptedRevgridOnlyGridSettings } from './adapted-revgrid-only-grid-settings';
 
 /** @public */
@@ -22,11 +22,11 @@ export const defaultAdaptedRevgridOnlyGridSettings: AdaptedRevgridOnlyGridSettin
     // recordRecentlyUpdatedBorderColor: 'orange',
     // recordRecentlyInsertedBorderColor: 'pink',
     verticalOffset: 0,
-    textTruncateType: RevTextTruncateTypeId.WithEllipsis,
+    textTruncateTypeId: RevTextTruncateTypeId.WithEllipsis,
     textStrikeThrough: false,
     font: '13px Tahoma, Geneva, sans-serif',
     columnHeaderFont: '12px Tahoma, Geneva, sans-serif',
-    horizontalAlign: 'center',
-    columnHeaderHorizontalAlign: 'center',
+    horizontalAlignId: RevHorizontalAlignId.Center,
+    columnHeaderHorizontalAlignId: RevHorizontalAlignId.Center,
     focusedCellSelectColored: false,
 } as const;

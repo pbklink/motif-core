@@ -4,6 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
+import { RevRecordValueRecentChangeTypeId } from '@xilytix/revgrid';
 import {
     ActiveFaultedStatusId,
     AdiService,
@@ -34,7 +35,6 @@ import {
     MapKey,
     MultiEvent, Ok, Result,
     UnreachableCaseError,
-    ValueRecentChangeTypeId,
     isUndefinableArrayEqualUniquely,
     isUndefinableDateEqual,
     isUndefinableStringNumberBooleanNestArrayEqual
@@ -289,7 +289,7 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
                         this._upperCaseName = name.toUpperCase();
                         const valueChange: Scan.ValueChange = {
                             fieldId: Scan.FieldId.Name,
-                            recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                            recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
                         };
                         this._valueChanges.push(valueChange);
                     }
@@ -302,7 +302,7 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
                         this._upperCaseDescription = description === undefined ? '' : description.toUpperCase();
                         const valueChange: Scan.ValueChange = {
                             fieldId: Scan.FieldId.Description,
-                            recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                            recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
                         };
                         this._valueChanges.push(valueChange);
                     }
@@ -314,7 +314,7 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
                         this._readonly = readonly;
                         const valueChange: Scan.ValueChange = {
                             fieldId: Scan.FieldId.Readonly,
-                            recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                            recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
                         };
                         this._valueChanges.push(valueChange);
                     }
@@ -326,7 +326,7 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
                         this._statusId = statusId;
                         const valueChange: Scan.ValueChange = {
                             fieldId: Scan.FieldId.StatusId,
-                            recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                            recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
                         };
                         this._valueChanges.push(valueChange);
                     }
@@ -338,7 +338,7 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
                         this._enabled = enabled;
                         const valueChange: Scan.ValueChange = {
                             fieldId: Scan.FieldId.Enabled,
-                            recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                            recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
                         };
                         this._valueChanges.push(valueChange);
                     }
@@ -354,7 +354,7 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
                         this._versioningInterrupted = versioningInterrupted;
                         const valueChange: Scan.ValueChange = {
                             fieldId: Scan.FieldId.Version,
-                            recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                            recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
                         };
                         this._valueChanges.push(valueChange);
                     }
@@ -366,7 +366,7 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
                         this._lastSavedTime = lastSavedTime;
                         const valueChange: Scan.ValueChange = {
                             fieldId: Scan.FieldId.LastSavedTime,
-                            recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                            recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
                         };
                         this._valueChanges.push(valueChange);
                     }
@@ -378,7 +378,7 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
                         this._lastEditSessionId = lastEditSessionId;
                         const valueChange: Scan.ValueChange = {
                             fieldId: Scan.FieldId.LastEditSessionId,
-                            recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                            recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
                         };
                         this._valueChanges.push(valueChange);
                     }
@@ -390,7 +390,7 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
                         this._symbolListEnabled = symbolListEnabled;
                         const valueChange: Scan.ValueChange = {
                             fieldId: Scan.FieldId.SymbolListEnabled,
-                            recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                            recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
                         };
                         this._valueChanges.push(valueChange);
                     }
@@ -402,7 +402,7 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
                         this._zenithCriteriaSource = zenithCriteriaSource;
                         const valueChange: Scan.ValueChange = {
                             fieldId: Scan.FieldId.ZenithCriteriaSource,
-                            recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                            recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
                         };
                         this._valueChanges.push(valueChange);
                     }
@@ -414,7 +414,7 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
                         this._zenithRankSource = zenithRankSource;
                         const valueChange: Scan.ValueChange = {
                             fieldId: Scan.FieldId.ZenithRankSource,
-                            recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                            recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
                         };
                         this._valueChanges.push(valueChange);
                     }
@@ -564,49 +564,49 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
                 this._targetTypeId = undefined;
                 this._valueChanges.push({
                     fieldId: Scan.FieldId.TargetTypeId,
-                    recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                    recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
                 });
             }
             if (this._targetMarketIds !== undefined) {
                 this._targetMarketIds = undefined;
                 this._valueChanges.push({
                     fieldId: Scan.FieldId.TargetMarkets,
-                    recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                    recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
                 });
             }
             if (this._targetLitIvemIds !== undefined) {
                 this._targetLitIvemIds = undefined;
                 this._valueChanges.push({
                     fieldId: Scan.FieldId.TargetLitIvemIds,
-                    recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                    recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
                 });
             }
             if (this._maxMatchCount !== undefined) {
                 this._maxMatchCount = undefined;
                 this._valueChanges.push({
                     fieldId: Scan.FieldId.MaxMatchCount,
-                    recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                    recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
                 });
             }
             if (this._zenithCriteria !== undefined) {
                 this._zenithCriteria = undefined;
                 this._valueChanges.push({
                     fieldId: Scan.FieldId.ZenithCriteria,
-                    recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                    recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
                 });
             }
             if (this._zenithRank !== undefined) {
                 this._zenithRank = undefined;
                 this._valueChanges.push({
                     fieldId: Scan.FieldId.ZenithRank,
-                    recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                    recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
                 });
             }
             if (this._attachedNotificationChannels !== undefined) {
                 this._attachedNotificationChannels = undefined;
                 this._valueChanges.push({
                     fieldId: Scan.FieldId.AttachedNotificationChannels,
-                    recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                    recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
                 });
             }
             this.endChange();
@@ -624,7 +624,7 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
             this._targetTypeId = newTargetTypeId;
             this._valueChanges.push({
                 fieldId: Scan.FieldId.TargetTypeId,
-                recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
             });
         }
         const newTargetMarketIds = detail.targetMarketIds;
@@ -632,7 +632,7 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
             this._targetMarketIds = newTargetMarketIds;
             this._valueChanges.push({
                 fieldId: Scan.FieldId.TargetMarkets,
-                recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
             });
         }
         const newTargetLitIvemIds = detail.targetLitIvemIds;
@@ -640,7 +640,7 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
             this._targetLitIvemIds = newTargetLitIvemIds;
             this._valueChanges.push({
                 fieldId: Scan.FieldId.TargetLitIvemIds,
-                recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
             });
         }
         const newMaxMatchCount = detail.maxMatchCount;
@@ -648,7 +648,7 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
             this._maxMatchCount = newMaxMatchCount;
             this._valueChanges.push({
                 fieldId: Scan.FieldId.MaxMatchCount,
-                recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
             });
         }
         const newZenithCriteria = detail.zenithCriteria;
@@ -656,7 +656,7 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
             this._zenithCriteria = newZenithCriteria;
             this._valueChanges.push({
                 fieldId: Scan.FieldId.ZenithCriteria,
-                recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
             });
         }
         const newZenithRank = detail.zenithRank;
@@ -664,7 +664,7 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
             this._zenithRank = newZenithRank;
             this._valueChanges.push({
                 fieldId: Scan.FieldId.ZenithRank,
-                recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
             });
         }
         const newAttachedNotificationChannels = detail.attachedNotificationChannels;
@@ -672,7 +672,7 @@ export class Scan implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>,
             this._attachedNotificationChannels = newAttachedNotificationChannels;
             this._valueChanges.push({
                 fieldId: Scan.FieldId.AttachedNotificationChannels,
-                recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
             });
         }
 
@@ -966,7 +966,7 @@ export namespace Scan {
                 } else {
                     const info = infos[i];
                     if (info.id !== id) {
-                        throw new EnumInfoOutOfOrderError('Scan.FieldId', i, `${idToName(id)}`);
+                        throw new EnumInfoOutOfOrderError('Scan.FieldId', i, idToName(id));
                     }
                 }
             }
@@ -1006,7 +1006,7 @@ export namespace Scan {
 
     export interface ValueChange {
         fieldId: FieldId;
-        recentChangeTypeId: ValueRecentChangeTypeId;
+        recentChangeTypeId: RevRecordValueRecentChangeTypeId;
     }
 
 }

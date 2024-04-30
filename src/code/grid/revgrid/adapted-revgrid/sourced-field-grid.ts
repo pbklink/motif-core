@@ -213,7 +213,7 @@ export namespace SourcedFieldGrid {
         if (!defaultColumnAutoSizing) {
             columnSettings.defaultColumnWidth = defaultWidth;
         }
-        columnSettings.horizontalAlign = fieldDefinition.defaultTextAlign;
+        columnSettings.horizontalAlignId = fieldDefinition.defaultTextAlignId;
         return columnSettings;
     }
 

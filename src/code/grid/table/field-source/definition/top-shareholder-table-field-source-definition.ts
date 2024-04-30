@@ -4,6 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
+import { RevHorizontalAlignId } from '@xilytix/revgrid';
 import { TopShareholder } from '../../../../adi/internal-api';
 import {
     AssertInternalError,
@@ -55,7 +56,7 @@ export class TopShareholderTableFieldSourceDefinition extends TableFieldSourceDe
             const sourcelessFieldName = TopShareholderTableFieldSourceDefinition.Field.getName(fieldIdx);
             const heading = TopShareholderTableFieldSourceDefinition.Field.getHeading(fieldIdx);
             const dataTypeId = TopShareholderTableFieldSourceDefinition.Field.getDataTypeId(fieldIdx);
-            const textAlign = FieldDataType.idIsNumber(dataTypeId) ? 'right' : 'left';
+            const textAlignId = FieldDataType.idIsNumber(dataTypeId) ? RevHorizontalAlignId.Right : RevHorizontalAlignId.Left;
             const fieldConstructor = TopShareholderTableFieldSourceDefinition.Field.getTableFieldConstructor(fieldIdx);
             const valueConstructor = TopShareholderTableFieldSourceDefinition.Field.getTableValueConstructor(fieldIdx);
 
@@ -63,7 +64,7 @@ export class TopShareholderTableFieldSourceDefinition extends TableFieldSourceDe
                 this,
                 sourcelessFieldName,
                 heading,
-                textAlign,
+                textAlignId,
                 fieldConstructor,
                 valueConstructor,
             );

@@ -4,10 +4,10 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevColumnSettings } from '@xilytix/revgrid';
+import { RevColumnSettings, RevStandardTextPainter } from '@xilytix/revgrid';
 import { AdaptedRevgridOnlyColumnSettings } from './adapted-revgrid-only-column-settings';
 
 /** @public */
-export interface AdaptedRevgridColumnSettings extends AdaptedRevgridOnlyColumnSettings, RevColumnSettings {
+export interface AdaptedRevgridColumnSettings extends AdaptedRevgridOnlyColumnSettings, RevColumnSettings, RevStandardTextPainter.ColumnSettings {
 
 }

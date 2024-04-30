@@ -89,7 +89,7 @@ export namespace ShortDepthSideGridField {
             DepthSideGridField.sourceDefinition,
             ShortDepthSideField.idToName(id),
             ShortDepthSideField.idToDefaultHeading(id),
-            ShortDepthSideField.idToDefaultTextAlign(id),
+            ShortDepthSideField.idToDefaultTextAlignId(id),
         );
     }
 

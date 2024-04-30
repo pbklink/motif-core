@@ -61,12 +61,12 @@ export class TableGrid extends RevTableGrid<
             schemaServer,
             subgrids: [
                 {
-                    role: RevDatalessSubgrid.RoleEnum.header,
+                    role: RevDatalessSubgrid.Role.header,
                     dataServer: headerDataServer,
                     getCellPainterEventer: getHeaderCellPainterEventer,
                 },
                 {
-                    role: RevDatalessSubgrid.RoleEnum.main,
+                    role: RevDatalessSubgrid.Role.main,
                     dataServer: mainDataServer,
                     getCellPainterEventer: getMainCellPainterEventer,
                 },

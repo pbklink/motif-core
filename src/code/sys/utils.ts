@@ -6,7 +6,6 @@
 
 import { RevRecordValueRecentChangeTypeId } from '@xilytix/revgrid';
 import { ComparisonResult, compareDecimal, isDecimalEqual } from '@xilytix/sysutils';
-import { ValueRecentChangeTypeId } from './grid-revgrid-types';
 import { PriceOrRemainder } from './types';
 export {
     IntlNumberFormatCharParts,
@@ -237,9 +236,9 @@ export namespace ValueRecentChangeType {
     /** Assumes oldValue and newValue are different */
     export function calculateChangeTypeId(oldValue: number | undefined, newValue: number | undefined): RevRecordValueRecentChangeTypeId {
         if (oldValue === undefined || newValue === undefined) {
-            return ValueRecentChangeTypeId.Update;
+            return RevRecordValueRecentChangeTypeId.Update;
         } else {
-            return newValue > oldValue ? ValueRecentChangeTypeId.Increase : ValueRecentChangeTypeId.Decrease;
+            return newValue > oldValue ? RevRecordValueRecentChangeTypeId.Increase : RevRecordValueRecentChangeTypeId.Decrease;
         }
     }
 }

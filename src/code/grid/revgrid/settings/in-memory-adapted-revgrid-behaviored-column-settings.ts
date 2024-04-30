@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevHorizontalAlign, RevInMemoryBehavioredColumnSettings, RevTextTruncateTypeId } from '@xilytix/revgrid';
+import { RevHorizontalAlignId, RevInMemoryBehavioredColumnSettings, RevTextTruncateTypeId } from '@xilytix/revgrid';
 import { AdaptedRevgridBehavioredColumnSettings } from './adapted-revgrid-behaviored-column-settings';
 import { AdaptedRevgridColumnSettings } from './adapted-revgrid-column-settings';
 import { AdaptedRevgridGridSettings } from './adapted-revgrid-grid-settings';
@@ -15,12 +15,12 @@ export class InMemoryAdaptedRevgridBehavioredColumnSettings extends RevInMemoryB
     declare gridSettings: AdaptedRevgridGridSettings;
 
     private _verticalOffset: number | undefined;
-    private _textTruncateType: RevTextTruncateTypeId | undefined | null;
+    private _textTruncateTypeId: RevTextTruncateTypeId | undefined | null;
     private _textStrikeThrough: boolean | undefined;
     private _font: string | undefined;
-    private _horizontalAlign: RevHorizontalAlign | undefined;
+    private _horizontalAlignId: RevHorizontalAlignId | undefined;
     private _columnHeaderFont: string | undefined;
-    private _columnHeaderHorizontalAlign: RevHorizontalAlign | undefined;
+    private _columnHeaderHorizontalAlignId: RevHorizontalAlignId | undefined;
 
     get verticalOffset() { return this._verticalOffset !== undefined ? this._verticalOffset : this.gridSettings.verticalOffset; }
     set verticalOffset(value: number) {
@@ -31,20 +31,20 @@ export class InMemoryAdaptedRevgridBehavioredColumnSettings extends RevInMemoryB
             this.endChange();
         }
     }
-    get textTruncateType() {
-        if (this._textTruncateType === null) {
+    get textTruncateTypeId() {
+        if (this._textTruncateTypeId === null) {
             return undefined;
         } else {
-            return this._textTruncateType !== undefined ? this._textTruncateType : this.gridSettings.textTruncateType;
+            return this._textTruncateTypeId !== undefined ? this._textTruncateTypeId : this.gridSettings.textTruncateTypeId;
         }
     }
-    set textTruncateType(value: RevTextTruncateTypeId | undefined) {
-        if (value !== this._textTruncateType) {
+    set textTruncateTypeId(value: RevTextTruncateTypeId | undefined) {
+        if (value !== this._textTruncateTypeId) {
             this.beginChange();
             if (value === undefined) {
-                this._textTruncateType = null;
+                this._textTruncateTypeId = null;
             } else {
-                this._textTruncateType = value;
+                this._textTruncateTypeId = value;
             }
             this.flagChangedViewRender();
             this.endChange();
@@ -68,11 +68,11 @@ export class InMemoryAdaptedRevgridBehavioredColumnSettings extends RevInMemoryB
             this.endChange();
         }
     }
-    get horizontalAlign() { return this._horizontalAlign !== undefined ? this._horizontalAlign : this.gridSettings.horizontalAlign; }
-    set horizontalAlign(value: RevHorizontalAlign) {
-        if (value !== this._horizontalAlign) {
+    get horizontalAlignId() { return this._horizontalAlignId !== undefined ? this._horizontalAlignId : this.gridSettings.horizontalAlignId; }
+    set horizontalAlignId(value: RevHorizontalAlignId) {
+        if (value !== this._horizontalAlignId) {
             this.beginChange();
-            this._horizontalAlign = value;
+            this._horizontalAlignId = value;
             this.flagChangedViewRender();
             this.endChange();
         }
@@ -86,13 +86,13 @@ export class InMemoryAdaptedRevgridBehavioredColumnSettings extends RevInMemoryB
             this.endChange();
         }
     }
-    get columnHeaderHorizontalAlign() {
-        return this._columnHeaderHorizontalAlign !== undefined ? this._columnHeaderHorizontalAlign : this.gridSettings.columnHeaderHorizontalAlign;
+    get columnHeaderHorizontalAlignId() {
+        return this._columnHeaderHorizontalAlignId !== undefined ? this._columnHeaderHorizontalAlignId : this.gridSettings.columnHeaderHorizontalAlignId;
     }
-    set columnHeaderHorizontalAlign(value: RevHorizontalAlign) {
-        if (value !== this._columnHeaderHorizontalAlign) {
+    set columnHeaderHorizontalAlignId(value: RevHorizontalAlignId) {
+        if (value !== this._columnHeaderHorizontalAlignId) {
             this.beginChange();
-            this._columnHeaderHorizontalAlign = value;
+            this._columnHeaderHorizontalAlignId = value;
             this.flagChangedViewRender();
             this.endChange();
         }
@@ -114,9 +114,9 @@ export class InMemoryAdaptedRevgridBehavioredColumnSettings extends RevInMemoryB
                         this.flagChangedViewRender();
                     }
                     break;
-                case 'textTruncateType':
-                    if (this._textTruncateType !== requiredSettings.textTruncateType) {
-                        this._textTruncateType = requiredSettings.textTruncateType;
+                case 'textTruncateTypeId':
+                    if (this._textTruncateTypeId !== requiredSettings.textTruncateTypeId) {
+                        this._textTruncateTypeId = requiredSettings.textTruncateTypeId;
                         this.flagChangedViewRender();
                     }
                     break;
@@ -132,9 +132,9 @@ export class InMemoryAdaptedRevgridBehavioredColumnSettings extends RevInMemoryB
                         this.flagChangedViewRender();
                     }
                     break;
-                case 'horizontalAlign':
-                    if (this._horizontalAlign !== requiredSettings.horizontalAlign) {
-                        this._horizontalAlign = requiredSettings.horizontalAlign;
+                case 'horizontalAlignId':
+                    if (this._horizontalAlignId !== requiredSettings.horizontalAlignId) {
+                        this._horizontalAlignId = requiredSettings.horizontalAlignId;
                         this.flagChangedViewRender();
                     }
                     break;
@@ -144,9 +144,9 @@ export class InMemoryAdaptedRevgridBehavioredColumnSettings extends RevInMemoryB
                         this.flagChangedViewRender();
                     }
                     break;
-                case 'columnHeaderHorizontalAlign':
-                    if (this._columnHeaderHorizontalAlign !== requiredSettings.columnHeaderHorizontalAlign) {
-                        this._columnHeaderHorizontalAlign = requiredSettings.columnHeaderHorizontalAlign;
+                case 'columnHeaderHorizontalAlignId':
+                    if (this._columnHeaderHorizontalAlignId !== requiredSettings.columnHeaderHorizontalAlignId) {
+                        this._columnHeaderHorizontalAlignId = requiredSettings.columnHeaderHorizontalAlignId;
                         this.flagChangedViewRender();
                     }
                     break;

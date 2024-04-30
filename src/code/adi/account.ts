@@ -4,6 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
+import { RevRecordValueRecentChangeTypeId } from '@xilytix/revgrid';
 import { StringId, Strings } from '../res/internal-api';
 import {
     Correctness,
@@ -21,7 +22,6 @@ import {
     MultiEvent,
     Ok,
     Result,
-    ValueRecentChangeTypeId
 } from "../sys/internal-api";
 import {
     BrokerageAccountId,
@@ -111,7 +111,7 @@ export class Account implements KeyedCorrectnessListItem {
             this._upperName = newName.toUpperCase();
             valueChanges[changedCount++] = {
                 fieldId: Account.FieldId.Name,
-                recentChangeTypeId: ValueRecentChangeTypeId.Update
+                recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update
             };
         }
 
@@ -127,7 +127,7 @@ export class Account implements KeyedCorrectnessListItem {
                 this._brokerCode = resolvedBrokerCode;
                 valueChanges[changedCount++] = {
                     fieldId: Account.FieldId.BrokerCode,
-                    recentChangeTypeId: ValueRecentChangeTypeId.Update
+                    recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update
                 };
             }
         }
@@ -144,7 +144,7 @@ export class Account implements KeyedCorrectnessListItem {
                 this._branchCode = resolvedBranchCode;
                 valueChanges[changedCount++] = {
                     fieldId: Account.FieldId.BranchCode,
-                    recentChangeTypeId: ValueRecentChangeTypeId.Update
+                    recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update
                 };
             }
         }
@@ -161,7 +161,7 @@ export class Account implements KeyedCorrectnessListItem {
                 this._advisorCode = resolvedAdvisorCode;
                 valueChanges[changedCount++] = {
                     fieldId: Account.FieldId.AdvisorCode,
-                    recentChangeTypeId: ValueRecentChangeTypeId.Update
+                    recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update
                 };
             }
         }
@@ -245,7 +245,7 @@ export namespace Account {
 
     export interface ValueChange {
         fieldId: FieldId;
-        recentChangeTypeId: ValueRecentChangeTypeId;
+        recentChangeTypeId: RevRecordValueRecentChangeTypeId;
     }
 
     export type ChangeEventHandler = (this: void, valueChanges: Account.ValueChange[]) => void;

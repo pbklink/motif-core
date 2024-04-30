@@ -6,13 +6,14 @@
 
 import {
     RevGridOptions,
+    RevHorizontalAlignId,
     RevLinedHoverCell,
     RevSingleHeadingDataRowArraySourcedFieldDefinition,
     RevSingleHeadingDataRowArraySourcedFieldGrid,
     RevSubgrid
 } from '@xilytix/revgrid';
 import { SettingsService } from '../../../services/internal-api';
-import { GridFieldHorizontalAlign, Integer, MultiEvent } from '../../../sys/internal-api';
+import { Integer, MultiEvent } from '../../../sys/internal-api';
 import { GridField } from '../../field/internal-api';
 import { SourcedFieldGrid } from '../adapted-revgrid/internal-api';
 import { AdaptedRevgridBehavioredColumnSettings, AdaptedRevgridBehavioredGridSettings } from '../settings/internal-api';
@@ -153,7 +154,7 @@ export namespace RowDataArrayGrid {
     export function createField(
         sourcelessName: string,
         defaultHeading: string,
-        defaultTextAlign: GridFieldHorizontalAlign,
+        defaultTextAlignId: RevHorizontalAlignId,
         defaultWidth?: Integer,
         key?: string,
     ) {
@@ -161,7 +162,7 @@ export namespace RowDataArrayGrid {
             { name: '' },
             sourcelessName,
             defaultHeading,
-            defaultTextAlign,
+            defaultTextAlignId,
             defaultWidth,
             key,
         );

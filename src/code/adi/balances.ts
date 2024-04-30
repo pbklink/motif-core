@@ -4,6 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
+import { RevRecordValueRecentChangeTypeId } from '@xilytix/revgrid';
 import { StringId, Strings } from '../res/internal-api';
 import {
     AssertInternalError,
@@ -16,7 +17,6 @@ import {
     MapKey,
     MultiEvent,
     UnreachableCaseError,
-    ValueRecentChangeTypeId,
     isDecimalEqual,
     isDecimalGreaterThan,
     newDecimal
@@ -153,45 +153,45 @@ export class Balances implements BrokerageAccountRecord {
     }
 
     private updateField(fieldId: Balances.FieldId, amount: Decimal) {
-        let recentChangeTypeId: ValueRecentChangeTypeId | undefined;
+        let recentChangeTypeId: RevRecordValueRecentChangeTypeId | undefined;
         switch (fieldId) {
             case Balances.FieldId.NetBalance:
                 if (!isDecimalEqual(amount, this._netBalance)) {
                     recentChangeTypeId = isDecimalGreaterThan(amount, this._netBalance)
-                        ? ValueRecentChangeTypeId.Increase
-                        : ValueRecentChangeTypeId.Decrease;
+                        ? RevRecordValueRecentChangeTypeId.Increase
+                        : RevRecordValueRecentChangeTypeId.Decrease;
                     this._netBalance = amount;
                 }
                 break;
             case Balances.FieldId.Trading:
                 if (!isDecimalEqual(amount, this._trading)) {
                     recentChangeTypeId = isDecimalGreaterThan(amount, this._trading)
-                        ? ValueRecentChangeTypeId.Increase
-                        : ValueRecentChangeTypeId.Decrease;
+                        ? RevRecordValueRecentChangeTypeId.Increase
+                        : RevRecordValueRecentChangeTypeId.Decrease;
                     this._trading = amount;
                 }
                 break;
             case Balances.FieldId.NonTrading:
                 if (!isDecimalEqual(amount, this._nonTrading)) {
                     recentChangeTypeId = isDecimalGreaterThan(amount, this._nonTrading)
-                        ? ValueRecentChangeTypeId.Increase
-                        : ValueRecentChangeTypeId.Decrease;
+                        ? RevRecordValueRecentChangeTypeId.Increase
+                        : RevRecordValueRecentChangeTypeId.Decrease;
                     this._nonTrading = amount;
                 }
                 break;
             case Balances.FieldId.UnfilledBuys:
                 if (!isDecimalEqual(amount, this._unfilledBuys)) {
                     recentChangeTypeId = isDecimalGreaterThan(amount, this._unfilledBuys)
-                        ? ValueRecentChangeTypeId.Increase
-                        : ValueRecentChangeTypeId.Decrease;
+                        ? RevRecordValueRecentChangeTypeId.Increase
+                        : RevRecordValueRecentChangeTypeId.Decrease;
                     this._unfilledBuys = amount;
                 }
                 break;
             case Balances.FieldId.Margin:
                 if (!isDecimalEqual(amount, this._margin)) {
                     recentChangeTypeId = isDecimalGreaterThan(amount, this._margin)
-                        ? ValueRecentChangeTypeId.Increase
-                        : ValueRecentChangeTypeId.Decrease;
+                        ? RevRecordValueRecentChangeTypeId.Increase
+                        : RevRecordValueRecentChangeTypeId.Decrease;
                     this._margin = amount;
                 }
                 break;
@@ -435,7 +435,7 @@ export namespace Balances {
 
     export interface ValueChange {
         fieldId: FieldId;
-        recentChangeTypeId: ValueRecentChangeTypeId | undefined;
+        recentChangeTypeId: RevRecordValueRecentChangeTypeId | undefined;
     }
 
     export function createNotFoundBalances(key: Balances.Key) {

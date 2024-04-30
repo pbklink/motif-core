@@ -4,6 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
+import { RevRecordValueRecentChangeTypeId } from '@xilytix/revgrid';
 import {
     AssertInternalError,
     EnumInfoOutOfOrderError,
@@ -19,7 +20,6 @@ import { ActiveFaultedStatusId, NotificationChannel, NotificationDistributionMet
 import { StringId, Strings } from '../res/internal-api';
 import {
     FieldDataTypeId,
-    ValueRecentChangeTypeId,
 } from '../sys/internal-api';
 
 export class LockOpenNotificationChannel implements LockOpenListItem<LockOpenNotificationChannel> {
@@ -129,11 +129,11 @@ export class LockOpenNotificationChannel implements LockOpenListItem<LockOpenNot
     }
 
     delete() {
-
+        // maybe implement in future
     }
 
     forceDelete() {
-
+        // maybe implement in future
     }
 
     beginFieldChanges(modifier: LockOpenNotificationChannel.Modifier | undefined) {
@@ -290,7 +290,7 @@ export namespace LockOpenNotificationChannel {
 
         export interface ValueChange {
             fieldId: Id;
-            recentChangeTypeId: ValueRecentChangeTypeId;
+            recentChangeTypeId: RevRecordValueRecentChangeTypeId;
         }
 
         interface Info {
@@ -375,7 +375,7 @@ export namespace LockOpenNotificationChannel {
                 const info = infos[i];
                 const id = i as FieldId;
                 if (info.id !== i as FieldId) {
-                    throw new EnumInfoOutOfOrderError('LockOpenNotificationChannel.FieldId', i, `${idToName(id)}`);
+                    throw new EnumInfoOutOfOrderError('LockOpenNotificationChannel.FieldId', i, idToName(id));
                 } else {
                     result[i] = info.id;
                 }

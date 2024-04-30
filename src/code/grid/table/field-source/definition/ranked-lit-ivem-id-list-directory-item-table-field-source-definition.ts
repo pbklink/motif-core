@@ -4,6 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
+import { RevHorizontalAlignId } from '@xilytix/revgrid';
 import { RankedLitIvemIdListDirectoryItem } from '../../../../services/internal-api';
 import { AssertInternalError, FieldDataType, FieldDataTypeId, Integer } from '../../../../sys/internal-api';
 import {
@@ -57,7 +58,7 @@ export class RankedLitIvemIdListDirectoryItemTableFieldSourceDefinition extends 
             const sourcelessFieldName = RankedLitIvemIdListDirectoryItemTableFieldSourceDefinition.Field.getName(fieldIdx);
             const heading = RankedLitIvemIdListDirectoryItemTableFieldSourceDefinition.Field.getHeading(fieldIdx);
             const dataTypeId = RankedLitIvemIdListDirectoryItemTableFieldSourceDefinition.Field.getDataTypeId(fieldIdx);
-            const textAlign = FieldDataType.idIsNumber(dataTypeId) ? 'right' : 'left';
+            const textAlignId = FieldDataType.idIsNumber(dataTypeId) ? RevHorizontalAlignId.Right : RevHorizontalAlignId.Left;
             const [fieldConstructor, valueConstructor] =
             RankedLitIvemIdListDirectoryItemTableFieldSourceDefinition.Field.getTableFieldValueConstructors(fieldIdx);
 
@@ -65,7 +66,7 @@ export class RankedLitIvemIdListDirectoryItemTableFieldSourceDefinition extends 
                 this,
                 sourcelessFieldName,
                 heading,
-                textAlign,
+                textAlignId,
                 fieldConstructor,
                 valueConstructor,
             );

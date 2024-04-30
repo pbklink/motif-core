@@ -4,6 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
+import { RevRecordValueRecentChangeTypeId } from '@xilytix/revgrid';
 import { StringId, Strings } from '../res/internal-api';
 import {
     AssertInternalError,
@@ -13,7 +14,6 @@ import {
     Integer,
     MultiEvent,
     SourceTzOffsetDate,
-    ValueRecentChangeTypeId,
     assert,
     isArrayEqualUniquely,
     isDecimalEqual,
@@ -365,7 +365,7 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
                 for (let i = 0; i < modifiedFieldCount; i++) {
                     valueChanges[i] = {
                         fieldId: modifiedFieldIds[i],
-                        recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                        recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
                     };
                 }
                 this.notifyUpdateChange();
@@ -453,7 +453,7 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
                 for (let i = 0; i < modifiedFieldCount; i++) {
                     valueChanges[i] = {
                         fieldId: modifiedFieldIds[i],
-                        recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                        recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
                     };
                 }
                 this.notifyUpdateChange();
@@ -519,7 +519,7 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
             this._code = msgRec.code;
             valueChanges[valueChangeCount++] = {
                 fieldId: SecurityDataItem.FieldId.Code,
-                recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
             };
         }
 
@@ -533,7 +533,7 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
             this._exchange = msgRec.exchangeId;
             valueChanges[valueChangeCount++] = {
                 fieldId: SecurityDataItem.FieldId.Exchange,
-                recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
             };
         }
 
@@ -541,7 +541,7 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
             this._name = msgRec.name;
             valueChanges[valueChangeCount++] = {
                 fieldId: SecurityDataItem.FieldId.Name,
-                recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
             };
         }
 
@@ -549,7 +549,7 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
             this._class = msgRec.classId;
             valueChanges[valueChangeCount++] = {
                 fieldId: SecurityDataItem.FieldId.Class,
-                recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
             };
         }
 
@@ -557,7 +557,7 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
             this._cfi = msgRec.cfi;
             valueChanges[valueChangeCount++] = {
                 fieldId: SecurityDataItem.FieldId.Cfi,
-                recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
             };
         }
 
@@ -565,14 +565,14 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
             this._tradingState = msgRec.tradingState;
             valueChanges[valueChangeCount++] = {
                 fieldId: SecurityDataItem.FieldId.TradingState,
-                recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
             };
 
             const allowReasonModifiedFieldIds = this.updateTradingStateAllowsReason();
             for (const fieldId of allowReasonModifiedFieldIds) {
                 valueChanges[valueChangeCount++] = {
                     fieldId,
-                    recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                    recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
                 };
             }
         }
@@ -582,7 +582,7 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
                 this._tradingMarkets = msgRec.marketIds;
                 valueChanges[valueChangeCount++] = {
                     fieldId: SecurityDataItem.FieldId.TradingMarkets,
-                    recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                    recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
                 };
             }
         }
@@ -591,7 +591,7 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
             this._isIndex = msgRec.isIndex;
             valueChanges[valueChangeCount++] = {
                 fieldId: SecurityDataItem.FieldId.IsIndex,
-                recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
             };
         }
 
@@ -602,7 +602,7 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
                     this._expiryDate = undefined;
                     valueChanges[valueChangeCount++] = {
                         fieldId: SecurityDataItem.FieldId.ExpiryDate,
-                        recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                        recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
                     };
                 }
             } else {
@@ -610,7 +610,7 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
                     this._expiryDate = newExpiryDate;
                     valueChanges[valueChangeCount++] = {
                         fieldId: SecurityDataItem.FieldId.ExpiryDate,
-                        recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                        recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
                     };
                 }
             }
@@ -623,7 +623,7 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
                     this._strikePrice = undefined;
                     valueChanges[valueChangeCount++] = {
                         fieldId: SecurityDataItem.FieldId.StrikePrice,
-                        recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                        recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
                     };
                 }
             } else {
@@ -631,13 +631,13 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
                     this._strikePrice = newStrikePrice;
                     valueChanges[valueChangeCount++] = {
                         fieldId: SecurityDataItem.FieldId.StrikePrice,
-                        recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                        recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
                     };
                 } else {
                     if (!isDecimalEqual(newStrikePrice, this._strikePrice)) {
                         const recentChangeTypeId = isDecimalGreaterThan(newStrikePrice, this._strikePrice)
-                            ? ValueRecentChangeTypeId.Increase
-                            : ValueRecentChangeTypeId.Decrease;
+                            ? RevRecordValueRecentChangeTypeId.Increase
+                            : RevRecordValueRecentChangeTypeId.Decrease;
                         this._strikePrice = newStrikePrice;
                         valueChanges[valueChangeCount++] = {
                             fieldId: SecurityDataItem.FieldId.StrikePrice,
@@ -655,7 +655,7 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
                     this._callOrPutId = undefined;
                     valueChanges[valueChangeCount++] = {
                         fieldId: SecurityDataItem.FieldId.CallOrPut,
-                        recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                        recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
                     };
                 }
             } else {
@@ -663,7 +663,7 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
                     this._callOrPutId = newCallOrPutId;
                     valueChanges[valueChangeCount++] = {
                         fieldId: SecurityDataItem.FieldId.CallOrPut,
-                        recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                        recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
                     };
                 }
             }
@@ -676,7 +676,7 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
                     this._contractSize = undefined;
                     valueChanges[valueChangeCount++] = {
                         fieldId: SecurityDataItem.FieldId.ContractSize,
-                        recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                        recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
                     };
                 }
             } else {
@@ -684,13 +684,13 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
                     this._contractSize = newContractSize;
                     valueChanges[valueChangeCount++] = {
                         fieldId: SecurityDataItem.FieldId.ContractSize,
-                        recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                        recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
                     };
                 } else {
                     if (!isDecimalEqual(newContractSize, this._contractSize)) {
                         const recentChangeTypeId = isDecimalGreaterThan(newContractSize, this._contractSize)
-                            ? ValueRecentChangeTypeId.Increase
-                            : ValueRecentChangeTypeId.Decrease;
+                            ? RevRecordValueRecentChangeTypeId.Increase
+                            : RevRecordValueRecentChangeTypeId.Decrease;
                         this._contractSize = newContractSize;
                         valueChanges[valueChangeCount++] = {
                             fieldId: SecurityDataItem.FieldId.ContractSize,
@@ -706,7 +706,7 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
                 this._subscriptionDataTypeIds = msgRec.subscriptionDataTypeIds;
                 valueChanges[valueChangeCount++] = {
                     fieldId: SecurityDataItem.FieldId.SubscriptionDataTypeIds,
-                    recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                    recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
                 };
             }
         }
@@ -717,7 +717,7 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
                 this._quotationBasis = msgRec.quotationBasis;
                 valueChanges[valueChangeCount++] = {
                     fieldId: SecurityDataItem.FieldId.QuotationBasis,
-                    recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                    recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
                 };
             }
         }
@@ -729,7 +729,7 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
                     this._currencyId = undefined;
                     valueChanges[valueChangeCount++] = {
                         fieldId: SecurityDataItem.FieldId.CallOrPut,
-                        recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                        recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
                     };
                 }
             } else {
@@ -737,7 +737,7 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
                     this._currencyId = newCurrencyId;
                     valueChanges[valueChangeCount++] = {
                         fieldId: SecurityDataItem.FieldId.CallOrPut,
-                        recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                        recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
                     };
                 }
             }
@@ -750,7 +750,7 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
                     this._open = undefined;
                     valueChanges[valueChangeCount++] = {
                         fieldId: SecurityDataItem.FieldId.Open,
-                        recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                        recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
                     };
                 }
             } else {
@@ -758,13 +758,13 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
                     this._open = newOpen;
                     valueChanges[valueChangeCount++] = {
                         fieldId: SecurityDataItem.FieldId.Open,
-                        recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                        recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
                     };
                 } else {
                     if (!isDecimalEqual(newOpen, this._open)) {
                         const recentChangeTypeId = isDecimalGreaterThan(newOpen, this._open)
-                            ? ValueRecentChangeTypeId.Increase
-                            : ValueRecentChangeTypeId.Decrease;
+                            ? RevRecordValueRecentChangeTypeId.Increase
+                            : RevRecordValueRecentChangeTypeId.Decrease;
                         this._open = newOpen;
                         valueChanges[valueChangeCount++] = {
                             fieldId: SecurityDataItem.FieldId.Open,
@@ -782,7 +782,7 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
                     this._high = undefined;
                     valueChanges[valueChangeCount++] = {
                         fieldId: SecurityDataItem.FieldId.High,
-                        recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                        recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
                     };
                 }
             } else {
@@ -790,13 +790,13 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
                     this._high = newHigh;
                     valueChanges[valueChangeCount++] = {
                         fieldId: SecurityDataItem.FieldId.High,
-                        recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                        recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
                     };
                 } else {
                     if (!isDecimalEqual(newHigh, this._high)) {
                         const recentChangeTypeId = isDecimalGreaterThan(newHigh, this._high)
-                            ? ValueRecentChangeTypeId.Increase
-                            : ValueRecentChangeTypeId.Decrease;
+                            ? RevRecordValueRecentChangeTypeId.Increase
+                            : RevRecordValueRecentChangeTypeId.Decrease;
                         this._high = newHigh;
                         valueChanges[valueChangeCount++] = {
                             fieldId: SecurityDataItem.FieldId.High,
@@ -814,7 +814,7 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
                     this._low = undefined;
                     valueChanges[valueChangeCount++] = {
                         fieldId: SecurityDataItem.FieldId.Low,
-                        recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                        recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
                     };
                 }
             } else {
@@ -822,13 +822,13 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
                     this._low = newLow;
                     valueChanges[valueChangeCount++] = {
                         fieldId: SecurityDataItem.FieldId.Low,
-                        recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                        recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
                     };
                 } else {
                     if (!isDecimalEqual(newLow, this._low)) {
                         const recentChangeTypeId = isDecimalGreaterThan(newLow, this._low)
-                            ? ValueRecentChangeTypeId.Increase
-                            : ValueRecentChangeTypeId.Decrease;
+                            ? RevRecordValueRecentChangeTypeId.Increase
+                            : RevRecordValueRecentChangeTypeId.Decrease;
                         this._low = newLow;
                         valueChanges[valueChangeCount++] = {
                             fieldId: SecurityDataItem.FieldId.Low,
@@ -846,7 +846,7 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
                     this._close = undefined;
                     valueChanges[valueChangeCount++] = {
                         fieldId: SecurityDataItem.FieldId.Close,
-                        recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                        recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
                     };
                 }
             } else {
@@ -854,13 +854,13 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
                     this._close = newClose;
                     valueChanges[valueChangeCount++] = {
                         fieldId: SecurityDataItem.FieldId.Close,
-                        recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                        recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
                     };
                 } else {
                     if (!isDecimalEqual(newClose, this._close)) {
                         const recentChangeTypeId = isDecimalGreaterThan(newClose, this._close)
-                            ? ValueRecentChangeTypeId.Increase
-                            : ValueRecentChangeTypeId.Decrease;
+                            ? RevRecordValueRecentChangeTypeId.Increase
+                            : RevRecordValueRecentChangeTypeId.Decrease;
                         this._close = newClose;
                         valueChanges[valueChangeCount++] = {
                             fieldId: SecurityDataItem.FieldId.Close,
@@ -878,7 +878,7 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
                     this._settlement = undefined;
                     valueChanges[valueChangeCount++] = {
                         fieldId: SecurityDataItem.FieldId.Settlement,
-                        recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                        recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
                     };
                 }
             } else {
@@ -886,13 +886,13 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
                     this._settlement = newSettlement;
                     valueChanges[valueChangeCount++] = {
                         fieldId: SecurityDataItem.FieldId.Settlement,
-                        recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                        recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
                     };
                 } else {
                     if (!isDecimalEqual(newSettlement, this._settlement)) {
                         const recentChangeTypeId = isDecimalGreaterThan(newSettlement, this._settlement)
-                            ? ValueRecentChangeTypeId.Increase
-                            : ValueRecentChangeTypeId.Decrease;
+                            ? RevRecordValueRecentChangeTypeId.Increase
+                            : RevRecordValueRecentChangeTypeId.Decrease;
                         this._settlement = newSettlement;
                         valueChanges[valueChangeCount++] = {
                             fieldId: SecurityDataItem.FieldId.Settlement,
@@ -910,7 +910,7 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
                     this._last = undefined;
                     valueChanges[valueChangeCount++] = {
                         fieldId: SecurityDataItem.FieldId.Last,
-                        recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                        recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
                     };
                 }
             } else {
@@ -918,13 +918,13 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
                     this._last = newLast;
                     valueChanges[valueChangeCount++] = {
                         fieldId: SecurityDataItem.FieldId.Last,
-                        recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                        recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
                     };
                 } else {
                     if (!isDecimalEqual(newLast, this._last)) {
                         const recentChangeTypeId = isDecimalGreaterThan(newLast, this._last)
-                            ? ValueRecentChangeTypeId.Increase
-                            : ValueRecentChangeTypeId.Decrease;
+                            ? RevRecordValueRecentChangeTypeId.Increase
+                            : RevRecordValueRecentChangeTypeId.Decrease;
                         this._last = newLast;
                         valueChanges[valueChangeCount++] = {
                             fieldId: SecurityDataItem.FieldId.Last,
@@ -939,7 +939,7 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
             this._trend = msgRec.trend;
             valueChanges[valueChangeCount++] = {
                 fieldId: SecurityDataItem.FieldId.Trend,
-                recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
             };
         }
 
@@ -950,7 +950,7 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
                     this._bestAsk = undefined;
                     valueChanges[valueChangeCount++] = {
                         fieldId: SecurityDataItem.FieldId.BestAsk,
-                        recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                        recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
                     };
                 }
             } else {
@@ -958,13 +958,13 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
                     this._bestAsk = newBestAsk;
                     valueChanges[valueChangeCount++] = {
                         fieldId: SecurityDataItem.FieldId.BestAsk,
-                        recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                        recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
                     };
                 } else {
                     if (!isDecimalEqual(newBestAsk, this._bestAsk)) {
                         const recentChangeTypeId = isDecimalGreaterThan(newBestAsk, this._bestAsk)
-                            ? ValueRecentChangeTypeId.Increase
-                            : ValueRecentChangeTypeId.Decrease;
+                            ? RevRecordValueRecentChangeTypeId.Increase
+                            : RevRecordValueRecentChangeTypeId.Decrease;
                         this._bestAsk = newBestAsk;
                         valueChanges[valueChangeCount++] = {
                             fieldId: SecurityDataItem.FieldId.BestAsk,
@@ -978,13 +978,13 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
         const newAskCount = msgRec.askCount;
         if (newAskCount !== undefined) {
             if (newAskCount !== this._askCount) {
-                let recentChangeTypeId: ValueRecentChangeTypeId;
+                let recentChangeTypeId: RevRecordValueRecentChangeTypeId;
                 if (this._askCount === undefined) {
-                    recentChangeTypeId = ValueRecentChangeTypeId.Update;
+                    recentChangeTypeId = RevRecordValueRecentChangeTypeId.Update;
                 } else {
                     recentChangeTypeId = newAskCount > this._askCount
-                        ? ValueRecentChangeTypeId.Increase
-                        : ValueRecentChangeTypeId.Decrease;
+                        ? RevRecordValueRecentChangeTypeId.Increase
+                        : RevRecordValueRecentChangeTypeId.Decrease;
                 }
                 this._askCount = newAskCount;
                 valueChanges[valueChangeCount++] = {
@@ -1000,13 +1000,13 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
                 this._askQuantity = newAskQuantity;
                 valueChanges[valueChangeCount++] = {
                     fieldId: SecurityDataItem.FieldId.AskQuantity,
-                    recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                    recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
                 };
             } else {
                 if (!isDecimalEqual(newAskQuantity, this._askQuantity)) {
                     const recentChangeTypeId = isDecimalGreaterThan(newAskQuantity, this._askQuantity)
-                        ? ValueRecentChangeTypeId.Increase
-                        : ValueRecentChangeTypeId.Decrease;
+                        ? RevRecordValueRecentChangeTypeId.Increase
+                        : RevRecordValueRecentChangeTypeId.Decrease;
                     this._askQuantity = newAskQuantity;
                     valueChanges[valueChangeCount++] = {
                         fieldId: SecurityDataItem.FieldId.AskQuantity,
@@ -1021,7 +1021,7 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
             this._askUndisclosed = newAskUndisclosed;
             valueChanges[valueChangeCount++] = {
                 fieldId: SecurityDataItem.FieldId.AskUndisclosed,
-                recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
             };
         }
 
@@ -1032,7 +1032,7 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
                     this._bestBid = undefined;
                     valueChanges[valueChangeCount++] = {
                         fieldId: SecurityDataItem.FieldId.BestBid,
-                        recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                        recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
                     };
                 }
             } else {
@@ -1040,13 +1040,13 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
                     this._bestBid = newBestBid;
                     valueChanges[valueChangeCount++] = {
                         fieldId: SecurityDataItem.FieldId.BestBid,
-                        recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                        recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
                     };
                 } else {
                     if (!isDecimalEqual(newBestBid, this._bestBid)) {
                         const recentChangeTypeId = isDecimalGreaterThan(newBestBid, this._bestBid)
-                            ? ValueRecentChangeTypeId.Increase
-                            : ValueRecentChangeTypeId.Decrease;
+                            ? RevRecordValueRecentChangeTypeId.Increase
+                            : RevRecordValueRecentChangeTypeId.Decrease;
                         this._bestBid = newBestBid;
                         valueChanges[valueChangeCount++] = {
                             fieldId: SecurityDataItem.FieldId.BestBid,
@@ -1063,13 +1063,13 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
                 this._bidCount = newBidCount;
                 valueChanges[valueChangeCount++] = {
                     fieldId: SecurityDataItem.FieldId.BidCount,
-                    recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                    recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
                 };
             } else {
                 if (newBidCount !== this._bidCount) {
                     const recentChangeTypeId = newBidCount > this._bidCount
-                        ? ValueRecentChangeTypeId.Increase
-                        : ValueRecentChangeTypeId.Decrease;
+                        ? RevRecordValueRecentChangeTypeId.Increase
+                        : RevRecordValueRecentChangeTypeId.Decrease;
                     this._bidCount = newBidCount;
                     valueChanges[valueChangeCount++] = { fieldId: SecurityDataItem.FieldId.BidCount, recentChangeTypeId };
                 }
@@ -1082,13 +1082,13 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
                 this._bidQuantity = newBidQuantity;
                 valueChanges[valueChangeCount++] = {
                     fieldId: SecurityDataItem.FieldId.BidQuantity,
-                    recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                    recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
                 };
             } else {
                 if (!isDecimalEqual(newBidQuantity, this._bidQuantity)) {
                     const recentChangeTypeId = isDecimalGreaterThan(newBidQuantity, this._bidQuantity)
-                        ? ValueRecentChangeTypeId.Increase
-                        : ValueRecentChangeTypeId.Decrease;
+                        ? RevRecordValueRecentChangeTypeId.Increase
+                        : RevRecordValueRecentChangeTypeId.Decrease;
                     this._bidQuantity = newBidQuantity;
                     valueChanges[valueChangeCount++] = {
                         fieldId: SecurityDataItem.FieldId.BidQuantity,
@@ -1103,7 +1103,7 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
             this._bidUndisclosed = newBidUndisclosed;
             valueChanges[valueChangeCount++] = {
                 fieldId: SecurityDataItem.FieldId.BidUndisclosed,
-                recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
             };
         }
 
@@ -1113,13 +1113,13 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
                 this._numberOfTrades = newNumberOfTrades;
                 valueChanges[valueChangeCount++] = {
                     fieldId: SecurityDataItem.FieldId.NumberOfTrades,
-                    recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                    recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
                 };
             } else {
                 if (newNumberOfTrades !== this._numberOfTrades) {
                     const recentChangeTypeId = newNumberOfTrades > this._numberOfTrades
-                        ? ValueRecentChangeTypeId.Increase
-                        : ValueRecentChangeTypeId.Decrease;
+                        ? RevRecordValueRecentChangeTypeId.Increase
+                        : RevRecordValueRecentChangeTypeId.Decrease;
 
                     this._numberOfTrades = newNumberOfTrades;
                     valueChanges[valueChangeCount++] = { fieldId: SecurityDataItem.FieldId.NumberOfTrades, recentChangeTypeId };
@@ -1133,13 +1133,13 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
                 this._volume = newVolume;
                 valueChanges[valueChangeCount++] = {
                     fieldId: SecurityDataItem.FieldId.Volume,
-                    recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                    recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
                 };
             } else {
                 if (!isDecimalEqual(newVolume, this._volume)) {
                     const recentChangeTypeId = isDecimalGreaterThan(newVolume, this._volume)
-                        ? ValueRecentChangeTypeId.Increase
-                        : ValueRecentChangeTypeId.Decrease;
+                        ? RevRecordValueRecentChangeTypeId.Increase
+                        : RevRecordValueRecentChangeTypeId.Decrease;
                     this._volume = newVolume;
                     valueChanges[valueChangeCount++] = {
                         fieldId: SecurityDataItem.FieldId.Volume,
@@ -1156,7 +1156,7 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
                     this._auctionPrice = undefined;
                     valueChanges[valueChangeCount++] = {
                         fieldId: SecurityDataItem.FieldId.AuctionPrice,
-                        recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                        recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
                     };
                 }
             } else {
@@ -1164,13 +1164,13 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
                     this._auctionPrice = newAuctionPrice;
                     valueChanges[valueChangeCount++] = {
                         fieldId: SecurityDataItem.FieldId.AuctionPrice,
-                        recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                        recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
                     };
                 } else {
                     if (!isDecimalEqual(newAuctionPrice, this._auctionPrice)) {
                         const recentChangeTypeId = isDecimalGreaterThan(newAuctionPrice, this._auctionPrice)
-                            ? ValueRecentChangeTypeId.Increase
-                            : ValueRecentChangeTypeId.Decrease;
+                            ? RevRecordValueRecentChangeTypeId.Increase
+                            : RevRecordValueRecentChangeTypeId.Decrease;
 
                         this._auctionPrice = newAuctionPrice;
                         valueChanges[valueChangeCount++] = { fieldId: SecurityDataItem.FieldId.AuctionPrice, recentChangeTypeId };
@@ -1186,7 +1186,7 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
                     this._auctionQuantity = undefined;
                     valueChanges[valueChangeCount++] = {
                         fieldId: SecurityDataItem.FieldId.AuctionQuantity,
-                        recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                        recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
                     };
                 }
             } else {
@@ -1194,13 +1194,13 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
                     this._auctionQuantity = newAuctionQuantity;
                     valueChanges[valueChangeCount++] = {
                         fieldId: SecurityDataItem.FieldId.AuctionQuantity,
-                        recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                        recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
                     };
                 } else {
                     if (!isDecimalEqual(newAuctionQuantity, this._auctionQuantity)) {
                         const recentChangeTypeId = isDecimalGreaterThan(newAuctionQuantity, this._auctionQuantity)
-                            ? ValueRecentChangeTypeId.Increase
-                            : ValueRecentChangeTypeId.Decrease;
+                            ? RevRecordValueRecentChangeTypeId.Increase
+                            : RevRecordValueRecentChangeTypeId.Decrease;
 
                         this._auctionQuantity = newAuctionQuantity;
                         valueChanges[valueChangeCount++] = { fieldId: SecurityDataItem.FieldId.AuctionQuantity, recentChangeTypeId };
@@ -1216,7 +1216,7 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
                     this._auctionRemainder = undefined;
                     valueChanges[valueChangeCount++] = {
                         fieldId: SecurityDataItem.FieldId.AuctionRemainder,
-                        recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                        recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
                     };
                 }
             } else {
@@ -1224,13 +1224,13 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
                     this._auctionRemainder = newAuctionRemainder;
                     valueChanges[valueChangeCount++] = {
                         fieldId: SecurityDataItem.FieldId.AuctionRemainder,
-                        recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                        recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
                     };
                 } else {
                     if (!isDecimalEqual(newAuctionRemainder, this._auctionRemainder)) {
                         const recentChangeTypeId = isDecimalGreaterThan(newAuctionRemainder, this._auctionRemainder)
-                            ? ValueRecentChangeTypeId.Increase
-                            : ValueRecentChangeTypeId.Decrease;
+                            ? RevRecordValueRecentChangeTypeId.Increase
+                            : RevRecordValueRecentChangeTypeId.Decrease;
 
                         this._auctionRemainder = newAuctionRemainder;
                         valueChanges[valueChangeCount++] = { fieldId: SecurityDataItem.FieldId.AuctionRemainder, recentChangeTypeId };
@@ -1246,7 +1246,7 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
                     this._vWAP = undefined;
                     valueChanges[valueChangeCount++] = {
                         fieldId: SecurityDataItem.FieldId.VWAP,
-                        recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                        recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
                     };
                 }
             } else {
@@ -1254,13 +1254,13 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
                     this._vWAP = newVWAP;
                     valueChanges[valueChangeCount++] = {
                         fieldId: SecurityDataItem.FieldId.VWAP,
-                        recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                        recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
                     };
                 } else {
                     if (!isDecimalEqual(newVWAP, this._vWAP)) {
                         const recentChangeTypeId = isDecimalGreaterThan(newVWAP, this._vWAP)
-                            ? ValueRecentChangeTypeId.Increase
-                            : ValueRecentChangeTypeId.Decrease;
+                            ? RevRecordValueRecentChangeTypeId.Increase
+                            : RevRecordValueRecentChangeTypeId.Decrease;
 
                         this._vWAP = newVWAP;
                         valueChanges[valueChangeCount++] = { fieldId: SecurityDataItem.FieldId.VWAP, recentChangeTypeId };
@@ -1275,13 +1275,13 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
                 this._valueTraded = newValueTraded;
                 valueChanges[valueChangeCount++] = {
                     fieldId: SecurityDataItem.FieldId.ValueTraded,
-                    recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                    recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
                 };
             } else {
                 if (!isDecimalEqual(newValueTraded, this._valueTraded)) {
                     const recentChangeTypeId = isDecimalGreaterThan(newValueTraded, this._valueTraded)
-                        ? ValueRecentChangeTypeId.Increase
-                        : ValueRecentChangeTypeId.Decrease;
+                        ? RevRecordValueRecentChangeTypeId.Increase
+                        : RevRecordValueRecentChangeTypeId.Decrease;
 
                     this._valueTraded = newValueTraded;
                     valueChanges[valueChangeCount++] = { fieldId: SecurityDataItem.FieldId.ValueTraded, recentChangeTypeId };
@@ -1296,7 +1296,7 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
                     this._openInterest = undefined;
                     valueChanges[valueChangeCount++] = {
                         fieldId: SecurityDataItem.FieldId.OpenInterest,
-                        recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                        recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
                     };
                 }
             } else {
@@ -1304,13 +1304,13 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
                     this._openInterest = newOpenInterest;
                     valueChanges[valueChangeCount++] = {
                         fieldId: SecurityDataItem.FieldId.OpenInterest,
-                        recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                        recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
                     };
                 } else {
                     if (newOpenInterest !== this._openInterest) {
                         const recentChangeTypeId = newOpenInterest > this._openInterest
-                            ? ValueRecentChangeTypeId.Increase
-                            : ValueRecentChangeTypeId.Decrease;
+                            ? RevRecordValueRecentChangeTypeId.Increase
+                            : RevRecordValueRecentChangeTypeId.Decrease;
 
                         this._openInterest = newOpenInterest;
                         valueChanges[valueChangeCount++] = { fieldId: SecurityDataItem.FieldId.OpenInterest, recentChangeTypeId };
@@ -1326,7 +1326,7 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
                     this._shareIssue = undefined;
                     valueChanges[valueChangeCount++] = {
                         fieldId: SecurityDataItem.FieldId.ShareIssue,
-                        recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                        recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
                     };
                 }
             } else {
@@ -1334,13 +1334,13 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
                     this._shareIssue = newShareIssue;
                     valueChanges[valueChangeCount++] = {
                         fieldId: SecurityDataItem.FieldId.ShareIssue,
-                        recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                        recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
                     };
                 } else {
                     if (!isDecimalEqual(newShareIssue, this._shareIssue)) {
                         const recentChangeTypeId = isDecimalGreaterThan(newShareIssue, this._shareIssue)
-                            ? ValueRecentChangeTypeId.Increase
-                            : ValueRecentChangeTypeId.Decrease;
+                            ? RevRecordValueRecentChangeTypeId.Increase
+                            : RevRecordValueRecentChangeTypeId.Decrease;
 
                         this._shareIssue = newShareIssue;
                         valueChanges[valueChangeCount++] = { fieldId: SecurityDataItem.FieldId.ShareIssue, recentChangeTypeId };
@@ -1355,7 +1355,7 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
                 this._statusNote = newStatusNote;
                 valueChanges[valueChangeCount++] = {
                     fieldId: SecurityDataItem.FieldId.StatusNote,
-                    recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                    recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
                 };
             }
         }
@@ -1789,7 +1789,7 @@ export namespace SecurityDataItem {
 
     export interface ValueChange {
         readonly fieldId: Field.Id;
-        readonly recentChangeTypeId: ValueRecentChangeTypeId | undefined;
+        readonly recentChangeTypeId: RevRecordValueRecentChangeTypeId | undefined;
     }
 
     export function valueChangeArrayIncludesFieldId(changes: readonly ValueChange[], fieldId: FieldId) {

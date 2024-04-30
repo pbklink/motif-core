@@ -4,19 +4,18 @@
  * License: motionite.trade/license/motif
  */
 
+import { RevRecordStore } from '@xilytix/revgrid';
 import { DayTradesDataItem } from '../../../adi/internal-api';
 import {
     AssertInternalError,
-    GridRecordStore,
-    GridRecordStoreRecordsEventers,
     Integer,
     MultiEvent,
     UnreachableCaseError,
     UsableListChangeTypeId
 } from "../../../sys/internal-api";
 
-export class DayTradesGridRecordStore implements GridRecordStore {
-    private _recordsEventers: GridRecordStoreRecordsEventers;
+export class DayTradesGridRecordStore implements RevRecordStore {
+    private _recordsEventers: RevRecordStore.RecordsEventers;
 
     private _dataItem: DayTradesDataItem | undefined;
     private _records: DayTradesDataItem.Record[] = [];
@@ -29,7 +28,7 @@ export class DayTradesGridRecordStore implements GridRecordStore {
     get recordCount() { return this._recordCount; }
     get dataItem() { return this._dataItem; } // used by ArcLight
 
-    setRecordEventers(recordsEventers: GridRecordStoreRecordsEventers): void {
+    setRecordEventers(recordsEventers: RevRecordStore.RecordsEventers): void {
         this._recordsEventers = recordsEventers;
     }
 

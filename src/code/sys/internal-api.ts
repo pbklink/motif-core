@@ -22,7 +22,6 @@ export * from './error-code-logger';
 export * from './error-code-with-extra-err';
 export * from './external-error';
 export * from './field-data-type';
-export * from './grid-revgrid-types';
 export * from './incubator';
 export * from './json-element-err';
 export * from './keyed-correctness-list';

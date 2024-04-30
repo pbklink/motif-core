@@ -4,6 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
+import { RevRecordValueRecentChangeTypeId } from '@xilytix/revgrid';
 import {
     AdiService,
     DataItemIncubator,
@@ -35,8 +36,7 @@ import {
     MultiEvent,
     Ok,
     RecordList,
-    Result,
-    ValueRecentChangeTypeId
+    Result
 } from "../sys/internal-api";
 
 export class WatchmakerList implements LockOpenListItem<RankedLitIvemIdListDirectoryItem>, KeyedCorrectnessSettableListItem, RankScoredLitIvemIdList, RankedLitIvemIdListDirectoryItem {
@@ -156,7 +156,7 @@ export class WatchmakerList implements LockOpenListItem<RankedLitIvemIdListDirec
             this._upperCaseName = value.toLocaleUpperCase();
             this._valueChanges.push({
                 fieldId: WatchmakerList.FieldId.Name,
-                recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
             });
             this.endChange();
         }
@@ -170,7 +170,7 @@ export class WatchmakerList implements LockOpenListItem<RankedLitIvemIdListDirec
             this._upperCaseDescription = value === undefined ? '' : value.toLocaleUpperCase();
             this._valueChanges.push({
                 fieldId: WatchmakerList.FieldId.Description,
-                recentChangeTypeId: ValueRecentChangeTypeId.Update
+                recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update
             });
             this.endChange();
         }
@@ -184,7 +184,7 @@ export class WatchmakerList implements LockOpenListItem<RankedLitIvemIdListDirec
             this._upperCaseCategory = value === undefined ? '' : value.toLocaleUpperCase();
             this._valueChanges.push({
                 fieldId: WatchmakerList.FieldId.Category,
-                recentChangeTypeId: ValueRecentChangeTypeId.Update
+                recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update
             });
             this.endChange();
         }
@@ -228,27 +228,27 @@ export class WatchmakerList implements LockOpenListItem<RankedLitIvemIdListDirec
     }
 
     initiateInsertInto(index: Integer, members: readonly LitIvemId[]) {
-
+        // todo
     }
 
     initiateReplaceAt(index: Integer, members: readonly LitIvemId[]) {
-
+        // todo
     }
 
     initiateRemoveAt(index: Integer, count: Integer) {
-
+        // todo
     }
 
     initiateMoveAt(index: Integer, count: Integer, target: Integer) {
-
+        // todo
     }
 
     initiateUpdate(name: string, description: string | undefined, category: string | undefined) {
-
+        // todo
     }
 
     initiateSetMembers(members: readonly LitIvemId[]) {
-
+        // todo
     }
 
     copy(name: string, description: string | undefined, category: string | undefined): Promise<Result<string>> {
@@ -387,7 +387,7 @@ export class WatchmakerList implements LockOpenListItem<RankedLitIvemIdListDirec
                         if (this._valueChanges.findIndex((change) => change.fieldId === WatchmakerList.FieldId.ConfigModified) < 0) {
                             this._valueChanges.push({
                                 fieldId: WatchmakerList.FieldId.ConfigModified,
-                                recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                                recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
                             });
                         }
                     }
@@ -509,7 +509,7 @@ export class WatchmakerList implements LockOpenListItem<RankedLitIvemIdListDirec
             this._syncStatusId = syncStatusId;
             this._valueChanges.push({
                 fieldId: WatchmakerList.FieldId.SyncStatusId,
-                recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
             });
             this.endChange();
         }
@@ -803,7 +803,7 @@ export namespace WatchmakerList {
         export function initialise() {
             const outOfOrderIdx = infos.findIndex((info: Info, index: number) => info.id !== index as FieldId);
             if (outOfOrderIdx >= 0) {
-                throw new EnumInfoOutOfOrderError('EditableScan.FieldId', outOfOrderIdx, `${idToName(outOfOrderIdx)}`);
+                throw new EnumInfoOutOfOrderError('EditableScan.FieldId', outOfOrderIdx, idToName(outOfOrderIdx));
             }
         }
 
@@ -834,7 +834,7 @@ export namespace WatchmakerList {
 
     export interface ValueChange {
         fieldId: FieldId;
-        recentChangeTypeId: ValueRecentChangeTypeId;
+        recentChangeTypeId: RevRecordValueRecentChangeTypeId;
     }
 
 }

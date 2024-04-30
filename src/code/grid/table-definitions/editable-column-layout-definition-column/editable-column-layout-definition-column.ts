@@ -4,6 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
+import { RevRecordValueRecentChangeTypeId } from '@xilytix/revgrid';
 import { StringId, Strings } from '../../../res/internal-api';
 import {
     EnumInfoOutOfOrderError,
@@ -11,7 +12,6 @@ import {
     IndexedRecord,
     Integer,
     MultiEvent,
-    ValueRecentChangeTypeId
 } from "../../../sys/internal-api";
 import { GridField } from '../../field/internal-api';
 
@@ -35,11 +35,11 @@ export class EditableColumnLayoutDefinitionColumn implements IndexedRecord {
     set width(newWidth: Integer | undefined) {
         const oldWidth = this._width;
         if (newWidth !== oldWidth) {
-            let recentChangeTypeId: ValueRecentChangeTypeId;
+            let recentChangeTypeId: RevRecordValueRecentChangeTypeId;
             if (newWidth === undefined || oldWidth === undefined) {
-                recentChangeTypeId = ValueRecentChangeTypeId.Update;
+                recentChangeTypeId = RevRecordValueRecentChangeTypeId.Update;
             } else {
-                recentChangeTypeId = newWidth > oldWidth ? ValueRecentChangeTypeId.Increase : ValueRecentChangeTypeId.Decrease;
+                recentChangeTypeId = newWidth > oldWidth ? RevRecordValueRecentChangeTypeId.Increase : RevRecordValueRecentChangeTypeId.Decrease;
             }
             this._width = newWidth;
             this.notifyWidthChanged({ fieldId: EditableColumnLayoutDefinitionColumn.FieldId.Width, recentChangeTypeId });
@@ -198,7 +198,7 @@ export namespace EditableColumnLayoutDefinitionColumn {
 
     export interface ValueChange {
         fieldId: FieldId;
-        recentChangeTypeId: ValueRecentChangeTypeId;
+        recentChangeTypeId: RevRecordValueRecentChangeTypeId;
     }
 }
 

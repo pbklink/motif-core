@@ -4,6 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
+import { RevRecordInvalidatedValue, RevRecordValueRecentChangeTypeId } from '@xilytix/revgrid';
 import { DepthDataItem, MarketId, MarketInfo, OrderSideId } from '../../../../adi/internal-api';
 import {
     CountAndXrefsRenderValue,
@@ -19,10 +20,8 @@ import {
 import {
     AssertInternalError,
     Decimal,
-    GridRecordInvalidatedValue,
     Integer,
     UnreachableCaseError,
-    ValueRecentChangeTypeId,
     compareDecimal,
     compareInteger,
     isArrayEqualUniquely,
@@ -187,11 +186,11 @@ export class OrderFullDepthRecord extends FullDepthRecord {
         }
     }
 
-    processOrderValueChanges(valueChanges: DepthDataItem.Order.ValueChange[]): GridRecordInvalidatedValue[] {
+    processOrderValueChanges(valueChanges: DepthDataItem.Order.ValueChange[]): RevRecordInvalidatedValue[] {
         const valueChangeCount = valueChanges.length;
-        const result = new Array<GridRecordInvalidatedValue>(valueChangeCount * 2); // guess capacity
-        let priceAndHasUndisclosedRecentChangeTypeId: ValueRecentChangeTypeId | undefined;
-        let countXrefRecentChangeTypeId: ValueRecentChangeTypeId | undefined;
+        const result = new Array<RevRecordInvalidatedValue>(valueChangeCount * 2); // guess capacity
+        let priceAndHasUndisclosedRecentChangeTypeId: RevRecordValueRecentChangeTypeId | undefined;
+        let countXrefRecentChangeTypeId: RevRecordValueRecentChangeTypeId | undefined;
         let count = 0;
         for (let i = 0; i < valueChangeCount; i++) {
             const valueChange = valueChanges[i];
@@ -216,7 +215,7 @@ export class OrderFullDepthRecord extends FullDepthRecord {
             }
 
             if (fieldId !== undefined) {
-                const invalidatedRecordField: GridRecordInvalidatedValue = {
+                const invalidatedRecordField: RevRecordInvalidatedValue = {
                     fieldIndex: fieldId, // Fields are added in order of their fieldId (FullDepthSideFieldId) so fieldIndex equals fieldId
                     typeId: recentChangeTypeId,
                 };
@@ -228,7 +227,7 @@ export class OrderFullDepthRecord extends FullDepthRecord {
         }
 
         if (countXrefRecentChangeTypeId !== undefined) {
-            const invalidatedRecordField: GridRecordInvalidatedValue = {
+            const invalidatedRecordField: RevRecordInvalidatedValue = {
                 fieldIndex: FullDepthSideFieldId.CountXref,
                 typeId: countXrefRecentChangeTypeId,
             };
@@ -241,7 +240,7 @@ export class OrderFullDepthRecord extends FullDepthRecord {
         if (priceAndHasUndisclosedRecentChangeTypeId === undefined) {
             result.length = count;
         } else {
-            const invalidatedRecordField: GridRecordInvalidatedValue = {
+            const invalidatedRecordField: RevRecordInvalidatedValue = {
                 fieldIndex: FullDepthSideFieldId.PriceAndHasUndisclosed,
                 typeId: priceAndHasUndisclosedRecentChangeTypeId,
             };
@@ -385,27 +384,27 @@ export class PriceLevelFullDepthRecord extends FullDepthRecord {
         }
     }
 
-    addOrder(order: DepthDataItem.Order): GridRecordInvalidatedValue[] {
-        const changes = new Array<GridRecordInvalidatedValue>(8); // Set to maximum possible number of elements
+    addOrder(order: DepthDataItem.Order): RevRecordInvalidatedValue[] {
+        const changes = new Array<RevRecordInvalidatedValue>(8); // Set to maximum possible number of elements
         let changeCount = 0;
 
         this._count++;
-        changes[changeCount++] = { fieldIndex: FullDepthSideFieldId.Count, typeId: ValueRecentChangeTypeId.Increase };
-        changes[changeCount++] = { fieldIndex: FullDepthSideFieldId.CountXref, typeId: ValueRecentChangeTypeId.Increase };
+        changes[changeCount++] = { fieldIndex: FullDepthSideFieldId.Count, typeId: RevRecordValueRecentChangeTypeId.Increase };
+        changes[changeCount++] = { fieldIndex: FullDepthSideFieldId.CountXref, typeId: RevRecordValueRecentChangeTypeId.Increase };
 
         this._volume += order.quantity;
-        changes[changeCount++] = { fieldIndex: FullDepthSideFieldId.Volume, typeId: ValueRecentChangeTypeId.Increase };
+        changes[changeCount++] = { fieldIndex: FullDepthSideFieldId.Volume, typeId: RevRecordValueRecentChangeTypeId.Increase };
 
         const marketId = order.marketId;
         if (this._marketIds.includes(marketId)) {
             this._marketIds.push(marketId);
-            changes[changeCount++] = { fieldIndex: FullDepthSideFieldId.MarketId, typeId: ValueRecentChangeTypeId.Update };
+            changes[changeCount++] = { fieldIndex: FullDepthSideFieldId.MarketId, typeId: RevRecordValueRecentChangeTypeId.Update };
         }
 
         if (order.hasUndisclosed) {
             if (this._undisclosedOrderCount++ === 0) {
                 changes[changeCount++] = {
-                    fieldIndex: FullDepthSideFieldId.PriceAndHasUndisclosed, typeId: ValueRecentChangeTypeId.Update
+                    fieldIndex: FullDepthSideFieldId.PriceAndHasUndisclosed, typeId: RevRecordValueRecentChangeTypeId.Update
                 };
             }
         }
@@ -413,13 +412,13 @@ export class PriceLevelFullDepthRecord extends FullDepthRecord {
         const xref = order.crossRef;
         if (xref !== undefined && !this._xrefs.includes(xref)) {
             this._xrefs.push(xref);
-            changes[changeCount++] = { fieldIndex: FullDepthSideFieldId.Xref, typeId: ValueRecentChangeTypeId.Update };
+            changes[changeCount++] = { fieldIndex: FullDepthSideFieldId.Xref, typeId: RevRecordValueRecentChangeTypeId.Update };
         }
 
         const brokerId = order.broker;
         if (brokerId !== undefined && !this._brokerIds.includes(brokerId)) {
             this._brokerIds.push(brokerId);
-            changes[changeCount++] = { fieldIndex: FullDepthSideFieldId.BrokerId, typeId: ValueRecentChangeTypeId.Update };
+            changes[changeCount++] = { fieldIndex: FullDepthSideFieldId.BrokerId, typeId: RevRecordValueRecentChangeTypeId.Update };
         }
 
         let attributeAdded = false;
@@ -430,7 +429,7 @@ export class PriceLevelFullDepthRecord extends FullDepthRecord {
             }
         }
         if (attributeAdded) {
-            changes[changeCount++] = { fieldIndex: FullDepthSideFieldId.Attributes, typeId: ValueRecentChangeTypeId.Update };
+            changes[changeCount++] = { fieldIndex: FullDepthSideFieldId.Attributes, typeId: RevRecordValueRecentChangeTypeId.Update };
         }
 
         this._orders.push(order);
@@ -439,16 +438,16 @@ export class PriceLevelFullDepthRecord extends FullDepthRecord {
         return changes;
     }
 
-    addOrders(depthOrders: DepthDataItem.Order[], index: Integer, count: Integer): GridRecordInvalidatedValue[] {
+    addOrders(depthOrders: DepthDataItem.Order[], index: Integer, count: Integer): RevRecordInvalidatedValue[] {
         if (count === 0) {
             return [];
         } else {
-            const changes = new Array<GridRecordInvalidatedValue>(8); // Set to maximum possible number of elements
+            const changes = new Array<RevRecordInvalidatedValue>(8); // Set to maximum possible number of elements
             let changeCount = 0;
 
             this._count += count;
-            changes[changeCount++] = { fieldIndex: FullDepthSideFieldId.Count, typeId: ValueRecentChangeTypeId.Increase };
-            changes[changeCount++] = { fieldIndex: FullDepthSideFieldId.CountXref, typeId: ValueRecentChangeTypeId.Increase };
+            changes[changeCount++] = { fieldIndex: FullDepthSideFieldId.Count, typeId: RevRecordValueRecentChangeTypeId.Increase };
+            changes[changeCount++] = { fieldIndex: FullDepthSideFieldId.CountXref, typeId: RevRecordValueRecentChangeTypeId.Increase };
 
             const oldHasUndisclosed = this.hasUndisclosed;
 
@@ -459,12 +458,12 @@ export class PriceLevelFullDepthRecord extends FullDepthRecord {
                     this._undisclosedOrderCount++;
                 }
             }
-            changes[changeCount++] = { fieldIndex: FullDepthSideFieldId.Volume, typeId: ValueRecentChangeTypeId.Increase };
+            changes[changeCount++] = { fieldIndex: FullDepthSideFieldId.Volume, typeId: RevRecordValueRecentChangeTypeId.Increase };
 
             // check if hasUndisclosed has changed
             if (this.hasUndisclosed !== oldHasUndisclosed) {
                 changes[changeCount++] = {
-                    fieldIndex: FullDepthSideFieldId.PriceAndHasUndisclosed, typeId: ValueRecentChangeTypeId.Update
+                    fieldIndex: FullDepthSideFieldId.PriceAndHasUndisclosed, typeId: RevRecordValueRecentChangeTypeId.Update
                 };
             }
 
@@ -473,25 +472,25 @@ export class PriceLevelFullDepthRecord extends FullDepthRecord {
             const newMarketIds = this.calculateMarketIds();
             if (newMarketIds.length !== this._marketIds.length) {
                 this._marketIds = newMarketIds;
-                changes[changeCount++] = { fieldIndex: FullDepthSideFieldId.MarketId, typeId: ValueRecentChangeTypeId.Update };
+                changes[changeCount++] = { fieldIndex: FullDepthSideFieldId.MarketId, typeId: RevRecordValueRecentChangeTypeId.Update };
             }
 
             const newXrefs = this.calculateXrefs();
             if (newXrefs.length !== this._xrefs.length) {
                 this._xrefs = newXrefs;
-                changes[changeCount++] = { fieldIndex: FullDepthSideFieldId.Xref, typeId: ValueRecentChangeTypeId.Update };
+                changes[changeCount++] = { fieldIndex: FullDepthSideFieldId.Xref, typeId: RevRecordValueRecentChangeTypeId.Update };
             }
 
             const newBrokerIds = this.calculateBrokerIds();
             if (newBrokerIds.length !== this._brokerIds.length) {
                 this._brokerIds = newBrokerIds;
-                changes[changeCount++] = { fieldIndex: FullDepthSideFieldId.BrokerId, typeId: ValueRecentChangeTypeId.Update };
+                changes[changeCount++] = { fieldIndex: FullDepthSideFieldId.BrokerId, typeId: RevRecordValueRecentChangeTypeId.Update };
             }
 
             const newAttributes = this.calculateAttributes();
             if (newAttributes.length !== this._attributes.length) {
                 this._attributes = newAttributes;
-                changes[changeCount++] = { fieldIndex: FullDepthSideFieldId.Attributes, typeId: ValueRecentChangeTypeId.Update };
+                changes[changeCount++] = { fieldIndex: FullDepthSideFieldId.Attributes, typeId: RevRecordValueRecentChangeTypeId.Update };
             }
 
             changes.length = changeCount;
@@ -503,14 +502,14 @@ export class PriceLevelFullDepthRecord extends FullDepthRecord {
         order: DepthDataItem.Order,
         oldVolume: Integer,
         oldHasUndisclosed: boolean
-    ): GridRecordInvalidatedValue[] {
+    ): RevRecordInvalidatedValue[] {
         // in some cases, order, has been changed so we need to pass in oldQuantity and oldHasUndisclosed separately
         const orderIdx = this._orders.indexOf(order);
         if (orderIdx < 0) {
             logger.logError(`FDRPLFDRRMR38867: ${order.orderId}`);
             return [];
         } else {
-            const changes = new Array<GridRecordInvalidatedValue>(8); // Set to maximum possible number of elements
+            const changes = new Array<RevRecordInvalidatedValue>(8); // Set to maximum possible number of elements
             let changeCount = 0;
 
             const oldMarketCount = this._marketIds.length;
@@ -520,16 +519,16 @@ export class PriceLevelFullDepthRecord extends FullDepthRecord {
 
             this._orders.splice(orderIdx, 1);
             this._count--;
-            changes[changeCount++] = { fieldIndex: FullDepthSideFieldId.Count, typeId: ValueRecentChangeTypeId.Decrease };
-            changes[changeCount++] = { fieldIndex: FullDepthSideFieldId.CountXref, typeId: ValueRecentChangeTypeId.Decrease };
+            changes[changeCount++] = { fieldIndex: FullDepthSideFieldId.Count, typeId: RevRecordValueRecentChangeTypeId.Decrease };
+            changes[changeCount++] = { fieldIndex: FullDepthSideFieldId.CountXref, typeId: RevRecordValueRecentChangeTypeId.Decrease };
 
             this._volume -= oldVolume;
-            changes[changeCount++] = { fieldIndex: FullDepthSideFieldId.Volume, typeId: ValueRecentChangeTypeId.Decrease };
+            changes[changeCount++] = { fieldIndex: FullDepthSideFieldId.Volume, typeId: RevRecordValueRecentChangeTypeId.Decrease };
 
             if (oldHasUndisclosed) {
                 if (--this._undisclosedOrderCount === 0) {
                     changes[changeCount++] = {
-                        fieldIndex: FullDepthSideFieldId.PriceAndHasUndisclosed, typeId: ValueRecentChangeTypeId.Update
+                        fieldIndex: FullDepthSideFieldId.PriceAndHasUndisclosed, typeId: RevRecordValueRecentChangeTypeId.Update
                     };
                 }
             }
@@ -537,25 +536,25 @@ export class PriceLevelFullDepthRecord extends FullDepthRecord {
             const marketIds = this.calculateMarketIds();
             if (marketIds.length !== oldMarketCount) {
                 this._marketIds = marketIds;
-                changes[changeCount++] = { fieldIndex: FullDepthSideFieldId.MarketId, typeId: ValueRecentChangeTypeId.Update };
+                changes[changeCount++] = { fieldIndex: FullDepthSideFieldId.MarketId, typeId: RevRecordValueRecentChangeTypeId.Update };
             }
 
             const xrefs = this.calculateXrefs();
             if (xrefs.length !== oldXrefCount) {
                 this._xrefs = xrefs;
-                changes[changeCount++] = { fieldIndex: FullDepthSideFieldId.Xref, typeId: ValueRecentChangeTypeId.Update };
+                changes[changeCount++] = { fieldIndex: FullDepthSideFieldId.Xref, typeId: RevRecordValueRecentChangeTypeId.Update };
             }
 
             const brokerIds = this.calculateBrokerIds();
             if (brokerIds.length !== oldBrokerIdCount) {
                 this._brokerIds = brokerIds;
-                changes[changeCount++] = { fieldIndex: FullDepthSideFieldId.BrokerId, typeId: ValueRecentChangeTypeId.Update };
+                changes[changeCount++] = { fieldIndex: FullDepthSideFieldId.BrokerId, typeId: RevRecordValueRecentChangeTypeId.Update };
             }
 
             const attributes = this.calculateAttributes();
             if (attributes.length !== oldAttributesCount) {
                 this._attributes = attributes;
-                changes[changeCount++] = { fieldIndex: FullDepthSideFieldId.Attributes, typeId: ValueRecentChangeTypeId.Update };
+                changes[changeCount++] = { fieldIndex: FullDepthSideFieldId.Attributes, typeId: RevRecordValueRecentChangeTypeId.Update };
             }
 
             changes.length = changeCount;
@@ -568,18 +567,18 @@ export class PriceLevelFullDepthRecord extends FullDepthRecord {
         oldOrderQuantity: Integer,
         oldHasUndisclosed: boolean,
         valueChanges: DepthDataItem.Order.ValueChange[]
-    ): GridRecordInvalidatedValue[] {
-        const changes = new Array<GridRecordInvalidatedValue>(6); // Set to maximum possible number of elements
+    ): RevRecordInvalidatedValue[] {
+        const changes = new Array<RevRecordInvalidatedValue>(6); // Set to maximum possible number of elements
         let changeCount = 0;
 
         const quantityChange = newOrder.quantity - oldOrderQuantity;
         if (quantityChange !== 0) {
             this._volume += quantityChange;
-            const changeTypeId = quantityChange > 0 ? ValueRecentChangeTypeId.Increase : ValueRecentChangeTypeId.Decrease;
+            const changeTypeId = quantityChange > 0 ? RevRecordValueRecentChangeTypeId.Increase : RevRecordValueRecentChangeTypeId.Decrease;
             changes[changeCount++] = { fieldIndex: FullDepthSideFieldId.Volume, typeId: changeTypeId };
         }
 
-        let priceAndHasUndisclosedChangeTypeId: ValueRecentChangeTypeId | undefined;
+        let priceAndHasUndisclosedChangeTypeId: RevRecordValueRecentChangeTypeId | undefined;
 
         if (oldHasUndisclosed !== newOrder.hasUndisclosed) {
             let hasPriceUndisclosedChanged: boolean;
@@ -589,7 +588,7 @@ export class PriceLevelFullDepthRecord extends FullDepthRecord {
                 hasPriceUndisclosedChanged = this._undisclosedOrderCount++ === 0;
             }
             if (hasPriceUndisclosedChanged) {
-                priceAndHasUndisclosedChangeTypeId = ValueRecentChangeTypeId.Update;
+                priceAndHasUndisclosedChangeTypeId = RevRecordValueRecentChangeTypeId.Update;
             }
         }
 
@@ -611,7 +610,7 @@ export class PriceLevelFullDepthRecord extends FullDepthRecord {
                         this._marketIds = newMarketIds;
                         changes[changeCount++] = {
                             fieldIndex: FullDepthSideFieldId.MarketId,
-                            typeId: ValueRecentChangeTypeId.Update
+                            typeId: RevRecordValueRecentChangeTypeId.Update
                         };
                     }
                     break;
@@ -620,7 +619,7 @@ export class PriceLevelFullDepthRecord extends FullDepthRecord {
                     const newXrefs = this.calculateXrefs();
                     if (!isArrayEqualUniquely<string>(newXrefs, this._xrefs)) {
                         this._xrefs = newXrefs;
-                        changes[changeCount++] = { fieldIndex: FullDepthSideFieldId.Xref, typeId: ValueRecentChangeTypeId.Update };
+                        changes[changeCount++] = { fieldIndex: FullDepthSideFieldId.Xref, typeId: RevRecordValueRecentChangeTypeId.Update };
                     }
                     break;
                 }
@@ -630,7 +629,7 @@ export class PriceLevelFullDepthRecord extends FullDepthRecord {
                         this._brokerIds = newBrokerIds;
                         changes[changeCount++] = {
                             fieldIndex: FullDepthSideFieldId.BrokerId,
-                            typeId: ValueRecentChangeTypeId.Update
+                            typeId: RevRecordValueRecentChangeTypeId.Update
                         };
                     }
                     break;
@@ -641,7 +640,7 @@ export class PriceLevelFullDepthRecord extends FullDepthRecord {
                         this._attributes = newAttributes;
                         changes[changeCount++] = {
                             fieldIndex: FullDepthSideFieldId.Attributes,
-                            typeId: ValueRecentChangeTypeId.Update
+                            typeId: RevRecordValueRecentChangeTypeId.Update
                         };
                     }
                     break;

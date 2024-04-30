@@ -4,12 +4,10 @@
  * License: motionite.trade/license/motif
  */
 
+import { RevRecordIndex, RevRecordInvalidatedValue, RevRecordStore } from '@xilytix/revgrid';
 import { DepthStyleId, OrderSideId } from '../../../adi/internal-api';
 import {
     Decimal,
-    GridRecordIndex,
-    GridRecordInvalidatedValue,
-    GridRecordStoreRecordsEventers,
     Integer
 } from "../../../sys/internal-api";
 import { DepthRecord } from './depth-record';
@@ -19,7 +17,7 @@ export abstract class DepthSideGridRecordStore {
     protected _auctionVolume: Integer | undefined;
     protected _volumeAheadNormalMaxRecordCount = 15; // make setting in future
 
-    private _recordsEventers: GridRecordStoreRecordsEventers;
+    private _recordsEventers: RevRecordStore.RecordsEventers;
 
     private _openPopulated = false;
     private _openPopulatedSuccess = false;
@@ -30,7 +28,7 @@ export abstract class DepthSideGridRecordStore {
     get styleId() { return this._styleId; }
     get sideId() { return this._sideId; }
 
-    setRecordEventers(recordsEventers: GridRecordStoreRecordsEventers): void {
+    setRecordEventers(recordsEventers: RevRecordStore.RecordsEventers): void {
         this._recordsEventers = recordsEventers;
     }
 
@@ -202,7 +200,7 @@ export abstract class DepthSideGridRecordStore {
 
     protected eventifyInvalidateRecordAndValuesAndFollowingRecords(
         recordIndex: Integer,
-        invalidatedRecordValues: GridRecordInvalidatedValue[],
+        invalidatedRecordValues: RevRecordInvalidatedValue[],
         lastAffectedFollowingRecordIndex: Integer | undefined
     ) {
         if (lastAffectedFollowingRecordIndex !== undefined) {
@@ -222,7 +220,7 @@ export abstract class DepthSideGridRecordStore {
         recordIndex: Integer,
         count: Integer,
         valuesRecordIndex: Integer,
-        invalidatedRecordValues: GridRecordInvalidatedValue[],
+        invalidatedRecordValues: RevRecordInvalidatedValue[],
     ) {
         if (invalidatedRecordValues.length === 0) {
             this._recordsEventers.invalidateRecords(recordIndex, count);
@@ -253,7 +251,7 @@ export abstract class DepthSideGridRecordStore {
     abstract setAllRecordsToOrder(): void;
     abstract setAllRecordsToPriceLevel(): void;
     abstract setNewPriceLevelAsOrder(value: boolean): void;
-    abstract getRecord(recordIndex: GridRecordIndex): DepthRecord;
+    abstract getRecord(recordIndex: RevRecordIndex): DepthRecord;
 
     protected abstract getRecordCount(): Integer;
 }
@@ -275,14 +273,14 @@ export namespace DepthSideGridRecordStore {
     ) => void;
     export type InvalidateRecordAndValuesAndFollowingRecordsEventHandler = (this: void,
         recordIndex: Integer,
-        invalidatedRecordValues: GridRecordInvalidatedValue[],
+        invalidatedRecordValues: RevRecordInvalidatedValue[],
         lastAffectedFollowingRecordIndex: Integer | undefined
     ) => void;
     export type InvalidateRecordsAndRecordValuesEventHandler = (this: void,
         recordIndex: Integer,
         count: Integer,
         valuesRecordIndex: Integer,
-        invalidatedRecordValues: GridRecordInvalidatedValue[]
+        invalidatedRecordValues: RevRecordInvalidatedValue[]
     ) => void;
 
     export type OpenPopulatedResolve = (this: void, success: boolean) => void;

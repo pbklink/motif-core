@@ -4,6 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
+import { RevRecordValueRecentChangeTypeId } from '@xilytix/revgrid';
 import {
     AssertInternalError,
     BinarySearchResult,
@@ -14,7 +15,6 @@ import {
     MultiEvent,
     UnexpectedCaseError,
     UnreachableCaseError,
-    ValueRecentChangeTypeId,
     ZenithDataError,
     assert,
     earliestBinarySearch,
@@ -454,7 +454,7 @@ export class DepthDataItem extends MarketSubscriptionDataItem {
     private deleteOrder(orderId: string) {
         const findResult = this.findOrderAndIndexById(orderId);
         if (findResult === undefined) {
-            throw new ZenithDataError(ErrorCode.ZenithDepthMessage_DeleteOrderDoesNotContainId, `${orderId}`);
+            throw new ZenithDataError(ErrorCode.ZenithDepthMessage_DeleteOrderDoesNotContainId, orderId);
         } else {
             const { sideId, list, orderIndex } = findResult;
             switch (sideId) {
@@ -532,7 +532,7 @@ export class DepthDataItem extends MarketSubscriptionDataItem {
         const findOldResult = this.findOrderAndIndexById(changeOrderId);
 
         if (findOldResult === undefined) {
-            throw new ZenithDataError(ErrorCode.ZenithDepthMessage_UpdateOrderNotFound, `${changeOrderId}`);
+            throw new ZenithDataError(ErrorCode.ZenithDepthMessage_UpdateOrderNotFound, changeOrderId);
         } else {
             const { sideId: sideId, list: list, orderIndex: oldIndex } = findOldResult;
             const oldOrder = list[oldIndex];
@@ -575,8 +575,8 @@ export class DepthDataItem extends MarketSubscriptionDataItem {
             if (!isDecimalEqual(newPrice, order.price)) {
                 const newIsGreater = isDecimalGreaterThan(newPrice, order.price);
                 const recentChangeTypeId = newIsGreater
-                    ? ValueRecentChangeTypeId.Increase
-                    : ValueRecentChangeTypeId.Decrease;
+                    ? RevRecordValueRecentChangeTypeId.Increase
+                    : RevRecordValueRecentChangeTypeId.Decrease;
                 order.price = newPrice;
                 changes[changeCount++] = {
                     fieldId: DepthDataItem.Order.Field.Id.Price,
@@ -591,7 +591,7 @@ export class DepthDataItem extends MarketSubscriptionDataItem {
                 order.position = newPosition;
                 changes[changeCount++] = {
                     fieldId: DepthDataItem.Order.Field.Id.Position,
-                    recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                    recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
                 };
             }
         }
@@ -602,7 +602,7 @@ export class DepthDataItem extends MarketSubscriptionDataItem {
                 order.broker = newBroker;
                 changes[changeCount++] = {
                     fieldId: DepthDataItem.Order.Field.Id.Broker,
-                    recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                    recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
                 };
             }
         }
@@ -613,7 +613,7 @@ export class DepthDataItem extends MarketSubscriptionDataItem {
                 order.crossRef = newCrossRef;
                 changes[changeCount++] = {
                     fieldId: DepthDataItem.Order.Field.Id.Xref,
-                    recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                    recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
                 };
             }
         }
@@ -623,8 +623,8 @@ export class DepthDataItem extends MarketSubscriptionDataItem {
             if (newQuantity !== order.quantity) {
                 const newIsGreater = newQuantity > order.quantity;
                 const recentChangeTypeId = newIsGreater
-                    ? ValueRecentChangeTypeId.Increase
-                    : ValueRecentChangeTypeId.Decrease;
+                    ? RevRecordValueRecentChangeTypeId.Increase
+                    : RevRecordValueRecentChangeTypeId.Decrease;
                 order.quantity = newQuantity;
                 changes[changeCount++] = {
                     fieldId: DepthDataItem.Order.Field.Id.Quantity,
@@ -639,7 +639,7 @@ export class DepthDataItem extends MarketSubscriptionDataItem {
                 order.hasUndisclosed = newHasUndisclosed;
                 changes[changeCount++] = {
                     fieldId: DepthDataItem.Order.Field.Id.HasUndisclosed,
-                    recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                    recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
                 };
             }
         }
@@ -650,7 +650,7 @@ export class DepthDataItem extends MarketSubscriptionDataItem {
                 order.marketId = newMarketId;
                 changes[changeCount++] = {
                     fieldId: DepthDataItem.Order.Field.Id.Market,
-                    recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                    recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
                 };
             }
         }
@@ -661,7 +661,7 @@ export class DepthDataItem extends MarketSubscriptionDataItem {
                 order.attributes = newAttributes;
                 changes[changeCount++] = {
                     fieldId: DepthDataItem.Order.Field.Id.Attributes,
-                    recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                    recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
                 };
             }
         }
@@ -767,7 +767,7 @@ export namespace DepthDataItem {
 
         export interface ValueChange {
             readonly fieldId: Field.Id;
-            readonly recentChangeTypeId: ValueRecentChangeTypeId;
+            readonly recentChangeTypeId: RevRecordValueRecentChangeTypeId;
         }
 
         export namespace ValueChange {

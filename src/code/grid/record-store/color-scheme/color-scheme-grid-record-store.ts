@@ -4,28 +4,26 @@
  * License: motionite.trade/license/motif
  */
 
+import { RevRecordIndex, RevRecordStore } from '@xilytix/revgrid';
 import {
     ColorScheme,
     ColorSettings,
     SettingsService
 } from '../../../services/internal-api';
 import {
-    GridRecordIndex,
-    GridRecordStore,
-    GridRecordStoreRecordsEventers,
     IndexedRecord,
     Integer,
     MultiEvent
 } from "../../../sys/internal-api";
 
 /** @public */
-export class ColorSchemeGridRecordStore implements GridRecordStore {
+export class ColorSchemeGridRecordStore implements RevRecordStore {
     readonly colorSettings: ColorSettings;
 
     private readonly _records = new Array<ColorSchemeGridRecordStore.Record>(ColorScheme.Item.idCount);
     private _settingsChangedEventSubscriptionId: MultiEvent.SubscriptionId;
 
-    private _recordsEventers: GridRecordStoreRecordsEventers;
+    private _recordsEventers: RevRecordStore.RecordsEventers;
 
     constructor(private readonly _settingsService: SettingsService) {
         this.colorSettings = this._settingsService.color;
@@ -50,11 +48,11 @@ export class ColorSchemeGridRecordStore implements GridRecordStore {
         this._settingsService.unsubscribeSettingsChangedEvent(this._settingsChangedEventSubscriptionId);
     }
 
-    setRecordEventers(recordsEventers: GridRecordStoreRecordsEventers): void {
+    setRecordEventers(recordsEventers: RevRecordStore.RecordsEventers): void {
         this._recordsEventers = recordsEventers;
     }
 
-    getRecord(index: GridRecordIndex): ColorSchemeGridRecordStore.Record {
+    getRecord(index: RevRecordIndex): ColorSchemeGridRecordStore.Record {
         return this._records[index];
     }
 
@@ -70,11 +68,11 @@ export class ColorSchemeGridRecordStore implements GridRecordStore {
         this._recordsEventers.invalidateAll();
     }
 
-    invalidateRecord(recordIndex: GridRecordIndex) {
+    invalidateRecord(recordIndex: RevRecordIndex) {
         this._recordsEventers.invalidateRecord(recordIndex);
     }
 
-    recordsInserted(firstInsertedRecordIndex: GridRecordIndex, count: Integer) {
+    recordsInserted(firstInsertedRecordIndex: RevRecordIndex, count: Integer) {
         this._recordsEventers.recordsInserted(firstInsertedRecordIndex, count);
     }
 

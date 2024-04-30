@@ -4,6 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
+import { RevHorizontalAlignId } from '@xilytix/revgrid';
 import { Order } from '../../../../adi/internal-api';
 import {
     AssertInternalError,
@@ -85,7 +86,7 @@ export class OrderTableFieldSourceDefinition extends TableFieldSourceDefinition 
         for (let fieldIdx = 0; fieldIdx < OrderTableFieldSourceDefinition.Field.count; fieldIdx++) {
             const sourcelessFieldName = OrderTableFieldSourceDefinition.Field.getName(fieldIdx);
             const dataTypeId = OrderTableFieldSourceDefinition.Field.getDataTypeId(fieldIdx);
-            const textAlign = FieldDataType.idIsNumber(dataTypeId) ? 'right' : 'left';
+            const textAlignId = FieldDataType.idIsNumber(dataTypeId) ? RevHorizontalAlignId.Right : RevHorizontalAlignId.Left;
             const fieldConstructor = OrderTableFieldSourceDefinition.Field.getTableFieldConstructor(fieldIdx);
             const valueConstructor = OrderTableFieldSourceDefinition.Field.getTableValueConstructor(fieldIdx);
 
@@ -93,7 +94,7 @@ export class OrderTableFieldSourceDefinition extends TableFieldSourceDefinition 
                 this,
                 sourcelessFieldName,
                 OrderTableFieldSourceDefinition.Field.getHeading(fieldIdx),
-                textAlign,
+                textAlignId,
                 fieldConstructor,
                 valueConstructor,
             );

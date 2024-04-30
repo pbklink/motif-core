@@ -4,6 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
+import { RevRecordValueRecentChangeTypeId } from '@xilytix/revgrid';
 import { StringId, Strings } from '../../res/i18n-strings';
 import {
     CorrectnessId,
@@ -13,7 +14,6 @@ import {
     Integer,
     Mappable,
     MultiEvent,
-    ValueRecentChangeTypeId
 } from "../../sys/internal-api";
 import { LitIvemId } from '../common/internal-api';
 
@@ -55,8 +55,8 @@ export class RankedLitIvemId implements CorrectnessRecord, Mappable {
     setRank(rank: Integer) {
         if (rank !== this._rank) {
             const recentChangeTypeId = rank > this._rank
-                ? ValueRecentChangeTypeId.Increase
-                : ValueRecentChangeTypeId.Decrease;
+                ? RevRecordValueRecentChangeTypeId.Increase
+                : RevRecordValueRecentChangeTypeId.Decrease;
             this._rank = rank;
             const valueChanges: RankedLitIvemId.ValueChange[] = [
                 { fieldId: RankedLitIvemId.FieldId.Rank, recentChangeTypeId }
@@ -71,16 +71,16 @@ export class RankedLitIvemId implements CorrectnessRecord, Mappable {
 
         if (rank !== this._rank) {
             const recentChangeTypeId = rank > this._rank
-                ? ValueRecentChangeTypeId.Increase
-                : ValueRecentChangeTypeId.Decrease;
+                ? RevRecordValueRecentChangeTypeId.Increase
+                : RevRecordValueRecentChangeTypeId.Decrease;
             this._rank = rank;
             valueChanges[changedIdx++] = { fieldId: RankedLitIvemId.FieldId.Rank, recentChangeTypeId };
         }
 
         if (rankScore !== this._rankScore) {
             const recentChangeTypeId = rankScore > this._rankScore
-                ? ValueRecentChangeTypeId.Increase
-                : ValueRecentChangeTypeId.Decrease;
+                ? RevRecordValueRecentChangeTypeId.Increase
+                : RevRecordValueRecentChangeTypeId.Decrease;
             this._rankScore = rankScore;
             valueChanges[changedIdx++] = { fieldId: RankedLitIvemId.FieldId.RankScore, recentChangeTypeId };
         }
@@ -142,7 +142,7 @@ export namespace RankedLitIvemId {
 
     export interface ValueChange {
         fieldId: FieldId;
-        recentChangeTypeId: ValueRecentChangeTypeId;
+        recentChangeTypeId: RevRecordValueRecentChangeTypeId;
     }
 
     export namespace Field {

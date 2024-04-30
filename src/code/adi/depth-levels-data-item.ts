@@ -4,16 +4,17 @@
  * License: motionite.trade/license/motif
  */
 
+import { RevRecordValueRecentChangeTypeId } from '@xilytix/revgrid';
 import {
-    assert,
-    comparePriceOrRemainder,
     ErrorCodeLogger,
     Integer,
     MultiEvent,
     PriceOrRemainder,
     UnexpectedCaseError,
     UnreachableCaseError,
-    ValueRecentChangeType, ValueRecentChangeTypeId
+    ValueRecentChangeType,
+    assert,
+    comparePriceOrRemainder
 } from '../sys/internal-api';
 import {
     DataDefinition,
@@ -508,7 +509,7 @@ export class DepthLevelsDataItem extends MarketSubscriptionDataItem {
                     level.hasUndisclosed = newHasUndisclosed;
                     valueChanges[count++] = {
                         fieldId: DepthLevelsDataItem.Level.Field.Id.HasUndisclosed,
-                        recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                        recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
                     };
                 }
                 const newMarketId = msgLevel.marketId;
@@ -516,7 +517,7 @@ export class DepthLevelsDataItem extends MarketSubscriptionDataItem {
                     level.marketId = newMarketId;
                     valueChanges[count++] = {
                         fieldId: DepthLevelsDataItem.Level.Field.Id.MarketId,
-                        recentChangeTypeId: ValueRecentChangeTypeId.Update,
+                        recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update,
                     };
                 }
 
@@ -607,7 +608,7 @@ export namespace DepthLevelsDataItem {
 
         export interface ValueChange {
             readonly fieldId: Field.Id;
-            readonly recentChangeTypeId: ValueRecentChangeTypeId;
+            readonly recentChangeTypeId: RevRecordValueRecentChangeTypeId;
         }
     }
 

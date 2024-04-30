@@ -9,11 +9,11 @@ import { AdaptedRevgridOnlyGridSettings } from './adapted-revgrid-only-grid-sett
 /** @public */
 export type AdaptedRevgridOnlyColumnSettings = Pick<AdaptedRevgridOnlyGridSettings,
     'verticalOffset' |
-    'textTruncateType' |
+    'textTruncateTypeId' |
     'textStrikeThrough' |
     'font' |
     'columnHeaderFont' |
-    'horizontalAlign' |
-    'columnHeaderHorizontalAlign'
+    'horizontalAlignId' |
+    'columnHeaderHorizontalAlignId'
 >;
 

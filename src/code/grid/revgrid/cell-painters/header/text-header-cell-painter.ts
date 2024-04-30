@@ -50,7 +50,7 @@ export class TextHeaderCellPainter extends HeaderCellPainter {
         } else {
             const bounds = cell.bounds;
             const cellPadding = this._scalarSettings.grid_CellPadding;
-            const horizontalAlign = columnSettings.columnHeaderHorizontalAlign;
+            const horizontalAlign = columnSettings.columnHeaderHorizontalAlignId;
 
             // background
             gc.cache.fillStyle = backgroundColor;

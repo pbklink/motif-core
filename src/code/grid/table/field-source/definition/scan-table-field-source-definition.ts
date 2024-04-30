@@ -4,6 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
+import { RevHorizontalAlignId } from '@xilytix/revgrid';
 import { Scan } from '../../../../scan/internal-api';
 import { AssertInternalError, FieldDataType, FieldDataTypeId, Integer } from '../../../../sys/internal-api';
 import {
@@ -66,7 +67,7 @@ export class ScanTableFieldSourceDefinition extends TableFieldSourceDefinition {
             const sourcelessFieldName = ScanTableFieldSourceDefinition.Field.getName(fieldIdx);
             const heading = ScanTableFieldSourceDefinition.Field.getHeading(fieldIdx);
             const dataTypeId = ScanTableFieldSourceDefinition.Field.getDataTypeId(fieldIdx);
-            const textAlign = FieldDataType.idIsNumber(dataTypeId) ? 'right' : 'left';
+            const textAlignId = FieldDataType.idIsNumber(dataTypeId) ? RevHorizontalAlignId.Right : RevHorizontalAlignId.Left;
             const [fieldConstructor, valueConstructor] =
                 ScanTableFieldSourceDefinition.Field.getTableFieldValueConstructors(fieldIdx);
 
@@ -74,7 +75,7 @@ export class ScanTableFieldSourceDefinition extends TableFieldSourceDefinition {
                 this,
                 sourcelessFieldName,
                 heading,
-                textAlign,
+                textAlignId,
                 fieldConstructor,
                 valueConstructor,
             );

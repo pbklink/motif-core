@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevHorizontalAlign, RevInMemoryBehavioredGridSettings, RevTextTruncateTypeId } from '@xilytix/revgrid';
+import { RevHorizontalAlignId, RevInMemoryBehavioredGridSettings, RevTextTruncateTypeId } from '@xilytix/revgrid';
 import { AdaptedRevgridBehavioredGridSettings } from './adapted-revgrid-behaviored-grid-settings';
 import { AdaptedRevgridGridSettings } from './adapted-revgrid-grid-settings';
 import { AdaptedRevgridOnlyGridSettings } from './adapted-revgrid-only-grid-settings';
@@ -12,12 +12,12 @@ import { AdaptedRevgridOnlyGridSettings } from './adapted-revgrid-only-grid-sett
 /** @public */
 export class InMemoryAdaptedRevgridBehavioredGridSettings extends RevInMemoryBehavioredGridSettings implements AdaptedRevgridBehavioredGridSettings {
     private _verticalOffset: number;
-    private _textTruncateType: RevTextTruncateTypeId | undefined;
+    private _textTruncateTypeId: RevTextTruncateTypeId | undefined;
     private _textStrikeThrough: boolean;
     private _font: string;
     private _columnHeaderFont: string;
-    private _horizontalAlign: RevHorizontalAlign;
-    private _columnHeaderHorizontalAlign: RevHorizontalAlign;
+    private _horizontalAlignId: RevHorizontalAlignId;
+    private _columnHeaderHorizontalAlignId: RevHorizontalAlignId;
     private _focusedCellSelectColored: boolean;
 
     get verticalOffset() { return this._verticalOffset; }
@@ -29,11 +29,11 @@ export class InMemoryAdaptedRevgridBehavioredGridSettings extends RevInMemoryBeh
             this.endChange();
         }
     }
-    get textTruncateType() { return this._textTruncateType; }
-    set textTruncateType(value: RevTextTruncateTypeId | undefined) {
-        if (value !== this._textTruncateType) {
+    get textTruncateTypeId() { return this._textTruncateTypeId; }
+    set textTruncateTypeId(value: RevTextTruncateTypeId | undefined) {
+        if (value !== this._textTruncateTypeId) {
             this.beginChange();
-            this._textTruncateType = value;
+            this._textTruncateTypeId = value;
             this.flagChangedViewRender();
             this.endChange();
         }
@@ -56,11 +56,11 @@ export class InMemoryAdaptedRevgridBehavioredGridSettings extends RevInMemoryBeh
             this.endChange();
         }
     }
-    get horizontalAlign() { return this._horizontalAlign; }
-    set horizontalAlign(value: RevHorizontalAlign) {
-        if (value !== this._horizontalAlign) {
+    get horizontalAlignId() { return this._horizontalAlignId; }
+    set horizontalAlignId(value: RevHorizontalAlignId) {
+        if (value !== this._horizontalAlignId) {
             this.beginChange();
-            this._horizontalAlign = value;
+            this._horizontalAlignId = value;
             this.flagChangedViewRender();
             this.endChange();
         }
@@ -74,11 +74,11 @@ export class InMemoryAdaptedRevgridBehavioredGridSettings extends RevInMemoryBeh
             this.endChange();
         }
     }
-    get columnHeaderHorizontalAlign() { return this._columnHeaderHorizontalAlign; }
-    set columnHeaderHorizontalAlign(value: RevHorizontalAlign) {
-        if (value !== this._columnHeaderHorizontalAlign) {
+    get columnHeaderHorizontalAlignId() { return this._columnHeaderHorizontalAlignId; }
+    set columnHeaderHorizontalAlignId(value: RevHorizontalAlignId) {
+        if (value !== this._columnHeaderHorizontalAlignId) {
             this.beginChange();
-            this._columnHeaderHorizontalAlign = value;
+            this._columnHeaderHorizontalAlignId = value;
             this.flagChangedViewRender();
             this.endChange();
         }
@@ -109,9 +109,9 @@ export class InMemoryAdaptedRevgridBehavioredGridSettings extends RevInMemoryBeh
                         this.flagChangedViewRender();
                     }
                     break;
-                case 'textTruncateType':
-                    if (this._textTruncateType !== requiredSettings.textTruncateType) {
-                        this._textTruncateType = requiredSettings.textTruncateType;
+                case 'textTruncateTypeId':
+                    if (this._textTruncateTypeId !== requiredSettings.textTruncateTypeId) {
+                        this._textTruncateTypeId = requiredSettings.textTruncateTypeId;
                         this.flagChangedViewRender();
                     }
                     break;
@@ -127,9 +127,9 @@ export class InMemoryAdaptedRevgridBehavioredGridSettings extends RevInMemoryBeh
                         this.flagChangedViewRender();
                     }
                     break;
-                case 'horizontalAlign':
-                    if (this._horizontalAlign !== requiredSettings.horizontalAlign) {
-                        this._horizontalAlign = requiredSettings.horizontalAlign;
+                case 'horizontalAlignId':
+                    if (this._horizontalAlignId !== requiredSettings.horizontalAlignId) {
+                        this._horizontalAlignId = requiredSettings.horizontalAlignId;
                         this.flagChangedViewRender();
                     }
                     break;
@@ -139,9 +139,9 @@ export class InMemoryAdaptedRevgridBehavioredGridSettings extends RevInMemoryBeh
                         this.flagChangedViewRender();
                     }
                     break;
-                case 'columnHeaderHorizontalAlign':
-                    if (this._columnHeaderHorizontalAlign !== requiredSettings.columnHeaderHorizontalAlign) {
-                        this._columnHeaderHorizontalAlign = requiredSettings.columnHeaderHorizontalAlign;
+                case 'columnHeaderHorizontalAlignId':
+                    if (this._columnHeaderHorizontalAlignId !== requiredSettings.columnHeaderHorizontalAlignId) {
+                        this._columnHeaderHorizontalAlignId = requiredSettings.columnHeaderHorizontalAlignId;
                         this.flagChangedViewRender();
                     }
                     break;

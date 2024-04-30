@@ -4,6 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
+import { RevHorizontalAlignId } from '@xilytix/revgrid';
 import { Balances } from '../../../../adi/internal-api';
 import {
     AssertInternalError,
@@ -62,7 +63,7 @@ export class BalancesTableFieldSourceDefinition extends TableFieldSourceDefiniti
         for (let fieldIdx = 0; fieldIdx < BalancesTableFieldSourceDefinition.Field.count; fieldIdx++) {
             const sourcelessFieldName = BalancesTableFieldSourceDefinition.Field.getName(fieldIdx);
             const dataTypeId = BalancesTableFieldSourceDefinition.Field.getDataTypeId(fieldIdx);
-            const textAlign = FieldDataType.idIsNumber(dataTypeId) ? 'right' : 'left';
+            const textAlignId = FieldDataType.idIsNumber(dataTypeId) ? RevHorizontalAlignId.Right : RevHorizontalAlignId.Left;
             const fieldConstructor = BalancesTableFieldSourceDefinition.Field.getTableFieldConstructor(fieldIdx);
             const valueConstructor = BalancesTableFieldSourceDefinition.Field.getTableValueConstructor(fieldIdx);
 
@@ -70,7 +71,7 @@ export class BalancesTableFieldSourceDefinition extends TableFieldSourceDefiniti
                 this,
                 sourcelessFieldName,
                 BalancesTableFieldSourceDefinition.Field.getHeading(fieldIdx),
-                textAlign,
+                textAlignId,
                 fieldConstructor,
                 valueConstructor,
             );

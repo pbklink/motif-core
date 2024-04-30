@@ -4,8 +4,9 @@
  * License: motionite.trade/license/motif
  */
 
+import { RevRecordValueRecentChangeTypeId } from '@xilytix/revgrid';
 import { Feed } from '../../../adi/internal-api';
-import { Correctness, Integer, MultiEvent, UnreachableCaseError, ValueRecentChangeTypeId } from '../../../sys/internal-api';
+import { Correctness, Integer, MultiEvent, UnreachableCaseError } from '../../../sys/internal-api';
 import { FeedTableFieldSourceDefinition } from '../field-source/definition/internal-api';
 import {
     CorrectnessTableValue,
@@ -74,7 +75,7 @@ export class FeedTableValueSource extends TableValueSource {
             const changedValues: TableValueSource.ValueChange[] = [{
                 fieldIndex,
                 newValue,
-                recentChangeTypeId: ValueRecentChangeTypeId.Update
+                recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update
             }];
             this.notifyValueChangesEvent(changedValues);
         }

@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevColumnLayoutDefinition, RevRecordSourcedFieldDefinition, RevRecordSourcedFieldSourceDefinition, RevSourcedFieldDefinition } from '@xilytix/revgrid';
+import { RevColumnLayoutDefinition, RevHorizontalAlignId, RevRecordField, RevRecordSourcedFieldDefinition, RevRecordSourcedFieldSourceDefinition, RevSourcedFieldDefinition } from '@xilytix/revgrid';
 import { DayTradesDataItem, MovementId, TradeFlagId } from '../../../adi/internal-api';
 import { StringId, Strings } from '../../../res/internal-api';
 import {
@@ -24,8 +24,6 @@ import {
 import {
     ComparisonResult,
     CorrectnessId,
-    GridFieldHorizontalAlign,
-    GridRevRecordField,
     Integer,
     SourceTzOffsetDateTime,
     UnreachableCaseError,
@@ -39,7 +37,7 @@ import {
 import { AllowedGridField, GridField } from '../../field/internal-api';
 
 /** @public */
-export abstract class DayTradesGridField extends GridField implements GridRevRecordField {
+export abstract class DayTradesGridField extends GridField implements RevRecordField {
     constructor(
         private readonly _id: DayTradesDataItem.Field.Id,
         definition: RevRecordSourcedFieldDefinition,
@@ -269,7 +267,7 @@ export namespace DayTradesGridField {
             DayTradesGridField.sourceDefinition,
             DayTradesDataItem.Field.idToName(id),
             Strings[StringId.DayTradesGridHeading_Id],
-            GridFieldHorizontalAlign.right,
+            RevHorizontalAlignId.Right,
         );
     }
 
@@ -278,7 +276,7 @@ export namespace DayTradesGridField {
             sourceDefinition,
             DayTradesDataItem.Field.idToName(id),
             Strings[StringId.DayTradesGridHeading_Price],
-            GridFieldHorizontalAlign.right,
+            RevHorizontalAlignId.Right,
         )
     }
 
@@ -287,7 +285,7 @@ export namespace DayTradesGridField {
             sourceDefinition,
             DayTradesDataItem.Field.idToName(id),
             Strings[StringId.DayTradesGridHeading_Quantity],
-            GridFieldHorizontalAlign.right,
+            RevHorizontalAlignId.Right,
         )
     }
 
@@ -296,7 +294,7 @@ export namespace DayTradesGridField {
             sourceDefinition,
             DayTradesDataItem.Field.idToName(id),
             Strings[StringId.DayTradesGridHeading_Time],
-            GridFieldHorizontalAlign.left,
+            RevHorizontalAlignId.Left,
         )
     }
 
@@ -305,7 +303,7 @@ export namespace DayTradesGridField {
             sourceDefinition,
             DayTradesDataItem.Field.idToName(id),
             Strings[StringId.DayTradesGridHeading_FlagIds],
-            GridFieldHorizontalAlign.left,
+            RevHorizontalAlignId.Left,
         )
     }
 
@@ -314,7 +312,7 @@ export namespace DayTradesGridField {
             sourceDefinition,
             DayTradesDataItem.Field.idToName(id),
             Strings[StringId.DayTradesGridHeading_TrendId],
-            GridFieldHorizontalAlign.left,
+            RevHorizontalAlignId.Left,
         )
     }
 
@@ -323,7 +321,7 @@ export namespace DayTradesGridField {
             sourceDefinition,
             DayTradesDataItem.Field.idToName(id),
             Strings[StringId.DayTradesGridHeading_OrderSideId],
-            GridFieldHorizontalAlign.right,
+            RevHorizontalAlignId.Right,
         )
     }
 
@@ -332,7 +330,7 @@ export namespace DayTradesGridField {
             sourceDefinition,
             DayTradesDataItem.Field.idToName(id),
             Strings[StringId.DayTradesGridHeading_AffectsIds],
-            GridFieldHorizontalAlign.right,
+            RevHorizontalAlignId.Right,
         )
     }
 
@@ -341,7 +339,7 @@ export namespace DayTradesGridField {
             sourceDefinition,
             DayTradesDataItem.Field.idToName(id),
             Strings[StringId.DayTradesGridHeading_ConditionCodes],
-            GridFieldHorizontalAlign.right,
+            RevHorizontalAlignId.Right,
         )
     }
 
@@ -350,7 +348,7 @@ export namespace DayTradesGridField {
             sourceDefinition,
             DayTradesDataItem.Field.idToName(id),
             Strings[StringId.DayTradesGridHeading_BuyDepthOrderId],
-            GridFieldHorizontalAlign.right,
+            RevHorizontalAlignId.Right,
         )
     }
 
@@ -359,7 +357,7 @@ export namespace DayTradesGridField {
             sourceDefinition,
             DayTradesDataItem.Field.idToName(id),
             Strings[StringId.DayTradesGridHeading_BuyBroker],
-            GridFieldHorizontalAlign.right,
+            RevHorizontalAlignId.Right,
         )
     }
 
@@ -368,7 +366,7 @@ export namespace DayTradesGridField {
             sourceDefinition,
             DayTradesDataItem.Field.idToName(id),
             Strings[StringId.DayTradesGridHeading_BuyCrossRef],
-            GridFieldHorizontalAlign.right,
+            RevHorizontalAlignId.Right,
         )
     }
 
@@ -377,7 +375,7 @@ export namespace DayTradesGridField {
             sourceDefinition,
             DayTradesDataItem.Field.idToName(id),
             Strings[StringId.DayTradesGridHeading_SellDepthOrderId],
-            GridFieldHorizontalAlign.right,
+            RevHorizontalAlignId.Right,
         )
     }
 
@@ -386,7 +384,7 @@ export namespace DayTradesGridField {
             sourceDefinition,
             DayTradesDataItem.Field.idToName(id),
             Strings[StringId.DayTradesGridHeading_SellBroker],
-            GridFieldHorizontalAlign.right,
+            RevHorizontalAlignId.Right,
         )
     }
 
@@ -395,7 +393,7 @@ export namespace DayTradesGridField {
             sourceDefinition,
             DayTradesDataItem.Field.idToName(id),
             Strings[StringId.DayTradesGridHeading_SellCrossRef],
-            GridFieldHorizontalAlign.right,
+            RevHorizontalAlignId.Right,
         )
     }
 
@@ -404,7 +402,7 @@ export namespace DayTradesGridField {
             sourceDefinition,
             DayTradesDataItem.Field.idToName(id),
             Strings[StringId.DayTradesGridHeading_MarketId],
-            GridFieldHorizontalAlign.right,
+            RevHorizontalAlignId.Right,
         )
     }
 
@@ -413,7 +411,7 @@ export namespace DayTradesGridField {
             sourceDefinition,
             DayTradesDataItem.Field.idToName(id),
             Strings[StringId.DayTradesGridHeading_RelatedId],
-            GridFieldHorizontalAlign.right,
+            RevHorizontalAlignId.Right,
         )
     }
 
@@ -422,7 +420,7 @@ export namespace DayTradesGridField {
             sourceDefinition,
             DayTradesDataItem.Field.idToName(id),
             Strings[StringId.DayTradesGridHeading_Attributes],
-            GridFieldHorizontalAlign.right,
+            RevHorizontalAlignId.Right,
         )
     }
 
@@ -431,7 +429,7 @@ export namespace DayTradesGridField {
             sourceDefinition,
             DayTradesDataItem.Field.idToName(id),
             Strings[StringId.DayTradesGridHeading_RecordType],
-            GridFieldHorizontalAlign.right,
+            RevHorizontalAlignId.Right,
         )
     }
 }

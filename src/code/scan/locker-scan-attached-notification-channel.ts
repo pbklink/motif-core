@@ -4,10 +4,11 @@
  * License: motionite.trade/license/motif
  */
 
+import { RevRecordValueRecentChangeTypeId } from '@xilytix/revgrid';
 import { NotificationChannel, ScanAttachedNotificationChannel } from '../adi/internal-api';
 import { LockOpenNotificationChannel } from '../notification-channel/internal-api';
 import { StringId, Strings } from '../res/internal-api';
-import { AssertInternalError, EnumInfoOutOfOrderError, FieldDataTypeId, Integer, MultiEvent, ValueRecentChangeTypeId } from '../sys/internal-api';
+import { AssertInternalError, EnumInfoOutOfOrderError, FieldDataTypeId, Integer, MultiEvent } from '../sys/internal-api';
 
 export class LockerScanAttachedNotificationChannel {
     changedEventer: LockerScanAttachedNotificationChannel.ChangedEventer | undefined; // only used by List
@@ -249,7 +250,7 @@ export namespace LockerScanAttachedNotificationChannel {
 
         export interface ValueChange {
             fieldId: Id;
-            recentChangeTypeId: ValueRecentChangeTypeId;
+            recentChangeTypeId: RevRecordValueRecentChangeTypeId;
         }
 
         interface Info {
@@ -328,7 +329,7 @@ export namespace LockerScanAttachedNotificationChannel {
                 const info = infos[i];
                 const id = i as FieldId;
                 if (info.id !== i as FieldId) {
-                    throw new EnumInfoOutOfOrderError('LockerScanAttachedNotificationChannel.FieldId', i, `${idToName(id)}`);
+                    throw new EnumInfoOutOfOrderError('LockerScanAttachedNotificationChannel.FieldId', i, idToName(id));
                 } else {
                     result[i] = info.id;
                 }

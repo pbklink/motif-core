@@ -4,6 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
+import { RevHorizontalAlignId } from '@xilytix/revgrid';
 import { CallPut } from '../../../../services/internal-api';
 import {
     AssertInternalError,
@@ -69,7 +70,7 @@ export class CallPutTableFieldSourceDefinition extends TableFieldSourceDefinitio
         for (let fieldIdx = 0; fieldIdx < CallPutTableFieldSourceDefinition.Field.count; fieldIdx++) {
             const sourcelessFieldName = CallPutTableFieldSourceDefinition.Field.getName(fieldIdx);
             const dataTypeId = CallPutTableFieldSourceDefinition.Field.getDataTypeId(fieldIdx);
-            const textAlign = FieldDataType.idIsNumber(dataTypeId) ? 'right' : 'left';
+            const textAlignId = FieldDataType.idIsNumber(dataTypeId) ? RevHorizontalAlignId.Right : RevHorizontalAlignId.Left;
             const fieldConstructor = CallPutTableFieldSourceDefinition.Field.getTableFieldConstructor(fieldIdx);
             const valueConstructor = CallPutTableFieldSourceDefinition.Field.getTableValueConstructor(fieldIdx);
 
@@ -77,7 +78,7 @@ export class CallPutTableFieldSourceDefinition extends TableFieldSourceDefinitio
                 this,
                 sourcelessFieldName,
                 CallPutTableFieldSourceDefinition.Field.getHeading(fieldIdx),
-                textAlign,
+                textAlignId,
                 fieldConstructor,
                 valueConstructor,
             );

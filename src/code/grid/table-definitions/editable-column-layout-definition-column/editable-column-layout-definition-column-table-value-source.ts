@@ -4,8 +4,9 @@
  * License: motionite.trade/license/motif
  */
 
+import { RevRecordValueRecentChangeTypeId } from '@xilytix/revgrid';
 import { RenderValue } from '../../../services/render-value';
-import { Integer, MultiEvent, UnreachableCaseError, ValueRecentChangeTypeId } from '../../../sys/internal-api';
+import { Integer, MultiEvent, UnreachableCaseError } from '../../../sys/internal-api';
 import { IntegerTableValue, StringTableValue, TableValue, TableValueSource, VisibleTableValue } from '../../table/internal-api';
 import { EditableColumnLayoutDefinitionColumn } from './editable-column-layout-definition-column';
 import { EditableColumnLayoutDefinitionColumnTableFieldSourceDefinition } from './editable-column-layout-definition-column-table-field-source-definition';
@@ -76,7 +77,7 @@ export class EditableColumnLayoutDefinitionColumnTableValueSource extends TableV
         const fieldId = EditableColumnLayoutDefinitionColumn.FieldId.Visible;
         const newValue = this.createTableValue(fieldId);
         this.loadValue(fieldId, newValue);
-        const valueChange: TableValueSource.ValueChange = { fieldIndex: fieldId, newValue, recentChangeTypeId: ValueRecentChangeTypeId.Update };
+        const valueChange: TableValueSource.ValueChange = { fieldIndex: fieldId, newValue, recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update };
         this.notifyValueChangesEvent([valueChange]);
     }
 

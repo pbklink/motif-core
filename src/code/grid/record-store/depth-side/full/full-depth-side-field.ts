@@ -4,8 +4,9 @@
  * License: motionite.trade/license/motif
  */
 
+import { RevHorizontalAlignId } from '@xilytix/revgrid';
 import { DepthDataItem } from '../../../../adi/internal-api';
-import { EnumInfoOutOfOrderError, GridFieldHorizontalAlign, Integer, UnreachableCaseError } from '../../../../sys/internal-api';
+import { EnumInfoOutOfOrderError, Integer, UnreachableCaseError } from '../../../../sys/internal-api';
 
 export const enum FullDepthSideFieldId {
     PriceAndHasUndisclosed,
@@ -24,15 +25,15 @@ export const enum FullDepthSideFieldId {
 export namespace FullDepthSideField {
     export type Id = FullDepthSideFieldId;
 
-    const leftTextAlign = 'left';
-    const rightTextAlign = 'right';
+    const leftTextAlign = RevHorizontalAlignId.Left;
+    const rightTextAlign = RevHorizontalAlignId.Right;
 
     class Info {
         constructor(
             public id: Id,
             public name: string,
             public defaultHeading: string,
-            public defaultTextAlign: GridFieldHorizontalAlign,
+            public defaultTextAlignId: RevHorizontalAlignId,
         ) { }
     }
 
@@ -43,67 +44,67 @@ export namespace FullDepthSideField {
             id: FullDepthSideFieldId.Price,
             name: 'PriceAndHasUndisclosed',
             defaultHeading: 'Price/U',
-            defaultTextAlign: rightTextAlign,
+            defaultTextAlignId: rightTextAlign,
         },
         Volume: {
             id: FullDepthSideFieldId.Volume,
             name: 'Volume',
             defaultHeading: 'Volume',
-            defaultTextAlign: rightTextAlign,
+            defaultTextAlignId: rightTextAlign,
         },
         CountXref: {
             id: FullDepthSideFieldId.CountXref,
             name: 'CountXref',
             defaultHeading: 'Count/X',
-            defaultTextAlign: leftTextAlign,
+            defaultTextAlignId: leftTextAlign,
         },
         BrokerId: {
             id: FullDepthSideFieldId.BrokerId,
             name: 'BrokerId',
             defaultHeading: 'Broker',
-            defaultTextAlign: leftTextAlign,
+            defaultTextAlignId: leftTextAlign,
         },
         MarketId: {
             id: FullDepthSideFieldId.MarketId,
             name: 'MarketId',
             defaultHeading: 'Market',
-            defaultTextAlign: leftTextAlign,
+            defaultTextAlignId: leftTextAlign,
         },
         VolumeAhead: {
             id: FullDepthSideFieldId.VolumeAhead,
             name: 'VolumeAhead',
             defaultHeading: 'Vol Ahead',
-            defaultTextAlign: rightTextAlign,
+            defaultTextAlignId: rightTextAlign,
         },
         Attributes: {
             id: FullDepthSideFieldId.Attributes,
             name: 'Attributes',
             defaultHeading: 'Attributes',
-            defaultTextAlign: leftTextAlign,
+            defaultTextAlignId: leftTextAlign,
         },
         Price: {
             id: FullDepthSideFieldId.Price,
             name: 'Price',
             defaultHeading: 'Price',
-            defaultTextAlign: rightTextAlign,
+            defaultTextAlignId: rightTextAlign,
         },
         Xref: {
             id: FullDepthSideFieldId.Xref,
             name: 'XRef',
             defaultHeading: 'XRef',
-            defaultTextAlign: leftTextAlign,
+            defaultTextAlignId: leftTextAlign,
         },
         Count: {
             id: FullDepthSideFieldId.Count,
             name: 'Count',
             defaultHeading: 'Count',
-            defaultTextAlign: rightTextAlign,
+            defaultTextAlignId: rightTextAlign,
         },
         OrderId: {
             id: FullDepthSideFieldId.OrderId,
             name: 'OrderId',
             defaultHeading: 'Order Id',
-            defaultTextAlign: leftTextAlign,
+            defaultTextAlignId: leftTextAlign,
         },
     };
 
@@ -112,7 +113,7 @@ export namespace FullDepthSideField {
     const infos = Object.values(infosObject);
 
     export function initialise() {
-        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index);
+        const outOfOrderIdx = infos.findIndex((info: Info, index: Integer) => info.id !== index as FullDepthSideFieldId);
         if (outOfOrderIdx >= 0) {
             throw new EnumInfoOutOfOrderError('FullDepthSideFieldId', outOfOrderIdx, infos[outOfOrderIdx].name);
         }
@@ -126,8 +127,8 @@ export namespace FullDepthSideField {
         return infos[id].defaultHeading;
     }
 
-    export function idToDefaultTextAlign(id: Id) {
-        return infos[id].defaultTextAlign;
+    export function idToDefaultTextAlignId(id: Id) {
+        return infos[id].defaultTextAlignId;
     }
 
     export function createIdFromDepthOrderFieldId(orderFieldId: DepthDataItem.Order.Field.Id): FullDepthSideFieldId | undefined {

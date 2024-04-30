@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevRecordInvalidatedValue } from '@xilytix/revgrid';
+import { RevRecordInvalidatedValue, RevRecordValueRecentChangeTypeId } from '@xilytix/revgrid';
 import { DepthLevelsDataItem, OrderSideId } from '../../../../adi/internal-api';
 import {
     IntegerRenderValue,
@@ -15,11 +15,9 @@ import {
     RenderValue
 } from '../../../../services/internal-api';
 import {
-    GridRecordInvalidatedValue,
     Integer,
     PriceOrRemainder,
     UnreachableCaseError,
-    ValueRecentChangeTypeId,
     compareBoolean,
     compareInteger,
     comparePriceOrRemainder
@@ -54,8 +52,8 @@ export class ShortDepthRecord extends DepthRecord {
 
     processValueChanges(valueChanges: DepthLevelsDataItem.Level.ValueChange[]): RevRecordInvalidatedValue[] {
         const valueChangeCount = valueChanges.length;
-        const result = new Array<GridRecordInvalidatedValue>(valueChangeCount * 2); // guess capacity
-        let priceAndHasUndisclosedRecentChangeTypeId: ValueRecentChangeTypeId | undefined;
+        const result = new Array<RevRecordInvalidatedValue>(valueChangeCount * 2); // guess capacity
+        let priceAndHasUndisclosedRecentChangeTypeId: RevRecordValueRecentChangeTypeId | undefined;
         let count = 0;
         for (let i = 0; i < valueChangeCount; i++) {
             const valueChange = valueChanges[i];
@@ -76,7 +74,7 @@ export class ShortDepthRecord extends DepthRecord {
             }
 
             if (fieldId !== undefined) {
-                const invalidatedRecordField: GridRecordInvalidatedValue = {
+                const invalidatedRecordField: RevRecordInvalidatedValue = {
                     fieldIndex: fieldId, // Fields are added in order of their fieldId (ShortDepthSideFieldId) so fieldIndex equals fieldId
                     typeId: recentChangeTypeId,
                 };
@@ -90,7 +88,7 @@ export class ShortDepthRecord extends DepthRecord {
         if (priceAndHasUndisclosedRecentChangeTypeId === undefined) {
             result.length = count;
         } else {
-            const invalidatedRecordField: GridRecordInvalidatedValue = {
+            const invalidatedRecordField: RevRecordInvalidatedValue = {
                 fieldIndex: ShortDepthSideFieldId.PriceAndHasUndisclosed,
                 typeId: priceAndHasUndisclosedRecentChangeTypeId,
             };

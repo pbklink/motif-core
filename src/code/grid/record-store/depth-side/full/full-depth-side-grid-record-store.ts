@@ -4,15 +4,13 @@
  * License: motionite.trade/license/motif
  */
 
+import { RevRecordIndex, RevRecordInvalidatedValue, RevRecordStore } from '@xilytix/revgrid';
 import { DepthDataItem, DepthStyleId, OrderSide, OrderSideId } from '../../../../adi/internal-api';
 import { SessionInfoService } from '../../../../services/session-info-service';
 import {
     AssertInternalError,
     CorrectnessId,
     Decimal,
-    GridRecordIndex,
-    GridRecordInvalidatedValue,
-    GridRecordStore,
     Integer,
     MultiEvent,
     UnreachableCaseError,
@@ -27,7 +25,7 @@ import { DepthRecord } from '../depth-record';
 import { DepthSideGridRecordStore } from '../depth-side-grid-record-store';
 import { FullDepthRecord, OrderFullDepthRecord, PriceLevelFullDepthRecord } from './full-depth-record';
 
-export class FullDepthSideGridRecordStore extends DepthSideGridRecordStore implements GridRecordStore {
+export class FullDepthSideGridRecordStore extends DepthSideGridRecordStore implements RevRecordStore {
     private _newPriceLevelAsOrder: boolean;
 
     private _dataItem: DepthDataItem;
@@ -197,7 +195,7 @@ export class FullDepthSideGridRecordStore extends DepthSideGridRecordStore imple
     }
 
     // GridDataStore methods
-    getRecord(recordIndex: GridRecordIndex) {
+    getRecord(recordIndex: RevRecordIndex) {
         return this._records[recordIndex];
     }
 
@@ -568,7 +566,7 @@ export class FullDepthSideGridRecordStore extends DepthSideGridRecordStore imple
         const fromRecordToBeKept = fromRecord.getCount() > 1; //  && !isDecimalEqual(fromRecord.getPrice(), toOrder.price)
 
         let toRecord: FullDepthRecord | undefined;
-        let toRecordInvalidatedValues: GridRecordInvalidatedValue[] | undefined;
+        let toRecordInvalidatedValues: RevRecordInvalidatedValue[] | undefined;
 
         // let toRecord = this._orderIndex[toOrderIdx];
         // let toToBeMerged: boolean;
@@ -1012,7 +1010,7 @@ export class FullDepthSideGridRecordStore extends DepthSideGridRecordStore imple
             const firstOrderRecord = this._orderIndex[firstOrderIdx];
             const levelRecordIndex = firstOrderRecord.index;
             if (!FullDepthRecord.isOrder(firstOrderRecord)) {
-                throw new AssertInternalError('FDSGDSFDSGDSCOTPL22245', `${JSON.stringify(firstOrderRecord)}`);
+                throw new AssertInternalError('FDSGDSFDSGDSCOTPL22245', JSON.stringify(firstOrderRecord));
             } else {
                 const levelRecord = new PriceLevelFullDepthRecord(levelRecordIndex,
                     firstOrderRecord.order, firstOrderRecord.volumeAhead, this._auctionVolume

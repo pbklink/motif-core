@@ -4,6 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
+import { RevRecordValueRecentChangeTypeId } from '@xilytix/revgrid';
 import { StringId, Strings } from '../res/internal-api';
 import {
     CorrectnessId,
@@ -15,7 +16,6 @@ import {
     KeyedRecord,
     MapKey,
     MultiEvent,
-    ValueRecentChangeTypeId,
     ZenithDataError,
     isDecimalEqual,
     isDecimalGreaterThan,
@@ -125,14 +125,14 @@ export class Holding implements BrokerageAccountRecord {
             this._exchangeId = newExchangeId;
             valueChanges[changedIdx++] = {
                 fieldId: Holding.FieldId.ExchangeId,
-                recentChangeTypeId: ValueRecentChangeTypeId.Update
+                recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update
             };
         }
 
         const newCode = changeData.code;
         if (newCode !== this._code) {
             this._code = newCode;
-            valueChanges[changedIdx++] = { fieldId: Holding.FieldId.Code, recentChangeTypeId: ValueRecentChangeTypeId.Update };
+            valueChanges[changedIdx++] = { fieldId: Holding.FieldId.Code, recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update };
         }
 
         if (changeData.accountId !== this._accountId) {
@@ -142,14 +142,14 @@ export class Holding implements BrokerageAccountRecord {
         const newStyleId = changeData.styleId;
         if (newStyleId !== this._styleId) {
             this._styleId = newStyleId;
-            valueChanges[changedIdx++] = { fieldId: Holding.FieldId.StyleId, recentChangeTypeId: ValueRecentChangeTypeId.Update };
+            valueChanges[changedIdx++] = { fieldId: Holding.FieldId.StyleId, recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update };
         }
 
         const newCost = changeData.cost;
         if (!isDecimalEqual(newCost, this._cost)) {
             const recentChangeTypeId = isDecimalGreaterThan(newCost, this.cost)
-                ? ValueRecentChangeTypeId.Increase
-                : ValueRecentChangeTypeId.Decrease;
+                ? RevRecordValueRecentChangeTypeId.Increase
+                : RevRecordValueRecentChangeTypeId.Decrease;
             this._cost = newCost; // from message so take Decimal object
             valueChanges[changedIdx++] = { fieldId: Holding.FieldId.Cost, recentChangeTypeId };
         }
@@ -157,7 +157,7 @@ export class Holding implements BrokerageAccountRecord {
         const newCurrencyId = changeData.currencyId;
         if ( newCurrencyId !== this._currencyId) {
             this._currencyId = newCurrencyId;
-            valueChanges[changedIdx++] = { fieldId: Holding.FieldId.Currency, recentChangeTypeId: ValueRecentChangeTypeId.Update };
+            valueChanges[changedIdx++] = { fieldId: Holding.FieldId.Currency, recentChangeTypeId: RevRecordValueRecentChangeTypeId.Update };
         }
 
         const newMarketDetail = changeData.marketDetail;
@@ -165,8 +165,8 @@ export class Holding implements BrokerageAccountRecord {
         const newTotalQuantity = newMarketDetail.totalQuantity;
         if (newTotalQuantity !== this._totalQuantity) {
             const recentChangeTypeId = newTotalQuantity > this.totalQuantity
-                ? ValueRecentChangeTypeId.Increase
-                : ValueRecentChangeTypeId.Decrease;
+                ? RevRecordValueRecentChangeTypeId.Increase
+                : RevRecordValueRecentChangeTypeId.Decrease;
             this._totalQuantity = newTotalQuantity;
             valueChanges[changedIdx++] = { fieldId: Holding.FieldId.TotalQuantity, recentChangeTypeId };
         }
@@ -174,8 +174,8 @@ export class Holding implements BrokerageAccountRecord {
         const newTotalAvailableQuantity = newMarketDetail.totalAvailableQuantity;
         if (newTotalAvailableQuantity !== this._totalAvailableQuantity) {
             const recentChangeTypeId = newTotalAvailableQuantity > this.totalAvailableQuantity
-                ? ValueRecentChangeTypeId.Increase
-                : ValueRecentChangeTypeId.Decrease;
+                ? RevRecordValueRecentChangeTypeId.Increase
+                : RevRecordValueRecentChangeTypeId.Decrease;
             this._totalAvailableQuantity = newTotalAvailableQuantity;
             valueChanges[changedIdx++] = { fieldId: Holding.FieldId.TotalAvailableQuantity, recentChangeTypeId };
         }
@@ -183,8 +183,8 @@ export class Holding implements BrokerageAccountRecord {
         const newAveragePrice = newMarketDetail.averagePrice;
         if (!isDecimalEqual(newAveragePrice, this._averagePrice)) {
             const recentChangeTypeId = isDecimalGreaterThan(newAveragePrice, this._averagePrice)
-                ? ValueRecentChangeTypeId.Increase
-                : ValueRecentChangeTypeId.Decrease;
+                ? RevRecordValueRecentChangeTypeId.Increase
+                : RevRecordValueRecentChangeTypeId.Decrease;
             this._averagePrice = newMarketDetail.averagePrice; // from message so take Decimal object
             valueChanges[changedIdx++] = { fieldId: Holding.FieldId.AveragePrice, recentChangeTypeId };
         }
@@ -447,7 +447,7 @@ export namespace Holding {
 
     export interface ValueChange {
         fieldId: FieldId;
-        recentChangeTypeId: ValueRecentChangeTypeId;
+        recentChangeTypeId: RevRecordValueRecentChangeTypeId;
     }
 
     export function createNotFoundHolding(key: Holding.Key) {

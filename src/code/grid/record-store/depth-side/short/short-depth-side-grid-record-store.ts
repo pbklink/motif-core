@@ -4,12 +4,13 @@
  * License: motionite.trade/license/motif
  */
 
+import { RevRecordIndex, RevRecordStore } from '@xilytix/revgrid';
 import { DepthLevelsDataItem } from '../../../../adi/internal-api';
-import { CorrectnessId, GridRecordIndex, GridRecordStore, Integer, MultiEvent, UnreachableCaseError } from '../../../../sys/internal-api';
+import { CorrectnessId, Integer, MultiEvent, UnreachableCaseError } from '../../../../sys/internal-api';
 import { DepthSideGridRecordStore } from '../depth-side-grid-record-store';
 import { ShortDepthRecord } from './short-depth-record';
 
-export class ShortDepthSideGridRecordStore extends DepthSideGridRecordStore implements GridRecordStore {
+export class ShortDepthSideGridRecordStore extends DepthSideGridRecordStore implements RevRecordStore {
     private _records: ShortDepthRecord[] = [];
     private _dataItem: DepthLevelsDataItem;
     private _levels: DepthLevelsDataItem.Level[];
@@ -76,7 +77,7 @@ export class ShortDepthSideGridRecordStore extends DepthSideGridRecordStore impl
     }
 
     // GridDataStore properties/methods
-    getRecord(recordIndex: GridRecordIndex) {
+    getRecord(recordIndex: RevRecordIndex) {
         return this._records[recordIndex];
     }
 
