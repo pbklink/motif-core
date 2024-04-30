@@ -9,8 +9,8 @@ import {
     BigIntRenderValue,
     DateTimeRenderValue,
     NumberRenderValue,
-    RenderValue,
     StringRenderValue,
+    TextFormattableValue,
     TrueFalseRenderValue
 } from '../../../services/internal-api';
 import { GridField } from '../../field/internal-api';
@@ -32,7 +32,7 @@ export class RenderValueRowDataArrayGridCellPainter<RVCP extends RenderValueCell
         return this._renderValueCellPainter.paintValue(cell, prefillColor, renderValue);
     }
 
-    private createRenderValue(viewValue: RevDataServer.ViewValue): RenderValue {
+    private createRenderValue(viewValue: RevDataServer.ViewValue): TextFormattableValue {
         switch (typeof viewValue) {
             case 'string':
                 return new StringRenderValue(viewValue);
@@ -43,7 +43,7 @@ export class RenderValueRowDataArrayGridCellPainter<RVCP extends RenderValueCell
             case 'bigint':
                 return new BigIntRenderValue(viewValue);
             case 'object': {
-                if (viewValue instanceof RenderValue) {
+                if (viewValue instanceof TextFormattableValue) {
                     return viewValue;
                 } else {
                     if (Object.prototype.toString.call(viewValue) === '[object Date]') {

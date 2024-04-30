@@ -6,7 +6,7 @@
 
 import { RevColumnLayoutDefinition, RevRecordSourcedFieldDefinition, RevSourcedFieldDefinition } from '@xilytix/revgrid';
 import { OrderSideId } from '../../../../adi/internal-api';
-import { RenderValue } from '../../../../services/internal-api';
+import { TextFormattableValue } from '../../../../services/internal-api';
 import { CorrectnessId, UnreachableCaseError } from '../../../../sys/internal-api';
 import { AllowedGridField } from '../../../field/internal-api';
 import { DepthSideGridField } from '../depth-side-grid-field';
@@ -23,15 +23,15 @@ export class FullDepthSideGridField extends DepthSideGridField {
         super(definition);
     }
 
-    override getViewValue(record: FullDepthRecord): RenderValue {
-        let dataCorrectnessAttribute: RenderValue.Attribute | undefined;
+    override getViewValue(record: FullDepthRecord): TextFormattableValue {
+        let dataCorrectnessAttribute: TextFormattableValue.Attribute | undefined;
         const correctnessId = this._getDataItemCorrectnessIdEvent();
         switch (correctnessId) {
             case CorrectnessId.Suspect:
-                dataCorrectnessAttribute = RenderValue.DataCorrectnessAttribute.suspect;
+                dataCorrectnessAttribute = TextFormattableValue.DataCorrectnessAttribute.suspect;
                 break;
             case CorrectnessId.Error:
-                dataCorrectnessAttribute = RenderValue.DataCorrectnessAttribute.error;
+                dataCorrectnessAttribute = TextFormattableValue.DataCorrectnessAttribute.error;
                 break;
             case CorrectnessId.Usable:
             case CorrectnessId.Good:

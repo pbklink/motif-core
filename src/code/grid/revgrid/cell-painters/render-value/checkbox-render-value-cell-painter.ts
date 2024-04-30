@@ -4,9 +4,9 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevDatalessViewCell, RevRectangle, RevDataServer, RevStandardCheckboxPainter } from '@xilytix/revgrid';
+import { RevDataServer, RevDatalessViewCell, RevRectangle, RevStandardCheckboxPainter } from '@xilytix/revgrid';
 import { IndexSignatureHack } from '@xilytix/sysutils';
-import { RenderValue, SettingsService } from '../../../../services/internal-api';
+import { SettingsService, TextFormattableValue } from '../../../../services/internal-api';
 import { AssertInternalError, Integer } from '../../../../sys/internal-api';
 import { GridField } from '../../../field/internal-api';
 import { SourcedFieldGrid } from '../../adapted-revgrid/sourced-field-grid';
@@ -29,7 +29,7 @@ export class CheckboxRenderValueCellPainter extends RenderValueCellPainter  {
         );
     }
 
-    paintValue(cell: RevDatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined, renderValue: RenderValue): Integer | undefined {
+    paintValue(cell: RevDatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined, renderValue: TextFormattableValue): Integer | undefined {
         const baseBkgdForeColors = this.calculateBaseColors(cell, prefillColor);
         const bkgdColor = baseBkgdForeColors.bkgdColor;
         const foreColor = baseBkgdForeColors.foreColor;

@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { IntegerRenderValue, RenderValue } from '../../../services/internal-api';
+import { IntegerRenderValue, TextFormattableValue } from '../../../services/internal-api';
 import { IndexedRecord, Integer } from '../../../sys/internal-api';
 
 /** @public */
@@ -79,7 +79,7 @@ export abstract class DepthRecord implements IndexedRecord {
 
     protected createVolumeRenderValue(): DepthRecord.CreateRenderValueResult {
         const renderValue = new IntegerRenderValue(this.getVolume());
-        let extraAttribute: RenderValue.DepthRecordInAuctionAttribute | undefined;
+        let extraAttribute: TextFormattableValue.DepthRecordInAuctionAttribute | undefined;
         if (!this.inAuction) {
             extraAttribute = undefined;
         } else {
@@ -90,7 +90,7 @@ export abstract class DepthRecord implements IndexedRecord {
                 partialAuctionProportion = this.partialAuctionQuantity / this.getVolume();
             }
             extraAttribute = {
-                typeId: RenderValue.Attribute.TypeId.DepthRecordInAuction,
+                typeId: TextFormattableValue.Attribute.TypeId.DepthRecordInAuction,
                 partialAuctionProportion,
             };
         }
@@ -120,7 +120,7 @@ export namespace DepthRecord {
     }
 
     export interface CreateRenderValueResult {
-        renderValue: RenderValue;
-        extraAttribute?: RenderValue.Attribute;
+        renderValue: TextFormattableValue;
+        extraAttribute?: TextFormattableValue.Attribute;
     }
 }

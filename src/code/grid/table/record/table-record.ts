@@ -5,9 +5,9 @@
  */
 
 import { RevTableRecord } from '@xilytix/revgrid';
-import { RenderValue } from '../../../services/internal-api';
+import { TextFormattableValue } from '../../../services/internal-api';
 
-export class TableRecord extends RevTableRecord<RenderValue.TypeId, RenderValue.Attribute.TypeId> {
+export class TableRecord extends RevTableRecord<TextFormattableValue.TypeId, TextFormattableValue.Attribute.TypeId> {
 }
 
 export namespace TableRecord {

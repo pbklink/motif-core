@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevRenderValue } from '@xilytix/revgrid';
+import { RevTextFormattableValue } from '@xilytix/revgrid';
 import {
     ActiveFaultedStatusId,
     DayTradesDataItem,
@@ -28,19 +28,19 @@ import {
 } from '../sys/internal-api';
 import { ColorSettings } from './settings/internal-api';
 
-export abstract class RenderValue implements RevRenderValue<RenderValue.TypeId, RenderValue.Attribute.TypeId> {
+export abstract class TextFormattableValue implements RevTextFormattableValue<TextFormattableValue.TypeId, TextFormattableValue.Attribute.TypeId> {
     formattedText: string | undefined;
 
-    private _attributes: RenderValue.Attribute[] = [];
+    private _attributes: TextFormattableValue.Attribute[] = [];
 
-    constructor(readonly typeId: RenderValue.TypeId) { }
+    constructor(readonly typeId: TextFormattableValue.TypeId) { }
 
-    get attributes(): readonly RenderValue.Attribute[] { return this._attributes; }
+    get attributes(): readonly TextFormattableValue.Attribute[] { return this._attributes; }
 
-    addAttribute(value: RenderValue.Attribute) { this._attributes.push(value); }
-    setAttributes(value: RenderValue.Attribute[]) { this._attributes = value; }
+    addAttribute(value: TextFormattableValue.Attribute) { this._attributes.push(value); }
+    setAttributes(value: TextFormattableValue.Attribute[]) { this._attributes = value; }
 
-    protected assign(other: RenderValue) {
+    protected assign(other: TextFormattableValue) {
         this._attributes = other._attributes;
         this.formattedText = other.formattedText;
     }
@@ -48,7 +48,7 @@ export abstract class RenderValue implements RevRenderValue<RenderValue.TypeId, 
     abstract isUndefined(): boolean;
 }
 
-export namespace RenderValue {
+export namespace TextFormattableValue {
     export const enum TypeId {
         // eslint-disable-next-line id-blacklist
         String,
@@ -285,9 +285,9 @@ export namespace RenderValue {
     } as const;
 }
 
-export abstract class GenericRenderValue<T> extends RenderValue {
+export abstract class GenericRenderValue<T> extends TextFormattableValue {
     private readonly _data: T;
-    constructor(data: T | undefined, typeId: RenderValue.TypeId) {
+    constructor(data: T | undefined, typeId: TextFormattableValue.TypeId) {
         super(typeId);
         if (data !== undefined) {
             this._data = data;
@@ -311,85 +311,85 @@ export abstract class GenericRenderValue<T> extends RenderValue {
 
 export class StringRenderValue extends GenericRenderValue<string> {
     constructor(data: string | undefined) {
-        super(data, RenderValue.TypeId.String);
+        super(data, TextFormattableValue.TypeId.String);
     }
 }
 
 export class NumberRenderValue extends GenericRenderValue<number> {
     constructor(data: number | undefined) {
-        super(data, RenderValue.TypeId.Number);
+        super(data, TextFormattableValue.TypeId.Number);
     }
 }
 
 export class PercentageRenderValue extends GenericRenderValue<number> {
     constructor(data: number | undefined) {
-        super(data, RenderValue.TypeId.Percentage);
+        super(data, TextFormattableValue.TypeId.Percentage);
     }
 }
 
 export class IntegerRenderValue extends GenericRenderValue<Integer> {
     constructor(data: Integer | undefined) {
-        super(data, RenderValue.TypeId.Integer);
+        super(data, TextFormattableValue.TypeId.Integer);
     }
 }
 
 export class BigIntRenderValue extends GenericRenderValue<bigint> {
     constructor(data: bigint | undefined) {
-        super(data, RenderValue.TypeId.Number);
+        super(data, TextFormattableValue.TypeId.Number);
     }
 }
 
 export class DateRenderValue extends GenericRenderValue<Date> {
     constructor(data: Date | undefined) {
-        super(data, RenderValue.TypeId.Date);
+        super(data, TextFormattableValue.TypeId.Date);
     }
 }
 
 export class DateTimeRenderValue extends GenericRenderValue<Date> {
     constructor(data: Date | undefined) {
-        super(data, RenderValue.TypeId.DateTime);
+        super(data, TextFormattableValue.TypeId.DateTime);
     }
 }
 
 export class TimeRenderValue extends GenericRenderValue<Date> {
     constructor(data: Date | undefined) {
-        super(data, RenderValue.TypeId.Time);
+        super(data, TextFormattableValue.TypeId.Time);
     }
 }
 
 export class SourceTzOffsetDateTimeRenderValue extends GenericRenderValue<SourceTzOffsetDateTime> {
     constructor(data: SourceTzOffsetDateTime | undefined) {
-        super(data, RenderValue.TypeId.SourceTzOffsetDateTime);
+        super(data, TextFormattableValue.TypeId.SourceTzOffsetDateTime);
     }
 }
 
 export class SourceTzOffsetDateTimeDateRenderValue extends GenericRenderValue<SourceTzOffsetDateTime> {
     constructor(data: SourceTzOffsetDateTime | undefined) {
-        super(data, RenderValue.TypeId.SourceTzOffsetDateTimeDate);
+        super(data, TextFormattableValue.TypeId.SourceTzOffsetDateTimeDate);
     }
 }
 
 export class SourceTzOffsetDateTimeTimeRenderValue extends GenericRenderValue<SourceTzOffsetDateTime> {
     constructor(data: SourceTzOffsetDateTime | undefined) {
-        super(data, RenderValue.TypeId.SourceTzOffsetDateTimeTime);
+        super(data, TextFormattableValue.TypeId.SourceTzOffsetDateTimeTime);
     }
 }
 
 export class SourceTzOffsetDateRenderValue extends GenericRenderValue<SourceTzOffsetDate> {
     constructor(data: SourceTzOffsetDate | undefined) {
-        super(data, RenderValue.TypeId.SourceTzOffsetDate);
+        super(data, TextFormattableValue.TypeId.SourceTzOffsetDate);
     }
 }
 
 export class DecimalRenderValue extends GenericRenderValue<Decimal> {
     constructor(data: Decimal | undefined) {
-        super(newUndefinableDecimal(data), RenderValue.TypeId.Decimal);
+        super(newUndefinableDecimal(data), TextFormattableValue.TypeId.Decimal);
     }
 }
 
 export class PriceRenderValue extends GenericRenderValue<Decimal> {
     constructor(data: Decimal | undefined) {
-        super(data === undefined ? undefined : new PriceRenderValue.decimalConstructor(data), RenderValue.TypeId.Price);
+        super(data === undefined ? undefined : new PriceRenderValue.decimalConstructor(data), TextFormattableValue.TypeId.Price);
     }
 }
 
@@ -405,44 +405,44 @@ export namespace PriceRenderValue {
 export class PriceOrRemainderRenderValue extends GenericRenderValue<PriceOrRemainder> {
     constructor(data: PriceOrRemainder | undefined) {
         super(data === undefined ? undefined :
-            data === null ? null : new PriceRenderValue.decimalConstructor(data), RenderValue.TypeId.PriceOrRemainder);
+            data === null ? null : new PriceRenderValue.decimalConstructor(data), TextFormattableValue.TypeId.PriceOrRemainder);
     }
 }
 
 export class ColorRenderValue extends GenericRenderValue<string> {
     constructor(data: string | undefined) {
-        super(data, RenderValue.TypeId.Color);
-        this.addAttribute(RenderValue.backgroundColorAttribute);
+        super(data, TextFormattableValue.TypeId.Color);
+        this.addAttribute(TextFormattableValue.backgroundColorAttribute);
     }
 }
 
 export class StringArrayRenderValue extends GenericRenderValue<readonly string[]> {
     constructor(data: readonly string[] | undefined) {
-        super(data, RenderValue.TypeId.StringArray);
+        super(data, TextFormattableValue.TypeId.StringArray);
     }
 }
 
 export class IvemIdRenderValue extends GenericRenderValue<IvemId> {
     constructor(data: IvemId | undefined) {
-        super(data, RenderValue.TypeId.IvemId);
+        super(data, TextFormattableValue.TypeId.IvemId);
     }
 }
 
 export class LitIvemIdRenderValue extends GenericRenderValue<LitIvemId> {
     constructor(data: LitIvemId | undefined) {
-        super(data, RenderValue.TypeId.LitIvemId);
+        super(data, TextFormattableValue.TypeId.LitIvemId);
     }
 }
 
 export class LitIvemIdArrayRenderValue extends GenericRenderValue<readonly LitIvemId[]> {
     constructor(data: readonly LitIvemId[] | undefined) {
-        super(data, RenderValue.TypeId.LitIvemIdArray);
+        super(data, TextFormattableValue.TypeId.LitIvemIdArray);
     }
 }
 
 export class RoutedIvemIdRenderValue extends GenericRenderValue<RoutedIvemId> {
     constructor(data: RoutedIvemId | undefined) {
-        super(data, RenderValue.TypeId.RoutedIvemId);
+        super(data, TextFormattableValue.TypeId.RoutedIvemId);
     }
 }
 
@@ -451,49 +451,49 @@ export class BooleanRenderValue extends GenericRenderValue<boolean> {
 
 export class TrueFalseRenderValue extends BooleanRenderValue {
     constructor(data: boolean | undefined) {
-        super(data, RenderValue.TypeId.TrueFalse);
+        super(data, TextFormattableValue.TypeId.TrueFalse);
     }
 }
 
 export class EnabledRenderValue extends BooleanRenderValue {
     constructor(data: boolean | undefined) {
-        super(data, RenderValue.TypeId.Enabled);
+        super(data, TextFormattableValue.TypeId.Enabled);
     }
 }
 
 export class ReadonlyRenderValue extends BooleanRenderValue {
     constructor(data: boolean | undefined) {
-        super(data, RenderValue.TypeId.Readonly);
+        super(data, TextFormattableValue.TypeId.Readonly);
     }
 }
 
 export class ValidRenderValue extends BooleanRenderValue {
     constructor(data: boolean | undefined) {
-        super(data, RenderValue.TypeId.Valid);
+        super(data, TextFormattableValue.TypeId.Valid);
     }
 }
 
 export class ModifiedRenderValue extends BooleanRenderValue {
     constructor(data: boolean | undefined) {
-        super(data, RenderValue.TypeId.Modified);
+        super(data, TextFormattableValue.TypeId.Modified);
     }
 }
 
 export class UndisclosedRenderValue extends BooleanRenderValue {
     constructor(data: boolean | undefined) {
-        super(data, RenderValue.TypeId.Undisclosed);
+        super(data, TextFormattableValue.TypeId.Undisclosed);
     }
 }
 
 export class IsReadableRenderValue extends BooleanRenderValue {
     constructor(data: boolean | undefined) {
-        super(data, RenderValue.TypeId.IsReadable);
+        super(data, TextFormattableValue.TypeId.IsReadable);
     }
 }
 
 export class MatchedRenderValue extends BooleanRenderValue {
     constructor(data: boolean | undefined) {
-        super(data, RenderValue.TypeId.Matched);
+        super(data, TextFormattableValue.TypeId.Matched);
     }
 }
 
@@ -502,43 +502,43 @@ export class EnumRenderValue extends GenericRenderValue<Integer> {
 
 export class ActiveFaultedStatusIdRenderValue extends EnumRenderValue {
     constructor(data: ActiveFaultedStatusId | undefined) {
-        super(data, RenderValue.TypeId.ActiveFaultedStatusId);
+        super(data, TextFormattableValue.TypeId.ActiveFaultedStatusId);
     }
 }
 
 export class MarketIdRenderValue extends EnumRenderValue {
     constructor(data: MarketId | undefined) {
-        super(data, RenderValue.TypeId.MarketId);
+        super(data, TextFormattableValue.TypeId.MarketId);
     }
 }
 
 export class OrderSideIdRenderValue extends EnumRenderValue {
     constructor(data: OrderSideId | undefined) {
-        super(data, RenderValue.TypeId.OrderSideId);
+        super(data, TextFormattableValue.TypeId.OrderSideId);
     }
 }
 
 export class OrderExtendedSideIdRenderValue extends EnumRenderValue {
     constructor(data: OrderExtendedSideId | undefined) {
-        super(data, RenderValue.TypeId.OrderExtendedSideId);
+        super(data, TextFormattableValue.TypeId.OrderExtendedSideId);
     }
 }
 
 export class TrendIdRenderValue extends EnumRenderValue {
     constructor(data: MovementId | undefined) {
-        super(data, RenderValue.TypeId.TrendId);
+        super(data, TextFormattableValue.TypeId.TrendId);
     }
 }
 
 export class ColorSettingsItemStateIdRenderValue extends EnumRenderValue {
     constructor(data: ColorSettings.ItemStateId | undefined) {
-        super(data, RenderValue.TypeId.ColorSettingsItemStateId);
+        super(data, TextFormattableValue.TypeId.ColorSettingsItemStateId);
     }
 }
 
 export class DayTradesDataItemRecordTypeIdRenderValue extends EnumRenderValue {
     constructor(data: DayTradesDataItem.Record.TypeId | undefined) {
-        super(data, RenderValue.TypeId.DayTradesDataItemRecordTypeId);
+        super(data, TextFormattableValue.TypeId.DayTradesDataItemRecordTypeId);
     }
 }
 
@@ -547,37 +547,37 @@ export class IntegerArrayRenderValue extends GenericRenderValue<readonly Integer
 
 export class TradeAffectsIdArrayRenderValue extends IntegerArrayRenderValue {
     constructor(data: readonly TradeAffectsId[] | undefined) {
-        super(data, RenderValue.TypeId.TradeAffectsIdArray);
+        super(data, TextFormattableValue.TypeId.TradeAffectsIdArray);
     }
 }
 
 export class TradeFlagIdArrayRenderValue extends IntegerArrayRenderValue {
     constructor(data: readonly TradeFlagId[] | undefined) {
-        super(data, RenderValue.TypeId.TradeFlagIdArray);
+        super(data, TextFormattableValue.TypeId.TradeFlagIdArray);
     }
 }
 
 export class MarketIdArrayRenderValue extends IntegerArrayRenderValue {
     constructor(data: readonly MarketId[] | undefined) {
-        super(data, RenderValue.TypeId.MarketIdArray);
+        super(data, TextFormattableValue.TypeId.MarketIdArray);
     }
 }
 
 export class OrderStatusAllowIdArrayRenderValue extends IntegerArrayRenderValue {
     constructor(data: readonly OrderStatus.AllowId[] | undefined) {
-        super(data, RenderValue.TypeId.OrderStatusAllowIdArray);
+        super(data, TextFormattableValue.TypeId.OrderStatusAllowIdArray);
     }
 }
 
 export class OrderStatusReasonIdArrayRenderValue extends IntegerArrayRenderValue {
     constructor(data: readonly OrderStatus.ReasonId[] | undefined) {
-        super(data, RenderValue.TypeId.OrderStatusReasonIdArray);
+        super(data, TextFormattableValue.TypeId.OrderStatusReasonIdArray);
     }
 }
 
 export class PriceAndHasUndisclosedRenderValue extends GenericRenderValue<PriceAndHasUndisclosedRenderValue.DataType> {
     constructor(data: PriceAndHasUndisclosedRenderValue.DataType | undefined) {
-        super(data, RenderValue.TypeId.PriceAndHasUndisclosed);
+        super(data, TextFormattableValue.TypeId.PriceAndHasUndisclosed);
     }
 }
 
@@ -591,7 +591,7 @@ export namespace PriceAndHasUndisclosedRenderValue {
 export class PriceOrRemainderAndHasUndisclosedRenderValue extends
     GenericRenderValue<PriceOrRemainderAndHasUndisclosedRenderValue.DataType> {
     constructor(data: PriceOrRemainderAndHasUndisclosedRenderValue.DataType | undefined) {
-        super(data, RenderValue.TypeId.PriceOrRemainderAndHasUndisclosed);
+        super(data, TextFormattableValue.TypeId.PriceOrRemainderAndHasUndisclosed);
     }
 }
 
@@ -604,7 +604,7 @@ export namespace PriceOrRemainderAndHasUndisclosedRenderValue {
 
 export class CountAndXrefsRenderValue extends GenericRenderValue<CountAndXrefsRenderValue.DataType> {
     constructor(data: CountAndXrefsRenderValue.DataType | undefined) {
-        super(data, RenderValue.TypeId.CountAndXrefs);
+        super(data, TextFormattableValue.TypeId.CountAndXrefs);
     }
 }
 

@@ -90,7 +90,6 @@ import {
     PriceOrRemainderRenderValue,
     PriceRenderValue,
     RankedLitIvemIdListDirectoryItem,
-    RenderValue,
     RoutedIvemIdRenderValue,
     ScalarSettings, SettingsService,
     SourceTzOffsetDateRenderValue,
@@ -100,6 +99,7 @@ import {
     StringArrayRenderValue,
     StringRenderValue,
     SymbolsService,
+    TextFormattableValue,
     TimeRenderValue,
     TradeAffectsIdArrayRenderValue,
     TradeFlagIdArrayRenderValue
@@ -175,7 +175,7 @@ export class TextFormatterService {
         return value ? Strings[StringId.Yes] : Strings[StringId.No];
     }
 
-    formatRenderValue(renderValue: RenderValue) {
+    format(renderValue: TextFormattableValue) {
         if (renderValue.formattedText === undefined) {
             if (renderValue.isUndefined()) {
                 renderValue.formattedText = '';
@@ -593,171 +593,171 @@ export class TextFormatterService {
         this._dateTimeTimezoneModeId = this._scalarSettings.format_DateTimeTimezoneModeId;
     }
 
-    private formatDefinedRenderValue(renderValue: RenderValue): string {
+    private formatDefinedRenderValue(renderValue: TextFormattableValue): string {
         switch (renderValue.typeId) {
-            case RenderValue.TypeId.String:
+            case TextFormattableValue.TypeId.String:
                 return (renderValue as StringRenderValue).definedData;
-            case RenderValue.TypeId.Number:
+            case TextFormattableValue.TypeId.Number:
                 return this.formatNumber((renderValue as NumberRenderValue).definedData);
-            case RenderValue.TypeId.Percentage:
+            case TextFormattableValue.TypeId.Percentage:
                 return this.formatPercentage((renderValue as PercentageRenderValue).definedData);
-            case RenderValue.TypeId.Integer:
+            case TextFormattableValue.TypeId.Integer:
                 return this.formatInteger((renderValue as IntegerRenderValue).definedData);
-            case RenderValue.TypeId.BigInt:
+            case TextFormattableValue.TypeId.BigInt:
                 return this.formatBigInt((renderValue as BigIntRenderValue).definedData);
-            case RenderValue.TypeId.Decimal:
+            case TextFormattableValue.TypeId.Decimal:
                 return this.formatDecimal((renderValue as DecimalRenderValue).definedData);
-            case RenderValue.TypeId.Price:
+            case TextFormattableValue.TypeId.Price:
                 return this.formatPrice((renderValue as PriceRenderValue).definedData);
-            case RenderValue.TypeId.PriceOrRemainder:
+            case TextFormattableValue.TypeId.PriceOrRemainder:
                 return this.formatPriceOrRemainder((renderValue as PriceOrRemainderRenderValue).definedData);
-            case RenderValue.TypeId.Date:
+            case TextFormattableValue.TypeId.Date:
                 return this.formatDate((renderValue as DateRenderValue).definedData);
-            case RenderValue.TypeId.DateTime:
+            case TextFormattableValue.TypeId.DateTime:
                 return this.formatDateTime((renderValue as DateTimeRenderValue).definedData);
-            case RenderValue.TypeId.Time:
+            case TextFormattableValue.TypeId.Time:
                 return this.formatTime((renderValue as TimeRenderValue).definedData);
-            case RenderValue.TypeId.SourceTzOffsetDateTime:
+            case TextFormattableValue.TypeId.SourceTzOffsetDateTime:
                 return this.formatSourceTzOffsetDateTime((renderValue as SourceTzOffsetDateTimeRenderValue).definedData);
-            case RenderValue.TypeId.SourceTzOffsetDateTimeDate:
+            case TextFormattableValue.TypeId.SourceTzOffsetDateTimeDate:
                 return this.formatSourceTzOffsetDateTimeDate((renderValue as SourceTzOffsetDateTimeDateRenderValue).definedData);
-            case RenderValue.TypeId.SourceTzOffsetDateTimeTime:
+            case TextFormattableValue.TypeId.SourceTzOffsetDateTimeTime:
                 return this.formatSourceTzOffsetDateTimeTime((renderValue as SourceTzOffsetDateTimeTimeRenderValue).definedData);
-            case RenderValue.TypeId.SourceTzOffsetDate:
+            case TextFormattableValue.TypeId.SourceTzOffsetDate:
                 return this.formatSourceTzOffsetDate((renderValue as SourceTzOffsetDateRenderValue).definedData);
-            case RenderValue.TypeId.Color:
+            case TextFormattableValue.TypeId.Color:
                 return '';
-            case RenderValue.TypeId.IvemId:
+            case TextFormattableValue.TypeId.IvemId:
                 return this.formatIvemId((renderValue as IvemIdRenderValue).definedData);
-            case RenderValue.TypeId.LitIvemId:
+            case TextFormattableValue.TypeId.LitIvemId:
                 return this.formatLitIvemId((renderValue as LitIvemIdRenderValue).definedData);
-            case RenderValue.TypeId.LitIvemIdArray:
+            case TextFormattableValue.TypeId.LitIvemIdArray:
                 return this.formatLitIvemIdArrayAsCommaText((renderValue as LitIvemIdArrayRenderValue).definedData);
-            case RenderValue.TypeId.RoutedIvemId:
+            case TextFormattableValue.TypeId.RoutedIvemId:
                 return this.formatRoutedIvemId((renderValue as RoutedIvemIdRenderValue).definedData);
-            case RenderValue.TypeId.TrueFalse:
+            case TextFormattableValue.TypeId.TrueFalse:
                 return this.formatTrueFalseBoolean((renderValue as BooleanRenderValue).definedData);
-            case RenderValue.TypeId.Enabled:
+            case TextFormattableValue.TypeId.Enabled:
                 return this.formatEnabledBoolean((renderValue as BooleanRenderValue).definedData);
-            case RenderValue.TypeId.Readonly:
+            case TextFormattableValue.TypeId.Readonly:
                 return this.formatReadonlyBoolean((renderValue as BooleanRenderValue).definedData);
-            case RenderValue.TypeId.Valid:
+            case TextFormattableValue.TypeId.Valid:
                 return this.formatValidBoolean((renderValue as BooleanRenderValue).definedData);
-            case RenderValue.TypeId.Faulted:
+            case TextFormattableValue.TypeId.Faulted:
                 return this.formatFaultedBoolean((renderValue as BooleanRenderValue).definedData);
-            case RenderValue.TypeId.Modified:
+            case TextFormattableValue.TypeId.Modified:
                 return this.formatModifiedBoolean((renderValue as BooleanRenderValue).definedData);
-            case RenderValue.TypeId.IsIndex:
+            case TextFormattableValue.TypeId.IsIndex:
                 return this.formatIsIndexBoolean((renderValue as BooleanRenderValue).definedData);
-            case RenderValue.TypeId.Visible:
+            case TextFormattableValue.TypeId.Visible:
                 return this.formatVisibleBoolean((renderValue as BooleanRenderValue).definedData);
-            case RenderValue.TypeId.Writable:
+            case TextFormattableValue.TypeId.Writable:
                 return this.formatWritableBoolean((renderValue as BooleanRenderValue).definedData);
-            case RenderValue.TypeId.Undisclosed:
+            case TextFormattableValue.TypeId.Undisclosed:
                 return this.formatUndisclosedBoolean((renderValue as BooleanRenderValue).definedData);
-            case RenderValue.TypeId.IsReadable:
+            case TextFormattableValue.TypeId.IsReadable:
                 return this.formatIsReadableBoolean((renderValue as BooleanRenderValue).definedData);
-            case RenderValue.TypeId.PhysicalDelivery:
+            case TextFormattableValue.TypeId.PhysicalDelivery:
                 return this.formatPhysicalDeliveryBoolean((renderValue as BooleanRenderValue).definedData);
-            case RenderValue.TypeId.Matched:
+            case TextFormattableValue.TypeId.Matched:
                 return this.formatMatchedBoolean((renderValue as BooleanRenderValue).definedData);
-            case RenderValue.TypeId.ActiveFaultedStatusId:
+            case TextFormattableValue.TypeId.ActiveFaultedStatusId:
                 return this.formatActiveFaultedStatusId((renderValue as EnumRenderValue).definedData);
-            case RenderValue.TypeId.TradingStateReasonId:
+            case TextFormattableValue.TypeId.TradingStateReasonId:
                 return this.formatTradingStateReasonId((renderValue as EnumRenderValue).definedData);
-            case RenderValue.TypeId.MarketId:
+            case TextFormattableValue.TypeId.MarketId:
                 return this.formatMarketId((renderValue as EnumRenderValue).definedData);
-            case RenderValue.TypeId.TrendId:
+            case TextFormattableValue.TypeId.TrendId:
                 return this.formatTrendId((renderValue as EnumRenderValue).definedData);
-            case RenderValue.TypeId.ColorSettingsItemStateId:
+            case TextFormattableValue.TypeId.ColorSettingsItemStateId:
                 return this.formatColorSettingsItemStateId((renderValue as EnumRenderValue).definedData);
-            case RenderValue.TypeId.ExerciseTypeId:
+            case TextFormattableValue.TypeId.ExerciseTypeId:
                 return this.formatExerciseTypeId((renderValue as EnumRenderValue).definedData);
-            case RenderValue.TypeId.RankedLitIvemIdListDirectoryItemTypeId:
+            case TextFormattableValue.TypeId.RankedLitIvemIdListDirectoryItemTypeId:
                 return this.formatRankedLitIvemIdListDirectoryItemTypeId((renderValue as EnumRenderValue).definedData);
-            case RenderValue.TypeId.ExchangeId:
+            case TextFormattableValue.TypeId.ExchangeId:
                 return this.formatExchangeId((renderValue as EnumRenderValue).definedData);
-            case RenderValue.TypeId.CallOrPutId:
+            case TextFormattableValue.TypeId.CallOrPutId:
                 return this.formatCallOrPutId((renderValue as EnumRenderValue).definedData);
-            case RenderValue.TypeId.MarketBoardId:
+            case TextFormattableValue.TypeId.MarketBoardId:
                 return this.formatMarketBoardId((renderValue as EnumRenderValue).definedData);
-            case RenderValue.TypeId.CurrencyId:
+            case TextFormattableValue.TypeId.CurrencyId:
                 return this.formatCurrencyId((renderValue as EnumRenderValue).definedData);
-            case RenderValue.TypeId.OrderExtendedSideId:
+            case TextFormattableValue.TypeId.OrderExtendedSideId:
                 return this.formatOrderExtendedSideId((renderValue as EnumRenderValue).definedData);
-            case RenderValue.TypeId.OrderSideId:
+            case TextFormattableValue.TypeId.OrderSideId:
                 return this.formatOrderSideId((renderValue as EnumRenderValue).definedData);
-            case RenderValue.TypeId.EquityOrderTypeId:
+            case TextFormattableValue.TypeId.EquityOrderTypeId:
                 return this.formatOrderTypeId((renderValue as EnumRenderValue).definedData);
-            case RenderValue.TypeId.TimeInForceId:
+            case TextFormattableValue.TypeId.TimeInForceId:
                 return this.formatTimeInForceId((renderValue as EnumRenderValue).definedData);
-            case RenderValue.TypeId.OrderShortSellTypeId:
+            case TextFormattableValue.TypeId.OrderShortSellTypeId:
                 return this.formatOrderShortSellTypeId((renderValue as EnumRenderValue).definedData);
-            case RenderValue.TypeId.OrderPriceUnitTypeId:
+            case TextFormattableValue.TypeId.OrderPriceUnitTypeId:
                 return this.formatOrderPriceUnitTypeId((renderValue as EnumRenderValue).definedData);
-            case RenderValue.TypeId.OrderRouteAlgorithmId:
+            case TextFormattableValue.TypeId.OrderRouteAlgorithmId:
                 return this.formatOrderRouteAlgorithmId((renderValue as EnumRenderValue).definedData);
-            case RenderValue.TypeId.OrderTriggerTypeId:
+            case TextFormattableValue.TypeId.OrderTriggerTypeId:
                 return this.formatOrderTriggerTypeId((renderValue as EnumRenderValue).definedData);
-            case RenderValue.TypeId.GridOrderTriggerTypeId:
+            case TextFormattableValue.TypeId.GridOrderTriggerTypeId:
                 return this.formatGridOrderTriggerTypeId((renderValue as EnumRenderValue).definedData);
-            case RenderValue.TypeId.TrailingStopLossOrderConditionTypeId:
+            case TextFormattableValue.TypeId.TrailingStopLossOrderConditionTypeId:
                 return this.formatTrailingStopLossOrderConditionTypeId((renderValue as EnumRenderValue).definedData);
-            case RenderValue.TypeId.DataEnvironmentId:
+            case TextFormattableValue.TypeId.DataEnvironmentId:
                 return this.formatDataEnvironmentId((renderValue as EnumRenderValue).definedData);
-            case RenderValue.TypeId.FeedClassId:
+            case TextFormattableValue.TypeId.FeedClassId:
                 return this.formatFeedClassId((renderValue as EnumRenderValue).definedData);
-            case RenderValue.TypeId.FeedStatusId:
+            case TextFormattableValue.TypeId.FeedStatusId:
                 return this.formatFeedStatusId((renderValue as EnumRenderValue).definedData);
-            case RenderValue.TypeId.IvemClassId:
+            case TextFormattableValue.TypeId.IvemClassId:
                 return this.formatIvemClassId((renderValue as EnumRenderValue).definedData);
-            case RenderValue.TypeId.DepthDirectionId:
+            case TextFormattableValue.TypeId.DepthDirectionId:
                 return this.formatDepthDirectionId((renderValue as EnumRenderValue).definedData);
-            case RenderValue.TypeId.MarketClassificationIdMyxLitIvemAttribute:
+            case TextFormattableValue.TypeId.MarketClassificationIdMyxLitIvemAttribute:
                 return this.formatMarketClassificationIdMyxLitIvemAttribute((renderValue as EnumRenderValue).definedData);
-            case RenderValue.TypeId.DeliveryBasisIdMyxLitIvemAttribute:
+            case TextFormattableValue.TypeId.DeliveryBasisIdMyxLitIvemAttribute:
                 return this.formatDeliveryBasisIdMyxLitIvemAttribute((renderValue as EnumRenderValue).definedData);
-            case RenderValue.TypeId.DayTradesDataItemRecordTypeId:
+            case TextFormattableValue.TypeId.DayTradesDataItemRecordTypeId:
                 return this.formatDayTradesDataItemRecordTypeId((renderValue as EnumRenderValue).definedData);
-            case RenderValue.TypeId.ScanCriteriaTypeId:
+            case TextFormattableValue.TypeId.ScanCriteriaTypeId:
                 return this.formatScanCriteriaTypeId((renderValue as EnumRenderValue).definedData);
-            case RenderValue.TypeId.ScanTargetTypeId:
+            case TextFormattableValue.TypeId.ScanTargetTypeId:
                 return this.formatScanTargetTypeId((renderValue as EnumRenderValue).definedData);
-            case RenderValue.TypeId.ScanFieldBooleanOperationId:
+            case TextFormattableValue.TypeId.ScanFieldBooleanOperationId:
                 return this.formatScanFieldBooleanOperationId((renderValue as EnumRenderValue).definedData);
-            case RenderValue.TypeId.NotificationChannelSourceSettingsUrgencyId:
+            case TextFormattableValue.TypeId.NotificationChannelSourceSettingsUrgencyId:
                 return this.formatUrgency((renderValue as EnumRenderValue).definedData);
-            case RenderValue.TypeId.NotificationDistributionMethodId:
+            case TextFormattableValue.TypeId.NotificationDistributionMethodId:
                 return this.formatNotificationDistributionMethodId((renderValue as EnumRenderValue).definedData);
-            case RenderValue.TypeId.StringArray:
+            case TextFormattableValue.TypeId.StringArray:
                 return this.formatStringArrayAsCommaText((renderValue as StringArrayRenderValue).definedData);
-            case RenderValue.TypeId.IntegerArray:
+            case TextFormattableValue.TypeId.IntegerArray:
                 return this.formatIntegerArrayAsCommaText((renderValue as IntegerArrayRenderValue).definedData);
-            case RenderValue.TypeId.MarketBoardIdArray:
+            case TextFormattableValue.TypeId.MarketBoardIdArray:
                 return this.formatMarketBoardIdArrayAsCommaText((renderValue as IntegerArrayRenderValue).definedData);
-            case RenderValue.TypeId.PublisherSubscriptionDataTypeIdArray:
+            case TextFormattableValue.TypeId.PublisherSubscriptionDataTypeIdArray:
                 return this.formatPublisherSubscriptionDataTypeIdArrayAsCommaText((renderValue as IntegerArrayRenderValue).definedData);
-            case RenderValue.TypeId.ShortSellTypeIdArrayMyxLitIvemAttribute:
+            case TextFormattableValue.TypeId.ShortSellTypeIdArrayMyxLitIvemAttribute:
                 return this.formatShortSellTypeIdMyxLitIvemAttribute((renderValue as IntegerArrayRenderValue).definedData);
-            case RenderValue.TypeId.TradeAffectsIdArray:
+            case TextFormattableValue.TypeId.TradeAffectsIdArray:
                 return this.formatTradeAffectsIdArrayAsCommaText((renderValue as TradeAffectsIdArrayRenderValue).definedData);
-            case RenderValue.TypeId.TradeFlagIdArray:
+            case TextFormattableValue.TypeId.TradeFlagIdArray:
                 return this.formatTradeFlagIdArrayAsCommaText((renderValue as TradeFlagIdArrayRenderValue).definedData);
-            case RenderValue.TypeId.TradingStateAllowIdArray:
+            case TextFormattableValue.TypeId.TradingStateAllowIdArray:
                 return this.formatTradingStateAllowIdArrayAsCommaText((renderValue as MarketIdArrayRenderValue).definedData);
-            case RenderValue.TypeId.MarketIdArray:
+            case TextFormattableValue.TypeId.MarketIdArray:
                 return this.formatMarketIdArrayAsCommaText((renderValue as MarketIdArrayRenderValue).definedData);
-            case RenderValue.TypeId.OrderStatusAllowIdArray:
+            case TextFormattableValue.TypeId.OrderStatusAllowIdArray:
                 return this.formatOrderStatusAllowIdArrayAsCommaText((renderValue as OrderStatusAllowIdArrayRenderValue).definedData);
-            case RenderValue.TypeId.OrderStatusReasonIdArray:
+            case TextFormattableValue.TypeId.OrderStatusReasonIdArray:
                 return this.formatOrderStatusReasonIdArrayAsCommaText((renderValue as OrderStatusReasonIdArrayRenderValue).definedData);
-            case RenderValue.TypeId.PriceAndHasUndisclosed:
+            case TextFormattableValue.TypeId.PriceAndHasUndisclosed:
                 return this.formatPriceAndHasUndisclosed((renderValue as PriceAndHasUndisclosedRenderValue).definedData);
-            case RenderValue.TypeId.PriceOrRemainderAndHasUndisclosed:
+            case TextFormattableValue.TypeId.PriceOrRemainderAndHasUndisclosed:
                 return this.formatPriceOrRemainderAndHasUndisclosed(
                     (renderValue as PriceOrRemainderAndHasUndisclosedRenderValue).definedData
                 );
-            case RenderValue.TypeId.CountAndXrefs:
+            case TextFormattableValue.TypeId.CountAndXrefs:
                 return this.formatCountAndXrefs((renderValue as CountAndXrefsRenderValue).definedData);
             default:
                 throw new UnreachableCaseError('TFFDRV28507', renderValue.typeId);

@@ -13,7 +13,7 @@ import {
     RevStandardTextPainter
 } from '@xilytix/revgrid';
 import { HigherLowerId, OrderSideId } from '../../../../adi/internal-api';
-import { ColorRenderValue, ColorScheme, RenderValue, SettingsService } from '../../../../services/internal-api';
+import { ColorRenderValue, ColorScheme, SettingsService, TextFormattableValue } from '../../../../services/internal-api';
 import { CorrectnessId, IndexSignatureHack, Integer, UnreachableCaseError } from '../../../../sys/internal-api';
 import { TextFormatterService } from '../../../../text-format/internal-api';
 import { GridField } from '../../../field/internal-api';
@@ -31,7 +31,7 @@ export class TextRenderValueCellPainter extends RenderValueCellPainter {
         this._textPainter = new RevStandardTextPainter(this._renderingContext);
     }
 
-    paintValue(cell: RevDatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined, renderValue: RenderValue): Integer | undefined {
+    paintValue(cell: RevDatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined, renderValue: TextFormattableValue): Integer | undefined {
         const columnSettings = cell.columnSettings;
 
         const baseBkgdForeColors = this.calculateBaseColors(cell, prefillColor);
@@ -54,9 +54,9 @@ export class TextRenderValueCellPainter extends RenderValueCellPainter {
         for (let i = attributes.length - 1; i >= 0; i--) {
             const attribute = attributes[i];
             switch (attribute.typeId) {
-                case RenderValue.Attribute.TypeId.Correctness: {
+                case TextFormattableValue.Attribute.TypeId.Correctness: {
                     const correctnessAttribute =
-                        attribute as RenderValue.CorrectnessAttribute;
+                        attribute as TextFormattableValue.CorrectnessAttribute;
                     const correctnessId = correctnessAttribute.correctnessId;
                     switch (correctnessId) {
                         case CorrectnessId.Suspect:
@@ -85,9 +85,9 @@ export class TextRenderValueCellPainter extends RenderValueCellPainter {
                     break;
                 }
 
-                case RenderValue.Attribute.TypeId.HigherLower: {
+                case TextFormattableValue.Attribute.TypeId.HigherLower: {
                     const higherLowerAttribute =
-                        attribute as RenderValue.HigherLowerAttribute;
+                        attribute as TextFormattableValue.HigherLowerAttribute;
                     const higherLowerId = higherLowerAttribute.higherLowerId;
                     switch (higherLowerId) {
                         case HigherLowerId.Higher:
@@ -104,7 +104,7 @@ export class TextRenderValueCellPainter extends RenderValueCellPainter {
                     break;
                 }
 
-                case RenderValue.Attribute.TypeId.BackgroundColor: {
+                case TextFormattableValue.Attribute.TypeId.BackgroundColor: {
                     if (renderValue instanceof ColorRenderValue) {
                         if (renderValue.isUndefined()) {
                             graphicId = TextRenderValueCellPainter.GraphicId.UndefinedColor;
@@ -119,7 +119,7 @@ export class TextRenderValueCellPainter extends RenderValueCellPainter {
                     break;
                 }
 
-                case RenderValue.Attribute.TypeId.DepthRecord: {
+                case TextFormattableValue.Attribute.TypeId.DepthRecord: {
                     const depthRecordAttribute = attribute as DepthRecordRenderValue.Attribute;
                     let depthRecordItemId: ColorScheme.ItemId;
                     if (depthRecordAttribute.ownOrder) {
@@ -136,8 +136,8 @@ export class TextRenderValueCellPainter extends RenderValueCellPainter {
                     break;
                 }
 
-                case RenderValue.Attribute.TypeId.DepthCountXRefField: {
-                    const depthCountXRefFieldAttribute = attribute as RenderValue.DepthCountXRefFieldAttribute;
+                case TextFormattableValue.Attribute.TypeId.DepthCountXRefField: {
+                    const depthCountXRefFieldAttribute = attribute as TextFormattableValue.DepthCountXRefFieldAttribute;
                     if (depthCountXRefFieldAttribute.isCountAndXrefs) {
                         horizontalAlignId = RevHorizontalAlignId.Right;
                     } else {
@@ -146,9 +146,9 @@ export class TextRenderValueCellPainter extends RenderValueCellPainter {
                     break;
                 }
 
-                case RenderValue.Attribute.TypeId.DepthRecordInAuction: {
+                case TextFormattableValue.Attribute.TypeId.DepthRecordInAuction: {
                     const depthRecordInAuctionAttribute =
-                        attribute as RenderValue.DepthRecordInAuctionAttribute;
+                        attribute as TextFormattableValue.DepthRecordInAuctionAttribute;
                     const auctionItemId = altRow ? ColorScheme.ItemId.Grid_PriceSellOverlapAlt : ColorScheme.ItemId.Grid_PriceSellOverlap;
                     if (depthRecordInAuctionAttribute.partialAuctionProportion === undefined) {
                         bkgdColor = this._colorSettings.getBkgd(auctionItemId);
@@ -162,25 +162,25 @@ export class TextRenderValueCellPainter extends RenderValueCellPainter {
                     break;
                 }
 
-                case RenderValue.Attribute.TypeId.OwnOrder: {
+                case TextFormattableValue.Attribute.TypeId.OwnOrder: {
                     // Note that Depth does not use this attribute as it has a custom attribute
                     const ownOrderRecordItemId = altRow ? ColorScheme.ItemId.Grid_MyOrderAlt : ColorScheme.ItemId.Grid_MyOrder;
                     bkgdColor = this._colorSettings.getBkgd(ownOrderRecordItemId);
                     break;
                 }
 
-                case RenderValue.Attribute.TypeId.Cancelled: {
+                case TextFormattableValue.Attribute.TypeId.Cancelled: {
                     graphicId = TextRenderValueCellPainter.GraphicId.LineThrough;
                     break;
                 }
 
-                case RenderValue.Attribute.TypeId.Canceller:
-                case RenderValue.Attribute.TypeId.GreyedOut: {
+                case TextFormattableValue.Attribute.TypeId.Canceller:
+                case TextFormattableValue.Attribute.TypeId.GreyedOut: {
                     foreColor = this._colorSettings.getFore(ColorScheme.ItemId.Grid_GreyedOut);
                     break;
                 }
 
-                case RenderValue.Attribute.TypeId.Advert: {
+                case TextFormattableValue.Attribute.TypeId.Advert: {
                     if (!rowFocused) {
                         bkgdColor = this._colorSettings.getBkgd(ColorScheme.ItemId.Grid_Advert);
                     }
@@ -192,7 +192,7 @@ export class TextRenderValueCellPainter extends RenderValueCellPainter {
             }
         }
 
-        const foreText = this._textFormatterService.formatRenderValue(renderValue);
+        const foreText = this._textFormatterService.format(renderValue);
         const foreFont = this._gridSettings.font;
         let internalBorderRowOnly: boolean;
 

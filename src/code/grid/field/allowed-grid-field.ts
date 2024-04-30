@@ -5,9 +5,9 @@
  */
 
 import { RevAllowedRecordSourcedField } from '@xilytix/revgrid';
-import { RenderValue } from '../../services/render-value';
+import { TextFormattableValue } from '../../services/render-value';
 
 // AllowedGridField is used in Column selector
-export class AllowedGridField extends RevAllowedRecordSourcedField<RenderValue.TypeId, RenderValue.Attribute.TypeId> {
+export class AllowedGridField extends RevAllowedRecordSourcedField<TextFormattableValue.TypeId, TextFormattableValue.Attribute.TypeId> {
 
 }

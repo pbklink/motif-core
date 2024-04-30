@@ -16,8 +16,8 @@ import {
     IntegerRenderValue,
     NumberRenderValue,
     PriceRenderValue,
-    RenderValue,
-    StringRenderValue
+    StringRenderValue,
+    TextFormattableValue
 } from '../../../services/internal-api';
 import { Decimal, Integer, newUndefinableDate, newUndefinableDecimal } from '../../../sys/internal-api';
 import { CorrectnessTableValue } from './table-value';
@@ -102,14 +102,14 @@ export class NullablePriceCorrectnessTableValue extends BaseNullableDecimalCorre
 }
 
 export abstract class NullableBooleanCorrectnessTableValue extends GenericNullableCorrectnessTableValue<boolean> {
-    protected renderValueTypeId: RenderValue.TypeId;
+    protected renderValueTypeId: TextFormattableValue.TypeId;
 
     protected createRenderValue() {
         return new BooleanRenderValue(this.data === null ? undefined : this.data, this.renderValueTypeId);
     }
 }
 export abstract class NullableEnumCorrectnessTableValue extends GenericNullableCorrectnessTableValue<Integer> {
-    protected renderValueTypeId: RenderValue.TypeId;
+    protected renderValueTypeId: TextFormattableValue.TypeId;
 
     protected createRenderValue() {
         return new EnumRenderValue(this.data === null ? undefined : this.data, this.renderValueTypeId);
@@ -117,7 +117,7 @@ export abstract class NullableEnumCorrectnessTableValue extends GenericNullableC
 }
 
 export abstract class BaseNullableIntegerCorrectnessArrayTableValue extends GenericNullableCorrectnessTableValue<Integer[]> {
-    protected renderValueTypeId: RenderValue.TypeId;
+    protected renderValueTypeId: TextFormattableValue.TypeId;
 
     protected createRenderValue() {
         return new IntegerArrayRenderValue(this.data === null ? undefined : this.data, this.renderValueTypeId);
@@ -127,6 +127,6 @@ export abstract class BaseNullableIntegerCorrectnessArrayTableValue extends Gene
 export class NullableIntegerArrayCorrectnessTableValue extends BaseNullableIntegerCorrectnessArrayTableValue {
     constructor() {
         super();
-        this.renderValueTypeId = RenderValue.TypeId.IntegerArray;
+        this.renderValueTypeId = TextFormattableValue.TypeId.IntegerArray;
     }
 }

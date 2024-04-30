@@ -5,13 +5,13 @@
  */
 
 import { RevTableFieldSourceDefinition } from '@xilytix/revgrid';
-import { RenderValue } from '../../../../services/internal-api';
+import { TextFormattableValue } from '../../../../services/internal-api';
 import { EnumInfoOutOfOrderError, Integer } from '../../../../sys/internal-api';
 // import { GridRecordFieldState } from '../../../record/grid-record-internal-api';
 import { CorrectnessTableField, TableField } from '../../field/internal-api';
 import { CorrectnessTableValue, TableValue } from '../../value/internal-api';
 
-export abstract class TableFieldSourceDefinition extends RevTableFieldSourceDefinition<TableFieldSourceDefinition.TypeId, RenderValue.TypeId, RenderValue.Attribute.TypeId> {
+export abstract class TableFieldSourceDefinition extends RevTableFieldSourceDefinition<TableFieldSourceDefinition.TypeId, TextFormattableValue.TypeId, TextFormattableValue.Attribute.TypeId> {
     constructor(typeId: TableFieldSourceDefinition.TypeId) {
         super(typeId, TableFieldSourceDefinition.Type.idToName(typeId));
     }

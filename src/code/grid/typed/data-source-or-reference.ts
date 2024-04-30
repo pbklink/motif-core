@@ -5,7 +5,7 @@
  */
 
 import { RevDataSourceOrReference } from '@xilytix/revgrid';
-import { RenderValue } from '../../services/internal-api';
+import { TextFormattableValue } from '../../services/internal-api';
 import { AssertInternalError, Badness, Err, ErrorCode, LockOpenListItem, Ok, PickEnum, Result, UnreachableCaseError } from '../../sys/internal-api';
 import { TableFieldSourceDefinition, TableRecordSourceDefinition } from '../table/internal-api';
 
@@ -13,8 +13,8 @@ export class DataSourceOrReference extends RevDataSourceOrReference<
     Badness,
     TableRecordSourceDefinition.TypeId,
     TableFieldSourceDefinition.TypeId,
-    RenderValue.TypeId,
-    RenderValue.Attribute.TypeId
+    TextFormattableValue.TypeId,
+    TextFormattableValue.Attribute.TypeId
 > {
 }
 

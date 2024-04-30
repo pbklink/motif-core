@@ -13,10 +13,10 @@ import {
     MarketIdRenderValue,
     OrderSideIdRenderValue,
     PriceRenderValue,
-    RenderValue,
     SourceTzOffsetDateTimeTimeRenderValue,
     StringArrayRenderValue,
     StringRenderValue,
+    TextFormattableValue,
     TradeAffectsIdArrayRenderValue,
     TradeFlagIdArrayRenderValue,
     TrendIdRenderValue
@@ -48,18 +48,18 @@ export abstract class DayTradesGridField extends GridField implements RevRecordF
 
     get isBrokerPrivateData() { return DayTradesDataItem.Field.idToIsBrokerPrivateData(this._id); }
 
-    override getViewValue(record: DayTradesDataItem.Record): RenderValue {
+    override getViewValue(record: DayTradesDataItem.Record): TextFormattableValue {
         const { renderValue, cellAttribute } = this.createRenderValue(record);
 
         // add attributes in correct priority order.  1st will be applied last (highest priority)
         const correctnessId = this._getDataItemCorrectnessIdEvent();
         switch (correctnessId) {
             case CorrectnessId.Suspect: {
-                renderValue.addAttribute(RenderValue.DataCorrectnessAttribute.suspect);
+                renderValue.addAttribute(TextFormattableValue.DataCorrectnessAttribute.suspect);
                 break;
             }
             case CorrectnessId.Error: {
-                renderValue.addAttribute(RenderValue.DataCorrectnessAttribute.error);
+                renderValue.addAttribute(TextFormattableValue.DataCorrectnessAttribute.error);
                 break;
             }
             case CorrectnessId.Usable:
@@ -71,17 +71,17 @@ export abstract class DayTradesGridField extends GridField implements RevRecordF
 
                 switch (record.typeId) {
                     case DayTradesDataItem.Record.TypeId.Cancelled:
-                        renderValue.addAttribute(RenderValue.cancelledAttribute);
+                        renderValue.addAttribute(TextFormattableValue.cancelledAttribute);
                         break;
                     case DayTradesDataItem.Record.TypeId.Canceller:
-                        renderValue.addAttribute(RenderValue.cancellerAttribute);
+                        renderValue.addAttribute(TextFormattableValue.cancellerAttribute);
                         break;
                 }
 
                 const tradeRecord = record.tradeRecord;
 
                 if (tradeRecord.buyCrossRef !== undefined || tradeRecord.sellCrossRef !== undefined) {
-                    renderValue.addAttribute(RenderValue.ownOrderAttribute);
+                    renderValue.addAttribute(TextFormattableValue.ownOrderAttribute);
                 } else {
                     // const buyOrderId = tradeRecord.buyDepthOrderId;
                     // const sellOrderId = tradeRecord.sellDepthOrderId;
@@ -114,7 +114,7 @@ export abstract class DayTradesGridField extends GridField implements RevRecordF
     }
 
     // eslint-disable-next-line @typescript-eslint/no-empty-function
-    protected addRenderAttributes(renderValue: RenderValue, record: DayTradesDataItem.Record, cellAttribute: RenderValue.Attribute) {
+    protected addRenderAttributes(renderValue: TextFormattableValue, record: DayTradesDataItem.Record, cellAttribute: TextFormattableValue.Attribute) {
 
     }
 
@@ -131,8 +131,8 @@ export namespace DayTradesGridField {
     export const sourceDefinition = new RevRecordSourcedFieldSourceDefinition('DayTrades');
 
     export interface CreateRenderValueResult {
-        renderValue: RenderValue;
-        cellAttribute: RenderValue.Attribute | undefined;
+        renderValue: TextFormattableValue;
+        cellAttribute: TextFormattableValue.Attribute | undefined;
     }
 
     export function createField(
@@ -452,13 +452,13 @@ export class IdDayTradesGridField extends DayTradesGridField {
 /** @internal */
 export class PriceDayTradesGridField extends DayTradesGridField {
     protected createRenderValue(record: DayTradesDataItem.Record) {
-        let cellAttribute: RenderValue.HigherLowerAttribute | undefined;
+        let cellAttribute: TextFormattableValue.HigherLowerAttribute | undefined;
         switch (record.tradeRecord.trendId) {
             case MovementId.Up:
-                cellAttribute = RenderValue.HigherLowerAttribute.higher;
+                cellAttribute = TextFormattableValue.HigherLowerAttribute.higher;
                 break;
             case MovementId.Down:
-                cellAttribute = RenderValue.HigherLowerAttribute.lower;
+                cellAttribute = TextFormattableValue.HigherLowerAttribute.lower;
                 break;
 
             default:

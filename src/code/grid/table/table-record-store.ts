@@ -5,7 +5,7 @@
  */
 
 import { RevTableRecordStore } from '@xilytix/revgrid';
-import { RenderValue } from '../../services/internal-api';
+import { TextFormattableValue } from '../../services/internal-api';
 import { Badness } from "../../sys/internal-api";
 import { TableFieldSourceDefinition } from './field-source/internal-api';
 import { TableRecordSourceDefinition } from './record-source/internal-api';
@@ -15,7 +15,7 @@ export class TableRecordStore extends RevTableRecordStore<
     Badness,
     TableRecordSourceDefinition.TypeId,
     TableFieldSourceDefinition.TypeId,
-    RenderValue.TypeId,
-    RenderValue.Attribute.TypeId
+    TextFormattableValue.TypeId,
+    TextFormattableValue.Attribute.TypeId
 > {
 }

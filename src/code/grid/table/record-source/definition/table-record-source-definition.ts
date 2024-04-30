@@ -6,7 +6,7 @@
 
 import { RevSourcedFieldCustomHeadingsService, RevTableRecordSourceDefinition } from '@xilytix/revgrid';
 import { StringId, Strings } from '../../../../res/internal-api';
-import { RenderValue } from '../../../../services/internal-api';
+import { TextFormattableValue } from '../../../../services/internal-api';
 import {
     EnumInfoOutOfOrderError,
     Err,
@@ -23,8 +23,8 @@ import { TableFieldSourceDefinition, TableFieldSourceDefinitionCachingFactorySer
 export abstract class TableRecordSourceDefinition extends RevTableRecordSourceDefinition<
     TableRecordSourceDefinition.TypeId,
     TableFieldSourceDefinition.TypeId,
-    RenderValue.TypeId,
-    RenderValue.Attribute.TypeId
+    TextFormattableValue.TypeId,
+    TextFormattableValue.Attribute.TypeId
 > {
     constructor(
         customHeadingsService: RevSourcedFieldCustomHeadingsService,

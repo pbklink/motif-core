@@ -5,7 +5,7 @@
  */
 
 import { AdiService, HigherLowerId, LitIvemId, SecurityDataDefinition, SecurityDataItem } from '../../../adi/internal-api';
-import { RenderValue } from '../../../services/internal-api';
+import { TextFormattableValue } from '../../../services/internal-api';
 import {
     AssertInternalError,
     Decimal,
@@ -447,10 +447,10 @@ export class SecurityDataItemTableValueSource extends TableValueSource {
     private loadHigherLower(value: TableValue, higherLowerId: HigherLowerId) {
         switch (higherLowerId) {
             case HigherLowerId.Higher:
-                value.addRenderAttribute(RenderValue.HigherLowerAttribute.higher);
+                value.addRenderAttribute(TextFormattableValue.HigherLowerAttribute.higher);
                 break;
             case HigherLowerId.Lower:
-                value.addRenderAttribute(RenderValue.HigherLowerAttribute.lower);
+                value.addRenderAttribute(TextFormattableValue.HigherLowerAttribute.lower);
                 break;
         }
     }

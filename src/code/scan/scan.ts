@@ -21,7 +21,7 @@ import {
     ZenithEncodedScanFormula
 } from '../adi/internal-api';
 import { StringId, Strings } from '../res/internal-api';
-import { EnumRenderValue, RankedLitIvemIdListDirectoryItem, RenderValue } from '../services/internal-api';
+import { EnumRenderValue, RankedLitIvemIdListDirectoryItem, TextFormattableValue } from '../services/internal-api';
 import {
     AssertInternalError,
     Correctness,
@@ -995,12 +995,12 @@ export namespace Scan {
 
     export class CriteriaTypeIdRenderValue extends EnumRenderValue {
         constructor(data: CriterionId | undefined) {
-            super(data, RenderValue.TypeId.ScanCriteriaTypeId);
+            super(data, TextFormattableValue.TypeId.ScanCriteriaTypeId);
         }
     }
     export class TargetTypeIdRenderValue extends EnumRenderValue {
         constructor(data: ScanTargetTypeId | undefined) {
-            super(data, RenderValue.TypeId.ScanTargetTypeId);
+            super(data, TextFormattableValue.TypeId.ScanTargetTypeId);
         }
     }
 

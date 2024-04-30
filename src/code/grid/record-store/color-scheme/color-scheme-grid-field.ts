@@ -15,8 +15,8 @@ import {
     IntegerRenderValue,
     IsReadableRenderValue,
     NumberRenderValue,
-    RenderValue,
-    StringRenderValue
+    StringRenderValue,
+    TextFormattableValue
 } from '../../../services/internal-api';
 import {
     UnreachableCaseError
@@ -34,7 +34,7 @@ export abstract class ColorSchemeGridField extends GridField implements RevRecor
 
     get colorSettings() { return this._colorSettings; }
 
-    abstract override getViewValue(record: ColorSchemeGridRecordStore.Record): RenderValue;
+    abstract override getViewValue(record: ColorSchemeGridRecordStore.Record): TextFormattableValue;
 }
 
 export namespace ColorSchemeGridField {
@@ -203,7 +203,7 @@ export class ResolvedBkgdColorTextColorSchemeGridField extends ColorSchemeGridFi
 
     getViewValue(record: ColorSchemeGridRecordStore.Record): StringRenderValue {
         const stateId = this.colorSettings.getBkgdItemStateId(record.itemId);
-        let attribute: RenderValue.GreyedOutAttribute | undefined;
+        let attribute: TextFormattableValue.GreyedOutAttribute | undefined;
         let value: string;
 
         switch (stateId) {
@@ -214,7 +214,7 @@ export class ResolvedBkgdColorTextColorSchemeGridField extends ColorSchemeGridFi
             case ColorSettings.ItemStateId.Inherit:
                 value = this.colorSettings.getBkgd(record.itemId);
                 attribute = {
-                    typeId: RenderValue.Attribute.TypeId.GreyedOut,
+                    typeId: TextFormattableValue.Attribute.TypeId.GreyedOut,
                 };
                 break;
             case ColorSettings.ItemStateId.Value:
@@ -263,7 +263,7 @@ export class ResolvedForeColorTextColorSchemeGridField extends ColorSchemeGridFi
 
     getViewValue(record: ColorSchemeGridRecordStore.Record): StringRenderValue {
         const stateId = this.colorSettings.getForeItemStateId(record.itemId);
-        let attribute: RenderValue.GreyedOutAttribute | undefined;
+        let attribute: TextFormattableValue.GreyedOutAttribute | undefined;
         let value: string;
 
         switch (stateId) {
@@ -274,7 +274,7 @@ export class ResolvedForeColorTextColorSchemeGridField extends ColorSchemeGridFi
             case ColorSettings.ItemStateId.Inherit:
                 value = this.colorSettings.getFore(record.itemId);
                 attribute = {
-                    typeId: RenderValue.Attribute.TypeId.GreyedOut,
+                    typeId: TextFormattableValue.Attribute.TypeId.GreyedOut,
                 };
                 break;
             case ColorSettings.ItemStateId.Value:

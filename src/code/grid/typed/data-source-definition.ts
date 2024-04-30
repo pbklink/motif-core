@@ -6,7 +6,7 @@
 
 import { RevDataSourceDefinition } from '@xilytix/revgrid';
 import { UnreachableCaseError } from '@xilytix/sysutils';
-import { RenderValue } from '../../services/internal-api';
+import { TextFormattableValue } from '../../services/internal-api';
 import { Err, ErrorCode, JsonElement, Ok, PickEnum, Result } from '../../sys/internal-api';
 import { TableFieldSourceDefinition, TableRecordSourceDefinition } from '../table/internal-api';
 import { TableRecordSourceDefinitionFromJsonFactory } from './table-record-source-definition-from-json-factory';
@@ -14,8 +14,8 @@ import { TableRecordSourceDefinitionFromJsonFactory } from './table-record-sourc
 export class DataSourceDefinition extends RevDataSourceDefinition<
     TableRecordSourceDefinition.TypeId,
     TableFieldSourceDefinition.TypeId,
-    RenderValue.TypeId,
-    RenderValue.Attribute.TypeId
+    TextFormattableValue.TypeId,
+    TextFormattableValue.Attribute.TypeId
 > {
 
 }

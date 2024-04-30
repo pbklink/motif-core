@@ -5,14 +5,14 @@
  */
 
 import { RevRecordField, RevRecordSourcedFieldSourceDefinition } from '@xilytix/revgrid';
-import { RenderValue } from '../../../services/internal-api';
+import { TextFormattableValue } from '../../../services/internal-api';
 import { CorrectnessId } from '../../../sys/internal-api';
 import { GridField } from '../../field/internal-api';
 import { DepthRecord } from './depth-record';
 
 /** @public */
 export abstract class DepthSideGridField extends GridField implements RevRecordField {
-    abstract override getViewValue(record: DepthRecord): RenderValue;
+    abstract override getViewValue(record: DepthRecord): TextFormattableValue;
 }
 
 /** @public */

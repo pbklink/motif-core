@@ -5,7 +5,7 @@
  */
 
 import { RevRecordValueRecentChangeTypeId } from '@xilytix/revgrid';
-import { RenderValue } from '../../../services/render-value';
+import { TextFormattableValue } from '../../../services/render-value';
 import { Integer, MultiEvent, UnreachableCaseError } from '../../../sys/internal-api';
 import { IntegerTableValue, StringTableValue, TableValue, TableValueSource, VisibleTableValue } from '../../table/internal-api';
 import { EditableColumnLayoutDefinitionColumn } from './editable-column-layout-definition-column';
@@ -91,19 +91,19 @@ export class EditableColumnLayoutDefinitionColumnTableValueSource extends TableV
             case EditableColumnLayoutDefinitionColumn.FieldId.FieldName:
                 (value as StringTableValue).data = this._record.fieldName;
                 if (this._record.anchored) {
-                    value.addRenderAttribute(RenderValue.greyedOutAttribute);
+                    value.addRenderAttribute(TextFormattableValue.greyedOutAttribute);
                 }
                 break;
             case EditableColumnLayoutDefinitionColumn.FieldId.FieldSourceName:
                 (value as StringTableValue).data = this._record.fieldSourceName;
                 if (this._record.anchored) {
-                    value.addRenderAttribute(RenderValue.greyedOutAttribute);
+                    value.addRenderAttribute(TextFormattableValue.greyedOutAttribute);
                 }
                 break;
             case EditableColumnLayoutDefinitionColumn.FieldId.FieldHeading:
                 (value as StringTableValue).data = this._record.fieldHeading;
                 if (this._record.anchored) {
-                    value.addRenderAttribute(RenderValue.greyedOutAttribute);
+                    value.addRenderAttribute(TextFormattableValue.greyedOutAttribute);
                 }
                 break;
             case EditableColumnLayoutDefinitionColumn.FieldId.Width:

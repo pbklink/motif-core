@@ -5,7 +5,7 @@
  */
 
 import { RevDataSource, RevReferenceableDataSourcesService } from '@xilytix/revgrid';
-import { RenderValue } from '../../services/internal-api';
+import { TextFormattableValue } from '../../services/internal-api';
 import { Badness, JsonElement, LockOpenList, SysTick, mSecsPerSec } from '../../sys/internal-api';
 import { ReferenceableColumnLayoutsService } from '../layout/internal-api';
 import { TableFieldSourceDefinition, TableFieldSourceDefinitionFactory, TableRecordSourceDefinition } from '../table/internal-api';
@@ -19,8 +19,8 @@ export class ReferenceableDataSourcesService
         Badness,
         TableRecordSourceDefinition.TypeId,
         TableFieldSourceDefinition.TypeId,
-        RenderValue.TypeId,
-        RenderValue.Attribute.TypeId
+        TextFormattableValue.TypeId,
+        TextFormattableValue.Attribute.TypeId
     > {
     private _saveModified: boolean;
     private nextPeriodicSaveCheckTime: SysTick.Time =

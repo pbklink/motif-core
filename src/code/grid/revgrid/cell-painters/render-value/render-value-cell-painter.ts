@@ -4,8 +4,8 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevCachedCanvasRenderingContext2D, RevDatalessViewCell, RevRectangle, RevDataServer, RevSelectionAreaTypeId } from '@xilytix/revgrid';
-import { ColorScheme, ColorSettings, RenderValue, ScalarSettings, SettingsService } from '../../../../services/internal-api';
+import { RevCachedCanvasRenderingContext2D, RevDataServer, RevDatalessViewCell, RevRectangle, RevSelectionAreaTypeId } from '@xilytix/revgrid';
+import { ColorScheme, ColorSettings, ScalarSettings, SettingsService, TextFormattableValue } from '../../../../services/internal-api';
 import { IndexSignatureHack } from '../../../../sys/internal-api';
 import { GridField } from '../../../field/internal-api';
 import { SourcedFieldGrid } from '../../adapted-revgrid/sourced-field-grid';
@@ -171,7 +171,7 @@ export abstract class RenderValueCellPainter {
         }
     }
 
-    abstract paintValue(cell: RevDatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined, renderValue: RenderValue): number | undefined;
+    abstract paintValue(cell: RevDatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined, renderValue: TextFormattableValue): number | undefined;
 }
 
 export namespace RenderValueCellPainter {

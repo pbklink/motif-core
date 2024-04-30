@@ -4,9 +4,9 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevRenderValue, RevTableField } from '@xilytix/revgrid';
+import { RevTableField, RevTextFormatterService } from '@xilytix/revgrid';
 import { IvemId, LitIvemId } from '../../../adi/internal-api';
-import { RenderValue } from '../../../services/internal-api';
+import { TextFormattableValue } from '../../../services/internal-api';
 import {
     Integer,
     SourceTzOffsetDate,
@@ -43,13 +43,13 @@ import {
     TableValue
 } from '../value/internal-api';
 
-export abstract class TableField extends RevTableField<RenderValue.TypeId, RenderValue.Attribute.TypeId> {
+export abstract class TableField extends RevTableField<TextFormattableValue.TypeId, TextFormattableValue.Attribute.TypeId> {
 
 }
 
 export namespace TableField {
-    export type Definition = RevTableField.Definition<RenderValue.TypeId, RenderValue.Attribute.TypeId>;
-    export type Constructor = RevTableField.Constructor<RenderValue.TypeId, RenderValue.Attribute.TypeId>;
+    export type Definition = RevTableField.Definition<TextFormattableValue.TypeId, TextFormattableValue.Attribute.TypeId>;
+    export type Constructor = RevTableField.Constructor<TextFormattableValue.TypeId, TextFormattableValue.Attribute.TypeId>;
 }
 
 // eslint-disable-next-line max-len
@@ -91,8 +91,8 @@ export class BooleanTableField extends TableField {
     protected compareDefined(left: TableValue, right: TableValue): number {
         const leftRenderValue = left.renderValue;
         const rightRenderValue = right.renderValue;
-        const leftFormattedText = this.textFormatter.formatRenderValue(leftRenderValue);
-        const rightFormattedText = this.textFormatter.formatRenderValue(rightRenderValue);
+        const leftFormattedText = this.textFormatter.format(leftRenderValue);
+        const rightFormattedText = this.textFormatter.format(rightRenderValue);
 
         return compareString(leftFormattedText, rightFormattedText);
     }
@@ -101,8 +101,8 @@ export class EnumTableField extends TableField {
     protected compareDefined(left: TableValue, right: TableValue): number {
         const leftRenderValue = left.renderValue;
         const rightRenderValue = right.renderValue;
-        const leftFormattedText = this.textFormatter.formatRenderValue(leftRenderValue);
-        const rightFormattedText = this.textFormatter.formatRenderValue(rightRenderValue);
+        const leftFormattedText = this.textFormatter.format(leftRenderValue);
+        const rightFormattedText = this.textFormatter.format(rightRenderValue);
 
         return compareString(leftFormattedText, rightFormattedText);
     }
@@ -120,7 +120,7 @@ export abstract class CorrectnessTableField extends TableField {
 
 export namespace CorrectnessTableField {
     export type Constructor = new(
-        textFormatter: RevRenderValue.TextFormatter<RenderValue.TypeId, RenderValue.Attribute.TypeId>,
+        textFormatterService: RevTextFormatterService<TextFormattableValue.TypeId, TextFormattableValue.Attribute.TypeId>,
         definition: TableField.Definition,
         heading: string,
     ) => CorrectnessTableField;
@@ -182,8 +182,8 @@ export class BooleanCorrectnessTableField extends CorrectnessTableField {
     protected compareDefined(left: CorrectnessTableValue, right: CorrectnessTableValue): number {
         const leftRenderValue = left.renderValue;
         const rightRenderValue = right.renderValue;
-        const leftFormattedText = this.textFormatter.formatRenderValue(leftRenderValue);
-        const rightFormattedText = this.textFormatter.formatRenderValue(rightRenderValue);
+        const leftFormattedText = this.textFormatter.format(leftRenderValue);
+        const rightFormattedText = this.textFormatter.format(rightRenderValue);
 
         return compareString(leftFormattedText, rightFormattedText);
     }
@@ -192,8 +192,8 @@ export class EnumCorrectnessTableField extends CorrectnessTableField {
     protected compareDefined(left: CorrectnessTableValue, right: CorrectnessTableValue): number {
         const leftRenderValue = left.renderValue;
         const rightRenderValue = right.renderValue;
-        const leftFormattedText = this.textFormatter.formatRenderValue(leftRenderValue);
-        const rightFormattedText = this.textFormatter.formatRenderValue(rightRenderValue);
+        const leftFormattedText = this.textFormatter.format(leftRenderValue);
+        const rightFormattedText = this.textFormatter.format(rightRenderValue);
 
         return compareString(leftFormattedText, rightFormattedText);
     }

@@ -13,9 +13,9 @@ import {
     MarketIdRenderValue,
     PriceAndHasUndisclosedRenderValue,
     PriceRenderValue,
-    RenderValue,
     StringArrayRenderValue,
-    StringRenderValue
+    StringRenderValue,
+    TextFormattableValue
 } from '../../../../services/internal-api';
 import {
     AssertInternalError,
@@ -36,7 +36,7 @@ import { FullDepthSideField, FullDepthSideFieldId } from './full-depth-side-fiel
 export abstract class FullDepthRecord extends DepthRecord {
     // protected renderRecord = new Array<RenderValue | undefined>(FullDepthSideField.idCount);
 
-    getRenderValue(id: FullDepthSideFieldId, sideId: OrderSideId, dataCorrectnessAttribute: RenderValue.Attribute | undefined) {
+    getRenderValue(id: FullDepthSideFieldId, sideId: OrderSideId, dataCorrectnessAttribute: TextFormattableValue.Attribute | undefined) {
         const { renderValue, extraAttribute } = this.createRenderValue(id);
 
         // Create attributes array.  First figure out how many elements
@@ -49,7 +49,7 @@ export abstract class FullDepthRecord extends DepthRecord {
         }
 
         // Create array
-        const attributes = new Array<RenderValue.Attribute>(attributeCount);
+        const attributes = new Array<TextFormattableValue.Attribute>(attributeCount);
 
         // Add required elements - must be in correct order
         let attributeIdx = 0;
@@ -60,7 +60,7 @@ export abstract class FullDepthRecord extends DepthRecord {
             attributes[attributeIdx++] = extraAttribute;
         }
         const recordAttribute: DepthRecordRenderValue.Attribute = {
-            typeId: RenderValue.Attribute.TypeId.DepthRecord,
+            typeId: TextFormattableValue.Attribute.TypeId.DepthRecord,
             orderSideId: sideId,
             depthRecordTypeId: this.typeId,
             ownOrder: this.isOwnOrder(),
@@ -283,8 +283,8 @@ export class OrderFullDepthRecord extends FullDepthRecord {
     }
     private createCountXrefRenderValue(): DepthRecord.CreateRenderValueResult {
         const renderValue = new StringRenderValue(this.order.crossRef);
-        const extraAttribute: RenderValue.DepthCountXRefFieldAttribute = {
-            typeId: RenderValue.Attribute.TypeId.DepthCountXRefField,
+        const extraAttribute: TextFormattableValue.DepthCountXRefFieldAttribute = {
+            typeId: TextFormattableValue.Attribute.TypeId.DepthCountXRefField,
             isCountAndXrefs: false,
         };
         return { renderValue, extraAttribute };
@@ -690,8 +690,8 @@ export class PriceLevelFullDepthRecord extends FullDepthRecord {
     }
     private createCountXrefRenderValue(): DepthRecord.CreateRenderValueResult {
         const renderValue = new CountAndXrefsRenderValue( { count: this._count, xrefs: this._xrefs });
-        const extraAttribute: RenderValue.DepthCountXRefFieldAttribute = {
-            typeId: RenderValue.Attribute.TypeId.DepthCountXRefField,
+        const extraAttribute: TextFormattableValue.DepthCountXRefFieldAttribute = {
+            typeId: TextFormattableValue.Attribute.TypeId.DepthCountXRefField,
             isCountAndXrefs: true,
         };
         return { renderValue, extraAttribute };

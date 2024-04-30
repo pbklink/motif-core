@@ -12,7 +12,7 @@ import {
     PriceOrRemainderAndHasUndisclosedRenderValue,
     PriceOrRemainderRenderValue,
     PriceRenderValue,
-    RenderValue
+    TextFormattableValue
 } from '../../../../services/internal-api';
 import {
     Integer,
@@ -100,7 +100,7 @@ export class ShortDepthRecord extends DepthRecord {
         return result;
     }
 
-    getRenderValue(id: ShortDepthSideFieldId, sideId: OrderSideId, dataCorrectnessAttribute: RenderValue.Attribute | undefined) {
+    getRenderValue(id: ShortDepthSideFieldId, sideId: OrderSideId, dataCorrectnessAttribute: TextFormattableValue.Attribute | undefined) {
         const { renderValue, extraAttribute } = this.createRenderValue(id);
 
         // Create attributes array.  First figure out how many elements
@@ -113,7 +113,7 @@ export class ShortDepthRecord extends DepthRecord {
         }
 
         // Create array
-        const attributes = new Array<RenderValue.Attribute>(attributeCount);
+        const attributes = new Array<TextFormattableValue.Attribute>(attributeCount);
 
         // Add required elements - must be in correct order
         let attributeIdx = 0;
@@ -124,7 +124,7 @@ export class ShortDepthRecord extends DepthRecord {
             attributes[attributeIdx++] = extraAttribute;
         }
         const recordAttribute: DepthRecordRenderValue.Attribute = {
-            typeId: RenderValue.Attribute.TypeId.DepthRecord,
+            typeId: TextFormattableValue.Attribute.TypeId.DepthRecord,
             orderSideId: sideId,
             depthRecordTypeId: DepthRecord.TypeId.PriceLevel,
             ownOrder: false,

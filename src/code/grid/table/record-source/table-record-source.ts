@@ -5,7 +5,7 @@
  */
 
 import { RevSourcedFieldCustomHeadingsService, RevTableRecordSource } from '@xilytix/revgrid';
-import { RenderValue } from '../../../services/internal-api';
+import { TextFormattableValue } from '../../../services/internal-api';
 import { Badness, CorrectnessBadness, MultiEvent } from '../../../sys/internal-api';
 import { TextFormatterService } from '../../../text-format/internal-api';
 import { TableFieldSourceDefinition, TableFieldSourceDefinitionCachingFactoryService } from '../field-source/internal-api';
@@ -15,8 +15,8 @@ export abstract class TableRecordSource extends RevTableRecordSource<
     Badness,
     TableRecordSourceDefinition.TypeId,
     TableFieldSourceDefinition.TypeId,
-    RenderValue.TypeId,
-    RenderValue.Attribute.TypeId
+    TextFormattableValue.TypeId,
+    TextFormattableValue.Attribute.TypeId
 > {
     private _correctnessBadnessUsableChangedSubscriptionId: MultiEvent.SubscriptionId;
 

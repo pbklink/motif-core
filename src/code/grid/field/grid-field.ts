@@ -6,10 +6,10 @@
 
 import { RevRecordSourcedField, RevSourcedField } from '@xilytix/revgrid';
 import { StringId, Strings } from '../../res/internal-api';
-import { RenderValue } from '../../services/internal-api';
+import { TextFormattableValue } from '../../services/internal-api';
 import { UnreachableCaseError } from '../../sys/internal-api';
 
-export abstract class GridField extends RevRecordSourcedField<RenderValue.TypeId, RenderValue.Attribute.TypeId> {
+export abstract class GridField extends RevRecordSourcedField<TextFormattableValue.TypeId, TextFormattableValue.Attribute.TypeId> {
 
 }
 

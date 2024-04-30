@@ -1,6 +1,6 @@
 import { RevColumnLayout, RevDatalessSubgrid, RevGridDefinition, RevGridOptions, RevRecordSchemaServer, RevSourcedFieldCustomHeadingsService, RevSubgrid, RevTableGrid, RevViewLayout } from '@xilytix/revgrid';
 import { MultiEvent } from '@xilytix/sysutils';
-import { RenderValue, SettingsService } from '../../../services/internal-api';
+import { SettingsService, TextFormattableValue } from '../../../services/internal-api';
 import { Badness } from '../../../sys/internal-api';
 import { GridField } from '../../field/internal-api';
 import { ReferenceableColumnLayoutsService } from '../../layout/internal-api';
@@ -14,8 +14,8 @@ export class TableGrid extends RevTableGrid<
     Badness,
     TableRecordSourceDefinition.TypeId,
     TableFieldSourceDefinition.TypeId,
-    RenderValue.TypeId,
-    RenderValue.Attribute.TypeId,
+    TextFormattableValue.TypeId,
+    TextFormattableValue.Attribute.TypeId,
     AdaptedRevgridBehavioredGridSettings,
     AdaptedRevgridBehavioredColumnSettings
 > {

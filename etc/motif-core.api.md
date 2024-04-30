@@ -200,7 +200,6 @@ import { RevReferenceableDataSource } from '@xilytix/revgrid';
 import { RevReferenceableDataSourceDefinition } from '@xilytix/revgrid';
 import { RevReferenceableDataSourceDefinitionsStoreService } from '@xilytix/revgrid';
 import { RevReferenceableDataSourcesService } from '@xilytix/revgrid';
-import { RevRenderValue } from '@xilytix/revgrid';
 import { RevSingleHeadingDataRowArraySourcedFieldGrid } from '@xilytix/revgrid';
 import { RevSingleHeadingDataServer } from '@xilytix/revgrid';
 import { RevSourcedField } from '@xilytix/revgrid';
@@ -226,6 +225,8 @@ import { RevTableRecordStore } from '@xilytix/revgrid';
 import { RevTableValue } from '@xilytix/revgrid';
 import { RevTableValueSource } from '@xilytix/revgrid';
 import { RevTableValuesRecord } from '@xilytix/revgrid';
+import { RevTextFormattableValue } from '@xilytix/revgrid';
+import { RevTextFormatterService } from '@xilytix/revgrid';
 import { RevTextTruncateTypeId } from '@xilytix/revgrid';
 import { RevViewLayout } from '@xilytix/revgrid';
 import { RGB } from '@xilytix/sysutils';
@@ -1173,7 +1174,7 @@ export class AllowedExchangesExplicitElementsArrayUiAction extends EnumExplicitE
 // Warning: (ae-missing-release-tag) "AllowedGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class AllowedGridField extends RevAllowedRecordSourcedField<RenderValue.TypeId, RenderValue.Attribute.TypeId> {
+export class AllowedGridField extends RevAllowedRecordSourcedField<TextFormattableValue.TypeId, TextFormattableValue.Attribute.TypeId> {
 }
 
 // Warning: (ae-missing-release-tag) "AllowedMarketsEnumUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -1205,7 +1206,7 @@ export class AllowedMarketsExplicitElementsArrayUiAction extends EnumExplicitEle
 // Warning: (ae-missing-release-tag) "AllowedSourcedFieldsColumnLayoutDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class AllowedSourcedFieldsColumnLayoutDefinition extends RevAllowedRecordSourcedFieldsColumnLayoutDefinition<RenderValue.TypeId, RenderValue.Attribute.TypeId> {
+export class AllowedSourcedFieldsColumnLayoutDefinition extends RevAllowedRecordSourcedFieldsColumnLayoutDefinition<TextFormattableValue.TypeId, TextFormattableValue.Attribute.TypeId> {
 }
 
 // Warning: (ae-missing-release-tag) "AllScanCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -2320,7 +2321,7 @@ export abstract class BaseIntegerArrayCorrectnessTableValue extends GenericCorre
     // (undocumented)
     protected createRenderValue(): IntegerArrayRenderValue;
     // (undocumented)
-    protected renderValueTypeId: RenderValue.TypeId;
+    protected renderValueTypeId: TextFormattableValue.TypeId;
 }
 
 // Warning: (ae-missing-release-tag) "BaseIntegerArrayTableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -2330,7 +2331,7 @@ export abstract class BaseIntegerArrayTableValue extends GenericTableValue<Integ
     // (undocumented)
     protected createRenderValue(): IntegerArrayRenderValue;
     // (undocumented)
-    protected renderValueTypeId: RenderValue.TypeId;
+    protected renderValueTypeId: TextFormattableValue.TypeId;
 }
 
 // Warning: (ae-missing-release-tag) "BaseNullableDecimalCorrectnessTableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -2349,7 +2350,7 @@ export abstract class BaseNullableIntegerCorrectnessArrayTableValue extends Gene
     // (undocumented)
     protected createRenderValue(): IntegerArrayRenderValue;
     // (undocumented)
-    protected renderValueTypeId: RenderValue.TypeId;
+    protected renderValueTypeId: TextFormattableValue.TypeId;
 }
 
 // Warning: (ae-missing-release-tag) "BaseNumberCorrectnessTableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -2628,7 +2629,7 @@ export abstract class BooleanCorrectnessTableValue extends GenericCorrectnessTab
     // (undocumented)
     protected createRenderValue(): BooleanRenderValue;
     // (undocumented)
-    protected renderValueTypeId: RenderValue.TypeId;
+    protected renderValueTypeId: TextFormattableValue.TypeId;
 }
 
 export { BooleanOrUndefined }
@@ -2654,7 +2655,7 @@ export abstract class BooleanTableValue extends GenericTableValue<boolean> {
     // (undocumented)
     protected createRenderValue(): BooleanRenderValue;
     // (undocumented)
-    protected renderValueTypeId: RenderValue.TypeId;
+    protected renderValueTypeId: TextFormattableValue.TypeId;
 }
 
 export { BooleanUiAction }
@@ -4002,7 +4003,7 @@ export class CheckboxRenderValueCellPainter extends RenderValueCellPainter {
     // (undocumented)
     calculateClickBox(cell: RevDatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>): RevRectangle | undefined;
     // (undocumented)
-    paintValue(cell: RevDatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined, renderValue: RenderValue): Integer | undefined;
+    paintValue(cell: RevDatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined, renderValue: TextFormattableValue): Integer | undefined;
 }
 
 // @public (undocumented)
@@ -4610,7 +4611,7 @@ export abstract class ColorSchemeGridField extends GridField implements RevRecor
     // (undocumented)
     get colorSettings(): ColorSettings;
     // (undocumented)
-    abstract getViewValue(record: ColorSchemeGridRecordStore.Record): RenderValue;
+    abstract getViewValue(record: ColorSchemeGridRecordStore.Record): TextFormattableValue;
 }
 
 // @public (undocumented)
@@ -5434,7 +5435,7 @@ export abstract class CorrectnessTableField extends TableField {
 // @public (undocumented)
 export namespace CorrectnessTableField {
     // (undocumented)
-    export type Constructor = new (textFormatter: RevRenderValue.TextFormatter<RenderValue.TypeId, RenderValue.Attribute.TypeId>, definition: TableField.Definition, heading: string) => CorrectnessTableField;
+    export type Constructor = new (textFormatterService: RevTextFormatterService<TextFormattableValue.TypeId, TextFormattableValue.Attribute.TypeId>, definition: TableField.Definition, heading: string) => CorrectnessTableField;
 }
 
 // Warning: (ae-missing-release-tag) "CorrectnessTableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -6467,7 +6468,7 @@ export namespace DataMgr {
 // Warning: (ae-missing-release-tag) "DataSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class DataSource extends RevDataSource<Badness, TableRecordSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId, RenderValue.TypeId, RenderValue.Attribute.TypeId> {
+export class DataSource extends RevDataSource<Badness, TableRecordSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId, TextFormattableValue.TypeId, TextFormattableValue.Attribute.TypeId> {
 }
 
 // @public (undocumented)
@@ -6489,7 +6490,7 @@ export namespace DataSource {
 // Warning: (ae-missing-release-tag) "DataSourceDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class DataSourceDefinition extends RevDataSourceDefinition<TableRecordSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId, RenderValue.TypeId, RenderValue.Attribute.TypeId> {
+export class DataSourceDefinition extends RevDataSourceDefinition<TableRecordSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId, TextFormattableValue.TypeId, TextFormattableValue.Attribute.TypeId> {
 }
 
 // @public (undocumented)
@@ -6523,7 +6524,7 @@ export namespace DataSourceDefinition {
 // Warning: (ae-missing-release-tag) "DataSourceOrReference" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class DataSourceOrReference extends RevDataSourceOrReference<Badness, TableRecordSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId, RenderValue.TypeId, RenderValue.Attribute.TypeId> {
+export class DataSourceOrReference extends RevDataSourceOrReference<Badness, TableRecordSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId, TextFormattableValue.TypeId, TextFormattableValue.Attribute.TypeId> {
 }
 
 // @public (undocumented)
@@ -6540,7 +6541,7 @@ export namespace DataSourceOrReference {
 }
 
 // @public (undocumented)
-export class DataSourceOrReferenceDefinition extends RevDataSourceOrReferenceDefinition<TableRecordSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId, RenderValue.TypeId, RenderValue.Attribute.TypeId> {
+export class DataSourceOrReferenceDefinition extends RevDataSourceOrReferenceDefinition<TableRecordSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId, TextFormattableValue.TypeId, TextFormattableValue.Attribute.TypeId> {
 }
 
 // @public (undocumented)
@@ -7058,7 +7059,7 @@ export class DayTradesDataItemRecordTypeIdRenderValue extends EnumRenderValue {
 export abstract class DayTradesGridField extends GridField implements RevRecordField {
     constructor(_id: DayTradesDataItem.Field.Id, definition: RevRecordSourcedFieldDefinition, _getDataItemCorrectnessIdEvent: DayTradesGridField.GetDataItemCorrectnessIdEventHandler);
     // (undocumented)
-    protected addRenderAttributes(renderValue: RenderValue, record: DayTradesDataItem.Record, cellAttribute: RenderValue.Attribute): void;
+    protected addRenderAttributes(renderValue: TextFormattableValue, record: DayTradesDataItem.Record, cellAttribute: TextFormattableValue.Attribute): void;
     // (undocumented)
     compare(left: DayTradesDataItem.Record, right: DayTradesDataItem.Record): number;
     // (undocumented)
@@ -7068,7 +7069,7 @@ export abstract class DayTradesGridField extends GridField implements RevRecordF
     // (undocumented)
     protected abstract createRenderValue(record: DayTradesDataItem.Record): DayTradesGridField.CreateRenderValueResult;
     // (undocumented)
-    getViewValue(record: DayTradesDataItem.Record): RenderValue;
+    getViewValue(record: DayTradesDataItem.Record): TextFormattableValue;
     // (undocumented)
     get isBrokerPrivateData(): boolean;
 }
@@ -7088,9 +7089,9 @@ export namespace DayTradesGridField {
     // (undocumented)
     export interface CreateRenderValueResult {
         // (undocumented)
-        cellAttribute: RenderValue.Attribute | undefined;
+        cellAttribute: TextFormattableValue.Attribute | undefined;
         // (undocumented)
-        renderValue: RenderValue;
+        renderValue: TextFormattableValue;
     }
     // (undocumented)
     export type GetDataItemCorrectnessIdEventHandler = (this: void) => CorrectnessId;
@@ -7717,9 +7718,9 @@ export namespace DepthRecord {
     // (undocumented)
     export interface CreateRenderValueResult {
         // (undocumented)
-        extraAttribute?: RenderValue.Attribute;
+        extraAttribute?: TextFormattableValue.Attribute;
         // (undocumented)
-        renderValue: RenderValue;
+        renderValue: TextFormattableValue;
     }
     // (undocumented)
     export interface ProcessVolumeAheadResult {
@@ -7748,14 +7749,14 @@ export namespace DepthRecordRenderValue {
         // (undocumented)
         ownOrder: boolean;
         // (undocumented)
-        readonly typeId: RenderValue.Attribute.TypeId.DepthRecord;
+        readonly typeId: TextFormattableValue.Attribute.TypeId.DepthRecord;
     }
 }
 
 // @public (undocumented)
 export abstract class DepthSideGridField extends GridField implements RevRecordField {
     // (undocumented)
-    abstract getViewValue(record: DepthRecord): RenderValue;
+    abstract getViewValue(record: DepthRecord): TextFormattableValue;
 }
 
 // @public (undocumented)
@@ -8166,7 +8167,7 @@ export abstract class EnumCorrectnessTableValue extends GenericCorrectnessTableV
     // (undocumented)
     protected createRenderValue(): EnumRenderValue;
     // (undocumented)
-    protected renderValueTypeId: RenderValue.TypeId;
+    protected renderValueTypeId: TextFormattableValue.TypeId;
 }
 
 export { EnumExplicitElementsArrayUiAction }
@@ -8196,7 +8197,7 @@ export abstract class EnumTableValue extends GenericTableValue<Integer> {
     // (undocumented)
     protected createRenderValue(): EnumRenderValue;
     // (undocumented)
-    protected renderValueTypeId: RenderValue.TypeId;
+    protected renderValueTypeId: TextFormattableValue.TypeId;
 }
 
 export { EnumUiAction }
@@ -10602,7 +10603,7 @@ export abstract class FullDepthRecord extends DepthRecord {
     // (undocumented)
     abstract getPrice(): Decimal;
     // (undocumented)
-    getRenderValue(id: FullDepthSideFieldId, sideId: OrderSideId, dataCorrectnessAttribute: RenderValue.Attribute | undefined): RenderValue;
+    getRenderValue(id: FullDepthSideFieldId, sideId: OrderSideId, dataCorrectnessAttribute: TextFormattableValue.Attribute | undefined): TextFormattableValue;
     // (undocumented)
     abstract getUndisclosedCount(): Integer;
     // (undocumented)
@@ -10680,7 +10681,7 @@ export class FullDepthSideGridField extends DepthSideGridField {
     // (undocumented)
     compareDesc(left: FullDepthRecord, right: FullDepthRecord): number;
     // (undocumented)
-    getViewValue(record: FullDepthRecord): RenderValue;
+    getViewValue(record: FullDepthRecord): TextFormattableValue;
 }
 
 // @public (undocumented)
@@ -10827,8 +10828,8 @@ export class GenericNullableDataItemTableField<DataType extends number | string,
 // Warning: (ae-missing-release-tag) "GenericRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export abstract class GenericRenderValue<T> extends RenderValue {
-    constructor(data: T | undefined, typeId: RenderValue.TypeId);
+export abstract class GenericRenderValue<T> extends TextFormattableValue {
+    constructor(data: T | undefined, typeId: TextFormattableValue.TypeId);
     // (undocumented)
     get definedData(): T;
     // (undocumented)
@@ -10873,7 +10874,7 @@ export { getUniqueElementArraysOverlapElements }
 // Warning: (ae-missing-release-tag) "GridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export abstract class GridField extends RevRecordSourcedField<RenderValue.TypeId, RenderValue.Attribute.TypeId> {
+export abstract class GridField extends RevRecordSourcedField<TextFormattableValue.TypeId, TextFormattableValue.Attribute.TypeId> {
 }
 
 // @public (undocumented)
@@ -11028,7 +11029,7 @@ export class GridOrderTriggerTypeIdCorrectnessTableValue extends EnumCorrectness
 // @public (undocumented)
 export namespace GridRecordStoreRenderValue {
     // (undocumented)
-    export interface Attribute extends RenderValue.Attribute {
+    export interface Attribute extends TextFormattableValue.Attribute {
     }
 }
 
@@ -17294,7 +17295,7 @@ export abstract class NullableBooleanCorrectnessTableValue extends GenericNullab
     // (undocumented)
     protected createRenderValue(): BooleanRenderValue;
     // (undocumented)
-    protected renderValueTypeId: RenderValue.TypeId;
+    protected renderValueTypeId: TextFormattableValue.TypeId;
 }
 
 // Warning: (ae-missing-release-tag) "NullableBooleanDataItemTableField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -17367,7 +17368,7 @@ export abstract class NullableEnumCorrectnessTableValue extends GenericNullableC
     // (undocumented)
     protected createRenderValue(): EnumRenderValue;
     // (undocumented)
-    protected renderValueTypeId: RenderValue.TypeId;
+    protected renderValueTypeId: TextFormattableValue.TypeId;
 }
 
 // Warning: (ae-missing-release-tag) "NullableEnumDataItemTableField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -22329,7 +22330,7 @@ export abstract class RecordsBrokerageAccountSubscriptionDataItem<Record extends
 // Warning: (ae-missing-release-tag) "RecordSourcedFieldGrid" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class RecordSourcedFieldGrid extends RevRecordSourcedFieldGrid<RenderValue.TypeId, RenderValue.Attribute.TypeId, AdaptedRevgridBehavioredGridSettings, AdaptedRevgridBehavioredColumnSettings, GridField> {
+export class RecordSourcedFieldGrid extends RevRecordSourcedFieldGrid<TextFormattableValue.TypeId, TextFormattableValue.Attribute.TypeId, AdaptedRevgridBehavioredGridSettings, AdaptedRevgridBehavioredColumnSettings, GridField> {
 }
 
 // Warning: (ae-missing-release-tag) "RecordsPublisherSubscriptionDataItem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -22416,13 +22417,13 @@ export class ReferenceableColumnLayoutsService extends LockOpenList<RevReference
 // Warning: (ae-missing-release-tag) "ReferenceableDataSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class ReferenceableDataSource extends RevReferenceableDataSource<Badness, TableRecordSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId, RenderValue.TypeId, RenderValue.Attribute.TypeId> {
+export class ReferenceableDataSource extends RevReferenceableDataSource<Badness, TableRecordSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId, TextFormattableValue.TypeId, TextFormattableValue.Attribute.TypeId> {
 }
 
 // Warning: (ae-missing-release-tag) "ReferenceableDataSourceDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class ReferenceableDataSourceDefinition extends RevReferenceableDataSourceDefinition<TableRecordSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId, RenderValue.TypeId, RenderValue.Attribute.TypeId> {
+export class ReferenceableDataSourceDefinition extends RevReferenceableDataSourceDefinition<TableRecordSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId, TextFormattableValue.TypeId, TextFormattableValue.Attribute.TypeId> {
 }
 
 // @public (undocumented)
@@ -22432,7 +22433,7 @@ export class ReferenceableDataSourceDefinitionsStoreService implements RevRefere
 // Warning: (ae-missing-release-tag) "ReferenceableDataSourcesService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class ReferenceableDataSourcesService extends LockOpenList<ReferenceableDataSource, ReferenceableDataSource, RevDataSource.LockErrorIdPlusTryError> implements RevReferenceableDataSourcesService<Badness, TableRecordSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId, RenderValue.TypeId, RenderValue.Attribute.TypeId> {
+export class ReferenceableDataSourcesService extends LockOpenList<ReferenceableDataSource, ReferenceableDataSource, RevDataSource.LockErrorIdPlusTryError> implements RevReferenceableDataSourcesService<Badness, TableRecordSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId, TextFormattableValue.TypeId, TextFormattableValue.Attribute.TypeId> {
     constructor(_referenceableColumnLayoutsService: ReferenceableColumnLayoutsService, _tableFieldSourceDefinitionFactory: TableFieldSourceDefinitionFactory, _tableRecordSourceFactory: TableRecordSourceFactory);
     // (undocumented)
     checkPeriodiSaveRequired(nowTime: SysTick.Time): void;
@@ -22500,316 +22501,6 @@ export { removeFromArray }
 export interface RemoveIrrcChange<T> extends InsertRemoveReplaceIrrcChange<T> {
     // (undocumented)
     typeId: IrrcChangeTypeId.Remove;
-}
-
-// Warning: (ae-missing-release-tag) "RenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "RenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export abstract class RenderValue implements RevRenderValue<RenderValue.TypeId, RenderValue.Attribute.TypeId> {
-    constructor(typeId: RenderValue.TypeId);
-    // (undocumented)
-    addAttribute(value: RenderValue.Attribute): void;
-    // (undocumented)
-    protected assign(other: RenderValue): void;
-    // (undocumented)
-    get attributes(): readonly RenderValue.Attribute[];
-    // (undocumented)
-    formattedText: string | undefined;
-    // (undocumented)
-    abstract isUndefined(): boolean;
-    // (undocumented)
-    setAttributes(value: RenderValue.Attribute[]): void;
-    // (undocumented)
-    readonly typeId: RenderValue.TypeId;
-}
-
-// @public (undocumented)
-export namespace RenderValue {
-    // (undocumented)
-    export interface AdvertAttribute extends Attribute {
-        // (undocumented)
-        readonly typeId: Attribute.TypeId.Advert;
-    }
-    // (undocumented)
-    export interface Attribute {
-        // (undocumented)
-        readonly typeId: Attribute.TypeId;
-    }
-    // (undocumented)
-    export namespace Attribute {
-        // (undocumented)
-        export const enum TypeId {
-            // (undocumented)
-            Advert = 10,
-            // (undocumented)
-            BackgroundColor = 2,
-            // (undocumented)
-            Cancelled = 7,
-            // (undocumented)
-            Canceller = 8,
-            // (undocumented)
-            Correctness = 0,
-            // (undocumented)
-            DepthCountXRefField = 4,
-            // (undocumented)
-            DepthRecord = 3,
-            // (undocumented)
-            DepthRecordInAuction = 5,
-            // (undocumented)
-            GreyedOut = 6,
-            // (undocumented)
-            HigherLower = 1,
-            // (undocumented)
-            OwnOrder = 9
-        }
-    }
-    // (undocumented)
-    export interface CancelledAttribute extends Attribute {
-        // (undocumented)
-        readonly typeId: Attribute.TypeId.Cancelled;
-    }
-    // (undocumented)
-    export interface CancellerAttribute extends Attribute {
-        // (undocumented)
-        readonly typeId: Attribute.TypeId.Canceller;
-    }
-    // (undocumented)
-    export interface CorrectnessAttribute extends Attribute {
-        // (undocumented)
-        correctnessId: CorrectnessId;
-        // (undocumented)
-        readonly typeId: Attribute.TypeId.Correctness;
-    }
-    // (undocumented)
-    export namespace DataCorrectnessAttribute {
-        const // (undocumented)
-        suspect: CorrectnessAttribute;
-        const // (undocumented)
-        error: CorrectnessAttribute;
-    }
-    const // (undocumented)
-    backgroundColorAttribute: Attribute;
-    // (undocumented)
-    export interface DepthCountXRefFieldAttribute extends Attribute {
-        // (undocumented)
-        isCountAndXrefs: boolean;
-        // (undocumented)
-        readonly typeId: Attribute.TypeId.DepthCountXRefField;
-    }
-    // (undocumented)
-    export namespace DepthCountXRefFieldAttribute {
-        const // (undocumented)
-        countAndXrefs: DepthCountXRefFieldAttribute;
-        const // (undocumented)
-        xref: DepthCountXRefFieldAttribute;
-    }
-    // (undocumented)
-    export interface DepthRecordInAuctionAttribute extends Attribute {
-        // (undocumented)
-        partialAuctionProportion: number | undefined;
-        // (undocumented)
-        readonly typeId: Attribute.TypeId.DepthRecordInAuction;
-    }
-    // (undocumented)
-    export interface GreyedOutAttribute extends Attribute {
-        // (undocumented)
-        readonly typeId: Attribute.TypeId.GreyedOut;
-    }
-    const // (undocumented)
-    greyedOutAttribute: GreyedOutAttribute;
-    // (undocumented)
-    export interface HigherLowerAttribute extends Attribute {
-        // (undocumented)
-        higherLowerId: HigherLowerId;
-        // (undocumented)
-        readonly typeId: Attribute.TypeId.HigherLower;
-    }
-    const // (undocumented)
-    cancelledAttribute: CancelledAttribute;
-    // (undocumented)
-    export namespace HigherLowerAttribute {
-        const // (undocumented)
-        higher: HigherLowerAttribute;
-        const // (undocumented)
-        lower: HigherLowerAttribute;
-    }
-    const // (undocumented)
-    cancellerAttribute: CancellerAttribute;
-    // (undocumented)
-    export interface OwnOrderAttribute extends Attribute {
-        // (undocumented)
-        readonly typeId: Attribute.TypeId.OwnOrder;
-    }
-    const // (undocumented)
-    ownOrderAttribute: OwnOrderAttribute;
-    // (undocumented)
-    export const enum TypeId {
-        // (undocumented)
-        ActiveFaultedStatusId = 33,
-        // (undocumented)
-        BigInt = 4,
-        // (undocumented)
-        CallOrPutId = 40,
-        // (undocumented)
-        Color = 14,
-        // (undocumented)
-        ColorSettingsItemStateId = 37,
-        // (undocumented)
-        CountAndXrefs = 80,
-        // (undocumented)
-        CurrencyId = 46,
-        // (undocumented)
-        DataEnvironmentId = 57,
-        // (undocumented)
-        Date = 7,
-        // (undocumented)
-        DateTime = 8,
-        // (undocumented)
-        DayTradesDataItemRecordTypeId = 62,
-        // (undocumented)
-        Decimal = 5,
-        // (undocumented)
-        DeliveryBasisIdMyxLitIvemAttribute = 61,
-        // (undocumented)
-        DepthDirectionId = 59,
-        // (undocumented)
-        Enabled = 21,
-        // (undocumented)
-        EquityOrderTypeId = 49,
-        // (undocumented)
-        ExchangeId = 39,
-        // (undocumented)
-        ExerciseTypeId = 41,
-        // (undocumented)
-        Faulted = 24,
-        // (undocumented)
-        FeedClassId = 45,
-        // (undocumented)
-        FeedStatusId = 44,
-        // (undocumented)
-        GridOrderTriggerTypeId = 55,
-        // (undocumented)
-        Integer = 3,
-        // (undocumented)
-        IntegerArray = 69,
-        // (undocumented)
-        IsIndex = 26,
-        // (undocumented)
-        IsReadable = 30,
-        // (undocumented)
-        IvemClassId = 58,
-        // (undocumented)
-        IvemId = 15,
-        // (undocumented)
-        LitIvemId = 16,
-        // (undocumented)
-        LitIvemIdArray = 17,
-        // (undocumented)
-        MarketBoardId = 43,
-        // (undocumented)
-        MarketBoardIdArray = 70,
-        // (undocumented)
-        MarketClassificationIdMyxLitIvemAttribute = 60,
-        // (undocumented)
-        MarketId = 35,
-        // (undocumented)
-        MarketIdArray = 74,
-        // (undocumented)
-        Matched = 32,
-        // (undocumented)
-        Modified = 25,
-        // (undocumented)
-        NotificationChannelSourceSettingsUrgencyId = 66,
-        // (undocumented)
-        NotificationDistributionMethodId = 67,
-        // (undocumented)
-        Number = 1,
-        // (undocumented)
-        OrderExtendedSideId = 47,
-        // (undocumented)
-        OrderPriceUnitTypeId = 52,
-        // (undocumented)
-        OrderRouteAlgorithmId = 53,
-        // (undocumented)
-        OrderShortSellTypeId = 51,
-        // (undocumented)
-        OrderSideId = 48,
-        // (undocumented)
-        OrderStatusAllowIdArray = 75,
-        // (undocumented)
-        OrderStatusReasonIdArray = 76,
-        // (undocumented)
-        OrderTriggerTypeId = 54,
-        // (undocumented)
-        Percentage = 2,
-        // (undocumented)
-        PhysicalDelivery = 31,
-        // (undocumented)
-        Price = 6,
-        // (undocumented)
-        PriceAndHasUndisclosed = 78,
-        // (undocumented)
-        PriceOrRemainder = 19,
-        // (undocumented)
-        PriceOrRemainderAndHasUndisclosed = 79,
-        // (undocumented)
-        PublisherSubscriptionDataTypeIdArray = 71,
-        // (undocumented)
-        RankedLitIvemIdListDirectoryItemTypeId = 42,
-        // (undocumented)
-        Readonly = 22,
-        // (undocumented)
-        RoutedIvemId = 18,
-        // (undocumented)
-        ScanCriteriaTypeId = 63,
-        // (undocumented)
-        ScanFieldBooleanOperationId = 65,
-        // (undocumented)
-        ScanTargetTypeId = 64,
-        // (undocumented)
-        ShortSellTypeIdArrayMyxLitIvemAttribute = 77,
-        // (undocumented)
-        SourceTzOffsetDate = 13,
-        // (undocumented)
-        SourceTzOffsetDateTime = 10,
-        // (undocumented)
-        SourceTzOffsetDateTimeDate = 11,
-        // (undocumented)
-        SourceTzOffsetDateTimeTime = 12,
-        // (undocumented)
-        String = 0,
-        // (undocumented)
-        StringArray = 68,
-        // (undocumented)
-        Time = 9,
-        // (undocumented)
-        TimeInForceId = 50,
-        // (undocumented)
-        TradeAffectsIdArray = 38,
-        // (undocumented)
-        TradeFlagIdArray = 72,
-        // (undocumented)
-        TradingStateAllowIdArray = 73,
-        // (undocumented)
-        TradingStateReasonId = 34,
-        // (undocumented)
-        TrailingStopLossOrderConditionTypeId = 56,
-        // (undocumented)
-        TrendId = 36,
-        // (undocumented)
-        TrueFalse = 20,
-        // (undocumented)
-        Undisclosed = 29,
-        // (undocumented)
-        Valid = 23,
-        // (undocumented)
-        Visible = 27,
-        // (undocumented)
-        Writable = 28
-    }
-    const // (undocumented)
-    advertAttribute: AdvertAttribute;
 }
 
 // Warning: (ae-missing-release-tag) "RenderValueRecordGridCellPainter" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -27817,7 +27508,7 @@ export class ShortDepthRecord extends DepthRecord {
     // (undocumented)
     acceptedByFilter(filterXrefs: string[]): boolean;
     // (undocumented)
-    getRenderValue(id: ShortDepthSideFieldId, sideId: OrderSideId, dataCorrectnessAttribute: RenderValue.Attribute | undefined): RenderValue;
+    getRenderValue(id: ShortDepthSideFieldId, sideId: OrderSideId, dataCorrectnessAttribute: TextFormattableValue.Attribute | undefined): TextFormattableValue;
     // (undocumented)
     getRenderVolume(): number | undefined;
     // (undocumented)
@@ -27891,7 +27582,7 @@ export class ShortDepthSideGridField extends DepthSideGridField {
     // (undocumented)
     compareDesc(left: ShortDepthRecord, right: ShortDepthRecord): number;
     // (undocumented)
-    getViewValue(record: ShortDepthRecord): RenderValue;
+    getViewValue(record: ShortDepthRecord): TextFormattableValue;
 }
 
 // @public (undocumented)
@@ -33949,29 +33640,29 @@ export { SysTick }
 // Warning: (ae-missing-release-tag) "Table" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class Table extends RevTable<Badness, TableRecordSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId, RenderValue.TypeId, RenderValue.Attribute.TypeId> {
+export class Table extends RevTable<Badness, TableRecordSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId, TextFormattableValue.TypeId, TextFormattableValue.Attribute.TypeId> {
 }
 
 // Warning: (ae-missing-release-tag) "TableField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "TableField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export abstract class TableField extends RevTableField<RenderValue.TypeId, RenderValue.Attribute.TypeId> {
+export abstract class TableField extends RevTableField<TextFormattableValue.TypeId, TextFormattableValue.Attribute.TypeId> {
 }
 
 // @public (undocumented)
 export namespace TableField {
     // (undocumented)
-    export type Constructor = RevTableField.Constructor<RenderValue.TypeId, RenderValue.Attribute.TypeId>;
+    export type Constructor = RevTableField.Constructor<TextFormattableValue.TypeId, TextFormattableValue.Attribute.TypeId>;
     // (undocumented)
-    export type Definition = RevTableField.Definition<RenderValue.TypeId, RenderValue.Attribute.TypeId>;
+    export type Definition = RevTableField.Definition<TextFormattableValue.TypeId, TextFormattableValue.Attribute.TypeId>;
 }
 
 // Warning: (ae-missing-release-tag) "TableFieldSourceDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "TableFieldSourceDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export abstract class TableFieldSourceDefinition extends RevTableFieldSourceDefinition<TableFieldSourceDefinition.TypeId, RenderValue.TypeId, RenderValue.Attribute.TypeId> {
+export abstract class TableFieldSourceDefinition extends RevTableFieldSourceDefinition<TableFieldSourceDefinition.TypeId, TextFormattableValue.TypeId, TextFormattableValue.Attribute.TypeId> {
     constructor(typeId: TableFieldSourceDefinition.TypeId);
 }
 
@@ -34111,13 +33802,13 @@ export namespace TableFieldSourceDefinition {
 // Warning: (ae-missing-release-tag) "TableFieldSourceDefinitionCachingFactoryService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class TableFieldSourceDefinitionCachingFactoryService extends RevTableFieldSourceDefinitionCachingFactoryService<TableFieldSourceDefinition.TypeId, RenderValue.TypeId, RenderValue.Attribute.TypeId> {
+export class TableFieldSourceDefinitionCachingFactoryService extends RevTableFieldSourceDefinitionCachingFactoryService<TableFieldSourceDefinition.TypeId, TextFormattableValue.TypeId, TextFormattableValue.Attribute.TypeId> {
 }
 
 // Warning: (ae-missing-release-tag) "TableFieldSourceDefinitionFactory" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface TableFieldSourceDefinitionFactory extends RevTableFieldSourceDefinitionFactory<TableFieldSourceDefinition.TypeId, RenderValue.TypeId, RenderValue.Attribute.TypeId> {
+export interface TableFieldSourceDefinitionFactory extends RevTableFieldSourceDefinitionFactory<TableFieldSourceDefinition.TypeId, TextFormattableValue.TypeId, TextFormattableValue.Attribute.TypeId> {
 }
 
 // Warning: (ae-internal-missing-underscore) The name "TableFieldSourceDefinitionStaticInitialise" should be prefixed with an underscore because the declaration is marked as @internal
@@ -34140,7 +33831,7 @@ export namespace TableFieldSourceStaticInitialise {
 // Warning: (ae-missing-release-tag) "TableGrid" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class TableGrid extends RevTableGrid<Badness, TableRecordSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId, RenderValue.TypeId, RenderValue.Attribute.TypeId, AdaptedRevgridBehavioredGridSettings, AdaptedRevgridBehavioredColumnSettings> {
+export class TableGrid extends RevTableGrid<Badness, TableRecordSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId, TextFormattableValue.TypeId, TextFormattableValue.Attribute.TypeId, AdaptedRevgridBehavioredGridSettings, AdaptedRevgridBehavioredColumnSettings> {
     constructor(gridFieldCustomHeadingsService: RevSourcedFieldCustomHeadingsService, referenceableColumnLayoutsService: ReferenceableColumnLayoutsService, tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService, tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFromJsonFactory, tableRecordSourceFactory: TableRecordSourceFactory, referenceableDataSourcesService: ReferenceableDataSourcesService, settingsService: SettingsService, gridHostElement: HTMLElement, customGridSettings: SourcedFieldGrid.CustomGridSettings, _customiseSettingsForNewColumnEventer: SourcedFieldGrid.CustomiseSettingsForNewColumnEventer, getMainCellPainterEventer: RevSubgrid.GetCellPainterEventer<AdaptedRevgridBehavioredColumnSettings, GridField>, getHeaderCellPainterEventer: RevSubgrid.GetCellPainterEventer<AdaptedRevgridBehavioredColumnSettings, GridField>, externalParent: unknown);
     // (undocumented)
     calculateHeaderPlusFixedRowsHeight(): number;
@@ -34170,7 +33861,7 @@ export namespace TableGrid {
 // Warning: (ae-missing-release-tag) "TableRecord" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class TableRecord extends RevTableRecord<RenderValue.TypeId, RenderValue.Attribute.TypeId> {
+export class TableRecord extends RevTableRecord<TextFormattableValue.TypeId, TextFormattableValue.Attribute.TypeId> {
 }
 
 // @public (undocumented)
@@ -34188,7 +33879,7 @@ export interface TableRecordDefinition extends RevTableRecordDefinition<TableFie
 // Warning: (ae-missing-release-tag) "TableRecordSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export abstract class TableRecordSource extends RevTableRecordSource<Badness, TableRecordSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId, RenderValue.TypeId, RenderValue.Attribute.TypeId> {
+export abstract class TableRecordSource extends RevTableRecordSource<Badness, TableRecordSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId, TextFormattableValue.TypeId, TextFormattableValue.Attribute.TypeId> {
     constructor(textFormatterService: TextFormatterService, gridFieldCustomHeadingsService: RevSourcedFieldCustomHeadingsService, tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService, _correctnessBadness: CorrectnessBadness, definition: TableRecordSourceDefinition, allowedFieldSourceDefinitionTypeIds: readonly TableFieldSourceDefinition.TypeId[]);
     // (undocumented)
     finalise(): void;
@@ -34200,7 +33891,7 @@ export abstract class TableRecordSource extends RevTableRecordSource<Badness, Ta
 // Warning: (ae-missing-release-tag) "TableRecordSourceDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export abstract class TableRecordSourceDefinition extends RevTableRecordSourceDefinition<TableRecordSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId, RenderValue.TypeId, RenderValue.Attribute.TypeId> {
+export abstract class TableRecordSourceDefinition extends RevTableRecordSourceDefinition<TableRecordSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId, TextFormattableValue.TypeId, TextFormattableValue.Attribute.TypeId> {
     constructor(customHeadingsService: RevSourcedFieldCustomHeadingsService, tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService, typeId: TableRecordSourceDefinition.TypeId, allowedFieldSourceDefinitionTypeIds: readonly TableFieldSourceDefinition.TypeId[]);
 }
 
@@ -34300,7 +33991,7 @@ export namespace TableRecordSourceDefinition {
 // Warning: (ae-missing-release-tag) "TableRecordSourceDefinitionFromJsonFactory" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export type TableRecordSourceDefinitionFromJsonFactory = RevTableRecordSourceDefinitionFromJsonFactory<TableRecordSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId, RenderValue.TypeId, RenderValue.Attribute.TypeId>;
+export type TableRecordSourceDefinitionFromJsonFactory = RevTableRecordSourceDefinitionFromJsonFactory<TableRecordSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId, TextFormattableValue.TypeId, TextFormattableValue.Attribute.TypeId>;
 
 // Warning: (ae-internal-missing-underscore) The name "TableRecordSourceDefinitionStaticInitialise" should be prefixed with an underscore because the declaration is marked as @internal
 //
@@ -34313,7 +34004,7 @@ export namespace TableRecordSourceDefinitionStaticInitialise {
 // Warning: (ae-missing-release-tag) "TableRecordSourceFactory" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface TableRecordSourceFactory extends RevTableRecordSourceFactory<Badness, TableRecordSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId, RenderValue.TypeId, RenderValue.Attribute.TypeId> {
+export interface TableRecordSourceFactory extends RevTableRecordSourceFactory<Badness, TableRecordSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId, TextFormattableValue.TypeId, TextFormattableValue.Attribute.TypeId> {
     // (undocumented)
     createCorrectnessState(): CorrectnessBadness;
 }
@@ -34327,7 +34018,7 @@ export namespace TableRecordSourceStaticInitialise {
 }
 
 // @public (undocumented)
-export class TableRecordStore extends RevTableRecordStore<Badness, TableRecordSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId, RenderValue.TypeId, RenderValue.Attribute.TypeId> {
+export class TableRecordStore extends RevTableRecordStore<Badness, TableRecordSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId, TextFormattableValue.TypeId, TextFormattableValue.Attribute.TypeId> {
 }
 
 // Warning: (ae-internal-missing-underscore) The name "TableStaticInitialise" should be prefixed with an underscore because the declaration is marked as @internal
@@ -34342,7 +34033,7 @@ export namespace TableStaticInitialise {
 // Warning: (ae-missing-release-tag) "TableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export abstract class TableValue extends RevTableValue<RenderValue.TypeId, RenderValue.Attribute.TypeId> {
+export abstract class TableValue extends RevTableValue<TextFormattableValue.TypeId, TextFormattableValue.Attribute.TypeId> {
 }
 
 // @public (undocumented)
@@ -34355,19 +34046,19 @@ export namespace TableValue {
 // Warning: (ae-missing-release-tag) "TableValueSource" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export abstract class TableValueSource extends RevTableValueSource<RenderValue.TypeId, RenderValue.Attribute.TypeId> {
+export abstract class TableValueSource extends RevTableValueSource<TextFormattableValue.TypeId, TextFormattableValue.Attribute.TypeId> {
 }
 
 // @public (undocumented)
 export namespace TableValueSource {
     // (undocumented)
-    export type ValueChange = RevTableValueSource.ValueChange<RenderValue.TypeId, RenderValue.Attribute.TypeId>;
+    export type ValueChange = RevTableValueSource.ValueChange<TextFormattableValue.TypeId, TextFormattableValue.Attribute.TypeId>;
 }
 
 // Warning: (ae-missing-release-tag) "TableValuesRecord" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class TableValuesRecord extends RevTableValuesRecord<RenderValue.TypeId, RenderValue.Attribute.TypeId> {
+export class TableValuesRecord extends RevTableValuesRecord<TextFormattableValue.TypeId, TextFormattableValue.Attribute.TypeId> {
 }
 
 // Warning: (ae-missing-release-tag) "TBasicListChangeType" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -34662,11 +34353,323 @@ export interface TextFieldScanCondition extends FieldScanCondition {
     readonly fieldId: ScanFormula.TextContainsFieldId | ScanFormula.TextEqualsFieldId;
 }
 
+// Warning: (ae-missing-release-tag) "TextFormattableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TextFormattableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export abstract class TextFormattableValue implements RevTextFormattableValue<TextFormattableValue.TypeId, TextFormattableValue.Attribute.TypeId> {
+    constructor(typeId: TextFormattableValue.TypeId);
+    // (undocumented)
+    addAttribute(value: TextFormattableValue.Attribute): void;
+    // (undocumented)
+    protected assign(other: TextFormattableValue): void;
+    // (undocumented)
+    get attributes(): readonly TextFormattableValue.Attribute[];
+    // (undocumented)
+    formattedText: string | undefined;
+    // (undocumented)
+    abstract isUndefined(): boolean;
+    // (undocumented)
+    setAttributes(value: TextFormattableValue.Attribute[]): void;
+    // (undocumented)
+    readonly typeId: TextFormattableValue.TypeId;
+}
+
+// @public (undocumented)
+export namespace TextFormattableValue {
+    // (undocumented)
+    export interface AdvertAttribute extends Attribute {
+        // (undocumented)
+        readonly typeId: Attribute.TypeId.Advert;
+    }
+    // (undocumented)
+    export interface Attribute {
+        // (undocumented)
+        readonly typeId: Attribute.TypeId;
+    }
+    // (undocumented)
+    export namespace Attribute {
+        // (undocumented)
+        export const enum TypeId {
+            // (undocumented)
+            Advert = 10,
+            // (undocumented)
+            BackgroundColor = 2,
+            // (undocumented)
+            Cancelled = 7,
+            // (undocumented)
+            Canceller = 8,
+            // (undocumented)
+            Correctness = 0,
+            // (undocumented)
+            DepthCountXRefField = 4,
+            // (undocumented)
+            DepthRecord = 3,
+            // (undocumented)
+            DepthRecordInAuction = 5,
+            // (undocumented)
+            GreyedOut = 6,
+            // (undocumented)
+            HigherLower = 1,
+            // (undocumented)
+            OwnOrder = 9
+        }
+    }
+    // (undocumented)
+    export interface CancelledAttribute extends Attribute {
+        // (undocumented)
+        readonly typeId: Attribute.TypeId.Cancelled;
+    }
+    // (undocumented)
+    export interface CancellerAttribute extends Attribute {
+        // (undocumented)
+        readonly typeId: Attribute.TypeId.Canceller;
+    }
+    // (undocumented)
+    export interface CorrectnessAttribute extends Attribute {
+        // (undocumented)
+        correctnessId: CorrectnessId;
+        // (undocumented)
+        readonly typeId: Attribute.TypeId.Correctness;
+    }
+    // (undocumented)
+    export namespace DataCorrectnessAttribute {
+        const // (undocumented)
+        suspect: CorrectnessAttribute;
+        const // (undocumented)
+        error: CorrectnessAttribute;
+    }
+    const // (undocumented)
+    backgroundColorAttribute: Attribute;
+    // (undocumented)
+    export interface DepthCountXRefFieldAttribute extends Attribute {
+        // (undocumented)
+        isCountAndXrefs: boolean;
+        // (undocumented)
+        readonly typeId: Attribute.TypeId.DepthCountXRefField;
+    }
+    // (undocumented)
+    export namespace DepthCountXRefFieldAttribute {
+        const // (undocumented)
+        countAndXrefs: DepthCountXRefFieldAttribute;
+        const // (undocumented)
+        xref: DepthCountXRefFieldAttribute;
+    }
+    // (undocumented)
+    export interface DepthRecordInAuctionAttribute extends Attribute {
+        // (undocumented)
+        partialAuctionProportion: number | undefined;
+        // (undocumented)
+        readonly typeId: Attribute.TypeId.DepthRecordInAuction;
+    }
+    // (undocumented)
+    export interface GreyedOutAttribute extends Attribute {
+        // (undocumented)
+        readonly typeId: Attribute.TypeId.GreyedOut;
+    }
+    const // (undocumented)
+    greyedOutAttribute: GreyedOutAttribute;
+    // (undocumented)
+    export interface HigherLowerAttribute extends Attribute {
+        // (undocumented)
+        higherLowerId: HigherLowerId;
+        // (undocumented)
+        readonly typeId: Attribute.TypeId.HigherLower;
+    }
+    const // (undocumented)
+    cancelledAttribute: CancelledAttribute;
+    // (undocumented)
+    export namespace HigherLowerAttribute {
+        const // (undocumented)
+        higher: HigherLowerAttribute;
+        const // (undocumented)
+        lower: HigherLowerAttribute;
+    }
+    const // (undocumented)
+    cancellerAttribute: CancellerAttribute;
+    // (undocumented)
+    export interface OwnOrderAttribute extends Attribute {
+        // (undocumented)
+        readonly typeId: Attribute.TypeId.OwnOrder;
+    }
+    const // (undocumented)
+    ownOrderAttribute: OwnOrderAttribute;
+    // (undocumented)
+    export const enum TypeId {
+        // (undocumented)
+        ActiveFaultedStatusId = 33,
+        // (undocumented)
+        BigInt = 4,
+        // (undocumented)
+        CallOrPutId = 40,
+        // (undocumented)
+        Color = 14,
+        // (undocumented)
+        ColorSettingsItemStateId = 37,
+        // (undocumented)
+        CountAndXrefs = 80,
+        // (undocumented)
+        CurrencyId = 46,
+        // (undocumented)
+        DataEnvironmentId = 57,
+        // (undocumented)
+        Date = 7,
+        // (undocumented)
+        DateTime = 8,
+        // (undocumented)
+        DayTradesDataItemRecordTypeId = 62,
+        // (undocumented)
+        Decimal = 5,
+        // (undocumented)
+        DeliveryBasisIdMyxLitIvemAttribute = 61,
+        // (undocumented)
+        DepthDirectionId = 59,
+        // (undocumented)
+        Enabled = 21,
+        // (undocumented)
+        EquityOrderTypeId = 49,
+        // (undocumented)
+        ExchangeId = 39,
+        // (undocumented)
+        ExerciseTypeId = 41,
+        // (undocumented)
+        Faulted = 24,
+        // (undocumented)
+        FeedClassId = 45,
+        // (undocumented)
+        FeedStatusId = 44,
+        // (undocumented)
+        GridOrderTriggerTypeId = 55,
+        // (undocumented)
+        Integer = 3,
+        // (undocumented)
+        IntegerArray = 69,
+        // (undocumented)
+        IsIndex = 26,
+        // (undocumented)
+        IsReadable = 30,
+        // (undocumented)
+        IvemClassId = 58,
+        // (undocumented)
+        IvemId = 15,
+        // (undocumented)
+        LitIvemId = 16,
+        // (undocumented)
+        LitIvemIdArray = 17,
+        // (undocumented)
+        MarketBoardId = 43,
+        // (undocumented)
+        MarketBoardIdArray = 70,
+        // (undocumented)
+        MarketClassificationIdMyxLitIvemAttribute = 60,
+        // (undocumented)
+        MarketId = 35,
+        // (undocumented)
+        MarketIdArray = 74,
+        // (undocumented)
+        Matched = 32,
+        // (undocumented)
+        Modified = 25,
+        // (undocumented)
+        NotificationChannelSourceSettingsUrgencyId = 66,
+        // (undocumented)
+        NotificationDistributionMethodId = 67,
+        // (undocumented)
+        Number = 1,
+        // (undocumented)
+        OrderExtendedSideId = 47,
+        // (undocumented)
+        OrderPriceUnitTypeId = 52,
+        // (undocumented)
+        OrderRouteAlgorithmId = 53,
+        // (undocumented)
+        OrderShortSellTypeId = 51,
+        // (undocumented)
+        OrderSideId = 48,
+        // (undocumented)
+        OrderStatusAllowIdArray = 75,
+        // (undocumented)
+        OrderStatusReasonIdArray = 76,
+        // (undocumented)
+        OrderTriggerTypeId = 54,
+        // (undocumented)
+        Percentage = 2,
+        // (undocumented)
+        PhysicalDelivery = 31,
+        // (undocumented)
+        Price = 6,
+        // (undocumented)
+        PriceAndHasUndisclosed = 78,
+        // (undocumented)
+        PriceOrRemainder = 19,
+        // (undocumented)
+        PriceOrRemainderAndHasUndisclosed = 79,
+        // (undocumented)
+        PublisherSubscriptionDataTypeIdArray = 71,
+        // (undocumented)
+        RankedLitIvemIdListDirectoryItemTypeId = 42,
+        // (undocumented)
+        Readonly = 22,
+        // (undocumented)
+        RoutedIvemId = 18,
+        // (undocumented)
+        ScanCriteriaTypeId = 63,
+        // (undocumented)
+        ScanFieldBooleanOperationId = 65,
+        // (undocumented)
+        ScanTargetTypeId = 64,
+        // (undocumented)
+        ShortSellTypeIdArrayMyxLitIvemAttribute = 77,
+        // (undocumented)
+        SourceTzOffsetDate = 13,
+        // (undocumented)
+        SourceTzOffsetDateTime = 10,
+        // (undocumented)
+        SourceTzOffsetDateTimeDate = 11,
+        // (undocumented)
+        SourceTzOffsetDateTimeTime = 12,
+        // (undocumented)
+        String = 0,
+        // (undocumented)
+        StringArray = 68,
+        // (undocumented)
+        Time = 9,
+        // (undocumented)
+        TimeInForceId = 50,
+        // (undocumented)
+        TradeAffectsIdArray = 38,
+        // (undocumented)
+        TradeFlagIdArray = 72,
+        // (undocumented)
+        TradingStateAllowIdArray = 73,
+        // (undocumented)
+        TradingStateReasonId = 34,
+        // (undocumented)
+        TrailingStopLossOrderConditionTypeId = 56,
+        // (undocumented)
+        TrendId = 36,
+        // (undocumented)
+        TrueFalse = 20,
+        // (undocumented)
+        Undisclosed = 29,
+        // (undocumented)
+        Valid = 23,
+        // (undocumented)
+        Visible = 27,
+        // (undocumented)
+        Writable = 28
+    }
+    const // (undocumented)
+    advertAttribute: AdvertAttribute;
+}
+
 // @public (undocumented)
 export class TextFormatterService {
     constructor(_symbolsService: SymbolsService, _settingsService: SettingsService);
     // (undocumented)
     finalise(): void;
+    // (undocumented)
+    format(renderValue: TextFormattableValue): string;
     // (undocumented)
     formatActiveFaultedStatusId(value: ActiveFaultedStatusId): string;
     // (undocumented)
@@ -34779,8 +34782,6 @@ export class TextFormatterService {
     formatRankedLitIvemIdListDirectoryItemTypeId(value: RankedLitIvemIdListDirectoryItem.TypeId): string;
     // (undocumented)
     formatReadonlyBoolean(value: boolean): string;
-    // (undocumented)
-    formatRenderValue(renderValue: RenderValue): string;
     // (undocumented)
     formatRoutedIvemId(value: RoutedIvemId): string;
     // (undocumented)
@@ -34962,7 +34963,7 @@ export namespace TextHeaderCellPainter {
 export class TextRenderValueCellPainter extends RenderValueCellPainter {
     constructor(settingsService: SettingsService, _textFormatterService: TextFormatterService, grid: SourcedFieldGrid, dataServer: RevDataServer<GridField>);
     // (undocumented)
-    paintValue(cell: RevDatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined, renderValue: RenderValue): Integer | undefined;
+    paintValue(cell: RevDatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined, renderValue: TextFormattableValue): Integer | undefined;
 }
 
 // @public (undocumented)

@@ -5,11 +5,11 @@
  */
 
 import { RevTableFieldSourceDefinitionFactory } from '@xilytix/revgrid';
-import { RenderValue } from '../../../../services/internal-api';
+import { TextFormattableValue } from '../../../../services/internal-api';
 import { TableFieldSourceDefinition } from './table-field-source-definition';
 
 export interface TableFieldSourceDefinitionFactory extends RevTableFieldSourceDefinitionFactory<
     TableFieldSourceDefinition.TypeId,
-    RenderValue.TypeId,
-    RenderValue.Attribute.TypeId> {
+    TextFormattableValue.TypeId,
+    TextFormattableValue.Attribute.TypeId> {
 }
