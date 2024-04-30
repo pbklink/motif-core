@@ -8,15 +8,15 @@
 // the classes below can be used.  However try to avoid this
 
 import {
-    BooleanRenderValue,
-    DateRenderValue,
-    DecimalRenderValue,
-    EnumRenderValue,
-    IntegerArrayRenderValue,
-    IntegerRenderValue,
-    NumberRenderValue,
-    PriceRenderValue,
-    StringRenderValue,
+    BooleanTextFormattableValue,
+    DateTextFormattableValue,
+    DecimalTextFormattableValue,
+    EnumTextFormattableValue,
+    IntegerArrayTextFormattableValue,
+    IntegerTextFormattableValue,
+    NumberTextFormattableValue,
+    PriceTextFormattableValue,
+    StringTextFormattableValue,
     TextFormattableValue
 } from '../../../services/internal-api';
 import { Decimal, Integer, newUndefinableDate, newUndefinableDecimal } from '../../../sys/internal-api';
@@ -57,18 +57,18 @@ export abstract class GenericNullableCorrectnessTableValue<T> extends NullableCo
 }
 
 export class NullableStringCorrectnessTableValue extends GenericNullableCorrectnessTableValue<string> {
-    protected createRenderValue() {
-        return new StringRenderValue(this.data === null ? undefined : this.data);
+    protected createTextFormattableValue() {
+        return new StringTextFormattableValue(this.data === null ? undefined : this.data);
     }
 }
 export class NullableNumberCorrectnessTableValue extends GenericNullableCorrectnessTableValue<number> {
-    protected createRenderValue() {
-        return new NumberRenderValue(this.data === null ? undefined : this.data);
+    protected createTextFormattableValue() {
+        return new NumberTextFormattableValue(this.data === null ? undefined : this.data);
     }
 }
 export class NullableIntegerCorrectnessTableValue extends GenericNullableCorrectnessTableValue<Integer> {
-    protected createRenderValue() {
-        return new IntegerRenderValue(this.data === null ? undefined : this.data);
+    protected createTextFormattableValue() {
+        return new IntegerTextFormattableValue(this.data === null ? undefined : this.data);
     }
 }
 export class NullableDateCorrectnessTableValue extends GenericNullableCorrectnessTableValue<Date> {
@@ -78,8 +78,8 @@ export class NullableDateCorrectnessTableValue extends GenericNullableCorrectnes
         super.data = value === null ? null : newUndefinableDate(value);
     }
 
-    protected createRenderValue() {
-        return new DateRenderValue(this.data === null ? undefined : this.data);
+    protected createTextFormattableValue() {
+        return new DateTextFormattableValue(this.data === null ? undefined : this.data);
     }
 }
 
@@ -91,42 +91,42 @@ export abstract class BaseNullableDecimalCorrectnessTableValue extends GenericNu
     }
 }
 export class NullableDecimalCorrectnessTableValue extends BaseNullableDecimalCorrectnessTableValue {
-    protected createRenderValue() {
-        return new DecimalRenderValue(this.data === null ? undefined : this.data);
+    protected createTextFormattableValue() {
+        return new DecimalTextFormattableValue(this.data === null ? undefined : this.data);
     }
 }
 export class NullablePriceCorrectnessTableValue extends BaseNullableDecimalCorrectnessTableValue {
-    protected createRenderValue() {
-        return new PriceRenderValue(this.data === null ? undefined : this.data);
+    protected createTextFormattableValue() {
+        return new PriceTextFormattableValue(this.data === null ? undefined : this.data);
     }
 }
 
 export abstract class NullableBooleanCorrectnessTableValue extends GenericNullableCorrectnessTableValue<boolean> {
-    protected renderValueTypeId: TextFormattableValue.TypeId;
+    protected textFormattableValueTypeId: TextFormattableValue.TypeId;
 
-    protected createRenderValue() {
-        return new BooleanRenderValue(this.data === null ? undefined : this.data, this.renderValueTypeId);
+    protected createTextFormattableValue() {
+        return new BooleanTextFormattableValue(this.data === null ? undefined : this.data, this.textFormattableValueTypeId);
     }
 }
 export abstract class NullableEnumCorrectnessTableValue extends GenericNullableCorrectnessTableValue<Integer> {
-    protected renderValueTypeId: TextFormattableValue.TypeId;
+    protected textFormattableValueTypeId: TextFormattableValue.TypeId;
 
-    protected createRenderValue() {
-        return new EnumRenderValue(this.data === null ? undefined : this.data, this.renderValueTypeId);
+    protected createTextFormattableValue() {
+        return new EnumTextFormattableValue(this.data === null ? undefined : this.data, this.textFormattableValueTypeId);
     }
 }
 
 export abstract class BaseNullableIntegerCorrectnessArrayTableValue extends GenericNullableCorrectnessTableValue<Integer[]> {
-    protected renderValueTypeId: TextFormattableValue.TypeId;
+    protected textFormattableValueTypeId: TextFormattableValue.TypeId;
 
-    protected createRenderValue() {
-        return new IntegerArrayRenderValue(this.data === null ? undefined : this.data, this.renderValueTypeId);
+    protected createTextFormattableValue() {
+        return new IntegerArrayTextFormattableValue(this.data === null ? undefined : this.data, this.textFormattableValueTypeId);
     }
 }
 
 export class NullableIntegerArrayCorrectnessTableValue extends BaseNullableIntegerCorrectnessArrayTableValue {
     constructor() {
         super();
-        this.renderValueTypeId = TextFormattableValue.TypeId.IntegerArray;
+        this.textFormattableValueTypeId = TextFormattableValue.TypeId.IntegerArray;
     }
 }

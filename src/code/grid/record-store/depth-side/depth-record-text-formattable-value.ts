@@ -6,12 +6,12 @@
 
 import { OrderSideId } from '../../../adi/internal-api';
 import { TextFormattableValue } from '../../../services/internal-api';
-import { GridRecordStoreRenderValue } from '../grid-record-store-render-value';
+import { GridRecordStoreTextFormattableValue } from '../grid-record-store-text-formattable-value';
 import { DepthRecord } from './depth-record';
 
 /** @public */
-export namespace DepthRecordRenderValue {
-    export interface Attribute extends GridRecordStoreRenderValue.Attribute {
+export namespace DepthRecordTextFormattableValue {
+    export interface Attribute extends GridRecordStoreTextFormattableValue.Attribute {
         readonly typeId: TextFormattableValue.Attribute.TypeId.DepthRecord;
         orderSideId: OrderSideId;
         depthRecordTypeId: DepthRecord.TypeId;

@@ -89,20 +89,20 @@ export class LitIvemIdTableField extends TableField {
 }
 export class BooleanTableField extends TableField {
     protected compareDefined(left: TableValue, right: TableValue): number {
-        const leftRenderValue = left.renderValue;
-        const rightRenderValue = right.renderValue;
-        const leftFormattedText = this.textFormatter.format(leftRenderValue);
-        const rightFormattedText = this.textFormatter.format(rightRenderValue);
+        const leftTextFormattableValue = left.textFormattableValue;
+        const rightTextFormattableValue = right.textFormattableValue;
+        const leftFormattedText = this.textFormatter.format(leftTextFormattableValue);
+        const rightFormattedText = this.textFormatter.format(rightTextFormattableValue);
 
         return compareString(leftFormattedText, rightFormattedText);
     }
 }
 export class EnumTableField extends TableField {
     protected compareDefined(left: TableValue, right: TableValue): number {
-        const leftRenderValue = left.renderValue;
-        const rightRenderValue = right.renderValue;
-        const leftFormattedText = this.textFormatter.format(leftRenderValue);
-        const rightFormattedText = this.textFormatter.format(rightRenderValue);
+        const leftTextFormattableValue = left.textFormattableValue;
+        const rightTextFormattableValue = right.textFormattableValue;
+        const leftFormattedText = this.textFormatter.format(leftTextFormattableValue);
+        const rightFormattedText = this.textFormatter.format(rightTextFormattableValue);
 
         return compareString(leftFormattedText, rightFormattedText);
     }
@@ -180,20 +180,20 @@ export class LitIvemIdCorrectnessTableField extends CorrectnessTableField {
 }
 export class BooleanCorrectnessTableField extends CorrectnessTableField {
     protected compareDefined(left: CorrectnessTableValue, right: CorrectnessTableValue): number {
-        const leftRenderValue = left.renderValue;
-        const rightRenderValue = right.renderValue;
-        const leftFormattedText = this.textFormatter.format(leftRenderValue);
-        const rightFormattedText = this.textFormatter.format(rightRenderValue);
+        const leftTextFormattableValue = left.textFormattableValue;
+        const rightTextFormattableValue = right.textFormattableValue;
+        const leftFormattedText = this.textFormatter.format(leftTextFormattableValue);
+        const rightFormattedText = this.textFormatter.format(rightTextFormattableValue);
 
         return compareString(leftFormattedText, rightFormattedText);
     }
 }
 export class EnumCorrectnessTableField extends CorrectnessTableField {
     protected compareDefined(left: CorrectnessTableValue, right: CorrectnessTableValue): number {
-        const leftRenderValue = left.renderValue;
-        const rightRenderValue = right.renderValue;
-        const leftFormattedText = this.textFormatter.format(leftRenderValue);
-        const rightFormattedText = this.textFormatter.format(rightRenderValue);
+        const leftTextFormattableValue = left.textFormattableValue;
+        const rightTextFormattableValue = right.textFormattableValue;
+        const leftFormattedText = this.textFormatter.format(leftTextFormattableValue);
+        const rightFormattedText = this.textFormatter.format(rightTextFormattableValue);
 
         return compareString(leftFormattedText, rightFormattedText);
     }

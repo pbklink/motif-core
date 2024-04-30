@@ -9,11 +9,11 @@ import { TextFormatterService } from '../../../text-format/internal-api';
 import { RecordSourcedFieldGrid, SingleHeadingGridDataServer, SourcedFieldGrid } from '../adapted-revgrid/internal-api';
 import { RecordGridDataServer } from '../record-grid/internal-api';
 import { RowDataArrayGrid, RowDataArrayGridDataServer } from '../row-data-array-grid/internal-api';
-import { CheckboxRenderValueRecordGridCellPainter } from './checkbox-render-value-record-grid-cell-painter';
+import { CheckboxTextFormattableValueRecordGridCellPainter } from './checkbox-text-formattable-value-record-grid-cell-painter';
 import { TextHeaderCellPainter } from './header/internal-api';
-import { RenderValueRecordGridCellPainter } from './render-value-record-grid-cell-painter';
-import { RenderValueRowDataArrayGridCellPainter } from './render-value-row-data-array-grid-cell-painter';
-import { CheckboxRenderValueCellPainter, TextRenderValueCellPainter } from './render-value/internal-api';
+import { TextFormattableValueRecordGridCellPainter } from './text-formattable-value-record-grid-cell-painter';
+import { TextFormattableValueRowDataArrayGridCellPainter } from './text-formattable-value-row-data-array-grid-cell-painter';
+import { CheckboxTextFormattableValueCellPainter, TextTextFormattableValueCellPainter } from './text-formattable-value/internal-api';
 
 export class CellPainterFactoryService {
     constructor(
@@ -27,18 +27,18 @@ export class CellPainterFactoryService {
         return new TextHeaderCellPainter(this._settingsService, grid, dataServer);
     }
 
-    createTextRenderValueRecordGrid(grid: RecordSourcedFieldGrid, dataServer: RecordGridDataServer) {
-        const renderValueCellPainter = new TextRenderValueCellPainter(this._settingsService, this._textFormatterService, grid, dataServer);
-        return new RenderValueRecordGridCellPainter(renderValueCellPainter);
+    createTextTextFormattableValueRecordGrid(grid: RecordSourcedFieldGrid, dataServer: RecordGridDataServer) {
+        const textFormattableValueCellPainter = new TextTextFormattableValueCellPainter(this._settingsService, this._textFormatterService, grid, dataServer);
+        return new TextFormattableValueRecordGridCellPainter(textFormattableValueCellPainter);
     }
 
-    createCheckboxRenderValueRecordGrid(grid: RecordSourcedFieldGrid, dataServer: RecordGridDataServer) {
-        const valueCellPainter = new CheckboxRenderValueCellPainter(this._settingsService, grid, dataServer, false);
-        return new CheckboxRenderValueRecordGridCellPainter(valueCellPainter);
+    createCheckboxTextFormattableValueRecordGrid(grid: RecordSourcedFieldGrid, dataServer: RecordGridDataServer) {
+        const valueCellPainter = new CheckboxTextFormattableValueCellPainter(this._settingsService, grid, dataServer, false);
+        return new CheckboxTextFormattableValueRecordGridCellPainter(valueCellPainter);
     }
 
-    createTextRenderValueRowDataArrayGrid(grid: RowDataArrayGrid, dataServer: RowDataArrayGridDataServer) {
-        const renderValueCellPainter = new TextRenderValueCellPainter(this._settingsService, this._textFormatterService, grid, dataServer);
-        return new RenderValueRowDataArrayGridCellPainter(renderValueCellPainter);
+    createTextTextFormattableValueRowDataArrayGrid(grid: RowDataArrayGrid, dataServer: RowDataArrayGridDataServer) {
+        const textFormattableValueCellPainter = new TextTextFormattableValueCellPainter(this._settingsService, this._textFormatterService, grid, dataServer);
+        return new TextFormattableValueRowDataArrayGridCellPainter(textFormattableValueCellPainter);
     }
 }

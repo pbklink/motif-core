@@ -7,24 +7,24 @@
 import { RevTableValue } from '@xilytix/revgrid';
 import { IvemId, LitIvemId } from '../../../adi/internal-api';
 import {
-    BooleanRenderValue,
-    DateRenderValue,
-    DateTimeRenderValue,
-    DecimalRenderValue,
-    EnumRenderValue,
-    IntegerArrayRenderValue,
-    IntegerRenderValue,
-    IvemIdRenderValue,
-    LitIvemIdArrayRenderValue,
-    LitIvemIdRenderValue,
-    NumberRenderValue,
-    PercentageRenderValue,
-    PriceRenderValue,
-    SourceTzOffsetDateRenderValue,
-    SourceTzOffsetDateTimeDateRenderValue,
-    SourceTzOffsetDateTimeRenderValue,
-    StringArrayRenderValue,
-    StringRenderValue,
+    BooleanTextFormattableValue,
+    DateTextFormattableValue,
+    DateTimeTextFormattableValue,
+    DecimalTextFormattableValue,
+    EnumTextFormattableValue,
+    IntegerArrayTextFormattableValue,
+    IntegerTextFormattableValue,
+    IvemIdTextFormattableValue,
+    LitIvemIdArrayTextFormattableValue,
+    LitIvemIdTextFormattableValue,
+    NumberTextFormattableValue,
+    PercentageTextFormattableValue,
+    PriceTextFormattableValue,
+    SourceTzOffsetDateTextFormattableValue,
+    SourceTzOffsetDateTimeDateTextFormattableValue,
+    SourceTzOffsetDateTimeTextFormattableValue,
+    StringArrayTextFormattableValue,
+    StringTextFormattableValue,
     TextFormattableValue
 } from '../../../services/internal-api';
 import {
@@ -68,25 +68,25 @@ export abstract class GenericTableValue<T> extends TableValue {
 }
 
 export class StringTableValue extends GenericTableValue<string> {
-    protected createRenderValue() {
-        return new StringRenderValue(this.data);
+    protected createTextFormattableValue() {
+        return new StringTextFormattableValue(this.data);
     }
 }
 export abstract class BaseNumberTableValue extends GenericTableValue<number> {
 }
 export class NumberTableValue extends BaseNumberTableValue {
-    protected createRenderValue() {
-        return new NumberRenderValue(this.data);
+    protected createTextFormattableValue() {
+        return new NumberTextFormattableValue(this.data);
     }
 }
 export class PercentageTableValue extends BaseNumberTableValue {
-    protected createRenderValue() {
-        return new PercentageRenderValue(this.data);
+    protected createTextFormattableValue() {
+        return new PercentageTextFormattableValue(this.data);
     }
 }
 export class IntegerTableValue extends GenericTableValue<Integer> {
-    protected createRenderValue() {
-        return new IntegerRenderValue(this.data);
+    protected createTextFormattableValue() {
+        return new IntegerTextFormattableValue(this.data);
     }
 }
 export class DateTableValue extends GenericTableValue<Date> {
@@ -96,8 +96,8 @@ export class DateTableValue extends GenericTableValue<Date> {
         super.data = newUndefinableDate(value);
     }
 
-    protected createRenderValue() {
-        return new DateRenderValue(this.data);
+    protected createTextFormattableValue() {
+        return new DateTextFormattableValue(this.data);
     }
 }
 export class IvemIdTableValue extends GenericTableValue<IvemId> {
@@ -106,8 +106,8 @@ export class IvemIdTableValue extends GenericTableValue<IvemId> {
         super.data = value?.createCopy();
     }
 
-    protected createRenderValue() {
-        return new IvemIdRenderValue(this.data);
+    protected createTextFormattableValue() {
+        return new IvemIdTextFormattableValue(this.data);
     }
 }
 export class LitIvemIdTableValue extends GenericTableValue<LitIvemId> {
@@ -116,14 +116,14 @@ export class LitIvemIdTableValue extends GenericTableValue<LitIvemId> {
         super.data = value?.createCopy();
     }
 
-    protected createRenderValue() {
-        return new LitIvemIdRenderValue(this.data);
+    protected createTextFormattableValue() {
+        return new LitIvemIdTextFormattableValue(this.data);
     }
 }
 
 export abstract class BaseDecimalTableValue extends GenericTableValue<Decimal> {
-    // protected createRenderValue() {
-    //     return new DecimalRenderValue(this.data);
+    // protected createTextFormattableValue() {
+    //     return new DecimalTextFormattableValue(this.data);
     // }
 
     override get data() { return super.data; }
@@ -133,116 +133,116 @@ export abstract class BaseDecimalTableValue extends GenericTableValue<Decimal> {
     }
 }
 export class DecimalTableValue extends BaseDecimalTableValue {
-    protected createRenderValue() {
-        return new DecimalRenderValue(this.data);
+    protected createTextFormattableValue() {
+        return new DecimalTextFormattableValue(this.data);
     }
 }
 export class PriceTableValue extends BaseDecimalTableValue {
-    protected createRenderValue() {
-        return new PriceRenderValue(this.data);
+    protected createTextFormattableValue() {
+        return new PriceTextFormattableValue(this.data);
     }
 }
 
 export abstract class BooleanTableValue extends GenericTableValue<boolean> {
-    protected renderValueTypeId: TextFormattableValue.TypeId;
+    protected textFormattableValueTypeId: TextFormattableValue.TypeId;
 
-    protected createRenderValue() {
-        return new BooleanRenderValue(this.data, this.renderValueTypeId);
+    protected createTextFormattableValue() {
+        return new BooleanTextFormattableValue(this.data, this.textFormattableValueTypeId);
     }
 }
 export class IsIndexTableValue extends BooleanTableValue {
     constructor() {
         super();
-        this.renderValueTypeId = TextFormattableValue.TypeId.IsIndex;
+        this.textFormattableValueTypeId = TextFormattableValue.TypeId.IsIndex;
     }
 }
 export class VisibleTableValue extends BooleanTableValue {
     constructor() {
         super();
-        this.renderValueTypeId = TextFormattableValue.TypeId.Visible;
+        this.textFormattableValueTypeId = TextFormattableValue.TypeId.Visible;
     }
 }
 export class EnabledTableValue extends BooleanTableValue {
     constructor() {
         super();
-        this.renderValueTypeId = TextFormattableValue.TypeId.Enabled;
+        this.textFormattableValueTypeId = TextFormattableValue.TypeId.Enabled;
     }
 }
 export class ValidTableValue extends BooleanTableValue {
     constructor() {
         super();
-        this.renderValueTypeId = TextFormattableValue.TypeId.Valid;
+        this.textFormattableValueTypeId = TextFormattableValue.TypeId.Valid;
     }
 }
 export class FaultedTableValue extends BooleanTableValue {
     constructor() {
         super();
-        this.renderValueTypeId = TextFormattableValue.TypeId.Faulted;
+        this.textFormattableValueTypeId = TextFormattableValue.TypeId.Faulted;
     }
 }
 
 export abstract class EnumTableValue extends GenericTableValue<Integer> {
-    protected renderValueTypeId: TextFormattableValue.TypeId;
+    protected textFormattableValueTypeId: TextFormattableValue.TypeId;
 
-    protected createRenderValue() {
-        return new EnumRenderValue(this.data, this.renderValueTypeId);
+    protected createTextFormattableValue() {
+        return new EnumTextFormattableValue(this.data, this.textFormattableValueTypeId);
     }
 }
 export class ActiveFaultedStatusIdTableValue extends EnumTableValue {
     constructor() {
         super();
-        this.renderValueTypeId = TextFormattableValue.TypeId.ActiveFaultedStatusId;
+        this.textFormattableValueTypeId = TextFormattableValue.TypeId.ActiveFaultedStatusId;
     }
 }
 export class MarketIdTableValue extends EnumTableValue {
     constructor() {
         super();
-        this.renderValueTypeId = TextFormattableValue.TypeId.MarketId;
+        this.textFormattableValueTypeId = TextFormattableValue.TypeId.MarketId;
     }
 }
 export class DataEnvironmentIdTableValue extends EnumTableValue {
     constructor() {
         super();
-        this.renderValueTypeId = TextFormattableValue.TypeId.DataEnvironmentId;
+        this.textFormattableValueTypeId = TextFormattableValue.TypeId.DataEnvironmentId;
     }
 }
 export class ExerciseTypeIdTableValue extends EnumTableValue {
     constructor() {
         super();
-        this.renderValueTypeId = TextFormattableValue.TypeId.ExerciseTypeId;
+        this.textFormattableValueTypeId = TextFormattableValue.TypeId.ExerciseTypeId;
     }
 }
 export class ScanFieldBooleanOperationIdTableValue extends EnumTableValue {
     constructor() {
         super();
-        this.renderValueTypeId = TextFormattableValue.TypeId.ScanFieldBooleanOperationId;
+        this.textFormattableValueTypeId = TextFormattableValue.TypeId.ScanFieldBooleanOperationId;
     }
 }
 export class NotificationChannelSourceSettingsUrgencyIdTableValue extends EnumTableValue {
     constructor() {
         super();
-        this.renderValueTypeId = TextFormattableValue.TypeId.NotificationChannelSourceSettingsUrgencyId;
+        this.textFormattableValueTypeId = TextFormattableValue.TypeId.NotificationChannelSourceSettingsUrgencyId;
     }
 }
 export class NotificationDistributionMethodIdTableValue extends EnumTableValue {
     constructor() {
         super();
-        this.renderValueTypeId = TextFormattableValue.TypeId.NotificationDistributionMethodId;
+        this.textFormattableValueTypeId = TextFormattableValue.TypeId.NotificationDistributionMethodId;
     }
 }
 
 export abstract class BaseIntegerArrayTableValue extends GenericTableValue<Integer[]> {
-    protected renderValueTypeId: TextFormattableValue.TypeId;
+    protected textFormattableValueTypeId: TextFormattableValue.TypeId;
 
-    protected createRenderValue() {
-        return new IntegerArrayRenderValue(this.data, this.renderValueTypeId);
+    protected createTextFormattableValue() {
+        return new IntegerArrayTextFormattableValue(this.data, this.textFormattableValueTypeId);
     }
 }
 
 export class IntegerArrayTableValue extends BaseIntegerArrayTableValue {
     constructor() {
         super();
-        this.renderValueTypeId = TextFormattableValue.TypeId.IntegerArray;
+        this.textFormattableValueTypeId = TextFormattableValue.TypeId.IntegerArray;
     }
 }
 
@@ -292,25 +292,25 @@ export abstract class GenericCorrectnessTableValue<T> extends CorrectnessTableVa
 }
 
 export class StringCorrectnessTableValue extends GenericCorrectnessTableValue<string> {
-    protected createRenderValue() {
-        return new StringRenderValue(this.data);
+    protected createTextFormattableValue() {
+        return new StringTextFormattableValue(this.data);
     }
 }
 export abstract class BaseNumberCorrectnessTableValue extends GenericCorrectnessTableValue<number> {
 }
 export class NumberCorrectnessTableValue extends BaseNumberCorrectnessTableValue {
-    protected createRenderValue() {
-        return new NumberRenderValue(this.data);
+    protected createTextFormattableValue() {
+        return new NumberTextFormattableValue(this.data);
     }
 }
 export class PercentageCorrectnessTableValue extends BaseNumberCorrectnessTableValue {
-    protected createRenderValue() {
-        return new PercentageRenderValue(this.data);
+    protected createTextFormattableValue() {
+        return new PercentageTextFormattableValue(this.data);
     }
 }
 export class IntegerCorrectnessTableValue extends GenericCorrectnessTableValue<Integer> {
-    protected createRenderValue() {
-        return new IntegerRenderValue(this.data);
+    protected createTextFormattableValue() {
+        return new IntegerTextFormattableValue(this.data);
     }
 }
 
@@ -321,14 +321,14 @@ export abstract class BaseDateCorrectnessTableValue extends GenericCorrectnessTa
     }
 }
 export class DateCorrectnessTableValue extends BaseDateCorrectnessTableValue {
-    protected createRenderValue() {
-        return new DateRenderValue(this.data);
+    protected createTextFormattableValue() {
+        return new DateTextFormattableValue(this.data);
     }
 }
 
 export class DateTimeCorrectnessTableValue extends BaseDateCorrectnessTableValue {
-    protected createRenderValue() {
-        return new DateTimeRenderValue(this.data);
+    protected createTextFormattableValue() {
+        return new DateTimeTextFormattableValue(this.data);
     }
 }
 
@@ -341,13 +341,13 @@ export abstract class BaseSourceTzOffsetDateTimeCorrectnessTableValue
     }
 }
 export class SourceTzOffsetDateTimeCorrectnessTableValue extends BaseSourceTzOffsetDateTimeCorrectnessTableValue {
-    protected createRenderValue() {
-        return new SourceTzOffsetDateTimeRenderValue(this.data);
+    protected createTextFormattableValue() {
+        return new SourceTzOffsetDateTimeTextFormattableValue(this.data);
     }
 }
 export class SourceTzOffsetDateTimeDateCorrectnessTableValue extends BaseSourceTzOffsetDateTimeCorrectnessTableValue {
-    protected createRenderValue() {
-        return new SourceTzOffsetDateTimeDateRenderValue(this.data);
+    protected createTextFormattableValue() {
+        return new SourceTzOffsetDateTimeDateTextFormattableValue(this.data);
     }
 }
 export class SourceTzOffsetDateCorrectnessTableValue extends GenericCorrectnessTableValue<SourceTzOffsetDate> {
@@ -356,8 +356,8 @@ export class SourceTzOffsetDateCorrectnessTableValue extends GenericCorrectnessT
         super.data = SourceTzOffsetDate.newUndefinable(value);
     }
 
-    protected createRenderValue() {
-        return new SourceTzOffsetDateRenderValue(this.data);
+    protected createTextFormattableValue() {
+        return new SourceTzOffsetDateTextFormattableValue(this.data);
     }
 }
 export class IvemIdCorrectnessTableValue extends GenericCorrectnessTableValue<IvemId> {
@@ -366,8 +366,8 @@ export class IvemIdCorrectnessTableValue extends GenericCorrectnessTableValue<Iv
         super.data = value?.createCopy();
     }
 
-    protected createRenderValue() {
-        return new IvemIdRenderValue(this.data);
+    protected createTextFormattableValue() {
+        return new IvemIdTextFormattableValue(this.data);
     }
 }
 export class LitIvemIdCorrectnessTableValue extends GenericCorrectnessTableValue<LitIvemId> {
@@ -376,66 +376,66 @@ export class LitIvemIdCorrectnessTableValue extends GenericCorrectnessTableValue
         super.data = value?.createCopy();
     }
 
-    protected createRenderValue() {
-        return new LitIvemIdRenderValue(this.data);
+    protected createTextFormattableValue() {
+        return new LitIvemIdTextFormattableValue(this.data);
     }
 }
 
 export abstract class BooleanCorrectnessTableValue extends GenericCorrectnessTableValue<boolean> {
-    protected renderValueTypeId: TextFormattableValue.TypeId;
+    protected textFormattableValueTypeId: TextFormattableValue.TypeId;
 
-    protected createRenderValue() {
-        return new BooleanRenderValue(this.data, this.renderValueTypeId);
+    protected createTextFormattableValue() {
+        return new BooleanTextFormattableValue(this.data, this.textFormattableValueTypeId);
     }
 }
 export class EnabledCorrectnessTableValue extends BooleanCorrectnessTableValue {
     constructor() {
         super();
-        this.renderValueTypeId = TextFormattableValue.TypeId.Enabled;
+        this.textFormattableValueTypeId = TextFormattableValue.TypeId.Enabled;
     }
 }
 export class ModifiedCorrectnessTableValue extends BooleanCorrectnessTableValue {
     constructor() {
         super();
-        this.renderValueTypeId = TextFormattableValue.TypeId.Modified;
+        this.textFormattableValueTypeId = TextFormattableValue.TypeId.Modified;
     }
 }
 export class IsIndexCorrectnessTableValue extends BooleanCorrectnessTableValue {
     constructor() {
         super();
-        this.renderValueTypeId = TextFormattableValue.TypeId.IsIndex;
+        this.textFormattableValueTypeId = TextFormattableValue.TypeId.IsIndex;
     }
 }
 export class UndisclosedCorrectnessTableValue extends BooleanCorrectnessTableValue {
     constructor() {
         super();
-        this.renderValueTypeId = TextFormattableValue.TypeId.Undisclosed;
+        this.textFormattableValueTypeId = TextFormattableValue.TypeId.Undisclosed;
     }
 }
 export class PhysicalDeliveryCorrectnessTableValue extends BooleanCorrectnessTableValue {
     constructor() {
         super();
-        this.renderValueTypeId = TextFormattableValue.TypeId.PhysicalDelivery;
+        this.textFormattableValueTypeId = TextFormattableValue.TypeId.PhysicalDelivery;
     }
 }
 export class WritableCorrectnessTableValue extends BooleanCorrectnessTableValue {
     constructor() {
         super();
-        this.renderValueTypeId = TextFormattableValue.TypeId.Writable;
+        this.textFormattableValueTypeId = TextFormattableValue.TypeId.Writable;
     }
 }
 export class ReadonlyCorrectnessTableValue extends BooleanCorrectnessTableValue {
     constructor() {
         super();
-        this.renderValueTypeId = TextFormattableValue.TypeId.Readonly;
+        this.textFormattableValueTypeId = TextFormattableValue.TypeId.Readonly;
     }
 }
 
 
 
 export abstract class BaseDecimalCorrectnessTableValue extends GenericCorrectnessTableValue<Decimal> {
-    // protected createRenderValue() {
-    //     return new DecimalRenderValue(this.data);
+    // protected createTextFormattableValue() {
+    //     return new DecimalTextFormattableValue(this.data);
     // }
 
     override get data() { return super.data; }
@@ -445,264 +445,264 @@ export abstract class BaseDecimalCorrectnessTableValue extends GenericCorrectnes
     }
 }
 export class DecimalCorrectnessTableValue extends BaseDecimalCorrectnessTableValue {
-    protected createRenderValue() {
-        return new DecimalRenderValue(this.data);
+    protected createTextFormattableValue() {
+        return new DecimalTextFormattableValue(this.data);
     }
 }
 export class PriceCorrectnessTableValue extends BaseDecimalCorrectnessTableValue {
-    protected createRenderValue() {
-        return new PriceRenderValue(this.data);
+    protected createTextFormattableValue() {
+        return new PriceTextFormattableValue(this.data);
     }
 }
 
 export abstract class EnumCorrectnessTableValue extends GenericCorrectnessTableValue<Integer> {
-    protected renderValueTypeId: TextFormattableValue.TypeId;
+    protected textFormattableValueTypeId: TextFormattableValue.TypeId;
 
-    protected createRenderValue() {
-        return new EnumRenderValue(this.data, this.renderValueTypeId);
+    protected createTextFormattableValue() {
+        return new EnumTextFormattableValue(this.data, this.textFormattableValueTypeId);
     }
 }
 export class TradingStateReasonIdCorrectnessTableValue extends EnumCorrectnessTableValue {
     constructor() {
         super();
-        this.renderValueTypeId = TextFormattableValue.TypeId.TradingStateReasonId;
+        this.textFormattableValueTypeId = TextFormattableValue.TypeId.TradingStateReasonId;
     }
 }
 export class MarketIdCorrectnessTableValue extends EnumCorrectnessTableValue {
     constructor() {
         super();
-        this.renderValueTypeId = TextFormattableValue.TypeId.MarketId;
+        this.textFormattableValueTypeId = TextFormattableValue.TypeId.MarketId;
     }
 }
 export class ExchangeIdCorrectnessTableValue extends EnumCorrectnessTableValue {
     constructor() {
         super();
-        this.renderValueTypeId = TextFormattableValue.TypeId.ExchangeId;
+        this.textFormattableValueTypeId = TextFormattableValue.TypeId.ExchangeId;
     }
 }
 export class CallOrPutCorrectnessTableValue extends EnumCorrectnessTableValue {
     constructor() {
         super();
-        this.renderValueTypeId = TextFormattableValue.TypeId.CallOrPutId;
+        this.textFormattableValueTypeId = TextFormattableValue.TypeId.CallOrPutId;
     }
 }
 export class MarketBoardIdCorrectnessTableValue extends EnumCorrectnessTableValue {
     constructor() {
         super();
-        this.renderValueTypeId = TextFormattableValue.TypeId.MarketBoardId;
+        this.textFormattableValueTypeId = TextFormattableValue.TypeId.MarketBoardId;
     }
 }
 export class CurrencyIdCorrectnessTableValue extends EnumCorrectnessTableValue {
     constructor() {
         super();
-        this.renderValueTypeId = TextFormattableValue.TypeId.CurrencyId;
+        this.textFormattableValueTypeId = TextFormattableValue.TypeId.CurrencyId;
     }
 }
 export class OrderSideIdCorrectnessTableValue extends EnumCorrectnessTableValue {
     constructor() {
         super();
-        this.renderValueTypeId = TextFormattableValue.TypeId.OrderSideId;
+        this.textFormattableValueTypeId = TextFormattableValue.TypeId.OrderSideId;
     }
 }
 export class OrderExtendedSideIdCorrectnessTableValue extends EnumCorrectnessTableValue {
     constructor() {
         super();
-        this.renderValueTypeId = TextFormattableValue.TypeId.OrderExtendedSideId;
+        this.textFormattableValueTypeId = TextFormattableValue.TypeId.OrderExtendedSideId;
     }
 }
 export class EquityOrderTypeIdCorrectnessTableValue extends EnumCorrectnessTableValue {
     constructor() {
         super();
-        this.renderValueTypeId = TextFormattableValue.TypeId.EquityOrderTypeId;
+        this.textFormattableValueTypeId = TextFormattableValue.TypeId.EquityOrderTypeId;
     }
 }
 export class TimeInForceIdCorrectnessTableValue extends EnumCorrectnessTableValue {
     constructor() {
         super();
-        this.renderValueTypeId = TextFormattableValue.TypeId.TimeInForceId;
+        this.textFormattableValueTypeId = TextFormattableValue.TypeId.TimeInForceId;
     }
 }
 export class OrderShortSellTypeIdCorrectnessTableValue extends EnumCorrectnessTableValue {
     constructor() {
         super();
-        this.renderValueTypeId = TextFormattableValue.TypeId.OrderShortSellTypeId;
+        this.textFormattableValueTypeId = TextFormattableValue.TypeId.OrderShortSellTypeId;
     }
 }
 export class OrderPriceUnitTypeIdCorrectnessTableValue extends EnumCorrectnessTableValue {
     constructor() {
         super();
-        this.renderValueTypeId = TextFormattableValue.TypeId.OrderPriceUnitTypeId;
+        this.textFormattableValueTypeId = TextFormattableValue.TypeId.OrderPriceUnitTypeId;
     }
 }
 export class OrderRouteAlgorithmIdCorrectnessTableValue extends EnumCorrectnessTableValue {
     constructor() {
         super();
-        this.renderValueTypeId = TextFormattableValue.TypeId.OrderRouteAlgorithmId;
+        this.textFormattableValueTypeId = TextFormattableValue.TypeId.OrderRouteAlgorithmId;
     }
 }
 export class OrderTriggerTypeIdCorrectnessTableValue extends EnumCorrectnessTableValue {
     constructor() {
         super();
-        this.renderValueTypeId = TextFormattableValue.TypeId.OrderTriggerTypeId;
+        this.textFormattableValueTypeId = TextFormattableValue.TypeId.OrderTriggerTypeId;
     }
 }
 export class GridOrderTriggerTypeIdCorrectnessTableValue extends EnumCorrectnessTableValue {
     constructor() {
         super();
-        this.renderValueTypeId = TextFormattableValue.TypeId.GridOrderTriggerTypeId;
+        this.textFormattableValueTypeId = TextFormattableValue.TypeId.GridOrderTriggerTypeId;
     }
 }
 export class TrailingStopLossOrderConditionTypeIdCorrectnessTableValue extends EnumCorrectnessTableValue {
     constructor() {
         super();
-        this.renderValueTypeId = TextFormattableValue.TypeId.TrailingStopLossOrderConditionTypeId;
+        this.textFormattableValueTypeId = TextFormattableValue.TypeId.TrailingStopLossOrderConditionTypeId;
     }
 }
 export class DataEnvironmentIdCorrectnessTableValue extends EnumCorrectnessTableValue {
     constructor() {
         super();
-        this.renderValueTypeId = TextFormattableValue.TypeId.DataEnvironmentId;
+        this.textFormattableValueTypeId = TextFormattableValue.TypeId.DataEnvironmentId;
     }
 }
 export class FeedStatusIdCorrectnessTableValue extends EnumCorrectnessTableValue {
     constructor() {
         super();
-        this.renderValueTypeId = TextFormattableValue.TypeId.FeedStatusId;
+        this.textFormattableValueTypeId = TextFormattableValue.TypeId.FeedStatusId;
     }
 }
 export class FeedClassIdCorrectnessTableValue extends EnumCorrectnessTableValue {
     constructor() {
         super();
-        this.renderValueTypeId = TextFormattableValue.TypeId.FeedClassId;
+        this.textFormattableValueTypeId = TextFormattableValue.TypeId.FeedClassId;
     }
 }
 export class IvemClassIdCorrectnessTableValue extends EnumCorrectnessTableValue {
     constructor() {
         super();
-        this.renderValueTypeId = TextFormattableValue.TypeId.IvemClassId;
+        this.textFormattableValueTypeId = TextFormattableValue.TypeId.IvemClassId;
     }
 }
 export class DepthDirectionIdCorrectnessTableValue extends EnumCorrectnessTableValue {
     constructor() {
         super();
-        this.renderValueTypeId = TextFormattableValue.TypeId.DepthDirectionId;
+        this.textFormattableValueTypeId = TextFormattableValue.TypeId.DepthDirectionId;
     }
 }
 export class ExerciseTypeIdCorrectnessTableValue extends EnumCorrectnessTableValue {
     constructor() {
         super();
-        this.renderValueTypeId = TextFormattableValue.TypeId.ExerciseTypeId;
+        this.textFormattableValueTypeId = TextFormattableValue.TypeId.ExerciseTypeId;
     }
 }
 export class CallOrPutIdCorrectnessTableValue extends EnumCorrectnessTableValue {
     constructor() {
         super();
-        this.renderValueTypeId = TextFormattableValue.TypeId.CallOrPutId;
+        this.textFormattableValueTypeId = TextFormattableValue.TypeId.CallOrPutId;
     }
 }
 export class MarketClassificationIdMyxLitIvemAttributeCorrectnessTableValue extends EnumCorrectnessTableValue {
     constructor() {
         super();
-        this.renderValueTypeId = TextFormattableValue.TypeId.MarketClassificationIdMyxLitIvemAttribute;
+        this.textFormattableValueTypeId = TextFormattableValue.TypeId.MarketClassificationIdMyxLitIvemAttribute;
     }
 }
 export class DeliveryBasisIdMyxLitIvemAttributeCorrectnessTableValue extends EnumCorrectnessTableValue {
     constructor() {
         super();
-        this.renderValueTypeId = TextFormattableValue.TypeId.DeliveryBasisIdMyxLitIvemAttribute;
+        this.textFormattableValueTypeId = TextFormattableValue.TypeId.DeliveryBasisIdMyxLitIvemAttribute;
     }
 }
 export class ScanTargetTypeIdCorrectnessTableValue extends EnumCorrectnessTableValue {
     constructor() {
         super();
-        this.renderValueTypeId = TextFormattableValue.TypeId.ScanTargetTypeId;
+        this.textFormattableValueTypeId = TextFormattableValue.TypeId.ScanTargetTypeId;
     }
 }
 export class ActiveFaultedStatusIdCorrectnessTableValue extends EnumCorrectnessTableValue {
     constructor() {
         super();
-        this.renderValueTypeId = TextFormattableValue.TypeId.ActiveFaultedStatusId;
+        this.textFormattableValueTypeId = TextFormattableValue.TypeId.ActiveFaultedStatusId;
     }
 }
 export class RankedLitIvemIdListDirectoryItemTypeIdCorrectnessTableValue extends EnumCorrectnessTableValue {
     constructor() {
         super();
-        this.renderValueTypeId = TextFormattableValue.TypeId.RankedLitIvemIdListDirectoryItemTypeId;
+        this.textFormattableValueTypeId = TextFormattableValue.TypeId.RankedLitIvemIdListDirectoryItemTypeId;
     }
 }
 
 export class StringArrayCorrectnessTableValue extends GenericCorrectnessTableValue<readonly string[]> {
-    protected createRenderValue() {
-        return new StringArrayRenderValue(this.data);
+    protected createTextFormattableValue() {
+        return new StringArrayTextFormattableValue(this.data);
     }
 }
 
 export abstract class BaseIntegerArrayCorrectnessTableValue extends GenericCorrectnessTableValue<readonly Integer[]> {
-    protected renderValueTypeId: TextFormattableValue.TypeId;
+    protected textFormattableValueTypeId: TextFormattableValue.TypeId;
 
-    protected createRenderValue() {
-        return new IntegerArrayRenderValue(this.data, this.renderValueTypeId);
+    protected createTextFormattableValue() {
+        return new IntegerArrayTextFormattableValue(this.data, this.textFormattableValueTypeId);
     }
 }
 
 export class IntegerArrayCorrectnessTableValue extends BaseIntegerArrayCorrectnessTableValue {
     constructor() {
         super();
-        this.renderValueTypeId = TextFormattableValue.TypeId.IntegerArray;
+        this.textFormattableValueTypeId = TextFormattableValue.TypeId.IntegerArray;
     }
 }
 
 export class TradingStateAllowIdArrayCorrectnessTableValue extends BaseIntegerArrayCorrectnessTableValue {
     constructor() {
         super();
-        this.renderValueTypeId = TextFormattableValue.TypeId.TradingStateAllowIdArray;
+        this.textFormattableValueTypeId = TextFormattableValue.TypeId.TradingStateAllowIdArray;
     }
 }
 
 export class MarketIdArrayCorrectnessTableValue extends BaseIntegerArrayCorrectnessTableValue {
     constructor() {
         super();
-        this.renderValueTypeId = TextFormattableValue.TypeId.MarketIdArray;
+        this.textFormattableValueTypeId = TextFormattableValue.TypeId.MarketIdArray;
     }
 }
 
 export class OrderStatusAllowIdArrayCorrectnessTableValue extends BaseIntegerArrayCorrectnessTableValue {
     constructor() {
         super();
-        this.renderValueTypeId = TextFormattableValue.TypeId.OrderStatusAllowIdArray;
+        this.textFormattableValueTypeId = TextFormattableValue.TypeId.OrderStatusAllowIdArray;
     }
 }
 
 export class OrderStatusReasonIdArrayCorrectnessTableValue extends BaseIntegerArrayCorrectnessTableValue {
     constructor() {
         super();
-        this.renderValueTypeId = TextFormattableValue.TypeId.OrderStatusReasonIdArray;
+        this.textFormattableValueTypeId = TextFormattableValue.TypeId.OrderStatusReasonIdArray;
     }
 }
 
 export class MarketBoardIdArrayCorrectnessTableValue extends BaseIntegerArrayCorrectnessTableValue {
     constructor() {
         super();
-        this.renderValueTypeId = TextFormattableValue.TypeId.MarketBoardIdArray;
+        this.textFormattableValueTypeId = TextFormattableValue.TypeId.MarketBoardIdArray;
     }
 }
 
 export class PublisherSubscriptionDataTypeIdArrayCorrectnessTableValue extends BaseIntegerArrayCorrectnessTableValue {
     constructor() {
         super();
-        this.renderValueTypeId = TextFormattableValue.TypeId.PublisherSubscriptionDataTypeIdArray;
+        this.textFormattableValueTypeId = TextFormattableValue.TypeId.PublisherSubscriptionDataTypeIdArray;
     }
 }
 
 export class ShortSellTypeIdArrayMyxLitIvemAttributeCorrectnessTableValue extends BaseIntegerArrayCorrectnessTableValue {
     constructor() {
         super();
-        this.renderValueTypeId = TextFormattableValue.TypeId.ShortSellTypeIdArrayMyxLitIvemAttribute;
+        this.textFormattableValueTypeId = TextFormattableValue.TypeId.ShortSellTypeIdArrayMyxLitIvemAttribute;
     }
 }
 
 export class LitIvemIdArrayCorrectnessTableValue extends GenericCorrectnessTableValue<readonly LitIvemId[]> {
-    protected createRenderValue() {
-        return new LitIvemIdArrayRenderValue(this.data);
+    protected createTextFormattableValue() {
+        return new LitIvemIdArrayTextFormattableValue(this.data);
     }
 }

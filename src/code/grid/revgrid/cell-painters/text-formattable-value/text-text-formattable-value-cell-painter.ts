@@ -13,17 +13,17 @@ import {
     RevStandardTextPainter
 } from '@xilytix/revgrid';
 import { HigherLowerId, OrderSideId } from '../../../../adi/internal-api';
-import { ColorRenderValue, ColorScheme, SettingsService, TextFormattableValue } from '../../../../services/internal-api';
+import { ColorScheme, ColorTextFormattableValue, SettingsService, TextFormattableValue } from '../../../../services/internal-api';
 import { CorrectnessId, IndexSignatureHack, Integer, UnreachableCaseError } from '../../../../sys/internal-api';
 import { TextFormatterService } from '../../../../text-format/internal-api';
 import { GridField } from '../../../field/internal-api';
-import { DepthRecord, DepthRecordRenderValue } from '../../../record-store/internal-api';
+import { DepthRecord, DepthRecordTextFormattableValue } from '../../../record-store/internal-api';
 import { SourcedFieldGrid } from '../../adapted-revgrid/sourced-field-grid';
 import { RecordGridDataServer } from '../../record-grid/record-grid-data-server';
 import { AdaptedRevgridBehavioredColumnSettings } from '../../settings/internal-api';
-import { RenderValueCellPainter } from './render-value-cell-painter';
+import { TextFormattableValueCellPainter } from './text-formattable-value-cell-painter';
 
-export class TextRenderValueCellPainter extends RenderValueCellPainter {
+export class TextTextFormattableValueCellPainter extends TextFormattableValueCellPainter {
     private readonly _textPainter: RevStandardTextPainter;
 
     constructor(settingsService: SettingsService, private readonly _textFormatterService: TextFormatterService, grid: SourcedFieldGrid, dataServer: RevDataServer<GridField>) {
@@ -31,7 +31,7 @@ export class TextRenderValueCellPainter extends RenderValueCellPainter {
         this._textPainter = new RevStandardTextPainter(this._renderingContext);
     }
 
-    paintValue(cell: RevDatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined, renderValue: TextFormattableValue): Integer | undefined {
+    paintValue(cell: RevDatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined, textFormattableValue: TextFormattableValue): Integer | undefined {
         const columnSettings = cell.columnSettings;
 
         const baseBkgdForeColors = this.calculateBaseColors(cell, prefillColor);
@@ -44,12 +44,12 @@ export class TextRenderValueCellPainter extends RenderValueCellPainter {
         const focusedRowBorderWidth = baseBkgdForeColors.focusedRowBorderWidth;
 
         let horizontalAlignId = columnSettings.horizontalAlignId;
-        let graphicId = TextRenderValueCellPainter.GraphicId.None;
-        let proportionBarGraphic: TextRenderValueCellPainter.ProportionBarGraphic | undefined;
+        let graphicId = TextTextFormattableValueCellPainter.GraphicId.None;
+        let proportionBarGraphic: TextTextFormattableValueCellPainter.ProportionBarGraphic | undefined;
         const subgridRowIndex = cell.viewLayoutRow.subgridRowIndex;
         const field = cell.viewLayoutColumn.column.field;
 
-        const attributes = renderValue.attributes;
+        const attributes = textFormattableValue.attributes;
 
         for (let i = attributes.length - 1; i >= 0; i--) {
             const attribute = attributes[i];
@@ -105,14 +105,14 @@ export class TextRenderValueCellPainter extends RenderValueCellPainter {
                 }
 
                 case TextFormattableValue.Attribute.TypeId.BackgroundColor: {
-                    if (renderValue instanceof ColorRenderValue) {
-                        if (renderValue.isUndefined()) {
-                            graphicId = TextRenderValueCellPainter.GraphicId.UndefinedColor;
+                    if (textFormattableValue instanceof ColorTextFormattableValue) {
+                        if (textFormattableValue.isUndefined()) {
+                            graphicId = TextTextFormattableValueCellPainter.GraphicId.UndefinedColor;
                         } else {
-                            if (renderValue.definedData === ColorScheme.schemeInheritColor) {
-                                graphicId = TextRenderValueCellPainter.GraphicId.InheritColor;
+                            if (textFormattableValue.definedData === ColorScheme.schemeInheritColor) {
+                                graphicId = TextTextFormattableValueCellPainter.GraphicId.InheritColor;
                             } else {
-                                bkgdColor = renderValue.definedData;
+                                bkgdColor = textFormattableValue.definedData;
                             }
                         }
                     }
@@ -120,13 +120,13 @@ export class TextRenderValueCellPainter extends RenderValueCellPainter {
                 }
 
                 case TextFormattableValue.Attribute.TypeId.DepthRecord: {
-                    const depthRecordAttribute = attribute as DepthRecordRenderValue.Attribute;
+                    const depthRecordAttribute = attribute as DepthRecordTextFormattableValue.Attribute;
                     let depthRecordItemId: ColorScheme.ItemId;
                     if (depthRecordAttribute.ownOrder) {
                         depthRecordItemId = altRow ? ColorScheme.ItemId.Grid_MyOrderAlt : ColorScheme.ItemId.Grid_MyOrder;
                     } else {
                         depthRecordItemId =
-                            TextRenderValueCellPainter.calculateDepthRecordBidAskOrderPriceLevelColorSchemeItemId(
+                            TextTextFormattableValueCellPainter.calculateDepthRecordBidAskOrderPriceLevelColorSchemeItemId(
                                 depthRecordAttribute.orderSideId,
                                 depthRecordAttribute.depthRecordTypeId,
                                 altRow
@@ -153,7 +153,7 @@ export class TextRenderValueCellPainter extends RenderValueCellPainter {
                     if (depthRecordInAuctionAttribute.partialAuctionProportion === undefined) {
                         bkgdColor = this._colorSettings.getBkgd(auctionItemId);
                     } else {
-                        graphicId = TextRenderValueCellPainter.GraphicId.ProportionBar;
+                        graphicId = TextTextFormattableValueCellPainter.GraphicId.ProportionBar;
                         proportionBarGraphic = {
                             color: this._colorSettings.getBkgd(auctionItemId),
                             proportion: depthRecordInAuctionAttribute.partialAuctionProportion,
@@ -170,7 +170,7 @@ export class TextRenderValueCellPainter extends RenderValueCellPainter {
                 }
 
                 case TextFormattableValue.Attribute.TypeId.Cancelled: {
-                    graphicId = TextRenderValueCellPainter.GraphicId.LineThrough;
+                    graphicId = TextTextFormattableValueCellPainter.GraphicId.LineThrough;
                     break;
                 }
 
@@ -192,7 +192,7 @@ export class TextRenderValueCellPainter extends RenderValueCellPainter {
             }
         }
 
-        const foreText = this._textFormatterService.format(renderValue);
+        const foreText = this._textFormatterService.format(textFormattableValue);
         const foreFont = this._gridSettings.font;
         let internalBorderRowOnly: boolean;
 
@@ -242,7 +242,7 @@ export class TextRenderValueCellPainter extends RenderValueCellPainter {
             internalBorderRowOnly = false;
         }
 
-        const newFingerprint: TextRenderValueCellPainter.TextPaintFingerprint = {
+        const newFingerprint: TextTextFormattableValueCellPainter.TextPaintFingerprint = {
             bkgdColor,
             foreColor,
             internalBorderColor,
@@ -253,9 +253,9 @@ export class TextRenderValueCellPainter extends RenderValueCellPainter {
             foreText,
         };
 
-        let oldFingerprint: TextRenderValueCellPainter.TextPaintFingerprint | undefined;
+        let oldFingerprint: TextTextFormattableValueCellPainter.TextPaintFingerprint | undefined;
         if (prefillColor === undefined) {
-            oldFingerprint = cell.paintFingerprint as TextRenderValueCellPainter.TextPaintFingerprint | undefined;
+            oldFingerprint = cell.paintFingerprint as TextTextFormattableValueCellPainter.TextPaintFingerprint | undefined;
         } else {
             oldFingerprint = {
                 bkgdColor: prefillColor,
@@ -271,7 +271,7 @@ export class TextRenderValueCellPainter extends RenderValueCellPainter {
 
         if (
             oldFingerprint !== undefined &&
-            TextRenderValueCellPainter.TextPaintFingerprint.same(oldFingerprint, newFingerprint)
+            TextTextFormattableValueCellPainter.TextPaintFingerprint.same(oldFingerprint, newFingerprint)
         ) {
             return undefined;
         } else {
@@ -290,13 +290,13 @@ export class TextRenderValueCellPainter extends RenderValueCellPainter {
             const cellPadding = this._scalarSettings.grid_CellPadding;
             const gc = this._renderingContext;
 
-            if (graphicId !== TextRenderValueCellPainter.GraphicId.None) {
+            if (graphicId !== TextTextFormattableValueCellPainter.GraphicId.None) {
                 const x = bounds.x;
                 const y = bounds.y;
                 const width = bounds.width;
                 const height = bounds.height;
                 switch (graphicId) {
-                    case TextRenderValueCellPainter.GraphicId.UndefinedColor: {
+                    case TextTextFormattableValueCellPainter.GraphicId.UndefinedColor: {
                         const paddedLeftX = x + cellPadding;
                         const paddedRightX = x + width - cellPadding;
                         const paddedTopY = y + cellPadding;
@@ -314,7 +314,7 @@ export class TextRenderValueCellPainter extends RenderValueCellPainter {
                         break;
                     }
 
-                    case TextRenderValueCellPainter.GraphicId.InheritColor: {
+                    case TextTextFormattableValueCellPainter.GraphicId.InheritColor: {
                         const inheritColorCenterY = y + height / 2 - 0.5;
 
                         gc.cache.strokeStyle = foreColor;
@@ -328,7 +328,7 @@ export class TextRenderValueCellPainter extends RenderValueCellPainter {
                         break;
                     }
 
-                    case TextRenderValueCellPainter.GraphicId.ProportionBar: {
+                    case TextTextFormattableValueCellPainter.GraphicId.ProportionBar: {
                         if (proportionBarGraphic !== undefined) {
                             const barWidth =
                                 proportionBarGraphic.proportion * width;
@@ -338,7 +338,7 @@ export class TextRenderValueCellPainter extends RenderValueCellPainter {
                         break;
                     }
 
-                    case TextRenderValueCellPainter.GraphicId.LineThrough: {
+                    case TextTextFormattableValueCellPainter.GraphicId.LineThrough: {
                         const lineThroughcenterY = y + height / 2 - 0.5;
 
                         gc.cache.strokeStyle = foreColor;
@@ -365,7 +365,7 @@ export class TextRenderValueCellPainter extends RenderValueCellPainter {
     }
 }
 
-export namespace TextRenderValueCellPainter {
+export namespace TextTextFormattableValueCellPainter {
     export const enum GraphicId {
         None,
         UndefinedColor,
@@ -374,7 +374,7 @@ export namespace TextRenderValueCellPainter {
         LineThrough,
     }
 
-    export interface TextPaintFingerprintInterface extends RenderValueCellPainter.PaintFingerprintInterface {
+    export interface TextPaintFingerprintInterface extends TextFormattableValueCellPainter.PaintFingerprintInterface {
         foreColor: string;
         foreText: string;
     }
@@ -383,7 +383,7 @@ export namespace TextRenderValueCellPainter {
 
     export namespace TextPaintFingerprint {
         export function same(left: TextPaintFingerprint, right: TextPaintFingerprint) {
-            if (RenderValueCellPainter.PaintFingerprint.same(left, right)) {
+            if (TextFormattableValueCellPainter.PaintFingerprint.same(left, right)) {
                 return (
                     left.foreText === right.foreText &&
                     left.foreColor === right.foreColor

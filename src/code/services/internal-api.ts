@@ -17,7 +17,6 @@ export * from './order-pad';
 export * from './price-stepper-incubator';
 export * from './pulse-types';
 export * from './ranked-lit-ivem-id-list-directory-item';
-export * from './render-value';
 export * from './save-management';
 export * from './security-price-stepper';
 export * from './service';
@@ -27,5 +26,6 @@ export * from './session-state';
 export * from './settings/internal-api';
 export * from './symbol-detail-cache-service';
 export * from './symbols-service';
+export * from './text-formattable-value';
 export * from './user-alert-service';
 

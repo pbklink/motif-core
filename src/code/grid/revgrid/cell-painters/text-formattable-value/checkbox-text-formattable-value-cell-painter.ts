@@ -11,9 +11,9 @@ import { AssertInternalError, Integer } from '../../../../sys/internal-api';
 import { GridField } from '../../../field/internal-api';
 import { SourcedFieldGrid } from '../../adapted-revgrid/sourced-field-grid';
 import { AdaptedRevgridBehavioredColumnSettings } from '../../settings/internal-api';
-import { RenderValueCellPainter } from './render-value-cell-painter';
+import { TextFormattableValueCellPainter } from './text-formattable-value-cell-painter';
 
-export class CheckboxRenderValueCellPainter extends RenderValueCellPainter  {
+export class CheckboxTextFormattableValueCellPainter extends TextFormattableValueCellPainter  {
     private readonly _checkboxPainter: RevStandardCheckboxPainter;
 
     constructor(
@@ -29,7 +29,7 @@ export class CheckboxRenderValueCellPainter extends RenderValueCellPainter  {
         );
     }
 
-    paintValue(cell: RevDatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined, renderValue: TextFormattableValue): Integer | undefined {
+    paintValue(cell: RevDatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined, textFormattableValue: TextFormattableValue): Integer | undefined {
         const baseBkgdForeColors = this.calculateBaseColors(cell, prefillColor);
         const bkgdColor = baseBkgdForeColors.bkgdColor;
         const foreColor = baseBkgdForeColors.foreColor;
@@ -37,9 +37,9 @@ export class CheckboxRenderValueCellPainter extends RenderValueCellPainter  {
         const focusedRowBorderColor = baseBkgdForeColors.focusedRowBorderColor;
         const focusedRowBorderWidth = baseBkgdForeColors.focusedRowBorderWidth;
 
-        let oldFingerprint: CheckboxRenderValueCellPainter.CheckboxPaintFingerprint | undefined;
+        let oldFingerprint: CheckboxTextFormattableValueCellPainter.CheckboxPaintFingerprint | undefined;
         if (prefillColor === undefined) {
-            oldFingerprint = cell.paintFingerprint as CheckboxRenderValueCellPainter.CheckboxPaintFingerprint | undefined;
+            oldFingerprint = cell.paintFingerprint as CheckboxTextFormattableValueCellPainter.CheckboxPaintFingerprint | undefined;
         } else {
             oldFingerprint = {
                 bkgdColor: prefillColor,
@@ -59,7 +59,7 @@ export class CheckboxRenderValueCellPainter extends RenderValueCellPainter  {
         const bounds = cell.bounds;
         const field = cell.viewLayoutColumn.column.field;
         const subgridRowIndex = cell.viewLayoutRow.subgridRowIndex;
-        const newFingerprint: Partial<CheckboxRenderValueCellPainter.CheckboxPaintFingerprint> = {
+        const newFingerprint: Partial<CheckboxTextFormattableValueCellPainter.CheckboxPaintFingerprint> = {
             bkgdColor,
             internalBorderColor: undefined,
             internalBorderRowOnly: false,
@@ -80,7 +80,7 @@ export class CheckboxRenderValueCellPainter extends RenderValueCellPainter  {
             checkboxPainter.writeFingerprintOrCheckPaint(newFingerprint, bounds, booleanValue, boxDetails, foreColor, font);
             if (
                 oldFingerprint !== undefined &&
-                CheckboxRenderValueCellPainter.CheckboxPaintFingerprint.same(oldFingerprint, newFingerprint as CheckboxRenderValueCellPainter.CheckboxPaintFingerprint)
+                CheckboxTextFormattableValueCellPainter.CheckboxPaintFingerprint.same(oldFingerprint, newFingerprint as CheckboxTextFormattableValueCellPainter.CheckboxPaintFingerprint)
             ) {
                 return undefined;
             } else {
@@ -120,8 +120,8 @@ export class CheckboxRenderValueCellPainter extends RenderValueCellPainter  {
     }
 }
 
-export namespace CheckboxRenderValueCellPainter {
-    export interface CheckboxPaintFingerprintInterface extends RenderValueCellPainter.PaintFingerprintInterface, RevStandardCheckboxPainter.PaintFingerprintInterface {
+export namespace CheckboxTextFormattableValueCellPainter {
+    export interface CheckboxPaintFingerprintInterface extends TextFormattableValueCellPainter.PaintFingerprintInterface, RevStandardCheckboxPainter.PaintFingerprintInterface {
     }
 
     export type CheckboxPaintFingerprint = IndexSignatureHack<CheckboxPaintFingerprintInterface>;
@@ -129,7 +129,7 @@ export namespace CheckboxRenderValueCellPainter {
     export namespace CheckboxPaintFingerprint {
         export function same(left: CheckboxPaintFingerprint, right: CheckboxPaintFingerprint) {
             return (
-                RenderValueCellPainter.PaintFingerprint.same(left, right) &&
+                TextFormattableValueCellPainter.PaintFingerprint.same(left, right) &&
                 RevStandardCheckboxPainter.PaintFingerprint.same(left, right)
             );
         }

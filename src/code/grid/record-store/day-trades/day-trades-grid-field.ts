@@ -8,18 +8,18 @@ import { RevColumnLayoutDefinition, RevHorizontalAlignId, RevRecordField, RevRec
 import { DayTradesDataItem, MovementId, TradeFlagId } from '../../../adi/internal-api';
 import { StringId, Strings } from '../../../res/internal-api';
 import {
-    DayTradesDataItemRecordTypeIdRenderValue,
-    IntegerRenderValue,
-    MarketIdRenderValue,
-    OrderSideIdRenderValue,
-    PriceRenderValue,
-    SourceTzOffsetDateTimeTimeRenderValue,
-    StringArrayRenderValue,
-    StringRenderValue,
+    DayTradesDataItemRecordTypeIdTextFormattableValue,
+    IntegerTextFormattableValue,
+    MarketIdTextFormattableValue,
+    OrderSideIdTextFormattableValue,
+    PriceTextFormattableValue,
+    SourceTzOffsetDateTimeTimeTextFormattableValue,
+    StringArrayTextFormattableValue,
+    StringTextFormattableValue,
     TextFormattableValue,
-    TradeAffectsIdArrayRenderValue,
-    TradeFlagIdArrayRenderValue,
-    TrendIdRenderValue
+    TradeAffectsIdArrayTextFormattableValue,
+    TradeFlagIdArrayTextFormattableValue,
+    TrendIdTextFormattableValue
 } from '../../../services/internal-api';
 import {
     ComparisonResult,
@@ -49,39 +49,39 @@ export abstract class DayTradesGridField extends GridField implements RevRecordF
     get isBrokerPrivateData() { return DayTradesDataItem.Field.idToIsBrokerPrivateData(this._id); }
 
     override getViewValue(record: DayTradesDataItem.Record): TextFormattableValue {
-        const { renderValue, cellAttribute } = this.createRenderValue(record);
+        const { textFormattableValue, cellAttribute } = this.createTextFormattableValue(record);
 
         // add attributes in correct priority order.  1st will be applied last (highest priority)
         const correctnessId = this._getDataItemCorrectnessIdEvent();
         switch (correctnessId) {
             case CorrectnessId.Suspect: {
-                renderValue.addAttribute(TextFormattableValue.DataCorrectnessAttribute.suspect);
+                textFormattableValue.addAttribute(TextFormattableValue.DataCorrectnessAttribute.suspect);
                 break;
             }
             case CorrectnessId.Error: {
-                renderValue.addAttribute(TextFormattableValue.DataCorrectnessAttribute.error);
+                textFormattableValue.addAttribute(TextFormattableValue.DataCorrectnessAttribute.error);
                 break;
             }
             case CorrectnessId.Usable:
             case CorrectnessId.Good: {
                 // can do other attributes if usable
                 if (cellAttribute !== undefined) {
-                    renderValue.addAttribute(cellAttribute);
+                    textFormattableValue.addAttribute(cellAttribute);
                 }
 
                 switch (record.typeId) {
                     case DayTradesDataItem.Record.TypeId.Cancelled:
-                        renderValue.addAttribute(TextFormattableValue.cancelledAttribute);
+                        textFormattableValue.addAttribute(TextFormattableValue.cancelledAttribute);
                         break;
                     case DayTradesDataItem.Record.TypeId.Canceller:
-                        renderValue.addAttribute(TextFormattableValue.cancellerAttribute);
+                        textFormattableValue.addAttribute(TextFormattableValue.cancellerAttribute);
                         break;
                 }
 
                 const tradeRecord = record.tradeRecord;
 
                 if (tradeRecord.buyCrossRef !== undefined || tradeRecord.sellCrossRef !== undefined) {
-                    renderValue.addAttribute(TextFormattableValue.ownOrderAttribute);
+                    textFormattableValue.addAttribute(TextFormattableValue.ownOrderAttribute);
                 } else {
                     // const buyOrderId = tradeRecord.buyDepthOrderId;
                     // const sellOrderId = tradeRecord.sellDepthOrderId;
@@ -89,7 +89,7 @@ export abstract class DayTradesGridField extends GridField implements RevRecordF
 
                     // if (sideId !== undefined) {
                     //     if (buyOrderId !== undefined || sellOrderId !== undefined) {
-                    //         renderValue.addAttribute(RenderValue.ownOrderAttribute);
+                    //         textFormattableValue.addAttribute(TextFormattableValue.ownOrderAttribute);
                     //     }
                     // }
                 }
@@ -102,7 +102,7 @@ export abstract class DayTradesGridField extends GridField implements RevRecordF
         }
 
 
-        return renderValue;
+        return textFormattableValue;
     }
 
     compare(left: DayTradesDataItem.Record, right: DayTradesDataItem.Record) {
@@ -114,11 +114,11 @@ export abstract class DayTradesGridField extends GridField implements RevRecordF
     }
 
     // eslint-disable-next-line @typescript-eslint/no-empty-function
-    protected addRenderAttributes(renderValue: TextFormattableValue, record: DayTradesDataItem.Record, cellAttribute: TextFormattableValue.Attribute) {
+    protected addRenderAttributes(textFormattableValue: TextFormattableValue, record: DayTradesDataItem.Record, cellAttribute: TextFormattableValue.Attribute) {
 
     }
 
-    protected abstract createRenderValue(record: DayTradesDataItem.Record): DayTradesGridField.CreateRenderValueResult;
+    protected abstract createTextFormattableValue(record: DayTradesDataItem.Record): DayTradesGridField.CreateTextFormattableValueResult;
     protected abstract compareValue(left: DayTradesDataItem.Record, right: DayTradesDataItem.Record, ascending: boolean): number;
 }
 
@@ -130,8 +130,8 @@ export namespace DayTradesGridField {
 
     export const sourceDefinition = new RevRecordSourcedFieldSourceDefinition('DayTrades');
 
-    export interface CreateRenderValueResult {
-        renderValue: TextFormattableValue;
+    export interface CreateTextFormattableValueResult {
+        textFormattableValue: TextFormattableValue;
         cellAttribute: TextFormattableValue.Attribute | undefined;
     }
 
@@ -436,9 +436,9 @@ export namespace DayTradesGridField {
 
 /** @internal */
 export class IdDayTradesGridField extends DayTradesGridField {
-    protected createRenderValue(record: DayTradesDataItem.Record) {
-        const result: DayTradesGridField.CreateRenderValueResult = {
-            renderValue: new IntegerRenderValue(record.tradeRecord.id),
+    protected createTextFormattableValue(record: DayTradesDataItem.Record) {
+        const result: DayTradesGridField.CreateTextFormattableValueResult = {
+            textFormattableValue: new IntegerTextFormattableValue(record.tradeRecord.id),
             cellAttribute: undefined,
         };
         return result;
@@ -451,7 +451,7 @@ export class IdDayTradesGridField extends DayTradesGridField {
 
 /** @internal */
 export class PriceDayTradesGridField extends DayTradesGridField {
-    protected createRenderValue(record: DayTradesDataItem.Record) {
+    protected createTextFormattableValue(record: DayTradesDataItem.Record) {
         let cellAttribute: TextFormattableValue.HigherLowerAttribute | undefined;
         switch (record.tradeRecord.trendId) {
             case MovementId.Up:
@@ -465,8 +465,8 @@ export class PriceDayTradesGridField extends DayTradesGridField {
                 cellAttribute = undefined;
         }
 
-        const result: DayTradesGridField.CreateRenderValueResult = {
-            renderValue: new PriceRenderValue(record.tradeRecord.price),
+        const result: DayTradesGridField.CreateTextFormattableValueResult = {
+            textFormattableValue: new PriceTextFormattableValue(record.tradeRecord.price),
             cellAttribute,
         };
         return result;
@@ -479,7 +479,7 @@ export class PriceDayTradesGridField extends DayTradesGridField {
 
 /** @internal */
 export class QuantityDayTradesGridField extends DayTradesGridField {
-    protected createRenderValue(record: DayTradesDataItem.Record) {
+    protected createTextFormattableValue(record: DayTradesDataItem.Record) {
         let quantity: Integer | undefined;
         if (record.relatedRecord !== undefined && record.tradeRecord.flagIds.includes(TradeFlagId.Cancel)) {
             const tradeQuantity = record.relatedRecord.tradeRecord.quantity;
@@ -492,8 +492,8 @@ export class QuantityDayTradesGridField extends DayTradesGridField {
             quantity = record.tradeRecord.quantity;
         }
 
-        const result: DayTradesGridField.CreateRenderValueResult = {
-            renderValue: new IntegerRenderValue(quantity),
+        const result: DayTradesGridField.CreateTextFormattableValueResult = {
+            textFormattableValue: new IntegerTextFormattableValue(quantity),
             cellAttribute: undefined,
         };
         return result;
@@ -506,9 +506,9 @@ export class QuantityDayTradesGridField extends DayTradesGridField {
 
 /** @internal */
 export class TimeDayTradesGridField extends DayTradesGridField {
-    protected createRenderValue(record: DayTradesDataItem.Record) {
-        const result: DayTradesGridField.CreateRenderValueResult = {
-            renderValue: new SourceTzOffsetDateTimeTimeRenderValue(record.tradeRecord.time),
+    protected createTextFormattableValue(record: DayTradesDataItem.Record) {
+        const result: DayTradesGridField.CreateTextFormattableValueResult = {
+            textFormattableValue: new SourceTzOffsetDateTimeTimeTextFormattableValue(record.tradeRecord.time),
             cellAttribute: undefined,
         };
         return result;
@@ -521,9 +521,9 @@ export class TimeDayTradesGridField extends DayTradesGridField {
 
 /** @internal */
 export class FlagIdsDayTradesGridField extends DayTradesGridField {
-    protected createRenderValue(record: DayTradesDataItem.Record) {
-        const result: DayTradesGridField.CreateRenderValueResult = {
-            renderValue: new TradeFlagIdArrayRenderValue(record.tradeRecord.flagIds),
+    protected createTextFormattableValue(record: DayTradesDataItem.Record) {
+        const result: DayTradesGridField.CreateTextFormattableValueResult = {
+            textFormattableValue: new TradeFlagIdArrayTextFormattableValue(record.tradeRecord.flagIds),
             cellAttribute: undefined,
         };
         return result;
@@ -536,9 +536,9 @@ export class FlagIdsDayTradesGridField extends DayTradesGridField {
 
 /** @internal */
 export class TrendIdDayTradesGridField extends DayTradesGridField {
-    protected createRenderValue(record: DayTradesDataItem.Record) {
-        const result: DayTradesGridField.CreateRenderValueResult = {
-            renderValue: new TrendIdRenderValue(record.tradeRecord.trendId),
+    protected createTextFormattableValue(record: DayTradesDataItem.Record) {
+        const result: DayTradesGridField.CreateTextFormattableValueResult = {
+            textFormattableValue: new TrendIdTextFormattableValue(record.tradeRecord.trendId),
             cellAttribute: undefined,
         };
         return result;
@@ -551,9 +551,9 @@ export class TrendIdDayTradesGridField extends DayTradesGridField {
 
 /** @internal */
 export class OrderSideIdDayTradesGridField extends DayTradesGridField {
-    protected createRenderValue(record: DayTradesDataItem.Record) {
-        const result: DayTradesGridField.CreateRenderValueResult = {
-            renderValue: new OrderSideIdRenderValue(record.tradeRecord.orderSideId),
+    protected createTextFormattableValue(record: DayTradesDataItem.Record) {
+        const result: DayTradesGridField.CreateTextFormattableValueResult = {
+            textFormattableValue: new OrderSideIdTextFormattableValue(record.tradeRecord.orderSideId),
             cellAttribute: undefined,
         };
         return result;
@@ -566,9 +566,9 @@ export class OrderSideIdDayTradesGridField extends DayTradesGridField {
 
 /** @internal */
 export class AffectsIdsDayTradesGridField extends DayTradesGridField {
-    protected createRenderValue(record: DayTradesDataItem.Record) {
-        const result: DayTradesGridField.CreateRenderValueResult = {
-            renderValue: new TradeAffectsIdArrayRenderValue(record.tradeRecord.affectsIds),
+    protected createTextFormattableValue(record: DayTradesDataItem.Record) {
+        const result: DayTradesGridField.CreateTextFormattableValueResult = {
+            textFormattableValue: new TradeAffectsIdArrayTextFormattableValue(record.tradeRecord.affectsIds),
             cellAttribute: undefined,
         };
         return result;
@@ -581,9 +581,9 @@ export class AffectsIdsDayTradesGridField extends DayTradesGridField {
 
 /** @internal */
 export class ConditionCodesDayTradesGridField extends DayTradesGridField {
-    protected createRenderValue(record: DayTradesDataItem.Record) {
-        const result: DayTradesGridField.CreateRenderValueResult = {
-            renderValue: new StringRenderValue(record.tradeRecord.conditionCodes),
+    protected createTextFormattableValue(record: DayTradesDataItem.Record) {
+        const result: DayTradesGridField.CreateTextFormattableValueResult = {
+            textFormattableValue: new StringTextFormattableValue(record.tradeRecord.conditionCodes),
             cellAttribute: undefined,
         };
         return result;
@@ -596,9 +596,9 @@ export class ConditionCodesDayTradesGridField extends DayTradesGridField {
 
 /** @internal */
 export class BuyDepthOrderIdDayTradesGridField extends DayTradesGridField {
-    protected createRenderValue(record: DayTradesDataItem.Record) {
-        const result: DayTradesGridField.CreateRenderValueResult = {
-            renderValue: new StringRenderValue(record.tradeRecord.buyDepthOrderId),
+    protected createTextFormattableValue(record: DayTradesDataItem.Record) {
+        const result: DayTradesGridField.CreateTextFormattableValueResult = {
+            textFormattableValue: new StringTextFormattableValue(record.tradeRecord.buyDepthOrderId),
             cellAttribute: undefined,
         };
         return result;
@@ -611,9 +611,9 @@ export class BuyDepthOrderIdDayTradesGridField extends DayTradesGridField {
 
 /** @internal */
 export class BuyBrokerDayTradesGridField extends DayTradesGridField {
-    protected createRenderValue(record: DayTradesDataItem.Record) {
-        const result: DayTradesGridField.CreateRenderValueResult = {
-            renderValue: new StringRenderValue(record.tradeRecord.buyBroker),
+    protected createTextFormattableValue(record: DayTradesDataItem.Record) {
+        const result: DayTradesGridField.CreateTextFormattableValueResult = {
+            textFormattableValue: new StringTextFormattableValue(record.tradeRecord.buyBroker),
             cellAttribute: undefined,
         };
         return result;
@@ -626,9 +626,9 @@ export class BuyBrokerDayTradesGridField extends DayTradesGridField {
 
 /** @internal */
 export class BuyCrossRefDayTradesGridField extends DayTradesGridField {
-    protected createRenderValue(record: DayTradesDataItem.Record) {
-        const result: DayTradesGridField.CreateRenderValueResult = {
-            renderValue: new StringRenderValue(record.tradeRecord.buyCrossRef),
+    protected createTextFormattableValue(record: DayTradesDataItem.Record) {
+        const result: DayTradesGridField.CreateTextFormattableValueResult = {
+            textFormattableValue: new StringTextFormattableValue(record.tradeRecord.buyCrossRef),
             cellAttribute: undefined,
         };
         return result;
@@ -641,9 +641,9 @@ export class BuyCrossRefDayTradesGridField extends DayTradesGridField {
 
 /** @internal */
 export class SellDepthOrderIdDayTradesGridField extends DayTradesGridField {
-    protected createRenderValue(record: DayTradesDataItem.Record) {
-        const result: DayTradesGridField.CreateRenderValueResult = {
-            renderValue: new StringRenderValue(record.tradeRecord.sellDepthOrderId),
+    protected createTextFormattableValue(record: DayTradesDataItem.Record) {
+        const result: DayTradesGridField.CreateTextFormattableValueResult = {
+            textFormattableValue: new StringTextFormattableValue(record.tradeRecord.sellDepthOrderId),
             cellAttribute: undefined,
         };
         return result;
@@ -656,9 +656,9 @@ export class SellDepthOrderIdDayTradesGridField extends DayTradesGridField {
 
 /** @internal */
 export class SellBrokerDayTradesGridField extends DayTradesGridField {
-    protected createRenderValue(record: DayTradesDataItem.Record) {
-        const result: DayTradesGridField.CreateRenderValueResult = {
-            renderValue: new StringRenderValue(record.tradeRecord.sellBroker),
+    protected createTextFormattableValue(record: DayTradesDataItem.Record) {
+        const result: DayTradesGridField.CreateTextFormattableValueResult = {
+            textFormattableValue: new StringTextFormattableValue(record.tradeRecord.sellBroker),
             cellAttribute: undefined,
         };
         return result;
@@ -671,9 +671,9 @@ export class SellBrokerDayTradesGridField extends DayTradesGridField {
 
 /** @internal */
 export class SellCrossRefDayTradesGridField extends DayTradesGridField {
-    protected createRenderValue(record: DayTradesDataItem.Record) {
-        const result: DayTradesGridField.CreateRenderValueResult = {
-            renderValue: new StringRenderValue(record.tradeRecord.sellCrossRef),
+    protected createTextFormattableValue(record: DayTradesDataItem.Record) {
+        const result: DayTradesGridField.CreateTextFormattableValueResult = {
+            textFormattableValue: new StringTextFormattableValue(record.tradeRecord.sellCrossRef),
             cellAttribute: undefined,
         };
         return result;
@@ -686,9 +686,9 @@ export class SellCrossRefDayTradesGridField extends DayTradesGridField {
 
 /** @internal */
 export class MarketIdDayTradesGridField extends DayTradesGridField {
-    protected createRenderValue(record: DayTradesDataItem.Record) {
-        const result: DayTradesGridField.CreateRenderValueResult = {
-            renderValue: new MarketIdRenderValue(record.tradeRecord.marketId),
+    protected createTextFormattableValue(record: DayTradesDataItem.Record) {
+        const result: DayTradesGridField.CreateTextFormattableValueResult = {
+            textFormattableValue: new MarketIdTextFormattableValue(record.tradeRecord.marketId),
             cellAttribute: undefined,
         };
         return result;
@@ -701,9 +701,9 @@ export class MarketIdDayTradesGridField extends DayTradesGridField {
 
 /** @internal */
 export class RelatedIdDayTradesGridField extends DayTradesGridField {
-    protected createRenderValue(record: DayTradesDataItem.Record) {
-        const result: DayTradesGridField.CreateRenderValueResult = {
-            renderValue: new IntegerRenderValue(record.tradeRecord.relatedId),
+    protected createTextFormattableValue(record: DayTradesDataItem.Record) {
+        const result: DayTradesGridField.CreateTextFormattableValueResult = {
+            textFormattableValue: new IntegerTextFormattableValue(record.tradeRecord.relatedId),
             cellAttribute: undefined,
         };
         return result;
@@ -716,9 +716,9 @@ export class RelatedIdDayTradesGridField extends DayTradesGridField {
 
 /** @internal */
 export class AttributesDayTradesGridField extends DayTradesGridField {
-    protected createRenderValue(record: DayTradesDataItem.Record) {
-        const result: DayTradesGridField.CreateRenderValueResult = {
-            renderValue: new StringArrayRenderValue(record.tradeRecord.attributes),
+    protected createTextFormattableValue(record: DayTradesDataItem.Record) {
+        const result: DayTradesGridField.CreateTextFormattableValueResult = {
+            textFormattableValue: new StringArrayTextFormattableValue(record.tradeRecord.attributes),
             cellAttribute: undefined,
         };
         return result;
@@ -731,9 +731,9 @@ export class AttributesDayTradesGridField extends DayTradesGridField {
 
 /** @internal */
 export class RecordTypeDayTradesGridField extends DayTradesGridField {
-    protected createRenderValue(record: DayTradesDataItem.Record) {
-        const result: DayTradesGridField.CreateRenderValueResult = {
-            renderValue: new DayTradesDataItemRecordTypeIdRenderValue(record.typeId),
+    protected createTextFormattableValue(record: DayTradesDataItem.Record) {
+        const result: DayTradesGridField.CreateTextFormattableValueResult = {
+            textFormattableValue: new DayTradesDataItemRecordTypeIdTextFormattableValue(record.typeId),
             cellAttribute: undefined,
         };
         return result;

@@ -8,14 +8,14 @@ import { isReadable as tinyColorIsReadable, readability as tinyColorReadability 
 import { RevColumnLayoutDefinition, RevHorizontalAlignId, RevRecordField, RevRecordSourcedFieldDefinition, RevRecordSourcedFieldSourceDefinition, RevSourcedFieldDefinition } from '@xilytix/revgrid';
 import { StringId, Strings } from '../../../res/internal-api';
 import {
-    ColorRenderValue,
     ColorScheme,
     ColorSettings,
-    ColorSettingsItemStateIdRenderValue,
-    IntegerRenderValue,
-    IsReadableRenderValue,
-    NumberRenderValue,
-    StringRenderValue,
+    ColorSettingsItemStateIdTextFormattableValue,
+    ColorTextFormattableValue,
+    IntegerTextFormattableValue,
+    IsReadableTextFormattableValue,
+    NumberTextFormattableValue,
+    StringTextFormattableValue,
     TextFormattableValue
 } from '../../../services/internal-api';
 import {
@@ -137,8 +137,8 @@ export class ItemIdColorSchemeGridField extends ColorSchemeGridField {
         super(colorSettings, definition);
     }
 
-    override getViewValue(record: ColorSchemeGridRecordStore.Record): IntegerRenderValue {
-        return new IntegerRenderValue(record.itemId);
+    override getViewValue(record: ColorSchemeGridRecordStore.Record): IntegerTextFormattableValue {
+        return new IntegerTextFormattableValue(record.itemId);
     }
 }
 
@@ -153,8 +153,8 @@ export class NameColorSchemeGridField extends ColorSchemeGridField {
         super(colorSettings, definition);
     }
 
-    override getViewValue(record: ColorSchemeGridRecordStore.Record): StringRenderValue {
-        return new StringRenderValue(ColorScheme.Item.idToName(record.itemId));
+    override getViewValue(record: ColorSchemeGridRecordStore.Record): StringTextFormattableValue {
+        return new StringTextFormattableValue(ColorScheme.Item.idToName(record.itemId));
     }
 }
 
@@ -169,8 +169,8 @@ export class DisplayColorSchemeGridField extends ColorSchemeGridField {
         super(colorSettings, definition);
     }
 
-    getViewValue(record: ColorSchemeGridRecordStore.Record): StringRenderValue {
-        return new StringRenderValue(ColorScheme.Item.idToDisplay(record.itemId));
+    getViewValue(record: ColorSchemeGridRecordStore.Record): StringTextFormattableValue {
+        return new StringTextFormattableValue(ColorScheme.Item.idToDisplay(record.itemId));
     }
 }
 
@@ -185,8 +185,8 @@ export class ItemBkgdColorTextColorSchemeGridField extends ColorSchemeGridField 
         super(colorSettings, definition);
     }
 
-    getViewValue(record: ColorSchemeGridRecordStore.Record): StringRenderValue {
-        return new StringRenderValue(this.colorSettings.getItemBkgd(record.itemId));
+    getViewValue(record: ColorSchemeGridRecordStore.Record): StringTextFormattableValue {
+        return new StringTextFormattableValue(this.colorSettings.getItemBkgd(record.itemId));
     }
 }
 
@@ -201,7 +201,7 @@ export class ResolvedBkgdColorTextColorSchemeGridField extends ColorSchemeGridFi
         super(colorSettings, definition);
     }
 
-    getViewValue(record: ColorSchemeGridRecordStore.Record): StringRenderValue {
+    getViewValue(record: ColorSchemeGridRecordStore.Record): StringTextFormattableValue {
         const stateId = this.colorSettings.getBkgdItemStateId(record.itemId);
         let attribute: TextFormattableValue.GreyedOutAttribute | undefined;
         let value: string;
@@ -225,12 +225,12 @@ export class ResolvedBkgdColorTextColorSchemeGridField extends ColorSchemeGridFi
                 throw new UnreachableCaseError('CSGDSRBCTF12129', stateId);
         }
 
-        const renderValue = new StringRenderValue(value);
+        const textFormattableValue = new StringTextFormattableValue(value);
         if (attribute !== undefined) {
-            renderValue.addAttribute(attribute);
+            textFormattableValue.addAttribute(attribute);
         }
 
-        return renderValue;
+        return textFormattableValue;
     }
 }
 
@@ -245,8 +245,8 @@ export class ItemForeColorTextColorSchemeGridField extends ColorSchemeGridField 
         super(colorSettings, definition);
     }
 
-    getViewValue(record: ColorSchemeGridRecordStore.Record): StringRenderValue {
-        return new StringRenderValue(this.colorSettings.getItemFore(record.itemId));
+    getViewValue(record: ColorSchemeGridRecordStore.Record): StringTextFormattableValue {
+        return new StringTextFormattableValue(this.colorSettings.getItemFore(record.itemId));
     }
 }
 
@@ -261,7 +261,7 @@ export class ResolvedForeColorTextColorSchemeGridField extends ColorSchemeGridFi
         super(colorSettings, definition);
     }
 
-    getViewValue(record: ColorSchemeGridRecordStore.Record): StringRenderValue {
+    getViewValue(record: ColorSchemeGridRecordStore.Record): StringTextFormattableValue {
         const stateId = this.colorSettings.getForeItemStateId(record.itemId);
         let attribute: TextFormattableValue.GreyedOutAttribute | undefined;
         let value: string;
@@ -285,12 +285,12 @@ export class ResolvedForeColorTextColorSchemeGridField extends ColorSchemeGridFi
                 throw new UnreachableCaseError('CSGDSRBCTF12129', stateId);
         }
 
-        const renderValue = new StringRenderValue(value);
+        const textFormattableValue = new StringTextFormattableValue(value);
         if (attribute !== undefined) {
-            renderValue.addAttribute(attribute);
+            textFormattableValue.addAttribute(attribute);
         }
 
-        return renderValue;
+        return textFormattableValue;
     }
 }
 
@@ -305,8 +305,8 @@ export class ItemBkgdColorColorSchemeGridField extends ColorSchemeGridField {
         super(colorSettings, definition);
     }
 
-    getViewValue(record: ColorSchemeGridRecordStore.Record): ColorRenderValue {
-        return new ColorRenderValue(this.colorSettings.getItemBkgd(record.itemId));
+    getViewValue(record: ColorSchemeGridRecordStore.Record): ColorTextFormattableValue {
+        return new ColorTextFormattableValue(this.colorSettings.getItemBkgd(record.itemId));
     }
 }
 
@@ -321,8 +321,8 @@ export class ResolvedBkgdColorColorSchemeGridField extends ColorSchemeGridField 
         super(colorSettings, definition);
     }
 
-    getViewValue(record: ColorSchemeGridRecordStore.Record): ColorRenderValue {
-        return new ColorRenderValue(this.colorSettings.getBkgd(record.itemId));
+    getViewValue(record: ColorSchemeGridRecordStore.Record): ColorTextFormattableValue {
+        return new ColorTextFormattableValue(this.colorSettings.getBkgd(record.itemId));
     }
 }
 
@@ -337,8 +337,8 @@ export class ItemForeColorColorSchemeGridField extends ColorSchemeGridField {
         super(colorSettings, definition);
     }
 
-    getViewValue(record: ColorSchemeGridRecordStore.Record): ColorRenderValue {
-        return new ColorRenderValue(this.colorSettings.getItemFore(record.itemId));
+    getViewValue(record: ColorSchemeGridRecordStore.Record): ColorTextFormattableValue {
+        return new ColorTextFormattableValue(this.colorSettings.getItemFore(record.itemId));
     }
 }
 
@@ -353,8 +353,8 @@ export class ResolvedForeColorColorSchemeGridField extends ColorSchemeGridField 
         super(colorSettings, definition);
     }
 
-    getViewValue(record: ColorSchemeGridRecordStore.Record): ColorRenderValue {
-        return new ColorRenderValue(this.colorSettings.getFore(record.itemId));
+    getViewValue(record: ColorSchemeGridRecordStore.Record): ColorTextFormattableValue {
+        return new ColorTextFormattableValue(this.colorSettings.getFore(record.itemId));
     }
 }
 
@@ -371,7 +371,7 @@ export class BkgdItemStateColorSchemeGridField extends ColorSchemeGridField {
 
     getViewValue(record: ColorSchemeGridRecordStore.Record) {
         const stateId = this.colorSettings.getBkgdItemStateId(record.itemId);
-        return new ColorSettingsItemStateIdRenderValue(stateId);
+        return new ColorSettingsItemStateIdTextFormattableValue(stateId);
     }
 }
 
@@ -388,7 +388,7 @@ export class ForeItemStateColorSchemeGridField extends ColorSchemeGridField {
 
     getViewValue(record: ColorSchemeGridRecordStore.Record) {
         const stateId = this.colorSettings.getForeItemStateId(record.itemId);
-        return new ColorSettingsItemStateIdRenderValue(stateId);
+        return new ColorSettingsItemStateIdTextFormattableValue(stateId);
     }
 }
 
@@ -403,14 +403,14 @@ export class ReadabilityColorSchemeGridField extends ColorSchemeGridField {
         super(colorSettings, definition);
     }
 
-    getViewValue(record: ColorSchemeGridRecordStore.Record): NumberRenderValue {
+    getViewValue(record: ColorSchemeGridRecordStore.Record): NumberTextFormattableValue {
         if (ColorScheme.Item.idHasBkgd(record.itemId) && ColorScheme.Item.idHasFore(record.itemId)) {
             const resolvedBkgdColor = this.colorSettings.getBkgd(record.itemId);
             const resolvedForeColor = this.colorSettings.getFore(record.itemId);
             const value = tinyColorReadability(resolvedBkgdColor, resolvedForeColor);
-            return new NumberRenderValue(value);
+            return new NumberTextFormattableValue(value);
         } else {
-            return new NumberRenderValue(undefined);
+            return new NumberTextFormattableValue(undefined);
         }
     }
 }
@@ -426,14 +426,14 @@ export class IsReadableColorSchemeGridField extends ColorSchemeGridField {
         super(colorSettings, definition);
     }
 
-    getViewValue(record: ColorSchemeGridRecordStore.Record): IsReadableRenderValue {
+    getViewValue(record: ColorSchemeGridRecordStore.Record): IsReadableTextFormattableValue {
         if (ColorScheme.Item.idHasBkgd(record.itemId) && ColorScheme.Item.idHasFore(record.itemId)) {
             const resolvedBkgdColor = this.colorSettings.getBkgd(record.itemId);
             const resolvedForeColor = this.colorSettings.getFore(record.itemId);
             const value = tinyColorIsReadable(resolvedBkgdColor, resolvedForeColor);
-            return new IsReadableRenderValue(value);
+            return new IsReadableTextFormattableValue(value);
         } else {
-            return new IsReadableRenderValue(undefined);
+            return new IsReadableTextFormattableValue(undefined);
         }
     }
 }

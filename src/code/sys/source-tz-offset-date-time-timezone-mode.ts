@@ -86,7 +86,7 @@ export namespace SourceTzOffsetDateTimeTimezoneMode {
 }
 
 /** @internal */
-export namespace SourceTzOffsetTimeRenderValueModule {
+export namespace SourceTzOffsetTimeTextFormattableValueModule {
     export function initaliseStatic() {
         SourceTzOffsetDateTimeTimezoneMode.initialise();
     }

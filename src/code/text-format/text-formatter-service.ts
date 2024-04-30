@@ -70,39 +70,39 @@ import {
 import { StringId, Strings } from '../res/internal-api';
 import { Scan, ScanField } from '../scan/internal-api';
 import {
-    BigIntRenderValue,
-    BooleanRenderValue,
+    BigIntTextFormattableValue,
+    BooleanTextFormattableValue,
     ColorSettings,
-    CountAndXrefsRenderValue,
-    DateRenderValue,
-    DateTimeRenderValue,
-    DecimalRenderValue,
-    EnumRenderValue,
-    IntegerArrayRenderValue,
-    IntegerRenderValue,
-    IvemIdRenderValue, LitIvemIdArrayRenderValue, LitIvemIdRenderValue, MarketIdArrayRenderValue,
-    NumberRenderValue,
-    OrderStatusAllowIdArrayRenderValue,
-    OrderStatusReasonIdArrayRenderValue,
-    PercentageRenderValue,
-    PriceAndHasUndisclosedRenderValue,
-    PriceOrRemainderAndHasUndisclosedRenderValue,
-    PriceOrRemainderRenderValue,
-    PriceRenderValue,
+    CountAndXrefsTextFormattableValue,
+    DateTextFormattableValue,
+    DateTimeTextFormattableValue,
+    DecimalTextFormattableValue,
+    EnumTextFormattableValue,
+    IntegerArrayTextFormattableValue,
+    IntegerTextFormattableValue,
+    IvemIdTextFormattableValue, LitIvemIdArrayTextFormattableValue, LitIvemIdTextFormattableValue, MarketIdArrayTextFormattableValue,
+    NumberTextFormattableValue,
+    OrderStatusAllowIdArrayTextFormattableValue,
+    OrderStatusReasonIdArrayTextFormattableValue,
+    PercentageTextFormattableValue,
+    PriceAndHasUndisclosedTextFormattableValue,
+    PriceOrRemainderAndHasUndisclosedTextFormattableValue,
+    PriceOrRemainderTextFormattableValue,
+    PriceTextFormattableValue,
     RankedLitIvemIdListDirectoryItem,
-    RoutedIvemIdRenderValue,
+    RoutedIvemIdTextFormattableValue,
     ScalarSettings, SettingsService,
-    SourceTzOffsetDateRenderValue,
-    SourceTzOffsetDateTimeDateRenderValue,
-    SourceTzOffsetDateTimeRenderValue,
-    SourceTzOffsetDateTimeTimeRenderValue,
-    StringArrayRenderValue,
-    StringRenderValue,
+    SourceTzOffsetDateTextFormattableValue,
+    SourceTzOffsetDateTimeDateTextFormattableValue,
+    SourceTzOffsetDateTimeTextFormattableValue,
+    SourceTzOffsetDateTimeTimeTextFormattableValue,
+    StringArrayTextFormattableValue,
+    StringTextFormattableValue,
     SymbolsService,
     TextFormattableValue,
-    TimeRenderValue,
-    TradeAffectsIdArrayRenderValue,
-    TradeFlagIdArrayRenderValue
+    TimeTextFormattableValue,
+    TradeAffectsIdArrayTextFormattableValue,
+    TradeFlagIdArrayTextFormattableValue
 } from '../services/internal-api';
 import {
     CommaText,
@@ -175,17 +175,17 @@ export class TextFormatterService {
         return value ? Strings[StringId.Yes] : Strings[StringId.No];
     }
 
-    format(renderValue: TextFormattableValue) {
-        if (renderValue.formattedText === undefined) {
-            if (renderValue.isUndefined()) {
-                renderValue.formattedText = '';
+    format(textFormattableValue: TextFormattableValue) {
+        if (textFormattableValue.formattedText === undefined) {
+            if (textFormattableValue.isUndefined()) {
+                textFormattableValue.formattedText = '';
             } else {
-                const text = this.formatDefinedRenderValue(renderValue);
-                renderValue.formattedText = text;
+                const text = this.formatDefinedTextFormattableValue(textFormattableValue);
+                textFormattableValue.formattedText = text;
             }
         }
 
-        return renderValue.formattedText;
+        return textFormattableValue.formattedText;
     }
 
     formatNumber(value: number) {
@@ -522,21 +522,21 @@ export class TextFormatterService {
         }
         return this.formatStringArrayAsCommaText(strArray);
     }
-    formatPriceAndHasUndisclosed(value: PriceAndHasUndisclosedRenderValue.DataType) {
+    formatPriceAndHasUndisclosed(value: PriceAndHasUndisclosedTextFormattableValue.DataType) {
         let result = this.formatPrice(value.price);
         if (value.hasUndisclosed) {
             result = TextFormatterService.UndisclosedPrefix + result;
         }
         return result;
     }
-    formatPriceOrRemainderAndHasUndisclosed(value: PriceOrRemainderAndHasUndisclosedRenderValue.DataType) {
+    formatPriceOrRemainderAndHasUndisclosed(value: PriceOrRemainderAndHasUndisclosedTextFormattableValue.DataType) {
         let result = this.formatPriceOrRemainder(value.price);
         if (value.hasUndisclosed) {
             result = TextFormatterService.UndisclosedPrefix + result;
         }
         return result;
     }
-    formatCountAndXrefs(value: CountAndXrefsRenderValue.DataType) {
+    formatCountAndXrefs(value: CountAndXrefsTextFormattableValue.DataType) {
         let result = this.formatInteger(value.count);
         const xrefCount = value.xrefs.length;
         if (xrefCount > 0) {
@@ -593,174 +593,174 @@ export class TextFormatterService {
         this._dateTimeTimezoneModeId = this._scalarSettings.format_DateTimeTimezoneModeId;
     }
 
-    private formatDefinedRenderValue(renderValue: TextFormattableValue): string {
-        switch (renderValue.typeId) {
+    private formatDefinedTextFormattableValue(textFormattableValue: TextFormattableValue): string {
+        switch (textFormattableValue.typeId) {
             case TextFormattableValue.TypeId.String:
-                return (renderValue as StringRenderValue).definedData;
+                return (textFormattableValue as StringTextFormattableValue).definedData;
             case TextFormattableValue.TypeId.Number:
-                return this.formatNumber((renderValue as NumberRenderValue).definedData);
+                return this.formatNumber((textFormattableValue as NumberTextFormattableValue).definedData);
             case TextFormattableValue.TypeId.Percentage:
-                return this.formatPercentage((renderValue as PercentageRenderValue).definedData);
+                return this.formatPercentage((textFormattableValue as PercentageTextFormattableValue).definedData);
             case TextFormattableValue.TypeId.Integer:
-                return this.formatInteger((renderValue as IntegerRenderValue).definedData);
+                return this.formatInteger((textFormattableValue as IntegerTextFormattableValue).definedData);
             case TextFormattableValue.TypeId.BigInt:
-                return this.formatBigInt((renderValue as BigIntRenderValue).definedData);
+                return this.formatBigInt((textFormattableValue as BigIntTextFormattableValue).definedData);
             case TextFormattableValue.TypeId.Decimal:
-                return this.formatDecimal((renderValue as DecimalRenderValue).definedData);
+                return this.formatDecimal((textFormattableValue as DecimalTextFormattableValue).definedData);
             case TextFormattableValue.TypeId.Price:
-                return this.formatPrice((renderValue as PriceRenderValue).definedData);
+                return this.formatPrice((textFormattableValue as PriceTextFormattableValue).definedData);
             case TextFormattableValue.TypeId.PriceOrRemainder:
-                return this.formatPriceOrRemainder((renderValue as PriceOrRemainderRenderValue).definedData);
+                return this.formatPriceOrRemainder((textFormattableValue as PriceOrRemainderTextFormattableValue).definedData);
             case TextFormattableValue.TypeId.Date:
-                return this.formatDate((renderValue as DateRenderValue).definedData);
+                return this.formatDate((textFormattableValue as DateTextFormattableValue).definedData);
             case TextFormattableValue.TypeId.DateTime:
-                return this.formatDateTime((renderValue as DateTimeRenderValue).definedData);
+                return this.formatDateTime((textFormattableValue as DateTimeTextFormattableValue).definedData);
             case TextFormattableValue.TypeId.Time:
-                return this.formatTime((renderValue as TimeRenderValue).definedData);
+                return this.formatTime((textFormattableValue as TimeTextFormattableValue).definedData);
             case TextFormattableValue.TypeId.SourceTzOffsetDateTime:
-                return this.formatSourceTzOffsetDateTime((renderValue as SourceTzOffsetDateTimeRenderValue).definedData);
+                return this.formatSourceTzOffsetDateTime((textFormattableValue as SourceTzOffsetDateTimeTextFormattableValue).definedData);
             case TextFormattableValue.TypeId.SourceTzOffsetDateTimeDate:
-                return this.formatSourceTzOffsetDateTimeDate((renderValue as SourceTzOffsetDateTimeDateRenderValue).definedData);
+                return this.formatSourceTzOffsetDateTimeDate((textFormattableValue as SourceTzOffsetDateTimeDateTextFormattableValue).definedData);
             case TextFormattableValue.TypeId.SourceTzOffsetDateTimeTime:
-                return this.formatSourceTzOffsetDateTimeTime((renderValue as SourceTzOffsetDateTimeTimeRenderValue).definedData);
+                return this.formatSourceTzOffsetDateTimeTime((textFormattableValue as SourceTzOffsetDateTimeTimeTextFormattableValue).definedData);
             case TextFormattableValue.TypeId.SourceTzOffsetDate:
-                return this.formatSourceTzOffsetDate((renderValue as SourceTzOffsetDateRenderValue).definedData);
+                return this.formatSourceTzOffsetDate((textFormattableValue as SourceTzOffsetDateTextFormattableValue).definedData);
             case TextFormattableValue.TypeId.Color:
                 return '';
             case TextFormattableValue.TypeId.IvemId:
-                return this.formatIvemId((renderValue as IvemIdRenderValue).definedData);
+                return this.formatIvemId((textFormattableValue as IvemIdTextFormattableValue).definedData);
             case TextFormattableValue.TypeId.LitIvemId:
-                return this.formatLitIvemId((renderValue as LitIvemIdRenderValue).definedData);
+                return this.formatLitIvemId((textFormattableValue as LitIvemIdTextFormattableValue).definedData);
             case TextFormattableValue.TypeId.LitIvemIdArray:
-                return this.formatLitIvemIdArrayAsCommaText((renderValue as LitIvemIdArrayRenderValue).definedData);
+                return this.formatLitIvemIdArrayAsCommaText((textFormattableValue as LitIvemIdArrayTextFormattableValue).definedData);
             case TextFormattableValue.TypeId.RoutedIvemId:
-                return this.formatRoutedIvemId((renderValue as RoutedIvemIdRenderValue).definedData);
+                return this.formatRoutedIvemId((textFormattableValue as RoutedIvemIdTextFormattableValue).definedData);
             case TextFormattableValue.TypeId.TrueFalse:
-                return this.formatTrueFalseBoolean((renderValue as BooleanRenderValue).definedData);
+                return this.formatTrueFalseBoolean((textFormattableValue as BooleanTextFormattableValue).definedData);
             case TextFormattableValue.TypeId.Enabled:
-                return this.formatEnabledBoolean((renderValue as BooleanRenderValue).definedData);
+                return this.formatEnabledBoolean((textFormattableValue as BooleanTextFormattableValue).definedData);
             case TextFormattableValue.TypeId.Readonly:
-                return this.formatReadonlyBoolean((renderValue as BooleanRenderValue).definedData);
+                return this.formatReadonlyBoolean((textFormattableValue as BooleanTextFormattableValue).definedData);
             case TextFormattableValue.TypeId.Valid:
-                return this.formatValidBoolean((renderValue as BooleanRenderValue).definedData);
+                return this.formatValidBoolean((textFormattableValue as BooleanTextFormattableValue).definedData);
             case TextFormattableValue.TypeId.Faulted:
-                return this.formatFaultedBoolean((renderValue as BooleanRenderValue).definedData);
+                return this.formatFaultedBoolean((textFormattableValue as BooleanTextFormattableValue).definedData);
             case TextFormattableValue.TypeId.Modified:
-                return this.formatModifiedBoolean((renderValue as BooleanRenderValue).definedData);
+                return this.formatModifiedBoolean((textFormattableValue as BooleanTextFormattableValue).definedData);
             case TextFormattableValue.TypeId.IsIndex:
-                return this.formatIsIndexBoolean((renderValue as BooleanRenderValue).definedData);
+                return this.formatIsIndexBoolean((textFormattableValue as BooleanTextFormattableValue).definedData);
             case TextFormattableValue.TypeId.Visible:
-                return this.formatVisibleBoolean((renderValue as BooleanRenderValue).definedData);
+                return this.formatVisibleBoolean((textFormattableValue as BooleanTextFormattableValue).definedData);
             case TextFormattableValue.TypeId.Writable:
-                return this.formatWritableBoolean((renderValue as BooleanRenderValue).definedData);
+                return this.formatWritableBoolean((textFormattableValue as BooleanTextFormattableValue).definedData);
             case TextFormattableValue.TypeId.Undisclosed:
-                return this.formatUndisclosedBoolean((renderValue as BooleanRenderValue).definedData);
+                return this.formatUndisclosedBoolean((textFormattableValue as BooleanTextFormattableValue).definedData);
             case TextFormattableValue.TypeId.IsReadable:
-                return this.formatIsReadableBoolean((renderValue as BooleanRenderValue).definedData);
+                return this.formatIsReadableBoolean((textFormattableValue as BooleanTextFormattableValue).definedData);
             case TextFormattableValue.TypeId.PhysicalDelivery:
-                return this.formatPhysicalDeliveryBoolean((renderValue as BooleanRenderValue).definedData);
+                return this.formatPhysicalDeliveryBoolean((textFormattableValue as BooleanTextFormattableValue).definedData);
             case TextFormattableValue.TypeId.Matched:
-                return this.formatMatchedBoolean((renderValue as BooleanRenderValue).definedData);
+                return this.formatMatchedBoolean((textFormattableValue as BooleanTextFormattableValue).definedData);
             case TextFormattableValue.TypeId.ActiveFaultedStatusId:
-                return this.formatActiveFaultedStatusId((renderValue as EnumRenderValue).definedData);
+                return this.formatActiveFaultedStatusId((textFormattableValue as EnumTextFormattableValue).definedData);
             case TextFormattableValue.TypeId.TradingStateReasonId:
-                return this.formatTradingStateReasonId((renderValue as EnumRenderValue).definedData);
+                return this.formatTradingStateReasonId((textFormattableValue as EnumTextFormattableValue).definedData);
             case TextFormattableValue.TypeId.MarketId:
-                return this.formatMarketId((renderValue as EnumRenderValue).definedData);
+                return this.formatMarketId((textFormattableValue as EnumTextFormattableValue).definedData);
             case TextFormattableValue.TypeId.TrendId:
-                return this.formatTrendId((renderValue as EnumRenderValue).definedData);
+                return this.formatTrendId((textFormattableValue as EnumTextFormattableValue).definedData);
             case TextFormattableValue.TypeId.ColorSettingsItemStateId:
-                return this.formatColorSettingsItemStateId((renderValue as EnumRenderValue).definedData);
+                return this.formatColorSettingsItemStateId((textFormattableValue as EnumTextFormattableValue).definedData);
             case TextFormattableValue.TypeId.ExerciseTypeId:
-                return this.formatExerciseTypeId((renderValue as EnumRenderValue).definedData);
+                return this.formatExerciseTypeId((textFormattableValue as EnumTextFormattableValue).definedData);
             case TextFormattableValue.TypeId.RankedLitIvemIdListDirectoryItemTypeId:
-                return this.formatRankedLitIvemIdListDirectoryItemTypeId((renderValue as EnumRenderValue).definedData);
+                return this.formatRankedLitIvemIdListDirectoryItemTypeId((textFormattableValue as EnumTextFormattableValue).definedData);
             case TextFormattableValue.TypeId.ExchangeId:
-                return this.formatExchangeId((renderValue as EnumRenderValue).definedData);
+                return this.formatExchangeId((textFormattableValue as EnumTextFormattableValue).definedData);
             case TextFormattableValue.TypeId.CallOrPutId:
-                return this.formatCallOrPutId((renderValue as EnumRenderValue).definedData);
+                return this.formatCallOrPutId((textFormattableValue as EnumTextFormattableValue).definedData);
             case TextFormattableValue.TypeId.MarketBoardId:
-                return this.formatMarketBoardId((renderValue as EnumRenderValue).definedData);
+                return this.formatMarketBoardId((textFormattableValue as EnumTextFormattableValue).definedData);
             case TextFormattableValue.TypeId.CurrencyId:
-                return this.formatCurrencyId((renderValue as EnumRenderValue).definedData);
+                return this.formatCurrencyId((textFormattableValue as EnumTextFormattableValue).definedData);
             case TextFormattableValue.TypeId.OrderExtendedSideId:
-                return this.formatOrderExtendedSideId((renderValue as EnumRenderValue).definedData);
+                return this.formatOrderExtendedSideId((textFormattableValue as EnumTextFormattableValue).definedData);
             case TextFormattableValue.TypeId.OrderSideId:
-                return this.formatOrderSideId((renderValue as EnumRenderValue).definedData);
+                return this.formatOrderSideId((textFormattableValue as EnumTextFormattableValue).definedData);
             case TextFormattableValue.TypeId.EquityOrderTypeId:
-                return this.formatOrderTypeId((renderValue as EnumRenderValue).definedData);
+                return this.formatOrderTypeId((textFormattableValue as EnumTextFormattableValue).definedData);
             case TextFormattableValue.TypeId.TimeInForceId:
-                return this.formatTimeInForceId((renderValue as EnumRenderValue).definedData);
+                return this.formatTimeInForceId((textFormattableValue as EnumTextFormattableValue).definedData);
             case TextFormattableValue.TypeId.OrderShortSellTypeId:
-                return this.formatOrderShortSellTypeId((renderValue as EnumRenderValue).definedData);
+                return this.formatOrderShortSellTypeId((textFormattableValue as EnumTextFormattableValue).definedData);
             case TextFormattableValue.TypeId.OrderPriceUnitTypeId:
-                return this.formatOrderPriceUnitTypeId((renderValue as EnumRenderValue).definedData);
+                return this.formatOrderPriceUnitTypeId((textFormattableValue as EnumTextFormattableValue).definedData);
             case TextFormattableValue.TypeId.OrderRouteAlgorithmId:
-                return this.formatOrderRouteAlgorithmId((renderValue as EnumRenderValue).definedData);
+                return this.formatOrderRouteAlgorithmId((textFormattableValue as EnumTextFormattableValue).definedData);
             case TextFormattableValue.TypeId.OrderTriggerTypeId:
-                return this.formatOrderTriggerTypeId((renderValue as EnumRenderValue).definedData);
+                return this.formatOrderTriggerTypeId((textFormattableValue as EnumTextFormattableValue).definedData);
             case TextFormattableValue.TypeId.GridOrderTriggerTypeId:
-                return this.formatGridOrderTriggerTypeId((renderValue as EnumRenderValue).definedData);
+                return this.formatGridOrderTriggerTypeId((textFormattableValue as EnumTextFormattableValue).definedData);
             case TextFormattableValue.TypeId.TrailingStopLossOrderConditionTypeId:
-                return this.formatTrailingStopLossOrderConditionTypeId((renderValue as EnumRenderValue).definedData);
+                return this.formatTrailingStopLossOrderConditionTypeId((textFormattableValue as EnumTextFormattableValue).definedData);
             case TextFormattableValue.TypeId.DataEnvironmentId:
-                return this.formatDataEnvironmentId((renderValue as EnumRenderValue).definedData);
+                return this.formatDataEnvironmentId((textFormattableValue as EnumTextFormattableValue).definedData);
             case TextFormattableValue.TypeId.FeedClassId:
-                return this.formatFeedClassId((renderValue as EnumRenderValue).definedData);
+                return this.formatFeedClassId((textFormattableValue as EnumTextFormattableValue).definedData);
             case TextFormattableValue.TypeId.FeedStatusId:
-                return this.formatFeedStatusId((renderValue as EnumRenderValue).definedData);
+                return this.formatFeedStatusId((textFormattableValue as EnumTextFormattableValue).definedData);
             case TextFormattableValue.TypeId.IvemClassId:
-                return this.formatIvemClassId((renderValue as EnumRenderValue).definedData);
+                return this.formatIvemClassId((textFormattableValue as EnumTextFormattableValue).definedData);
             case TextFormattableValue.TypeId.DepthDirectionId:
-                return this.formatDepthDirectionId((renderValue as EnumRenderValue).definedData);
+                return this.formatDepthDirectionId((textFormattableValue as EnumTextFormattableValue).definedData);
             case TextFormattableValue.TypeId.MarketClassificationIdMyxLitIvemAttribute:
-                return this.formatMarketClassificationIdMyxLitIvemAttribute((renderValue as EnumRenderValue).definedData);
+                return this.formatMarketClassificationIdMyxLitIvemAttribute((textFormattableValue as EnumTextFormattableValue).definedData);
             case TextFormattableValue.TypeId.DeliveryBasisIdMyxLitIvemAttribute:
-                return this.formatDeliveryBasisIdMyxLitIvemAttribute((renderValue as EnumRenderValue).definedData);
+                return this.formatDeliveryBasisIdMyxLitIvemAttribute((textFormattableValue as EnumTextFormattableValue).definedData);
             case TextFormattableValue.TypeId.DayTradesDataItemRecordTypeId:
-                return this.formatDayTradesDataItemRecordTypeId((renderValue as EnumRenderValue).definedData);
+                return this.formatDayTradesDataItemRecordTypeId((textFormattableValue as EnumTextFormattableValue).definedData);
             case TextFormattableValue.TypeId.ScanCriteriaTypeId:
-                return this.formatScanCriteriaTypeId((renderValue as EnumRenderValue).definedData);
+                return this.formatScanCriteriaTypeId((textFormattableValue as EnumTextFormattableValue).definedData);
             case TextFormattableValue.TypeId.ScanTargetTypeId:
-                return this.formatScanTargetTypeId((renderValue as EnumRenderValue).definedData);
+                return this.formatScanTargetTypeId((textFormattableValue as EnumTextFormattableValue).definedData);
             case TextFormattableValue.TypeId.ScanFieldBooleanOperationId:
-                return this.formatScanFieldBooleanOperationId((renderValue as EnumRenderValue).definedData);
+                return this.formatScanFieldBooleanOperationId((textFormattableValue as EnumTextFormattableValue).definedData);
             case TextFormattableValue.TypeId.NotificationChannelSourceSettingsUrgencyId:
-                return this.formatUrgency((renderValue as EnumRenderValue).definedData);
+                return this.formatUrgency((textFormattableValue as EnumTextFormattableValue).definedData);
             case TextFormattableValue.TypeId.NotificationDistributionMethodId:
-                return this.formatNotificationDistributionMethodId((renderValue as EnumRenderValue).definedData);
+                return this.formatNotificationDistributionMethodId((textFormattableValue as EnumTextFormattableValue).definedData);
             case TextFormattableValue.TypeId.StringArray:
-                return this.formatStringArrayAsCommaText((renderValue as StringArrayRenderValue).definedData);
+                return this.formatStringArrayAsCommaText((textFormattableValue as StringArrayTextFormattableValue).definedData);
             case TextFormattableValue.TypeId.IntegerArray:
-                return this.formatIntegerArrayAsCommaText((renderValue as IntegerArrayRenderValue).definedData);
+                return this.formatIntegerArrayAsCommaText((textFormattableValue as IntegerArrayTextFormattableValue).definedData);
             case TextFormattableValue.TypeId.MarketBoardIdArray:
-                return this.formatMarketBoardIdArrayAsCommaText((renderValue as IntegerArrayRenderValue).definedData);
+                return this.formatMarketBoardIdArrayAsCommaText((textFormattableValue as IntegerArrayTextFormattableValue).definedData);
             case TextFormattableValue.TypeId.PublisherSubscriptionDataTypeIdArray:
-                return this.formatPublisherSubscriptionDataTypeIdArrayAsCommaText((renderValue as IntegerArrayRenderValue).definedData);
+                return this.formatPublisherSubscriptionDataTypeIdArrayAsCommaText((textFormattableValue as IntegerArrayTextFormattableValue).definedData);
             case TextFormattableValue.TypeId.ShortSellTypeIdArrayMyxLitIvemAttribute:
-                return this.formatShortSellTypeIdMyxLitIvemAttribute((renderValue as IntegerArrayRenderValue).definedData);
+                return this.formatShortSellTypeIdMyxLitIvemAttribute((textFormattableValue as IntegerArrayTextFormattableValue).definedData);
             case TextFormattableValue.TypeId.TradeAffectsIdArray:
-                return this.formatTradeAffectsIdArrayAsCommaText((renderValue as TradeAffectsIdArrayRenderValue).definedData);
+                return this.formatTradeAffectsIdArrayAsCommaText((textFormattableValue as TradeAffectsIdArrayTextFormattableValue).definedData);
             case TextFormattableValue.TypeId.TradeFlagIdArray:
-                return this.formatTradeFlagIdArrayAsCommaText((renderValue as TradeFlagIdArrayRenderValue).definedData);
+                return this.formatTradeFlagIdArrayAsCommaText((textFormattableValue as TradeFlagIdArrayTextFormattableValue).definedData);
             case TextFormattableValue.TypeId.TradingStateAllowIdArray:
-                return this.formatTradingStateAllowIdArrayAsCommaText((renderValue as MarketIdArrayRenderValue).definedData);
+                return this.formatTradingStateAllowIdArrayAsCommaText((textFormattableValue as MarketIdArrayTextFormattableValue).definedData);
             case TextFormattableValue.TypeId.MarketIdArray:
-                return this.formatMarketIdArrayAsCommaText((renderValue as MarketIdArrayRenderValue).definedData);
+                return this.formatMarketIdArrayAsCommaText((textFormattableValue as MarketIdArrayTextFormattableValue).definedData);
             case TextFormattableValue.TypeId.OrderStatusAllowIdArray:
-                return this.formatOrderStatusAllowIdArrayAsCommaText((renderValue as OrderStatusAllowIdArrayRenderValue).definedData);
+                return this.formatOrderStatusAllowIdArrayAsCommaText((textFormattableValue as OrderStatusAllowIdArrayTextFormattableValue).definedData);
             case TextFormattableValue.TypeId.OrderStatusReasonIdArray:
-                return this.formatOrderStatusReasonIdArrayAsCommaText((renderValue as OrderStatusReasonIdArrayRenderValue).definedData);
+                return this.formatOrderStatusReasonIdArrayAsCommaText((textFormattableValue as OrderStatusReasonIdArrayTextFormattableValue).definedData);
             case TextFormattableValue.TypeId.PriceAndHasUndisclosed:
-                return this.formatPriceAndHasUndisclosed((renderValue as PriceAndHasUndisclosedRenderValue).definedData);
+                return this.formatPriceAndHasUndisclosed((textFormattableValue as PriceAndHasUndisclosedTextFormattableValue).definedData);
             case TextFormattableValue.TypeId.PriceOrRemainderAndHasUndisclosed:
                 return this.formatPriceOrRemainderAndHasUndisclosed(
-                    (renderValue as PriceOrRemainderAndHasUndisclosedRenderValue).definedData
+                    (textFormattableValue as PriceOrRemainderAndHasUndisclosedTextFormattableValue).definedData
                 );
             case TextFormattableValue.TypeId.CountAndXrefs:
-                return this.formatCountAndXrefs((renderValue as CountAndXrefsRenderValue).definedData);
+                return this.formatCountAndXrefs((textFormattableValue as CountAndXrefsTextFormattableValue).definedData);
             default:
-                throw new UnreachableCaseError('TFFDRV28507', renderValue.typeId);
+                throw new UnreachableCaseError('TFFDRV28507', textFormattableValue.typeId);
         }
     }
 }

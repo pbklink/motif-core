@@ -79,10 +79,10 @@ export class NullableDateDataItemTableField extends NullableDataItemTableField {
 
 export abstract class NullableBooleanDataItemTableField extends NullableDataItemTableField {
     protected compareNonNull(left: NullableCorrectnessTableValue, right: NullableCorrectnessTableValue): number {
-        const leftRenderValue = left.renderValue;
-        const rightRenderValue = right.renderValue;
-        const leftFormattedText = this.textFormatter.format(leftRenderValue);
-        const rightFormattedText = this.textFormatter.format(rightRenderValue);
+        const leftTextFormattableValue = left.textFormattableValue;
+        const rightTextFormattableValue = right.textFormattableValue;
+        const leftFormattedText = this.textFormatter.format(leftTextFormattableValue);
+        const rightFormattedText = this.textFormatter.format(rightTextFormattableValue);
 
         return compareString(leftFormattedText, rightFormattedText);
     }
@@ -90,10 +90,10 @@ export abstract class NullableBooleanDataItemTableField extends NullableDataItem
 /* eslint-enable max-len */
 export abstract class NullableEnumDataItemTableField extends NullableDataItemTableField {
     protected compareNonNull(left: NullableCorrectnessTableValue, right: NullableCorrectnessTableValue): number {
-        const leftRenderValue = left.renderValue;
-        const rightRenderValue = right.renderValue;
-        const leftFormattedText = this.textFormatter.format(leftRenderValue);
-        const rightFormattedText = this.textFormatter.format(rightRenderValue);
+        const leftTextFormattableValue = left.textFormattableValue;
+        const rightTextFormattableValue = right.textFormattableValue;
+        const leftFormattedText = this.textFormatter.format(leftTextFormattableValue);
+        const rightFormattedText = this.textFormatter.format(rightTextFormattableValue);
 
         return compareString(leftFormattedText, rightFormattedText);
     }

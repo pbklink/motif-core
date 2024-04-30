@@ -12,7 +12,7 @@
   "include": [
     "*.ts",
     "header/*.ts",
-    "render-value/*.ts"
+    "text-formattable-value/*.ts"
   ],
   "references": [
     { "path": "../record-grid/tsconfig.json" },

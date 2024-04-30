@@ -464,18 +464,18 @@ export class ActiveFaultedStatusIdCorrectnessTableValue extends EnumCorrectnessT
     constructor();
 }
 
-// Warning: (ae-missing-release-tag) "ActiveFaultedStatusIdRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class ActiveFaultedStatusIdRenderValue extends EnumRenderValue {
-    constructor(data: ActiveFaultedStatusId | undefined);
-}
-
 // Warning: (ae-missing-release-tag) "ActiveFaultedStatusIdTableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ActiveFaultedStatusIdTableValue extends EnumTableValue {
     constructor();
+}
+
+// Warning: (ae-missing-release-tag) "ActiveFaultedStatusIdTextFormattableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ActiveFaultedStatusIdTextFormattableValue extends EnumTextFormattableValue {
+    constructor(data: ActiveFaultedStatusId | undefined);
 }
 
 // @public (undocumented)
@@ -911,7 +911,7 @@ export class AffectsIdsDayTradesGridField extends DayTradesGridField {
     // (undocumented)
     protected compareValue(left: DayTradesDataItem.Record, right: DayTradesDataItem.Record, ascending: boolean): number;
     // (undocumented)
-    protected createRenderValue(record: DayTradesDataItem.Record): DayTradesGridField.CreateRenderValueResult;
+    protected createTextFormattableValue(record: DayTradesDataItem.Record): DayTradesGridField.CreateTextFormattableValueResult;
 }
 
 // Warning: (ae-missing-release-tag) "AllBalancesDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -1419,7 +1419,7 @@ export class AttributesDayTradesGridField extends DayTradesGridField {
     // (undocumented)
     protected compareValue(left: DayTradesDataItem.Record, right: DayTradesDataItem.Record): number;
     // (undocumented)
-    protected createRenderValue(record: DayTradesDataItem.Record): DayTradesGridField.CreateRenderValueResult;
+    protected createTextFormattableValue(record: DayTradesDataItem.Record): DayTradesGridField.CreateTextFormattableValueResult;
 }
 
 // Warning: (ae-missing-release-tag) "AttributeSubbedScanField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -2319,9 +2319,9 @@ export namespace BaseDirectory {
 // @public (undocumented)
 export abstract class BaseIntegerArrayCorrectnessTableValue extends GenericCorrectnessTableValue<readonly Integer[]> {
     // (undocumented)
-    protected createRenderValue(): IntegerArrayRenderValue;
+    protected createTextFormattableValue(): IntegerArrayTextFormattableValue;
     // (undocumented)
-    protected renderValueTypeId: TextFormattableValue.TypeId;
+    protected textFormattableValueTypeId: TextFormattableValue.TypeId;
 }
 
 // Warning: (ae-missing-release-tag) "BaseIntegerArrayTableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -2329,9 +2329,9 @@ export abstract class BaseIntegerArrayCorrectnessTableValue extends GenericCorre
 // @public (undocumented)
 export abstract class BaseIntegerArrayTableValue extends GenericTableValue<Integer[]> {
     // (undocumented)
-    protected createRenderValue(): IntegerArrayRenderValue;
+    protected createTextFormattableValue(): IntegerArrayTextFormattableValue;
     // (undocumented)
-    protected renderValueTypeId: TextFormattableValue.TypeId;
+    protected textFormattableValueTypeId: TextFormattableValue.TypeId;
 }
 
 // Warning: (ae-missing-release-tag) "BaseNullableDecimalCorrectnessTableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -2348,9 +2348,9 @@ export abstract class BaseNullableDecimalCorrectnessTableValue extends GenericNu
 // @public (undocumented)
 export abstract class BaseNullableIntegerCorrectnessArrayTableValue extends GenericNullableCorrectnessTableValue<Integer[]> {
     // (undocumented)
-    protected createRenderValue(): IntegerArrayRenderValue;
+    protected createTextFormattableValue(): IntegerArrayTextFormattableValue;
     // (undocumented)
-    protected renderValueTypeId: TextFormattableValue.TypeId;
+    protected textFormattableValueTypeId: TextFormattableValue.TypeId;
 }
 
 // Warning: (ae-missing-release-tag) "BaseNumberCorrectnessTableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -2596,10 +2596,10 @@ export interface BidAskPair<T> {
     bid: T;
 }
 
-// Warning: (ae-missing-release-tag) "BigIntRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BigIntTextFormattableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class BigIntRenderValue extends GenericRenderValue<bigint> {
+export class BigIntTextFormattableValue extends GenericTextFormattableValue<bigint> {
     constructor(data: bigint | undefined);
 }
 
@@ -2611,7 +2611,7 @@ export { BinarySearchResult }
 export class BkgdItemStateColorSchemeGridField extends ColorSchemeGridField {
     constructor(colorSettings: ColorSettings);
     // (undocumented)
-    getViewValue(record: ColorSchemeGridRecordStore.Record): ColorSettingsItemStateIdRenderValue;
+    getViewValue(record: ColorSchemeGridRecordStore.Record): ColorSettingsItemStateIdTextFormattableValue;
 }
 
 // Warning: (ae-missing-release-tag) "BooleanCorrectnessTableField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -2627,18 +2627,12 @@ export class BooleanCorrectnessTableField extends CorrectnessTableField {
 // @public (undocumented)
 export abstract class BooleanCorrectnessTableValue extends GenericCorrectnessTableValue<boolean> {
     // (undocumented)
-    protected createRenderValue(): BooleanRenderValue;
+    protected createTextFormattableValue(): BooleanTextFormattableValue;
     // (undocumented)
-    protected renderValueTypeId: TextFormattableValue.TypeId;
+    protected textFormattableValueTypeId: TextFormattableValue.TypeId;
 }
 
 export { BooleanOrUndefined }
-
-// Warning: (ae-missing-release-tag) "BooleanRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class BooleanRenderValue extends GenericRenderValue<boolean> {
-}
 
 // Warning: (ae-missing-release-tag) "BooleanTableField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -2653,9 +2647,15 @@ export class BooleanTableField extends TableField {
 // @public (undocumented)
 export abstract class BooleanTableValue extends GenericTableValue<boolean> {
     // (undocumented)
-    protected createRenderValue(): BooleanRenderValue;
+    protected createTextFormattableValue(): BooleanTextFormattableValue;
     // (undocumented)
-    protected renderValueTypeId: TextFormattableValue.TypeId;
+    protected textFormattableValueTypeId: TextFormattableValue.TypeId;
+}
+
+// Warning: (ae-missing-release-tag) "BooleanTextFormattableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class BooleanTextFormattableValue extends GenericTextFormattableValue<boolean> {
 }
 
 export { BooleanUiAction }
@@ -3262,7 +3262,7 @@ export class BuyBrokerDayTradesGridField extends DayTradesGridField {
     // (undocumented)
     protected compareValue(left: DayTradesDataItem.Record, right: DayTradesDataItem.Record, ascending: boolean): number;
     // (undocumented)
-    protected createRenderValue(record: DayTradesDataItem.Record): DayTradesGridField.CreateRenderValueResult;
+    protected createTextFormattableValue(record: DayTradesDataItem.Record): DayTradesGridField.CreateTextFormattableValueResult;
 }
 
 // Warning: (ae-internal-missing-underscore) The name "BuyCrossRefDayTradesGridField" should be prefixed with an underscore because the declaration is marked as @internal
@@ -3272,7 +3272,7 @@ export class BuyCrossRefDayTradesGridField extends DayTradesGridField {
     // (undocumented)
     protected compareValue(left: DayTradesDataItem.Record, right: DayTradesDataItem.Record, ascending: boolean): number;
     // (undocumented)
-    protected createRenderValue(record: DayTradesDataItem.Record): DayTradesGridField.CreateRenderValueResult;
+    protected createTextFormattableValue(record: DayTradesDataItem.Record): DayTradesGridField.CreateTextFormattableValueResult;
 }
 
 // Warning: (ae-internal-missing-underscore) The name "BuyDepthOrderIdDayTradesGridField" should be prefixed with an underscore because the declaration is marked as @internal
@@ -3282,7 +3282,7 @@ export class BuyDepthOrderIdDayTradesGridField extends DayTradesGridField {
     // (undocumented)
     protected compareValue(left: DayTradesDataItem.Record, right: DayTradesDataItem.Record, ascending: boolean): number;
     // (undocumented)
-    protected createRenderValue(record: DayTradesDataItem.Record): DayTradesGridField.CreateRenderValueResult;
+    protected createTextFormattableValue(record: DayTradesDataItem.Record): DayTradesGridField.CreateTextFormattableValueResult;
 }
 
 // Warning: (ae-missing-release-tag) "BuyOrSellId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -3766,13 +3766,13 @@ export const enum CapabilityId {
 export class CellPainterFactoryService {
     constructor(_settingsService: SettingsService, _textFormatterService: TextFormatterService);
     // (undocumented)
-    createCheckboxRenderValueRecordGrid(grid: RecordSourcedFieldGrid, dataServer: RecordGridDataServer): CheckboxRenderValueRecordGridCellPainter;
+    createCheckboxTextFormattableValueRecordGrid(grid: RecordSourcedFieldGrid, dataServer: RecordGridDataServer): CheckboxTextFormattableValueRecordGridCellPainter;
     // (undocumented)
     createTextHeader(grid: SourcedFieldGrid, dataServer: SingleHeadingGridDataServer): TextHeaderCellPainter;
     // (undocumented)
-    createTextRenderValueRecordGrid(grid: RecordSourcedFieldGrid, dataServer: RecordGridDataServer): RenderValueRecordGridCellPainter<TextRenderValueCellPainter>;
+    createTextTextFormattableValueRecordGrid(grid: RecordSourcedFieldGrid, dataServer: RecordGridDataServer): TextFormattableValueRecordGridCellPainter<TextTextFormattableValueCellPainter>;
     // (undocumented)
-    createTextRenderValueRowDataArrayGrid(grid: RowDataArrayGrid, dataServer: RowDataArrayGridDataServer): RenderValueRowDataArrayGridCellPainter<TextRenderValueCellPainter>;
+    createTextTextFormattableValueRowDataArrayGrid(grid: RowDataArrayGrid, dataServer: RowDataArrayGridDataServer): TextFormattableValueRowDataArrayGridCellPainter<TextTextFormattableValueCellPainter>;
 }
 
 export { ChangeSubscribableComparableList }
@@ -3993,21 +3993,20 @@ export const enum ChartIntervalId {
     ThirtyMinutes = 3
 }
 
-// Warning: (ae-forgotten-export) The symbol "RenderValueCellPainter" needs to be exported by the entry point public-api.d.ts
-// Warning: (ae-missing-release-tag) "CheckboxRenderValueCellPainter" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "CheckboxRenderValueCellPainter" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CheckboxTextFormattableValueCellPainter" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CheckboxTextFormattableValueCellPainter" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class CheckboxRenderValueCellPainter extends RenderValueCellPainter {
+export class CheckboxTextFormattableValueCellPainter extends TextFormattableValueCellPainter {
     constructor(settingsService: SettingsService, grid: SourcedFieldGrid, dataServer: RevDataServer<GridField>, _editable: boolean);
     // (undocumented)
     calculateClickBox(cell: RevDatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>): RevRectangle | undefined;
     // (undocumented)
-    paintValue(cell: RevDatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined, renderValue: TextFormattableValue): Integer | undefined;
+    paintValue(cell: RevDatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined, textFormattableValue: TextFormattableValue): Integer | undefined;
 }
 
 // @public (undocumented)
-export namespace CheckboxRenderValueCellPainter {
+export namespace CheckboxTextFormattableValueCellPainter {
     // (undocumented)
     export type CheckboxPaintFingerprint = IndexSignatureHack<CheckboxPaintFingerprintInterface>;
     // (undocumented)
@@ -4016,22 +4015,22 @@ export namespace CheckboxRenderValueCellPainter {
         export function same(left: CheckboxPaintFingerprint, right: CheckboxPaintFingerprint): boolean;
     }
     // (undocumented)
-    export interface CheckboxPaintFingerprintInterface extends RenderValueCellPainter.PaintFingerprintInterface, RevStandardCheckboxPainter.PaintFingerprintInterface {
+    export interface CheckboxPaintFingerprintInterface extends TextFormattableValueCellPainter.PaintFingerprintInterface, RevStandardCheckboxPainter.PaintFingerprintInterface {
     }
 }
 
-// Warning: (ae-missing-release-tag) "CheckboxRenderValueRecordGridCellEditor" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CheckboxTextFormattableValueRecordGridCellEditor" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class CheckboxRenderValueRecordGridCellEditor extends RevStandardToggleClickBoxCellEditor<AdaptedRevgridBehavioredGridSettings, AdaptedRevgridBehavioredColumnSettings, GridField> {
+export class CheckboxTextFormattableValueRecordGridCellEditor extends RevStandardToggleClickBoxCellEditor<AdaptedRevgridBehavioredGridSettings, AdaptedRevgridBehavioredColumnSettings, GridField> {
     constructor(settingsService: SettingsService, grid: SourcedFieldGrid, dataServer: RecordGridDataServer);
 }
 
-// Warning: (ae-missing-release-tag) "CheckboxRenderValueRecordGridCellPainter" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CheckboxTextFormattableValueRecordGridCellPainter" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class CheckboxRenderValueRecordGridCellPainter implements RevClickBoxCellPainter<AdaptedRevgridBehavioredColumnSettings, GridField> {
-    constructor(_renderValueCellPainter: CheckboxRenderValueCellPainter);
+export class CheckboxTextFormattableValueRecordGridCellPainter implements RevClickBoxCellPainter<AdaptedRevgridBehavioredColumnSettings, GridField> {
+    constructor(_textFormattableValueCellPainter: CheckboxTextFormattableValueCellPainter);
     // (undocumented)
     calculateClickBox(cell: RevDatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>): RevRectangle | undefined;
     // (undocumented)
@@ -4144,13 +4143,6 @@ export namespace CloseIntervalHistorySequenceSeries {
         // (undocumented)
         value: number | undefined;
     }
-}
-
-// Warning: (ae-missing-release-tag) "ColorRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class ColorRenderValue extends GenericRenderValue<string> {
-    constructor(data: string | undefined);
 }
 
 // Warning: (ae-missing-release-tag) "ColorScheme" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -4830,11 +4822,18 @@ export namespace ColorSettings {
     export type UndefineableOpaqueColor = ColorScheme.OpaqueColor | undefined;
 }
 
-// Warning: (ae-missing-release-tag) "ColorSettingsItemStateIdRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ColorSettingsItemStateIdTextFormattableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class ColorSettingsItemStateIdRenderValue extends EnumRenderValue {
+export class ColorSettingsItemStateIdTextFormattableValue extends EnumTextFormattableValue {
     constructor(data: ColorSettings.ItemStateId | undefined);
+}
+
+// Warning: (ae-missing-release-tag) "ColorTextFormattableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ColorTextFormattableValue extends GenericTextFormattableValue<string> {
+    constructor(data: string | undefined);
 }
 
 // @public (undocumented)
@@ -5170,7 +5169,7 @@ export class ConditionCodesDayTradesGridField extends DayTradesGridField {
     // (undocumented)
     protected compareValue(left: DayTradesDataItem.Record, right: DayTradesDataItem.Record, ascending: boolean): number;
     // (undocumented)
-    protected createRenderValue(record: DayTradesDataItem.Record): DayTradesGridField.CreateRenderValueResult;
+    protected createTextFormattableValue(record: DayTradesDataItem.Record): DayTradesGridField.CreateTextFormattableValueResult;
 }
 
 // @public (undocumented)
@@ -5470,16 +5469,16 @@ export abstract class CorrectnessTableValueSource<Record extends CorrectnessReco
     protected abstract getRecord(): Record;
 }
 
-// Warning: (ae-missing-release-tag) "CountAndXrefsRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "CountAndXrefsRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CountAndXrefsTextFormattableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CountAndXrefsTextFormattableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class CountAndXrefsRenderValue extends GenericRenderValue<CountAndXrefsRenderValue.DataType> {
-    constructor(data: CountAndXrefsRenderValue.DataType | undefined);
+export class CountAndXrefsTextFormattableValue extends GenericTextFormattableValue<CountAndXrefsTextFormattableValue.DataType> {
+    constructor(data: CountAndXrefsTextFormattableValue.DataType | undefined);
 }
 
 // @public (undocumented)
-export namespace CountAndXrefsRenderValue {
+export namespace CountAndXrefsTextFormattableValue {
     // (undocumented)
     export interface DataType {
         // (undocumented)
@@ -6585,7 +6584,7 @@ export class DateCorrectnessTableField extends CorrectnessTableField {
 // @public (undocumented)
 export class DateCorrectnessTableValue extends BaseDateCorrectnessTableValue {
     // (undocumented)
-    protected createRenderValue(): DateRenderValue;
+    protected createTextFormattableValue(): DateTextFormattableValue;
 }
 
 // Warning: (ae-missing-release-tag) "DateFieldEqualsScanCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -6654,13 +6653,6 @@ export namespace DateInRangeScanField {
 }
 
 export { DateOrDateTime }
-
-// Warning: (ae-missing-release-tag) "DateRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class DateRenderValue extends GenericRenderValue<Date> {
-    constructor(data: Date | undefined);
-}
 
 // Warning: (ae-missing-release-tag) "DateScanFieldCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "DateScanFieldCondition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -6843,7 +6835,7 @@ export class DateTableField extends TableField {
 // @public (undocumented)
 export class DateTableValue extends GenericTableValue<Date> {
     // (undocumented)
-    protected createRenderValue(): DateRenderValue;
+    protected createTextFormattableValue(): DateTextFormattableValue;
     // (undocumented)
     get data(): Date | undefined;
     set data(value: Date | undefined);
@@ -6859,18 +6851,25 @@ export namespace DateText {
     export function toDate(text: string, utc: boolean): Date | undefined;
 }
 
+// Warning: (ae-missing-release-tag) "DateTextFormattableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class DateTextFormattableValue extends GenericTextFormattableValue<Date> {
+    constructor(data: Date | undefined);
+}
+
 // Warning: (ae-missing-release-tag) "DateTimeCorrectnessTableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class DateTimeCorrectnessTableValue extends BaseDateCorrectnessTableValue {
     // (undocumented)
-    protected createRenderValue(): DateTimeRenderValue;
+    protected createTextFormattableValue(): DateTimeTextFormattableValue;
 }
 
-// Warning: (ae-missing-release-tag) "DateTimeRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DateTimeTextFormattableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class DateTimeRenderValue extends GenericRenderValue<Date> {
+export class DateTimeTextFormattableValue extends GenericTextFormattableValue<Date> {
     constructor(data: Date | undefined);
 }
 
@@ -7048,10 +7047,10 @@ export namespace DayTradesDataItemModule {
     export function initialiseStatic(): void;
 }
 
-// Warning: (ae-missing-release-tag) "DayTradesDataItemRecordTypeIdRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DayTradesDataItemRecordTypeIdTextFormattableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class DayTradesDataItemRecordTypeIdRenderValue extends EnumRenderValue {
+export class DayTradesDataItemRecordTypeIdTextFormattableValue extends EnumTextFormattableValue {
     constructor(data: DayTradesDataItem.Record.TypeId | undefined);
 }
 
@@ -7059,7 +7058,7 @@ export class DayTradesDataItemRecordTypeIdRenderValue extends EnumRenderValue {
 export abstract class DayTradesGridField extends GridField implements RevRecordField {
     constructor(_id: DayTradesDataItem.Field.Id, definition: RevRecordSourcedFieldDefinition, _getDataItemCorrectnessIdEvent: DayTradesGridField.GetDataItemCorrectnessIdEventHandler);
     // (undocumented)
-    protected addRenderAttributes(renderValue: TextFormattableValue, record: DayTradesDataItem.Record, cellAttribute: TextFormattableValue.Attribute): void;
+    protected addRenderAttributes(textFormattableValue: TextFormattableValue, record: DayTradesDataItem.Record, cellAttribute: TextFormattableValue.Attribute): void;
     // (undocumented)
     compare(left: DayTradesDataItem.Record, right: DayTradesDataItem.Record): number;
     // (undocumented)
@@ -7067,7 +7066,7 @@ export abstract class DayTradesGridField extends GridField implements RevRecordF
     // (undocumented)
     protected abstract compareValue(left: DayTradesDataItem.Record, right: DayTradesDataItem.Record, ascending: boolean): number;
     // (undocumented)
-    protected abstract createRenderValue(record: DayTradesDataItem.Record): DayTradesGridField.CreateRenderValueResult;
+    protected abstract createTextFormattableValue(record: DayTradesDataItem.Record): DayTradesGridField.CreateTextFormattableValueResult;
     // (undocumented)
     getViewValue(record: DayTradesDataItem.Record): TextFormattableValue;
     // (undocumented)
@@ -7087,11 +7086,11 @@ export namespace DayTradesGridField {
     // (undocumented)
     export function createField(id: Id, getDataItemCorrectnessIdEventHandler: GetDataItemCorrectnessIdEventHandler): DayTradesGridField;
     // (undocumented)
-    export interface CreateRenderValueResult {
+    export interface CreateTextFormattableValueResult {
         // (undocumented)
         cellAttribute: TextFormattableValue.Attribute | undefined;
         // (undocumented)
-        renderValue: TextFormattableValue;
+        textFormattableValue: TextFormattableValue;
     }
     // (undocumented)
     export type GetDataItemCorrectnessIdEventHandler = (this: void) => CorrectnessId;
@@ -7144,14 +7143,7 @@ export class DecimalCorrectnessTableField extends CorrectnessTableField {
 // @public (undocumented)
 export class DecimalCorrectnessTableValue extends BaseDecimalCorrectnessTableValue {
     // (undocumented)
-    protected createRenderValue(): DecimalRenderValue;
-}
-
-// Warning: (ae-missing-release-tag) "DecimalRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class DecimalRenderValue extends GenericRenderValue<Decimal> {
-    constructor(data: Decimal | undefined);
+    protected createTextFormattableValue(): DecimalTextFormattableValue;
 }
 
 // Warning: (ae-missing-release-tag) "DecimalTableField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -7167,7 +7159,14 @@ export class DecimalTableField extends TableField {
 // @public (undocumented)
 export class DecimalTableValue extends BaseDecimalTableValue {
     // (undocumented)
-    protected createRenderValue(): DecimalRenderValue;
+    protected createTextFormattableValue(): DecimalTextFormattableValue;
+}
+
+// Warning: (ae-missing-release-tag) "DecimalTextFormattableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class DecimalTextFormattableValue extends GenericTextFormattableValue<Decimal> {
+    constructor(data: Decimal | undefined);
 }
 
 export { DecimalUiAction }
@@ -7690,9 +7689,9 @@ export abstract class DepthRecord implements IndexedRecord {
     // (undocumented)
     abstract acceptedByFilter(filterXrefs: string[]): boolean;
     // (undocumented)
-    protected createVolumeAheadRenderValue(): DepthRecord.CreateRenderValueResult;
+    protected createVolumeAheadTextFormattableValue(): DepthRecord.CreateTextFormattableValueResult;
     // (undocumented)
-    protected createVolumeRenderValue(): DepthRecord.CreateRenderValueResult;
+    protected createVolumeTextFormattableValue(): DepthRecord.CreateTextFormattableValueResult;
     // (undocumented)
     get cumulativeQuantity(): number | undefined;
     // (undocumented)
@@ -7716,11 +7715,11 @@ export abstract class DepthRecord implements IndexedRecord {
 // @public (undocumented)
 export namespace DepthRecord {
     // (undocumented)
-    export interface CreateRenderValueResult {
+    export interface CreateTextFormattableValueResult {
         // (undocumented)
         extraAttribute?: TextFormattableValue.Attribute;
         // (undocumented)
-        renderValue: TextFormattableValue;
+        textFormattableValue: TextFormattableValue;
     }
     // (undocumented)
     export interface ProcessVolumeAheadResult {
@@ -7739,9 +7738,9 @@ export namespace DepthRecord {
 }
 
 // @public (undocumented)
-export namespace DepthRecordRenderValue {
+export namespace DepthRecordTextFormattableValue {
     // (undocumented)
-    export interface Attribute extends GridRecordStoreRenderValue.Attribute {
+    export interface Attribute extends GridRecordStoreTextFormattableValue.Attribute {
         // (undocumented)
         depthRecordTypeId: DepthRecord.TypeId;
         // (undocumented)
@@ -7892,7 +7891,7 @@ export const enum DepthStyleId {
 export class DisplayColorSchemeGridField extends ColorSchemeGridField {
     constructor(colorSettings: ColorSettings);
     // (undocumented)
-    getViewValue(record: ColorSchemeGridRecordStore.Record): StringRenderValue;
+    getViewValue(record: ColorSchemeGridRecordStore.Record): StringTextFormattableValue;
 }
 
 // Warning: (ae-missing-release-tag) "DisposableRecord" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -8138,18 +8137,18 @@ export class EnabledCorrectnessTableValue extends BooleanCorrectnessTableValue {
     constructor();
 }
 
-// Warning: (ae-missing-release-tag) "EnabledRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class EnabledRenderValue extends BooleanRenderValue {
-    constructor(data: boolean | undefined);
-}
-
 // Warning: (ae-missing-release-tag) "EnabledTableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class EnabledTableValue extends BooleanTableValue {
     constructor();
+}
+
+// Warning: (ae-missing-release-tag) "EnabledTextFormattableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class EnabledTextFormattableValue extends BooleanTextFormattableValue {
+    constructor(data: boolean | undefined);
 }
 
 // Warning: (ae-missing-release-tag) "EnumCorrectnessTableField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -8165,9 +8164,9 @@ export class EnumCorrectnessTableField extends CorrectnessTableField {
 // @public (undocumented)
 export abstract class EnumCorrectnessTableValue extends GenericCorrectnessTableValue<Integer> {
     // (undocumented)
-    protected createRenderValue(): EnumRenderValue;
+    protected createTextFormattableValue(): EnumTextFormattableValue;
     // (undocumented)
-    protected renderValueTypeId: TextFormattableValue.TypeId;
+    protected textFormattableValueTypeId: TextFormattableValue.TypeId;
 }
 
 export { EnumExplicitElementsArrayUiAction }
@@ -8175,12 +8174,6 @@ export { EnumExplicitElementsArrayUiAction }
 export { EnumInfoOutOfOrderError }
 
 export { EnumMappedExplicitElementsArrayUiAction }
-
-// Warning: (ae-missing-release-tag) "EnumRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class EnumRenderValue extends GenericRenderValue<Integer> {
-}
 
 // Warning: (ae-missing-release-tag) "EnumTableField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -8195,9 +8188,15 @@ export class EnumTableField extends TableField {
 // @public (undocumented)
 export abstract class EnumTableValue extends GenericTableValue<Integer> {
     // (undocumented)
-    protected createRenderValue(): EnumRenderValue;
+    protected createTextFormattableValue(): EnumTextFormattableValue;
     // (undocumented)
-    protected renderValueTypeId: TextFormattableValue.TypeId;
+    protected textFormattableValueTypeId: TextFormattableValue.TypeId;
+}
+
+// Warning: (ae-missing-release-tag) "EnumTextFormattableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class EnumTextFormattableValue extends GenericTextFormattableValue<Integer> {
 }
 
 export { EnumUiAction }
@@ -10579,7 +10578,7 @@ export class FlagIdsDayTradesGridField extends DayTradesGridField {
     // (undocumented)
     protected compareValue(left: DayTradesDataItem.Record, right: DayTradesDataItem.Record, ascending: boolean): number;
     // (undocumented)
-    protected createRenderValue(record: DayTradesDataItem.Record): DayTradesGridField.CreateRenderValueResult;
+    protected createTextFormattableValue(record: DayTradesDataItem.Record): DayTradesGridField.CreateTextFormattableValueResult;
 }
 
 // Warning: (ae-missing-release-tag) "ForeItemStateColorSchemeGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -10588,7 +10587,7 @@ export class FlagIdsDayTradesGridField extends DayTradesGridField {
 export class ForeItemStateColorSchemeGridField extends ColorSchemeGridField {
     constructor(colorSettings: ColorSettings);
     // (undocumented)
-    getViewValue(record: ColorSchemeGridRecordStore.Record): ColorSettingsItemStateIdRenderValue;
+    getViewValue(record: ColorSchemeGridRecordStore.Record): ColorSettingsItemStateIdTextFormattableValue;
 }
 
 // Warning: (ae-missing-release-tag) "FullDepthRecord" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -10597,13 +10596,13 @@ export class ForeItemStateColorSchemeGridField extends ColorSchemeGridField {
 // @public (undocumented)
 export abstract class FullDepthRecord extends DepthRecord {
     // (undocumented)
-    protected abstract createRenderValue(id: FullDepthSideFieldId): DepthRecord.CreateRenderValueResult;
+    protected abstract createTextFormattableValue(id: FullDepthSideFieldId): DepthRecord.CreateTextFormattableValueResult;
     // (undocumented)
     abstract getCount(): Integer;
     // (undocumented)
     abstract getPrice(): Decimal;
     // (undocumented)
-    getRenderValue(id: FullDepthSideFieldId, sideId: OrderSideId, dataCorrectnessAttribute: TextFormattableValue.Attribute | undefined): TextFormattableValue;
+    getTextFormattableValue(id: FullDepthSideFieldId, sideId: OrderSideId, dataCorrectnessAttribute: TextFormattableValue.Attribute | undefined): TextFormattableValue;
     // (undocumented)
     abstract getUndisclosedCount(): Integer;
     // (undocumented)
@@ -10825,17 +10824,6 @@ export class GenericNullableDataItemTableField<DataType extends number | string,
     protected compareNonNull(left: NullableCorrectnessTableValue, right: NullableCorrectnessTableValue): number;
 }
 
-// Warning: (ae-missing-release-tag) "GenericRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export abstract class GenericRenderValue<T> extends TextFormattableValue {
-    constructor(data: T | undefined, typeId: TextFormattableValue.TypeId);
-    // (undocumented)
-    get definedData(): T;
-    // (undocumented)
-    isUndefined(): boolean;
-}
-
 // Warning: (ae-missing-release-tag) "GenericTableField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -10853,6 +10841,17 @@ export abstract class GenericTableValue<T> extends TableValue {
     // (undocumented)
     get data(): T | undefined;
     set data(value: T | undefined);
+    // (undocumented)
+    get definedData(): T;
+    // (undocumented)
+    isUndefined(): boolean;
+}
+
+// Warning: (ae-missing-release-tag) "GenericTextFormattableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export abstract class GenericTextFormattableValue<T> extends TextFormattableValue {
+    constructor(data: T | undefined, typeId: TextFormattableValue.TypeId);
     // (undocumented)
     get definedData(): T;
     // (undocumented)
@@ -11024,10 +11023,10 @@ export class GridOrderTriggerTypeIdCorrectnessTableValue extends EnumCorrectness
     constructor();
 }
 
-// Warning: (ae-missing-release-tag) "GridRecordStoreRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "GridRecordStoreTextFormattableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export namespace GridRecordStoreRenderValue {
+export namespace GridRecordStoreTextFormattableValue {
     // (undocumented)
     export interface Attribute extends TextFormattableValue.Attribute {
     }
@@ -11809,7 +11808,7 @@ export class IdDayTradesGridField extends DayTradesGridField {
     // (undocumented)
     protected compareValue(left: DayTradesDataItem.Record, right: DayTradesDataItem.Record): ComparisonResult;
     // (undocumented)
-    protected createRenderValue(record: DayTradesDataItem.Record): DayTradesGridField.CreateRenderValueResult;
+    protected createTextFormattableValue(record: DayTradesDataItem.Record): DayTradesGridField.CreateTextFormattableValueResult;
 }
 
 // Warning: (ae-missing-release-tag) "IdleService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -12091,12 +12090,6 @@ export class IntegerArrayCorrectnessTableValue extends BaseIntegerArrayCorrectne
     constructor();
 }
 
-// Warning: (ae-missing-release-tag) "IntegerArrayRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class IntegerArrayRenderValue extends GenericRenderValue<readonly Integer[]> {
-}
-
 // Warning: (ae-missing-release-tag) "IntegerArrayTableField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -12112,6 +12105,12 @@ export class IntegerArrayTableValue extends BaseIntegerArrayTableValue {
     constructor();
 }
 
+// Warning: (ae-missing-release-tag) "IntegerArrayTextFormattableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class IntegerArrayTextFormattableValue extends GenericTextFormattableValue<readonly Integer[]> {
+}
+
 // Warning: (ae-missing-release-tag) "IntegerCorrectnessTableField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -12123,17 +12122,10 @@ export class IntegerCorrectnessTableField extends GenericCorrectnessTableField<I
 // @public (undocumented)
 export class IntegerCorrectnessTableValue extends GenericCorrectnessTableValue<Integer> {
     // (undocumented)
-    protected createRenderValue(): IntegerRenderValue;
+    protected createTextFormattableValue(): IntegerTextFormattableValue;
 }
 
 export { IntegerExplicitElementsEnumUiAction }
-
-// Warning: (ae-missing-release-tag) "IntegerRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class IntegerRenderValue extends GenericRenderValue<Integer> {
-    constructor(data: Integer | undefined);
-}
 
 // Warning: (ae-missing-release-tag) "IntegerTableField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -12146,7 +12138,14 @@ export class IntegerTableField extends GenericTableField<Integer, IntegerTableVa
 // @public (undocumented)
 export class IntegerTableValue extends GenericTableValue<Integer> {
     // (undocumented)
-    protected createRenderValue(): IntegerRenderValue;
+    protected createTextFormattableValue(): IntegerTextFormattableValue;
+}
+
+// Warning: (ae-missing-release-tag) "IntegerTextFormattableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class IntegerTextFormattableValue extends GenericTextFormattableValue<Integer> {
+    constructor(data: Integer | undefined);
 }
 
 export { IntegerUiAction }
@@ -12977,13 +12976,13 @@ export function isPriceOrRemainderEqual(left: PriceOrRemainder, right: PriceOrRe
 export class IsReadableColorSchemeGridField extends ColorSchemeGridField {
     constructor(colorSettings: ColorSettings);
     // (undocumented)
-    getViewValue(record: ColorSchemeGridRecordStore.Record): IsReadableRenderValue;
+    getViewValue(record: ColorSchemeGridRecordStore.Record): IsReadableTextFormattableValue;
 }
 
-// Warning: (ae-missing-release-tag) "IsReadableRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "IsReadableTextFormattableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class IsReadableRenderValue extends BooleanRenderValue {
+export class IsReadableTextFormattableValue extends BooleanTextFormattableValue {
     constructor(data: boolean | undefined);
 }
 
@@ -13103,7 +13102,7 @@ export function isUndefinableStringNumberBooleanNestArrayEqual(left: unknown[] |
 export class ItemBkgdColorColorSchemeGridField extends ColorSchemeGridField {
     constructor(colorSettings: ColorSettings);
     // (undocumented)
-    getViewValue(record: ColorSchemeGridRecordStore.Record): ColorRenderValue;
+    getViewValue(record: ColorSchemeGridRecordStore.Record): ColorTextFormattableValue;
 }
 
 // Warning: (ae-missing-release-tag) "ItemBkgdColorTextColorSchemeGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -13112,7 +13111,7 @@ export class ItemBkgdColorColorSchemeGridField extends ColorSchemeGridField {
 export class ItemBkgdColorTextColorSchemeGridField extends ColorSchemeGridField {
     constructor(colorSettings: ColorSettings);
     // (undocumented)
-    getViewValue(record: ColorSchemeGridRecordStore.Record): StringRenderValue;
+    getViewValue(record: ColorSchemeGridRecordStore.Record): StringTextFormattableValue;
 }
 
 // Warning: (ae-missing-release-tag) "ItemForeColorColorSchemeGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -13121,7 +13120,7 @@ export class ItemBkgdColorTextColorSchemeGridField extends ColorSchemeGridField 
 export class ItemForeColorColorSchemeGridField extends ColorSchemeGridField {
     constructor(colorSettings: ColorSettings);
     // (undocumented)
-    getViewValue(record: ColorSchemeGridRecordStore.Record): ColorRenderValue;
+    getViewValue(record: ColorSchemeGridRecordStore.Record): ColorTextFormattableValue;
 }
 
 // Warning: (ae-missing-release-tag) "ItemForeColorTextColorSchemeGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -13130,7 +13129,7 @@ export class ItemForeColorColorSchemeGridField extends ColorSchemeGridField {
 export class ItemForeColorTextColorSchemeGridField extends ColorSchemeGridField {
     constructor(colorSettings: ColorSettings);
     // (undocumented)
-    getViewValue(record: ColorSchemeGridRecordStore.Record): StringRenderValue;
+    getViewValue(record: ColorSchemeGridRecordStore.Record): StringTextFormattableValue;
 }
 
 // Warning: (ae-missing-release-tag) "ItemIdColorSchemeGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -13139,7 +13138,7 @@ export class ItemForeColorTextColorSchemeGridField extends ColorSchemeGridField 
 export class ItemIdColorSchemeGridField extends ColorSchemeGridField {
     constructor(colorSettings: ColorSettings);
     // (undocumented)
-    getViewValue(record: ColorSchemeGridRecordStore.Record): IntegerRenderValue;
+    getViewValue(record: ColorSchemeGridRecordStore.Record): IntegerTextFormattableValue;
 }
 
 // Warning: (ae-missing-release-tag) "IvemClass" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -13243,17 +13242,10 @@ export class IvemIdCorrectnessTableField extends CorrectnessTableField {
 // @public (undocumented)
 export class IvemIdCorrectnessTableValue extends GenericCorrectnessTableValue<IvemId> {
     // (undocumented)
-    protected createRenderValue(): IvemIdRenderValue;
+    protected createTextFormattableValue(): IvemIdTextFormattableValue;
     // (undocumented)
     get data(): IvemId | undefined;
     set data(value: IvemId | undefined);
-}
-
-// Warning: (ae-missing-release-tag) "IvemIdRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class IvemIdRenderValue extends GenericRenderValue<IvemId> {
-    constructor(data: IvemId | undefined);
 }
 
 // Warning: (ae-missing-release-tag) "IvemIdTableField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -13269,10 +13261,17 @@ export class IvemIdTableField extends TableField {
 // @public (undocumented)
 export class IvemIdTableValue extends GenericTableValue<IvemId> {
     // (undocumented)
-    protected createRenderValue(): IvemIdRenderValue;
+    protected createTextFormattableValue(): IvemIdTextFormattableValue;
     // (undocumented)
     get data(): IvemId | undefined;
     set data(value: IvemId | undefined);
+}
+
+// Warning: (ae-missing-release-tag) "IvemIdTextFormattableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class IvemIdTextFormattableValue extends GenericTextFormattableValue<IvemId> {
+    constructor(data: IvemId | undefined);
 }
 
 // Warning: (ae-missing-release-tag) "IvemIdUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -14322,7 +14321,7 @@ export class LitIvemIdAddToWatchmakerListDataItem extends RequestAcknowledgeWatc
 // @public (undocumented)
 export class LitIvemIdArrayCorrectnessTableValue extends GenericCorrectnessTableValue<readonly LitIvemId[]> {
     // (undocumented)
-    protected createRenderValue(): LitIvemIdArrayRenderValue;
+    protected createTextFormattableValue(): LitIvemIdArrayTextFormattableValue;
 }
 
 // Warning: (ae-forgotten-export) The symbol "BaseRankedLitIvemIdList" needs to be exported by the entry point public-api.d.ts
@@ -14402,10 +14401,10 @@ export namespace LitIvemIdArrayRankedLitIvemIdListDefinition {
     export function tryCreateLitIvemIdsFromJson(element: JsonElement): Result<LitIvemId[]>;
 }
 
-// Warning: (ae-missing-release-tag) "LitIvemIdArrayRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "LitIvemIdArrayTextFormattableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class LitIvemIdArrayRenderValue extends GenericRenderValue<readonly LitIvemId[]> {
+export class LitIvemIdArrayTextFormattableValue extends GenericTextFormattableValue<readonly LitIvemId[]> {
     constructor(data: readonly LitIvemId[] | undefined);
 }
 
@@ -14479,7 +14478,7 @@ export class LitIvemIdCorrectnessTableField extends CorrectnessTableField {
 // @public (undocumented)
 export class LitIvemIdCorrectnessTableValue extends GenericCorrectnessTableValue<LitIvemId> {
     // (undocumented)
-    protected createRenderValue(): LitIvemIdRenderValue;
+    protected createTextFormattableValue(): LitIvemIdTextFormattableValue;
     // (undocumented)
     get data(): LitIvemId | undefined;
     set data(value: LitIvemId | undefined);
@@ -14743,13 +14742,6 @@ export class LitIvemIdQueryWatchmakerListMembersDataDefinition extends QueryWatc
     constructor();
 }
 
-// Warning: (ae-missing-release-tag) "LitIvemIdRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class LitIvemIdRenderValue extends GenericRenderValue<LitIvemId> {
-    constructor(data: LitIvemId | undefined);
-}
-
 // Warning: (ae-missing-release-tag) "LitIvemIdScanMatch" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -14887,7 +14879,7 @@ export namespace LitIvemIdTableRecordDefinition {
 // @public (undocumented)
 export class LitIvemIdTableValue extends GenericTableValue<LitIvemId> {
     // (undocumented)
-    protected createRenderValue(): LitIvemIdRenderValue;
+    protected createTextFormattableValue(): LitIvemIdTextFormattableValue;
     // (undocumented)
     get data(): LitIvemId | undefined;
     set data(value: LitIvemId | undefined);
@@ -14908,6 +14900,13 @@ export class LitIvemIdTableValueSource extends TableValueSource {
     protected getfieldCount(): Integer;
     // (undocumented)
     protected getRecord(): LitIvemId;
+}
+
+// Warning: (ae-missing-release-tag) "LitIvemIdTextFormattableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class LitIvemIdTextFormattableValue extends GenericTextFormattableValue<LitIvemId> {
+    constructor(data: LitIvemId | undefined);
 }
 
 // Warning: (ae-missing-release-tag) "LitIvemIdUiAction" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -15904,10 +15903,10 @@ export class MarketIdArrayCorrectnessTableValue extends BaseIntegerArrayCorrectn
     constructor();
 }
 
-// Warning: (ae-missing-release-tag) "MarketIdArrayRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "MarketIdArrayTextFormattableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class MarketIdArrayRenderValue extends IntegerArrayRenderValue {
+export class MarketIdArrayTextFormattableValue extends IntegerArrayTextFormattableValue {
     constructor(data: readonly MarketId[] | undefined);
 }
 
@@ -15925,14 +15924,7 @@ export class MarketIdDayTradesGridField extends DayTradesGridField {
     // (undocumented)
     protected compareValue(left: DayTradesDataItem.Record, right: DayTradesDataItem.Record, ascending: boolean): number;
     // (undocumented)
-    protected createRenderValue(record: DayTradesDataItem.Record): DayTradesGridField.CreateRenderValueResult;
-}
-
-// Warning: (ae-missing-release-tag) "MarketIdRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class MarketIdRenderValue extends EnumRenderValue {
-    constructor(data: MarketId | undefined);
+    protected createTextFormattableValue(record: DayTradesDataItem.Record): DayTradesGridField.CreateTextFormattableValueResult;
 }
 
 // Warning: (ae-missing-release-tag) "MarketIdTableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -15940,6 +15932,13 @@ export class MarketIdRenderValue extends EnumRenderValue {
 // @public (undocumented)
 export class MarketIdTableValue extends EnumTableValue {
     constructor();
+}
+
+// Warning: (ae-missing-release-tag) "MarketIdTextFormattableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class MarketIdTextFormattableValue extends EnumTextFormattableValue {
+    constructor(data: MarketId | undefined);
 }
 
 // Warning: (ae-missing-release-tag) "MarketInfo" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -16367,10 +16366,10 @@ export namespace MasterSettingsModule {
     export function initialiseStatic(): void;
 }
 
-// Warning: (ae-missing-release-tag) "MatchedRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "MatchedTextFormattableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class MatchedRenderValue extends BooleanRenderValue {
+export class MatchedTextFormattableValue extends BooleanTextFormattableValue {
     constructor(data: boolean | undefined);
 }
 
@@ -16437,10 +16436,10 @@ export class ModifiedCorrectnessTableValue extends BooleanCorrectnessTableValue 
     constructor();
 }
 
-// Warning: (ae-missing-release-tag) "ModifiedRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ModifiedTextFormattableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class ModifiedRenderValue extends BooleanRenderValue {
+export class ModifiedTextFormattableValue extends BooleanTextFormattableValue {
     constructor(data: boolean | undefined);
 }
 
@@ -17014,7 +17013,7 @@ export class MyxLitIvemAttributesTableValueSource extends TableValueSource {
 export class NameColorSchemeGridField extends ColorSchemeGridField {
     constructor(colorSettings: ColorSettings);
     // (undocumented)
-    getViewValue(record: ColorSchemeGridRecordStore.Record): StringRenderValue;
+    getViewValue(record: ColorSchemeGridRecordStore.Record): StringTextFormattableValue;
 }
 
 export { newDate }
@@ -17293,9 +17292,9 @@ export interface NotSubbedScanField extends ScanField {
 // @public (undocumented)
 export abstract class NullableBooleanCorrectnessTableValue extends GenericNullableCorrectnessTableValue<boolean> {
     // (undocumented)
-    protected createRenderValue(): BooleanRenderValue;
+    protected createTextFormattableValue(): BooleanTextFormattableValue;
     // (undocumented)
-    protected renderValueTypeId: TextFormattableValue.TypeId;
+    protected textFormattableValueTypeId: TextFormattableValue.TypeId;
 }
 
 // Warning: (ae-missing-release-tag) "NullableBooleanDataItemTableField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -17331,7 +17330,7 @@ export abstract class NullableDataItemTableField extends CorrectnessTableField {
 // @public (undocumented)
 export class NullableDateCorrectnessTableValue extends GenericNullableCorrectnessTableValue<Date> {
     // (undocumented)
-    protected createRenderValue(): DateRenderValue;
+    protected createTextFormattableValue(): DateTextFormattableValue;
     // (undocumented)
     get data(): Date | null | undefined;
     set data(value: Date | null | undefined);
@@ -17350,7 +17349,7 @@ export class NullableDateDataItemTableField extends NullableDataItemTableField {
 // @public (undocumented)
 export class NullableDecimalCorrectnessTableValue extends BaseNullableDecimalCorrectnessTableValue {
     // (undocumented)
-    protected createRenderValue(): DecimalRenderValue;
+    protected createTextFormattableValue(): DecimalTextFormattableValue;
 }
 
 // Warning: (ae-missing-release-tag) "NullableDecimalDataItemTableField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -17366,9 +17365,9 @@ export class NullableDecimalDataItemTableField extends NullableDataItemTableFiel
 // @public (undocumented)
 export abstract class NullableEnumCorrectnessTableValue extends GenericNullableCorrectnessTableValue<Integer> {
     // (undocumented)
-    protected createRenderValue(): EnumRenderValue;
+    protected createTextFormattableValue(): EnumTextFormattableValue;
     // (undocumented)
-    protected renderValueTypeId: TextFormattableValue.TypeId;
+    protected textFormattableValueTypeId: TextFormattableValue.TypeId;
 }
 
 // Warning: (ae-missing-release-tag) "NullableEnumDataItemTableField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -17399,7 +17398,7 @@ export abstract class NullableIntegerArrayDataItemTableField extends NullableDat
 // @public (undocumented)
 export class NullableIntegerCorrectnessTableValue extends GenericNullableCorrectnessTableValue<Integer> {
     // (undocumented)
-    protected createRenderValue(): IntegerRenderValue;
+    protected createTextFormattableValue(): IntegerTextFormattableValue;
 }
 
 // Warning: (ae-missing-release-tag) "NullableIntegerDataItemTableField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -17413,7 +17412,7 @@ export class NullableIntegerDataItemTableField extends GenericNullableDataItemTa
 // @public (undocumented)
 export class NullableNumberCorrectnessTableValue extends GenericNullableCorrectnessTableValue<number> {
     // (undocumented)
-    protected createRenderValue(): NumberRenderValue;
+    protected createTextFormattableValue(): NumberTextFormattableValue;
 }
 
 // Warning: (ae-missing-release-tag) "NullableNumberDataItemTableField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -17427,7 +17426,7 @@ export class NullableNumberDataItemTableField extends GenericNullableDataItemTab
 // @public (undocumented)
 export class NullablePriceCorrectnessTableValue extends BaseNullableDecimalCorrectnessTableValue {
     // (undocumented)
-    protected createRenderValue(): PriceRenderValue;
+    protected createTextFormattableValue(): PriceTextFormattableValue;
 }
 
 // Warning: (ae-missing-release-tag) "NullableStringCorrectnessTableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -17435,7 +17434,7 @@ export class NullablePriceCorrectnessTableValue extends BaseNullableDecimalCorre
 // @public (undocumented)
 export class NullableStringCorrectnessTableValue extends GenericNullableCorrectnessTableValue<string> {
     // (undocumented)
-    protected createRenderValue(): StringRenderValue;
+    protected createTextFormattableValue(): StringTextFormattableValue;
 }
 
 // Warning: (ae-missing-release-tag) "NullableStringDataItemTableField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -17459,7 +17458,7 @@ export class NumberCorrectnessTableField extends GenericCorrectnessTableField<nu
 // @public (undocumented)
 export class NumberCorrectnessTableValue extends BaseNumberCorrectnessTableValue {
     // (undocumented)
-    protected createRenderValue(): NumberRenderValue;
+    protected createTextFormattableValue(): NumberTextFormattableValue;
 }
 
 // Warning: (ae-missing-release-tag) "NumberHistorySequenceSeriesInterface" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -17482,13 +17481,6 @@ export namespace NumberHistorySequenceSeriesInterface {
     }
 }
 
-// Warning: (ae-missing-release-tag) "NumberRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class NumberRenderValue extends GenericRenderValue<number> {
-    constructor(data: number | undefined);
-}
-
 // Warning: (ae-missing-release-tag) "NumberTableField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -17500,7 +17492,14 @@ export class NumberTableField extends GenericTableField<number, NumberTableValue
 // @public (undocumented)
 export class NumberTableValue extends BaseNumberTableValue {
     // (undocumented)
-    protected createRenderValue(): NumberRenderValue;
+    protected createTextFormattableValue(): NumberTextFormattableValue;
+}
+
+// Warning: (ae-missing-release-tag) "NumberTextFormattableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class NumberTextFormattableValue extends GenericTextFormattableValue<number> {
+    constructor(data: number | undefined);
 }
 
 export { numberToPixels }
@@ -18266,10 +18265,10 @@ export class OrderExtendedSideIdCorrectnessTableValue extends EnumCorrectnessTab
     constructor();
 }
 
-// Warning: (ae-missing-release-tag) "OrderExtendedSideIdRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OrderExtendedSideIdTextFormattableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class OrderExtendedSideIdRenderValue extends EnumRenderValue {
+export class OrderExtendedSideIdTextFormattableValue extends EnumTextFormattableValue {
     constructor(data: OrderExtendedSideId | undefined);
 }
 
@@ -18281,7 +18280,7 @@ export class OrderFullDepthRecord extends FullDepthRecord {
     // (undocumented)
     acceptedByFilter(filterXrefs: string[]): boolean;
     // (undocumented)
-    protected createRenderValue(id: FullDepthSideFieldId): DepthRecord.CreateRenderValueResult;
+    protected createTextFormattableValue(id: FullDepthSideFieldId): DepthRecord.CreateTextFormattableValueResult;
     // (undocumented)
     getCount(): number;
     // (undocumented)
@@ -19702,13 +19701,13 @@ export class OrderSideIdDayTradesGridField extends DayTradesGridField {
     // (undocumented)
     protected compareValue(left: DayTradesDataItem.Record, right: DayTradesDataItem.Record, ascending: boolean): ComparisonResult;
     // (undocumented)
-    protected createRenderValue(record: DayTradesDataItem.Record): DayTradesGridField.CreateRenderValueResult;
+    protected createTextFormattableValue(record: DayTradesDataItem.Record): DayTradesGridField.CreateTextFormattableValueResult;
 }
 
-// Warning: (ae-missing-release-tag) "OrderSideIdRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OrderSideIdTextFormattableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class OrderSideIdRenderValue extends EnumRenderValue {
+export class OrderSideIdTextFormattableValue extends EnumTextFormattableValue {
     constructor(data: OrderSideId | undefined);
 }
 
@@ -19796,10 +19795,10 @@ export class OrderStatusAllowIdArrayCorrectnessTableValue extends BaseIntegerArr
     constructor();
 }
 
-// Warning: (ae-missing-release-tag) "OrderStatusAllowIdArrayRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OrderStatusAllowIdArrayTextFormattableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class OrderStatusAllowIdArrayRenderValue extends IntegerArrayRenderValue {
+export class OrderStatusAllowIdArrayTextFormattableValue extends IntegerArrayTextFormattableValue {
     constructor(data: readonly OrderStatus.AllowId[] | undefined);
 }
 
@@ -19875,10 +19874,10 @@ export class OrderStatusReasonIdArrayCorrectnessTableValue extends BaseIntegerAr
     constructor();
 }
 
-// Warning: (ae-missing-release-tag) "OrderStatusReasonIdArrayRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "OrderStatusReasonIdArrayTextFormattableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class OrderStatusReasonIdArrayRenderValue extends IntegerArrayRenderValue {
+export class OrderStatusReasonIdArrayTextFormattableValue extends IntegerArrayTextFormattableValue {
     constructor(data: readonly OrderStatus.ReasonId[] | undefined);
 }
 
@@ -20238,14 +20237,7 @@ export interface PayloadTableRecordDefinition<Record> extends TableRecordDefinit
 // @public (undocumented)
 export class PercentageCorrectnessTableValue extends BaseNumberCorrectnessTableValue {
     // (undocumented)
-    protected createRenderValue(): PercentageRenderValue;
-}
-
-// Warning: (ae-missing-release-tag) "PercentageRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class PercentageRenderValue extends GenericRenderValue<number> {
-    constructor(data: number | undefined);
+    protected createTextFormattableValue(): PercentageTextFormattableValue;
 }
 
 // Warning: (ae-missing-release-tag) "PercentageTableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -20253,7 +20245,14 @@ export class PercentageRenderValue extends GenericRenderValue<number> {
 // @public (undocumented)
 export class PercentageTableValue extends BaseNumberTableValue {
     // (undocumented)
-    protected createRenderValue(): PercentageRenderValue;
+    protected createTextFormattableValue(): PercentageTextFormattableValue;
+}
+
+// Warning: (ae-missing-release-tag) "PercentageTextFormattableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class PercentageTextFormattableValue extends GenericTextFormattableValue<number> {
+    constructor(data: number | undefined);
 }
 
 // Warning: (ae-missing-release-tag) "PercentageTrailingPriceOrderTrigger" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -20408,16 +20407,16 @@ export namespace PrefixableSecurityDataItemTableFieldSourceDefinition {
     export function initialiseStatic(): void;
 }
 
-// Warning: (ae-missing-release-tag) "PriceAndHasUndisclosedRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "PriceAndHasUndisclosedRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "PriceAndHasUndisclosedTextFormattableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "PriceAndHasUndisclosedTextFormattableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class PriceAndHasUndisclosedRenderValue extends GenericRenderValue<PriceAndHasUndisclosedRenderValue.DataType> {
-    constructor(data: PriceAndHasUndisclosedRenderValue.DataType | undefined);
+export class PriceAndHasUndisclosedTextFormattableValue extends GenericTextFormattableValue<PriceAndHasUndisclosedTextFormattableValue.DataType> {
+    constructor(data: PriceAndHasUndisclosedTextFormattableValue.DataType | undefined);
 }
 
 // @public (undocumented)
-export namespace PriceAndHasUndisclosedRenderValue {
+export namespace PriceAndHasUndisclosedTextFormattableValue {
     // (undocumented)
     export interface DataType {
         // (undocumented)
@@ -20432,7 +20431,7 @@ export namespace PriceAndHasUndisclosedRenderValue {
 // @public (undocumented)
 export class PriceCorrectnessTableValue extends BaseDecimalCorrectnessTableValue {
     // (undocumented)
-    protected createRenderValue(): PriceRenderValue;
+    protected createTextFormattableValue(): PriceTextFormattableValue;
 }
 
 // Warning: (ae-internal-missing-underscore) The name "PriceDayTradesGridField" should be prefixed with an underscore because the declaration is marked as @internal
@@ -20442,7 +20441,7 @@ export class PriceDayTradesGridField extends DayTradesGridField {
     // (undocumented)
     protected compareValue(left: DayTradesDataItem.Record, right: DayTradesDataItem.Record, ascending: boolean): number;
     // (undocumented)
-    protected createRenderValue(record: DayTradesDataItem.Record): DayTradesGridField.CreateRenderValueResult;
+    protected createTextFormattableValue(record: DayTradesDataItem.Record): DayTradesGridField.CreateTextFormattableValueResult;
 }
 
 // Warning: (ae-missing-release-tag) "PriceHistoryPeriod" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -20469,7 +20468,7 @@ export class PriceLevelFullDepthRecord extends FullDepthRecord {
     // (undocumented)
     get count(): number;
     // (undocumented)
-    protected createRenderValue(id: FullDepthSideFieldId): DepthRecord.CreateRenderValueResult;
+    protected createTextFormattableValue(id: FullDepthSideFieldId): DepthRecord.CreateTextFormattableValueResult;
     // (undocumented)
     getCount(): number;
     // (undocumented)
@@ -20547,16 +20546,16 @@ export namespace PriceOrderTrigger {
 // @public (undocumented)
 export type PriceOrRemainder = Decimal | null;
 
-// Warning: (ae-missing-release-tag) "PriceOrRemainderAndHasUndisclosedRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "PriceOrRemainderAndHasUndisclosedRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "PriceOrRemainderAndHasUndisclosedTextFormattableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "PriceOrRemainderAndHasUndisclosedTextFormattableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class PriceOrRemainderAndHasUndisclosedRenderValue extends GenericRenderValue<PriceOrRemainderAndHasUndisclosedRenderValue.DataType> {
-    constructor(data: PriceOrRemainderAndHasUndisclosedRenderValue.DataType | undefined);
+export class PriceOrRemainderAndHasUndisclosedTextFormattableValue extends GenericTextFormattableValue<PriceOrRemainderAndHasUndisclosedTextFormattableValue.DataType> {
+    constructor(data: PriceOrRemainderAndHasUndisclosedTextFormattableValue.DataType | undefined);
 }
 
 // @public (undocumented)
-export namespace PriceOrRemainderAndHasUndisclosedRenderValue {
+export namespace PriceOrRemainderAndHasUndisclosedTextFormattableValue {
     // (undocumented)
     export interface DataType {
         // (undocumented)
@@ -20566,25 +20565,11 @@ export namespace PriceOrRemainderAndHasUndisclosedRenderValue {
     }
 }
 
-// Warning: (ae-missing-release-tag) "PriceOrRemainderRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "PriceOrRemainderTextFormattableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class PriceOrRemainderRenderValue extends GenericRenderValue<PriceOrRemainder> {
+export class PriceOrRemainderTextFormattableValue extends GenericTextFormattableValue<PriceOrRemainder> {
     constructor(data: PriceOrRemainder | undefined);
-}
-
-// Warning: (ae-missing-release-tag) "PriceRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "PriceRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class PriceRenderValue extends GenericRenderValue<Decimal> {
-    constructor(data: Decimal | undefined);
-}
-
-// @public (undocumented)
-export namespace PriceRenderValue {
-    const // (undocumented)
-    decimalConstructor: typeof Decimal;
 }
 
 // Warning: (ae-missing-release-tag) "PriceStepperIncubator" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -20692,7 +20677,21 @@ export interface PriceSubfieldScanCondition extends SubFieldScanCondition<ScanFo
 // @public (undocumented)
 export class PriceTableValue extends BaseDecimalTableValue {
     // (undocumented)
-    protected createRenderValue(): PriceRenderValue;
+    protected createTextFormattableValue(): PriceTextFormattableValue;
+}
+
+// Warning: (ae-missing-release-tag) "PriceTextFormattableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "PriceTextFormattableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class PriceTextFormattableValue extends GenericTextFormattableValue<Decimal> {
+    constructor(data: Decimal | undefined);
+}
+
+// @public (undocumented)
+export namespace PriceTextFormattableValue {
+    const // (undocumented)
+    decimalConstructor: typeof Decimal;
 }
 
 export { priorityCompareInteger }
@@ -21016,7 +21015,7 @@ export class QuantityDayTradesGridField extends DayTradesGridField {
     // (undocumented)
     protected compareValue(left: DayTradesDataItem.Record, right: DayTradesDataItem.Record, ascending: boolean): ComparisonResult;
     // (undocumented)
-    protected createRenderValue(record: DayTradesDataItem.Record): DayTradesGridField.CreateRenderValueResult;
+    protected createTextFormattableValue(record: DayTradesDataItem.Record): DayTradesGridField.CreateTextFormattableValueResult;
 }
 
 // Warning: (ae-missing-release-tag) "QueryBrokerageAccountBalancesDataDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -22206,7 +22205,7 @@ export interface RankScoredLitIvemIdList extends CorrectnessRecord, BadnessList<
 export class ReadabilityColorSchemeGridField extends ColorSchemeGridField {
     constructor(colorSettings: ColorSettings);
     // (undocumented)
-    getViewValue(record: ColorSchemeGridRecordStore.Record): NumberRenderValue;
+    getViewValue(record: ColorSchemeGridRecordStore.Record): NumberTextFormattableValue;
 }
 
 // Warning: (ae-missing-release-tag) "ReadonlyCorrectnessTableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -22232,10 +22231,10 @@ export interface ReadonlyRankedLitIvemIdRecord {
     readonly rankedLitIvemId: RankedLitIvemId;
 }
 
-// Warning: (ae-missing-release-tag) "ReadonlyRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ReadonlyTextFormattableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class ReadonlyRenderValue extends BooleanRenderValue {
+export class ReadonlyTextFormattableValue extends BooleanTextFormattableValue {
     constructor(data: boolean | undefined);
 }
 
@@ -22386,7 +22385,7 @@ export class RecordTypeDayTradesGridField extends DayTradesGridField {
     // (undocumented)
     protected compareValue(left: DayTradesDataItem.Record, right: DayTradesDataItem.Record): ComparisonResult;
     // (undocumented)
-    protected createRenderValue(record: DayTradesDataItem.Record): DayTradesGridField.CreateRenderValueResult;
+    protected createTextFormattableValue(record: DayTradesDataItem.Record): DayTradesGridField.CreateTextFormattableValueResult;
 }
 
 export { Rect }
@@ -22490,7 +22489,7 @@ export class RelatedIdDayTradesGridField extends DayTradesGridField {
     // (undocumented)
     protected compareValue(left: DayTradesDataItem.Record, right: DayTradesDataItem.Record, ascending: boolean): ComparisonResult;
     // (undocumented)
-    protected createRenderValue(record: DayTradesDataItem.Record): DayTradesGridField.CreateRenderValueResult;
+    protected createTextFormattableValue(record: DayTradesDataItem.Record): DayTradesGridField.CreateTextFormattableValueResult;
 }
 
 export { removeFromArray }
@@ -22501,27 +22500,6 @@ export { removeFromArray }
 export interface RemoveIrrcChange<T> extends InsertRemoveReplaceIrrcChange<T> {
     // (undocumented)
     typeId: IrrcChangeTypeId.Remove;
-}
-
-// Warning: (ae-missing-release-tag) "RenderValueRecordGridCellPainter" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class RenderValueRecordGridCellPainter<RVCP extends RenderValueCellPainter> implements RevCellPainter<AdaptedRevgridBehavioredColumnSettings, GridField> {
-    constructor(_renderValueCellPainter: RVCP);
-    // (undocumented)
-    get focusedRowColoredAllowed(): boolean;
-    set focusedRowColoredAllowed(value: boolean);
-    // (undocumented)
-    paint(cell: RevDatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined): number | undefined;
-}
-
-// Warning: (ae-missing-release-tag) "RenderValueRowDataArrayGridCellPainter" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class RenderValueRowDataArrayGridCellPainter<RVCP extends RenderValueCellPainter> implements RevCellPainter<AdaptedRevgridBehavioredColumnSettings, GridField> {
-    constructor(_renderValueCellPainter: RVCP);
-    // (undocumented)
-    paint(cell: RevDatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined): number | undefined;
 }
 
 // Warning: (ae-missing-release-tag) "RepeatableExactHistorySequencer" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -22612,7 +22590,7 @@ export namespace RepeatableExactHistorySequenceSeries {
 export class ResolvedBkgdColorColorSchemeGridField extends ColorSchemeGridField {
     constructor(colorSettings: ColorSettings);
     // (undocumented)
-    getViewValue(record: ColorSchemeGridRecordStore.Record): ColorRenderValue;
+    getViewValue(record: ColorSchemeGridRecordStore.Record): ColorTextFormattableValue;
 }
 
 // Warning: (ae-missing-release-tag) "ResolvedBkgdColorTextColorSchemeGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -22621,7 +22599,7 @@ export class ResolvedBkgdColorColorSchemeGridField extends ColorSchemeGridField 
 export class ResolvedBkgdColorTextColorSchemeGridField extends ColorSchemeGridField {
     constructor(colorSettings: ColorSettings);
     // (undocumented)
-    getViewValue(record: ColorSchemeGridRecordStore.Record): StringRenderValue;
+    getViewValue(record: ColorSchemeGridRecordStore.Record): StringTextFormattableValue;
 }
 
 // Warning: (ae-missing-release-tag) "ResolvedForeColorColorSchemeGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -22630,7 +22608,7 @@ export class ResolvedBkgdColorTextColorSchemeGridField extends ColorSchemeGridFi
 export class ResolvedForeColorColorSchemeGridField extends ColorSchemeGridField {
     constructor(colorSettings: ColorSettings);
     // (undocumented)
-    getViewValue(record: ColorSchemeGridRecordStore.Record): ColorRenderValue;
+    getViewValue(record: ColorSchemeGridRecordStore.Record): ColorTextFormattableValue;
 }
 
 // Warning: (ae-missing-release-tag) "ResolvedForeColorTextColorSchemeGridField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -22639,7 +22617,7 @@ export class ResolvedForeColorColorSchemeGridField extends ColorSchemeGridField 
 export class ResolvedForeColorTextColorSchemeGridField extends ColorSchemeGridField {
     constructor(colorSettings: ColorSettings);
     // (undocumented)
-    getViewValue(record: ColorSchemeGridRecordStore.Record): StringRenderValue;
+    getViewValue(record: ColorSchemeGridRecordStore.Record): StringTextFormattableValue;
 }
 
 // Warning: (ae-missing-release-tag) "ResourceBadness" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -22730,10 +22708,10 @@ export namespace RoutedIvemId {
     export function tryCreateFromJson(element: JsonElement): Result<RoutedIvemId>;
 }
 
-// Warning: (ae-missing-release-tag) "RoutedIvemIdRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "RoutedIvemIdTextFormattableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class RoutedIvemIdRenderValue extends GenericRenderValue<RoutedIvemId> {
+export class RoutedIvemIdTextFormattableValue extends GenericTextFormattableValue<RoutedIvemId> {
     constructor(data: RoutedIvemId | undefined);
 }
 
@@ -23308,7 +23286,7 @@ export namespace Scan {
         export function initialise(): void;
     }
     // (undocumented)
-    export class CriteriaTypeIdRenderValue extends EnumRenderValue {
+    export class CriteriaTypeIdTextFormattableValue extends EnumTextFormattableValue {
         constructor(data: CriterionId | undefined);
     }
     // (undocumented)
@@ -23395,7 +23373,7 @@ export namespace Scan {
     // (undocumented)
     export type RequireUnwantDetailOnLastCloseEventer = (this: void) => boolean;
     // (undocumented)
-    export class TargetTypeIdRenderValue extends EnumRenderValue {
+    export class TargetTypeIdTextFormattableValue extends EnumTextFormattableValue {
         constructor(data: ScanTargetTypeId | undefined);
     }
     // (undocumented)
@@ -27024,7 +27002,7 @@ export class SellBrokerDayTradesGridField extends DayTradesGridField {
     // (undocumented)
     protected compareValue(left: DayTradesDataItem.Record, right: DayTradesDataItem.Record, ascending: boolean): number;
     // (undocumented)
-    protected createRenderValue(record: DayTradesDataItem.Record): DayTradesGridField.CreateRenderValueResult;
+    protected createTextFormattableValue(record: DayTradesDataItem.Record): DayTradesGridField.CreateTextFormattableValueResult;
 }
 
 // Warning: (ae-internal-missing-underscore) The name "SellCrossRefDayTradesGridField" should be prefixed with an underscore because the declaration is marked as @internal
@@ -27034,7 +27012,7 @@ export class SellCrossRefDayTradesGridField extends DayTradesGridField {
     // (undocumented)
     protected compareValue(left: DayTradesDataItem.Record, right: DayTradesDataItem.Record, ascending: boolean): number;
     // (undocumented)
-    protected createRenderValue(record: DayTradesDataItem.Record): DayTradesGridField.CreateRenderValueResult;
+    protected createTextFormattableValue(record: DayTradesDataItem.Record): DayTradesGridField.CreateTextFormattableValueResult;
 }
 
 // Warning: (ae-internal-missing-underscore) The name "SellDepthOrderIdDayTradesGridField" should be prefixed with an underscore because the declaration is marked as @internal
@@ -27044,7 +27022,7 @@ export class SellDepthOrderIdDayTradesGridField extends DayTradesGridField {
     // (undocumented)
     protected compareValue(left: DayTradesDataItem.Record, right: DayTradesDataItem.Record, ascending: boolean): number;
     // (undocumented)
-    protected createRenderValue(record: DayTradesDataItem.Record): DayTradesGridField.CreateRenderValueResult;
+    protected createTextFormattableValue(record: DayTradesDataItem.Record): DayTradesGridField.CreateTextFormattableValueResult;
 }
 
 // Warning: (ae-missing-release-tag) "SequenceHistory" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -27508,9 +27486,9 @@ export class ShortDepthRecord extends DepthRecord {
     // (undocumented)
     acceptedByFilter(filterXrefs: string[]): boolean;
     // (undocumented)
-    getRenderValue(id: ShortDepthSideFieldId, sideId: OrderSideId, dataCorrectnessAttribute: TextFormattableValue.Attribute | undefined): TextFormattableValue;
-    // (undocumented)
     getRenderVolume(): number | undefined;
+    // (undocumented)
+    getTextFormattableValue(id: ShortDepthSideFieldId, sideId: OrderSideId, dataCorrectnessAttribute: TextFormattableValue.Attribute | undefined): TextFormattableValue;
     // (undocumented)
     getVolume(): number;
     // (undocumented)
@@ -27726,16 +27704,16 @@ export class SourceTzOffsetDateCorrectnessTableField extends CorrectnessTableFie
 // @public (undocumented)
 export class SourceTzOffsetDateCorrectnessTableValue extends GenericCorrectnessTableValue<SourceTzOffsetDate> {
     // (undocumented)
-    protected createRenderValue(): SourceTzOffsetDateRenderValue;
+    protected createTextFormattableValue(): SourceTzOffsetDateTextFormattableValue;
     // (undocumented)
     get data(): SourceTzOffsetDate | undefined;
     set data(value: SourceTzOffsetDate | undefined);
 }
 
-// Warning: (ae-missing-release-tag) "SourceTzOffsetDateRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SourceTzOffsetDateTextFormattableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class SourceTzOffsetDateRenderValue extends GenericRenderValue<SourceTzOffsetDate> {
+export class SourceTzOffsetDateTextFormattableValue extends GenericTextFormattableValue<SourceTzOffsetDate> {
     constructor(data: SourceTzOffsetDate | undefined);
 }
 
@@ -27754,7 +27732,7 @@ export class SourceTzOffsetDateTimeCorrectnessTableField extends CorrectnessTabl
 // @public (undocumented)
 export class SourceTzOffsetDateTimeCorrectnessTableValue extends BaseSourceTzOffsetDateTimeCorrectnessTableValue {
     // (undocumented)
-    protected createRenderValue(): SourceTzOffsetDateTimeRenderValue;
+    protected createTextFormattableValue(): SourceTzOffsetDateTimeTextFormattableValue;
 }
 
 // Warning: (ae-missing-release-tag) "SourceTzOffsetDateTimeDateCorrectnessTableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -27762,27 +27740,27 @@ export class SourceTzOffsetDateTimeCorrectnessTableValue extends BaseSourceTzOff
 // @public (undocumented)
 export class SourceTzOffsetDateTimeDateCorrectnessTableValue extends BaseSourceTzOffsetDateTimeCorrectnessTableValue {
     // (undocumented)
-    protected createRenderValue(): SourceTzOffsetDateTimeDateRenderValue;
+    protected createTextFormattableValue(): SourceTzOffsetDateTimeDateTextFormattableValue;
 }
 
-// Warning: (ae-missing-release-tag) "SourceTzOffsetDateTimeDateRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SourceTzOffsetDateTimeDateTextFormattableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class SourceTzOffsetDateTimeDateRenderValue extends GenericRenderValue<SourceTzOffsetDateTime> {
+export class SourceTzOffsetDateTimeDateTextFormattableValue extends GenericTextFormattableValue<SourceTzOffsetDateTime> {
     constructor(data: SourceTzOffsetDateTime | undefined);
 }
 
-// Warning: (ae-missing-release-tag) "SourceTzOffsetDateTimeRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SourceTzOffsetDateTimeTextFormattableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class SourceTzOffsetDateTimeRenderValue extends GenericRenderValue<SourceTzOffsetDateTime> {
+export class SourceTzOffsetDateTimeTextFormattableValue extends GenericTextFormattableValue<SourceTzOffsetDateTime> {
     constructor(data: SourceTzOffsetDateTime | undefined);
 }
 
-// Warning: (ae-missing-release-tag) "SourceTzOffsetDateTimeTimeRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SourceTzOffsetDateTimeTimeTextFormattableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class SourceTzOffsetDateTimeTimeRenderValue extends GenericRenderValue<SourceTzOffsetDateTime> {
+export class SourceTzOffsetDateTimeTimeTextFormattableValue extends GenericTextFormattableValue<SourceTzOffsetDateTime> {
     constructor(data: SourceTzOffsetDateTime | undefined);
 }
 
@@ -27810,10 +27788,10 @@ export namespace SourceTzOffsetDateTimeTimezoneMode {
     export function tryJsonValueToId(value: string): number | undefined;
 }
 
-// Warning: (ae-internal-missing-underscore) The name "SourceTzOffsetTimeRenderValueModule" should be prefixed with an underscore because the declaration is marked as @internal
+// Warning: (ae-internal-missing-underscore) The name "SourceTzOffsetTimeTextFormattableValueModule" should be prefixed with an underscore because the declaration is marked as @internal
 //
 // @internal (undocumented)
-export namespace SourceTzOffsetTimeRenderValueModule {
+export namespace SourceTzOffsetTimeTextFormattableValueModule {
     // (undocumented)
     export function initaliseStatic(): void;
 }
@@ -28014,13 +27992,13 @@ export class StringArrayCorrectnessTableField extends CorrectnessTableField {
 // @public (undocumented)
 export class StringArrayCorrectnessTableValue extends GenericCorrectnessTableValue<readonly string[]> {
     // (undocumented)
-    protected createRenderValue(): StringArrayRenderValue;
+    protected createTextFormattableValue(): StringArrayTextFormattableValue;
 }
 
-// Warning: (ae-missing-release-tag) "StringArrayRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "StringArrayTextFormattableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class StringArrayRenderValue extends GenericRenderValue<readonly string[]> {
+export class StringArrayTextFormattableValue extends GenericTextFormattableValue<readonly string[]> {
     constructor(data: readonly string[] | undefined);
 }
 
@@ -28039,7 +28017,7 @@ export class StringCorrectnessTableField extends GenericCorrectnessTableField<st
 // @public (undocumented)
 export class StringCorrectnessTableValue extends GenericCorrectnessTableValue<string> {
     // (undocumented)
-    protected createRenderValue(): StringRenderValue;
+    protected createTextFormattableValue(): StringTextFormattableValue;
 }
 
 export { StringExplicitElementsEnumUiAction }
@@ -32850,13 +32828,6 @@ export namespace StringOverlapsScanFieldCondition {
     }
 }
 
-// Warning: (ae-missing-release-tag) "StringRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class StringRenderValue extends GenericRenderValue<string> {
-    constructor(data: string | undefined);
-}
-
 // @public (undocumented)
 export const Strings: string[];
 
@@ -32871,7 +32842,14 @@ export class StringTableField extends GenericTableField<string, StringTableValue
 // @public (undocumented)
 export class StringTableValue extends GenericTableValue<string> {
     // (undocumented)
-    protected createRenderValue(): StringRenderValue;
+    protected createTextFormattableValue(): StringTextFormattableValue;
+}
+
+// Warning: (ae-missing-release-tag) "StringTextFormattableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class StringTextFormattableValue extends GenericTextFormattableValue<string> {
+    constructor(data: string | undefined);
 }
 
 export { StringUiAction }
@@ -34663,13 +34641,104 @@ export namespace TextFormattableValue {
     advertAttribute: AdvertAttribute;
 }
 
+// Warning: (ae-missing-release-tag) "TextFormattableValueCellPainter" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export abstract class TextFormattableValueCellPainter {
+    constructor(settingsService: SettingsService, _grid: SourcedFieldGrid, dataServer: RevDataServer<GridField>);
+    // (undocumented)
+    protected calculateBaseColors(cell: RevDatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined): TextFormattableValueCellPainter.BaseColors;
+    // (undocumented)
+    protected readonly _colorSettings: ColorSettings;
+    // (undocumented)
+    readonly dataServer: RevDataServer<GridField>;
+    // (undocumented)
+    focusedRowColoredAllowed: boolean;
+    // (undocumented)
+    protected readonly _grid: SourcedFieldGrid;
+    // (undocumented)
+    protected readonly _gridSettings: AdaptedRevgridBehavioredGridSettings;
+    // (undocumented)
+    protected paintBackgroundBorderFocus(bounds: RevRectangle, prefillColor: string | undefined, bkgdColor: string, internalBorderColor: string | undefined, internalBorderRowOnly: boolean, focusedCellBorderColor: string | undefined, focusedRowBorderColor: string | undefined, focusedRowBorderWidth: number): void;
+    // (undocumented)
+    abstract paintValue(cell: RevDatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined, textFormattableValue: TextFormattableValue): number | undefined;
+    // (undocumented)
+    protected readonly _renderingContext: RevCachedCanvasRenderingContext2D;
+    // (undocumented)
+    protected readonly _scalarSettings: ScalarSettings;
+}
+
+// @public (undocumented)
+export namespace TextFormattableValueCellPainter {
+    // (undocumented)
+    export interface BaseColors {
+        // (undocumented)
+        altRow: boolean;
+        // (undocumented)
+        bkgdColor: string;
+        // (undocumented)
+        focusedCellBorderColor: string | undefined;
+        // (undocumented)
+        focusedRowBorderColor: string | undefined;
+        // (undocumented)
+        focusedRowBorderWidth: number;
+        // (undocumented)
+        foreColor: string;
+        // (undocumented)
+        rowFocused: boolean;
+    }
+    // (undocumented)
+    export type PaintFingerprint = IndexSignatureHack<PaintFingerprintInterface>;
+    // (undocumented)
+    export namespace PaintFingerprint {
+        // (undocumented)
+        export function same(left: PaintFingerprint, right: PaintFingerprint): boolean;
+    }
+    // (undocumented)
+    export interface PaintFingerprintInterface {
+        // (undocumented)
+        bkgdColor: string;
+        // (undocumented)
+        focusedCellBorderColor: string | undefined;
+        // (undocumented)
+        focusedRowBorderColor: string | undefined;
+        // (undocumented)
+        focusedRowBorderWidth: number;
+        // (undocumented)
+        internalBorderColor: string | undefined;
+        // (undocumented)
+        internalBorderRowOnly: boolean;
+    }
+}
+
+// Warning: (ae-missing-release-tag) "TextFormattableValueRecordGridCellPainter" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class TextFormattableValueRecordGridCellPainter<RVCP extends TextFormattableValueCellPainter> implements RevCellPainter<AdaptedRevgridBehavioredColumnSettings, GridField> {
+    constructor(_textFormattableValueCellPainter: RVCP);
+    // (undocumented)
+    get focusedRowColoredAllowed(): boolean;
+    set focusedRowColoredAllowed(value: boolean);
+    // (undocumented)
+    paint(cell: RevDatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined): number | undefined;
+}
+
+// Warning: (ae-missing-release-tag) "TextFormattableValueRowDataArrayGridCellPainter" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class TextFormattableValueRowDataArrayGridCellPainter<RVCP extends TextFormattableValueCellPainter> implements RevCellPainter<AdaptedRevgridBehavioredColumnSettings, GridField> {
+    constructor(_textFormattableValueCellPainter: RVCP);
+    // (undocumented)
+    paint(cell: RevDatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined): number | undefined;
+}
+
 // @public (undocumented)
 export class TextFormatterService {
     constructor(_symbolsService: SymbolsService, _settingsService: SettingsService);
     // (undocumented)
     finalise(): void;
     // (undocumented)
-    format(renderValue: TextFormattableValue): string;
+    format(textFormattableValue: TextFormattableValue): string;
     // (undocumented)
     formatActiveFaultedStatusId(value: ActiveFaultedStatusId): string;
     // (undocumented)
@@ -34679,7 +34748,7 @@ export class TextFormatterService {
     // (undocumented)
     formatColorSettingsItemStateId(value: ColorSettings.ItemStateId): string;
     // (undocumented)
-    formatCountAndXrefs(value: CountAndXrefsRenderValue.DataType): string;
+    formatCountAndXrefs(value: CountAndXrefsTextFormattableValue.DataType): string;
     // (undocumented)
     formatCurrencyId(value: CurrencyId): string;
     // (undocumented)
@@ -34769,11 +34838,11 @@ export class TextFormatterService {
     // (undocumented)
     formatPrice(value: Decimal): string;
     // (undocumented)
-    formatPriceAndHasUndisclosed(value: PriceAndHasUndisclosedRenderValue.DataType): string;
+    formatPriceAndHasUndisclosed(value: PriceAndHasUndisclosedTextFormattableValue.DataType): string;
     // (undocumented)
     formatPriceOrRemainder(value: PriceOrRemainder): string;
     // (undocumented)
-    formatPriceOrRemainderAndHasUndisclosed(value: PriceOrRemainderAndHasUndisclosedRenderValue.DataType): string;
+    formatPriceOrRemainderAndHasUndisclosed(value: PriceOrRemainderAndHasUndisclosedTextFormattableValue.DataType): string;
     // (undocumented)
     formatPublisherSubscriptionDataTypeIdArrayAsCommaText(value: readonly PublisherSubscriptionDataTypeId[]): string;
     // (undocumented)
@@ -34956,18 +35025,18 @@ export namespace TextHeaderCellPainter {
     }
 }
 
-// Warning: (ae-missing-release-tag) "TextRenderValueCellPainter" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "TextRenderValueCellPainter" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TextTextFormattableValueCellPainter" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TextTextFormattableValueCellPainter" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class TextRenderValueCellPainter extends RenderValueCellPainter {
+export class TextTextFormattableValueCellPainter extends TextFormattableValueCellPainter {
     constructor(settingsService: SettingsService, _textFormatterService: TextFormatterService, grid: SourcedFieldGrid, dataServer: RevDataServer<GridField>);
     // (undocumented)
-    paintValue(cell: RevDatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined, renderValue: TextFormattableValue): Integer | undefined;
+    paintValue(cell: RevDatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined, textFormattableValue: TextFormattableValue): Integer | undefined;
 }
 
 // @public (undocumented)
-export namespace TextRenderValueCellPainter {
+export namespace TextTextFormattableValueCellPainter {
     // (undocumented)
     export function calculateDepthRecordBidAskOrderPriceLevelColorSchemeItemId(sideId: OrderSideId, typeId: DepthRecord.TypeId, altRow: boolean): ColorScheme.ItemId.Grid_OrderBuy | ColorScheme.ItemId.Grid_OrderBuyAlt | ColorScheme.ItemId.Grid_PriceBuy | ColorScheme.ItemId.Grid_PriceBuyAlt | ColorScheme.ItemId.Grid_OrderSell | ColorScheme.ItemId.Grid_OrderSellAlt | ColorScheme.ItemId.Grid_PriceSell | ColorScheme.ItemId.Grid_PriceSellAlt;
     // (undocumented)
@@ -34998,7 +35067,7 @@ export namespace TextRenderValueCellPainter {
         export function same(left: TextPaintFingerprint, right: TextPaintFingerprint): boolean;
     }
     // (undocumented)
-    export interface TextPaintFingerprintInterface extends RenderValueCellPainter.PaintFingerprintInterface {
+    export interface TextPaintFingerprintInterface extends TextFormattableValueCellPainter.PaintFingerprintInterface {
         // (undocumented)
         foreColor: string;
         // (undocumented)
@@ -35013,7 +35082,7 @@ export class TimeDayTradesGridField extends DayTradesGridField {
     // (undocumented)
     protected compareValue(left: DayTradesDataItem.Record, right: DayTradesDataItem.Record, ascending: boolean): ComparisonResult;
     // (undocumented)
-    protected createRenderValue(record: DayTradesDataItem.Record): DayTradesGridField.CreateRenderValueResult;
+    protected createTextFormattableValue(record: DayTradesDataItem.Record): DayTradesGridField.CreateTextFormattableValueResult;
 }
 
 // Warning: (ae-missing-release-tag) "TimeInForce" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -35077,14 +35146,14 @@ export class TimeInForceIdCorrectnessTableValue extends EnumCorrectnessTableValu
     constructor();
 }
 
-// Warning: (ae-missing-release-tag) "TimeRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+export { TimeSpan }
+
+// Warning: (ae-missing-release-tag) "TimeTextFormattableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class TimeRenderValue extends GenericRenderValue<Date> {
+export class TimeTextFormattableValue extends GenericTextFormattableValue<Date> {
     constructor(data: Date | undefined);
 }
-
-export { TimeSpan }
 
 // Warning: (ae-missing-release-tag) "TLowLevelTopShareholdersDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -36042,10 +36111,10 @@ export const enum TradeAffectsId {
     Vwap = 2
 }
 
-// Warning: (ae-missing-release-tag) "TradeAffectsIdArrayRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TradeAffectsIdArrayTextFormattableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class TradeAffectsIdArrayRenderValue extends IntegerArrayRenderValue {
+export class TradeAffectsIdArrayTextFormattableValue extends IntegerArrayTextFormattableValue {
     constructor(data: readonly TradeAffectsId[] | undefined);
 }
 
@@ -36077,10 +36146,10 @@ export const enum TradeFlagId {
     Placeholder = 1
 }
 
-// Warning: (ae-missing-release-tag) "TradeFlagIdArrayRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TradeFlagIdArrayTextFormattableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class TradeFlagIdArrayRenderValue extends IntegerArrayRenderValue {
+export class TradeFlagIdArrayTextFormattableValue extends IntegerArrayTextFormattableValue {
     constructor(data: readonly TradeFlagId[] | undefined);
 }
 
@@ -36821,20 +36890,20 @@ export class TrendIdDayTradesGridField extends DayTradesGridField {
     // (undocumented)
     protected compareValue(left: DayTradesDataItem.Record, right: DayTradesDataItem.Record, ascending: boolean): ComparisonResult;
     // (undocumented)
-    protected createRenderValue(record: DayTradesDataItem.Record): DayTradesGridField.CreateRenderValueResult;
+    protected createTextFormattableValue(record: DayTradesDataItem.Record): DayTradesGridField.CreateTextFormattableValueResult;
 }
 
-// Warning: (ae-missing-release-tag) "TrendIdRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TrendIdTextFormattableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class TrendIdRenderValue extends EnumRenderValue {
+export class TrendIdTextFormattableValue extends EnumTextFormattableValue {
     constructor(data: MovementId | undefined);
 }
 
-// Warning: (ae-missing-release-tag) "TrueFalseRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TrueFalseTextFormattableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class TrueFalseRenderValue extends BooleanRenderValue {
+export class TrueFalseTextFormattableValue extends BooleanTextFormattableValue {
     constructor(data: boolean | undefined);
 }
 
@@ -37290,10 +37359,10 @@ export class UndisclosedCorrectnessTableValue extends BooleanCorrectnessTableVal
     constructor();
 }
 
-// Warning: (ae-missing-release-tag) "UndisclosedRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "UndisclosedTextFormattableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class UndisclosedRenderValue extends BooleanRenderValue {
+export class UndisclosedTextFormattableValue extends BooleanTextFormattableValue {
     constructor(data: boolean | undefined);
 }
 
@@ -37562,18 +37631,18 @@ export namespace UserAlertServiceModule {
     export function initialiseStatic(): void;
 }
 
-// Warning: (ae-missing-release-tag) "ValidRenderValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class ValidRenderValue extends BooleanRenderValue {
-    constructor(data: boolean | undefined);
-}
-
 // Warning: (ae-missing-release-tag) "ValidTableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ValidTableValue extends BooleanTableValue {
     constructor();
+}
+
+// Warning: (ae-missing-release-tag) "ValidTextFormattableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ValidTextFormattableValue extends BooleanTextFormattableValue {
+    constructor(data: boolean | undefined);
 }
 
 // @public (undocumented)

@@ -7,14 +7,14 @@
 import { RevRecordInvalidatedValue, RevRecordValueRecentChangeTypeId } from '@xilytix/revgrid';
 import { DepthDataItem, MarketId, MarketInfo, OrderSideId } from '../../../../adi/internal-api';
 import {
-    CountAndXrefsRenderValue,
-    IntegerRenderValue,
-    MarketIdArrayRenderValue,
-    MarketIdRenderValue,
-    PriceAndHasUndisclosedRenderValue,
-    PriceRenderValue,
-    StringArrayRenderValue,
-    StringRenderValue,
+    CountAndXrefsTextFormattableValue,
+    IntegerTextFormattableValue,
+    MarketIdArrayTextFormattableValue,
+    MarketIdTextFormattableValue,
+    PriceAndHasUndisclosedTextFormattableValue,
+    PriceTextFormattableValue,
+    StringArrayTextFormattableValue,
+    StringTextFormattableValue,
     TextFormattableValue
 } from '../../../../services/internal-api';
 import {
@@ -30,14 +30,14 @@ import {
     uniqueElementArraysOverlap
 } from "../../../../sys/internal-api";
 import { DepthRecord } from '../depth-record';
-import { DepthRecordRenderValue } from '../depth-record-render-value';
+import { DepthRecordTextFormattableValue } from '../depth-record-text-formattable-value';
 import { FullDepthSideField, FullDepthSideFieldId } from './full-depth-side-field';
 
 export abstract class FullDepthRecord extends DepthRecord {
-    // protected renderRecord = new Array<RenderValue | undefined>(FullDepthSideField.idCount);
+    // protected renderRecord = new Array<TextFormattableValue | undefined>(FullDepthSideField.idCount);
 
-    getRenderValue(id: FullDepthSideFieldId, sideId: OrderSideId, dataCorrectnessAttribute: TextFormattableValue.Attribute | undefined) {
-        const { renderValue, extraAttribute } = this.createRenderValue(id);
+    getTextFormattableValue(id: FullDepthSideFieldId, sideId: OrderSideId, dataCorrectnessAttribute: TextFormattableValue.Attribute | undefined) {
+        const { textFormattableValue, extraAttribute } = this.createTextFormattableValue(id);
 
         // Create attributes array.  First figure out how many elements
         let attributeCount = 1;
@@ -59,7 +59,7 @@ export abstract class FullDepthRecord extends DepthRecord {
         if (extraAttribute !== undefined) {
             attributes[attributeIdx++] = extraAttribute;
         }
-        const recordAttribute: DepthRecordRenderValue.Attribute = {
+        const recordAttribute: DepthRecordTextFormattableValue.Attribute = {
             typeId: TextFormattableValue.Attribute.TypeId.DepthRecord,
             orderSideId: sideId,
             depthRecordTypeId: this.typeId,
@@ -67,15 +67,15 @@ export abstract class FullDepthRecord extends DepthRecord {
         };
         attributes[attributeIdx] = recordAttribute;
 
-        renderValue.setAttributes(attributes);
-        return renderValue;
+        textFormattableValue.setAttributes(attributes);
+        return textFormattableValue;
     }
 
     abstract getCount(): Integer;
     abstract getPrice(): Decimal;
     abstract getUndisclosedCount(): Integer;
 
-    protected abstract createRenderValue(id: FullDepthSideFieldId): DepthRecord.CreateRenderValueResult;
+    protected abstract createTextFormattableValue(id: FullDepthSideFieldId): DepthRecord.CreateTextFormattableValueResult;
     protected abstract isOwnOrder(): boolean;
 }
 
@@ -252,19 +252,19 @@ export class OrderFullDepthRecord extends FullDepthRecord {
         return result;
     }
 
-    protected createRenderValue(id: FullDepthSideFieldId): DepthRecord.CreateRenderValueResult {  // virtual override
+    protected createTextFormattableValue(id: FullDepthSideFieldId): DepthRecord.CreateTextFormattableValueResult {  // virtual override
         switch (id) {
-            case FullDepthSideFieldId.PriceAndHasUndisclosed: return this.createPriceAndHasUndisclosedRenderValue();
-            case FullDepthSideFieldId.Volume: return this.createVolumeRenderValue();
-            case FullDepthSideFieldId.CountXref: return this.createCountXrefRenderValue();
-            case FullDepthSideFieldId.BrokerId: return this.createBrokerIdRenderValue();
-            case FullDepthSideFieldId.MarketId: return this.createMarketIdRenderValue();
-            case FullDepthSideFieldId.VolumeAhead: return this.createVolumeAheadRenderValue();
-            case FullDepthSideFieldId.Attributes: return this.createAttributesRenderValue();
-            case FullDepthSideFieldId.Price: return this.createPriceRenderValue();
-            case FullDepthSideFieldId.Xref: return this.createXRefRenderValue();
-            case FullDepthSideFieldId.Count: return this.createCountRenderValue();
-            case FullDepthSideFieldId.OrderId: return this.createOrderIdRenderValue();
+            case FullDepthSideFieldId.PriceAndHasUndisclosed: return this.createPriceAndHasUndisclosedTextFormattableValue();
+            case FullDepthSideFieldId.Volume: return this.createVolumeTextFormattableValue();
+            case FullDepthSideFieldId.CountXref: return this.createCountXrefTextFormattableValue();
+            case FullDepthSideFieldId.BrokerId: return this.createBrokerIdTextFormattableValue();
+            case FullDepthSideFieldId.MarketId: return this.createMarketIdTextFormattableValue();
+            case FullDepthSideFieldId.VolumeAhead: return this.createVolumeAheadTextFormattableValue();
+            case FullDepthSideFieldId.Attributes: return this.createAttributesTextFormattableValue();
+            case FullDepthSideFieldId.Price: return this.createPriceTextFormattableValue();
+            case FullDepthSideFieldId.Xref: return this.createXRefTextFormattableValue();
+            case FullDepthSideFieldId.Count: return this.createCountTextFormattableValue();
+            case FullDepthSideFieldId.OrderId: return this.createOrderIdTextFormattableValue();
             default: throw new UnreachableCaseError('FDROFDRCRV88736', id);
         }
     }
@@ -273,49 +273,49 @@ export class OrderFullDepthRecord extends FullDepthRecord {
         return this._order.crossRef !== undefined;
     }
 
-    private createPriceAndHasUndisclosedRenderValue(): DepthRecord.CreateRenderValueResult  {
-        const data: PriceAndHasUndisclosedRenderValue.DataType = {
-            price: new PriceRenderValue.decimalConstructor(this.order.price),
+    private createPriceAndHasUndisclosedTextFormattableValue(): DepthRecord.CreateTextFormattableValueResult  {
+        const data: PriceAndHasUndisclosedTextFormattableValue.DataType = {
+            price: new PriceTextFormattableValue.decimalConstructor(this.order.price),
             hasUndisclosed: this.order.hasUndisclosed
         };
-        const renderValue = new PriceAndHasUndisclosedRenderValue(data);
-        return { renderValue };
+        const textFormattableValue = new PriceAndHasUndisclosedTextFormattableValue(data);
+        return { textFormattableValue };
     }
-    private createCountXrefRenderValue(): DepthRecord.CreateRenderValueResult {
-        const renderValue = new StringRenderValue(this.order.crossRef);
+    private createCountXrefTextFormattableValue(): DepthRecord.CreateTextFormattableValueResult {
+        const textFormattableValue = new StringTextFormattableValue(this.order.crossRef);
         const extraAttribute: TextFormattableValue.DepthCountXRefFieldAttribute = {
             typeId: TextFormattableValue.Attribute.TypeId.DepthCountXRefField,
             isCountAndXrefs: false,
         };
-        return { renderValue, extraAttribute };
+        return { textFormattableValue, extraAttribute };
     }
-    private createBrokerIdRenderValue(): DepthRecord.CreateRenderValueResult {
-        const renderValue = new StringRenderValue(this.order.broker);
-        return { renderValue };
+    private createBrokerIdTextFormattableValue(): DepthRecord.CreateTextFormattableValueResult {
+        const textFormattableValue = new StringTextFormattableValue(this.order.broker);
+        return { textFormattableValue };
     }
-    private createMarketIdRenderValue(): DepthRecord.CreateRenderValueResult {
-        const renderValue = new MarketIdRenderValue(this.order.marketId);
-        return { renderValue };
+    private createMarketIdTextFormattableValue(): DepthRecord.CreateTextFormattableValueResult {
+        const textFormattableValue = new MarketIdTextFormattableValue(this.order.marketId);
+        return { textFormattableValue };
     }
-    private createAttributesRenderValue(): DepthRecord.CreateRenderValueResult {
-        const renderValue = new StringArrayRenderValue(this.order.attributes);
-        return { renderValue };
+    private createAttributesTextFormattableValue(): DepthRecord.CreateTextFormattableValueResult {
+        const textFormattableValue = new StringArrayTextFormattableValue(this.order.attributes);
+        return { textFormattableValue };
     }
-    private createPriceRenderValue(): DepthRecord.CreateRenderValueResult {
-        const renderValue = new PriceRenderValue(this.order.price);
-        return { renderValue };
+    private createPriceTextFormattableValue(): DepthRecord.CreateTextFormattableValueResult {
+        const textFormattableValue = new PriceTextFormattableValue(this.order.price);
+        return { textFormattableValue };
     }
-    private createXRefRenderValue(): DepthRecord.CreateRenderValueResult {
-        const renderValue = new StringRenderValue(this.order.crossRef);
-        return { renderValue };
+    private createXRefTextFormattableValue(): DepthRecord.CreateTextFormattableValueResult {
+        const textFormattableValue = new StringTextFormattableValue(this.order.crossRef);
+        return { textFormattableValue };
     }
-    private createCountRenderValue(): DepthRecord.CreateRenderValueResult {
-        const renderValue = new IntegerRenderValue(1);
-        return { renderValue };
+    private createCountTextFormattableValue(): DepthRecord.CreateTextFormattableValueResult {
+        const textFormattableValue = new IntegerTextFormattableValue(1);
+        return { textFormattableValue };
     }
-    private createOrderIdRenderValue(): DepthRecord.CreateRenderValueResult {
-        const renderValue = new StringRenderValue(this.order.orderId);
-        return { renderValue };
+    private createOrderIdTextFormattableValue(): DepthRecord.CreateTextFormattableValueResult {
+        const textFormattableValue = new StringTextFormattableValue(this.order.orderId);
+        return { textFormattableValue };
     }
 }
 
@@ -663,66 +663,66 @@ export class PriceLevelFullDepthRecord extends FullDepthRecord {
         return this._xrefs.length > 0;
     }
 
-    protected createRenderValue(id: FullDepthSideFieldId): DepthRecord.CreateRenderValueResult {  // virtual override
+    protected createTextFormattableValue(id: FullDepthSideFieldId): DepthRecord.CreateTextFormattableValueResult {  // virtual override
         switch (id) {
-            case FullDepthSideFieldId.PriceAndHasUndisclosed: return this.createPriceAndHasUndisclosedRenderValue();
-            case FullDepthSideFieldId.Volume: return this.createVolumeRenderValue();
-            case FullDepthSideFieldId.CountXref: return this.createCountXrefRenderValue();
-            case FullDepthSideFieldId.BrokerId: return this.createBrokerIdRenderValue();
-            case FullDepthSideFieldId.MarketId: return this.createMarketIdRenderValue();
-            case FullDepthSideFieldId.VolumeAhead: return this.createVolumeAheadRenderValue();
-            case FullDepthSideFieldId.Attributes: return this.createAttributesRenderValue();
-            case FullDepthSideFieldId.Price: return this.createPriceRenderValue();
-            case FullDepthSideFieldId.Xref: return this.createXRefRenderValue();
-            case FullDepthSideFieldId.Count: return this.createCountRenderValue();
-            case FullDepthSideFieldId.OrderId: return this.createOrderIdRenderValue();
+            case FullDepthSideFieldId.PriceAndHasUndisclosed: return this.createPriceAndHasUndisclosedTextFormattableValue();
+            case FullDepthSideFieldId.Volume: return this.createVolumeTextFormattableValue();
+            case FullDepthSideFieldId.CountXref: return this.createCountXrefTextFormattableValue();
+            case FullDepthSideFieldId.BrokerId: return this.createBrokerIdTextFormattableValue();
+            case FullDepthSideFieldId.MarketId: return this.createMarketIdTextFormattableValue();
+            case FullDepthSideFieldId.VolumeAhead: return this.createVolumeAheadTextFormattableValue();
+            case FullDepthSideFieldId.Attributes: return this.createAttributesTextFormattableValue();
+            case FullDepthSideFieldId.Price: return this.createPriceTextFormattableValue();
+            case FullDepthSideFieldId.Xref: return this.createXRefTextFormattableValue();
+            case FullDepthSideFieldId.Count: return this.createCountTextFormattableValue();
+            case FullDepthSideFieldId.OrderId: return this.createOrderIdTextFormattableValue();
             default: throw new UnreachableCaseError('FDRPLFDRCRV29958', id);
         }
     }
 
-    private createPriceAndHasUndisclosedRenderValue(): DepthRecord.CreateRenderValueResult {
-        const data: PriceAndHasUndisclosedRenderValue.DataType = {
-            price: new PriceRenderValue.decimalConstructor(this._price),
+    private createPriceAndHasUndisclosedTextFormattableValue(): DepthRecord.CreateTextFormattableValueResult {
+        const data: PriceAndHasUndisclosedTextFormattableValue.DataType = {
+            price: new PriceTextFormattableValue.decimalConstructor(this._price),
             hasUndisclosed: this._undisclosedOrderCount > 0
         };
-        const renderValue = new PriceAndHasUndisclosedRenderValue(data);
-        return { renderValue };
+        const textFormattableValue = new PriceAndHasUndisclosedTextFormattableValue(data);
+        return { textFormattableValue };
     }
-    private createCountXrefRenderValue(): DepthRecord.CreateRenderValueResult {
-        const renderValue = new CountAndXrefsRenderValue( { count: this._count, xrefs: this._xrefs });
+    private createCountXrefTextFormattableValue(): DepthRecord.CreateTextFormattableValueResult {
+        const textFormattableValue = new CountAndXrefsTextFormattableValue( { count: this._count, xrefs: this._xrefs });
         const extraAttribute: TextFormattableValue.DepthCountXRefFieldAttribute = {
             typeId: TextFormattableValue.Attribute.TypeId.DepthCountXRefField,
             isCountAndXrefs: true,
         };
-        return { renderValue, extraAttribute };
+        return { textFormattableValue, extraAttribute };
     }
-    private createBrokerIdRenderValue(): DepthRecord.CreateRenderValueResult {
-        const renderValue = new StringArrayRenderValue(this._brokerIds);
-        return { renderValue };
+    private createBrokerIdTextFormattableValue(): DepthRecord.CreateTextFormattableValueResult {
+        const textFormattableValue = new StringArrayTextFormattableValue(this._brokerIds);
+        return { textFormattableValue };
     }
-    private createMarketIdRenderValue(): DepthRecord.CreateRenderValueResult {
-        const renderValue = new MarketIdArrayRenderValue(this._marketIds);
-        return { renderValue };
+    private createMarketIdTextFormattableValue(): DepthRecord.CreateTextFormattableValueResult {
+        const textFormattableValue = new MarketIdArrayTextFormattableValue(this._marketIds);
+        return { textFormattableValue };
     }
-    private createAttributesRenderValue(): DepthRecord.CreateRenderValueResult {
-        const renderValue = new StringArrayRenderValue(this._attributes);
-        return { renderValue };
+    private createAttributesTextFormattableValue(): DepthRecord.CreateTextFormattableValueResult {
+        const textFormattableValue = new StringArrayTextFormattableValue(this._attributes);
+        return { textFormattableValue };
     }
-    private createPriceRenderValue(): DepthRecord.CreateRenderValueResult {
-        const renderValue = new PriceRenderValue(this._price);
-        return { renderValue };
+    private createPriceTextFormattableValue(): DepthRecord.CreateTextFormattableValueResult {
+        const textFormattableValue = new PriceTextFormattableValue(this._price);
+        return { textFormattableValue };
     }
-    private createXRefRenderValue(): DepthRecord.CreateRenderValueResult {
-        const renderValue = new StringArrayRenderValue(this._xrefs);
-        return { renderValue };
+    private createXRefTextFormattableValue(): DepthRecord.CreateTextFormattableValueResult {
+        const textFormattableValue = new StringArrayTextFormattableValue(this._xrefs);
+        return { textFormattableValue };
     }
-    private createCountRenderValue(): DepthRecord.CreateRenderValueResult {
-        const renderValue = new IntegerRenderValue(this._count);
-        return { renderValue };
+    private createCountTextFormattableValue(): DepthRecord.CreateTextFormattableValueResult {
+        const textFormattableValue = new IntegerTextFormattableValue(this._count);
+        return { textFormattableValue };
     }
-    private createOrderIdRenderValue(): DepthRecord.CreateRenderValueResult {
-        const renderValue = new StringRenderValue(undefined);
-        return { renderValue };
+    private createOrderIdTextFormattableValue(): DepthRecord.CreateTextFormattableValueResult {
+        const textFormattableValue = new StringTextFormattableValue(undefined);
+        return { textFormattableValue };
     }
 
     private calculateMarketIds() {

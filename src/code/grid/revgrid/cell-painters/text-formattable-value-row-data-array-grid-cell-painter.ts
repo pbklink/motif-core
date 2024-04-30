@@ -6,55 +6,55 @@
 
 import { RevCellPainter, RevDatalessViewCell, RevDataRowArrayDataServer, RevDataServer } from '@xilytix/revgrid';
 import {
-    BigIntRenderValue,
-    DateTimeRenderValue,
-    NumberRenderValue,
-    StringRenderValue,
+    BigIntTextFormattableValue,
+    DateTimeTextFormattableValue,
+    NumberTextFormattableValue,
+    StringTextFormattableValue,
     TextFormattableValue,
-    TrueFalseRenderValue
+    TrueFalseTextFormattableValue
 } from '../../../services/internal-api';
 import { GridField } from '../../field/internal-api';
 import { AdaptedRevgridBehavioredColumnSettings } from '../settings/adapted-revgrid-behaviored-column-settings';
-import { RenderValueCellPainter } from './render-value/render-value-cell-painter';
+import { TextFormattableValueCellPainter } from './text-formattable-value/internal-api';
 
-export class RenderValueRowDataArrayGridCellPainter<RVCP extends RenderValueCellPainter> implements RevCellPainter<AdaptedRevgridBehavioredColumnSettings, GridField> {
+export class TextFormattableValueRowDataArrayGridCellPainter<RVCP extends TextFormattableValueCellPainter> implements RevCellPainter<AdaptedRevgridBehavioredColumnSettings, GridField> {
     private readonly _dataServer: RevDataRowArrayDataServer<GridField>;
 
-    constructor(private readonly _renderValueCellPainter: RVCP) {
-        this._dataServer = this._renderValueCellPainter.dataServer as RevDataRowArrayDataServer<GridField>;
+    constructor(private readonly _textFormattableValueCellPainter: RVCP) {
+        this._dataServer = this._textFormattableValueCellPainter.dataServer as RevDataRowArrayDataServer<GridField>;
     }
 
     paint(cell: RevDatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined) {
         const field = cell.viewLayoutColumn.column.field;
         const subgridRowIndex = cell.viewLayoutRow.subgridRowIndex;
         const viewValue = this._dataServer.getViewValue(field, subgridRowIndex);
-        const renderValue = this.createRenderValue(viewValue);
-        return this._renderValueCellPainter.paintValue(cell, prefillColor, renderValue);
+        const textFormattableValue = this.createTextFormattableValue(viewValue);
+        return this._textFormattableValueCellPainter.paintValue(cell, prefillColor, textFormattableValue);
     }
 
-    private createRenderValue(viewValue: RevDataServer.ViewValue): TextFormattableValue {
+    private createTextFormattableValue(viewValue: RevDataServer.ViewValue): TextFormattableValue {
         switch (typeof viewValue) {
             case 'string':
-                return new StringRenderValue(viewValue);
+                return new StringTextFormattableValue(viewValue);
             case 'number':
-                return new NumberRenderValue(viewValue);
+                return new NumberTextFormattableValue(viewValue);
             case 'boolean':
-                return new TrueFalseRenderValue(viewValue);
+                return new TrueFalseTextFormattableValue(viewValue);
             case 'bigint':
-                return new BigIntRenderValue(viewValue);
+                return new BigIntTextFormattableValue(viewValue);
             case 'object': {
                 if (viewValue instanceof TextFormattableValue) {
                     return viewValue;
                 } else {
                     if (Object.prototype.toString.call(viewValue) === '[object Date]') {
-                        return new DateTimeRenderValue(viewValue as Date);
+                        return new DateTimeTextFormattableValue(viewValue as Date);
                     } else {
-                        return new StringRenderValue('');
+                        return new StringTextFormattableValue('');
                     }
                 }
             }
             default:
-                return new StringRenderValue('');
+                return new StringTextFormattableValue('');
         }
     }
 }

@@ -4,5 +4,5 @@
  * License: motionite.trade/license/motif
  */
 
-export { CheckboxRenderValueRecordGridCellEditor } from './checkbox-render-value-record-grid-cell-editor';
+export { CheckboxTextFormattableValueRecordGridCellEditor } from './checkbox-text-formattable-value-record-grid-cell-editor';
 

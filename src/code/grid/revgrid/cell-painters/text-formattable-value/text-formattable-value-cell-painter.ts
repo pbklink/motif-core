@@ -12,7 +12,7 @@ import { SourcedFieldGrid } from '../../adapted-revgrid/sourced-field-grid';
 import { AdaptedRevgridBehavioredColumnSettings, AdaptedRevgridBehavioredGridSettings } from '../../settings/internal-api';
 
 /** @public */
-export abstract class RenderValueCellPainter {
+export abstract class TextFormattableValueCellPainter {
     focusedRowColoredAllowed = true;
 
     protected readonly _gridSettings: AdaptedRevgridBehavioredGridSettings;
@@ -32,7 +32,7 @@ export abstract class RenderValueCellPainter {
         this._colorSettings = settingsService.color;
     }
 
-    protected calculateBaseColors(cell: RevDatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined): RenderValueCellPainter.BaseColors {
+    protected calculateBaseColors(cell: RevDatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined): TextFormattableValueCellPainter.BaseColors {
         const grid = this._grid;
 
         const subgridRowIndex = cell.viewLayoutRow.subgridRowIndex;
@@ -171,10 +171,10 @@ export abstract class RenderValueCellPainter {
         }
     }
 
-    abstract paintValue(cell: RevDatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined, renderValue: TextFormattableValue): number | undefined;
+    abstract paintValue(cell: RevDatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined, textFormattableValue: TextFormattableValue): number | undefined;
 }
 
-export namespace RenderValueCellPainter {
+export namespace TextFormattableValueCellPainter {
     export interface PaintFingerprintInterface {
         bkgdColor: string;
         internalBorderColor: string | undefined;

@@ -41,7 +41,7 @@ export class ShortDepthSideGridField extends DepthSideGridField {
                 throw new UnreachableCaseError('SDSGFGFV5438827', correctnessId);
         }
 
-        return record.getRenderValue(this._id, this._sideId, dataCorrectnessAttribute);
+        return record.getTextFormattableValue(this._id, this._sideId, dataCorrectnessAttribute);
     }
 
     compare(left: ShortDepthRecord, right: ShortDepthRecord): number {

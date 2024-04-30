@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { IntegerRenderValue, TextFormattableValue } from '../../../services/internal-api';
+import { IntegerTextFormattableValue, TextFormattableValue } from '../../../services/internal-api';
 import { IndexedRecord, Integer } from '../../../sys/internal-api';
 
 /** @public */
@@ -77,8 +77,8 @@ export abstract class DepthRecord implements IndexedRecord {
         };
     }
 
-    protected createVolumeRenderValue(): DepthRecord.CreateRenderValueResult {
-        const renderValue = new IntegerRenderValue(this.getVolume());
+    protected createVolumeTextFormattableValue(): DepthRecord.CreateTextFormattableValueResult {
+        const textFormattableValue = new IntegerTextFormattableValue(this.getVolume());
         let extraAttribute: TextFormattableValue.DepthRecordInAuctionAttribute | undefined;
         if (!this.inAuction) {
             extraAttribute = undefined;
@@ -94,12 +94,12 @@ export abstract class DepthRecord implements IndexedRecord {
                 partialAuctionProportion,
             };
         }
-        return { renderValue, extraAttribute };
+        return { textFormattableValue, extraAttribute };
     }
 
-    protected createVolumeAheadRenderValue(): DepthRecord.CreateRenderValueResult {
-        const renderValue = new IntegerRenderValue(this.volumeAhead);
-        return { renderValue };
+    protected createVolumeAheadTextFormattableValue(): DepthRecord.CreateTextFormattableValueResult {
+        const textFormattableValue = new IntegerTextFormattableValue(this.volumeAhead);
+        return { textFormattableValue };
     }
 
     abstract getVolume(): Integer;
@@ -119,8 +119,8 @@ export namespace DepthRecord {
         inAuctionOrVolumeAheadOrPartialChanged: boolean;
     }
 
-    export interface CreateRenderValueResult {
-        renderValue: TextFormattableValue;
+    export interface CreateTextFormattableValueResult {
+        textFormattableValue: TextFormattableValue;
         extraAttribute?: TextFormattableValue.Attribute;
     }
 }

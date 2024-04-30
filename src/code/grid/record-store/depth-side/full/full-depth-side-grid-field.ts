@@ -41,7 +41,7 @@ export class FullDepthSideGridField extends DepthSideGridField {
                 throw new UnreachableCaseError('DSGFGFV27759', correctnessId);
         }
 
-        return record.getRenderValue(this._id, this._sideId, dataCorrectnessAttribute);
+        return record.getTextFormattableValue(this._id, this._sideId, dataCorrectnessAttribute);
     }
 
     compare(left: FullDepthRecord, right: FullDepthRecord): number {
