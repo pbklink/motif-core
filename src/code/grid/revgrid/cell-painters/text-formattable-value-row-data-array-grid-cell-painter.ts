@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevCellPainter, RevDatalessViewCell, RevDataRowArrayDataServer, RevDataServer } from '@xilytix/revgrid';
+import { RevCellPainter, RevDataRowArrayDataServer, RevDataServer, RevViewCell } from '@xilytix/revgrid';
 import {
     BigIntTextFormattableValue,
     DateTimeTextFormattableValue,
@@ -24,7 +24,7 @@ export class TextFormattableValueRowDataArrayGridCellPainter<RVCP extends TextFo
         this._dataServer = this._textFormattableValueCellPainter.dataServer as RevDataRowArrayDataServer<GridField>;
     }
 
-    paint(cell: RevDatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined) {
+    paint(cell: RevViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined) {
         const field = cell.viewLayoutColumn.column.field;
         const subgridRowIndex = cell.viewLayoutRow.subgridRowIndex;
         const viewValue = this._dataServer.getViewValue(field, subgridRowIndex);

@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevDataServer, RevDatalessViewCell, RevRectangle, RevStandardCheckboxPainter } from '@xilytix/revgrid';
+import { RevDataServer, RevRectangle, RevStandardCheckboxPainter, RevViewCell } from '@xilytix/revgrid';
 import { IndexSignatureHack } from '@xilytix/sysutils';
 import { SettingsService, TextFormattableValue } from '../../../../services/internal-api';
 import { AssertInternalError, Integer } from '../../../../sys/internal-api';
@@ -29,7 +29,7 @@ export class CheckboxTextFormattableValueCellPainter extends TextFormattableValu
         );
     }
 
-    paintValue(cell: RevDatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined, textFormattableValue: TextFormattableValue): Integer | undefined {
+    paintValue(cell: RevViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined, textFormattableValue: TextFormattableValue): Integer | undefined {
         const baseBkgdForeColors = this.calculateBaseColors(cell, prefillColor);
         const bkgdColor = baseBkgdForeColors.bkgdColor;
         const foreColor = baseBkgdForeColors.foreColor;
@@ -102,7 +102,7 @@ export class CheckboxTextFormattableValueCellPainter extends TextFormattableValu
         }
     }
 
-    calculateClickBox(cell: RevDatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>): RevRectangle | undefined {
+    calculateClickBox(cell: RevViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>): RevRectangle | undefined {
         if (this.dataServer.getEditValue === undefined) {
             return undefined;
         } else {

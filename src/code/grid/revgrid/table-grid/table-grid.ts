@@ -1,4 +1,4 @@
-import { RevColumnLayout, RevDatalessSubgrid, RevGridDefinition, RevGridOptions, RevRecordSchemaServer, RevSourcedFieldCustomHeadingsService, RevSubgrid, RevTableGrid, RevViewLayout } from '@xilytix/revgrid';
+import { RevColumnLayout, RevGridDefinition, RevGridOptions, RevRecordSchemaServer, RevSourcedFieldCustomHeadingsService, RevSubgrid, RevTableGrid, RevViewLayout } from '@xilytix/revgrid';
 import { MultiEvent } from '@xilytix/sysutils';
 import { SettingsService, TextFormattableValue } from '../../../services/internal-api';
 import { Badness } from '../../../sys/internal-api';
@@ -61,12 +61,12 @@ export class TableGrid extends RevTableGrid<
             schemaServer,
             subgrids: [
                 {
-                    role: RevDatalessSubgrid.Role.header,
+                    role: RevSubgrid.Role.header,
                     dataServer: headerDataServer,
                     getCellPainterEventer: getHeaderCellPainterEventer,
                 },
                 {
-                    role: RevDatalessSubgrid.Role.main,
+                    role: RevSubgrid.Role.main,
                     dataServer: mainDataServer,
                     getCellPainterEventer: getMainCellPainterEventer,
                 },

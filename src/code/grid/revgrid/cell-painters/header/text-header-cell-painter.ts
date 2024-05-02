@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevDatalessViewCell, RevDataServer, RevStandardTextPainter } from '@xilytix/revgrid';
+import { RevDataServer, RevStandardTextPainter, RevViewCell } from '@xilytix/revgrid';
 import { IndexSignatureHack } from '@xilytix/sysutils';
 import { ColorScheme, SettingsService } from '../../../../services/internal-api';
 import { GridField } from '../../../field/internal-api';
@@ -20,7 +20,7 @@ export class TextHeaderCellPainter extends HeaderCellPainter {
         this._textPainter = new RevStandardTextPainter(this._renderingContext);
     }
 
-    override paint(cell: RevDatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, _prefillColor: string | undefined): number | undefined {
+    override paint(cell: RevViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, _prefillColor: string | undefined): number | undefined {
         const columnSettings = cell.columnSettings;
         this._textPainter.setColumnSettings(columnSettings);
 

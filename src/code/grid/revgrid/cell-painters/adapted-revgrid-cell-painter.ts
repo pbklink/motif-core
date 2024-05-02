@@ -5,7 +5,7 @@
  */
 
 // not used
-import { RevCellPainter, RevDatalessViewCell, RevDataServer } from '@xilytix/revgrid';
+import { RevCellPainter, RevDataServer, RevViewCell } from '@xilytix/revgrid';
 import { GridField } from '../../field/internal-api';
 import { SourcedFieldGrid } from '../adapted-revgrid/sourced-field-grid';
 import { AdaptedRevgridBehavioredColumnSettings } from '../settings/internal-api';
@@ -21,5 +21,5 @@ export abstract class AdaptedRevgridCellPainter implements RevCellPainter<Adapte
     }
 
 
-    abstract paint(cell: RevDatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined): number | undefined;
+    abstract paint(cell: RevViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined): number | undefined;
 }

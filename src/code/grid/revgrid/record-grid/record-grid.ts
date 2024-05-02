@@ -5,7 +5,6 @@
  */
 
 import {
-    RevDatalessSubgrid,
     RevGridDefinition,
     RevGridOptions,
     RevRecordStore,
@@ -58,12 +57,12 @@ export class RecordGrid extends RecordSourcedFieldGrid {
             schemaServer,
             subgrids: [
                 {
-                    role: RevDatalessSubgrid.Role.header,
+                    role: RevSubgrid.Role.header,
                     dataServer: headerDataServer,
                     getCellPainterEventer: getHeaderCellPainterEventer,
                 },
                 {
-                    role: RevDatalessSubgrid.Role.main,
+                    role: RevSubgrid.Role.main,
                     dataServer: mainDataServer,
                     getCellPainterEventer: getMainCellPainterEventer,
                 },

@@ -5,12 +5,12 @@
  */
 
 import {
-    RevDatalessViewCell,
     RevDataServer,
     RevHorizontalAlignId,
     RevRecordRecentChangeTypeId,
     RevRecordValueRecentChangeTypeId,
-    RevStandardTextPainter
+    RevStandardTextPainter,
+    RevViewCell
 } from '@xilytix/revgrid';
 import { HigherLowerId, OrderSideId } from '../../../../adi/internal-api';
 import { ColorScheme, ColorTextFormattableValue, SettingsService, TextFormattableValue } from '../../../../services/internal-api';
@@ -31,7 +31,7 @@ export class TextTextFormattableValueCellPainter extends TextFormattableValueCel
         this._textPainter = new RevStandardTextPainter(this._renderingContext);
     }
 
-    paintValue(cell: RevDatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined, textFormattableValue: TextFormattableValue): Integer | undefined {
+    paintValue(cell: RevViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined, textFormattableValue: TextFormattableValue): Integer | undefined {
         const columnSettings = cell.columnSettings;
 
         const baseBkgdForeColors = this.calculateBaseColors(cell, prefillColor);

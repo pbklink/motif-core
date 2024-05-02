@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevCachedCanvasRenderingContext2D, RevCellPainter, RevDatalessViewCell, RevDataServer } from '@xilytix/revgrid';
+import { RevCachedCanvasRenderingContext2D, RevCellPainter, RevDataServer, RevViewCell } from '@xilytix/revgrid';
 import { ColorSettings, ScalarSettings, SettingsService } from '../../../../services/internal-api';
 import { GridField } from '../../../field/internal-api';
 import { SourcedFieldGrid } from '../../adapted-revgrid/internal-api';
@@ -28,5 +28,5 @@ export abstract class HeaderCellPainter implements RevCellPainter<AdaptedRevgrid
         this._colorSettings = settingsService.color;
     }
 
-    abstract paint(cell: RevDatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, _prefillColor: string | undefined): number | undefined;
+    abstract paint(cell: RevViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, _prefillColor: string | undefined): number | undefined;
 }

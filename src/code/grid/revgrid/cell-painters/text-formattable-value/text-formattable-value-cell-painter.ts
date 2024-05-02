@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevCachedCanvasRenderingContext2D, RevDataServer, RevDatalessViewCell, RevRectangle, RevSelectionAreaTypeId } from '@xilytix/revgrid';
+import { RevCachedCanvasRenderingContext2D, RevDataServer, RevRectangle, RevSelectionAreaTypeId, RevViewCell } from '@xilytix/revgrid';
 import { ColorScheme, ColorSettings, ScalarSettings, SettingsService, TextFormattableValue } from '../../../../services/internal-api';
 import { IndexSignatureHack } from '../../../../sys/internal-api';
 import { GridField } from '../../../field/internal-api';
@@ -32,7 +32,7 @@ export abstract class TextFormattableValueCellPainter {
         this._colorSettings = settingsService.color;
     }
 
-    protected calculateBaseColors(cell: RevDatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined): TextFormattableValueCellPainter.BaseColors {
+    protected calculateBaseColors(cell: RevViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined): TextFormattableValueCellPainter.BaseColors {
         const grid = this._grid;
 
         const subgridRowIndex = cell.viewLayoutRow.subgridRowIndex;
@@ -171,7 +171,7 @@ export abstract class TextFormattableValueCellPainter {
         }
     }
 
-    abstract paintValue(cell: RevDatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined, textFormattableValue: TextFormattableValue): number | undefined;
+    abstract paintValue(cell: RevViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined, textFormattableValue: TextFormattableValue): number | undefined;
 }
 
 export namespace TextFormattableValueCellPainter {

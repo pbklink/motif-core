@@ -168,7 +168,6 @@ import { RevColumnLayoutDefinition } from '@xilytix/revgrid';
 import { RevColumnLayoutOrReference } from '@xilytix/revgrid';
 import { RevColumnLayoutOrReferenceDefinition } from '@xilytix/revgrid';
 import { RevColumnSettings } from '@xilytix/revgrid';
-import { RevDatalessViewCell } from '@xilytix/revgrid';
 import { RevDataRowArrayDataServer } from '@xilytix/revgrid';
 import { RevDataServer } from '@xilytix/revgrid';
 import { RevDataSource } from '@xilytix/revgrid';
@@ -228,6 +227,7 @@ import { RevTableValuesRecord } from '@xilytix/revgrid';
 import { RevTextFormattableValue } from '@xilytix/revgrid';
 import { RevTextFormatterService } from '@xilytix/revgrid';
 import { RevTextTruncateTypeId } from '@xilytix/revgrid';
+import { RevViewCell } from '@xilytix/revgrid';
 import { RevViewLayout } from '@xilytix/revgrid';
 import { RGB } from '@xilytix/sysutils';
 import { secsPerDay } from '@xilytix/sysutils';
@@ -4000,9 +4000,9 @@ export const enum ChartIntervalId {
 export class CheckboxTextFormattableValueCellPainter extends TextFormattableValueCellPainter {
     constructor(settingsService: SettingsService, grid: SourcedFieldGrid, dataServer: RevDataServer<GridField>, _editable: boolean);
     // (undocumented)
-    calculateClickBox(cell: RevDatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>): RevRectangle | undefined;
+    calculateClickBox(cell: RevViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>): RevRectangle | undefined;
     // (undocumented)
-    paintValue(cell: RevDatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined, textFormattableValue: TextFormattableValue): Integer | undefined;
+    paintValue(cell: RevViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined, textFormattableValue: TextFormattableValue): Integer | undefined;
 }
 
 // @public (undocumented)
@@ -4032,12 +4032,12 @@ export class CheckboxTextFormattableValueRecordGridCellEditor extends RevStandar
 export class CheckboxTextFormattableValueRecordGridCellPainter implements RevClickBoxCellPainter<AdaptedRevgridBehavioredColumnSettings, GridField> {
     constructor(_textFormattableValueCellPainter: CheckboxTextFormattableValueCellPainter);
     // (undocumented)
-    calculateClickBox(cell: RevDatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>): RevRectangle | undefined;
+    calculateClickBox(cell: RevViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>): RevRectangle | undefined;
     // (undocumented)
     get focusedRowColoredAllowed(): boolean;
     set focusedRowColoredAllowed(value: boolean);
     // (undocumented)
-    paint(cell: RevDatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined): number | undefined;
+    paint(cell: RevViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined): number | undefined;
 }
 
 export { checkEscapeCharForRegexInsideCharClass }
@@ -34647,7 +34647,7 @@ export namespace TextFormattableValue {
 export abstract class TextFormattableValueCellPainter {
     constructor(settingsService: SettingsService, _grid: SourcedFieldGrid, dataServer: RevDataServer<GridField>);
     // (undocumented)
-    protected calculateBaseColors(cell: RevDatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined): TextFormattableValueCellPainter.BaseColors;
+    protected calculateBaseColors(cell: RevViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined): TextFormattableValueCellPainter.BaseColors;
     // (undocumented)
     protected readonly _colorSettings: ColorSettings;
     // (undocumented)
@@ -34661,7 +34661,7 @@ export abstract class TextFormattableValueCellPainter {
     // (undocumented)
     protected paintBackgroundBorderFocus(bounds: RevRectangle, prefillColor: string | undefined, bkgdColor: string, internalBorderColor: string | undefined, internalBorderRowOnly: boolean, focusedCellBorderColor: string | undefined, focusedRowBorderColor: string | undefined, focusedRowBorderWidth: number): void;
     // (undocumented)
-    abstract paintValue(cell: RevDatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined, textFormattableValue: TextFormattableValue): number | undefined;
+    abstract paintValue(cell: RevViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined, textFormattableValue: TextFormattableValue): number | undefined;
     // (undocumented)
     protected readonly _renderingContext: RevCachedCanvasRenderingContext2D;
     // (undocumented)
@@ -34720,7 +34720,7 @@ export class TextFormattableValueRecordGridCellPainter<RVCP extends TextFormatta
     get focusedRowColoredAllowed(): boolean;
     set focusedRowColoredAllowed(value: boolean);
     // (undocumented)
-    paint(cell: RevDatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined): number | undefined;
+    paint(cell: RevViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined): number | undefined;
 }
 
 // Warning: (ae-missing-release-tag) "TextFormattableValueRowDataArrayGridCellPainter" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -34729,7 +34729,7 @@ export class TextFormattableValueRecordGridCellPainter<RVCP extends TextFormatta
 export class TextFormattableValueRowDataArrayGridCellPainter<RVCP extends TextFormattableValueCellPainter> implements RevCellPainter<AdaptedRevgridBehavioredColumnSettings, GridField> {
     constructor(_textFormattableValueCellPainter: RVCP);
     // (undocumented)
-    paint(cell: RevDatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined): number | undefined;
+    paint(cell: RevViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined): number | undefined;
 }
 
 // @public (undocumented)
@@ -35000,7 +35000,7 @@ export namespace TextHasValueEqualsScanFieldCondition {
 export class TextHeaderCellPainter extends HeaderCellPainter {
     constructor(settingsService: SettingsService, grid: SourcedFieldGrid, dataServer: RevDataServer<GridField>);
     // (undocumented)
-    paint(cell: RevDatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, _prefillColor: string | undefined): number | undefined;
+    paint(cell: RevViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, _prefillColor: string | undefined): number | undefined;
 }
 
 // @public (undocumented)
@@ -35032,7 +35032,7 @@ export namespace TextHeaderCellPainter {
 export class TextTextFormattableValueCellPainter extends TextFormattableValueCellPainter {
     constructor(settingsService: SettingsService, _textFormatterService: TextFormatterService, grid: SourcedFieldGrid, dataServer: RevDataServer<GridField>);
     // (undocumented)
-    paintValue(cell: RevDatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined, textFormattableValue: TextFormattableValue): Integer | undefined;
+    paintValue(cell: RevViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined, textFormattableValue: TextFormattableValue): Integer | undefined;
 }
 
 // @public (undocumented)

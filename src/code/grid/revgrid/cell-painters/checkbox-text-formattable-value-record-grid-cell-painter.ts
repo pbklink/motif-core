@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevClickBoxCellPainter, RevDatalessViewCell, RevRectangle } from '@xilytix/revgrid';
+import { RevClickBoxCellPainter, RevRectangle, RevViewCell } from '@xilytix/revgrid';
 import { TextFormattableValue } from '../../../services/internal-api';
 import { GridField } from '../../field/internal-api';
 import { RecordGridDataServer } from '../record-grid/internal-api';
@@ -23,14 +23,14 @@ export class CheckboxTextFormattableValueRecordGridCellPainter implements RevCli
         this._textFormattableValueCellPainter.focusedRowColoredAllowed = value;
     }
 
-    paint(cell: RevDatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined) {
+    paint(cell: RevViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined) {
         const field = cell.viewLayoutColumn.column.field;
         const subgridRowIndex = cell.viewLayoutRow.subgridRowIndex;
         const textFormattableValue = this._dataServer.getViewValue(field, subgridRowIndex) as TextFormattableValue;
         return this._textFormattableValueCellPainter.paintValue(cell, prefillColor, textFormattableValue);
     }
 
-    calculateClickBox(cell: RevDatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>): RevRectangle | undefined {
+    calculateClickBox(cell: RevViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>): RevRectangle | undefined {
         return this._textFormattableValueCellPainter.calculateClickBox(cell);
     }
 }

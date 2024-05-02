@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevCellPainter, RevDatalessViewCell } from '@xilytix/revgrid';
+import { RevCellPainter, RevViewCell } from '@xilytix/revgrid';
 import { TextFormattableValue } from '../../../services/internal-api';
 import { GridField } from '../../field/internal-api';
 import { RecordGridDataServer } from '../record-grid/internal-api';
@@ -23,7 +23,7 @@ export class TextFormattableValueRecordGridCellPainter<RVCP extends TextFormatta
         this._textFormattableValueCellPainter.focusedRowColoredAllowed = value;
     }
 
-    paint(cell: RevDatalessViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined) {
+    paint(cell: RevViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined) {
         const field = cell.viewLayoutColumn.column.field;
         const subgridRowIndex = cell.viewLayoutRow.subgridRowIndex;
         const textFormattableValue = this._dataServer.getViewValue(field, subgridRowIndex) as TextFormattableValue;
