@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevDataSource, RevReferenceableDataSourcesService } from '@xilytix/revgrid';
+import { RevDataSource, RevReferenceableDataSources } from '@xilytix/revgrid';
 import { TextFormattableValue } from '../../services/internal-api';
 import { Badness, JsonElement, LockOpenList, SysTick, mSecsPerSec } from '../../sys/internal-api';
 import { ReferenceableColumnLayoutsService } from '../layout/internal-api';
@@ -15,7 +15,7 @@ import { TableRecordSourceFactory } from './table-record-source-factory';
 
 export class ReferenceableDataSourcesService
     extends LockOpenList<ReferenceableDataSource, ReferenceableDataSource, RevDataSource.LockErrorIdPlusTryError>
-    implements RevReferenceableDataSourcesService<
+    implements RevReferenceableDataSources<
         Badness,
         TableRecordSourceDefinition.TypeId,
         TableFieldSourceDefinition.TypeId,

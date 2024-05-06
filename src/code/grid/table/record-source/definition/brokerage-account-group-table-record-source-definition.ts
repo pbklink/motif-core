@@ -4,21 +4,21 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevSourcedFieldCustomHeadingsService } from '@xilytix/revgrid';
+import { RevSourcedFieldCustomHeadings } from '@xilytix/revgrid';
 import { AllBrokerageAccountGroup, BrokerageAccountGroup } from '../../../../adi/internal-api';
 import { JsonElement } from '../../../../sys/internal-api';
-import { TableFieldSourceDefinition, TableFieldSourceDefinitionCachingFactoryService } from "../../field-source/internal-api";
+import { TableFieldSourceDefinition, TableFieldSourceDefinitionCachingFactory } from "../../field-source/internal-api";
 import { TableRecordSourceDefinition } from './table-record-source-definition';
 
 export abstract class BrokerageAccountGroupTableRecordSourceDefinition extends TableRecordSourceDefinition {
     constructor(
-        customHeadingsService: RevSourcedFieldCustomHeadingsService,
-        tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService,
+        customHeadings: RevSourcedFieldCustomHeadings | undefined,
+        tableFieldSourceDefinitionCachingFactory: TableFieldSourceDefinitionCachingFactory,
         typeId: TableRecordSourceDefinition.TypeId,
         allowedFieldSourceDefinitionTypeIds: TableFieldSourceDefinition.TypeId[],
         public readonly brokerageAccountGroup: BrokerageAccountGroup
     ) {
-        super(customHeadingsService, tableFieldSourceDefinitionCachingFactoryService, typeId, allowedFieldSourceDefinitionTypeIds);
+        super(customHeadings, tableFieldSourceDefinitionCachingFactory, typeId, allowedFieldSourceDefinitionTypeIds);
     }
 
     override saveToJson(element: JsonElement) {

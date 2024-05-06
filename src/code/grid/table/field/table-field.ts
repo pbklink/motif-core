@@ -4,9 +4,9 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevTableField, RevTextFormatterService } from '@xilytix/revgrid';
+import { RevTableField } from '@xilytix/revgrid';
 import { IvemId, LitIvemId } from '../../../adi/internal-api';
-import { TextFormattableValue } from '../../../services/internal-api';
+import { TextFormattableValue, TextFormatter } from '../../../services/internal-api';
 import {
     Integer,
     SourceTzOffsetDate,
@@ -120,7 +120,7 @@ export abstract class CorrectnessTableField extends TableField {
 
 export namespace CorrectnessTableField {
     export type Constructor = new(
-        textFormatterService: RevTextFormatterService<TextFormattableValue.TypeId, TextFormattableValue.Attribute.TypeId>,
+        textFormatter: TextFormatter,
         definition: TableField.Definition,
         heading: string,
     ) => CorrectnessTableField;

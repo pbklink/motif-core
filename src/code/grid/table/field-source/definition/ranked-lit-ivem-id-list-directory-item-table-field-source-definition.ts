@@ -21,7 +21,7 @@ import {
     WritableCorrectnessTableValue
 } from '../../value/internal-api';
 import { TableFieldSourceDefinition } from './table-field-source-definition';
-import { TableFieldSourceDefinitionCachingFactoryService } from './table-field-source-definition-caching-factory-service';
+import { TableFieldSourceDefinitionCachingFactory } from './table-field-source-definition-caching-factory';
 
 /** @public */
 export class RankedLitIvemIdListDirectoryItemTableFieldSourceDefinition extends TableFieldSourceDefinition {
@@ -173,7 +173,7 @@ export namespace RankedLitIvemIdListDirectoryItemTableFieldSourceDefinition {
         id: RankedLitIvemIdListDirectoryItem.FieldId;
     }
 
-    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactoryService): RankedLitIvemIdListDirectoryItemTableFieldSourceDefinition {
+    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactory): RankedLitIvemIdListDirectoryItemTableFieldSourceDefinition {
         return cachingFactoryService.get(typeId) as RankedLitIvemIdListDirectoryItemTableFieldSourceDefinition;
     }
 

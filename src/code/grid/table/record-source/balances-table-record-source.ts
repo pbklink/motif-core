@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevSourcedFieldCustomHeadingsService } from '@xilytix/revgrid';
+import { RevSourcedFieldCustomHeadings } from '@xilytix/revgrid';
 import {
     AdiService,
     AllBalancesDataDefinition,
@@ -16,10 +16,10 @@ import {
     BrokerageAccountGroupRecordList,
     SingleBrokerageAccountGroup
 } from '../../../adi/internal-api';
+import { TextFormatter } from '../../../services/internal-api';
 import { CorrectnessBadness, Integer, LockOpenListItem, UnreachableCaseError } from '../../../sys/internal-api';
-import { TextFormatterService } from '../../../text-format/internal-api';
 import {
-    TableFieldSourceDefinition, TableFieldSourceDefinitionCachingFactoryService
+    TableFieldSourceDefinition, TableFieldSourceDefinitionCachingFactory
 } from '../field-source/internal-api';
 import { BalancesTableRecordDefinition } from '../record-definition/internal-api';
 import { TableRecord } from '../record/internal-api';
@@ -34,16 +34,16 @@ export class BalancesTableRecordSource
 
     constructor(
         private readonly _adiService: AdiService,
-        textFormatterService: TextFormatterService,
-        gridFieldCustomHeadingsService: RevSourcedFieldCustomHeadingsService,
-        tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService,
+        textFormatter: TextFormatter,
+        customHeadings: RevSourcedFieldCustomHeadings | undefined,
+        tableFieldSourceDefinitionCachingFactory: TableFieldSourceDefinitionCachingFactory,
         correctnessBadness: CorrectnessBadness,
         definition: BalancesTableRecordSourceDefinition,
     ) {
         super(
-            textFormatterService,
-            gridFieldCustomHeadingsService,
-            tableFieldSourceDefinitionCachingFactoryService,
+            textFormatter,
+            customHeadings,
+            tableFieldSourceDefinitionCachingFactory,
             correctnessBadness,
             definition,
             BalancesTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
@@ -52,8 +52,8 @@ export class BalancesTableRecordSource
 
     override createDefinition(): BalancesTableRecordSourceDefinition {
         return new BalancesTableRecordSourceDefinition(
-            this._gridFieldCustomHeadingsService,
-            this._tableFieldSourceDefinitionCachingFactoryService,
+            this.customHeadings,
+            this.tableFieldSourceDefinitionCachingFactory,
             this.brokerageAccountGroup,
         );
     }

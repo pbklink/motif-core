@@ -4,14 +4,14 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevColumnLayoutDefinition, RevSourcedFieldCustomHeadingsService } from '@xilytix/revgrid';
+import { RevColumnLayoutDefinition, RevSourcedFieldCustomHeadings } from '@xilytix/revgrid';
 import { Account, BrokerageAccountGroup, Holding } from '../../../../adi/internal-api';
 import { PickEnum } from '../../../../sys/internal-api';
 import {
     BrokerageAccountTableFieldSourceDefinition,
     HoldingTableFieldSourceDefinition,
     TableFieldSourceDefinition,
-    TableFieldSourceDefinitionCachingFactoryService,
+    TableFieldSourceDefinitionCachingFactory,
 } from '../../field-source/internal-api';
 import { BrokerageAccountGroupTableRecordSourceDefinition } from './brokerage-account-group-table-record-source-definition';
 import { TableRecordSourceDefinition } from './table-record-source-definition';
@@ -19,13 +19,13 @@ import { TableRecordSourceDefinition } from './table-record-source-definition';
 /** @public */
 export class HoldingTableRecordSourceDefinition extends BrokerageAccountGroupTableRecordSourceDefinition {
     constructor(
-        customHeadingsService: RevSourcedFieldCustomHeadingsService,
-        tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService,
+        customHeadings: RevSourcedFieldCustomHeadings | undefined,
+        tableFieldSourceDefinitionCachingFactory: TableFieldSourceDefinitionCachingFactory,
         brokerageAccountGroup: BrokerageAccountGroup
     ) {
         super(
-            customHeadingsService,
-            tableFieldSourceDefinitionCachingFactoryService,
+            customHeadings,
+            tableFieldSourceDefinitionCachingFactory,
             TableRecordSourceDefinition.TypeId.Holding,
             HoldingTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
             brokerageAccountGroup
@@ -33,8 +33,8 @@ export class HoldingTableRecordSourceDefinition extends BrokerageAccountGroupTab
     }
 
     override createDefaultLayoutDefinition() {
-        const holdingsDataItemFieldSourceDefinition = HoldingTableFieldSourceDefinition.get(this.tableFieldSourceDefinitionCachingFactoryService);
-        const brokerageAccountFieldSourceDefinition = BrokerageAccountTableFieldSourceDefinition.get(this.tableFieldSourceDefinitionCachingFactoryService);
+        const holdingsDataItemFieldSourceDefinition = HoldingTableFieldSourceDefinition.get(this.tableFieldSourceDefinitionCachingFactory);
+        const brokerageAccountFieldSourceDefinition = BrokerageAccountTableFieldSourceDefinition.get(this.tableFieldSourceDefinitionCachingFactory);
 
         const fieldNames = new Array<string>();
 

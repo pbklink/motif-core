@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevColumnLayoutDefinition, RevSourcedFieldCustomHeadingsService } from '@xilytix/revgrid';
+import { RevColumnLayoutDefinition, RevSourcedFieldCustomHeadings } from '@xilytix/revgrid';
 import { ExchangeId, LitIvemAlternateCodes, LitIvemBaseDetail, MarketInfo, MyxLitIvemAttributes, SearchSymbolsDataDefinition, SearchSymbolsLitIvemFullDetail } from '../../../../adi/internal-api';
 import { ErrorCode, JsonElement, JsonElementErr, Ok, PickEnum, Result } from '../../../../sys/internal-api';
 import {
@@ -13,7 +13,7 @@ import {
     LitIvemExtendedDetailTableFieldSourceDefinition,
     MyxLitIvemAttributesTableFieldSourceDefinition,
     TableFieldSourceDefinition,
-    TableFieldSourceDefinitionCachingFactoryService
+    TableFieldSourceDefinitionCachingFactory
 } from '../../field-source/internal-api';
 import { TableRecordSourceDefinition } from './table-record-source-definition';
 
@@ -22,13 +22,13 @@ export class LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition extends T
     readonly isFullDetail: boolean;
 
     constructor(
-        customHeadingsService: RevSourcedFieldCustomHeadingsService,
-        tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService,
+        customHeadings: RevSourcedFieldCustomHeadings | undefined,
+        tableFieldSourceDefinitionCachingFactory: TableFieldSourceDefinitionCachingFactory,
         readonly dataDefinition: SearchSymbolsDataDefinition
     ) {
         super(
-            customHeadingsService,
-            tableFieldSourceDefinitionCachingFactoryService,
+            customHeadings,
+            tableFieldSourceDefinitionCachingFactory,
             TableRecordSourceDefinition.TypeId.LitIvemDetailsFromSearchSymbols,
             LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
         );
@@ -133,7 +133,7 @@ export class LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition extends T
     }
 
     private addLitIvemBaseDetailToDefaultColumnLayout(fieldNames: string[]) {
-        const fieldSourceDefinition = LitIvemBaseDetailTableFieldSourceDefinition.get(this.tableFieldSourceDefinitionCachingFactoryService);
+        const fieldSourceDefinition = LitIvemBaseDetailTableFieldSourceDefinition.get(this.tableFieldSourceDefinitionCachingFactory);
 
         fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(LitIvemBaseDetail.Field.Id.Id));
         fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(LitIvemBaseDetail.Field.Id.Name));
@@ -144,7 +144,7 @@ export class LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition extends T
     }
 
     private addLitIvemExtendedDetailFieldDefinitionSource(fieldNames: string[]) {
-        const fieldSourceDefinition = LitIvemExtendedDetailTableFieldSourceDefinition.get(this.tableFieldSourceDefinitionCachingFactoryService);
+        const fieldSourceDefinition = LitIvemExtendedDetailTableFieldSourceDefinition.get(this.tableFieldSourceDefinitionCachingFactory);
 
         fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(SearchSymbolsLitIvemFullDetail.ExtendedField.Id.IsIndex));
         fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(SearchSymbolsLitIvemFullDetail.ExtendedField.Id.Categories));
@@ -157,7 +157,7 @@ export class LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition extends T
     }
 
     private addMyxLitIvemAttributesFieldDefinitionSource(fieldNames: string[]) {
-        const fieldSourceDefinition = MyxLitIvemAttributesTableFieldSourceDefinition.get(this.tableFieldSourceDefinitionCachingFactoryService);
+        const fieldSourceDefinition = MyxLitIvemAttributesTableFieldSourceDefinition.get(this.tableFieldSourceDefinitionCachingFactory);
 
         fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(MyxLitIvemAttributes.Field.Id.MarketClassification));
         fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(MyxLitIvemAttributes.Field.Id.Category));
@@ -166,7 +166,7 @@ export class LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition extends T
     }
 
     private addLitIvemAlternateCodesFieldDefinitionSource(fieldNames: string[]) {
-        const fieldSourceDefinition = LitIvemAlternateCodesTableFieldSourceDefinition.get(this.tableFieldSourceDefinitionCachingFactoryService);
+        const fieldSourceDefinition = LitIvemAlternateCodesTableFieldSourceDefinition.get(this.tableFieldSourceDefinitionCachingFactory);
 
         fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(LitIvemAlternateCodes.Field.Id.Ticker));
         fieldNames.push(fieldSourceDefinition.getSupportedFieldNameById(LitIvemAlternateCodes.Field.Id.Isin));
@@ -218,7 +218,7 @@ export namespace LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition {
     }
 
     export function createLayoutDefinition(
-        fieldSourceDefinitionRegistryService: TableFieldSourceDefinitionCachingFactoryService,
+        fieldSourceDefinitionRegistryService: TableFieldSourceDefinitionCachingFactory,
         fieldIds: FieldId[],
     ): RevColumnLayoutDefinition {
         return fieldSourceDefinitionRegistryService.createLayoutDefinition(fieldIds);

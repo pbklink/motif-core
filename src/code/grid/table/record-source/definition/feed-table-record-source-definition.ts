@@ -4,21 +4,21 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevColumnLayoutDefinition, RevSourcedFieldCustomHeadingsService } from '@xilytix/revgrid';
+import { RevColumnLayoutDefinition, RevSourcedFieldCustomHeadings } from '@xilytix/revgrid';
 import { Feed } from '../../../../adi/internal-api';
 import { PickEnum } from '../../../../sys/internal-api';
-import { FeedTableFieldSourceDefinition, TableFieldSourceDefinition, TableFieldSourceDefinitionCachingFactoryService } from '../../field-source/internal-api';
+import { FeedTableFieldSourceDefinition, TableFieldSourceDefinition, TableFieldSourceDefinitionCachingFactory } from '../../field-source/internal-api';
 import { TableRecordSourceDefinition } from './table-record-source-definition';
 
 /** @public */
 export class FeedTableRecordSourceDefinition extends TableRecordSourceDefinition {
     constructor(
-        customHeadingsService: RevSourcedFieldCustomHeadingsService,
-        tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService
+        customHeadings: RevSourcedFieldCustomHeadings | undefined,
+        tableFieldSourceDefinitionCachingFactory: TableFieldSourceDefinitionCachingFactory
     ) {
         super(
-            customHeadingsService,
-            tableFieldSourceDefinitionCachingFactoryService,
+            customHeadings,
+            tableFieldSourceDefinitionCachingFactory,
             TableRecordSourceDefinition.TypeId.Feed,
             FeedTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
         );
@@ -27,7 +27,7 @@ export class FeedTableRecordSourceDefinition extends TableRecordSourceDefinition
     // no override for saveToJson()
 
     override createDefaultLayoutDefinition() {
-        const feedFieldSourceDefinition = FeedTableFieldSourceDefinition.get(this.tableFieldSourceDefinitionCachingFactoryService);
+        const feedFieldSourceDefinition = FeedTableFieldSourceDefinition.get(this.tableFieldSourceDefinitionCachingFactory);
 
         const fieldNames = new Array<string>();
 

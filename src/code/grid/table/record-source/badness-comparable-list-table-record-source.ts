@@ -4,10 +4,10 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevSourcedFieldCustomHeadingsService } from '@xilytix/revgrid';
+import { RevSourcedFieldCustomHeadings } from '@xilytix/revgrid';
+import { TextFormatter } from '../../../services/internal-api';
 import { BadnessList, CorrectnessBadness, LockOpenListItem } from '../../../sys/internal-api';
-import { TextFormatterService } from '../../../text-format/internal-api';
-import { TableFieldSourceDefinition, TableFieldSourceDefinitionCachingFactoryService } from '../field-source/internal-api';
+import { TableFieldSourceDefinition, TableFieldSourceDefinitionCachingFactory } from '../field-source/internal-api';
 import { BadnessListTableRecordSourceDefinition } from './definition/internal-api';
 import { SubscribeBadnessListTableRecordSource } from './subscribe-badness-list-table-record-source';
 
@@ -15,17 +15,17 @@ export abstract class BadnessListTableRecordSource<Record> extends SubscribeBadn
     readonly list: BadnessList<Record>;
 
     constructor(
-        textFormatterService: TextFormatterService,
-        gridFieldCustomHeadingsService: RevSourcedFieldCustomHeadingsService,
-        tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService,
+        textFormatter: TextFormatter,
+        customHeadings: RevSourcedFieldCustomHeadings | undefined,
+        tableFieldSourceDefinitionCachingFactory: TableFieldSourceDefinitionCachingFactory,
         correctnessBadness: CorrectnessBadness,
         definition: BadnessListTableRecordSourceDefinition<Record>,
         allowedFieldSourceDefinitionTypeIds: readonly TableFieldSourceDefinition.TypeId[],
     ) {
         super(
-            textFormatterService,
-            gridFieldCustomHeadingsService,
-            tableFieldSourceDefinitionCachingFactoryService,
+            textFormatter,
+            customHeadings,
+            tableFieldSourceDefinitionCachingFactory,
             correctnessBadness,
             definition,
             allowedFieldSourceDefinitionTypeIds,

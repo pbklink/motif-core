@@ -4,22 +4,22 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevColumnLayoutDefinition, RevSourcedField, RevSourcedFieldCustomHeadingsService } from '@xilytix/revgrid';
+import { RevColumnLayoutDefinition, RevSourcedField, RevSourcedFieldCustomHeadings } from '@xilytix/revgrid';
 import { PickEnum } from '../../../../sys/internal-api';
 import { GridField } from '../../../field/internal-api';
-import { GridFieldTableFieldSourceDefinition, TableFieldSourceDefinition, TableFieldSourceDefinitionCachingFactoryService } from '../../field-source/internal-api';
+import { GridFieldTableFieldSourceDefinition, TableFieldSourceDefinition, TableFieldSourceDefinitionCachingFactory } from '../../field-source/internal-api';
 import { TableRecordSourceDefinition } from './table-record-source-definition';
 
 /** @public */
 export class GridFieldTableRecordSourceDefinition extends TableRecordSourceDefinition {
     constructor(
-        customHeadingsService: RevSourcedFieldCustomHeadingsService,
-        tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService,
+        customHeadings: RevSourcedFieldCustomHeadings | undefined,
+        tableFieldSourceDefinitionCachingFactory: TableFieldSourceDefinitionCachingFactory,
         private readonly _gridFieldArray: GridField[],
     ) {
         super(
-            customHeadingsService,
-            tableFieldSourceDefinitionCachingFactoryService,
+            customHeadings,
+            tableFieldSourceDefinitionCachingFactory,
             TableRecordSourceDefinition.TypeId.GridField,
             GridFieldTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
         );
@@ -28,7 +28,7 @@ export class GridFieldTableRecordSourceDefinition extends TableRecordSourceDefin
     get gridFieldArray() { return this._gridFieldArray; }
 
     override createDefaultLayoutDefinition() {
-        const gridFieldFieldSourceDefinition = GridFieldTableFieldSourceDefinition.get(this.tableFieldSourceDefinitionCachingFactoryService);
+        const gridFieldFieldSourceDefinition = GridFieldTableFieldSourceDefinition.get(this.tableFieldSourceDefinitionCachingFactory);
 
         const fieldNames = new Array<string>();
 

@@ -4,12 +4,12 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevSourcedFieldCustomHeadingsService } from '@xilytix/revgrid';
+import { RevSourcedFieldCustomHeadings } from '@xilytix/revgrid';
+import { TextFormatter } from '../../../services/internal-api';
 import { Badness, CorrectnessBadness, Integer, LockOpenListItem, Ok, Result, UnreachableCaseError, UsableListChangeTypeId } from '../../../sys/internal-api';
-import { TextFormatterService } from '../../../text-format/internal-api';
 import { GridField } from '../../field/internal-api';
 import {
-    TableFieldSourceDefinition, TableFieldSourceDefinitionCachingFactoryService
+    TableFieldSourceDefinition, TableFieldSourceDefinitionCachingFactory
 } from "../field-source/internal-api";
 import { GridFieldTableRecordDefinition } from '../record-definition/internal-api';
 import { TableRecord } from '../record/internal-api';
@@ -22,16 +22,16 @@ export class GridFieldTableRecordSource extends TableRecordSource {
     private readonly _records: GridField[];
 
     constructor(
-        textFormatterService: TextFormatterService,
-        gridFieldCustomHeadingsService: RevSourcedFieldCustomHeadingsService,
-        tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService,
+        textFormatter: TextFormatter,
+        customHeadings: RevSourcedFieldCustomHeadings | undefined,
+        tableFieldSourceDefinitionCachingFactory: TableFieldSourceDefinitionCachingFactory,
         correctnessBadness: CorrectnessBadness,
         definition: GridFieldTableRecordSourceDefinition,
     ) {
         super(
-            textFormatterService,
-            gridFieldCustomHeadingsService,
-            tableFieldSourceDefinitionCachingFactoryService,
+            textFormatter,
+            customHeadings,
+            tableFieldSourceDefinitionCachingFactory,
             correctnessBadness,
             definition,
             GridFieldTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
@@ -44,8 +44,8 @@ export class GridFieldTableRecordSource extends TableRecordSource {
 
     override createDefinition(): GridFieldTableRecordSourceDefinition {
         return new GridFieldTableRecordSourceDefinition(
-            this._gridFieldCustomHeadingsService,
-            this._tableFieldSourceDefinitionCachingFactoryService,
+            this.customHeadings,
+            this.tableFieldSourceDefinitionCachingFactory,
             this._records.slice(),
         );
     }

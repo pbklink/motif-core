@@ -194,24 +194,25 @@ import { RevRecordValueRecentChangeTypeId } from '@xilytix/revgrid';
 import { RevRectangle } from '@xilytix/revgrid';
 import { RevReferenceableColumnLayout } from '@xilytix/revgrid';
 import { RevReferenceableColumnLayoutDefinition } from '@xilytix/revgrid';
-import { RevReferenceableColumnLayoutsService } from '@xilytix/revgrid';
+import { RevReferenceableColumnLayouts } from '@xilytix/revgrid';
 import { RevReferenceableDataSource } from '@xilytix/revgrid';
 import { RevReferenceableDataSourceDefinition } from '@xilytix/revgrid';
-import { RevReferenceableDataSourceDefinitionsStoreService } from '@xilytix/revgrid';
-import { RevReferenceableDataSourcesService } from '@xilytix/revgrid';
+import { RevReferenceableDataSourceDefinitionsStore } from '@xilytix/revgrid';
+import { RevReferenceableDataSources } from '@xilytix/revgrid';
 import { RevSingleHeadingDataRowArraySourcedFieldGrid } from '@xilytix/revgrid';
 import { RevSingleHeadingDataServer } from '@xilytix/revgrid';
 import { RevSourcedField } from '@xilytix/revgrid';
-import { RevSourcedFieldCustomHeadingsService } from '@xilytix/revgrid';
+import { RevSourcedFieldCustomHeadings } from '@xilytix/revgrid';
 import { RevSourcedFieldGrid } from '@xilytix/revgrid';
 import { RevStandardCheckboxPainter } from '@xilytix/revgrid';
+import { RevStandardTableFieldSourceDefinitionCachingFactoryService } from '@xilytix/revgrid';
 import { RevStandardTextPainter } from '@xilytix/revgrid';
 import { RevStandardToggleClickBoxCellEditor } from '@xilytix/revgrid';
 import { RevSubgrid } from '@xilytix/revgrid';
 import { RevTable } from '@xilytix/revgrid';
 import { RevTableField } from '@xilytix/revgrid';
 import { RevTableFieldSourceDefinition } from '@xilytix/revgrid';
-import { RevTableFieldSourceDefinitionCachingFactoryService } from '@xilytix/revgrid';
+import { RevTableFieldSourceDefinitionCachingFactory } from '@xilytix/revgrid';
 import { RevTableFieldSourceDefinitionFactory } from '@xilytix/revgrid';
 import { RevTableGrid } from '@xilytix/revgrid';
 import { RevTableRecord } from '@xilytix/revgrid';
@@ -225,7 +226,7 @@ import { RevTableValue } from '@xilytix/revgrid';
 import { RevTableValueSource } from '@xilytix/revgrid';
 import { RevTableValuesRecord } from '@xilytix/revgrid';
 import { RevTextFormattableValue } from '@xilytix/revgrid';
-import { RevTextFormatterService } from '@xilytix/revgrid';
+import { RevTextFormatter } from '@xilytix/revgrid';
 import { RevTextTruncateTypeId } from '@xilytix/revgrid';
 import { RevViewCell } from '@xilytix/revgrid';
 import { RevViewLayout } from '@xilytix/revgrid';
@@ -1781,7 +1782,7 @@ export namespace BadnessList {
 //
 // @public (undocumented)
 export abstract class BadnessListTableRecordSource<Record> extends SubscribeBadnessListTableRecordSource<Record, BadnessList<Record>> {
-    constructor(textFormatterService: TextFormatterService, gridFieldCustomHeadingsService: RevSourcedFieldCustomHeadingsService, tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService, correctnessBadness: CorrectnessBadness, definition: BadnessListTableRecordSourceDefinition<Record>, allowedFieldSourceDefinitionTypeIds: readonly TableFieldSourceDefinition.TypeId[]);
+    constructor(textFormatter: TextFormatter, customHeadings: RevSourcedFieldCustomHeadings | undefined, tableFieldSourceDefinitionCachingFactory: TableFieldSourceDefinitionCachingFactory, correctnessBadness: CorrectnessBadness, definition: BadnessListTableRecordSourceDefinition<Record>, allowedFieldSourceDefinitionTypeIds: readonly TableFieldSourceDefinition.TypeId[]);
     // (undocumented)
     readonly list: BadnessList<Record>;
     // (undocumented)
@@ -1792,7 +1793,7 @@ export abstract class BadnessListTableRecordSource<Record> extends SubscribeBadn
 
 // @public (undocumented)
 export abstract class BadnessListTableRecordSourceDefinition<T> extends TableRecordSourceDefinition {
-    constructor(customHeadingsService: RevSourcedFieldCustomHeadingsService, tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService, typeId: TableRecordSourceDefinition.TypeId, allowedFieldSourceDefinitionTypeIds: TableFieldSourceDefinition.TypeId[], list: BadnessList<T>);
+    constructor(customHeadings: RevSourcedFieldCustomHeadings | undefined, tableFieldSourceDefinitionCachingFactory: TableFieldSourceDefinitionCachingFactory, typeId: TableRecordSourceDefinition.TypeId, allowedFieldSourceDefinitionTypeIds: TableFieldSourceDefinition.TypeId[], list: BadnessList<T>);
     // (undocumented)
     readonly list: BadnessList<T>;
 }
@@ -2195,7 +2196,7 @@ export namespace BalancesTableFieldSourceDefinition {
         sourceTypeId: BalancesTableFieldSourceDefinition.TypeId;
     }
     // (undocumented)
-    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactoryService): BalancesTableFieldSourceDefinition;
+    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactory): BalancesTableFieldSourceDefinition;
     // (undocumented)
     export function initialiseStatic(): void;
     // (undocumented)
@@ -2221,7 +2222,7 @@ export namespace BalancesTableRecordDefinition {
 //
 // @public (undocumented)
 export class BalancesTableRecordSource extends BrokerageAccountGroupTableRecordSource<Balances, BrokerageAccountGroupRecordList<Balances>> {
-    constructor(_adiService: AdiService, textFormatterService: TextFormatterService, gridFieldCustomHeadingsService: RevSourcedFieldCustomHeadingsService, tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService, correctnessBadness: CorrectnessBadness, definition: BalancesTableRecordSourceDefinition);
+    constructor(_adiService: AdiService, textFormatter: TextFormatter, customHeadings: RevSourcedFieldCustomHeadings | undefined, tableFieldSourceDefinitionCachingFactory: TableFieldSourceDefinitionCachingFactory, correctnessBadness: CorrectnessBadness, definition: BalancesTableRecordSourceDefinition);
     // (undocumented)
     createDefinition(): BalancesTableRecordSourceDefinition;
     // (undocumented)
@@ -2241,7 +2242,7 @@ export class BalancesTableRecordSource extends BrokerageAccountGroupTableRecordS
 //
 // @public (undocumented)
 export class BalancesTableRecordSourceDefinition extends BrokerageAccountGroupTableRecordSourceDefinition {
-    constructor(customHeadingsService: RevSourcedFieldCustomHeadingsService, tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService, brokerageAccountGroup: BrokerageAccountGroup);
+    constructor(customHeadings: RevSourcedFieldCustomHeadings | undefined, tableFieldSourceDefinitionCachingFactory: TableFieldSourceDefinitionCachingFactory, brokerageAccountGroup: BrokerageAccountGroup);
     // (undocumented)
     createDefaultLayoutDefinition(): RevColumnLayoutDefinition;
 }
@@ -2798,7 +2799,7 @@ export interface BrokerageAccountGroupRecordList<Record extends BrokerageAccount
 //
 // @public (undocumented)
 export abstract class BrokerageAccountGroupTableRecordSource<Record extends BrokerageAccountRecord, RecordList extends BrokerageAccountGroupRecordList<Record>> extends SingleDataItemRecordTableRecordSource<Record, RecordList> {
-    constructor(textFormatterService: TextFormatterService, gridFieldCustomHeadingsService: RevSourcedFieldCustomHeadingsService, tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService, correctnessBadness: CorrectnessBadness, definition: BrokerageAccountGroupTableRecordSourceDefinition, allowedFieldSourceDefinitionTypeIds: TableFieldSourceDefinition.TypeId[]);
+    constructor(textFormatter: TextFormatter, customHeadings: RevSourcedFieldCustomHeadings | undefined, tableFieldSourceDefinitionCachingFactory: TableFieldSourceDefinitionCachingFactory, correctnessBadness: CorrectnessBadness, definition: BrokerageAccountGroupTableRecordSourceDefinition, allowedFieldSourceDefinitionTypeIds: TableFieldSourceDefinition.TypeId[]);
     // (undocumented)
     readonly brokerageAccountGroup: BrokerageAccountGroup;
 }
@@ -2808,7 +2809,7 @@ export abstract class BrokerageAccountGroupTableRecordSource<Record extends Brok
 //
 // @public (undocumented)
 export abstract class BrokerageAccountGroupTableRecordSourceDefinition extends TableRecordSourceDefinition {
-    constructor(customHeadingsService: RevSourcedFieldCustomHeadingsService, tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService, typeId: TableRecordSourceDefinition.TypeId, allowedFieldSourceDefinitionTypeIds: TableFieldSourceDefinition.TypeId[], brokerageAccountGroup: BrokerageAccountGroup);
+    constructor(customHeadings: RevSourcedFieldCustomHeadings | undefined, tableFieldSourceDefinitionCachingFactory: TableFieldSourceDefinitionCachingFactory, typeId: TableRecordSourceDefinition.TypeId, allowedFieldSourceDefinitionTypeIds: TableFieldSourceDefinition.TypeId[], brokerageAccountGroup: BrokerageAccountGroup);
     // (undocumented)
     readonly brokerageAccountGroup: BrokerageAccountGroup;
     // (undocumented)
@@ -3161,7 +3162,7 @@ export namespace BrokerageAccountTableFieldSourceDefinition {
         sourceTypeId: BrokerageAccountTableFieldSourceDefinition.TypeId;
     }
     // (undocumented)
-    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactoryService): BrokerageAccountTableFieldSourceDefinition;
+    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactory): BrokerageAccountTableFieldSourceDefinition;
     // (undocumented)
     export function initialiseStatic(): void;
     // (undocumented)
@@ -3185,7 +3186,7 @@ export namespace BrokerageAccountTableRecordDefinition {
 
 // @public (undocumented)
 export class BrokerageAccountTableRecordSource extends SingleDataItemRecordTableRecordSource<Account, KeyedCorrectnessList<Account>> {
-    constructor(_adiService: AdiService, textFormatterService: TextFormatterService, gridFieldCustomHeadingsService: RevSourcedFieldCustomHeadingsService, tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService, correctnessBadness: CorrectnessBadness, definition: BrokerageAccountTableRecordSourceDefinition);
+    constructor(_adiService: AdiService, textFormatter: TextFormatter, customHeadings: RevSourcedFieldCustomHeadings | undefined, tableFieldSourceDefinitionCachingFactory: TableFieldSourceDefinitionCachingFactory, correctnessBadness: CorrectnessBadness, definition: BrokerageAccountTableRecordSourceDefinition);
     // (undocumented)
     createDefinition(): BrokerageAccountTableRecordSourceDefinition;
     // (undocumented)
@@ -3202,7 +3203,7 @@ export class BrokerageAccountTableRecordSource extends SingleDataItemRecordTable
 
 // @public (undocumented)
 export class BrokerageAccountTableRecordSourceDefinition extends TableRecordSourceDefinition {
-    constructor(customHeadingsService: RevSourcedFieldCustomHeadingsService, tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService);
+    constructor(customHeadings: RevSourcedFieldCustomHeadings | undefined, tableFieldSourceDefinitionCachingFactory: TableFieldSourceDefinitionCachingFactory);
     // (undocumented)
     createDefaultLayoutDefinition(): RevColumnLayoutDefinition;
 }
@@ -3448,7 +3449,7 @@ export namespace CallPut {
 
 // @public (undocumented)
 export class CallPutFromUnderlyingTableRecordSource extends SingleDataItemTableRecordSource {
-    constructor(_adiService: AdiService, textFormatterService: TextFormatterService, gridFieldCustomHeadingsService: RevSourcedFieldCustomHeadingsService, tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService, correctnessBadness: CorrectnessBadness, definition: CallPutFromUnderlyingTableRecordSourceDefinition);
+    constructor(_adiService: AdiService, textFormatter: TextFormatter, customHeadings: RevSourcedFieldCustomHeadings | undefined, tableFieldSourceDefinitionCachingFactory: TableFieldSourceDefinitionCachingFactory, correctnessBadness: CorrectnessBadness, definition: CallPutFromUnderlyingTableRecordSourceDefinition);
     // (undocumented)
     closeLocked(opener: LockOpenListItem.Opener): void;
     // (undocumented)
@@ -3469,7 +3470,7 @@ export class CallPutFromUnderlyingTableRecordSource extends SingleDataItemTableR
 
 // @public (undocumented)
 export class CallPutFromUnderlyingTableRecordSourceDefinition extends TableRecordSourceDefinition {
-    constructor(customHeadingsService: RevSourcedFieldCustomHeadingsService, tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService, underlyingIvemId: IvemId);
+    constructor(customHeadings: RevSourcedFieldCustomHeadings | undefined, tableFieldSourceDefinitionCachingFactory: TableFieldSourceDefinitionCachingFactory, underlyingIvemId: IvemId);
     // (undocumented)
     createDefaultLayoutDefinition(): RevColumnLayoutDefinition;
     // (undocumented)
@@ -3589,7 +3590,7 @@ export namespace CallPutTableFieldSourceDefinition {
         sourceTypeId: CallPutTableFieldSourceDefinition.TypeId;
     }
     // (undocumented)
-    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactoryService): CallPutTableFieldSourceDefinition;
+    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactory): CallPutTableFieldSourceDefinition;
     // (undocumented)
     export function initialiseStatic(): void;
     // (undocumented)
@@ -3646,7 +3647,7 @@ export namespace CallSecurityDataItemTableFieldSourceDefinition {
         sourceTypeId: CallSecurityDataItemTableFieldSourceDefinition.TypeId;
     }
     // (undocumented)
-    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactoryService): CallSecurityDataItemTableFieldSourceDefinition;
+    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactory): CallSecurityDataItemTableFieldSourceDefinition;
     // (undocumented)
     export type TypeId = typeof typeId;
 }
@@ -3764,7 +3765,7 @@ export const enum CapabilityId {
 //
 // @public (undocumented)
 export class CellPainterFactoryService {
-    constructor(_settingsService: SettingsService, _textFormatterService: TextFormatterService);
+    constructor(_settingsService: SettingsService, _textFormatter: TextFormatter);
     // (undocumented)
     createCheckboxTextFormattableValueRecordGrid(grid: RecordSourcedFieldGrid, dataServer: RecordGridDataServer): CheckboxTextFormattableValueRecordGridCellPainter;
     // (undocumented)
@@ -5232,9 +5233,9 @@ export class CoreService {
     // (undocumented)
     readonly commandRegisterService: CommandRegisterService;
     // (undocumented)
-    finalise(): void;
+    readonly customHeadingsService: RevSourcedFieldCustomHeadings;
     // (undocumented)
-    readonly gridFieldCustomHeadingsService: RevSourcedFieldCustomHeadingsService;
+    finalise(): void;
     // (undocumented)
     readonly idleService: IdleService;
     // (undocumented)
@@ -5266,7 +5267,7 @@ export class CoreService {
     // (undocumented)
     readonly symbolsService: SymbolsService;
     // (undocumented)
-    get tableFieldSourceDefinitionCachingFactoryService(): TableFieldSourceDefinitionCachingFactoryService;
+    get tableFieldSourceDefinitionCachingFactoryService(): StandardTableFieldSourceDefinitionCachingFactoryService;
     // (undocumented)
     readonly textFormatterService: TextFormatterService;
     // (undocumented)
@@ -5434,7 +5435,7 @@ export abstract class CorrectnessTableField extends TableField {
 // @public (undocumented)
 export namespace CorrectnessTableField {
     // (undocumented)
-    export type Constructor = new (textFormatterService: RevTextFormatterService<TextFormattableValue.TypeId, TextFormattableValue.Attribute.TypeId>, definition: TableField.Definition, heading: string) => CorrectnessTableField;
+    export type Constructor = new (textFormatter: TextFormatter, definition: TableField.Definition, heading: string) => CorrectnessTableField;
 }
 
 // Warning: (ae-missing-release-tag) "CorrectnessTableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -8066,7 +8067,7 @@ export namespace EditableColumnLayoutDefinitionColumnTableFieldSourceDefinition 
         sourceTypeId: EditableColumnLayoutDefinitionColumnTableFieldSourceDefinition.TypeId;
     }
     // (undocumented)
-    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactoryService): EditableColumnLayoutDefinitionColumnTableFieldSourceDefinition;
+    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactory): EditableColumnLayoutDefinitionColumnTableFieldSourceDefinition;
     // (undocumented)
     export function initialiseStatic(): void;
     // (undocumented)
@@ -8090,7 +8091,7 @@ export namespace EditableColumnLayoutDefinitionColumnTableRecordDefinition {
 
 // @public (undocumented)
 export class EditableColumnLayoutDefinitionColumnTableRecordSource extends TableRecordSource {
-    constructor(textFormatterService: TextFormatterService, gridFieldCustomHeadingsService: RevSourcedFieldCustomHeadingsService, tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService, correctnessBadness: CorrectnessBadness, definition: EditableColumnLayoutDefinitionColumnTableRecordSourceDefinition);
+    constructor(textFormatter: TextFormatter, customHeadings: RevSourcedFieldCustomHeadings | undefined, tableFieldSourceDefinitionCachingFactory: TableFieldSourceDefinitionCachingFactory, correctnessBadness: CorrectnessBadness, definition: EditableColumnLayoutDefinitionColumnTableRecordSourceDefinition);
     // (undocumented)
     closeLocked(opener: LockOpenListItem.Opener): void;
     // (undocumented)
@@ -8113,7 +8114,7 @@ export class EditableColumnLayoutDefinitionColumnTableRecordSource extends Table
 
 // @public (undocumented)
 export class EditableColumnLayoutDefinitionColumnTableRecordSourceDefinition extends TableRecordSourceDefinition {
-    constructor(customHeadingsService: RevSourcedFieldCustomHeadingsService, tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService, list: EditableColumnLayoutDefinitionColumnList);
+    constructor(customHeadings: RevSourcedFieldCustomHeadings | undefined, tableFieldSourceDefinitionCachingFactory: TableFieldSourceDefinitionCachingFactory, list: EditableColumnLayoutDefinitionColumnList);
     // (undocumented)
     createDefaultLayoutDefinition(): RevColumnLayoutDefinition;
     // (undocumented)
@@ -10354,7 +10355,7 @@ export namespace FeedTableFieldSourceDefinition {
         sourceTypeId: FeedTableFieldSourceDefinition.TypeId;
     }
     // (undocumented)
-    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactoryService): FeedTableFieldSourceDefinition;
+    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactory): FeedTableFieldSourceDefinition;
     // (undocumented)
     export function initialiseStatic(): void;
     // (undocumented)
@@ -10378,7 +10379,7 @@ export namespace FeedTableRecordDefinition {
 
 // @public (undocumented)
 export class FeedTableRecordSource extends SingleDataItemRecordTableRecordSource<Feed, KeyedCorrectnessList<Feed>> {
-    constructor(_adiService: AdiService, textFormatterService: TextFormatterService, gridFieldCustomHeadingsService: RevSourcedFieldCustomHeadingsService, tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService, correctnessBadness: CorrectnessBadness, definition: FeedTableRecordSourceDefinition);
+    constructor(_adiService: AdiService, textFormatter: TextFormatter, customHeadings: RevSourcedFieldCustomHeadings | undefined, tableFieldSourceDefinitionCachingFactory: TableFieldSourceDefinitionCachingFactory, correctnessBadness: CorrectnessBadness, definition: FeedTableRecordSourceDefinition);
     // (undocumented)
     createDefinition(): FeedTableRecordSourceDefinition;
     // (undocumented)
@@ -10395,7 +10396,7 @@ export class FeedTableRecordSource extends SingleDataItemRecordTableRecordSource
 
 // @public (undocumented)
 export class FeedTableRecordSourceDefinition extends TableRecordSourceDefinition {
-    constructor(customHeadingsService: RevSourcedFieldCustomHeadingsService, tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService);
+    constructor(customHeadings: RevSourcedFieldCustomHeadings | undefined, tableFieldSourceDefinitionCachingFactory: TableFieldSourceDefinitionCachingFactory);
     // (undocumented)
     createDefaultLayoutDefinition(): RevColumnLayoutDefinition;
 }
@@ -10930,7 +10931,7 @@ export namespace GridFieldTableFieldSourceDefinition {
         sourceTypeId: GridFieldTableFieldSourceDefinition.TypeId;
     }
     // (undocumented)
-    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactoryService): GridFieldTableFieldSourceDefinition;
+    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactory): GridFieldTableFieldSourceDefinition;
     // (undocumented)
     export function initialiseStatic(): void;
     // (undocumented)
@@ -10954,7 +10955,7 @@ export namespace GridFieldTableRecordDefinition {
 
 // @public (undocumented)
 export class GridFieldTableRecordSource extends TableRecordSource {
-    constructor(textFormatterService: TextFormatterService, gridFieldCustomHeadingsService: RevSourcedFieldCustomHeadingsService, tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService, correctnessBadness: CorrectnessBadness, definition: GridFieldTableRecordSourceDefinition);
+    constructor(textFormatter: TextFormatter, customHeadings: RevSourcedFieldCustomHeadings | undefined, tableFieldSourceDefinitionCachingFactory: TableFieldSourceDefinitionCachingFactory, correctnessBadness: CorrectnessBadness, definition: GridFieldTableRecordSourceDefinition);
     // (undocumented)
     closeLocked(_opener: LockOpenListItem.Opener): void;
     // (undocumented)
@@ -10979,7 +10980,7 @@ export class GridFieldTableRecordSource extends TableRecordSource {
 
 // @public (undocumented)
 export class GridFieldTableRecordSourceDefinition extends TableRecordSourceDefinition {
-    constructor(customHeadingsService: RevSourcedFieldCustomHeadingsService, tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService, _gridFieldArray: GridField[]);
+    constructor(customHeadings: RevSourcedFieldCustomHeadings | undefined, tableFieldSourceDefinitionCachingFactory: TableFieldSourceDefinitionCachingFactory, _gridFieldArray: GridField[]);
     // (undocumented)
     createDefaultLayoutDefinition(): RevColumnLayoutDefinition;
     // (undocumented)
@@ -11571,7 +11572,7 @@ export namespace HoldingTableFieldSourceDefinition {
         sourceTypeId: HoldingTableFieldSourceDefinition.TypeId;
     }
     // (undocumented)
-    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactoryService): HoldingTableFieldSourceDefinition;
+    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactory): HoldingTableFieldSourceDefinition;
     // (undocumented)
     export function initialiseStatic(): void;
     // (undocumented)
@@ -11595,7 +11596,7 @@ export namespace HoldingTableRecordDefinition {
 
 // @public (undocumented)
 export class HoldingTableRecordSource extends BrokerageAccountGroupTableRecordSource<Holding, BrokerageAccountGroupRecordList<Holding>> {
-    constructor(_adiService: AdiService, textFormatterService: TextFormatterService, gridFieldCustomHeadingsService: RevSourcedFieldCustomHeadingsService, tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService, correctnessBadness: CorrectnessBadness, definition: HoldingTableRecordSourceDefinition);
+    constructor(_adiService: AdiService, textFormatter: TextFormatter, customHeadings: RevSourcedFieldCustomHeadings | undefined, tableFieldSourceDefinitionCachingFactory: TableFieldSourceDefinitionCachingFactory, correctnessBadness: CorrectnessBadness, definition: HoldingTableRecordSourceDefinition);
     // (undocumented)
     createDefinition(): HoldingTableRecordSourceDefinition;
     // (undocumented)
@@ -11612,7 +11613,7 @@ export class HoldingTableRecordSource extends BrokerageAccountGroupTableRecordSo
 
 // @public (undocumented)
 export class HoldingTableRecordSourceDefinition extends BrokerageAccountGroupTableRecordSourceDefinition {
-    constructor(customHeadingsService: RevSourcedFieldCustomHeadingsService, tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService, brokerageAccountGroup: BrokerageAccountGroup);
+    constructor(customHeadings: RevSourcedFieldCustomHeadings | undefined, tableFieldSourceDefinitionCachingFactory: TableFieldSourceDefinitionCachingFactory, brokerageAccountGroup: BrokerageAccountGroup);
     // (undocumented)
     createDefaultLayoutDefinition(): RevColumnLayoutDefinition;
 }
@@ -13763,7 +13764,7 @@ export namespace LitIvemAlternateCodesTableFieldSourceDefinition {
         sourceTypeId: LitIvemAlternateCodesTableFieldSourceDefinition.TypeId;
     }
     // (undocumented)
-    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactoryService): LitIvemAlternateCodesTableFieldSourceDefinition;
+    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactory): LitIvemAlternateCodesTableFieldSourceDefinition;
     // (undocumented)
     export function initialiseStatic(): void;
     // (undocumented)
@@ -13965,7 +13966,7 @@ export namespace LitIvemBaseDetailTableFieldSourceDefinition {
         sourceTypeId: LitIvemBaseDetailTableFieldSourceDefinition.TypeId;
     }
     // (undocumented)
-    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactoryService): LitIvemBaseDetailTableFieldSourceDefinition;
+    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactory): LitIvemBaseDetailTableFieldSourceDefinition;
     // (undocumented)
     export function initialiseStatic(): void;
     // (undocumented)
@@ -14009,7 +14010,7 @@ export class LitIvemBaseDetailTableValueSource extends TableValueSource {
 //
 // @public (undocumented)
 export class LitIvemDetailFromSearchSymbolsTableRecordSource extends SingleDataItemTableRecordSource {
-    constructor(_adiService: AdiService, textFormatterService: TextFormatterService, gridFieldCustomHeadingsService: RevSourcedFieldCustomHeadingsService, tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService, correctnessBadness: CorrectnessBadness, definition: LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition);
+    constructor(_adiService: AdiService, textFormatter: TextFormatter, customHeadings: RevSourcedFieldCustomHeadings | undefined, tableFieldSourceDefinitionCachingFactory: TableFieldSourceDefinitionCachingFactory, correctnessBadness: CorrectnessBadness, definition: LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition);
     // (undocumented)
     closeLocked(opener: LockOpenListItem.Opener): void;
     // (undocumented)
@@ -14051,7 +14052,7 @@ export namespace LitIvemDetailFromSearchSymbolsTableRecordSource {
 //
 // @public (undocumented)
 export class LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition extends TableRecordSourceDefinition {
-    constructor(customHeadingsService: RevSourcedFieldCustomHeadingsService, tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService, dataDefinition: SearchSymbolsDataDefinition);
+    constructor(customHeadings: RevSourcedFieldCustomHeadings | undefined, tableFieldSourceDefinitionCachingFactory: TableFieldSourceDefinitionCachingFactory, dataDefinition: SearchSymbolsDataDefinition);
     // (undocumented)
     createDefaultLayoutDefinition(): RevColumnLayoutDefinition;
     // (undocumented)
@@ -14073,7 +14074,7 @@ export namespace LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition {
     const // (undocumented)
     allowedFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[];
     // (undocumented)
-    export function createLayoutDefinition(fieldSourceDefinitionRegistryService: TableFieldSourceDefinitionCachingFactoryService, fieldIds: FieldId[]): RevColumnLayoutDefinition;
+    export function createLayoutDefinition(fieldSourceDefinitionRegistryService: TableFieldSourceDefinitionCachingFactory, fieldIds: FieldId[]): RevColumnLayoutDefinition;
     // (undocumented)
     export type FieldId = LitIvemBaseDetailTableFieldSourceDefinition.FieldId | LitIvemExtendedDetailTableFieldSourceDefinition.FieldId | LitIvemAlternateCodesTableFieldSourceDefinition.FieldId | MyxLitIvemAttributesTableFieldSourceDefinition.FieldId;
     // (undocumented)
@@ -14150,7 +14151,7 @@ export namespace LitIvemExtendedDetailTableFieldSourceDefinition {
         sourceTypeId: LitIvemExtendedDetailTableFieldSourceDefinition.TypeId;
     }
     // (undocumented)
-    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactoryService): LitIvemExtendedDetailTableFieldSourceDefinition;
+    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactory): LitIvemExtendedDetailTableFieldSourceDefinition;
     // (undocumented)
     export function initialiseStatic(): void;
     // (undocumented)
@@ -14412,7 +14413,7 @@ export class LitIvemIdArrayTextFormattableValue extends GenericTextFormattableVa
 //
 // @public (undocumented)
 export class LitIvemIdComparableListTableRecordSource extends BadnessListTableRecordSource<LitIvemId> {
-    constructor(_adiService: AdiService, _symbolDetailCacheService: SymbolDetailCacheService, textFormatterService: TextFormatterService, gridFieldCustomHeadingsService: RevSourcedFieldCustomHeadingsService, tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService, correctnessBadness: CorrectnessBadness, definition: LitIvemIdComparableListTableRecordSourceDefinition);
+    constructor(_adiService: AdiService, _symbolDetailCacheService: SymbolDetailCacheService, textFormatter: TextFormatter, customHeadings: RevSourcedFieldCustomHeadings | undefined, tableFieldSourceDefinitionCachingFactory: TableFieldSourceDefinitionCachingFactory, correctnessBadness: CorrectnessBadness, definition: LitIvemIdComparableListTableRecordSourceDefinition);
     // (undocumented)
     createDefinition(): LitIvemIdComparableListTableRecordSourceDefinition;
     // (undocumented)
@@ -14431,7 +14432,7 @@ export class LitIvemIdComparableListTableRecordSource extends BadnessListTableRe
 
 // @public (undocumented)
 export class LitIvemIdComparableListTableRecordSourceDefinition extends BadnessListTableRecordSourceDefinition<LitIvemId> {
-    constructor(customHeadingsService: RevSourcedFieldCustomHeadingsService, tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService, list: UiComparableList<LitIvemId>);
+    constructor(customHeadings: RevSourcedFieldCustomHeadings | undefined, tableFieldSourceDefinitionCachingFactory: TableFieldSourceDefinitionCachingFactory, list: UiComparableList<LitIvemId>);
     // (undocumented)
     createDefaultLayoutDefinition(): RevColumnLayoutDefinition;
     // (undocumented)
@@ -14443,7 +14444,7 @@ export class LitIvemIdComparableListTableRecordSourceDefinition extends BadnessL
 // @public (undocumented)
 export namespace LitIvemIdComparableListTableRecordSourceDefinition {
     // (undocumented)
-    export function createLayoutDefinition(fieldSourceDefinitionRegistryService: TableFieldSourceDefinitionCachingFactoryService, fieldIds: FieldId[]): RevColumnLayoutDefinition;
+    export function createLayoutDefinition(fieldSourceDefinitionRegistryService: TableFieldSourceDefinitionCachingFactory, fieldIds: FieldId[]): RevColumnLayoutDefinition;
     const // (undocumented)
     allowedFieldSourceDefinitionTypeIds: FieldSourceDefinitionTypeId[];
     const // (undocumented)
@@ -14460,7 +14461,7 @@ export namespace LitIvemIdComparableListTableRecordSourceDefinition {
         list = "list";
     }
     // (undocumented)
-    export function tryCreateDefinition(customHeadingsService: RevSourcedFieldCustomHeadingsService, tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService, element: JsonElement): Result<LitIvemIdComparableListTableRecordSourceDefinition>;
+    export function tryCreateDefinition(customHeadings: RevSourcedFieldCustomHeadings | undefined, tableFieldSourceDefinitionCachingFactory: TableFieldSourceDefinitionCachingFactory, element: JsonElement): Result<LitIvemIdComparableListTableRecordSourceDefinition>;
     // (undocumented)
     export function tryCreateListFromElement(element: JsonElement): Result<UiComparableList<LitIvemId>>;
 }
@@ -14850,7 +14851,7 @@ export namespace LitIvemIdTableFieldSourceDefinition {
         sourceTypeId: LitIvemIdTableFieldSourceDefinition.TypeId;
     }
     // (undocumented)
-    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactoryService): LitIvemIdTableFieldSourceDefinition;
+    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactory): LitIvemIdTableFieldSourceDefinition;
     // (undocumented)
     export function initialiseStatic(): void;
     // (undocumented)
@@ -16985,7 +16986,7 @@ export namespace MyxLitIvemAttributesTableFieldSourceDefinition {
         sourceTypeId: MyxLitIvemAttributesTableFieldSourceDefinition.TypeId;
     }
     // (undocumented)
-    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactoryService): MyxLitIvemAttributesTableFieldSourceDefinition;
+    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactory): MyxLitIvemAttributesTableFieldSourceDefinition;
     // (undocumented)
     export function initialiseStatic(): void;
     // (undocumented)
@@ -19934,7 +19935,7 @@ export namespace OrderTableFieldSourceDefinition {
         sourceTypeId: OrderTableFieldSourceDefinition.TypeId;
     }
     // (undocumented)
-    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactoryService): OrderTableFieldSourceDefinition;
+    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactory): OrderTableFieldSourceDefinition;
     // (undocumented)
     export function initialiseStatic(): void;
     // (undocumented)
@@ -19958,7 +19959,7 @@ export namespace OrderTableRecordDefinition {
 
 // @public (undocumented)
 export class OrderTableRecordSource extends BrokerageAccountGroupTableRecordSource<Order, BrokerageAccountGroupRecordList<Order>> {
-    constructor(_adiService: AdiService, textFormatterService: TextFormatterService, gridFieldCustomHeadingsService: RevSourcedFieldCustomHeadingsService, tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService, correctnessBadness: CorrectnessBadness, definition: OrderTableRecordSourceDefinition);
+    constructor(_adiService: AdiService, textFormatter: TextFormatter, customHeadings: RevSourcedFieldCustomHeadings | undefined, tableFieldSourceDefinitionCachingFactory: TableFieldSourceDefinitionCachingFactory, correctnessBadness: CorrectnessBadness, definition: OrderTableRecordSourceDefinition);
     // (undocumented)
     createDefinition(): OrderTableRecordSourceDefinition;
     // (undocumented)
@@ -19975,7 +19976,7 @@ export class OrderTableRecordSource extends BrokerageAccountGroupTableRecordSour
 
 // @public (undocumented)
 export class OrderTableRecordSourceDefinition extends BrokerageAccountGroupTableRecordSourceDefinition {
-    constructor(customHeadingsService: RevSourcedFieldCustomHeadingsService, tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService, brokerageAccountGroup: BrokerageAccountGroup);
+    constructor(customHeadings: RevSourcedFieldCustomHeadings | undefined, tableFieldSourceDefinitionCachingFactory: TableFieldSourceDefinitionCachingFactory, brokerageAccountGroup: BrokerageAccountGroup);
     // (undocumented)
     createDefaultLayoutDefinition(): RevColumnLayoutDefinition;
 }
@@ -21003,7 +21004,7 @@ export namespace PutSecurityDataItemTableFieldSourceDefinition {
         sourceTypeId: PutSecurityDataItemTableFieldSourceDefinition.TypeId;
     }
     // (undocumented)
-    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactoryService): PutSecurityDataItemTableFieldSourceDefinition;
+    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactory): PutSecurityDataItemTableFieldSourceDefinition;
     // (undocumented)
     export type TypeId = typeof typeId;
 }
@@ -21868,7 +21869,7 @@ export namespace RankedLitIvemIdListDirectoryItemTableFieldSourceDefinition {
         sourceTypeId: RankedLitIvemIdListDirectoryItemTableFieldSourceDefinition.TypeId;
     }
     // (undocumented)
-    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactoryService): RankedLitIvemIdListDirectoryItemTableFieldSourceDefinition;
+    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactory): RankedLitIvemIdListDirectoryItemTableFieldSourceDefinition;
     // (undocumented)
     export function initialiseStatic(): void;
     // (undocumented)
@@ -21894,7 +21895,7 @@ export namespace RankedLitIvemIdListDirectoryItemTableRecordDefinition {
 //
 // @public (undocumented)
 export class RankedLitIvemIdListDirectoryItemTableRecordSource extends SubscribeBadnessListTableRecordSource<RankedLitIvemIdListDirectoryItem, RankedLitIvemIdListDirectory> {
-    constructor(textFormatterService: TextFormatterService, gridFieldCustomHeadingsService: RevSourcedFieldCustomHeadingsService, tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService, correctnessBadness: CorrectnessBadness, definition: RankedLitIvemIdListDirectoryItemTableRecordSourceDefinition);
+    constructor(textFormatter: TextFormatter, customHeadings: RevSourcedFieldCustomHeadings | undefined, tableFieldSourceDefinitionCachingFactory: TableFieldSourceDefinitionCachingFactory, correctnessBadness: CorrectnessBadness, definition: RankedLitIvemIdListDirectoryItemTableRecordSourceDefinition);
     // (undocumented)
     createDefinition(): RankedLitIvemIdListDirectoryItemTableRecordSourceDefinition;
     // (undocumented)
@@ -21913,7 +21914,7 @@ export class RankedLitIvemIdListDirectoryItemTableRecordSource extends Subscribe
 
 // @public (undocumented)
 export class RankedLitIvemIdListDirectoryItemTableRecordSourceDefinition extends TableRecordSourceDefinition {
-    constructor(customHeadingsService: RevSourcedFieldCustomHeadingsService, tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService, listDirectory: RankedLitIvemIdListDirectory);
+    constructor(customHeadings: RevSourcedFieldCustomHeadings | undefined, tableFieldSourceDefinitionCachingFactory: TableFieldSourceDefinitionCachingFactory, listDirectory: RankedLitIvemIdListDirectory);
     // (undocumented)
     createDefaultLayoutDefinition(): RevColumnLayoutDefinition;
     // (undocumented)
@@ -22018,7 +22019,7 @@ export namespace RankedLitIvemIdListStaticInitialise {
 //
 // @public (undocumented)
 export class RankedLitIvemIdListTableRecordSource extends SubscribeBadnessListTableRecordSource<RankedLitIvemId, RankedLitIvemIdList> {
-    constructor(_adiService: AdiService, _symbolDetailCacheService: SymbolDetailCacheService, _rankedLitIvemIdListFactoryService: RankedLitIvemIdListFactoryService, textFormatterService: TextFormatterService, gridFieldCustomHeadingsService: RevSourcedFieldCustomHeadingsService, tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService, correctnessBadness: CorrectnessBadness, definition: RankedLitIvemIdListTableRecordSourceDefinition);
+    constructor(_adiService: AdiService, _symbolDetailCacheService: SymbolDetailCacheService, _rankedLitIvemIdListFactoryService: RankedLitIvemIdListFactoryService, textFormatter: TextFormatter, customHeadings: RevSourcedFieldCustomHeadings | undefined, tableFieldSourceDefinitionCachingFactory: TableFieldSourceDefinitionCachingFactory, correctnessBadness: CorrectnessBadness, definition: RankedLitIvemIdListTableRecordSourceDefinition);
     // (undocumented)
     createDefinition(): RankedLitIvemIdListTableRecordSourceDefinition;
     // (undocumented)
@@ -22045,7 +22046,7 @@ export class RankedLitIvemIdListTableRecordSource extends SubscribeBadnessListTa
 
 // @public (undocumented)
 export abstract class RankedLitIvemIdListTableRecordSourceDefinition extends TableRecordSourceDefinition {
-    constructor(customHeadingsService: RevSourcedFieldCustomHeadingsService, tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService, allowedFieldSourceDefinitionTypeIds: RankedLitIvemIdListTableRecordSourceDefinition.FieldSourceDefinitionTypeId[], rankedLitIvemIdListDefinition: RankedLitIvemIdListDefinition);
+    constructor(customHeadings: RevSourcedFieldCustomHeadings | undefined, tableFieldSourceDefinitionCachingFactory: TableFieldSourceDefinitionCachingFactory, allowedFieldSourceDefinitionTypeIds: RankedLitIvemIdListTableRecordSourceDefinition.FieldSourceDefinitionTypeId[], rankedLitIvemIdListDefinition: RankedLitIvemIdListDefinition);
     // (undocumented)
     abstract get defaultFieldSourceDefinitionTypeIds(): RankedLitIvemIdListTableRecordSourceDefinition.FieldSourceDefinitionTypeId[];
     // (undocumented)
@@ -22125,7 +22126,7 @@ export namespace RankedLitIvemIdTableFieldSourceDefinition {
         sourceTypeId: RankedLitIvemIdTableFieldSourceDefinition.TypeId;
     }
     // (undocumented)
-    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactoryService): RankedLitIvemIdTableFieldSourceDefinition;
+    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactory): RankedLitIvemIdTableFieldSourceDefinition;
     // (undocumented)
     export function initialiseStatic(): void;
     // (undocumented)
@@ -22170,7 +22171,7 @@ export class RankedLitIvemIdTableValueSource extends CorrectnessTableValueSource
 
 // @public (undocumented)
 export abstract class RankedLitIvemIdUsableListTableRecordSourceDefinition extends UsableListTableRecordSourceDefinition<RankedLitIvemId> {
-    constructor(customHeadingsService: RevSourcedFieldCustomHeadingsService, tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService, typeId: TableRecordSourceDefinition.TypeId, allowedFieldSourceDefinitionTypeIds: RankedLitIvemIdUsableListTableRecordSourceDefinition.FieldSourceDefinitionTypeId[], list: UsableList<RankedLitIvemId>);
+    constructor(customHeadings: RevSourcedFieldCustomHeadings | undefined, tableFieldSourceDefinitionCachingFactory: TableFieldSourceDefinitionCachingFactory, typeId: TableRecordSourceDefinition.TypeId, allowedFieldSourceDefinitionTypeIds: RankedLitIvemIdUsableListTableRecordSourceDefinition.FieldSourceDefinitionTypeId[], list: UsableList<RankedLitIvemId>);
     // (undocumented)
     abstract get defaultFieldSourceDefinitionTypeIds(): RankedLitIvemIdUsableListTableRecordSourceDefinition.FieldSourceDefinitionTypeId[];
 }
@@ -22408,7 +22409,7 @@ export namespace ReferenceableColumnLayoutDefinition {
 // Warning: (ae-missing-release-tag) "ReferenceableColumnLayoutsService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class ReferenceableColumnLayoutsService extends LockOpenList<RevReferenceableColumnLayout> implements RevReferenceableColumnLayoutsService {
+export class ReferenceableColumnLayoutsService extends LockOpenList<RevReferenceableColumnLayout> implements RevReferenceableColumnLayouts {
     // (undocumented)
     getOrNew(definition: RevReferenceableColumnLayoutDefinition): RevReferenceableColumnLayout;
 }
@@ -22426,13 +22427,13 @@ export class ReferenceableDataSourceDefinition extends RevReferenceableDataSourc
 }
 
 // @public (undocumented)
-export class ReferenceableDataSourceDefinitionsStoreService implements RevReferenceableDataSourceDefinitionsStoreService {
+export class ReferenceableDataSourceDefinitionsStoreService implements RevReferenceableDataSourceDefinitionsStore {
 }
 
 // Warning: (ae-missing-release-tag) "ReferenceableDataSourcesService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class ReferenceableDataSourcesService extends LockOpenList<ReferenceableDataSource, ReferenceableDataSource, RevDataSource.LockErrorIdPlusTryError> implements RevReferenceableDataSourcesService<Badness, TableRecordSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId, TextFormattableValue.TypeId, TextFormattableValue.Attribute.TypeId> {
+export class ReferenceableDataSourcesService extends LockOpenList<ReferenceableDataSource, ReferenceableDataSource, RevDataSource.LockErrorIdPlusTryError> implements RevReferenceableDataSources<Badness, TableRecordSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId, TextFormattableValue.TypeId, TextFormattableValue.Attribute.TypeId> {
     constructor(_referenceableColumnLayoutsService: ReferenceableColumnLayoutsService, _tableFieldSourceDefinitionFactory: TableFieldSourceDefinitionFactory, _tableRecordSourceFactory: TableRecordSourceFactory);
     // (undocumented)
     checkPeriodiSaveRequired(nowTime: SysTick.Time): void;
@@ -26167,7 +26168,7 @@ export namespace ScanTableFieldSourceDefinition {
         sourceTypeId: ScanTableFieldSourceDefinition.TypeId;
     }
     // (undocumented)
-    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactoryService): ScanTableFieldSourceDefinition;
+    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactory): ScanTableFieldSourceDefinition;
     // (undocumented)
     export function initialiseStatic(): void;
     // (undocumented)
@@ -26193,7 +26194,7 @@ export namespace ScanTableRecordDefinition {
 //
 // @public (undocumented)
 export class ScanTableRecordSource extends LockOpenListTableRecordSource<Scan, ScanList> {
-    constructor(_scansService: ScansService, textFormatterService: TextFormatterService, gridFieldCustomHeadingsService: RevSourcedFieldCustomHeadingsService, tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService, correctnessBadness: CorrectnessBadness, definition: ScanTableRecordSourceDefinition);
+    constructor(_scansService: ScansService, textFormatter: TextFormatter, customHeadings: RevSourcedFieldCustomHeadings | undefined, tableFieldSourceDefinitionCachingFactory: TableFieldSourceDefinitionCachingFactory, correctnessBadness: CorrectnessBadness, definition: ScanTableRecordSourceDefinition);
     // (undocumented)
     createDefinition(): ScanTableRecordSourceDefinition;
     // (undocumented)
@@ -26212,7 +26213,7 @@ export class ScanTableRecordSource extends LockOpenListTableRecordSource<Scan, S
 
 // @public (undocumented)
 export class ScanTableRecordSourceDefinition extends TableRecordSourceDefinition {
-    constructor(customHeadingsService: RevSourcedFieldCustomHeadingsService, tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService);
+    constructor(customHeadings: RevSourcedFieldCustomHeadings | undefined, tableFieldSourceDefinitionCachingFactory: TableFieldSourceDefinitionCachingFactory);
     // (undocumented)
     createDefaultLayoutDefinition(): RevColumnLayoutDefinition;
 }
@@ -26284,7 +26285,7 @@ export class ScanTargetTypeIdCorrectnessTableValue extends EnumCorrectnessTableV
 
 // @public (undocumented)
 export class ScanTestTableRecordSourceDefinition extends RankedLitIvemIdListTableRecordSourceDefinition {
-    constructor(customHeadingsService: RevSourcedFieldCustomHeadingsService, tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService, rankedLitIvemIdListDefinition: LitIvemIdExecuteScanRankedLitIvemIdListDefinition);
+    constructor(customHeadings: RevSourcedFieldCustomHeadings | undefined, tableFieldSourceDefinitionCachingFactory: TableFieldSourceDefinitionCachingFactory, rankedLitIvemIdListDefinition: LitIvemIdExecuteScanRankedLitIvemIdListDefinition);
     // (undocumented)
     createDefaultLayoutDefinition(): RevColumnLayoutDefinition;
     // (undocumented)
@@ -26840,7 +26841,7 @@ export namespace SecurityDataItemTableFieldSourceDefinition {
     const // (undocumented)
     fieldNameHeaderPrefix = "";
     // (undocumented)
-    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactoryService): SecurityDataItemTableFieldSourceDefinition;
+    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactory): SecurityDataItemTableFieldSourceDefinition;
     // (undocumented)
     export type TypeId = typeof typeId;
 }
@@ -27977,6 +27978,18 @@ export namespace StandAloneScanFieldSet {
         // (undocumented)
         createTextHasValueEquals(_fieldSet: ScanFieldSet, fieldId: ScanFormula.TextHasValueEqualsFieldId): Result<TextHasValueEqualsScanField>;
     }
+}
+
+// Warning: (ae-missing-release-tag) "StandardTableFieldSourceDefinitionCachingFactoryService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "StandardTableFieldSourceDefinitionCachingFactoryService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type StandardTableFieldSourceDefinitionCachingFactoryService = RevStandardTableFieldSourceDefinitionCachingFactoryService<TableFieldSourceDefinition.TypeId, TextFormattableValue.TypeId, TextFormattableValue.Attribute.TypeId>;
+
+// @public (undocumented)
+export namespace StandardTableFieldSourceDefinitionCachingFactoryService {
+    // (undocumented)
+    export function create(definitionFactory: TableFieldSourceDefinitionFactory): RevStandardTableFieldSourceDefinitionCachingFactoryService<TableFieldSourceDefinition.TypeId, TextFormattableValue.TypeId, TextFormattableValue.Attribute.TypeId>;
 }
 
 // Warning: (ae-missing-release-tag) "StringArrayCorrectnessTableField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -33777,10 +33790,10 @@ export namespace TableFieldSourceDefinition {
     }
 }
 
-// Warning: (ae-missing-release-tag) "TableFieldSourceDefinitionCachingFactoryService" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "TableFieldSourceDefinitionCachingFactory" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class TableFieldSourceDefinitionCachingFactoryService extends RevTableFieldSourceDefinitionCachingFactoryService<TableFieldSourceDefinition.TypeId, TextFormattableValue.TypeId, TextFormattableValue.Attribute.TypeId> {
+export interface TableFieldSourceDefinitionCachingFactory extends RevTableFieldSourceDefinitionCachingFactory<TableFieldSourceDefinition.TypeId, TextFormattableValue.TypeId, TextFormattableValue.Attribute.TypeId> {
 }
 
 // Warning: (ae-missing-release-tag) "TableFieldSourceDefinitionFactory" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -33810,7 +33823,7 @@ export namespace TableFieldSourceStaticInitialise {
 //
 // @public (undocumented)
 export class TableGrid extends RevTableGrid<Badness, TableRecordSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId, TextFormattableValue.TypeId, TextFormattableValue.Attribute.TypeId, AdaptedRevgridBehavioredGridSettings, AdaptedRevgridBehavioredColumnSettings> {
-    constructor(gridFieldCustomHeadingsService: RevSourcedFieldCustomHeadingsService, referenceableColumnLayoutsService: ReferenceableColumnLayoutsService, tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService, tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFromJsonFactory, tableRecordSourceFactory: TableRecordSourceFactory, referenceableDataSourcesService: ReferenceableDataSourcesService, settingsService: SettingsService, gridHostElement: HTMLElement, customGridSettings: SourcedFieldGrid.CustomGridSettings, _customiseSettingsForNewColumnEventer: SourcedFieldGrid.CustomiseSettingsForNewColumnEventer, getMainCellPainterEventer: RevSubgrid.GetCellPainterEventer<AdaptedRevgridBehavioredColumnSettings, GridField>, getHeaderCellPainterEventer: RevSubgrid.GetCellPainterEventer<AdaptedRevgridBehavioredColumnSettings, GridField>, externalParent: unknown);
+    constructor(referenceableColumnLayoutsService: ReferenceableColumnLayoutsService, tableFieldSourceDefinitionCachingFactory: TableFieldSourceDefinitionCachingFactory, tableRecordSourceDefinitionFromJsonFactory: TableRecordSourceDefinitionFromJsonFactory, tableRecordSourceFactory: TableRecordSourceFactory, referenceableDataSourcesService: ReferenceableDataSourcesService, settingsService: SettingsService, gridHostElement: HTMLElement, customGridSettings: SourcedFieldGrid.CustomGridSettings, _customiseSettingsForNewColumnEventer: SourcedFieldGrid.CustomiseSettingsForNewColumnEventer, getMainCellPainterEventer: RevSubgrid.GetCellPainterEventer<AdaptedRevgridBehavioredColumnSettings, GridField>, getHeaderCellPainterEventer: RevSubgrid.GetCellPainterEventer<AdaptedRevgridBehavioredColumnSettings, GridField>, externalParent: unknown);
     // (undocumented)
     calculateHeaderPlusFixedRowsHeight(): number;
     // (undocumented)
@@ -33858,7 +33871,7 @@ export interface TableRecordDefinition extends RevTableRecordDefinition<TableFie
 //
 // @public (undocumented)
 export abstract class TableRecordSource extends RevTableRecordSource<Badness, TableRecordSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId, TextFormattableValue.TypeId, TextFormattableValue.Attribute.TypeId> {
-    constructor(textFormatterService: TextFormatterService, gridFieldCustomHeadingsService: RevSourcedFieldCustomHeadingsService, tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService, _correctnessBadness: CorrectnessBadness, definition: TableRecordSourceDefinition, allowedFieldSourceDefinitionTypeIds: readonly TableFieldSourceDefinition.TypeId[]);
+    constructor(textFormatter: TextFormatter, customHeadings: RevSourcedFieldCustomHeadings | undefined, tableFieldSourceDefinitionCachingFactory: TableFieldSourceDefinitionCachingFactory, _correctnessBadness: CorrectnessBadness, definition: TableRecordSourceDefinition, allowedFieldSourceDefinitionTypeIds: readonly TableFieldSourceDefinition.TypeId[]);
     // (undocumented)
     finalise(): void;
     // (undocumented)
@@ -33870,7 +33883,7 @@ export abstract class TableRecordSource extends RevTableRecordSource<Badness, Ta
 //
 // @public (undocumented)
 export abstract class TableRecordSourceDefinition extends RevTableRecordSourceDefinition<TableRecordSourceDefinition.TypeId, TableFieldSourceDefinition.TypeId, TextFormattableValue.TypeId, TextFormattableValue.Attribute.TypeId> {
-    constructor(customHeadingsService: RevSourcedFieldCustomHeadingsService, tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService, typeId: TableRecordSourceDefinition.TypeId, allowedFieldSourceDefinitionTypeIds: readonly TableFieldSourceDefinition.TypeId[]);
+    constructor(customHeadings: RevSourcedFieldCustomHeadings | undefined, tableFieldSourceDefinitionCachingFactory: TableFieldSourceDefinitionCachingFactory, typeId: TableRecordSourceDefinition.TypeId, allowedFieldSourceDefinitionTypeIds: readonly TableFieldSourceDefinition.TypeId[]);
 }
 
 // @public (undocumented)
@@ -34732,8 +34745,14 @@ export class TextFormattableValueRowDataArrayGridCellPainter<RVCP extends TextFo
     paint(cell: RevViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined): number | undefined;
 }
 
+// Warning: (ae-missing-release-tag) "TextFormatter" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
 // @public (undocumented)
-export class TextFormatterService {
+export interface TextFormatter extends RevTextFormatter<TextFormattableValue.TypeId, TextFormattableValue.Attribute.TypeId> {
+}
+
+// @public (undocumented)
+export class TextFormatterService implements TextFormatter {
     constructor(_symbolsService: SymbolsService, _settingsService: SettingsService);
     // (undocumented)
     finalise(): void;
@@ -35030,7 +35049,7 @@ export namespace TextHeaderCellPainter {
 //
 // @public (undocumented)
 export class TextTextFormattableValueCellPainter extends TextFormattableValueCellPainter {
-    constructor(settingsService: SettingsService, _textFormatterService: TextFormatterService, grid: SourcedFieldGrid, dataServer: RevDataServer<GridField>);
+    constructor(settingsService: SettingsService, _textFormatter: TextFormatter, grid: SourcedFieldGrid, dataServer: RevDataServer<GridField>);
     // (undocumented)
     paintValue(cell: RevViewCell<AdaptedRevgridBehavioredColumnSettings, GridField>, prefillColor: string | undefined, textFormattableValue: TextFormattableValue): Integer | undefined;
 }
@@ -35942,7 +35961,7 @@ export namespace TopShareholderTableFieldSourceDefinition {
         sourceTypeId: TopShareholderTableFieldSourceDefinition.TypeId;
     }
     // (undocumented)
-    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactoryService): TopShareholderTableFieldSourceDefinition;
+    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactory): TopShareholderTableFieldSourceDefinition;
     // (undocumented)
     export function initialiseStatic(): void;
     // (undocumented)
@@ -35968,7 +35987,7 @@ export namespace TopShareholderTableRecordDefinition {
 
 // @public (undocumented)
 export class TopShareholderTableRecordSource extends SingleDataItemTableRecordSource {
-    constructor(_adiService: AdiService, textFormatterService: TextFormatterService, gridFieldCustomHeadingsService: RevSourcedFieldCustomHeadingsService, tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService, correctnessBadness: CorrectnessBadness, definition: TopShareholderTableRecordSourceDefinition);
+    constructor(_adiService: AdiService, textFormatter: TextFormatter, customHeadings: RevSourcedFieldCustomHeadings | undefined, tableFieldSourceDefinitionCachingFactory: TableFieldSourceDefinitionCachingFactory, correctnessBadness: CorrectnessBadness, definition: TopShareholderTableRecordSourceDefinition);
     // (undocumented)
     closeLocked(opener: LockOpenListItem.Opener): void;
     // (undocumented)
@@ -35991,7 +36010,7 @@ export class TopShareholderTableRecordSource extends SingleDataItemTableRecordSo
 
 // @public (undocumented)
 export class TopShareholderTableRecordSourceDefinition extends TableRecordSourceDefinition {
-    constructor(customHeadingsService: RevSourcedFieldCustomHeadingsService, tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService, litIvemId: LitIvemId, tradingDate: Date | undefined, compareToTradingDate: Date | undefined);
+    constructor(customHeadings: RevSourcedFieldCustomHeadings | undefined, tableFieldSourceDefinitionCachingFactory: TableFieldSourceDefinitionCachingFactory, litIvemId: LitIvemId, tradingDate: Date | undefined, compareToTradingDate: Date | undefined);
     // (undocumented)
     readonly compareToTradingDate: Date | undefined;
     // (undocumented)
@@ -37545,7 +37564,7 @@ export { UsableListChangeTypeId }
 
 // @public (undocumented)
 export abstract class UsableListTableRecordSourceDefinition<T> extends TableRecordSourceDefinition {
-    constructor(customHeadingsService: RevSourcedFieldCustomHeadingsService, tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService, typeId: TableRecordSourceDefinition.TypeId, allowedFieldSourceDefinitionTypeIds: TableFieldSourceDefinition.TypeId[], list: UsableList<T>);
+    constructor(customHeadings: RevSourcedFieldCustomHeadings | undefined, tableFieldSourceDefinitionCachingFactory: TableFieldSourceDefinitionCachingFactory, typeId: TableRecordSourceDefinition.TypeId, allowedFieldSourceDefinitionTypeIds: TableFieldSourceDefinition.TypeId[], list: UsableList<T>);
     // (undocumented)
     readonly list: UsableList<T>;
 }
@@ -37668,7 +37687,7 @@ export class WarningPublisherSubscriptionDataMessage extends PublisherSubscripti
 
 // @public (undocumented)
 export class WatchlistTableRecordSourceDefinition extends RankedLitIvemIdListTableRecordSourceDefinition {
-    constructor(customHeadingsService: RevSourcedFieldCustomHeadingsService, tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService, rankedLitIvemIdListDefinition: LitIvemIdArrayRankedLitIvemIdListDefinition | ScanIdRankedLitIvemIdListDefinition);
+    constructor(customHeadings: RevSourcedFieldCustomHeadings | undefined, tableFieldSourceDefinitionCachingFactory: TableFieldSourceDefinitionCachingFactory, rankedLitIvemIdListDefinition: LitIvemIdArrayRankedLitIvemIdListDefinition | ScanIdRankedLitIvemIdListDefinition);
     // (undocumented)
     createDefaultLayoutDefinition(): RevColumnLayoutDefinition;
     // (undocumented)
@@ -37682,7 +37701,7 @@ export namespace WatchlistTableRecordSourceDefinition {
     const // (undocumented)
     defaultFieldSourceDefinitionTypeIds: RankedLitIvemIdListTableRecordSourceDefinition.FieldSourceDefinitionTypeId[];
     // (undocumented)
-    export function createLayoutDefinition(fieldSourceDefinitionRegistryService: TableFieldSourceDefinitionCachingFactoryService, fieldIds: FieldId[]): RevColumnLayoutDefinition;
+    export function createLayoutDefinition(fieldSourceDefinitionRegistryService: TableFieldSourceDefinitionCachingFactory, fieldIds: FieldId[]): RevColumnLayoutDefinition;
     // (undocumented)
     export type FieldId = LitIvemBaseDetailTableFieldSourceDefinition.FieldId | SecurityDataItemTableFieldSourceDefinition.FieldId | RankedLitIvemIdTableFieldSourceDefinition.FieldId;
     // (undocumented)

@@ -100,6 +100,7 @@ import {
     StringTextFormattableValue,
     SymbolsService,
     TextFormattableValue,
+    TextFormatter,
     TimeTextFormattableValue,
     TradeAffectsIdArrayTextFormattableValue,
     TradeFlagIdArrayTextFormattableValue
@@ -117,7 +118,7 @@ import {
 } from '../sys/internal-api';
 
 /** @public */
-export class TextFormatterService {
+export class TextFormatterService implements TextFormatter {
     private readonly _scalarSettings: ScalarSettings;
     private _settingsChangeSubscriptionId: MultiEvent.SubscriptionId;
 

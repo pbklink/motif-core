@@ -4,8 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { SettingsService } from '../../../services/internal-api';
-import { TextFormatterService } from '../../../text-format/internal-api';
+import { SettingsService, TextFormatter } from '../../../services/internal-api';
 import { RecordSourcedFieldGrid, SingleHeadingGridDataServer, SourcedFieldGrid } from '../adapted-revgrid/internal-api';
 import { RecordGridDataServer } from '../record-grid/internal-api';
 import { RowDataArrayGrid, RowDataArrayGridDataServer } from '../row-data-array-grid/internal-api';
@@ -18,7 +17,7 @@ import { CheckboxTextFormattableValueCellPainter, TextTextFormattableValueCellPa
 export class CellPainterFactoryService {
     constructor(
         private readonly _settingsService: SettingsService,
-        private readonly _textFormatterService: TextFormatterService,
+        private readonly _textFormatter: TextFormatter,
     ) {
 
     }
@@ -28,7 +27,7 @@ export class CellPainterFactoryService {
     }
 
     createTextTextFormattableValueRecordGrid(grid: RecordSourcedFieldGrid, dataServer: RecordGridDataServer) {
-        const textFormattableValueCellPainter = new TextTextFormattableValueCellPainter(this._settingsService, this._textFormatterService, grid, dataServer);
+        const textFormattableValueCellPainter = new TextTextFormattableValueCellPainter(this._settingsService, this._textFormatter, grid, dataServer);
         return new TextFormattableValueRecordGridCellPainter(textFormattableValueCellPainter);
     }
 
@@ -38,7 +37,7 @@ export class CellPainterFactoryService {
     }
 
     createTextTextFormattableValueRowDataArrayGrid(grid: RowDataArrayGrid, dataServer: RowDataArrayGridDataServer) {
-        const textFormattableValueCellPainter = new TextTextFormattableValueCellPainter(this._settingsService, this._textFormatterService, grid, dataServer);
+        const textFormattableValueCellPainter = new TextTextFormattableValueCellPainter(this._settingsService, this._textFormatter, grid, dataServer);
         return new TextFormattableValueRowDataArrayGridCellPainter(textFormattableValueCellPainter);
     }
 }

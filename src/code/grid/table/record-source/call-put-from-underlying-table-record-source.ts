@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevSourcedFieldCustomHeadingsService } from '@xilytix/revgrid';
+import { RevSourcedFieldCustomHeadings } from '@xilytix/revgrid';
 import {
     AdiService,
     CallOrPutId,
@@ -15,7 +15,7 @@ import {
     SymbolFieldId,
     SymbolsDataItem
 } from '../../../adi/internal-api';
-import { CallPut } from '../../../services/internal-api';
+import { CallPut, TextFormatter } from '../../../services/internal-api';
 import {
     AssertInternalError,
     Badness,
@@ -28,9 +28,8 @@ import {
     UsableListChangeTypeId,
     newDecimal
 } from '../../../sys/internal-api';
-import { TextFormatterService } from '../../../text-format/internal-api';
 import {
-    TableFieldSourceDefinition, TableFieldSourceDefinitionCachingFactoryService
+    TableFieldSourceDefinition, TableFieldSourceDefinitionCachingFactory
 } from "../field-source/internal-api";
 import { CallPutTableRecordDefinition } from '../record-definition/internal-api';
 import { TableRecord } from '../record/internal-api';
@@ -53,16 +52,16 @@ export class CallPutFromUnderlyingTableRecordSource extends SingleDataItemTableR
 
     constructor(
         private readonly _adiService: AdiService,
-        textFormatterService: TextFormatterService,
-        gridFieldCustomHeadingsService: RevSourcedFieldCustomHeadingsService,
-        tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService,
+        textFormatter: TextFormatter,
+        customHeadings: RevSourcedFieldCustomHeadings | undefined,
+        tableFieldSourceDefinitionCachingFactory: TableFieldSourceDefinitionCachingFactory,
         correctnessBadness: CorrectnessBadness,
         definition: CallPutFromUnderlyingTableRecordSourceDefinition,
     ) {
         super(
-            textFormatterService,
-            gridFieldCustomHeadingsService,
-            tableFieldSourceDefinitionCachingFactoryService,
+            textFormatter,
+            customHeadings,
+            tableFieldSourceDefinitionCachingFactory,
             correctnessBadness,
             definition,
             CallPutFromUnderlyingTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
@@ -72,8 +71,8 @@ export class CallPutFromUnderlyingTableRecordSource extends SingleDataItemTableR
 
     override createDefinition(): CallPutFromUnderlyingTableRecordSourceDefinition {
         return new CallPutFromUnderlyingTableRecordSourceDefinition(
-            this._gridFieldCustomHeadingsService,
-            this._tableFieldSourceDefinitionCachingFactoryService,
+            this.customHeadings,
+            this.tableFieldSourceDefinitionCachingFactory,
             this._underlyingIvemId.createCopy(),
         );
     }

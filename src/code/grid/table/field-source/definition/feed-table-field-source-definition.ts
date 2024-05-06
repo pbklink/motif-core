@@ -28,7 +28,7 @@ import {
     StringCorrectnessTableValue
 } from '../../value/internal-api';
 import { TableFieldSourceDefinition } from './table-field-source-definition';
-import { TableFieldSourceDefinitionCachingFactoryService } from './table-field-source-definition-caching-factory-service';
+import { TableFieldSourceDefinitionCachingFactory } from './table-field-source-definition-caching-factory';
 
 export class FeedTableFieldSourceDefinition extends TableFieldSourceDefinition {
     override readonly fieldDefinitions: TableField.Definition[];
@@ -176,7 +176,7 @@ export namespace FeedTableFieldSourceDefinition {
         id: Feed.FieldId;
     }
 
-    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactoryService): FeedTableFieldSourceDefinition {
+    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactory): FeedTableFieldSourceDefinition {
         return cachingFactoryService.get(typeId) as FeedTableFieldSourceDefinition;
     }
 

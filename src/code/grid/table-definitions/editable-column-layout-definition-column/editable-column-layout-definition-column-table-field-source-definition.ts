@@ -14,7 +14,7 @@ import {
     StringTableValue,
     TableField,
     TableFieldSourceDefinition,
-    TableFieldSourceDefinitionCachingFactoryService,
+    TableFieldSourceDefinitionCachingFactory,
     TableValue,
     VisibleTableValue
 } from '../../table/internal-api';
@@ -134,7 +134,7 @@ export namespace EditableColumnLayoutDefinitionColumnTableFieldSourceDefinition 
         id: EditableColumnLayoutDefinitionColumn.FieldId;
     }
 
-    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactoryService): EditableColumnLayoutDefinitionColumnTableFieldSourceDefinition {
+    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactory): EditableColumnLayoutDefinitionColumnTableFieldSourceDefinition {
         return cachingFactoryService.get(typeId) as EditableColumnLayoutDefinitionColumnTableFieldSourceDefinition;
     }
 

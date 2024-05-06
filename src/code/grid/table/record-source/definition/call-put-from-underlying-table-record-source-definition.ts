@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevColumnLayoutDefinition, RevSourcedFieldCustomHeadingsService } from '@xilytix/revgrid';
+import { RevColumnLayoutDefinition, RevSourcedFieldCustomHeadings } from '@xilytix/revgrid';
 import { IvemId, SecurityDataItem } from '../../../../adi/internal-api';
 import { CallPut } from '../../../../services/internal-api';
 import { ErrorCode, JsonElement, JsonElementErr, Ok, PickEnum, Result } from '../../../../sys/internal-api';
@@ -13,20 +13,20 @@ import {
     CallSecurityDataItemTableFieldSourceDefinition,
     PutSecurityDataItemTableFieldSourceDefinition,
     TableFieldSourceDefinition,
-    TableFieldSourceDefinitionCachingFactoryService
+    TableFieldSourceDefinitionCachingFactory
 } from '../../field-source/internal-api';
 import { TableRecordSourceDefinition } from './table-record-source-definition';
 
 /** @public */
 export class CallPutFromUnderlyingTableRecordSourceDefinition extends TableRecordSourceDefinition {
     constructor(
-        customHeadingsService: RevSourcedFieldCustomHeadingsService,
-        tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService,
+        customHeadings: RevSourcedFieldCustomHeadings | undefined,
+        tableFieldSourceDefinitionCachingFactory: TableFieldSourceDefinitionCachingFactory,
         readonly underlyingIvemId: IvemId
     ) {
         super(
-            customHeadingsService,
-            tableFieldSourceDefinitionCachingFactoryService,
+            customHeadings,
+            tableFieldSourceDefinitionCachingFactory,
             TableRecordSourceDefinition.TypeId.CallPutFromUnderlying,
             CallPutFromUnderlyingTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
         );
@@ -39,9 +39,9 @@ export class CallPutFromUnderlyingTableRecordSourceDefinition extends TableRecor
     }
 
     override createDefaultLayoutDefinition() {
-        const callPutFieldSourceDefinition = CallPutTableFieldSourceDefinition.get(this.tableFieldSourceDefinitionCachingFactoryService);
-        const callSecurityDataItemFieldSourceDefinition = CallSecurityDataItemTableFieldSourceDefinition.get(this.tableFieldSourceDefinitionCachingFactoryService);
-        const putSecurityDataItemFieldSourceDefinition = PutSecurityDataItemTableFieldSourceDefinition.get(this.tableFieldSourceDefinitionCachingFactoryService);
+        const callPutFieldSourceDefinition = CallPutTableFieldSourceDefinition.get(this.tableFieldSourceDefinitionCachingFactory);
+        const callSecurityDataItemFieldSourceDefinition = CallSecurityDataItemTableFieldSourceDefinition.get(this.tableFieldSourceDefinitionCachingFactory);
+        const putSecurityDataItemFieldSourceDefinition = PutSecurityDataItemTableFieldSourceDefinition.get(this.tableFieldSourceDefinitionCachingFactory);
 
         const fieldNames = new Array<string>();
 

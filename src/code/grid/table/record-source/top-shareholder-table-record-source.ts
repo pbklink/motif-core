@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevSourcedFieldCustomHeadingsService } from '@xilytix/revgrid';
+import { RevSourcedFieldCustomHeadings } from '@xilytix/revgrid';
 import {
     AdiService,
     LitIvemId,
@@ -12,6 +12,7 @@ import {
     TopShareholdersDataDefinition,
     TopShareholdersDataItem
 } from "../../../adi/internal-api";
+import { TextFormatter } from '../../../services/internal-api';
 import {
     AssertInternalError,
     Badness,
@@ -22,9 +23,8 @@ import {
     UsableListChangeTypeId,
     newUndefinableDate
 } from "../../../sys/internal-api";
-import { TextFormatterService } from '../../../text-format/internal-api';
 import {
-    TableFieldSourceDefinition, TableFieldSourceDefinitionCachingFactoryService
+    TableFieldSourceDefinition, TableFieldSourceDefinitionCachingFactory
 } from "../field-source/internal-api";
 import { TopShareholderTableRecordDefinition } from '../record-definition/internal-api';
 import { TableRecord } from '../record/internal-api';
@@ -47,16 +47,16 @@ export class TopShareholderTableRecordSource extends SingleDataItemTableRecordSo
 
     constructor(
         private readonly _adiService: AdiService,
-        textFormatterService: TextFormatterService,
-        gridFieldCustomHeadingsService: RevSourcedFieldCustomHeadingsService,
-        tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService,
+        textFormatter: TextFormatter,
+        customHeadings: RevSourcedFieldCustomHeadings | undefined,
+        tableFieldSourceDefinitionCachingFactory: TableFieldSourceDefinitionCachingFactory,
         correctnessBadness: CorrectnessBadness,
         definition: TopShareholderTableRecordSourceDefinition,
     ) {
         super(
-            textFormatterService,
-            gridFieldCustomHeadingsService,
-            tableFieldSourceDefinitionCachingFactoryService,
+            textFormatter,
+            customHeadings,
+            tableFieldSourceDefinitionCachingFactory,
             correctnessBadness,
             definition,
             TopShareholderTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
@@ -69,8 +69,8 @@ export class TopShareholderTableRecordSource extends SingleDataItemTableRecordSo
 
     override createDefinition(): TopShareholderTableRecordSourceDefinition {
         return new TopShareholderTableRecordSourceDefinition(
-            this._gridFieldCustomHeadingsService,
-            this._tableFieldSourceDefinitionCachingFactoryService,
+            this.customHeadings,
+            this.tableFieldSourceDefinitionCachingFactory,
             this._litIvemId.createCopy(),
             newUndefinableDate(this._tradingDate),
             newUndefinableDate(this._compareToTradingDate),

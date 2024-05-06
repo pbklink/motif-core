@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevColumnLayoutDefinition, RevSourcedFieldCustomHeadingsService } from '@xilytix/revgrid';
+import { RevColumnLayoutDefinition, RevSourcedFieldCustomHeadings } from '@xilytix/revgrid';
 import { LitIvemId } from '../../../../adi/internal-api';
 import { ErrorCode, JsonElement, JsonElementErr, Ok, PickEnum, Result, UiComparableList } from '../../../../sys/internal-api';
 import {
@@ -12,7 +12,7 @@ import {
     LitIvemIdTableFieldSourceDefinition,
     SecurityDataItemTableFieldSourceDefinition,
     TableFieldSourceDefinition,
-    TableFieldSourceDefinitionCachingFactoryService
+    TableFieldSourceDefinitionCachingFactory
 } from "../../field-source/internal-api";
 import { BadnessListTableRecordSourceDefinition } from './badness-list-table-record-source-definition';
 import { TableRecordSourceDefinition } from './table-record-source-definition';
@@ -22,13 +22,13 @@ export class LitIvemIdComparableListTableRecordSourceDefinition extends BadnessL
     declare list: UiComparableList<LitIvemId>;
 
     constructor(
-        customHeadingsService: RevSourcedFieldCustomHeadingsService,
-        tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService,
+        customHeadings: RevSourcedFieldCustomHeadings | undefined,
+        tableFieldSourceDefinitionCachingFactory: TableFieldSourceDefinitionCachingFactory,
         list: UiComparableList<LitIvemId>,
     ) {
         super(
-            customHeadingsService,
-            tableFieldSourceDefinitionCachingFactoryService,
+            customHeadings,
+            tableFieldSourceDefinitionCachingFactory,
             TableRecordSourceDefinition.TypeId.LitIvemIdComparableList,
             LitIvemIdComparableListTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
             list,
@@ -42,7 +42,7 @@ export class LitIvemIdComparableListTableRecordSourceDefinition extends BadnessL
     }
 
     override createDefaultLayoutDefinition(): RevColumnLayoutDefinition {
-        const litIvemIdFieldSourceDefinition = LitIvemIdTableFieldSourceDefinition.get(this.tableFieldSourceDefinitionCachingFactoryService);
+        const litIvemIdFieldSourceDefinition = LitIvemIdTableFieldSourceDefinition.get(this.tableFieldSourceDefinitionCachingFactory);
 
         const fieldNames = new Array<string>();
 
@@ -106,8 +106,8 @@ export namespace LitIvemIdComparableListTableRecordSourceDefinition {
     }
 
     export function tryCreateDefinition(
-        customHeadingsService: RevSourcedFieldCustomHeadingsService,
-        tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService,
+        customHeadings: RevSourcedFieldCustomHeadings | undefined,
+        tableFieldSourceDefinitionCachingFactory: TableFieldSourceDefinitionCachingFactory,
         element: JsonElement,
     ): Result<LitIvemIdComparableListTableRecordSourceDefinition> {
         const listCreateResult = tryCreateListFromElement(element);
@@ -116,13 +116,13 @@ export namespace LitIvemIdComparableListTableRecordSourceDefinition {
             return listCreateResult.createOuter(errorCode);
         } else {
             const list = listCreateResult.value;
-            const definition = new LitIvemIdComparableListTableRecordSourceDefinition(customHeadingsService, tableFieldSourceDefinitionCachingFactoryService, list);
+            const definition = new LitIvemIdComparableListTableRecordSourceDefinition(customHeadings, tableFieldSourceDefinitionCachingFactory, list);
             return new Ok(definition);
         }
     }
 
     export function createLayoutDefinition(
-        fieldSourceDefinitionRegistryService: TableFieldSourceDefinitionCachingFactoryService,
+        fieldSourceDefinitionRegistryService: TableFieldSourceDefinitionCachingFactory,
         fieldIds: FieldId[],
     ): RevColumnLayoutDefinition {
         return fieldSourceDefinitionRegistryService.createLayoutDefinition(fieldIds);

@@ -27,7 +27,7 @@ import {
     NumberCorrectnessTableValue
 } from "../../value/internal-api";
 import { TableFieldSourceDefinition } from './table-field-source-definition';
-import { TableFieldSourceDefinitionCachingFactoryService } from './table-field-source-definition-caching-factory-service';
+import { TableFieldSourceDefinitionCachingFactory } from './table-field-source-definition-caching-factory';
 
 /** @public */
 export class RankedLitIvemIdTableFieldSourceDefinition extends TableFieldSourceDefinition {
@@ -174,7 +174,7 @@ export namespace RankedLitIvemIdTableFieldSourceDefinition {
         id: RankedLitIvemId.FieldId;
     }
 
-    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactoryService): RankedLitIvemIdTableFieldSourceDefinition {
+    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactory): RankedLitIvemIdTableFieldSourceDefinition {
         return cachingFactoryService.get(typeId) as RankedLitIvemIdTableFieldSourceDefinition;
     }
 

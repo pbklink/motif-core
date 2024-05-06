@@ -6,7 +6,7 @@
 
 import { PrefixableSecurityDataItemTableFieldSourceDefinition } from './prefixable-security-data-item-table-field-source-definition';
 import { TableFieldSourceDefinition } from './table-field-source-definition';
-import { TableFieldSourceDefinitionCachingFactoryService } from './table-field-source-definition-caching-factory-service';
+import { TableFieldSourceDefinitionCachingFactory } from './table-field-source-definition-caching-factory';
 
 export class SecurityDataItemTableFieldSourceDefinition extends PrefixableSecurityDataItemTableFieldSourceDefinition {
     constructor() {
@@ -27,7 +27,7 @@ export namespace SecurityDataItemTableFieldSourceDefinition {
         sourceTypeId: TableFieldSourceDefinition.TypeId.SecurityDataItem;
     }
 
-    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactoryService): SecurityDataItemTableFieldSourceDefinition {
+    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactory): SecurityDataItemTableFieldSourceDefinition {
         return cachingFactoryService.get(typeId) as SecurityDataItemTableFieldSourceDefinition;
     }
 }

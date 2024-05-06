@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevSourcedFieldCustomHeadingsService } from '@xilytix/revgrid';
+import { RevSourcedFieldCustomHeadings } from '@xilytix/revgrid';
 import { AdiService, RankedLitIvemId } from '../../../adi/internal-api';
 import {
     LitIvemIdArrayRankedLitIvemIdListDefinition,
@@ -14,11 +14,11 @@ import {
     RankedLitIvemIdListFactoryService,
     ScanIdRankedLitIvemIdListDefinition
 } from "../../../ranked-lit-ivem-id-list/internal-api";
+import { TextFormatter } from '../../../services/internal-api';
 import { SymbolDetailCacheService } from '../../../services/symbol-detail-cache-service';
 import { AssertInternalError, CorrectnessBadness, ErrorCode, Integer, LockOpenListItem, NotImplementedError, Ok, Result, UnreachableCaseError } from '../../../sys/internal-api';
-import { TextFormatterService } from '../../../text-format/internal-api';
 import {
-    TableFieldSourceDefinition, TableFieldSourceDefinitionCachingFactoryService
+    TableFieldSourceDefinition, TableFieldSourceDefinitionCachingFactory
 } from "../field-source/internal-api";
 import { RankedLitIvemIdTableRecordDefinition } from '../record-definition/internal-api';
 import { TableRecord } from '../record/internal-api';
@@ -35,16 +35,16 @@ export class RankedLitIvemIdListTableRecordSource extends SubscribeBadnessListTa
         private readonly _adiService: AdiService,
         private readonly _symbolDetailCacheService: SymbolDetailCacheService,
         private readonly _rankedLitIvemIdListFactoryService: RankedLitIvemIdListFactoryService,
-        textFormatterService: TextFormatterService,
-        gridFieldCustomHeadingsService: RevSourcedFieldCustomHeadingsService,
-        tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService,
+        textFormatter: TextFormatter,
+        customHeadings: RevSourcedFieldCustomHeadings | undefined,
+        tableFieldSourceDefinitionCachingFactory: TableFieldSourceDefinitionCachingFactory,
         correctnessBadness: CorrectnessBadness,
         definition: RankedLitIvemIdListTableRecordSourceDefinition,
     ) {
         super(
-            textFormatterService,
-            gridFieldCustomHeadingsService,
-            tableFieldSourceDefinitionCachingFactoryService,
+            textFormatter,
+            customHeadings,
+            tableFieldSourceDefinitionCachingFactory,
             correctnessBadness,
             definition,
             definition.allowedFieldSourceDefinitionTypeIds,
@@ -65,8 +65,8 @@ export class RankedLitIvemIdListTableRecordSource extends SubscribeBadnessListTa
                 case RankedLitIvemIdListDefinition.TypeId.LitIvemIdExecuteScan:
                     if (listDefinition instanceof LitIvemIdExecuteScanRankedLitIvemIdListDefinition) {
                         return new ScanTestTableRecordSourceDefinition(
-                            this._gridFieldCustomHeadingsService,
-                            this._tableFieldSourceDefinitionCachingFactoryService,
+                            this.customHeadings,
+                            this.tableFieldSourceDefinitionCachingFactory,
                             listDefinition,
                         );
                     } else {
@@ -75,8 +75,8 @@ export class RankedLitIvemIdListTableRecordSource extends SubscribeBadnessListTa
                 case RankedLitIvemIdListDefinition.TypeId.ScanId:
                 case RankedLitIvemIdListDefinition.TypeId.LitIvemIdArray:
                     return new WatchlistTableRecordSourceDefinition(
-                        this._gridFieldCustomHeadingsService,
-                        this._tableFieldSourceDefinitionCachingFactoryService,
+                        this.customHeadings,
+                        this.tableFieldSourceDefinitionCachingFactory,
                         listDefinition as (LitIvemIdArrayRankedLitIvemIdListDefinition | ScanIdRankedLitIvemIdListDefinition),
                     );
                 case RankedLitIvemIdListDefinition.TypeId.WatchmakerListId:

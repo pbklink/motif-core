@@ -4,34 +4,34 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevColumnLayoutDefinition, RevSourcedFieldCustomHeadingsService } from '@xilytix/revgrid';
+import { RevColumnLayoutDefinition, RevSourcedFieldCustomHeadings } from '@xilytix/revgrid';
 import { RankedLitIvemIdListDirectory } from '../../../../ranked-lit-ivem-id-list/internal-api';
 import { RankedLitIvemIdListDirectoryItem } from '../../../../services/internal-api';
 import { PickEnum } from '../../../../sys/internal-api';
 import {
     RankedLitIvemIdListDirectoryItemTableFieldSourceDefinition,
     TableFieldSourceDefinition,
-    TableFieldSourceDefinitionCachingFactoryService,
+    TableFieldSourceDefinitionCachingFactory,
 } from '../../field-source/internal-api';
 import { TableRecordSourceDefinition } from './table-record-source-definition';
 
 /** @public */
 export class RankedLitIvemIdListDirectoryItemTableRecordSourceDefinition extends TableRecordSourceDefinition {
     constructor(
-        customHeadingsService: RevSourcedFieldCustomHeadingsService,
-        tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService,
+        customHeadings: RevSourcedFieldCustomHeadings | undefined,
+        tableFieldSourceDefinitionCachingFactory: TableFieldSourceDefinitionCachingFactory,
         readonly listDirectory: RankedLitIvemIdListDirectory,
     ) {
         super(
-            customHeadingsService,
-            tableFieldSourceDefinitionCachingFactoryService,
+            customHeadings,
+            tableFieldSourceDefinitionCachingFactory,
             TableRecordSourceDefinition.TypeId.RankedLitIvemIdListDirectoryItem,
             RankedLitIvemIdListDirectoryItemTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
         );
     }
 
     override createDefaultLayoutDefinition() {
-        const rankedLitIvemIdListDirectoryItemFieldSourceDefinition = RankedLitIvemIdListDirectoryItemTableFieldSourceDefinition.get(this.tableFieldSourceDefinitionCachingFactoryService);
+        const rankedLitIvemIdListDirectoryItemFieldSourceDefinition = RankedLitIvemIdListDirectoryItemTableFieldSourceDefinition.get(this.tableFieldSourceDefinitionCachingFactory);
 
         const fieldNames = new Array<string>();
 

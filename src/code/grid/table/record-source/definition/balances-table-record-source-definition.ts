@@ -4,27 +4,27 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevColumnLayoutDefinition, RevSourcedFieldCustomHeadingsService } from '@xilytix/revgrid';
+import { RevColumnLayoutDefinition, RevSourcedFieldCustomHeadings } from '@xilytix/revgrid';
 import { Account, Balances, BrokerageAccountGroup } from '../../../../adi/internal-api';
 import { PickEnum } from '../../../../sys/internal-api';
 import {
     BalancesTableFieldSourceDefinition,
     BrokerageAccountTableFieldSourceDefinition,
     TableFieldSourceDefinition,
-    TableFieldSourceDefinitionCachingFactoryService
+    TableFieldSourceDefinitionCachingFactory
 } from "../../field-source/internal-api";
 import { BrokerageAccountGroupTableRecordSourceDefinition } from './brokerage-account-group-table-record-source-definition';
 import { TableRecordSourceDefinition } from './table-record-source-definition';
 
 export class BalancesTableRecordSourceDefinition extends BrokerageAccountGroupTableRecordSourceDefinition {
     constructor(
-        customHeadingsService: RevSourcedFieldCustomHeadingsService,
-        tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService,
+        customHeadings: RevSourcedFieldCustomHeadings | undefined,
+        tableFieldSourceDefinitionCachingFactory: TableFieldSourceDefinitionCachingFactory,
         brokerageAccountGroup: BrokerageAccountGroup
     ) {
         super(
-            customHeadingsService,
-            tableFieldSourceDefinitionCachingFactoryService,
+            customHeadings,
+            tableFieldSourceDefinitionCachingFactory,
             TableRecordSourceDefinition.TypeId.Balances,
             BalancesTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
             brokerageAccountGroup
@@ -32,8 +32,8 @@ export class BalancesTableRecordSourceDefinition extends BrokerageAccountGroupTa
     }
 
     override createDefaultLayoutDefinition() {
-        const balancesDataItemFieldSourceDefinition = BalancesTableFieldSourceDefinition.get(this.tableFieldSourceDefinitionCachingFactoryService);
-        const brokerageAccountFieldSourceDefinition = BrokerageAccountTableFieldSourceDefinition.get(this.tableFieldSourceDefinitionCachingFactoryService);
+        const balancesDataItemFieldSourceDefinition = BalancesTableFieldSourceDefinition.get(this.tableFieldSourceDefinitionCachingFactory);
+        const brokerageAccountFieldSourceDefinition = BrokerageAccountTableFieldSourceDefinition.get(this.tableFieldSourceDefinitionCachingFactory);
 
         const fieldNames = new Array<string>();
 

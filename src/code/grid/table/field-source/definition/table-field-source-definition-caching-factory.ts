@@ -4,11 +4,11 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevTableFieldSourceDefinitionCachingFactoryService } from '@xilytix/revgrid';
+import { RevTableFieldSourceDefinitionCachingFactory } from '@xilytix/revgrid';
 import { TextFormattableValue } from '../../../../services/internal-api';
 import { TableFieldSourceDefinition } from './table-field-source-definition';
 
-export class TableFieldSourceDefinitionCachingFactoryService extends RevTableFieldSourceDefinitionCachingFactoryService<
+export interface TableFieldSourceDefinitionCachingFactory extends RevTableFieldSourceDefinitionCachingFactory<
     TableFieldSourceDefinition.TypeId,
     TextFormattableValue.TypeId,
     TextFormattableValue.Attribute.TypeId

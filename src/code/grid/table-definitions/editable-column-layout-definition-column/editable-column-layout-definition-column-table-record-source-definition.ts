@@ -4,9 +4,9 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevColumnLayoutDefinition, RevSourcedFieldCustomHeadingsService } from '@xilytix/revgrid';
+import { RevColumnLayoutDefinition, RevSourcedFieldCustomHeadings } from '@xilytix/revgrid';
 import { PickEnum } from '../../../sys/internal-api';
-import { TableFieldSourceDefinition, TableFieldSourceDefinitionCachingFactoryService, TableRecordSourceDefinition } from '../../table/internal-api';
+import { TableFieldSourceDefinition, TableFieldSourceDefinitionCachingFactory, TableRecordSourceDefinition } from '../../table/internal-api';
 import { EditableColumnLayoutDefinitionColumn } from './editable-column-layout-definition-column';
 import { EditableColumnLayoutDefinitionColumnList } from './editable-column-layout-definition-column-list';
 import { EditableColumnLayoutDefinitionColumnTableFieldSourceDefinition } from './editable-column-layout-definition-column-table-field-source-definition';
@@ -14,13 +14,13 @@ import { EditableColumnLayoutDefinitionColumnTableFieldSourceDefinition } from '
 /** @public */
 export class EditableColumnLayoutDefinitionColumnTableRecordSourceDefinition extends TableRecordSourceDefinition {
     constructor(
-        customHeadingsService: RevSourcedFieldCustomHeadingsService,
-        tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService,
+        customHeadings: RevSourcedFieldCustomHeadings | undefined,
+        tableFieldSourceDefinitionCachingFactory: TableFieldSourceDefinitionCachingFactory,
         readonly list: EditableColumnLayoutDefinitionColumnList,
     ) {
         super(
-            customHeadingsService,
-            tableFieldSourceDefinitionCachingFactoryService,
+            customHeadings,
+            tableFieldSourceDefinitionCachingFactory,
             TableRecordSourceDefinition.TypeId.EditableColumnLayoutDefinitionColumn,
             EditableColumnLayoutDefinitionColumnTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
         );
@@ -29,7 +29,7 @@ export class EditableColumnLayoutDefinitionColumnTableRecordSourceDefinition ext
     // no override for saveToJson()
 
     override createDefaultLayoutDefinition() {
-        const fieldSourceDefinition = EditableColumnLayoutDefinitionColumnTableFieldSourceDefinition.get(this.tableFieldSourceDefinitionCachingFactoryService);
+        const fieldSourceDefinition = EditableColumnLayoutDefinitionColumnTableFieldSourceDefinition.get(this.tableFieldSourceDefinitionCachingFactory);
 
         const fieldNames = new Array<string>();
 

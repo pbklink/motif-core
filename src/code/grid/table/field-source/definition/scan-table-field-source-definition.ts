@@ -30,7 +30,7 @@ import {
     WritableCorrectnessTableValue
 } from '../../value/internal-api';
 import { TableFieldSourceDefinition } from './table-field-source-definition';
-import { TableFieldSourceDefinitionCachingFactoryService } from './table-field-source-definition-caching-factory-service';
+import { TableFieldSourceDefinitionCachingFactory } from './table-field-source-definition-caching-factory';
 
 /** @public */
 export class ScanTableFieldSourceDefinition extends TableFieldSourceDefinition {
@@ -222,7 +222,7 @@ export namespace ScanTableFieldSourceDefinition {
         id: Scan.FieldId;
     }
 
-    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactoryService): ScanTableFieldSourceDefinition {
+    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactory): ScanTableFieldSourceDefinition {
         return cachingFactoryService.get(typeId) as ScanTableFieldSourceDefinition;
     }
 

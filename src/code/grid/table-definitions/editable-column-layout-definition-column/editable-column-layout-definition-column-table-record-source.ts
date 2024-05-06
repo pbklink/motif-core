@@ -4,13 +4,13 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevSourcedFieldCustomHeadingsService } from '@xilytix/revgrid';
+import { RevSourcedFieldCustomHeadings } from '@xilytix/revgrid';
+import { TextFormatter } from '../../../services/internal-api';
 import { Badness, CorrectnessBadness, Integer, LockOpenListItem, MultiEvent, UnreachableCaseError, UsableListChangeTypeId } from '../../../sys/internal-api';
-import { TextFormatterService } from '../../../text-format/internal-api';
 import {
     TableField,
     TableFieldSourceDefinition,
-    TableFieldSourceDefinitionCachingFactoryService,
+    TableFieldSourceDefinitionCachingFactory,
     TableRecord,
     TableRecordSource
 } from '../../table/internal-api';
@@ -27,16 +27,16 @@ export class EditableColumnLayoutDefinitionColumnTableRecordSource extends Table
     private _listChangeEventSubscriptionId: MultiEvent.SubscriptionId;
 
     constructor(
-        textFormatterService: TextFormatterService,
-        gridFieldCustomHeadingsService: RevSourcedFieldCustomHeadingsService,
-        tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService,
+        textFormatter: TextFormatter,
+        customHeadings: RevSourcedFieldCustomHeadings | undefined,
+        tableFieldSourceDefinitionCachingFactory: TableFieldSourceDefinitionCachingFactory,
         correctnessBadness: CorrectnessBadness,
         definition: EditableColumnLayoutDefinitionColumnTableRecordSourceDefinition,
     ) {
         super(
-            textFormatterService,
-            gridFieldCustomHeadingsService,
-            tableFieldSourceDefinitionCachingFactoryService,
+            textFormatter,
+            customHeadings,
+            tableFieldSourceDefinitionCachingFactory,
             correctnessBadness,
             definition,
             EditableColumnLayoutDefinitionColumnTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
@@ -78,8 +78,8 @@ export class EditableColumnLayoutDefinitionColumnTableRecordSource extends Table
 
     override createDefinition(): EditableColumnLayoutDefinitionColumnTableRecordSourceDefinition {
         return new EditableColumnLayoutDefinitionColumnTableRecordSourceDefinition(
-            this._gridFieldCustomHeadingsService,
-            this._tableFieldSourceDefinitionCachingFactoryService,
+            this.customHeadings,
+            this.tableFieldSourceDefinitionCachingFactory,
             this._list,
         );
     }

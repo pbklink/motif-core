@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevSourcedFieldCustomHeadingsService, RevTableRecordSourceDefinition } from '@xilytix/revgrid';
+import { RevSourcedFieldCustomHeadings, RevTableRecordSourceDefinition } from '@xilytix/revgrid';
 import { StringId, Strings } from '../../../../res/internal-api';
 import { TextFormattableValue } from '../../../../services/internal-api';
 import {
@@ -18,7 +18,7 @@ import {
     Result,
     compareNumber
 } from "../../../../sys/internal-api";
-import { TableFieldSourceDefinition, TableFieldSourceDefinitionCachingFactoryService } from '../../field-source/internal-api';
+import { TableFieldSourceDefinition, TableFieldSourceDefinitionCachingFactory } from '../../field-source/internal-api';
 
 export abstract class TableRecordSourceDefinition extends RevTableRecordSourceDefinition<
     TableRecordSourceDefinition.TypeId,
@@ -27,14 +27,14 @@ export abstract class TableRecordSourceDefinition extends RevTableRecordSourceDe
     TextFormattableValue.Attribute.TypeId
 > {
     constructor(
-        customHeadingsService: RevSourcedFieldCustomHeadingsService,
-        tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService,
+        customHeadings: RevSourcedFieldCustomHeadings | undefined,
+        tableFieldSourceDefinitionCachingFactory: TableFieldSourceDefinitionCachingFactory,
         typeId: TableRecordSourceDefinition.TypeId,
         allowedFieldSourceDefinitionTypeIds: readonly TableFieldSourceDefinition.TypeId[],
     ) {
         super(
-            customHeadingsService,
-            tableFieldSourceDefinitionCachingFactoryService,
+            customHeadings,
+            tableFieldSourceDefinitionCachingFactory,
             typeId,
             TableRecordSourceDefinition.Type.idToJson(typeId),
             allowedFieldSourceDefinitionTypeIds

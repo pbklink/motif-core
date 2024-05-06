@@ -27,5 +27,6 @@ export * from './settings/internal-api';
 export * from './symbol-detail-cache-service';
 export * from './symbols-service';
 export * from './text-formattable-value';
+export * from './text-formatter';
 export * from './user-alert-service';
 

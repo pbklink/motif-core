@@ -8,7 +8,7 @@ import { CallOrPutId } from '../../../../adi/internal-api';
 import { CallPutSecurityDataItemTableFieldSourceDefinition } from './call-put-security-data-item-table-field-source-definition';
 import { PrefixableSecurityDataItemTableFieldSourceDefinition } from './prefixable-security-data-item-table-field-source-definition';
 import { TableFieldSourceDefinition } from './table-field-source-definition';
-import { TableFieldSourceDefinitionCachingFactoryService } from './table-field-source-definition-caching-factory-service';
+import { TableFieldSourceDefinitionCachingFactory } from './table-field-source-definition-caching-factory';
 
 export class CallSecurityDataItemTableFieldSourceDefinition extends CallPutSecurityDataItemTableFieldSourceDefinition {
     constructor() {
@@ -24,7 +24,7 @@ export namespace CallSecurityDataItemTableFieldSourceDefinition {
         sourceTypeId: CallSecurityDataItemTableFieldSourceDefinition.TypeId;
     }
 
-    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactoryService): CallSecurityDataItemTableFieldSourceDefinition {
+    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactory): CallSecurityDataItemTableFieldSourceDefinition {
         return cachingFactoryService.get(typeId) as CallSecurityDataItemTableFieldSourceDefinition;
     }
 }

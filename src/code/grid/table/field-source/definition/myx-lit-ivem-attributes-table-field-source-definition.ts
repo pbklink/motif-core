@@ -30,7 +30,7 @@ import {
     ShortSellTypeIdArrayMyxLitIvemAttributeCorrectnessTableValue
 } from '../../value/internal-api';
 import { TableFieldSourceDefinition } from './table-field-source-definition';
-import { TableFieldSourceDefinitionCachingFactoryService } from './table-field-source-definition-caching-factory-service';
+import { TableFieldSourceDefinitionCachingFactory } from './table-field-source-definition-caching-factory';
 
 export class MyxLitIvemAttributesTableFieldSourceDefinition extends TableFieldSourceDefinition {
     override readonly fieldDefinitions: TableField.Definition[];
@@ -183,7 +183,7 @@ export namespace MyxLitIvemAttributesTableFieldSourceDefinition {
         id: MyxLitIvemAttributes.Field.Id;
     }
 
-    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactoryService): MyxLitIvemAttributesTableFieldSourceDefinition {
+    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactory): MyxLitIvemAttributesTableFieldSourceDefinition {
         return cachingFactoryService.get(typeId) as MyxLitIvemAttributesTableFieldSourceDefinition;
     }
 

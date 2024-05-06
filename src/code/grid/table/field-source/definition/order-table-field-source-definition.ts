@@ -52,7 +52,7 @@ import {
     TimeInForceIdCorrectnessTableValue
 } from '../../value/internal-api';
 import { TableFieldSourceDefinition } from './table-field-source-definition';
-import { TableFieldSourceDefinitionCachingFactoryService } from './table-field-source-definition-caching-factory-service';
+import { TableFieldSourceDefinitionCachingFactory } from './table-field-source-definition-caching-factory';
 
 export class OrderTableFieldSourceDefinition extends TableFieldSourceDefinition {
     override readonly fieldDefinitions: TableField.Definition[];
@@ -280,7 +280,7 @@ export namespace OrderTableFieldSourceDefinition {
         id: Order.FieldId;
     }
 
-    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactoryService): OrderTableFieldSourceDefinition {
+    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactory): OrderTableFieldSourceDefinition {
         return cachingFactoryService.get(typeId) as OrderTableFieldSourceDefinition;
     }
 

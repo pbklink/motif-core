@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevSourcedFieldCustomHeadingsService } from '@xilytix/revgrid';
+import { RevSourcedFieldCustomHeadings } from '@xilytix/revgrid';
 import {
     AdiService,
     ExchangeId,
@@ -15,6 +15,7 @@ import {
     SymbolFieldId,
     SymbolsDataItem
 } from "../../../adi/internal-api";
+import { TextFormatter } from '../../../services/internal-api';
 import {
     AssertInternalError,
     Badness,
@@ -25,9 +26,8 @@ import {
     UnreachableCaseError,
     UsableListChangeTypeId
 } from '../../../sys/internal-api';
-import { TextFormatterService } from '../../../text-format/internal-api';
 import {
-    TableFieldSourceDefinition, TableFieldSourceDefinitionCachingFactoryService
+    TableFieldSourceDefinition, TableFieldSourceDefinitionCachingFactory
 } from "../field-source/internal-api";
 import { LitIvemBaseDetailTableRecordDefinition } from '../record-definition/internal-api';
 import { TableRecord } from '../record/internal-api';
@@ -59,16 +59,16 @@ export class LitIvemDetailFromSearchSymbolsTableRecordSource extends SingleDataI
     // setting accountId to undefined will return orders for all accounts
     constructor(
         private readonly _adiService: AdiService,
-        textFormatterService: TextFormatterService,
-        gridFieldCustomHeadingsService: RevSourcedFieldCustomHeadingsService,
-        tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService,
+        textFormatter: TextFormatter,
+        customHeadings: RevSourcedFieldCustomHeadings | undefined,
+        tableFieldSourceDefinitionCachingFactory: TableFieldSourceDefinitionCachingFactory,
         correctnessBadness: CorrectnessBadness,
         definition: LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition
     ) {
         super(
-            textFormatterService,
-            gridFieldCustomHeadingsService,
-            tableFieldSourceDefinitionCachingFactoryService,
+            textFormatter,
+            customHeadings,
+            tableFieldSourceDefinitionCachingFactory,
             correctnessBadness,
             definition,
             definition.allowedFieldSourceDefinitionTypeIds,
@@ -82,8 +82,8 @@ export class LitIvemDetailFromSearchSymbolsTableRecordSource extends SingleDataI
 
     override createDefinition(): LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition {
         return new LitIvemDetailFromSearchSymbolsTableRecordSourceDefinition(
-            this._gridFieldCustomHeadingsService,
-            this._tableFieldSourceDefinitionCachingFactoryService,
+            this.customHeadings,
+            this.tableFieldSourceDefinitionCachingFactory,
             this._dataDefinition.createCopy(),
         );
     }

@@ -4,13 +4,12 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevSourcedFieldCustomHeadingsService } from '@xilytix/revgrid';
+import { RevSourcedFieldCustomHeadings } from '@xilytix/revgrid';
 import { RankedLitIvemIdListDirectory } from '../../../ranked-lit-ivem-id-list/internal-api';
-import { RankedLitIvemIdListDirectoryItem } from '../../../services/internal-api';
+import { RankedLitIvemIdListDirectoryItem, TextFormatter } from '../../../services/internal-api';
 import { CorrectnessBadness, Integer, LockOpenListItem, UnreachableCaseError } from '../../../sys/internal-api';
-import { TextFormatterService } from '../../../text-format/internal-api';
 import {
-    TableFieldSourceDefinition, TableFieldSourceDefinitionCachingFactoryService
+    TableFieldSourceDefinition, TableFieldSourceDefinitionCachingFactory
 } from "../field-source/internal-api";
 import { RankedLitIvemIdListDirectoryItemTableRecordDefinition } from '../record-definition/internal-api';
 import { TableRecord } from '../record/internal-api';
@@ -22,16 +21,16 @@ export class RankedLitIvemIdListDirectoryItemTableRecordSource extends Subscribe
     private readonly _listDirectory: RankedLitIvemIdListDirectory;
 
     constructor(
-        textFormatterService: TextFormatterService,
-        gridFieldCustomHeadingsService: RevSourcedFieldCustomHeadingsService,
-        tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService,
+        textFormatter: TextFormatter,
+        customHeadings: RevSourcedFieldCustomHeadings | undefined,
+        tableFieldSourceDefinitionCachingFactory: TableFieldSourceDefinitionCachingFactory,
         correctnessBadness: CorrectnessBadness,
         definition: RankedLitIvemIdListDirectoryItemTableRecordSourceDefinition,
     ) {
         super(
-            textFormatterService,
-            gridFieldCustomHeadingsService,
-            tableFieldSourceDefinitionCachingFactoryService,
+            textFormatter,
+            customHeadings,
+            tableFieldSourceDefinitionCachingFactory,
             correctnessBadness,
             definition,
             RankedLitIvemIdListDirectoryItemTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
@@ -42,8 +41,8 @@ export class RankedLitIvemIdListDirectoryItemTableRecordSource extends Subscribe
 
     override createDefinition(): RankedLitIvemIdListDirectoryItemTableRecordSourceDefinition {
         return new RankedLitIvemIdListDirectoryItemTableRecordSourceDefinition(
-            this._gridFieldCustomHeadingsService,
-            this._tableFieldSourceDefinitionCachingFactoryService,
+            this.customHeadings,
+            this.tableFieldSourceDefinitionCachingFactory,
             this._listDirectory,
         );
     }

@@ -27,7 +27,7 @@ import {
     StringCorrectnessTableValue
 } from '../../value/internal-api';
 import { TableFieldSourceDefinition } from './table-field-source-definition';
-import { TableFieldSourceDefinitionCachingFactoryService } from './table-field-source-definition-caching-factory-service';
+import { TableFieldSourceDefinitionCachingFactory } from './table-field-source-definition-caching-factory';
 
 export class BalancesTableFieldSourceDefinition extends TableFieldSourceDefinition {
     declare readonly typeId: BalancesTableFieldSourceDefinition.TypeId;
@@ -180,7 +180,7 @@ export namespace BalancesTableFieldSourceDefinition {
         id: Balances.FieldId;
     }
 
-    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactoryService): BalancesTableFieldSourceDefinition {
+    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactory): BalancesTableFieldSourceDefinition {
         return cachingFactoryService.get(typeId) as BalancesTableFieldSourceDefinition;
     }
 

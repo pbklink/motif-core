@@ -4,7 +4,10 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevSourcedFieldCustomHeadingsService } from '@xilytix/revgrid';
+import {
+    RevSourcedFieldCustomHeadings,
+    RevStandardSourcedFieldCustomHeadingsService
+} from '@xilytix/revgrid';
 import { AdiService } from './adi/internal-api';
 import { CommandRegisterService } from "./command/internal-api";
 import {
@@ -12,7 +15,7 @@ import {
     ReferenceableColumnLayoutsService,
     ReferenceableDataSourceDefinitionsStoreService,
     ReferenceableDataSourcesService,
-    TableFieldSourceDefinitionCachingFactoryService,
+    StandardTableFieldSourceDefinitionCachingFactoryService,
     TableFieldSourceDefinitionFactory,
     TableRecordSourceFactory
 } from "./grid/internal-api";
@@ -51,7 +54,7 @@ export class CoreService {
     readonly rankedLitIvemIdListDefinitionFactoryService: RankedLitIvemIdListDefinitionFactoryService;
     readonly rankedLitIvemIdListFactoryService: RankedLitIvemIdListFactoryService;
     readonly textFormatterService: TextFormatterService;
-    readonly gridFieldCustomHeadingsService: RevSourcedFieldCustomHeadingsService;
+    readonly customHeadingsService: RevSourcedFieldCustomHeadings;
     readonly referenceableColumnLayoutsService: ReferenceableColumnLayoutsService;
     readonly referenceableDataSourceDefinitionsStoreService: ReferenceableDataSourceDefinitionsStoreService;
     readonly cellPainterFactoryService: CellPainterFactoryService;
@@ -60,7 +63,7 @@ export class CoreService {
 
     private _finalised = false;
 
-    private _tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService;
+    private _tableFieldSourceDefinitionCachingFactoryService: StandardTableFieldSourceDefinitionCachingFactoryService;
     private _referenceableDataSourcesService: ReferenceableDataSourcesService;
     private _activeColorSchemeName: string;
 
@@ -83,7 +86,7 @@ export class CoreService {
             this.watchmakerService,
         );
         this.textFormatterService = new TextFormatterService(this.symbolsService, this.settingsService);
-        this.gridFieldCustomHeadingsService = new RevSourcedFieldCustomHeadingsService();
+        this.customHeadingsService = new RevStandardSourcedFieldCustomHeadingsService();
         this.referenceableColumnLayoutsService = new ReferenceableColumnLayoutsService();
         this.referenceableDataSourceDefinitionsStoreService = new ReferenceableDataSourceDefinitionsStoreService(
         );
@@ -99,7 +102,7 @@ export class CoreService {
     get referenceableDataSourcesService() { return this._referenceableDataSourcesService; }
 
     setTableFieldSourceDefinitionFactory(tableFieldSourceDefinitionFactory: TableFieldSourceDefinitionFactory) {
-        this._tableFieldSourceDefinitionCachingFactoryService = new TableFieldSourceDefinitionCachingFactoryService(tableFieldSourceDefinitionFactory);
+        this._tableFieldSourceDefinitionCachingFactoryService = StandardTableFieldSourceDefinitionCachingFactoryService.create(tableFieldSourceDefinitionFactory);
     }
 
     setTableRecordSourceFactory(tableRecordSourceFactory: TableRecordSourceFactory, tableFieldSourceDefinitionFactory: TableFieldSourceDefinitionFactory) {

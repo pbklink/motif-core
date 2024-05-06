@@ -4,10 +4,10 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevSourcedFieldCustomHeadingsService } from '@xilytix/revgrid';
+import { RevSourcedFieldCustomHeadings } from '@xilytix/revgrid';
+import { TextFormatter } from '../../../services/internal-api';
 import { CorrectnessBadness, Integer, LockOpenListItem, MultiEvent, UsableList, UsableListChangeTypeId } from '../../../sys/internal-api';
-import { TextFormatterService } from '../../../text-format/internal-api';
-import { TableFieldSourceDefinitionCachingFactoryService } from '../field-source/internal-api';
+import { TableFieldSourceDefinitionCachingFactory } from '../field-source/internal-api';
 import { UsableListTableRecordSourceDefinition } from './definition/internal-api';
 import { TableRecordSource } from './table-record-source';
 
@@ -17,16 +17,16 @@ export abstract class UsableListTableRecordSource<Record> extends TableRecordSou
     private _listChangeEventSubscriptionId: MultiEvent.SubscriptionId;
 
     constructor(
-        textFormatterService: TextFormatterService,
-        gridFieldCustomHeadingsService: RevSourcedFieldCustomHeadingsService,
-        tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService,
+        textFormatter: TextFormatter,
+        customHeadings: RevSourcedFieldCustomHeadings | undefined,
+        tableFieldSourceDefinitionCachingFactory: TableFieldSourceDefinitionCachingFactory,
         correctnessBadness: CorrectnessBadness,
         definition: UsableListTableRecordSourceDefinition<Record>,
     ) {
         super(
-            textFormatterService,
-            gridFieldCustomHeadingsService,
-            tableFieldSourceDefinitionCachingFactoryService,
+            textFormatter,
+            customHeadings,
+            tableFieldSourceDefinitionCachingFactory,
             correctnessBadness,
             definition,
             definition.allowedFieldSourceDefinitionTypeIds,

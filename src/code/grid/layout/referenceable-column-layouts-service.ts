@@ -4,10 +4,10 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevReferenceableColumnLayout, RevReferenceableColumnLayoutDefinition, RevReferenceableColumnLayoutsService } from '@xilytix/revgrid';
+import { RevReferenceableColumnLayout, RevReferenceableColumnLayoutDefinition, RevReferenceableColumnLayouts } from '@xilytix/revgrid';
 import { LockOpenList } from '../../sys/internal-api';
 
-export class ReferenceableColumnLayoutsService extends LockOpenList<RevReferenceableColumnLayout> implements RevReferenceableColumnLayoutsService {
+export class ReferenceableColumnLayoutsService extends LockOpenList<RevReferenceableColumnLayout> implements RevReferenceableColumnLayouts {
     getOrNew(definition: RevReferenceableColumnLayoutDefinition): RevReferenceableColumnLayout {
         let source = this.getItemByKey(definition.id);
         if (source === undefined) {

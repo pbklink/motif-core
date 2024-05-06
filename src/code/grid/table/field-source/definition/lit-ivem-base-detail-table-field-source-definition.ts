@@ -32,7 +32,7 @@ import {
     StringCorrectnessTableValue
 } from '../../value/internal-api';
 import { TableFieldSourceDefinition } from './table-field-source-definition';
-import { TableFieldSourceDefinitionCachingFactoryService } from './table-field-source-definition-caching-factory-service';
+import { TableFieldSourceDefinitionCachingFactory } from './table-field-source-definition-caching-factory';
 
 export class LitIvemBaseDetailTableFieldSourceDefinition extends TableFieldSourceDefinition {
     override readonly fieldDefinitions: TableField.Definition[];
@@ -187,7 +187,7 @@ export namespace LitIvemBaseDetailTableFieldSourceDefinition {
         id: LitIvemBaseDetail.Field.Id;
     }
 
-    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactoryService): LitIvemBaseDetailTableFieldSourceDefinition {
+    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactory): LitIvemBaseDetailTableFieldSourceDefinition {
         return cachingFactoryService.get(typeId) as LitIvemBaseDetailTableFieldSourceDefinition;
     }
 

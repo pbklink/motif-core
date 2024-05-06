@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevSourcedFieldCustomHeadingsService } from '@xilytix/revgrid';
+import { RevSourcedFieldCustomHeadings } from '@xilytix/revgrid';
 import {
     RankedLitIvemIdListDefinition,
     RankedLitIvemIdListDefinitionFactoryService
@@ -12,21 +12,21 @@ import {
 import { ErrorCode, JsonElement, JsonElementErr, PickEnum, Result } from '../../../../sys/internal-api';
 import {
     TableFieldSourceDefinition,
-    TableFieldSourceDefinitionCachingFactoryService
+    TableFieldSourceDefinitionCachingFactory
 } from "../../field-source/internal-api";
 import { TableRecordSourceDefinition } from './table-record-source-definition';
 
 /** @public */
 export abstract class RankedLitIvemIdListTableRecordSourceDefinition extends TableRecordSourceDefinition {
     constructor(
-        customHeadingsService: RevSourcedFieldCustomHeadingsService,
-        tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService,
+        customHeadings: RevSourcedFieldCustomHeadings | undefined,
+        tableFieldSourceDefinitionCachingFactory: TableFieldSourceDefinitionCachingFactory,
         allowedFieldSourceDefinitionTypeIds: RankedLitIvemIdListTableRecordSourceDefinition.FieldSourceDefinitionTypeId[],
         readonly rankedLitIvemIdListDefinition: RankedLitIvemIdListDefinition
     ) {
         super(
-            customHeadingsService,
-            tableFieldSourceDefinitionCachingFactoryService,
+            customHeadings,
+            tableFieldSourceDefinitionCachingFactory,
             TableRecordSourceDefinition.TypeId.RankedLitIvemIdList,
             allowedFieldSourceDefinitionTypeIds,
         );

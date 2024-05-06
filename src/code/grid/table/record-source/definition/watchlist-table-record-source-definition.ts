@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevColumnLayoutDefinition, RevSourcedFieldCustomHeadingsService } from '@xilytix/revgrid';
+import { RevColumnLayoutDefinition, RevSourcedFieldCustomHeadings } from '@xilytix/revgrid';
 import { SecurityDataItem } from '../../../../adi/internal-api';
 import {
     LitIvemIdArrayRankedLitIvemIdListDefinition, ScanIdRankedLitIvemIdListDefinition
@@ -14,7 +14,7 @@ import {
     RankedLitIvemIdTableFieldSourceDefinition,
     SecurityDataItemTableFieldSourceDefinition,
     TableFieldSourceDefinition,
-    TableFieldSourceDefinitionCachingFactoryService
+    TableFieldSourceDefinitionCachingFactory
 } from "../../field-source/internal-api";
 import { RankedLitIvemIdListTableRecordSourceDefinition } from './ranked-lit-ivem-id-list-table-record-source-definition';
 import { TableRecordSourceDefinition } from './table-record-source-definition';
@@ -22,13 +22,13 @@ import { TableRecordSourceDefinition } from './table-record-source-definition';
 /** @public */
 export class WatchlistTableRecordSourceDefinition extends RankedLitIvemIdListTableRecordSourceDefinition {
     constructor(
-        customHeadingsService: RevSourcedFieldCustomHeadingsService,
-        tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService,
+        customHeadings: RevSourcedFieldCustomHeadings | undefined,
+        tableFieldSourceDefinitionCachingFactory: TableFieldSourceDefinitionCachingFactory,
         rankedLitIvemIdListDefinition: LitIvemIdArrayRankedLitIvemIdListDefinition | ScanIdRankedLitIvemIdListDefinition,
     ) {
         super(
-            customHeadingsService,
-            tableFieldSourceDefinitionCachingFactoryService,
+            customHeadings,
+            tableFieldSourceDefinitionCachingFactory,
             WatchlistTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
             rankedLitIvemIdListDefinition,
         );
@@ -37,7 +37,7 @@ export class WatchlistTableRecordSourceDefinition extends RankedLitIvemIdListTab
     override get defaultFieldSourceDefinitionTypeIds() { return WatchlistTableRecordSourceDefinition.defaultFieldSourceDefinitionTypeIds; }
 
     override createDefaultLayoutDefinition() {
-        const fieldSourceDefinition = SecurityDataItemTableFieldSourceDefinition.get(this.tableFieldSourceDefinitionCachingFactoryService);
+        const fieldSourceDefinition = SecurityDataItemTableFieldSourceDefinition.get(this.tableFieldSourceDefinitionCachingFactory);
 
         const fieldNames = new Array<string>();
 
@@ -106,7 +106,7 @@ export namespace WatchlistTableRecordSourceDefinition {
 
 
     export function createLayoutDefinition(
-        fieldSourceDefinitionRegistryService: TableFieldSourceDefinitionCachingFactoryService,
+        fieldSourceDefinitionRegistryService: TableFieldSourceDefinitionCachingFactory,
         fieldIds: FieldId[],
     ): RevColumnLayoutDefinition {
         return fieldSourceDefinitionRegistryService.createLayoutDefinition(fieldIds);

@@ -16,7 +16,7 @@ import {
     TableValue
 } from '../../value/internal-api';
 import { TableFieldSourceDefinition } from './table-field-source-definition';
-import { TableFieldSourceDefinitionCachingFactoryService } from './table-field-source-definition-caching-factory-service';
+import { TableFieldSourceDefinitionCachingFactory } from './table-field-source-definition-caching-factory';
 
 /** @public */
 export class GridFieldTableFieldSourceDefinition extends TableFieldSourceDefinition {
@@ -159,7 +159,7 @@ export namespace GridFieldTableFieldSourceDefinition {
         id: RevSourcedField.FieldId;
     }
 
-    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactoryService): GridFieldTableFieldSourceDefinition {
+    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactory): GridFieldTableFieldSourceDefinition {
         return cachingFactoryService.get(typeId) as GridFieldTableFieldSourceDefinition;
     }
 

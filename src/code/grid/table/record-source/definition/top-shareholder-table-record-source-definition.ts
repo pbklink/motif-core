@@ -4,24 +4,24 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevColumnLayoutDefinition, RevSourcedFieldCustomHeadingsService } from '@xilytix/revgrid';
+import { RevColumnLayoutDefinition, RevSourcedFieldCustomHeadings } from '@xilytix/revgrid';
 import { LitIvemId, TopShareholder } from '../../../../adi/internal-api';
 import { ErrorCode, JsonElement, Ok, PickEnum, Result } from '../../../../sys/internal-api';
-import { TableFieldSourceDefinition, TableFieldSourceDefinitionCachingFactoryService, TopShareholderTableFieldSourceDefinition } from '../../field-source/internal-api';
+import { TableFieldSourceDefinition, TableFieldSourceDefinitionCachingFactory, TopShareholderTableFieldSourceDefinition } from '../../field-source/internal-api';
 import { TableRecordSourceDefinition } from './table-record-source-definition';
 
 /** @public */
 export class TopShareholderTableRecordSourceDefinition extends TableRecordSourceDefinition {
     constructor(
-        customHeadingsService: RevSourcedFieldCustomHeadingsService,
-        tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService,
+        customHeadings: RevSourcedFieldCustomHeadings | undefined,
+        tableFieldSourceDefinitionCachingFactory: TableFieldSourceDefinitionCachingFactory,
         readonly litIvemId: LitIvemId,
         readonly tradingDate: Date | undefined,
         readonly compareToTradingDate: Date | undefined,
     ) {
         super(
-            customHeadingsService,
-            tableFieldSourceDefinitionCachingFactoryService,
+            customHeadings,
+            tableFieldSourceDefinitionCachingFactory,
             TableRecordSourceDefinition.TypeId.TopShareholder,
             TopShareholderTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
         );
@@ -41,7 +41,7 @@ export class TopShareholderTableRecordSourceDefinition extends TableRecordSource
     }
 
     override createDefaultLayoutDefinition() {
-        const topShareholdersFieldSourceDefinition = TopShareholderTableFieldSourceDefinition.get(this.tableFieldSourceDefinitionCachingFactoryService);
+        const topShareholdersFieldSourceDefinition = TopShareholderTableFieldSourceDefinition.get(this.tableFieldSourceDefinitionCachingFactory);
 
         const fieldNames = new Array<string>();
 

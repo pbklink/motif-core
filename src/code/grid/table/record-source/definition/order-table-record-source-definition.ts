@@ -4,23 +4,23 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevColumnLayoutDefinition, RevSourcedFieldCustomHeadingsService } from '@xilytix/revgrid';
+import { RevColumnLayoutDefinition, RevSourcedFieldCustomHeadings } from '@xilytix/revgrid';
 import { Account, BrokerageAccountGroup, Order } from '../../../../adi/internal-api';
 import { PickEnum } from '../../../../sys/internal-api';
-import { BrokerageAccountTableFieldSourceDefinition, OrderTableFieldSourceDefinition, TableFieldSourceDefinition, TableFieldSourceDefinitionCachingFactoryService } from '../../field-source/internal-api';
+import { BrokerageAccountTableFieldSourceDefinition, OrderTableFieldSourceDefinition, TableFieldSourceDefinition, TableFieldSourceDefinitionCachingFactory } from '../../field-source/internal-api';
 import { BrokerageAccountGroupTableRecordSourceDefinition } from './brokerage-account-group-table-record-source-definition';
 import { TableRecordSourceDefinition } from './table-record-source-definition';
 
 /** @public */
 export class OrderTableRecordSourceDefinition extends BrokerageAccountGroupTableRecordSourceDefinition {
     constructor(
-        customHeadingsService: RevSourcedFieldCustomHeadingsService,
-        tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService,
+        customHeadings: RevSourcedFieldCustomHeadings | undefined,
+        tableFieldSourceDefinitionCachingFactory: TableFieldSourceDefinitionCachingFactory,
         brokerageAccountGroup: BrokerageAccountGroup
     ) {
         super(
-            customHeadingsService,
-            tableFieldSourceDefinitionCachingFactoryService,
+            customHeadings,
+            tableFieldSourceDefinitionCachingFactory,
             TableRecordSourceDefinition.TypeId.Order,
             OrderTableRecordSourceDefinition.allowedFieldSourceDefinitionTypeIds,
             brokerageAccountGroup,
@@ -28,8 +28,8 @@ export class OrderTableRecordSourceDefinition extends BrokerageAccountGroupTable
     }
 
     override createDefaultLayoutDefinition() {
-        const ordersDataItemFieldSourceDefinition = OrderTableFieldSourceDefinition.get(this.tableFieldSourceDefinitionCachingFactoryService);
-        const brokerageAccountsFieldSourceDefinition = BrokerageAccountTableFieldSourceDefinition.get(this.tableFieldSourceDefinitionCachingFactoryService);
+        const ordersDataItemFieldSourceDefinition = OrderTableFieldSourceDefinition.get(this.tableFieldSourceDefinitionCachingFactory);
+        const brokerageAccountsFieldSourceDefinition = BrokerageAccountTableFieldSourceDefinition.get(this.tableFieldSourceDefinitionCachingFactory);
 
         const fieldNames = new Array<string>();
 

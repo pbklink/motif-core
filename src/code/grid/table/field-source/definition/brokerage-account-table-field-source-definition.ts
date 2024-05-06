@@ -25,7 +25,7 @@ import {
     StringCorrectnessTableValue
 } from '../../value/internal-api';
 import { TableFieldSourceDefinition } from './table-field-source-definition';
-import { TableFieldSourceDefinitionCachingFactoryService } from './table-field-source-definition-caching-factory-service';
+import { TableFieldSourceDefinitionCachingFactory } from './table-field-source-definition-caching-factory';
 
 export class BrokerageAccountTableFieldSourceDefinition extends TableFieldSourceDefinition {
     override readonly fieldDefinitions: TableField.Definition[];
@@ -174,7 +174,7 @@ export namespace BrokerageAccountTableFieldSourceDefinition {
         id: Account.FieldId;
     }
 
-    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactoryService): BrokerageAccountTableFieldSourceDefinition {
+    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactory): BrokerageAccountTableFieldSourceDefinition {
         return cachingFactoryService.get(typeId) as BrokerageAccountTableFieldSourceDefinition;
     }
 

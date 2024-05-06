@@ -26,7 +26,7 @@ import {
     TableValue
 } from "../../value/internal-api";
 import { TableFieldSourceDefinition } from './table-field-source-definition';
-import { TableFieldSourceDefinitionCachingFactoryService } from './table-field-source-definition-caching-factory-service';
+import { TableFieldSourceDefinitionCachingFactory } from './table-field-source-definition-caching-factory';
 
 /** @public */
 export class LitIvemIdTableFieldSourceDefinition extends TableFieldSourceDefinition {
@@ -174,7 +174,7 @@ export namespace LitIvemIdTableFieldSourceDefinition {
         id: LitIvemId.FieldId;
     }
 
-    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactoryService): LitIvemIdTableFieldSourceDefinition {
+    export function get(cachingFactoryService: TableFieldSourceDefinitionCachingFactory): LitIvemIdTableFieldSourceDefinition {
         return cachingFactoryService.get(typeId) as LitIvemIdTableFieldSourceDefinition;
     }
 

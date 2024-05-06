@@ -1,10 +1,10 @@
-import { RevColumnLayout, RevGridDefinition, RevGridOptions, RevRecordSchemaServer, RevSourcedFieldCustomHeadingsService, RevSubgrid, RevTableGrid, RevViewLayout } from '@xilytix/revgrid';
+import { RevColumnLayout, RevGridDefinition, RevGridOptions, RevRecordSchemaServer, RevSubgrid, RevTableGrid, RevViewLayout } from '@xilytix/revgrid';
 import { MultiEvent } from '@xilytix/sysutils';
 import { SettingsService, TextFormattableValue } from '../../../services/internal-api';
 import { Badness } from '../../../sys/internal-api';
 import { GridField } from '../../field/internal-api';
 import { ReferenceableColumnLayoutsService } from '../../layout/internal-api';
-import { TableFieldSourceDefinition, TableFieldSourceDefinitionCachingFactoryService, TableRecordSourceDefinition, TableRecordStore } from '../../table/internal-api';
+import { TableFieldSourceDefinition, TableFieldSourceDefinitionCachingFactory, TableRecordSourceDefinition, TableRecordStore } from '../../table/internal-api';
 import { ReferenceableDataSourcesService, TableRecordSourceDefinitionFromJsonFactory, TableRecordSourceFactory } from '../../typed/internal-api';
 import { SingleHeadingGridDataServer, SourcedFieldGrid } from '../adapted-revgrid/internal-api';
 import { RecordGridDataServer } from '../record-grid/internal-api';
@@ -29,10 +29,9 @@ export class TableGrid extends RevTableGrid<
     private _settingsChangedSubscriptionId: MultiEvent.SubscriptionId;
 
     constructor(
-        gridFieldCustomHeadingsService: RevSourcedFieldCustomHeadingsService,
         referenceableColumnLayoutsService: ReferenceableColumnLayoutsService,
-        tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService,
-        tableRecordSourceDefinitionFactoryService: TableRecordSourceDefinitionFromJsonFactory,
+        tableFieldSourceDefinitionCachingFactory: TableFieldSourceDefinitionCachingFactory,
+        tableRecordSourceDefinitionFromJsonFactory: TableRecordSourceDefinitionFromJsonFactory,
         tableRecordSourceFactory: TableRecordSourceFactory,
         referenceableDataSourcesService: ReferenceableDataSourcesService,
         settingsService: SettingsService,
@@ -74,10 +73,9 @@ export class TableGrid extends RevTableGrid<
         }
 
         super(
-            gridFieldCustomHeadingsService,
             referenceableColumnLayoutsService,
-            tableFieldSourceDefinitionCachingFactoryService,
-            tableRecordSourceDefinitionFactoryService,
+            tableFieldSourceDefinitionCachingFactory,
+            tableRecordSourceDefinitionFromJsonFactory,
             referenceableDataSourcesService,
             tableRecordSourceFactory,
             gridHostElement,

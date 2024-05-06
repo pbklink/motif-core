@@ -4,13 +4,12 @@
  * License: motionite.trade/license/motif
  */
 
-import { RevSourcedFieldCustomHeadingsService } from '@xilytix/revgrid';
+import { RevSourcedFieldCustomHeadings } from '@xilytix/revgrid';
 import { AdiService, LitIvemId } from '../../../adi/internal-api';
-import { SymbolDetailCacheService } from '../../../services/internal-api';
+import { SymbolDetailCacheService, TextFormatter } from '../../../services/internal-api';
 import { CorrectnessBadness, Integer, UiComparableList, UnreachableCaseError } from '../../../sys/internal-api';
-import { TextFormatterService } from '../../../text-format/internal-api';
 import {
-    TableFieldSourceDefinition, TableFieldSourceDefinitionCachingFactoryService
+    TableFieldSourceDefinition, TableFieldSourceDefinitionCachingFactory
 } from "../field-source/internal-api";
 import { LitIvemIdTableRecordDefinition } from '../record-definition/internal-api';
 import { TableRecord } from '../record/internal-api';
@@ -26,16 +25,16 @@ export class LitIvemIdComparableListTableRecordSource extends BadnessListTableRe
     constructor(
         private readonly _adiService: AdiService,
         private readonly _symbolDetailCacheService: SymbolDetailCacheService,
-        textFormatterService: TextFormatterService,
-        gridFieldCustomHeadingsService: RevSourcedFieldCustomHeadingsService,
-        tableFieldSourceDefinitionCachingFactoryService: TableFieldSourceDefinitionCachingFactoryService,
+        textFormatter: TextFormatter,
+        customHeadings: RevSourcedFieldCustomHeadings | undefined,
+        tableFieldSourceDefinitionCachingFactory: TableFieldSourceDefinitionCachingFactory,
         correctnessBadness: CorrectnessBadness,
         definition: LitIvemIdComparableListTableRecordSourceDefinition,
     ) {
         super(
-            textFormatterService,
-            gridFieldCustomHeadingsService,
-            tableFieldSourceDefinitionCachingFactoryService,
+            textFormatter,
+            customHeadings,
+            tableFieldSourceDefinitionCachingFactory,
             correctnessBadness,
             definition,
             definition.allowedFieldSourceDefinitionTypeIds,
@@ -47,8 +46,8 @@ export class LitIvemIdComparableListTableRecordSource extends BadnessListTableRe
     override createDefinition(): LitIvemIdComparableListTableRecordSourceDefinition {
         const list = this.list.clone();
         return new LitIvemIdComparableListTableRecordSourceDefinition(
-            this._gridFieldCustomHeadingsService,
-            this._tableFieldSourceDefinitionCachingFactoryService,
+            this.customHeadings,
+            this.tableFieldSourceDefinitionCachingFactory,
             list,
         );
     }
