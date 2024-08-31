@@ -111,36 +111,36 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
     get tradingMarkets() { return this._tradingMarkets; }
     get isIndex() { return this._isIndex; }
     get expiryDate() { return this._expiryDate; }
-    get strikePrice() { return this._strikePrice; }
+    get strikePrice(): SysDecimal | undefined { return this._strikePrice; }
     get callOrPutId() { return this._callOrPutId; }
-    get contractSize() { return this._contractSize; }
+    get contractSize(): SysDecimal | undefined { return this._contractSize; }
     get subscriptionDataTypeIds() { return this._subscriptionDataTypeIds; }
     get quotationBasis() { return this._quotationBasis; }
     get currencyId() { return this._currencyId; }
-    get open() { return this._open; }
-    get high() { return this._high; }
-    get low() { return this._low; }
-    get close() { return this._close; }
-    get settlement() { return this._settlement; }
-    get last() { return this._last; }
+    get open(): SysDecimal | undefined { return this._open; }
+    get high(): SysDecimal | undefined { return this._high; }
+    get low(): SysDecimal | undefined { return this._low; }
+    get close(): SysDecimal | undefined { return this._close; }
+    get settlement(): SysDecimal | undefined { return this._settlement; }
+    get last(): SysDecimal | undefined { return this._last; }
     get trend() { return this._trend; }
-    get bestAsk() { return this._bestAsk; }
+    get bestAsk(): SysDecimal | undefined { return this._bestAsk; }
     get askCount() { return this._askCount; }
-    get askQuantity() { return this._askQuantity; }
+    get askQuantity(): SysDecimal | undefined { return this._askQuantity; }
     get askUndisclosed() { return this._askUndisclosed; }
-    get bestBid() { return this._bestBid; }
+    get bestBid(): SysDecimal | undefined { return this._bestBid; }
     get bidCount() { return this._bidCount; }
-    get bidQuantity() { return this._bidQuantity; }
+    get bidQuantity(): SysDecimal | undefined { return this._bidQuantity; }
     get bidUndisclosed() { return this._bidUndisclosed; }
     get numberOfTrades() { return this._numberOfTrades; }
-    get volume() { return this._volume; }
-    get auctionPrice() { return this._auctionPrice; }
-    get auctionQuantity() { return this._auctionQuantity; }
-    get auctionRemainder() { return this._auctionRemainder; }
-    get vWAP() { return this._vWAP; }
-    get valueTraded() { return this._valueTraded; }
+    get volume(): SysDecimal | undefined { return this._volume; }
+    get auctionPrice(): SysDecimal | undefined { return this._auctionPrice; }
+    get auctionQuantity(): SysDecimal | undefined { return this._auctionQuantity; }
+    get auctionRemainder(): SysDecimal | undefined { return this._auctionRemainder; }
+    get vWAP(): SysDecimal | undefined { return this._vWAP; }
+    get valueTraded(): SysDecimal | undefined { return this._valueTraded; }
     get openInterest() { return this._openInterest; }
-    get shareIssue() { return this._shareIssue; }
+    get shareIssue(): SysDecimal | undefined { return this._shareIssue; }
     get statusNote() { return this._statusNote; }
 
     /*AssignValues(SrcDataItem: TDataItem): void { // virtual
@@ -1371,16 +1371,16 @@ export namespace SecurityDataItem {
     export const defaultIsIndex = false;
     export const defaultQuotationBasis: readonly string[] = [];
     export const defaultAskCount = 0;
-    export const defaultAskQuantity = newDecimal(0.0);
+    export const defaultAskQuantity: SysDecimal = newDecimal(0.0);
     export const defaultAskUndisclosed = false;
     export const defaultBidCount = 0;
-    export const defaultBidQuantity = newDecimal(0.0);
+    export const defaultBidQuantity: SysDecimal = newDecimal(0.0);
     export const defaultBidUndisclosed = false;
     export const defaultNumberOfTrades = 0;
-    export const defaultVolume = newDecimal(0.0);
-    export const defaultValueTraded = newDecimal(0.0);
+    export const defaultVolume: SysDecimal = newDecimal(0.0);
+    export const defaultValueTraded: SysDecimal = newDecimal(0.0);
     export const defaultOpenInterest = 0;
-    export const defaultShareIssue = newDecimal(0.0);
+    export const defaultShareIssue: SysDecimal = newDecimal(0.0);
     export const defaultStatusNote: readonly string[] = [];
 
     export const enum FieldId {

@@ -717,7 +717,7 @@ export class OrderPad {
         }
     }
 
-    getTriggerValueIfOk() {
+    getTriggerValueIfOk(): SysDecimal | undefined {
         if (this.isFieldOk(OrderPad.FieldId.TriggerValue)) {
             return this._triggerValue;
         } else {
@@ -749,7 +749,7 @@ export class OrderPad {
         }
     }
 
-    getLimitValueIfOk() {
+    getLimitValueIfOk(): SysDecimal | undefined {
         if (this.isFieldOk(OrderPad.FieldId.LimitValue)) {
             return this._limitValue;
         } else {

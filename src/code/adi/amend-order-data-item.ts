@@ -17,9 +17,9 @@ export class AmendOrderDataItem extends OrderRequestDataItem {
         super(MyDataDefinition, OrderRequestTypeId.Amend);
     }
 
-    get estimatedBrokerage() { return this._estimatedBrokerage; }
-    get estimatedTax() { return this._estimatedTax; }
-    get estimatedValue() { return this._estimatedValue; }
+    get estimatedBrokerage(): SysDecimal | undefined { return this._estimatedBrokerage; }
+    get estimatedTax(): SysDecimal | undefined { return this._estimatedTax; }
+    get estimatedValue(): SysDecimal | undefined { return this._estimatedValue; }
 
     override processMessage(msg: DataMessage) { // virtual;
         if (msg.typeId !== DataMessageTypeId.AmendOrderResponse) {

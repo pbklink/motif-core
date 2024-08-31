@@ -174,16 +174,16 @@ export class Order implements BrokerageAccountRecord {
     get marketId() { return this._marketId; }
     get marketBoardId() { return this._marketBoardId; }
     get currencyId() { return this._currencyId; }
-    get estimatedBrokerage() { return this._estimatedBrokerage; }
-    get currentBrokerage() { return this._currentBrokerage; }
-    get estimatedTax() { return this._estimatedTax; }
-    get currentTax() { return this._currentTax; }
-    get currentValue() { return this._currentValue; }
+    get estimatedBrokerage(): SysDecimal | undefined { return this._estimatedBrokerage; }
+    get currentBrokerage(): SysDecimal | undefined { return this._currentBrokerage; }
+    get estimatedTax(): SysDecimal | undefined { return this._estimatedTax; }
+    get currentTax(): SysDecimal | undefined { return this._currentTax; }
+    get currentValue(): SysDecimal { return this._currentValue; }
     get createdDate() { return this._createdDate; }
     get updatedDate() { return this._updatedDate; }
     get children() { return this._children; }
     get executedQuantity() { return this._executedQuantity; }
-    get averagePrice() { return this._averagePrice; }
+    get averagePrice(): SysDecimal | undefined { return this._averagePrice; }
     get styleId() { return this._styleId; }
     get exchangeId() { return this._exchangeId; }
     get environmentId() { return this._environmentId; }
@@ -192,7 +192,7 @@ export class Order implements BrokerageAccountRecord {
     get extendedSideId() { return this._extendedSideId; }
     get brokerageSchedule() { return this._brokerageSchedule; }
     get equityOrderTypeId() { return this._equityOrderTypeId; }
-    get limitPrice() { return this._limitPrice; }
+    get limitPrice(): SysDecimal | undefined { return this._limitPrice; }
     get quantity() { return this._quantity; }
     get hiddenQuantity() { return this._hiddenQuantity; }
     get minimumQuantity() { return this._minimumQuantity; }
@@ -200,7 +200,7 @@ export class Order implements BrokerageAccountRecord {
     get expiryDate() { return this._expiryDate; }
     get shortSellTypeId() { return this._shortSellTypeId; }
     get unitTypeId() { return this._unitTypeId; }
-    get unitAmount() { return this._unitAmount; }
+    get unitAmount(): SysDecimal { return this._unitAmount; }
     get managedFundCurrency() { return this._managedFundCurrency; }
     get physicalDelivery() { return this._physicalDelivery; }
     get route() { return this._route; }
@@ -246,7 +246,7 @@ export class Order implements BrokerageAccountRecord {
         return this.trigger.typeId;
     }
 
-    get triggerValue() {
+    get triggerValue(): SysDecimal | undefined {
         return this.trigger.value;
     }
     get triggerExtraParamsText() {

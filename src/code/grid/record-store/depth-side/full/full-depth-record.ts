@@ -170,7 +170,7 @@ export class OrderFullDepthRecord extends FullDepthRecord {
     getVolume() { return this._order.quantity; } // virtual override
     getRenderVolume() { return this._order.quantity; } // virtual override
     getCount() { return 1; } // virtual override
-    getPrice() { return this._order.price; } // virtual override
+    getPrice(): SysDecimal { return this._order.price; } // virtual override
     getUndisclosedCount() { return this._order.hasUndisclosed ? 1 : 0; } // virtual override
 
     acceptedByFilter(filterXrefs: string[]): boolean {
@@ -353,7 +353,7 @@ export class PriceLevelFullDepthRecord extends FullDepthRecord {
         this._orders[0] = firstOrder;
     }
 
-    get price() { return this._price; }
+    get price(): SysDecimal { return this._price; }
     get count() { return this._count; }
     get quantity() { return this._volume; }
     get marketIds() { return this._marketIds; }
@@ -368,7 +368,7 @@ export class PriceLevelFullDepthRecord extends FullDepthRecord {
     getVolume() { return this._volume; } // virtual override
     getRenderVolume() { return this._volume; } // virtual override
     getCount() { return this._count; } // virtual override
-    getPrice() { return this.price; } // virtual override
+    getPrice(): SysDecimal { return this.price; } // virtual override
     getUndisclosedCount() { return this._undisclosedOrderCount; } // virtual override
 
     acceptedByFilter(filterXrefs: string[]): boolean {

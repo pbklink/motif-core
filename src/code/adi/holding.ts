@@ -78,11 +78,11 @@ export class Holding implements BrokerageAccountRecord {
     get code() { return this._code; }
     get accountId() { return this._accountId; }
     get styleId() { return this._styleId; }
-    get cost() { return this._cost; }
+    get cost(): SysDecimal { return this._cost; }
     get currencyId() { return this._currencyId; }
     get totalQuantity() { return this._totalQuantity; }
     get totalAvailableQuantity() { return this._totalAvailableQuantity; }
-    get averagePrice() { return this._averagePrice; }
+    get averagePrice(): SysDecimal { return this._averagePrice; }
 
     get correctnessId() { return this._correctnessId; }
 

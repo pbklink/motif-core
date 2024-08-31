@@ -5,6 +5,7 @@
  */
 
 import { RevTextFormattableValue } from '@xilytix/revgrid';
+import { SysDecimalConstructor } from '@xilytix/sysutils';
 import {
     ActiveFaultedStatusId,
     DayTradesDataItem,
@@ -24,6 +25,7 @@ import {
     SourceTzOffsetDate,
     SourceTzOffsetDateTime,
     SysDecimal,
+    cloneDecimal,
     newUndefinableDecimal
 } from '../sys/internal-api';
 import { ColorSettings } from './settings/internal-api';
@@ -389,12 +391,13 @@ export class DecimalTextFormattableValue extends GenericTextFormattableValue<Sys
 
 export class PriceTextFormattableValue extends GenericTextFormattableValue<SysDecimal> {
     constructor(data: SysDecimal | undefined) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-call
         super(data === undefined ? undefined : new PriceTextFormattableValue.decimalConstructor(data), TextFormattableValue.TypeId.Price);
     }
 }
 
 export namespace PriceTextFormattableValue {
-    export const decimalConstructor = SysDecimal.clone({
+    export const decimalConstructor: SysDecimalConstructor = cloneDecimal({
         precision: 20,
         rounding: SysDecimal.ROUND_HALF_UP,
         toExpNeg: -15,
@@ -404,7 +407,9 @@ export namespace PriceTextFormattableValue {
 
 export class PriceOrRemainderTextFormattableValue extends GenericTextFormattableValue<PriceOrRemainder> {
     constructor(data: PriceOrRemainder | undefined) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         super(data === undefined ? undefined :
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-call
             data === null ? null : new PriceTextFormattableValue.decimalConstructor(data), TextFormattableValue.TypeId.PriceOrRemainder);
     }
 }
