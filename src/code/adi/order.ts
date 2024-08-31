@@ -8,7 +8,6 @@ import { RevRecordValueRecentChangeTypeId } from '@xilytix/revgrid';
 import { StringId, Strings } from '../res/internal-api';
 import {
     CorrectnessId,
-    Decimal,
     EnumInfoOutOfOrderError,
     ErrorCode,
     FieldDataTypeId,
@@ -16,6 +15,7 @@ import {
     MapKey,
     MultiEvent,
     SourceTzOffsetDateTime,
+    SysDecimal,
     ZenithDataError,
     isArrayEqualUniquely,
     isDecimalEqual,
@@ -70,16 +70,16 @@ export class Order implements BrokerageAccountRecord {
     private _marketId: MarketId | undefined;
     private _marketBoardId: MarketBoardId | undefined;
     private _currencyId: CurrencyId | undefined;
-    private _estimatedBrokerage: Decimal | undefined;
-    private _currentBrokerage: Decimal | undefined;
-    private _estimatedTax: Decimal | undefined;
-    private _currentTax: Decimal | undefined;
-    private _currentValue: Decimal;
+    private _estimatedBrokerage: SysDecimal | undefined;
+    private _currentBrokerage: SysDecimal | undefined;
+    private _estimatedTax: SysDecimal | undefined;
+    private _currentTax: SysDecimal | undefined;
+    private _currentValue: SysDecimal;
     private _createdDate: SourceTzOffsetDateTime;
     private _updatedDate: SourceTzOffsetDateTime;
     private _children: string[] | undefined;
     private _executedQuantity: Integer;
-    private _averagePrice: Decimal | undefined;
+    private _averagePrice: SysDecimal | undefined;
     // details
     private _styleId: IvemClassId;
     private _exchangeId: ExchangeId;
@@ -90,7 +90,7 @@ export class Order implements BrokerageAccountRecord {
     private _brokerageSchedule: string | undefined;
     // equity details
     private _equityOrderTypeId: OrderTypeId;
-    private _limitPrice: Decimal | undefined;
+    private _limitPrice: SysDecimal | undefined;
     private _quantity: Integer;
     private _hiddenQuantity: Integer | undefined;
     private _minimumQuantity: Integer | undefined;
@@ -99,7 +99,7 @@ export class Order implements BrokerageAccountRecord {
     private _shortSellTypeId: OrderShortSellTypeId | undefined;
     // managed fund details
     private _unitTypeId: OrderPriceUnitTypeId;
-    private _unitAmount: Decimal;
+    private _unitAmount: SysDecimal;
     private _managedFundCurrency: string | undefined;
     private _physicalDelivery: boolean | undefined;
     // route

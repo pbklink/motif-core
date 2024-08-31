@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { Decimal, Integer } from './xilytix-sysutils';
+import { Integer, SysDecimal } from './xilytix-sysutils';
 
 // export {
 //     BooleanOrUndefined,
@@ -30,7 +30,7 @@ import { Decimal, Integer } from './xilytix-sysutils';
 // } from './xiltyix-sysutils';
 
 /** @public */
-export type PriceOrRemainder = Decimal | null;
+export type PriceOrRemainder = SysDecimal | null;
 
 /** @public */
 export interface BidAskPair<T> {

@@ -9,13 +9,13 @@ import { StringId, Strings } from '../res/internal-api';
 import {
     AssertInternalError,
     CorrectnessId,
-    Decimal,
     EnumInfoOutOfOrderError,
     FieldDataTypeId,
     Integer,
     KeyedRecord,
     MapKey,
     MultiEvent,
+    SysDecimal,
     UnreachableCaseError,
     isDecimalEqual,
     isDecimalGreaterThan,
@@ -152,7 +152,7 @@ export class Balances implements BrokerageAccountRecord {
         }
     }
 
-    private updateField(fieldId: Balances.FieldId, amount: Decimal) {
+    private updateField(fieldId: Balances.FieldId, amount: SysDecimal) {
         let recentChangeTypeId: RevRecordValueRecentChangeTypeId | undefined;
         switch (fieldId) {
             case Balances.FieldId.NetBalance:
@@ -211,7 +211,7 @@ export namespace Balances {
 
     export interface BalanceValue {
         readonly type: string;
-        amount: Decimal;
+        amount: SysDecimal;
     }
 
     export type ChangedEventHandler = (valueChanges: ValueChange[]) => void;

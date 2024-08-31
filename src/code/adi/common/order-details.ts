@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { Decimal, Integer, newUndefinableDate, newUndefinableDecimal } from '../../sys/internal-api';
+import { Integer, newUndefinableDate, newUndefinableDecimal, SysDecimal } from '../../sys/internal-api';
 import {
     ExchangeId,
     IvemClassId, OrderInstructionId, OrderPriceUnitTypeId, OrderShortSellTypeId, OrderSideId, OrderTypeId, TimeInForceId
@@ -34,7 +34,7 @@ export abstract class OrderDetails {
 
 export class MarketOrderDetails extends OrderDetails {
     typeId: OrderTypeId;
-    limitPrice: Decimal | undefined;
+    limitPrice: SysDecimal | undefined;
     quantity: Integer;
     hiddenQuantity: Integer | undefined;
     minimumQuantity: Integer | undefined;

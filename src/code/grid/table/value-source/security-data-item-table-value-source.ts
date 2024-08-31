@@ -8,10 +8,10 @@ import { AdiService, HigherLowerId, LitIvemId, SecurityDataDefinition, SecurityD
 import { TextFormattableValue } from '../../../services/internal-api';
 import {
     AssertInternalError,
-    Decimal,
     Integer,
     MultiEvent,
     SourceTzOffsetDate,
+    SysDecimal,
     UnexpectedCaseError,
     UnreachableCaseError
 } from "../../../sys/internal-api";
@@ -41,12 +41,12 @@ export class SecurityDataItemTableValueSource extends TableValueSource {
     private fieldValuesChangeEventSubscriptionId: MultiEvent.SubscriptionId;
     // private lastLastHigherLower: HigherLowerId = HigherLowerId.Invalid;
 
-    private _lastOldValue: Decimal | undefined;
-    private _bestAskOldValue: Decimal | undefined;
-    private _bestBidOldValue: Decimal | undefined;
-    private _auctionPriceOldValue: Decimal | undefined;
-    private _vwapOldValue: Decimal | undefined;
-    private _valueTradedOldValue: Decimal | undefined;
+    private _lastOldValue: SysDecimal | undefined;
+    private _bestAskOldValue: SysDecimal | undefined;
+    private _bestBidOldValue: SysDecimal | undefined;
+    private _auctionPriceOldValue: SysDecimal | undefined;
+    private _vwapOldValue: SysDecimal | undefined;
+    private _valueTradedOldValue: SysDecimal | undefined;
 
     constructor(firstFieldIndexOffset: Integer, private readonly _litIvemId: LitIvemId, private readonly _adi: AdiService) {
         super(firstFieldIndexOffset);
@@ -180,7 +180,7 @@ export class SecurityDataItemTableValueSource extends TableValueSource {
         return new valueConstructor();
     }
 
-    private calculateDecimalHigherLowerId(newValue: Decimal | undefined, oldValue: Decimal | undefined) {
+    private calculateDecimalHigherLowerId(newValue: SysDecimal | undefined, oldValue: SysDecimal | undefined) {
         if (newValue === undefined || oldValue === undefined) {
             return HigherLowerId.Invalid;
         } else {
@@ -244,37 +244,37 @@ export class SecurityDataItemTableValueSource extends TableValueSource {
     //     return higherLower;
     // }
 
-    private calculateLastHigherLowerId(newValue: Decimal | undefined): HigherLowerId {
+    private calculateLastHigherLowerId(newValue: SysDecimal | undefined): HigherLowerId {
         const result = this.calculateDecimalHigherLowerId(newValue, this._lastOldValue);
         this._lastOldValue = newValue;
         return result;
     }
 
-    private calculateBestAskHigherLowerId(newValue: Decimal | undefined) {
+    private calculateBestAskHigherLowerId(newValue: SysDecimal | undefined) {
         const result = this.calculateDecimalHigherLowerId(newValue, this._bestAskOldValue);
         this._bestAskOldValue = newValue;
         return result;
     }
 
-    private calculateBestBidHigherLowerId(newValue: Decimal | undefined) {
+    private calculateBestBidHigherLowerId(newValue: SysDecimal | undefined) {
         const result = this.calculateDecimalHigherLowerId(newValue, this._bestBidOldValue);
         this._bestBidOldValue = newValue;
         return result;
     }
 
-    private calculateAuctionPriceHigherLowerId(newValue: Decimal | undefined) {
+    private calculateAuctionPriceHigherLowerId(newValue: SysDecimal | undefined) {
         const result = this.calculateDecimalHigherLowerId(newValue, this._auctionPriceOldValue);
         this._auctionPriceOldValue = newValue;
         return result;
     }
 
-    private calculateVwapHigherLowerId(newValue: Decimal | undefined) {
+    private calculateVwapHigherLowerId(newValue: SysDecimal | undefined) {
         const result = this.calculateDecimalHigherLowerId(newValue, this._vwapOldValue);
         this._vwapOldValue = newValue;
         return result;
     }
 
-    private calculateValueTradedHigherLowerId(newValue: Decimal | undefined) {
+    private calculateValueTradedHigherLowerId(newValue: SysDecimal | undefined) {
         const result = this.calculateDecimalHigherLowerId(newValue, this._valueTradedOldValue);
         this._valueTradedOldValue = newValue;
         return result;

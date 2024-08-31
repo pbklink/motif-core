@@ -6,14 +6,14 @@
 
 import { ExerciseTypeId, IvemId, LitIvemId, MarketId, MarketInfo } from '../adi/internal-api';
 import { StringId, Strings } from '../res/internal-api';
-import { Decimal, EnumInfoOutOfOrderError, FieldDataTypeId, Integer, MapKey, isDecimalEqual, nullDate, nullDecimal } from '../sys/internal-api';
+import { EnumInfoOutOfOrderError, FieldDataTypeId, Integer, MapKey, SysDecimal, isDecimalEqual, nullDate, nullDecimal } from '../sys/internal-api';
 
 export class CallPut {
     constructor(
-        readonly exercisePrice: Decimal,
+        readonly exercisePrice: SysDecimal,
         readonly expiryDate: Date,
         readonly litId: MarketId,
-        readonly contractMultiplier: Decimal,
+        readonly contractMultiplier: SysDecimal,
         readonly exerciseTypeId: ExerciseTypeId,
         readonly underlyingIvemId: IvemId | undefined,
         readonly underlyingIsIndex: boolean | undefined,
@@ -168,7 +168,7 @@ export namespace CallPut {
 
         private _mapKey: MapKey | undefined;
 
-        constructor(public exercisePrice: Decimal, public expiryDate: Date, public litId: MarketId) { }
+        constructor(public exercisePrice: SysDecimal, public expiryDate: Date, public litId: MarketId) { }
 
         get mapKey(): MapKey {
             if (this._mapKey === undefined) {
@@ -196,7 +196,7 @@ export namespace CallPut {
     }
 
     export namespace Key {
-        export function toString(exercisePrice: Decimal, expiryDate: Date, litId: MarketId): string {
+        export function toString(exercisePrice: SysDecimal, expiryDate: Date, litId: MarketId): string {
             return `${exercisePrice.toString()}|${expiryDate.getTime()}|${MarketInfo.idToJsonValue(litId)}`;
         }
 

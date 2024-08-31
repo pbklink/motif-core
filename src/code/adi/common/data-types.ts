@@ -11,9 +11,9 @@ import {
     CommaText,
     ComparisonResult,
     CorrectnessId,
-    Decimal,
     EnumInfoOutOfOrderError,
     Integer,
+    SysDecimal,
     UnreachableCaseError,
     assert,
     compareInteger,
@@ -7813,12 +7813,12 @@ export interface OrderRequestError {
 }
 
 export namespace AsxIndexPoint {
-    const dollarsToPointsFactor: Decimal = newDecimal(100.0);
+    const dollarsToPointsFactor: SysDecimal = newDecimal(100.0);
 
-    export function toDollars(Value: Decimal): Decimal {
+    export function toDollars(Value: SysDecimal): SysDecimal {
         return Value.div(dollarsToPointsFactor);
     }
-    export function fromDollars(Value: Decimal): Decimal {
+    export function fromDollars(Value: SysDecimal): SysDecimal {
         return Value.times(dollarsToPointsFactor);
     }
 }

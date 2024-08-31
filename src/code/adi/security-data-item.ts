@@ -8,12 +8,12 @@ import { RevRecordValueRecentChangeTypeId } from '@xilytix/revgrid';
 import { StringId, Strings } from '../res/internal-api';
 import {
     AssertInternalError,
-    Decimal,
     EnumInfoOutOfOrderError,
     FieldDataTypeId,
     Integer,
     MultiEvent,
     SourceTzOffsetDate,
+    SysDecimal,
     assert,
     isArrayEqualUniquely,
     isDecimalEqual,
@@ -52,36 +52,36 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
     private _tradingMarkets: readonly MarketId[] | undefined;
     private _isIndex: boolean | undefined;
     private _expiryDate: SourceTzOffsetDate | undefined;
-    private _strikePrice: Decimal | undefined;
+    private _strikePrice: SysDecimal | undefined;
     private _callOrPutId: CallOrPutId | undefined;
-    private _contractSize: Decimal | undefined;
+    private _contractSize: SysDecimal | undefined;
     private _subscriptionDataTypeIds: readonly PublisherSubscriptionDataTypeId[] | undefined;
     private _quotationBasis: readonly string[] | undefined;
     private _currencyId: CurrencyId | undefined;
-    private _open: Decimal | undefined;
-    private _high: Decimal | undefined;
-    private _low: Decimal | undefined;
-    private _close: Decimal | undefined;
-    private _settlement: Decimal | undefined;
-    private _last: Decimal | undefined;
+    private _open: SysDecimal | undefined;
+    private _high: SysDecimal | undefined;
+    private _low: SysDecimal | undefined;
+    private _close: SysDecimal | undefined;
+    private _settlement: SysDecimal | undefined;
+    private _last: SysDecimal | undefined;
     private _trend: MovementId | undefined;
-    private _bestAsk: Decimal | undefined;
+    private _bestAsk: SysDecimal | undefined;
     private _askCount: Integer | undefined;
-    private _askQuantity: Decimal | undefined;
+    private _askQuantity: SysDecimal | undefined;
     private _askUndisclosed: boolean | undefined;
-    private _bestBid: Decimal | undefined;
+    private _bestBid: SysDecimal | undefined;
     private _bidCount: Integer | undefined;
-    private _bidQuantity: Decimal | undefined;
+    private _bidQuantity: SysDecimal | undefined;
     private _bidUndisclosed: boolean | undefined;
     private _numberOfTrades: Integer | undefined;
-    private _volume: Decimal | undefined;
-    private _auctionPrice: Decimal | undefined;
-    private _auctionQuantity: Decimal | undefined;
-    private _auctionRemainder: Decimal | undefined;
-    private _vWAP: Decimal | undefined;
-    private _valueTraded: Decimal | undefined;
+    private _volume: SysDecimal | undefined;
+    private _auctionPrice: SysDecimal | undefined;
+    private _auctionQuantity: SysDecimal | undefined;
+    private _auctionRemainder: SysDecimal | undefined;
+    private _vWAP: SysDecimal | undefined;
+    private _valueTraded: SysDecimal | undefined;
     private _openInterest: Integer | undefined;
-    private _shareIssue: Decimal | undefined;
+    private _shareIssue: SysDecimal | undefined;
     private _statusNote: readonly string[] | undefined;
 
     private _fieldValuesChangedMultiEvent = new MultiEvent<SecurityDataItem.FieldValuesChangedEvent>();

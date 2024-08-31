@@ -10,13 +10,13 @@ import {
     compareInteger,
     ComparisonResult,
     CorrectnessBadness,
-    Decimal,
     Integer,
     mSecsPerMin,
     MultiEvent,
     rangedEarliestBinarySearch,
     rangedQuickSort,
     SourceTzOffsetDateTime,
+    SysDecimal,
     SysTick,
     UnreachableCaseError,
     UsableListChangeTypeId
@@ -383,7 +383,7 @@ export namespace TradesDataItem {
 
     export interface Record {
         id: Integer;
-        price: Decimal | undefined;
+        price: SysDecimal | undefined;
         quantity: Integer | undefined;
         time: SourceTzOffsetDateTime | undefined;
         flagIds: readonly TradeFlagId[];

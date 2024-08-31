@@ -9,10 +9,10 @@ import {
     AssertInternalError,
     BinarySearchResult,
     ComparisonResult,
-    Decimal,
     ErrorCode,
     Integer,
     MultiEvent,
+    SysDecimal,
     UnexpectedCaseError,
     UnreachableCaseError,
     ZenithDataError,
@@ -311,7 +311,7 @@ export class DepthDataItem extends MarketSubscriptionDataItem {
     private findOrderIndex(
         list: DepthDataItem.Order[],
         side: OrderSideId,
-        orderPrice: Decimal,
+        orderPrice: SysDecimal,
         orderPosition: number
     ): BinarySearchResult {
 
@@ -737,7 +737,7 @@ export namespace DepthDataItem {
     export interface Order {
         orderId: string;
         sideId: OrderSideId;
-        price: Decimal;
+        price: SysDecimal;
         position: Integer;
         broker: string | undefined;
         crossRef: string | undefined;

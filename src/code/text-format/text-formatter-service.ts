@@ -107,12 +107,12 @@ import {
 } from '../services/internal-api';
 import {
     CommaText,
-    Decimal,
     Integer,
     MultiEvent,
     PriceOrRemainder,
     SourceTzOffsetDate,
     SourceTzOffsetDateTime,
+    SysDecimal,
     UnreachableCaseError,
     logger
 } from '../sys/internal-api';
@@ -205,11 +205,11 @@ export class TextFormatterService implements TextFormatter {
         return this._integerFormat.format(value);
     }
 
-    formatDecimal(value: Decimal) {
+    formatDecimal(value: SysDecimal) {
         return this._decimalFormat.format(value.toNumber());
     }
 
-    formatPrice(value: Decimal) {
+    formatPrice(value: SysDecimal) {
         // TODO:MED How many decimal places to display?
         return this._priceFormat.format(value.toNumber());
     }

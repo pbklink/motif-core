@@ -19,7 +19,7 @@ import {
     StringTextFormattableValue,
     TextFormattableValue
 } from '../../../services/internal-api';
-import { Decimal, Integer, newUndefinableDate, newUndefinableDecimal } from '../../../sys/internal-api';
+import { Integer, newUndefinableDate, newUndefinableDecimal, SysDecimal } from '../../../sys/internal-api';
 import { CorrectnessTableValue } from './table-value';
 
 export abstract class NullableCorrectnessTableValue extends CorrectnessTableValue {
@@ -83,10 +83,10 @@ export class NullableDateCorrectnessTableValue extends GenericNullableCorrectnes
     }
 }
 
-export abstract class BaseNullableDecimalCorrectnessTableValue extends GenericNullableCorrectnessTableValue<Decimal> {
+export abstract class BaseNullableDecimalCorrectnessTableValue extends GenericNullableCorrectnessTableValue<SysDecimal> {
     override get data() { return super.data; }
 
-    override set data(value: Decimal | null | undefined) {
+    override set data(value: SysDecimal | null | undefined) {
         super.data = value === null ? null : newUndefinableDecimal(value);
     }
 }

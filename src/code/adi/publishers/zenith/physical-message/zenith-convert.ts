@@ -8,7 +8,6 @@ import {
     AssertInternalError,
     CommaText,
     concatenateArrayUniquely,
-    Decimal,
     defined,
     EnumInfoOutOfOrderError,
     ErrorCode,
@@ -29,6 +28,7 @@ import {
     Result,
     SourceTzOffsetDate,
     SourceTzOffsetDateTime,
+    SysDecimal,
     UnexpectedCaseError,
     UnreachableCaseError,
     ZenithDataError
@@ -2314,8 +2314,8 @@ export namespace ZenithConvert {
         }
 
         export interface AsDecimal {
-            readonly brokerage: Decimal | undefined;
-            readonly tax: Decimal | undefined;
+            readonly brokerage: SysDecimal | undefined;
+            readonly tax: SysDecimal | undefined;
         }
     }
 

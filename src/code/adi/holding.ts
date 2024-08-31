@@ -8,7 +8,6 @@ import { RevRecordValueRecentChangeTypeId } from '@xilytix/revgrid';
 import { StringId, Strings } from '../res/internal-api';
 import {
     CorrectnessId,
-    Decimal,
     EnumInfoOutOfOrderError,
     ErrorCode,
     FieldDataTypeId,
@@ -16,6 +15,7 @@ import {
     KeyedRecord,
     MapKey,
     MultiEvent,
+    SysDecimal,
     ZenithDataError,
     isDecimalEqual,
     isDecimalGreaterThan,
@@ -43,11 +43,11 @@ export class Holding implements BrokerageAccountRecord {
     private _code: string;
     private readonly _accountId: BrokerageAccountId;
     private _styleId: IvemClassId;
-    private _cost: Decimal;
+    private _cost: SysDecimal;
     private _currencyId: CurrencyId | undefined;
     private _totalQuantity: Integer;
     private _totalAvailableQuantity: Integer;
-    private _averagePrice: Decimal;
+    private _averagePrice: SysDecimal;
 
     private _mapKey: MapKey | undefined;
 

@@ -6,12 +6,12 @@
 
 import { StringId, Strings } from '../res/internal-api';
 import {
-    Decimal,
     EnumInfoOutOfOrderError,
     FieldDataTypeId,
     Integer,
     MultiEvent,
     SourceTzOffsetDate,
+    SysDecimal,
     isUndefinableArrayEqualUniquely,
     isUndefinableDecimalEqual
 } from '../sys/internal-api';
@@ -31,10 +31,10 @@ export class SearchSymbolsLitIvemFullDetail extends SearchSymbolsLitIvemBaseDeta
     depthDirectionId: DepthDirectionId | undefined;
     isIndex: boolean | undefined;
     expiryDate: SourceTzOffsetDate | undefined;
-    strikePrice: Decimal | undefined;
+    strikePrice: SysDecimal | undefined;
     exerciseTypeId: ExerciseTypeId | undefined;
     callOrPutId: CallOrPutId | undefined;
-    contractSize: Decimal | undefined;
+    contractSize: SysDecimal | undefined;
     lotSize: Integer | undefined;
     attributes: LitIvemAttributes | undefined;
     tmcLegs: TmcLegs | undefined;

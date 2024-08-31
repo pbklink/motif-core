@@ -4,14 +4,14 @@
  * License: motionite.trade/license/motif
  */
 
-import { Decimal } from '../sys/internal-api';
+import { SysDecimal } from '../sys/internal-api';
 import { AmendOrderResponseDataMessage, DataDefinition, DataMessage, DataMessageTypeId, OrderRequestTypeId } from './common/internal-api';
 import { OrderRequestDataItem } from './order-request-data-item';
 
 export class AmendOrderDataItem extends OrderRequestDataItem {
-    private _estimatedBrokerage: Decimal | undefined;
-    private _estimatedTax: Decimal | undefined;
-    private _estimatedValue: Decimal | undefined;
+    private _estimatedBrokerage: SysDecimal | undefined;
+    private _estimatedTax: SysDecimal | undefined;
+    private _estimatedValue: SysDecimal | undefined;
 
     constructor(MyDataDefinition: DataDefinition) {
         super(MyDataDefinition, OrderRequestTypeId.Amend);

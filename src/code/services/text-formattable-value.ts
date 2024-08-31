@@ -19,11 +19,11 @@ import {
 } from "../adi/internal-api";
 import {
     CorrectnessId,
-    Decimal,
     Integer,
     PriceOrRemainder,
     SourceTzOffsetDate,
     SourceTzOffsetDateTime,
+    SysDecimal,
     newUndefinableDecimal
 } from '../sys/internal-api';
 import { ColorSettings } from './settings/internal-api';
@@ -381,22 +381,22 @@ export class SourceTzOffsetDateTextFormattableValue extends GenericTextFormattab
     }
 }
 
-export class DecimalTextFormattableValue extends GenericTextFormattableValue<Decimal> {
-    constructor(data: Decimal | undefined) {
+export class DecimalTextFormattableValue extends GenericTextFormattableValue<SysDecimal> {
+    constructor(data: SysDecimal | undefined) {
         super(newUndefinableDecimal(data), TextFormattableValue.TypeId.Decimal);
     }
 }
 
-export class PriceTextFormattableValue extends GenericTextFormattableValue<Decimal> {
-    constructor(data: Decimal | undefined) {
+export class PriceTextFormattableValue extends GenericTextFormattableValue<SysDecimal> {
+    constructor(data: SysDecimal | undefined) {
         super(data === undefined ? undefined : new PriceTextFormattableValue.decimalConstructor(data), TextFormattableValue.TypeId.Price);
     }
 }
 
 export namespace PriceTextFormattableValue {
-    export const decimalConstructor = Decimal.clone({
+    export const decimalConstructor = SysDecimal.clone({
         precision: 20,
-        rounding: Decimal.ROUND_HALF_UP,
+        rounding: SysDecimal.ROUND_HALF_UP,
         toExpNeg: -15,
         toExpPos: 30,
     });
@@ -583,7 +583,7 @@ export class PriceAndHasUndisclosedTextFormattableValue extends GenericTextForma
 
 export namespace PriceAndHasUndisclosedTextFormattableValue {
     export interface DataType {
-        price: Decimal;
+        price: SysDecimal;
         hasUndisclosed: boolean;
     }
 }

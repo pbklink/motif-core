@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { AssertInternalError, Decimal } from '../sys/internal-api';
+import { AssertInternalError, SysDecimal } from '../sys/internal-api';
 import {
     DataDefinition,
     OrderRequestError,
@@ -28,9 +28,9 @@ export abstract class OrderRequestDataItem extends PublisherSubscriptionDataItem
     get order() { return this._order; }
     get errors() { return this._errors; }
 
-    abstract get estimatedBrokerage(): Decimal | undefined;
-    abstract get estimatedTax(): Decimal | undefined;
-    abstract get estimatedValue(): Decimal | undefined;
+    abstract get estimatedBrokerage(): SysDecimal | undefined;
+    abstract get estimatedTax(): SysDecimal | undefined;
+    abstract get estimatedValue(): SysDecimal | undefined;
 
     protected override processSubscriptionPreOnline() {
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition

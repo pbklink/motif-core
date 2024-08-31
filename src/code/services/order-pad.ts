@@ -48,7 +48,6 @@ import { StringId, Strings } from '../res/internal-api';
 import {
     AssertInternalError,
     concatenateArrayUniquely,
-    Decimal,
     EnumInfoOutOfOrderError,
     getErrorMessage,
     Integer,
@@ -63,6 +62,7 @@ import {
     newUndefinableDate,
     newUndefinableDecimal,
     NotImplementedError,
+    SysDecimal,
     UnreachableCaseError
 } from "../sys/internal-api";
 import { PriceStepperIncubator } from './price-stepper-incubator';
@@ -116,7 +116,7 @@ export class OrderPad {
     private _loadedTriggerTypeId: OrderTriggerTypeId | undefined;
     private _triggerTypeId: OrderTriggerTypeId | undefined;
     private _allowedTriggerTypeIds: readonly OrderTriggerTypeId[] = OrderPad.defaultAllowedTriggerTypeIds;
-    private _triggerValue: Decimal | undefined;
+    private _triggerValue: SysDecimal | undefined;
     private _triggerFieldId: PriceOrderTrigger.FieldId | undefined;
     private _triggerMovementId: MovementId | undefined;
     // private _previewed: boolean;
@@ -126,8 +126,8 @@ export class OrderPad {
     // private _orderGivenBy: string;
     // private _orderGiversDataItemReady: boolean;
     // private _orderTakenBy: string;
-    private _loadedLimitValue: Decimal | undefined;
-    private _limitValue: Decimal | undefined;
+    private _loadedLimitValue: SysDecimal | undefined;
+    private _limitValue: SysDecimal | undefined;
     private _limitUnitId: OrderPad.PriceUnitId | undefined;
     private _priceStepperRetrieveError: string | undefined;
     private _priceStepper: SecurityPriceStepper | undefined;
@@ -365,7 +365,7 @@ export class OrderPad {
 
     // eslint-disable-next-line @typescript-eslint/member-ordering
     get triggerValue() { return this._triggerValue; }
-    set triggerValue(value: Decimal | undefined) {
+    set triggerValue(value: SysDecimal | undefined) {
         if (this._readonly) {
             throw new AssertInternalError('OPSTVR775498');
         } else {
@@ -441,7 +441,7 @@ export class OrderPad {
 
     // eslint-disable-next-line @typescript-eslint/member-ordering
     get limitValue() { return this._limitValue; }
-    set limitValue(value: Decimal | undefined) {
+    set limitValue(value: SysDecimal | undefined) {
         if (this._readonly) {
             throw new AssertInternalError('OPSLVR5888372');
         } else {
@@ -2470,7 +2470,7 @@ export class OrderPad {
         }
     }
 
-    private internalSetLimitValue(value: Decimal | undefined) {
+    private internalSetLimitValue(value: SysDecimal | undefined) {
         if (value !== this._limitValue) {
             this.beginChanges();
             try {
@@ -2552,7 +2552,7 @@ export class OrderPad {
         }
     }
 
-    private internalSetTriggerValue(value: Decimal | undefined) {
+    private internalSetTriggerValue(value: SysDecimal | undefined) {
         if (!isUndefinableDecimalEqual(value, this._triggerValue)) {
             this.beginChanges();
             try {

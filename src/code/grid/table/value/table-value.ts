@@ -29,10 +29,10 @@ import {
 } from '../../../services/internal-api';
 import {
     CorrectnessId,
-    Decimal,
     Integer,
     SourceTzOffsetDate,
     SourceTzOffsetDateTime,
+    SysDecimal,
     newUndefinableDate,
     newUndefinableDecimal
 } from '../../../sys/internal-api';
@@ -121,14 +121,14 @@ export class LitIvemIdTableValue extends GenericTableValue<LitIvemId> {
     }
 }
 
-export abstract class BaseDecimalTableValue extends GenericTableValue<Decimal> {
+export abstract class BaseDecimalTableValue extends GenericTableValue<SysDecimal> {
     // protected createTextFormattableValue() {
     //     return new DecimalTextFormattableValue(this.data);
     // }
 
     override get data() { return super.data; }
 
-    override set data(value: Decimal | undefined) {
+    override set data(value: SysDecimal | undefined) {
         super.data = newUndefinableDecimal(value);
     }
 }
@@ -433,14 +433,14 @@ export class ReadonlyCorrectnessTableValue extends BooleanCorrectnessTableValue 
 
 
 
-export abstract class BaseDecimalCorrectnessTableValue extends GenericCorrectnessTableValue<Decimal> {
+export abstract class BaseDecimalCorrectnessTableValue extends GenericCorrectnessTableValue<SysDecimal> {
     // protected createTextFormattableValue() {
     //     return new DecimalTextFormattableValue(this.data);
     // }
 
     override get data() { return super.data; }
 
-    override set data(value: Decimal | undefined) {
+    override set data(value: SysDecimal | undefined) {
         super.data = newUndefinableDecimal(value);
     }
 }

@@ -19,8 +19,8 @@ import {
 } from '../../../../services/internal-api';
 import {
     AssertInternalError,
-    Decimal,
     Integer,
+    SysDecimal,
     UnreachableCaseError,
     compareDecimal,
     compareInteger,
@@ -72,7 +72,7 @@ export abstract class FullDepthRecord extends DepthRecord {
     }
 
     abstract getCount(): Integer;
-    abstract getPrice(): Decimal;
+    abstract getPrice(): SysDecimal;
     abstract getUndisclosedCount(): Integer;
 
     protected abstract createTextFormattableValue(id: FullDepthSideFieldId): DepthRecord.CreateTextFormattableValueResult;
@@ -320,7 +320,7 @@ export class OrderFullDepthRecord extends FullDepthRecord {
 }
 
 export class PriceLevelFullDepthRecord extends FullDepthRecord {
-    private _price: Decimal;
+    private _price: SysDecimal;
     private _count: Integer; // Number of orders at this price level.
     private _volume: Integer; // Total number of shares at this price level.
     private _marketIds: MarketId[]; // Array of markets in orders

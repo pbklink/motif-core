@@ -261,7 +261,7 @@ export namespace IdleService {
                 (value) => {
                     this.resolve(value);
                 },
-                (reason) => Promise.reject(reason),
+                (reason) => Promise.reject(AssertInternalError.createIfNotError(reason, 'ISCAR45557')),
             );
         }
 

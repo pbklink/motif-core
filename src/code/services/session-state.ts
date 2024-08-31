@@ -59,7 +59,7 @@ export namespace SessionState {
 
     export function initialise() {
         for (let i = 0; i < infos.length; i++) {
-            if (infos[i].id !== i) {
+            if (infos[i].id !== i as SessionStateId) {
                 throw new EnumInfoOutOfOrderError('SessionManager.StateId', i, Strings[infos[i].displayId]);
             }
         }

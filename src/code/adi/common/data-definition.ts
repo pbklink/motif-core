@@ -7,7 +7,6 @@
 import {
     CommaText,
     dateToUtcYyyyMmDd,
-    Decimal,
     Guid,
     Integer,
     JsonElement,
@@ -17,6 +16,7 @@ import {
     NotImplementedError,
     Ok,
     Result,
+    SysDecimal,
 } from '../../sys/internal-api';
 import { AdiPublisherSubscriptionDelayRetryAlgorithmId } from './adi-publisher-subscription-delay-retry-algorithm';
 import {
@@ -221,8 +221,8 @@ export class SearchSymbolsDataDefinition extends MarketSubscriptionDataDefinitio
     marketIds?: readonly MarketId[];
     preferExact?: boolean;
     startIndex?: Integer;
-    strikePriceMin?: Decimal;
-    strikePriceMax?: Decimal;
+    strikePriceMin?: SysDecimal;
+    strikePriceMax?: SysDecimal;
 
     constructor() {
         super(DataChannelId.Symbols);

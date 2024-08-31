@@ -4,14 +4,14 @@
  * License: motionite.trade/license/motif
  */
 
-import { Decimal } from '../sys/internal-api';
+import { SysDecimal } from '../sys/internal-api';
 import { SymbolDetailCacheService } from './symbol-detail-cache-service';
 
 export class SecurityPriceStepper {
     // needs more work
     constructor(private _detail: SymbolDetailCacheService.LitIvemIdDetail) { }
 
-    isOnStep(price: Decimal) {
+    isOnStep(price: SysDecimal) {
         return true;
     }
 }

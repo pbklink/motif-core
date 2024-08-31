@@ -4,7 +4,7 @@
  * License: motionite.trade/license/motif
  */
 
-import { Decimal, Integer, SourceTzOffsetDateTime } from '../../sys/internal-api';
+import { Integer, SourceTzOffsetDateTime, SysDecimal } from '../../sys/internal-api';
 import { BrokerageAccountId, CurrencyId, DataEnvironmentId, ExchangeId, IvemClassId, MarketId } from './data-types';
 
 export interface Transaction {
@@ -17,9 +17,9 @@ export interface Transaction {
     orderStyleId: IvemClassId;
     tradeDate: SourceTzOffsetDateTime;
     settlementDate: SourceTzOffsetDateTime;
-    grossAmount: Decimal;
-    netAmount: Decimal;
-    settlementAmount: Decimal;
+    grossAmount: SysDecimal;
+    netAmount: SysDecimal;
+    settlementAmount: SysDecimal;
     currencyId: CurrencyId | undefined;
     orderId: string;
 }
@@ -37,11 +37,11 @@ export namespace Transaction {
 export interface MarketTransaction extends Transaction {
     orderStyleId: IvemClassId.Market;
     totalQuantity: Integer;
-    averagePrice: Decimal;
+    averagePrice: SysDecimal;
 }
 
 export interface ManagedFundTransaction extends Transaction {
     orderStyleId: IvemClassId.ManagedFund;
-    totalUnits: Decimal;
-    unitValue: Decimal;
+    totalUnits: SysDecimal;
+    unitValue: SysDecimal;
 }
