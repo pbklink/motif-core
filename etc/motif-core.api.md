@@ -54,7 +54,6 @@ import { dateToDateOnlyIsoString } from '@xilytix/sysutils';
 import { dateToUtcYyyyMmDd } from '@xilytix/sysutils';
 import { DateUiAction } from '@xilytix/ui-action';
 import { DayOfWeek } from '@xilytix/sysutils';
-import { Decimal } from '@xilytix/sysutils';
 import { DecimalUiAction } from '@xilytix/ui-action';
 import { deepExtendObject } from '@xilytix/sysutils';
 import { deepExtendValue } from '@xilytix/sysutils';
@@ -243,6 +242,8 @@ import { StringExplicitElementsEnumUiAction } from '@xilytix/ui-action';
 import { StringUiAction } from '@xilytix/ui-action';
 import { subtractElementFromArray } from '@xilytix/sysutils';
 import { subtractElementFromArrayUniquely } from '@xilytix/sysutils';
+import { SysDecimal } from '@xilytix/sysutils';
+import { SysDecimalConstructor } from '@xilytix/sysutils';
 import { SysTick } from '@xilytix/sysutils';
 import { testRemoveFromArray } from '@xilytix/sysutils';
 import { TimeSpan } from '@xilytix/sysutils';
@@ -1307,11 +1308,11 @@ export interface AltCodeSubfieldScanCondition extends SubFieldScanCondition<Scan
 export class AmendOrderDataItem extends OrderRequestDataItem {
     constructor(MyDataDefinition: DataDefinition);
     // (undocumented)
-    get estimatedBrokerage(): Decimal | undefined;
+    get estimatedBrokerage(): SysDecimal | undefined;
     // (undocumented)
-    get estimatedTax(): Decimal | undefined;
+    get estimatedTax(): SysDecimal | undefined;
     // (undocumented)
-    get estimatedValue(): Decimal | undefined;
+    get estimatedValue(): SysDecimal | undefined;
     // (undocumented)
     processMessage(msg: DataMessage): void;
 }
@@ -1349,11 +1350,11 @@ export class AmendOrderRequestDataDefinition extends OrderRequestDataDefinition 
 export class AmendOrderResponseDataMessage extends OrderResponseDataMessage {
     constructor();
     // (undocumented)
-    estimatedBrokerage: Decimal | undefined;
+    estimatedBrokerage: SysDecimal | undefined;
     // (undocumented)
-    estimatedTax: Decimal | undefined;
+    estimatedTax: SysDecimal | undefined;
     // (undocumented)
-    estimatedValue: Decimal | undefined;
+    estimatedValue: SysDecimal | undefined;
     // (undocumented)
     static readonly typeId = DataMessageTypeId.AmendOrderResponse;
 }
@@ -1408,9 +1409,9 @@ export function assigned<T>(value: T): value is Exclude<T, null | undefined>;
 // @public (undocumented)
 export namespace AsxIndexPoint {
     // (undocumented)
-    export function fromDollars(Value: Decimal): Decimal;
+    export function fromDollars(Value: SysDecimal): SysDecimal;
     // (undocumented)
-    export function toDollars(Value: Decimal): Decimal;
+    export function toDollars(Value: SysDecimal): SysDecimal;
 }
 
 // Warning: (ae-internal-missing-underscore) The name "AttributesDayTradesGridField" should be prefixed with an underscore because the declaration is marked as @internal
@@ -1874,11 +1875,11 @@ export class Balances implements BrokerageAccountRecord {
     // (undocumented)
     get mapKey(): string;
     // (undocumented)
-    get margin(): Decimal;
+    get margin(): SysDecimal;
     // (undocumented)
-    get netBalance(): Decimal;
+    get netBalance(): SysDecimal;
     // (undocumented)
-    get nonTrading(): Decimal;
+    get nonTrading(): SysDecimal;
     // (undocumented)
     setListCorrectness(value: CorrectnessId): void;
     // (undocumented)
@@ -1886,9 +1887,9 @@ export class Balances implements BrokerageAccountRecord {
     // (undocumented)
     subscribeCorrectnessChangedEvent(handler: Balances.FeedCorrectnessChangedEventHandler): number;
     // (undocumented)
-    get trading(): Decimal;
+    get trading(): SysDecimal;
     // (undocumented)
-    get unfilledBuys(): Decimal;
+    get unfilledBuys(): SysDecimal;
     // (undocumented)
     unsubscribeChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
     // (undocumented)
@@ -1902,12 +1903,12 @@ export namespace Balances {
     // (undocumented)
     export interface BalanceValue {
         // (undocumented)
-        amount: Decimal;
+        amount: SysDecimal;
         // (undocumented)
         readonly type: string;
     }
     const // (undocumented)
-    initialiseValue: Decimal;
+    initialiseValue: SysDecimal;
     // (undocumented)
     export type ChangedEventHandler = (valueChanges: ValueChange[]) => void;
     // (undocumented)
@@ -2096,7 +2097,7 @@ export namespace BalancesDataMessage {
     // (undocumented)
     export interface AddUpdateChange extends Change {
         // (undocumented)
-        amount: Decimal;
+        amount: SysDecimal;
         // (undocumented)
         balanceType: string;
         // (undocumented)
@@ -2286,19 +2287,19 @@ export abstract class BaseDateCorrectnessTableValue extends GenericCorrectnessTa
 // Warning: (ae-missing-release-tag) "BaseDecimalCorrectnessTableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export abstract class BaseDecimalCorrectnessTableValue extends GenericCorrectnessTableValue<Decimal> {
+export abstract class BaseDecimalCorrectnessTableValue extends GenericCorrectnessTableValue<SysDecimal> {
     // (undocumented)
-    get data(): Decimal | undefined;
-    set data(value: Decimal | undefined);
+    get data(): SysDecimal | undefined;
+    set data(value: SysDecimal | undefined);
 }
 
 // Warning: (ae-missing-release-tag) "BaseDecimalTableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export abstract class BaseDecimalTableValue extends GenericTableValue<Decimal> {
+export abstract class BaseDecimalTableValue extends GenericTableValue<SysDecimal> {
     // (undocumented)
-    get data(): Decimal | undefined;
-    set data(value: Decimal | undefined);
+    get data(): SysDecimal | undefined;
+    set data(value: SysDecimal | undefined);
 }
 
 // Warning: (ae-missing-release-tag) "BaseDirectory" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -2338,10 +2339,10 @@ export abstract class BaseIntegerArrayTableValue extends GenericTableValue<Integ
 // Warning: (ae-missing-release-tag) "BaseNullableDecimalCorrectnessTableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export abstract class BaseNullableDecimalCorrectnessTableValue extends GenericNullableCorrectnessTableValue<Decimal> {
+export abstract class BaseNullableDecimalCorrectnessTableValue extends GenericNullableCorrectnessTableValue<SysDecimal> {
     // (undocumented)
-    get data(): Decimal | null | undefined;
-    set data(value: Decimal | null | undefined);
+    get data(): SysDecimal | null | undefined;
+    set data(value: SysDecimal | null | undefined);
 }
 
 // Warning: (ae-missing-release-tag) "BaseNullableIntegerCorrectnessArrayTableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -3345,15 +3346,15 @@ export class CallOrPutIdCorrectnessTableValue extends EnumCorrectnessTableValue 
 //
 // @public (undocumented)
 export class CallPut {
-    constructor(exercisePrice: Decimal, expiryDate: Date, litId: MarketId, contractMultiplier: Decimal, exerciseTypeId: ExerciseTypeId, underlyingIvemId: IvemId | undefined, underlyingIsIndex: boolean | undefined, callLitIvemId: LitIvemId | undefined, putLitIvemId: LitIvemId | undefined);
+    constructor(exercisePrice: SysDecimal, expiryDate: Date, litId: MarketId, contractMultiplier: SysDecimal, exerciseTypeId: ExerciseTypeId, underlyingIvemId: IvemId | undefined, underlyingIsIndex: boolean | undefined, callLitIvemId: LitIvemId | undefined, putLitIvemId: LitIvemId | undefined);
     // (undocumented)
     callLitIvemId: LitIvemId | undefined;
     // (undocumented)
-    readonly contractMultiplier: Decimal;
+    readonly contractMultiplier: SysDecimal;
     // (undocumented)
     createKey(): CallPut.Key;
     // (undocumented)
-    readonly exercisePrice: Decimal;
+    readonly exercisePrice: SysDecimal;
     // (undocumented)
     readonly exerciseTypeId: ExerciseTypeId;
     // (undocumented)
@@ -3418,13 +3419,13 @@ export namespace CallPut {
     export function initialiseStatic(): void;
     // (undocumented)
     export class Key {
-        constructor(exercisePrice: Decimal, expiryDate: Date, litId: MarketId);
+        constructor(exercisePrice: SysDecimal, expiryDate: Date, litId: MarketId);
         // (undocumented)
         assign(other: Key): void;
         // (undocumented)
         static createNull(): Key;
         // (undocumented)
-        exercisePrice: Decimal;
+        exercisePrice: SysDecimal;
         // (undocumented)
         expiryDate: Date;
         // (undocumented)
@@ -3443,7 +3444,7 @@ export namespace CallPut {
         // (undocumented)
         export function isEqual(left: Key, right: Key): boolean;
         // (undocumented)
-        export function toString(exercisePrice: Decimal, expiryDate: Date, litId: MarketId): string;
+        export function toString(exercisePrice: SysDecimal, expiryDate: Date, litId: MarketId): string;
     }
 }
 
@@ -7129,8 +7130,6 @@ export class DayTradesGridRecordStore implements RevRecordStore {
     setRecordEventers(recordsEventers: RevRecordStore.RecordsEventers): void;
 }
 
-export { Decimal }
-
 // Warning: (ae-missing-release-tag) "DecimalCorrectnessTableField" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -7166,8 +7165,8 @@ export class DecimalTableValue extends BaseDecimalTableValue {
 // Warning: (ae-missing-release-tag) "DecimalTextFormattableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class DecimalTextFormattableValue extends GenericTextFormattableValue<Decimal> {
-    constructor(data: Decimal | undefined);
+export class DecimalTextFormattableValue extends GenericTextFormattableValue<SysDecimal> {
+    constructor(data: SysDecimal | undefined);
 }
 
 export { DecimalUiAction }
@@ -7360,7 +7359,7 @@ export namespace DepthDataItem {
         // (undocumented)
         position: Integer;
         // (undocumented)
-        price: Decimal;
+        price: SysDecimal;
         // (undocumented)
         quantity: Integer;
         // (undocumented)
@@ -7466,7 +7465,7 @@ export namespace DepthDataMessage {
         // (undocumented)
         position: Integer | undefined;
         // (undocumented)
-        price: Decimal | undefined;
+        price: SysDecimal | undefined;
         // (undocumented)
         quantity: Integer | undefined;
         // (undocumented)
@@ -7817,7 +7816,7 @@ export abstract class DepthSideGridRecordStore {
     // (undocumented)
     abstract setAllRecordsToPriceLevel(): void;
     // (undocumented)
-    setAuctionQuantity(value: Decimal | undefined): void;
+    setAuctionQuantity(value: SysDecimal | undefined): void;
     // (undocumented)
     abstract setNewPriceLevelAsOrder(value: boolean): void;
     // (undocumented)
@@ -10601,7 +10600,7 @@ export abstract class FullDepthRecord extends DepthRecord {
     // (undocumented)
     abstract getCount(): Integer;
     // (undocumented)
-    abstract getPrice(): Decimal;
+    abstract getPrice(): SysDecimal;
     // (undocumented)
     getTextFormattableValue(id: FullDepthSideFieldId, sideId: OrderSideId, dataCorrectnessAttribute: TextFormattableValue.Attribute | undefined): TextFormattableValue;
     // (undocumented)
@@ -11273,13 +11272,13 @@ export class Holding implements BrokerageAccountRecord {
     // (undocumented)
     get accountMapKey(): string;
     // (undocumented)
-    get averagePrice(): Decimal;
+    get averagePrice(): SysDecimal;
     // (undocumented)
     get code(): string;
     // (undocumented)
     get correctnessId(): CorrectnessId;
     // (undocumented)
-    get cost(): Decimal;
+    get cost(): SysDecimal;
     // (undocumented)
     createKey(): Holding.Key;
     // (undocumented)
@@ -11445,7 +11444,7 @@ export namespace HoldingsDataMessage {
         // (undocumented)
         code: string;
         // (undocumented)
-        cost: Decimal;
+        cost: SysDecimal;
         // (undocumented)
         currencyId: CurrencyId | undefined;
         // (undocumented)
@@ -11499,7 +11498,7 @@ export namespace HoldingsDataMessage {
         // (undocumented)
         export interface Detail {
             // (undocumented)
-            averagePrice: Decimal;
+            averagePrice: SysDecimal;
             // (undocumented)
             totalAvailableQuantity: Integer;
             // (undocumented)
@@ -15417,9 +15416,9 @@ export interface ManagedFundTransaction extends Transaction {
     // (undocumented)
     orderStyleId: IvemClassId.ManagedFund;
     // (undocumented)
-    totalUnits: Decimal;
+    totalUnits: SysDecimal;
     // (undocumented)
-    unitValue: Decimal;
+    unitValue: SysDecimal;
 }
 
 export { MapKey }
@@ -16032,7 +16031,7 @@ export class MarketOrderDetails extends OrderDetails {
     // (undocumented)
     hiddenQuantity: Integer | undefined;
     // (undocumented)
-    limitPrice: Decimal | undefined;
+    limitPrice: SysDecimal | undefined;
     // (undocumented)
     minimumQuantity: Integer | undefined;
     // (undocumented)
@@ -16260,7 +16259,7 @@ export abstract class MarketSubscriptionDataItem extends FeedStatusSubscriptionD
 // @public (undocumented)
 export interface MarketTransaction extends Transaction {
     // (undocumented)
-    averagePrice: Decimal;
+    averagePrice: SysDecimal;
     // (undocumented)
     orderStyleId: IvemClassId.Market;
     // (undocumented)
@@ -17859,7 +17858,7 @@ export class Order implements BrokerageAccountRecord {
     // (undocumented)
     get accountMapKey(): string;
     // (undocumented)
-    get averagePrice(): Decimal | undefined;
+    get averagePrice(): SysDecimal | undefined;
     // (undocumented)
     get brokerageSchedule(): string | undefined;
     // (undocumented)
@@ -17881,11 +17880,11 @@ export class Order implements BrokerageAccountRecord {
     // (undocumented)
     get currencyId(): CurrencyId | undefined;
     // (undocumented)
-    get currentBrokerage(): Decimal | undefined;
+    get currentBrokerage(): SysDecimal | undefined;
     // (undocumented)
-    get currentTax(): Decimal | undefined;
+    get currentTax(): SysDecimal | undefined;
     // (undocumented)
-    get currentValue(): Decimal;
+    get currentValue(): SysDecimal;
     // (undocumented)
     get depthOrderId(): string | undefined;
     // (undocumented)
@@ -17895,9 +17894,9 @@ export class Order implements BrokerageAccountRecord {
     // (undocumented)
     get equityOrderTypeId(): OrderTypeId;
     // (undocumented)
-    get estimatedBrokerage(): Decimal | undefined;
+    get estimatedBrokerage(): SysDecimal | undefined;
     // (undocumented)
-    get estimatedTax(): Decimal | undefined;
+    get estimatedTax(): SysDecimal | undefined;
     // (undocumented)
     get exchangeId(): ExchangeId;
     // (undocumented)
@@ -17917,7 +17916,7 @@ export class Order implements BrokerageAccountRecord {
     // (undocumented)
     get ivemId(): IvemId;
     // (undocumented)
-    get limitPrice(): Decimal | undefined;
+    get limitPrice(): SysDecimal | undefined;
     // (undocumented)
     get litIvemId(): LitIvemId | undefined;
     // (undocumented)
@@ -17967,9 +17966,9 @@ export class Order implements BrokerageAccountRecord {
     // (undocumented)
     get triggerTypeId(): OrderTriggerTypeId;
     // (undocumented)
-    get triggerValue(): Decimal | undefined;
+    get triggerValue(): SysDecimal | undefined;
     // (undocumented)
-    get unitAmount(): Decimal;
+    get unitAmount(): SysDecimal;
     // (undocumented)
     get unitTypeId(): OrderPriceUnitTypeId;
     // (undocumented)
@@ -18285,7 +18284,7 @@ export class OrderFullDepthRecord extends FullDepthRecord {
     // (undocumented)
     getCount(): number;
     // (undocumented)
-    getPrice(): Decimal;
+    getPrice(): SysDecimal;
     // (undocumented)
     getRenderVolume(): number;
     // (undocumented)
@@ -18414,7 +18413,7 @@ export class OrderPad {
     // (undocumented)
     getInvalidFieldIds(): readonly OrderPad.FieldId[];
     // (undocumented)
-    getLimitValueIfOk(): Decimal | undefined;
+    getLimitValueIfOk(): SysDecimal | undefined;
     // (undocumented)
     getOrderTypeIdIfOk(): OrderTypeId | undefined;
     // (undocumented)
@@ -18434,7 +18433,7 @@ export class OrderPad {
     // (undocumented)
     getTriggerTypeIdIfOk(): OrderTriggerTypeId | undefined;
     // (undocumented)
-    getTriggerValueIfOk(): Decimal | undefined;
+    getTriggerValueIfOk(): SysDecimal | undefined;
     // (undocumented)
     isAmend(): boolean;
     // (undocumented)
@@ -18456,8 +18455,8 @@ export class OrderPad {
     // (undocumented)
     get limitUnitId(): OrderPad.PriceUnitId | undefined;
     // (undocumented)
-    get limitValue(): Decimal | undefined;
-    set limitValue(value: Decimal | undefined);
+    get limitValue(): SysDecimal | undefined;
+    set limitValue(value: SysDecimal | undefined);
     // (undocumented)
     loadAmendFromOrder(order: Order): void;
     // (undocumented)
@@ -18530,8 +18529,8 @@ export class OrderPad {
     get triggerTypeId(): OrderTriggerTypeId | undefined;
     set triggerTypeId(value: OrderTriggerTypeId | undefined);
     // (undocumented)
-    get triggerValue(): Decimal | undefined;
-    set triggerValue(value: Decimal | undefined);
+    get triggerValue(): SysDecimal | undefined;
+    set triggerValue(value: SysDecimal | undefined);
     // (undocumented)
     unsubscribeFieldsChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
 }
@@ -19061,11 +19060,11 @@ export abstract class OrderRequestDataItem extends PublisherSubscriptionDataItem
     // (undocumented)
     protected _errors: OrderRequestError[] | undefined;
     // (undocumented)
-    abstract get estimatedBrokerage(): Decimal | undefined;
+    abstract get estimatedBrokerage(): SysDecimal | undefined;
     // (undocumented)
-    abstract get estimatedTax(): Decimal | undefined;
+    abstract get estimatedTax(): SysDecimal | undefined;
     // (undocumented)
-    abstract get estimatedValue(): Decimal | undefined;
+    abstract get estimatedValue(): SysDecimal | undefined;
     // (undocumented)
     get order(): OrdersDataMessage.AddUpdateChange | undefined;
     // (undocumented)
@@ -19508,7 +19507,7 @@ export namespace OrdersDataMessage {
     // (undocumented)
     export class AddUpdateChange extends Change {
         // (undocumented)
-        averagePrice: Decimal | null | undefined;
+        averagePrice: SysDecimal | null | undefined;
         // (undocumented)
         brokerageSchedule: string | undefined;
         // (undocumented)
@@ -19520,11 +19519,11 @@ export namespace OrdersDataMessage {
         // (undocumented)
         currencyId: CurrencyId | undefined;
         // (undocumented)
-        currentBrokerage: Decimal | undefined;
+        currentBrokerage: SysDecimal | undefined;
         // (undocumented)
-        currentTax: Decimal | undefined;
+        currentTax: SysDecimal | undefined;
         // (undocumented)
-        currentValue: Decimal;
+        currentValue: SysDecimal;
         // (undocumented)
         depthOrderId: string | undefined;
         // (undocumented)
@@ -19532,9 +19531,9 @@ export namespace OrdersDataMessage {
         // (undocumented)
         equityOrderTypeId: OrderTypeId;
         // (undocumented)
-        estimatedBrokerage: Decimal | undefined;
+        estimatedBrokerage: SysDecimal | undefined;
         // (undocumented)
-        estimatedTax: Decimal | undefined;
+        estimatedTax: SysDecimal | undefined;
         // (undocumented)
         exchangeId: ExchangeId;
         // (undocumented)
@@ -19550,7 +19549,7 @@ export namespace OrdersDataMessage {
         // (undocumented)
         instructionIds: OrderInstructionId[];
         // (undocumented)
-        limitPrice: Decimal | undefined;
+        limitPrice: SysDecimal | undefined;
         // (undocumented)
         managedFundCurrency: string | undefined;
         // (undocumented)
@@ -19578,7 +19577,7 @@ export namespace OrdersDataMessage {
         // (undocumented)
         trigger: OrderTrigger;
         // (undocumented)
-        unitAmount: Decimal;
+        unitAmount: SysDecimal;
         // (undocumented)
         unitTypeId: OrderPriceUnitTypeId;
         // (undocumented)
@@ -20022,7 +20021,7 @@ export abstract class OrderTrigger {
     // (undocumented)
     get typeId(): OrderTriggerTypeId;
     // (undocumented)
-    abstract get value(): Decimal | undefined;
+    abstract get value(): SysDecimal | undefined;
 }
 
 // Warning: (ae-missing-release-tag) "OrderTriggerModule" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -20268,11 +20267,11 @@ export class PercentageTrailingPriceOrderTrigger extends OrderTrigger {
     // (undocumented)
     static isEqual(left: PercentageTrailingPriceOrderTrigger, right: PercentageTrailingPriceOrderTrigger): boolean;
     // (undocumented)
-    limit: Decimal;
+    limit: SysDecimal;
     // (undocumented)
-    stop: Decimal | undefined;
+    stop: SysDecimal | undefined;
     // (undocumented)
-    value: Decimal;
+    value: SysDecimal;
 }
 
 // Warning: (ae-missing-release-tag) "PhysicalDeliveryCorrectnessTableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -20300,11 +20299,11 @@ export { PickExcludedEnum }
 export class PlaceOrderDataItem extends OrderRequestDataItem {
     constructor(MyDataDefinition: DataDefinition);
     // (undocumented)
-    get estimatedBrokerage(): Decimal | undefined;
+    get estimatedBrokerage(): SysDecimal | undefined;
     // (undocumented)
-    get estimatedTax(): Decimal | undefined;
+    get estimatedTax(): SysDecimal | undefined;
     // (undocumented)
-    get estimatedValue(): Decimal | undefined;
+    get estimatedValue(): SysDecimal | undefined;
     // (undocumented)
     processMessage(msg: DataMessage): void;
 }
@@ -20340,11 +20339,11 @@ export class PlaceOrderRequestDataDefinition extends OrderRequestDataDefinition 
 export class PlaceOrderResponseDataMessage extends OrderResponseDataMessage {
     constructor();
     // (undocumented)
-    estimatedBrokerage: Decimal | undefined;
+    estimatedBrokerage: SysDecimal | undefined;
     // (undocumented)
-    estimatedTax: Decimal | undefined;
+    estimatedTax: SysDecimal | undefined;
     // (undocumented)
-    estimatedValue: Decimal | undefined;
+    estimatedValue: SysDecimal | undefined;
     // (undocumented)
     static readonly typeId = DataMessageTypeId.PlaceOrderResponse;
 }
@@ -20423,7 +20422,7 @@ export namespace PriceAndHasUndisclosedTextFormattableValue {
         // (undocumented)
         hasUndisclosed: boolean;
         // (undocumented)
-        price: Decimal;
+        price: SysDecimal;
     }
 }
 
@@ -20473,7 +20472,7 @@ export class PriceLevelFullDepthRecord extends FullDepthRecord {
     // (undocumented)
     getCount(): number;
     // (undocumented)
-    getPrice(): Decimal;
+    getPrice(): SysDecimal;
     // (undocumented)
     getRenderVolume(): number;
     // (undocumented)
@@ -20489,7 +20488,7 @@ export class PriceLevelFullDepthRecord extends FullDepthRecord {
     // (undocumented)
     get orders(): DepthDataItem.Order[];
     // (undocumented)
-    get price(): Decimal;
+    get price(): SysDecimal;
     // (undocumented)
     processOrderChange(newOrder: DepthDataItem.Order, oldOrderQuantity: Integer, oldHasUndisclosed: boolean, valueChanges: DepthDataItem.Order.ValueChange[]): RevRecordInvalidatedValue[];
     // (undocumented)
@@ -20507,7 +20506,7 @@ export class PriceLevelFullDepthRecord extends FullDepthRecord {
 //
 // @public (undocumented)
 export class PriceOrderTrigger extends OrderTrigger {
-    constructor(_value: Decimal | undefined, _fieldId: PriceOrderTrigger.FieldId | undefined, _movementId: MovementId | undefined);
+    constructor(_value: SysDecimal | undefined, _fieldId: PriceOrderTrigger.FieldId | undefined, _movementId: MovementId | undefined);
     // (undocumented)
     createCopy(): PriceOrderTrigger;
     // (undocumented)
@@ -20517,7 +20516,7 @@ export class PriceOrderTrigger extends OrderTrigger {
     // (undocumented)
     get movementId(): MovementId | undefined;
     // (undocumented)
-    get value(): Decimal | undefined;
+    get value(): SysDecimal | undefined;
 }
 
 // @public (undocumented)
@@ -20545,7 +20544,7 @@ export namespace PriceOrderTrigger {
 }
 
 // @public (undocumented)
-export type PriceOrRemainder = Decimal | null;
+export type PriceOrRemainder = SysDecimal | null;
 
 // Warning: (ae-missing-release-tag) "PriceOrRemainderAndHasUndisclosedTextFormattableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "PriceOrRemainderAndHasUndisclosedTextFormattableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -20685,14 +20684,14 @@ export class PriceTableValue extends BaseDecimalTableValue {
 // Warning: (ae-missing-release-tag) "PriceTextFormattableValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class PriceTextFormattableValue extends GenericTextFormattableValue<Decimal> {
-    constructor(data: Decimal | undefined);
+export class PriceTextFormattableValue extends GenericTextFormattableValue<SysDecimal> {
+    constructor(data: SysDecimal | undefined);
 }
 
 // @public (undocumented)
 export namespace PriceTextFormattableValue {
     const // (undocumented)
-    decimalConstructor: typeof Decimal;
+    decimalConstructor: SysDecimalConstructor;
 }
 
 export { priorityCompareInteger }
@@ -26341,9 +26340,9 @@ export class SearchSymbolsDataDefinition extends MarketSubscriptionDataDefinitio
     // (undocumented)
     startIndex?: Integer;
     // (undocumented)
-    strikePriceMax?: Decimal;
+    strikePriceMax?: SysDecimal;
     // (undocumented)
-    strikePriceMin?: Decimal;
+    strikePriceMin?: SysDecimal;
 }
 
 // @public (undocumented)
@@ -26450,7 +26449,7 @@ export class SearchSymbolsLitIvemFullDetail extends SearchSymbolsLitIvemBaseDeta
     // (undocumented)
     cfi: string | undefined;
     // (undocumented)
-    contractSize: Decimal | undefined;
+    contractSize: SysDecimal | undefined;
     // (undocumented)
     depthDirectionId: DepthDirectionId | undefined;
     // (undocumented)
@@ -26462,7 +26461,7 @@ export class SearchSymbolsLitIvemFullDetail extends SearchSymbolsLitIvemBaseDeta
     // (undocumented)
     lotSize: Integer | undefined;
     // (undocumented)
-    strikePrice: Decimal | undefined;
+    strikePrice: SysDecimal | undefined;
     // (undocumented)
     subscribeExtendedChangeEvent(handler: SearchSymbolsLitIvemFullDetail.ExtendedChangeEventHandler): number;
     // (undocumented)
@@ -26555,23 +26554,23 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
     // (undocumented)
     get askCount(): number | undefined;
     // (undocumented)
-    get askQuantity(): Decimal | undefined;
+    get askQuantity(): SysDecimal | undefined;
     // (undocumented)
     get askUndisclosed(): boolean | undefined;
     // (undocumented)
-    get auctionPrice(): Decimal | undefined;
+    get auctionPrice(): SysDecimal | undefined;
     // (undocumented)
-    get auctionQuantity(): Decimal | undefined;
+    get auctionQuantity(): SysDecimal | undefined;
     // (undocumented)
-    get auctionRemainder(): Decimal | undefined;
+    get auctionRemainder(): SysDecimal | undefined;
     // (undocumented)
-    get bestAsk(): Decimal | undefined;
+    get bestAsk(): SysDecimal | undefined;
     // (undocumented)
-    get bestBid(): Decimal | undefined;
+    get bestBid(): SysDecimal | undefined;
     // (undocumented)
     get bidCount(): number | undefined;
     // (undocumented)
-    get bidQuantity(): Decimal | undefined;
+    get bidQuantity(): SysDecimal | undefined;
     // (undocumented)
     get bidUndisclosed(): boolean | undefined;
     // (undocumented)
@@ -26581,11 +26580,11 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
     // (undocumented)
     get class(): IvemClassId | undefined;
     // (undocumented)
-    get close(): Decimal | undefined;
+    get close(): SysDecimal | undefined;
     // (undocumented)
     get code(): string;
     // (undocumented)
-    get contractSize(): Decimal | undefined;
+    get contractSize(): SysDecimal | undefined;
     // (undocumented)
     get currencyId(): CurrencyId | undefined;
     // (undocumented)
@@ -26595,19 +26594,19 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
     // (undocumented)
     get expiryDate(): SourceTzOffsetDate | undefined;
     // (undocumented)
-    get high(): Decimal | undefined;
+    get high(): SysDecimal | undefined;
     // (undocumented)
     get isIndex(): boolean | undefined;
     // (undocumented)
-    get last(): Decimal | undefined;
+    get last(): SysDecimal | undefined;
     // (undocumented)
-    get low(): Decimal | undefined;
+    get low(): SysDecimal | undefined;
     // (undocumented)
     get name(): string | undefined;
     // (undocumented)
     get numberOfTrades(): number | undefined;
     // (undocumented)
-    get open(): Decimal | undefined;
+    get open(): SysDecimal | undefined;
     // (undocumented)
     get openInterest(): number | undefined;
     // (undocumented)
@@ -26621,13 +26620,13 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
     // (undocumented)
     get quotationBasis(): readonly string[] | undefined;
     // (undocumented)
-    get settlement(): Decimal | undefined;
+    get settlement(): SysDecimal | undefined;
     // (undocumented)
-    get shareIssue(): Decimal | undefined;
+    get shareIssue(): SysDecimal | undefined;
     // (undocumented)
     get statusNote(): readonly string[] | undefined;
     // (undocumented)
-    get strikePrice(): Decimal | undefined;
+    get strikePrice(): SysDecimal | undefined;
     // (undocumented)
     subscribeFieldValuesChangedEvent(handler: SecurityDataItem.FieldValuesChangedEvent): number;
     // (undocumented)
@@ -26645,11 +26644,11 @@ export class SecurityDataItem extends MarketSubscriptionDataItem {
     // (undocumented)
     unsubscribeFieldValuesChangedEvent(subscriptionId: MultiEvent.SubscriptionId): void;
     // (undocumented)
-    get valueTraded(): Decimal | undefined;
+    get valueTraded(): SysDecimal | undefined;
     // (undocumented)
-    get volume(): Decimal | undefined;
+    get volume(): SysDecimal | undefined;
     // (undocumented)
-    get vWAP(): Decimal | undefined;
+    get vWAP(): SysDecimal | undefined;
 }
 
 // @public (undocumented)
@@ -26665,25 +26664,25 @@ export namespace SecurityDataItem {
     const // (undocumented)
     defaultAskCount = 0;
     const // (undocumented)
-    defaultAskQuantity: Decimal;
+    defaultAskQuantity: SysDecimal;
     const // (undocumented)
     defaultAskUndisclosed = false;
     const // (undocumented)
     defaultBidCount = 0;
     const // (undocumented)
-    defaultBidQuantity: Decimal;
+    defaultBidQuantity: SysDecimal;
     const // (undocumented)
     defaultBidUndisclosed = false;
     const // (undocumented)
     defaultNumberOfTrades = 0;
     const // (undocumented)
-    defaultVolume: Decimal;
+    defaultVolume: SysDecimal;
     const // (undocumented)
-    defaultValueTraded: Decimal;
+    defaultValueTraded: SysDecimal;
     const // (undocumented)
     defaultOpenInterest = 0;
     const // (undocumented)
-    defaultShareIssue: Decimal;
+    defaultShareIssue: SysDecimal;
     const // (undocumented)
     defaultStatusNote: readonly string[];
     // (undocumented)
@@ -26878,46 +26877,46 @@ export namespace SecurityDataMessage {
     // (undocumented)
     export interface Extended {
         // (undocumented)
-        high52: Decimal | undefined;
+        high52: SysDecimal | undefined;
         // (undocumented)
-        highLimit: Decimal | undefined;
+        highLimit: SysDecimal | undefined;
         // (undocumented)
-        idss: Decimal | undefined;
+        idss: SysDecimal | undefined;
         // (undocumented)
-        low52: Decimal | undefined;
+        low52: SysDecimal | undefined;
         // (undocumented)
-        lowLimit: Decimal | undefined;
+        lowLimit: SysDecimal | undefined;
         // (undocumented)
-        pdt: Decimal | undefined;
+        pdt: SysDecimal | undefined;
         // (undocumented)
-        pss: Decimal | undefined;
+        pss: SysDecimal | undefined;
         // (undocumented)
-        reference: Decimal | undefined;
+        reference: SysDecimal | undefined;
         // (undocumented)
-        rss: Decimal | undefined;
+        rss: SysDecimal | undefined;
     }
     // (undocumented)
     export interface Rec {
         // (undocumented)
         askCount: Integer | undefined;
         // (undocumented)
-        askQuantity: Decimal | undefined;
+        askQuantity: SysDecimal | undefined;
         // (undocumented)
         askUndisclosed: boolean | undefined;
         // (undocumented)
-        auctionPrice: Decimal | null | undefined;
+        auctionPrice: SysDecimal | null | undefined;
         // (undocumented)
-        auctionQuantity: Decimal | null | undefined;
+        auctionQuantity: SysDecimal | null | undefined;
         // (undocumented)
-        auctionRemainder: Decimal | null | undefined;
+        auctionRemainder: SysDecimal | null | undefined;
         // (undocumented)
-        bestAsk: Decimal | null | undefined;
+        bestAsk: SysDecimal | null | undefined;
         // (undocumented)
-        bestBid: Decimal | null | undefined;
+        bestBid: SysDecimal | null | undefined;
         // (undocumented)
         bidCount: Integer | undefined;
         // (undocumented)
-        bidQuantity: Decimal | undefined;
+        bidQuantity: SysDecimal | undefined;
         // (undocumented)
         bidUndisclosed: boolean | undefined;
         // (undocumented)
@@ -26927,11 +26926,11 @@ export namespace SecurityDataMessage {
         // (undocumented)
         classId: IvemClassId | undefined;
         // (undocumented)
-        close: Decimal | null | undefined;
+        close: SysDecimal | null | undefined;
         // (undocumented)
         code: string | undefined;
         // (undocumented)
-        contractSize: Decimal | null | undefined;
+        contractSize: SysDecimal | null | undefined;
         // (undocumented)
         currencyId: CurrencyId | null | undefined;
         // (undocumented)
@@ -26943,13 +26942,13 @@ export namespace SecurityDataMessage {
         // (undocumented)
         extended: Extended | null | undefined;
         // (undocumented)
-        high: Decimal | null | undefined;
+        high: SysDecimal | null | undefined;
         // (undocumented)
         isIndex: boolean | undefined;
         // (undocumented)
-        last: Decimal | null | undefined;
+        last: SysDecimal | null | undefined;
         // (undocumented)
-        low: Decimal | null | undefined;
+        low: SysDecimal | null | undefined;
         // (undocumented)
         marketId: MarketId | undefined;
         // (undocumented)
@@ -26959,19 +26958,19 @@ export namespace SecurityDataMessage {
         // (undocumented)
         numberOfTrades: Integer | undefined;
         // (undocumented)
-        open: Decimal | null | undefined;
+        open: SysDecimal | null | undefined;
         // (undocumented)
         openInterest: Integer | null | undefined;
         // (undocumented)
         quotationBasis: readonly string[] | undefined;
         // (undocumented)
-        settlement: Decimal | null | undefined;
+        settlement: SysDecimal | null | undefined;
         // (undocumented)
-        shareIssue: Decimal | null | undefined;
+        shareIssue: SysDecimal | null | undefined;
         // (undocumented)
         statusNote: readonly string[] | undefined;
         // (undocumented)
-        strikePrice: Decimal | null | undefined;
+        strikePrice: SysDecimal | null | undefined;
         // (undocumented)
         subscriptionDataTypeIds: readonly PublisherSubscriptionDataTypeId[] | undefined;
         // (undocumented)
@@ -26979,11 +26978,11 @@ export namespace SecurityDataMessage {
         // (undocumented)
         trend: MovementId | undefined;
         // (undocumented)
-        valueTraded: Decimal | undefined;
+        valueTraded: SysDecimal | undefined;
         // (undocumented)
-        volume: Decimal | undefined;
+        volume: SysDecimal | undefined;
         // (undocumented)
-        vWAP: Decimal | null | undefined;
+        vWAP: SysDecimal | null | undefined;
     }
 }
 
@@ -26993,7 +26992,7 @@ export namespace SecurityDataMessage {
 export class SecurityPriceStepper {
     constructor(_detail: SymbolDetailCacheService.LitIvemIdDetail);
     // (undocumented)
-    isOnStep(price: Decimal): boolean;
+    isOnStep(price: SysDecimal): boolean;
 }
 
 // Warning: (ae-internal-missing-underscore) The name "SellBrokerDayTradesGridField" should be prefixed with an underscore because the declaration is marked as @internal
@@ -33193,7 +33192,7 @@ export namespace SymbolsDataMessage {
         // (undocumented)
         cfi: string | undefined;
         // (undocumented)
-        contractSize: Decimal | undefined;
+        contractSize: SysDecimal | undefined;
         // (undocumented)
         depthDirectionId: DepthDirectionId | undefined;
         // (undocumented)
@@ -33205,7 +33204,7 @@ export namespace SymbolsDataMessage {
         // (undocumented)
         lotSize: Integer | undefined;
         // (undocumented)
-        strikePrice: Decimal | undefined;
+        strikePrice: SysDecimal | undefined;
         // (undocumented)
         tmcLegs: readonly TmcLeg[] | undefined;
     }
@@ -33258,7 +33257,7 @@ export namespace SymbolsDataMessage {
         // (undocumented)
         cfi: string | undefined;
         // (undocumented)
-        contractSize: Decimal | undefined | null;
+        contractSize: SysDecimal | undefined | null;
         // (undocumented)
         depthDirectionId: DepthDirectionId | undefined | null;
         // (undocumented)
@@ -33270,7 +33269,7 @@ export namespace SymbolsDataMessage {
         // (undocumented)
         lotSize: Integer | undefined | null;
         // (undocumented)
-        strikePrice: Decimal | undefined | null;
+        strikePrice: SysDecimal | undefined | null;
         // (undocumented)
         tmcLegs: readonly TmcLeg[] | undefined | null;
     }
@@ -33617,6 +33616,8 @@ export class SynchronisedPublisherSubscriptionDataMessage extends PublisherSubsc
     // (undocumented)
     static readonly typeId = DataMessageTypeId.Synchronised;
 }
+
+export { SysDecimal }
 
 // Warning: (ae-internal-missing-underscore) The name "SysStaticInitialise" should be prefixed with an underscore because the declaration is marked as @internal
 //
@@ -34779,7 +34780,7 @@ export class TextFormatterService implements TextFormatter {
     // (undocumented)
     formatDayTradesDataItemRecordTypeId(value: DayTradesDataItem.Record.TypeId): string;
     // (undocumented)
-    formatDecimal(value: Decimal): string;
+    formatDecimal(value: SysDecimal): string;
     // (undocumented)
     formatDeliveryBasisIdMyxLitIvemAttribute(value: MyxLitIvemAttributes.DeliveryBasisId): string;
     // (undocumented)
@@ -34855,7 +34856,7 @@ export class TextFormatterService implements TextFormatter {
     // (undocumented)
     formatPhysicalDeliveryBoolean(value: boolean): string;
     // (undocumented)
-    formatPrice(value: Decimal): string;
+    formatPrice(value: SysDecimal): string;
     // (undocumented)
     formatPriceAndHasUndisclosed(value: PriceAndHasUndisclosedTextFormattableValue.DataType): string;
     // (undocumented)
@@ -36256,7 +36257,7 @@ export namespace TradesDataItem {
         // (undocumented)
         orderSideId: OrderSideId | undefined;
         // (undocumented)
-        price: Decimal | undefined;
+        price: SysDecimal | undefined;
         // (undocumented)
         quantity: Integer | undefined;
         // (undocumented)
@@ -36346,7 +36347,7 @@ export namespace TradesDataMessage {
         // (undocumented)
         marketId: MarketId | undefined;
         // (undocumented)
-        price: Decimal | undefined;
+        price: SysDecimal | undefined;
         // (undocumented)
         quantity: Integer | undefined;
         // (undocumented)
@@ -36727,11 +36728,11 @@ export class TrailingPriceOrderTrigger extends OrderTrigger {
     // (undocumented)
     static isEqual(left: TrailingPriceOrderTrigger, right: TrailingPriceOrderTrigger): boolean;
     // (undocumented)
-    limit: Decimal;
+    limit: SysDecimal;
     // (undocumented)
-    stop: Decimal | undefined;
+    stop: SysDecimal | undefined;
     // (undocumented)
-    value: Decimal;
+    value: SysDecimal;
 }
 
 // Warning: (ae-missing-release-tag) "TrailingStopLossOrderConditionType" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -36789,17 +36790,17 @@ export interface Transaction {
     // (undocumented)
     exchangeId: ExchangeId;
     // (undocumented)
-    grossAmount: Decimal;
+    grossAmount: SysDecimal;
     // (undocumented)
     id: string;
     // (undocumented)
-    netAmount: Decimal;
+    netAmount: SysDecimal;
     // (undocumented)
     orderId: string;
     // (undocumented)
     orderStyleId: IvemClassId;
     // (undocumented)
-    settlementAmount: Decimal;
+    settlementAmount: SysDecimal;
     // (undocumented)
     settlementDate: SourceTzOffsetDateTime;
     // (undocumented)
@@ -38750,9 +38751,9 @@ export namespace ZenithConvert {
         // (undocumented)
         export interface AsDecimal {
             // (undocumented)
-            readonly brokerage: Decimal | undefined;
+            readonly brokerage: SysDecimal | undefined;
             // (undocumented)
-            readonly tax: Decimal | undefined;
+            readonly tax: SysDecimal | undefined;
         }
         // (undocumented)
         export function toDecimal(value: ZenithProtocol.TradingController.OrderFees): AsDecimal;
