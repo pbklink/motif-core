@@ -4,7 +4,6 @@
  * License: motionite.trade/license/motif
  */
 
-import { InternalCommandModule } from '../command/internal-api';
 import { UserAlertServiceModule } from '../services/user-alert-service';
 import { CallPutModule } from './call-put';
 import { ChartHistoryIntervalModule } from './chart-history-interval';
@@ -21,7 +20,6 @@ export namespace ServicesStaticInitialise {
         ChartHistoryIntervalModule.initialiseStatic();
         MotifServicesServiceModule.initialiseStatic();
         OrderPadModule.initialiseStatic();
-        InternalCommandModule.initialiseStatic();
         RankedLitIvemIdListDirectoryItemModule.initialiseStatic();
         SaveManagementModule.initialiseStatic();
     }
